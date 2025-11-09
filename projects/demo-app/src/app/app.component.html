@@ -313,6 +313,40 @@
           <pre><code [innerHTML]="minMaxCode | code"></code></pre>
         </div>
       </div>
+
+      <div id="custom-labels" class="example-section">
+        <h3 class="example-title">Custom Navigation Labels</h3>
+        <p>Customize the <code>aria-label</code> and <code>title</code> for the previous and next month navigation buttons.</p>
+        
+        <div class="example-controls">
+          <div class="form-group">
+            <label for="prevMonthLabel">Previous Month Label</label>
+            <input id="prevMonthLabel" type="text" [(ngModel)]="prevMonthLabel" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="nextMonthLabel">Next Month Label</label>
+            <input id="nextMonthLabel" type="text" [(ngModel)]="nextMonthLabel" [ngModelOptions]="{standalone: true}">
+          </div>
+        </div>
+
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [theme]="currentTheme"
+            [prevMonthLabel]="prevMonthLabel"
+            [nextMonthLabel]="nextMonthLabel"
+            placeholder="Select a date">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">html</span>
+            <button class="code-copy" (click)="copyCode(customLabelsCode)">Copy</button>
+          </div>
+          <pre><code [innerHTML]="customLabelsCode | code"></code></pre>
+        </div>
+      </div>
       </form>
     </section>
   </main>

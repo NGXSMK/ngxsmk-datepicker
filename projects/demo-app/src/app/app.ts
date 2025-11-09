@@ -82,6 +82,9 @@ export class App {
   public currentTheme: 'light' | 'dark' = 'light';
   public mobileMenuOpen: boolean = false;
 
+  public prevMonthLabel: string = 'Previous month';
+  public nextMonthLabel: string = 'Next month';
+
   public features = [
     { icon: '🚀', title: 'Zero Dependencies', description: 'No external dependencies, just Angular' },
     { icon: '⚡', title: 'High Performance', description: 'Optimized for fast rendering and selection' },
@@ -105,6 +108,7 @@ export class App {
     { id: 'date-range', label: 'Date Range', sub: true },
     { id: 'multiple-dates', label: 'Multiple Dates', sub: true },
     { id: 'programmatic-value', label: 'Programmatic Value', sub: true },
+    { id: 'custom-labels', label: 'Custom Labels', sub: true },
   ];
 
   public inputProperties = [
@@ -116,6 +120,8 @@ export class App {
     { property: 'showTime', type: 'boolean', default: 'false', description: 'Show time selection' },
     { property: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Inline calendar display' },
     { property: 'theme', type: "'light' | 'dark'", default: "'light'", description: 'Theme variant' },
+    { property: 'prevMonthLabel', type: 'string', default: "'Previous month'", description: 'Aria-label for previous month button' },
+    { property: 'nextMonthLabel', type: 'string', default: "'Next month'", description: 'Aria-label for next month button' },
   ];
 
   public outputProperties = [
@@ -245,6 +251,11 @@ export class MyComponent {
     formControlName="singleDate2">
   </ngxsmk-datepicker>
 </form>`;
+
+  public customLabelsCode = `<ngxsmk-datepicker
+  [prevMonthLabel]="'Go Back'"
+  [nextMonthLabel]="'Go Forward'">
+</ngxsmk-datepicker>`;
 
   @HostBinding('class.dark-theme') get isDarkMode() {
     return this.currentTheme === 'dark';

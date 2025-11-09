@@ -198,6 +198,8 @@ const futureMaxDate = new Date(2025, 11, 21); // December 21, 2025
 | `holidayProvider` | `HolidayProvider` | `null` | An object that provides holiday information |
 | `disableHolidays` | `boolean` | `false` | If true, disables holiday dates from being selected |
 | `disabledDates` | `(string \| Date)[]` | `[]` | Array of dates to disable. Supports both string dates (MM/DD/YYYY) and Date objects |
+| `prevMonthLabel` | `string` | `'Previous month'` | Aria-label for the previous month navigation button. |
+| `nextMonthLabel` | `string` | `'Next month'` | Aria-label for the next month navigation button. |
 
 ### Outputs
 
