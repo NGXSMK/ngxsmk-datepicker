@@ -315,8 +315,8 @@
       </div>
 
       <div id="custom-labels" class="example-section">
-        <h3 class="example-title">Custom Navigation Labels</h3>
-        <p>Customize the <code>aria-label</code> and <code>title</code> for the previous and next month navigation buttons.</p>
+        <h3 class="example-title">Customization</h3>
+        <p>Customize the <code>aria-label</code> for navigation buttons and toggle the visibility of footer buttons.</p>
         
         <div class="example-controls">
           <div class="form-group">
@@ -327,6 +327,14 @@
             <label for="nextMonthLabel">Next Month Label</label>
             <input id="nextMonthLabel" type="text" [(ngModel)]="nextMonthLabel" [ngModelOptions]="{standalone: true}">
           </div>
+          <div class="form-group checkbox-group">
+            <input id="showClearButton" type="checkbox" [(ngModel)]="showClearButton" [ngModelOptions]="{standalone: true}">
+            <label for="showClearButton">Show Clear Button</label>
+          </div>
+          <div class="form-group checkbox-group">
+            <input id="showCloseButton" type="checkbox" [(ngModel)]="showCloseButton" [ngModelOptions]="{standalone: true}">
+            <label for="showCloseButton">Show Close Button</label>
+          </div>
         </div>
 
         <div class="example-demo">
@@ -335,6 +343,8 @@
             [theme]="currentTheme"
             [prevMonthLabel]="prevMonthLabel"
             [nextMonthLabel]="nextMonthLabel"
+            [showClearButton]="showClearButton"
+            [showCloseButton]="showCloseButton"
             placeholder="Select a date">
           </ngxsmk-datepicker>
         </div>

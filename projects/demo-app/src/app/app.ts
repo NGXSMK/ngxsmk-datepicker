@@ -84,6 +84,8 @@ export class App {
 
   public prevMonthLabel: string = 'Previous month';
   public nextMonthLabel: string = 'Next month';
+  public showClearButton: boolean = true;
+  public showCloseButton: boolean = true;
 
   public features = [
     { icon: '🚀', title: 'Zero Dependencies', description: 'No external dependencies, just Angular' },
@@ -108,7 +110,7 @@ export class App {
     { id: 'date-range', label: 'Date Range', sub: true },
     { id: 'multiple-dates', label: 'Multiple Dates', sub: true },
     { id: 'programmatic-value', label: 'Programmatic Value', sub: true },
-    { id: 'custom-labels', label: 'Custom Labels', sub: true },
+    { id: 'custom-labels', label: 'Customization', sub: true },
   ];
 
   public inputProperties = [
@@ -122,6 +124,8 @@ export class App {
     { property: 'theme', type: "'light' | 'dark'", default: "'light'", description: 'Theme variant' },
     { property: 'prevMonthLabel', type: 'string', default: "'Previous month'", description: 'Aria-label for previous month button' },
     { property: 'nextMonthLabel', type: 'string', default: "'Next month'", description: 'Aria-label for next month button' },
+    { property: 'showClearButton', type: 'boolean', default: 'true', description: 'Show the clear button in the footer' },
+    { property: 'showCloseButton', type: 'boolean', default: 'true', description: 'Show the close button in the footer' },
   ];
 
   public outputProperties = [

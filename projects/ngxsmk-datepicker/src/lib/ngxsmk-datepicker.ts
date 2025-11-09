@@ -163,14 +163,18 @@ import { createDateComparator } from './utils/performance.utils';
               }
               
               <div class="ngxsmk-footer" *ngIf="!isInlineMode">
-                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled"
-                        [attr.aria-label]="clearButtonLabel" [title]="clearButtonLabel">
-                  {{ clearButtonLabel }}
-                </button>
-                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled"
-                        [attr.aria-label]="closeButtonLabel" [title]="closeButtonLabel">
-                  {{ closeButtonLabel }}
-                </button>
+                @if (showClearButton) {
+                  <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled"
+                          [attr.aria-label]="clearButtonLabel" [title]="clearButtonLabel">
+                    {{ clearButtonLabel }}
+                  </button>
+                }
+                @if (showCloseButton) {
+                  <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled"
+                          [attr.aria-label]="closeButtonLabel" [title]="closeButtonLabel">
+                    {{ closeButtonLabel }}
+                  </button>
+                }
               </div>
             </div>
           </div>
@@ -191,6 +195,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() placeholder: string = 'Select Date';
   @Input() inline: boolean | 'always' | 'auto' = false;
   @Input() yearRange: number = 10;
+  @Input() showClearButton: boolean = true;
+  @Input() showCloseButton: boolean = true;
 
   private _clearButtonLabel: string = 'Clear';
   @Input()

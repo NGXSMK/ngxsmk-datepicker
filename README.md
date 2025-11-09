@@ -171,6 +171,8 @@ class MyHolidayProvider implements HolidayProvider {
 | disabledDates  | (string \| Date)[]                               | []                    | Array of dates to disable. Supports both string dates (MM/DD/YYYY) and Date objects.                         |
 | prevMonthLabel | string                                             | 'Previous month'      | Aria-label for the previous month navigation button.                                                          |
 | nextMonthLabel | string                                             | 'Next month'          | Aria-label for the next month navigation button.                                                              |
+| showClearButton| boolean                                            | true                  | If true, displays the clear button in the footer.                                                             |
+| showCloseButton| boolean                                            | true                  | If true, displays the close button in the footer.                                                             |
 
 ### **Outputs**
 
