@@ -99,7 +99,7 @@
     "karma-jasmine-html-reporter": "^2.1.0",
     "ng-packagr": "^20.3.0",
     "semantic-release": "^23.0.0",
-    "typedoc": "^0.26.11",
+    "typedoc": "^0.28.14",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.46.3",
     "zone.js": "^0.15.0"
