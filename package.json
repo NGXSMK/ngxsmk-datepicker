@@ -153,7 +153,7 @@
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/addon-interactions": "^8.6.14",
     "@storybook/addon-controls": "^8.6.14",
-    "@storybook/addon-actions": "^8.6.14",
+    "@storybook/addon-actions": "^9.0.8",
     "@storybook/addon-docs": "^8.6.14",
     "storybook": "^8.6.14",
     "luxon": "^3.4.4",
