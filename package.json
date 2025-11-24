@@ -148,7 +148,7 @@
     "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.46.4",
-    "zone.js": "^0.15.0",
+    "zone.js": "^0.16.0",
     "@storybook/angular": "^8.6.14",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/addon-interactions": "^8.6.14",
