@@ -51,7 +51,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       // isDateValid checks constraints, not if date is NaN
       // An invalid date will fail constraints if minDate/maxDate are set
       // For this test, we expect it to pass validation if no constraints are set
-      const isValid = !isNaN(invalidDate.getTime());
+      const _isValid = !isNaN(invalidDate.getTime());
       // Since isDateValid doesn't check NaN, we just check it doesn't throw
       expect(() => component['isDateValid'](invalidDate)).not.toThrow();
     });
@@ -131,7 +131,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should regenerate calendar when month changes', () => {
-      const initialDays = component.daysInMonth.length;
+      const _initialDays = component.daysInMonth.length;
       component.changeMonth(1);
       fixture.detectChanges();
       

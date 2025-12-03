@@ -276,8 +276,8 @@ describe('Issue #33: Angular 21+ Signal Forms Type Compatibility', () => {
       const fieldTree: any = {
         value: () => testDate,
         disabled: () => false,
-        setValue: (val: Date) => {},
-        updateValue: (updater: () => Date) => {}
+        setValue: (_val: Date) => {},
+        updateValue: (_updater: () => Date) => {}
       };
 
       // This assignment should not cause: 

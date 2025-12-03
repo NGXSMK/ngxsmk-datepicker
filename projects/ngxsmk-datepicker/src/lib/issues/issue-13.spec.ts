@@ -262,7 +262,7 @@ describe('Issue #13: Programmatic value setting', () => {
   describe('FormControl integration (ControlValueAccessor)', () => {
     it('should set value via formControl', () => {
       component.mode = 'single';
-      const formControl = new FormControl<DatepickerValue>(null);
+      const _formControl = new FormControl<DatepickerValue>(null);
       const testDate = getStartOfDay(new Date(2024, 5, 15));
       component.writeValue(testDate);
       fixture.detectChanges();
@@ -283,11 +283,11 @@ describe('Issue #13: Programmatic value setting', () => {
 
     it('should update formControl value when set programmatically', () => {
       component.mode = 'single';
-      const formControl = new FormControl<DatepickerValue>(null);
-      let onChangeValue: DatepickerValue | null = null;
+      const _formControl = new FormControl<DatepickerValue>(null);
+      let _onChangeValue: DatepickerValue | null = null;
       component.registerOnChange((value: DatepickerValue) => {
-        onChangeValue = value;
-        formControl.setValue(value, { emitEvent: false });
+        _onChangeValue = value;
+        _formControl.setValue(value, { emitEvent: false });
       });
       
       const testDate = getStartOfDay(new Date(2024, 5, 15));
@@ -443,7 +443,7 @@ describe('Issue #13: Programmatic value setting', () => {
       const date2 = new Date(2024, 5, 15, 14, 45);
       
       setValueAndTriggerChange(date1);
-      const firstSelection = component.selectedDate;
+      const _firstSelection = component.selectedDate;
       
       setValueAndTriggerChange(date2);
       expect(component.selectedDate).toBeTruthy();
@@ -453,7 +453,7 @@ describe('Issue #13: Programmatic value setting', () => {
       const testDate = getStartOfDay(new Date(2024, 5, 15));
       
       setValueAndTriggerChange(testDate);
-      const firstSelectedDate = component.selectedDate;
+      const _firstSelectedDate = component.selectedDate;
       setValueAndTriggerChange(new Date(testDate.getTime()));
       
       expect(component.selectedDate).toBeTruthy();

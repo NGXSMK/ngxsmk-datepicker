@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+// import { By } from '@angular/platform-browser'; // Unused import
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
@@ -417,7 +417,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       fixture.detectChanges();
 
       // Get initial memo function
-      const memo1 = component.isDateDisabledMemo;
+      const _memo1 = component.isDateDisabledMemo;
       const june30 = getStartOfDay(new Date(2024, 5, 30));
 
       // Click on date from previous month - should navigate and invalidate cache

@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.18` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.19` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -761,6 +761,15 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.19** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.19
+- ✅ **Stable Release**: Version 1.9.19 is the current stable version
+- 🎨 **Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes (320px to desktop)
+- 📱 **Mobile Optimization**: Enhanced mobile experience with improved navbar, sidebar, hero section, and feature grid
+- 🧹 **Code Cleanup**: Removed unnecessary comments for cleaner codebase
+- 🔧 **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.18
 
 ### **v1.9.18** (Stable)
 - 🐛 **Mobile Touch Event Handling**: Fixed touch listener attachment when calendar opens on mobile devices

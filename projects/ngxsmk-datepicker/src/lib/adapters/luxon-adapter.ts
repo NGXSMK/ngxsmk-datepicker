@@ -17,10 +17,14 @@
 
 import { DateAdapter } from './date-adapter.interface';
 
-declare const require: (module: string) => any;
+declare const require: (module: string) => unknown;
 
 export class LuxonAdapter implements DateAdapter {
-  private DateTime: any;
+  private DateTime: {
+    fromJSDate: (date: Date) => { isValid: boolean; toJSDate: () => Date; startOf: (unit: string) => { toJSDate: () => Date }; endOf: (unit: string) => { toJSDate: () => Date }; plus: (options: Record<string, number>) => { toJSDate: () => Date }; hasSame: (other: unknown, unit: string) => boolean; toFormat: (format: string, options?: Record<string, unknown>) => string };
+    fromISO: (value: string | unknown) => { isValid: boolean; toJSDate: () => Date };
+    fromFormat: (value: string | unknown, format: string) => { isValid: boolean; toJSDate: () => Date };
+  };
 
   constructor() {
     try {
@@ -30,7 +34,7 @@ export class LuxonAdapter implements DateAdapter {
     }
   }
 
-  parse(value: any): Date | null {
+  parse(value: string | Date | number | unknown): Date | null {
     if (!value) return null;
     if (value instanceof Date) {
       return this.DateTime.fromJSDate(value).isValid ? new Date(value.getTime()) : null;
@@ -49,7 +53,7 @@ export class LuxonAdapter implements DateAdapter {
       const dt = this.DateTime.fromJSDate(date);
       if (!dt.isValid) return '';
       
-      const options: any = {};
+      const options: Record<string, unknown> = {};
       if (locale) {
         options.locale = locale;
       }
@@ -60,11 +64,14 @@ export class LuxonAdapter implements DateAdapter {
     }
   }
 
-  isValid(value: any): boolean {
+  isValid(value: string | Date | number | unknown): boolean {
     if (value instanceof Date) {
       return this.DateTime.fromJSDate(value).isValid;
     }
-    return this.DateTime.fromISO(value).isValid || this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid;
+    if (typeof value === 'string') {
+      return this.DateTime.fromISO(value).isValid || this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid;
+    }
+    return false;
   }
 
   startOfDay(date: Date): Date {

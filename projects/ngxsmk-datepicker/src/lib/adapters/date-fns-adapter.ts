@@ -17,10 +17,10 @@
 
 import { DateAdapter } from './date-adapter.interface';
 
-declare const require: (module: string) => any;
+declare const require: (module: string) => unknown;
 
 export class DateFnsAdapter implements DateAdapter {
-  private dateFns: any;
+  private dateFns: Record<string, unknown>;
 
   constructor() {
     try {
@@ -30,7 +30,7 @@ export class DateFnsAdapter implements DateAdapter {
     }
   }
 
-  parse(value: any): Date | null {
+  parse(value: string | Date | number | unknown): Date | null {
     if (!value) return null;
     if (value instanceof Date) {
       return this.dateFns.isValid(value) ? new Date(value.getTime()) : null;
@@ -53,7 +53,7 @@ export class DateFnsAdapter implements DateAdapter {
     }
   }
 
-  isValid(value: any): boolean {
+  isValid(value: string | Date | number | unknown): boolean {
     return this.dateFns.isValid(value);
   }
 
@@ -78,7 +78,7 @@ export class DateFnsAdapter implements DateAdapter {
     return this.dateFns.isSameDay(date1, date2);
   }
 
-  private getDateFnsLocale(locale: string): any {
+  private getDateFnsLocale(locale: string): unknown {
     if (!locale || locale.length === 0) {
       return undefined;
     }

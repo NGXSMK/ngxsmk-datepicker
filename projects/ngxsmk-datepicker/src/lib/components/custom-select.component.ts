@@ -207,10 +207,10 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
   `],
 })
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {
-  @Input() options: { label: string; value: any }[] = [];
-  @Input() value: any;
+  @Input() options: { label: string; value: unknown }[] = [];
+  @Input() value: unknown;
   @Input() disabled: boolean = false;
-  @Output() valueChange = new EventEmitter<any>();
+  @Output() valueChange = new EventEmitter<unknown>();
   @ViewChild('container', { static: false }) container!: ElementRef<HTMLDivElement>;
   @ViewChild('button', { static: false }) button!: ElementRef<HTMLButtonElement>;
   @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
@@ -337,7 +337,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  selectOption(option: { label: string; value: any }): void {
+  selectOption(option: { label: string; value: unknown }): void {
     this.value = option.value;
     this.valueChange.emit(this.value);
     this.isOpen = false;

@@ -73,7 +73,7 @@ type SignalFormField = ({
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
 } & {
-  [key: string]: any;
+  [key: string]: unknown;
 }) | null | undefined;
 
 @Component({
@@ -152,7 +152,7 @@ type SignalFormField = ({
                   <div class="ngxsmk-month-year-selects">
                     <ngxsmk-custom-select #monthSelect class="month-select" [options]="monthOptions"
                                       [(value)]="currentMonth" [disabled]="disabled"></ngxsmk-custom-select>
-                      <ngxsmk-custom-select #yearSelect class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled" (valueChange)="onYearSelectChange($event)"></ngxsmk-custom-select>
+                      <ngxsmk-custom-select #yearSelect class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled" (valueChange)="onYearSelectChange($any($event))"></ngxsmk-custom-select>
                   </div>
                   <div class="ngxsmk-nav-buttons">
                     <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled" [attr.aria-label]="_prevMonthAriaLabel" [title]="_prevMonthAriaLabel" [ngClass]="classes?.navPrev">
@@ -714,7 +714,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private lastDateCellTouchDate: Date | null = null;
   private dateCellTouchHandled: boolean = false;
   private dateCellTouchHandledTime: number = 0;
-  private touchHandledTimeout: any = null;
+  private touchHandledTimeout: ReturnType<typeof setTimeout> | null = null;
 
   private calendarSwipeStartX: number = 0;
   private calendarSwipeStartY: number = 0;
@@ -3388,6 +3388,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.scheduleChangeDetection();
         }
         else if (dayTime === startTime!) {
+          // User clicked the same day as start date - no action needed
         }
         else {
           const potentialEndDate = this.applyTimeIfNeeded(day);
@@ -3885,10 +3886,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.ariaLiveService.announce(yearChangedMsg, 'polite');
   }
 
-  public onYearSelectChange(year: number): void {
-    this._currentYear = year;
-    this._currentYearSignal.set(year);
-    this.currentDate.setFullYear(year);
+  public onYearSelectChange(year: number | unknown): void {
+    const yearValue = typeof year === 'number' ? year : Number(year);
+    if (isNaN(yearValue)) return;
+    this._currentYear = yearValue;
+    this._currentYearSignal.set(yearValue);
+    this.currentDate.setFullYear(yearValue);
     this._invalidateMemoCache();
     this.generateYearGrid();
     this.generateCalendar();

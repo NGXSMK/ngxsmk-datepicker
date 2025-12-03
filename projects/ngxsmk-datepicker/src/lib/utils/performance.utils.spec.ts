@@ -9,7 +9,7 @@ describe('Performance Utils', () => {
         return x * 2;
       };
 
-      const memoized = memoize(fn);
+      const memoized = memoize(fn as (...args: unknown[]) => unknown);
 
       expect(memoized(5)).toBe(10);
       expect(callCount).toBe(1);
@@ -25,7 +25,7 @@ describe('Performance Utils', () => {
       const fn = (a: number, b: number) => a + b;
       const keyGen = (a: number, b: number) => `${a}-${b}`;
 
-      const memoized = memoize(fn, keyGen);
+      const memoized = memoize(fn as (...args: unknown[]) => unknown, keyGen as (...args: unknown[]) => string);
 
       expect(memoized(1, 2)).toBe(3);
       expect(memoized(1, 2)).toBe(3);

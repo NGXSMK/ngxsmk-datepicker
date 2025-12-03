@@ -209,7 +209,7 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
     it('should not throw when accessing DOM elements after hydration', () => {
       expect(() => {
         fixture.detectChanges();
-        const input = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
+        const _input = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
         // Accessing DOM should not throw
       }).not.toThrow();
     });

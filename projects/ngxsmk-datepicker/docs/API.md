@@ -2170,7 +2170,7 @@ type DateInput =
 
 ### DatepickerHooks
 
-**Status**: Stable (v1.9.18+)
+**Status**: Stable (v1.9.19+)
 
 Comprehensive hook interface for customizing datepicker behavior.
 
@@ -2194,7 +2194,7 @@ interface DatepickerHooks {
 
 ### KeyboardShortcutContext
 
-**Status**: Stable (v1.9.18+)
+**Status**: Stable (v1.9.19+)
 
 Context object provided to keyboard shortcut handlers.
 

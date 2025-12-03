@@ -28,7 +28,7 @@ export class DefaultTranslationService implements TranslationService {
   }
   
   translate(key: string, params?: Record<string, string | number>): string {
-    const translation = (this.translations as any)[key];
+    const translation = (this.translations as unknown as Record<string, string | ((params?: Record<string, string | number>) => string)>)[key];
     if (!translation) {
       return key;
     }
@@ -41,7 +41,15 @@ export class DefaultTranslationService implements TranslationService {
       return result;
     }
     
-    return translation;
+    if (typeof translation === 'string') {
+      return translation;
+    }
+    
+    if (typeof translation === 'function') {
+      return translation(params);
+    }
+    
+    return key;
   }
   
   getCurrentLocale(): string {

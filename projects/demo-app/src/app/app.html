@@ -22,7 +22,7 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.18</span>
+            <span class="logo-version">v1.9.19</span>
           </div>
         </a>
       </div>
@@ -149,7 +149,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.18)</p>
+        <p class="hero-version">(v1.9.19)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
@@ -1618,15 +1618,15 @@
           <div style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <div>
               <label for="primary-color" style="display: block; margin-bottom: 0.5rem;">Primary Color:</label>
-              <input id="primary-color" type="color" [(ngModel)]="customTheme.colors!['primary']" (ngModelChange)="onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="primary-color" type="color" [value]="customTheme.colors?.['primary'] || '#6d28d9'" (input)="customTheme.colors!['primary'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
             <div>
               <label for="background-color" style="display: block; margin-bottom: 0.5rem;">Background:</label>
-              <input id="background-color" type="color" [(ngModel)]="customTheme.colors!['background']" (ngModelChange)="onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="background-color" type="color" [value]="customTheme.colors?.['background'] || '#ffffff'" (input)="customTheme.colors!['background'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
             <div>
               <label for="text-color" style="display: block; margin-bottom: 0.5rem;">Text Color:</label>
-              <input id="text-color" type="color" [(ngModel)]="customTheme.colors!['text']" (ngModelChange)="onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="text-color" type="color" [value]="customTheme.colors?.['text'] || '#1f2937'" (input)="customTheme.colors!['text'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
           </div>
 
