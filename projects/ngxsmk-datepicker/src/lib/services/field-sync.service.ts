@@ -7,7 +7,7 @@ export type SignalFormField = ({
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
 } & {
-  [key: string]: any;
+  [key: string]: unknown;
 }) | null | undefined;
 
 export interface FieldSyncCallbacks {

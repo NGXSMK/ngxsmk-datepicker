@@ -274,7 +274,7 @@ export class DatePresetsService {
     return value;
   }
 
-  private deserializeValue(value: any): DatepickerValue {
+  private deserializeValue(value: unknown): DatepickerValue {
     if (value === null || value === undefined) {
       return null;
     }
@@ -292,14 +292,21 @@ export class DatePresetsService {
       });
     }
 
-    if (typeof value === 'object' && 'start' in value && 'end' in value) {
-      return {
-        start: typeof value.start === 'string' ? new Date(value.start) : value.start,
-        end: typeof value.end === 'string' ? new Date(value.end) : value.end,
-      };
+    if (typeof value === 'object' && value !== null && 'start' in value && 'end' in value) {
+      const rangeValue = value as { start: unknown; end: unknown };
+      const start = typeof rangeValue.start === 'string' 
+        ? new Date(rangeValue.start) 
+        : (rangeValue.start instanceof Date ? rangeValue.start : null);
+      const end = typeof rangeValue.end === 'string' 
+        ? new Date(rangeValue.end) 
+        : (rangeValue.end instanceof Date ? rangeValue.end : null);
+      
+      if (start && end) {
+        return { start, end };
+      }
     }
 
-    return value;
+    return null;
   }
 }
 

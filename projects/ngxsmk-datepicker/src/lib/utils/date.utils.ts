@@ -37,7 +37,13 @@ export function isSameDay(d1: Date | null, d2: Date | null): boolean {
 
 export function normalizeDate(date: DateInput | null): Date | null {
   if (!date) return null;
-  const d = (date instanceof Date) ? new Date(date.getTime()) : new Date((date as any).toDate ? (date as any).toDate() : date as any);
+  const d = (date instanceof Date) 
+    ? new Date(date.getTime()) 
+    : new Date(
+        (date as { toDate?: () => Date }).toDate 
+          ? (date as { toDate: () => Date }).toDate() 
+          : date as Date | string | number
+      );
   if (isNaN(d.getTime())) return null;
   return d;
 }

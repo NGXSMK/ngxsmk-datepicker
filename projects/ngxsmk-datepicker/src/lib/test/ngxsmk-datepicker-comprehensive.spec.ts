@@ -472,7 +472,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
   describe('FormControl Integration', () => {
     it('should work with FormControl', () => {
-      const formControl = new FormControl<DatepickerValue>(null);
+      const _formControl = new FormControl<DatepickerValue>(null);
       fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       component = fixture.componentInstance;
       component.inline = true;

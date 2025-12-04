@@ -192,6 +192,13 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     
     announceSpy.calls.reset();
     
+    // Get the current month before changing
+    const currentMonthIndex = component.currentMonth;
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    const nextMonthIndex = (currentMonthIndex + 1) % 12;
+    const expectedMonthName = monthNames[nextMonthIndex];
+    
     component.changeMonth(1);
     fixture.detectChanges();
     tick(10);
@@ -202,8 +209,8 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     const announcedMessage = announceSpy.calls.mostRecent()?.args[0] || '';
     expect(announcedMessage.length).toBeGreaterThan(0, 
       `Announce was called with empty message for month change.`);
-    expect(announcedMessage).toContain('December', 
-      `Month change announcement should mention the new month. Got: "${announcedMessage}"`);
+    expect(announcedMessage).toContain(expectedMonthName, 
+      `Month change announcement should mention the new month. Got: "${announcedMessage}", Expected to contain: "${expectedMonthName}"`);
     
     const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
     expect(liveRegion).toBeTruthy('Live region should exist');

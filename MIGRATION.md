@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.18 → v1.9.19](#v1918---v1919)
 - [v1.9.17 → v1.9.18](#v1917---v1918)
 - [v1.9.16 → v1.9.17](#v1916---v1917)
 - [v1.9.15 → v1.9.16](#v1915---v1916)
@@ -61,6 +62,39 @@ None in v1.9.16.
 
 - This version maintains full backward compatibility with v1.9.15. All existing code will continue to work without modifications.
 - The fix ensures that range mode date pickers work correctly when users click on dates from previous months, especially when starting with null initial values.
+
+## v1.9.18 → v1.9.19
+
+### Added
+- **Comprehensive Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes
+  - Redesigned navbar for all breakpoints (320px-374px, 375px-479px, 480px-599px, 600px-767px, 768px-1023px, 1024px+)
+  - Enhanced sidebar navigation with mobile drawer, tablet collapsible, and desktop fixed layouts
+  - Responsive hero section with adaptive typography and button layouts
+  - Feature grid responsive design (1 column → 2 columns → 3 columns → 4 columns)
+  - Optimized content sections with responsive padding, typography, and spacing
+
+### Changed
+- **Version Update**: Updated to version 1.9.19
+- **Stable Release**: Version 1.9.19 is the current stable version
+- **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
+- **Code Cleanup**: Removed unnecessary comments from SCSS files for cleaner codebase
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.19
+```
+
+### Breaking Changes
+None in v1.9.19.
+
+### Deprecations
+None in v1.9.19.
+
+### Migration Steps
+- This version maintains full backward compatibility with v1.9.18. All existing code will continue to work without modifications.
+- No code changes required.
+- Demo project layout improvements are automatic and require no code changes.
 
 ## v1.9.17 → v1.9.18
 

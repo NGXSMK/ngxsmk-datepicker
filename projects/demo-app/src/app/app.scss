@@ -15,7 +15,7 @@
   width: 100%;
   overflow-x: hidden;
   position: relative;
-  
+
   --border-color: rgba(0, 0, 0, 0.12);
   --code-bg: rgba(0, 0, 0, 0.03);
   --subtle-text: #64748b;
@@ -23,10 +23,17 @@
   --text-primary: #0f172a;
 }
 
+/* Allow datepicker popover to escape on mobile devices */
+@media (max-width: 1023px) {
+  .docs-container {
+    overflow-x: visible !important;
+  }
+}
+
 .docs-container.dark-theme {
   background: #0f0f0f;
   color: #e5e5e5;
-  
+
   --border-color: rgba(255, 255, 255, 0.12);
   --code-bg: rgba(255, 255, 255, 0.05);
   --subtle-text: #94a3b8;
@@ -451,7 +458,7 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
-.search-input:focus + .search-icon,
+.search-input:focus+.search-icon,
 .global-search:focus-within .search-icon {
   color: #6366f1;
 }
@@ -462,7 +469,7 @@
   box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
 }
 
-.docs-container.dark-theme .search-input:focus + .search-icon,
+.docs-container.dark-theme .search-input:focus+.search-icon,
 .docs-container.dark-theme .global-search:focus-within .search-icon {
   color: #818cf8;
 }
@@ -741,6 +748,7 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1046,7 +1054,7 @@
   overflow: hidden;
 }
 
-.nav-link > * {
+.nav-link>* {
   position: relative;
   z-index: 1;
 }
@@ -2173,11 +2181,11 @@
   .navbar-search-wrapper {
     display: none;
   }
-  
+
   .navbar-container {
     gap: 0.75rem;
   }
-  
+
   .language-selector-btn {
     min-width: 50px;
     max-width: 140px;
@@ -2192,7 +2200,253 @@
   }
 }
 
-@media (max-width: 768px) {
+/* ============================================
+   TABLET PORTRAIT (768px - 1023px)
+   Desktop-like navbar experience
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 72px !important;
+  }
+
+  .navbar-container {
+    padding: 0 2rem !important;
+    gap: 1.5rem !important;
+  }
+
+  .navbar-left {
+    gap: 1.5rem !important;
+  }
+
+  .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  .navbar-logo {
+    padding: 0.625rem 1rem !important;
+    gap: 0.875rem !important;
+  }
+
+  .logo-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .logo-text {
+    font-size: 1.125rem !important;
+  }
+
+  .logo-version {
+    font-size: 0.6875rem !important;
+  }
+
+  .navbar-nav {
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  .nav-item {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .navbar-search-wrapper {
+    display: flex !important;
+  }
+
+  .global-search {
+    width: 240px !important;
+    min-width: 200px !important;
+    max-width: 280px !important;
+  }
+
+  .search-input {
+    height: 48px !important;
+    padding: 0.625rem 1rem 0.625rem 2.5rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .navbar-right {
+    gap: 0.875rem !important;
+  }
+
+  .language-selector-btn {
+    height: 48px !important;
+    min-width: 80px !important;
+    max-width: 140px !important;
+    padding: 0 1rem !important;
+    padding-right: 2.5rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 10px !important;
+  }
+
+  .language-selector-text {
+    display: block !important;
+    font-size: 0.875rem !important;
+  }
+
+  .language-dropdown {
+    min-width: 200px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 10px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .docs-content {
+    margin-top: 72px !important;
+    padding-top: 3.5rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+
+  .docs-sidebar {
+    top: 72px !important;
+    height: calc(100vh - 72px) !important;
+    width: 280px !important;
+    max-width: 320px !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 2rem 1.75rem 1.75rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.875rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1.75rem 1.25rem !important;
+  }
+
+  .nav-link {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem 0.75rem 0.25rem 0 !important;
+    min-height: 44px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 4rem 2rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 3.5rem !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font-size: 3rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 1.75rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .hero-version {
+    font-size: 1rem !important;
+    margin-bottom: 1.75rem !important;
+  }
+
+  .hero-description {
+    font-size: 1.125rem !important;
+    margin-bottom: 3rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .hero-buttons {
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 1.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .hero-button {
+    flex: 0 1 auto !important;
+    min-width: 180px !important;
+    text-align: center !important;
+    padding: 1.25rem 2.5rem !important;
+    font-size: 1rem !important;
+    min-height: 48px !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2.5rem !important;
+    padding: 3rem 2rem 4rem !important;
+  }
+
+  .feature-card {
+    padding: 2.5rem 2.25rem !important;
+    border-radius: 18px !important;
+  }
+
+  .feature-icon {
+    font-size: 3rem !important;
+    margin-bottom: 1.75rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.625rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .feature-card p {
+    font-size: 1.0625rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 4rem 2rem !important;
+    margin: 3.5rem 0 !important;
+  }
+
+  .section-title {
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 1.75rem !important;
+    margin-top: 3rem !important;
+    margin-bottom: 1.75rem !important;
+  }
+
+  .docs-section p {
+    font-size: 1.0625rem !important;
+    margin-bottom: 2rem !important;
+    line-height: 1.7 !important;
+  }
+}
+
+@media (max-width: 767px) {
   .modern-navbar {
     height: 64px;
   }
@@ -2213,7 +2467,7 @@
   .logo-version {
     display: none;
   }
-  
+
   .language-selector-btn {
     height: 40px;
     min-width: 45px;
@@ -2226,11 +2480,11 @@
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
-  
+
   .language-dropdown {
     min-width: 120px;
   }
-  
+
   .theme-toggle-btn,
   .github-link {
     width: 40px;
@@ -2390,6 +2644,8 @@
     border-right: none;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    display: block;
+    width: calc(100% + 2.5rem);
   }
 
   .api-table table {
@@ -2417,6 +2673,13 @@
   .api-table th:last-child,
   .api-table td:last-child {
     padding-right: 1.25rem;
+  }
+
+  .api-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .example-section {
@@ -2534,6 +2797,7 @@
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     width: calc(100% + 2rem);
+    max-width: 100vw;
   }
 
   .code-block pre {
@@ -2863,7 +3127,7 @@
     box-sizing: border-box;
   }
 
-  .example-demo > * {
+  .example-demo>* {
     max-width: 100%;
     box-sizing: border-box;
   }
@@ -3303,5 +3567,2282 @@
     margin-right: 0;
     width: 100%;
     padding-bottom: 2rem;
+  }
+}
+/* ============================================
+   EXTRA SMALL MOBILE (320px - 374px)
+   Ultra-compact navbar and layout
+   ============================================ */
+@media (max-width: 374px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 56px !important;
+  }
+
+  .navbar-container {
+    padding: 0 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .navbar-left {
+    gap: 0.5rem !important;
+  }
+
+  .mobile-menu-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    padding: 0.5rem !important;
+    border-radius: 8px !important;
+  }
+
+  .hamburger-line {
+    width: 18px !important;
+    height: 2px !important;
+  }
+
+  .navbar-logo {
+    padding: 0.375rem 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .logo-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .logo-content {
+    display: none !important;
+  }
+
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .navbar-search-wrapper {
+    display: none !important;
+  }
+
+  .navbar-right {
+    gap: 0.375rem !important;
+  }
+
+  .language-selector-wrapper {
+    position: relative !important;
+  }
+
+  .language-selector-btn {
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 50px !important;
+    padding: 0 0.5rem !important;
+    padding-right: 1.5rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  .language-selector-text {
+    display: none !important;
+  }
+
+  .language-dropdown {
+    min-width: 140px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 8px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .docs-content {
+    margin-top: 56px !important;
+    padding-top: 1.5rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .docs-sidebar {
+    top: 56px !important;
+    height: calc(100vh - 56px) !important;
+    width: 280px !important;
+    max-width: 90vw !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 1.25rem 1rem 1rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.75rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.6875rem !important;
+    padding: 0.25rem 0.625rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1rem 0.5rem !important;
+  }
+
+  .nav-link {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.8125rem !important;
+    margin: 0.25rem 0.375rem 0.25rem 0 !important;
+    min-height: 44px !important;
+    border-radius: 0 8px 8px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 2rem 0.75rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 2rem !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font-size: 1.875rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.625rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 1.125rem !important;
+    margin-bottom: 0.375rem !important;
+  }
+
+  .hero-version {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .hero-description {
+    font-size: 0.8125rem !important;
+    margin-bottom: 1.75rem !important;
+    line-height: 1.6 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .hero-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .hero-button {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 1.5rem 0.75rem 2rem !important;
+  }
+
+  .feature-card {
+    padding: 1.5rem 1.25rem !important;
+    border-radius: 12px !important;
+  }
+
+  .feature-icon {
+    font-size: 2rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.125rem !important;
+    margin-bottom: 0.625rem !important;
+  }
+
+  .feature-card p {
+    font-size: 0.8125rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 2rem 0.75rem !important;
+    margin: 2rem 0 !important;
+  }
+
+  .section-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 1.25rem !important;
+    margin-top: 1.75rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .docs-section p {
+    font-size: 0.8125rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.7 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .example-demo {
+    padding: 0.75rem !important;
+    margin: 1rem 0 !important;
+    border-radius: 8px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo ngxsmk-datepicker {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo>* {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-section {
+    padding: 1.5rem 0.75rem !important;
+    margin: 1.5rem 0 !important;
+  }
+
+  .example-title {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.625rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .example-section p {
+    font-size: 0.8125rem !important;
+    margin-bottom: 0.875rem !important;
+    line-height: 1.6 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .mobile-preview-container {
+    margin: 1rem auto !important;
+    padding: 4px !important;
+    border-radius: 16px !important;
+    max-width: calc(100vw - 1rem) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-preview-frame {
+    height: 600px !important;
+    border-radius: 14px !important;
+  }
+
+  .mobile-preview-header {
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 14px 14px 0 0 !important;
+  }
+
+  .mobile-preview-status-bar {
+    font-size: 0.6875rem !important;
+  }
+
+  .mobile-time {
+    font-size: 0.6875rem !important;
+  }
+
+  .mobile-signal-icons {
+    font-size: 0.5625rem !important;
+    gap: 0.125rem !important;
+  }
+
+  .mobile-preview-content {
+    padding: 0.75rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
+  .result-box {
+    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+    margin-top: 0.625rem !important;
+    line-height: 1.5 !important;
+    border-radius: 8px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.375rem !important;
+    word-break: break-word !important;
+  }
+
+  .result-box strong {
+    display: block !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .result-box code {
+    font-size: 0.6875rem !important;
+    word-break: break-word !important;
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .example-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    margin: 1rem 0 !important;
+  }
+
+  .demo-button {
+    flex: 1 1 100% !important;
+    min-width: 100% !important;
+    font-size: 0.8125rem !important;
+    padding: 0.75rem 1rem !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .mobile-size-selector {
+    padding: 0.75rem !important;
+    gap: 0.375rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .size-button {
+    padding: 0.5rem 0.625rem !important;
+    font-size: 0.8125rem !important;
+    min-width: calc(50% - 0.1875rem) !important;
+    flex: 1 1 calc(50% - 0.1875rem) !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .size-dimension {
+    font-size: 0.625rem !important;
+  }
+
+  .code-block {
+    margin: 1rem -0.75rem !important;
+    width: calc(100% + 1.5rem) !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  .code-block pre {
+    padding: 0.875rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-block code {
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-header {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.6875rem !important;
+  }
+
+  .code-copy {
+    padding: 0.3125rem 0.625rem !important;
+    font-size: 0.6875rem !important;
+    min-height: 32px !important;
+  }
+
+  .format-examples {
+    padding: 0.875rem !important;
+    margin-top: 0.875rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .format-examples ul {
+    padding-left: 1.25rem !important;
+  }
+
+  .format-examples li {
+    font-size: 0.75rem !important;
+    margin: 0.375rem 0 !important;
+  }
+
+  .theme-demo {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .theme-demo-btn {
+    padding: 0.625rem 1rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 44px !important;
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE (375px - 479px)
+   Improved navbar spacing
+   ============================================ */
+@media (min-width: 375px) and (max-width: 479px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 60px !important;
+  }
+
+  .navbar-container {
+    padding: 0 1rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .navbar-left {
+    gap: 0.75rem !important;
+  }
+
+  .mobile-menu-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.625rem !important;
+    border-radius: 10px !important;
+  }
+
+  .hamburger-line {
+    width: 20px !important;
+    height: 2.5px !important;
+  }
+
+  .navbar-logo {
+    padding: 0.5rem 0.625rem !important;
+    gap: 0.625rem !important;
+  }
+
+  .logo-icon {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .logo-content {
+    display: flex !important;
+  }
+
+  .logo-text {
+    font-size: 0.9375rem !important;
+  }
+
+  .logo-version {
+    font-size: 0.5625rem !important;
+  }
+
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .navbar-search-wrapper {
+    display: none !important;
+  }
+
+  .navbar-right {
+    gap: 0.5rem !important;
+  }
+
+  .language-selector-btn {
+    height: 44px !important;
+    min-width: 50px !important;
+    max-width: 70px !important;
+    padding: 0 0.625rem !important;
+    padding-right: 1.75rem !important;
+    font-size: 0.8125rem !important;
+    border-radius: 10px !important;
+  }
+
+  .language-selector-text {
+    display: block !important;
+    font-size: 0.75rem !important;
+  }
+
+  .language-dropdown {
+    min-width: 150px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 10px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  .docs-content {
+    margin-top: 60px !important;
+    padding-top: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .docs-sidebar {
+    top: 60px !important;
+    height: calc(100vh - 60px) !important;
+    width: 300px !important;
+    max-width: 85vw !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 1.5rem 1.25rem 1.25rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.8125rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1.25rem 0.75rem !important;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem 0.5rem 0.25rem 0 !important;
+    min-height: 44px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 2.5rem 1rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 2.25rem !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .hero-version {
+    font-size: 0.8125rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-description {
+    font-size: 0.875rem !important;
+    margin-bottom: 2rem !important;
+    line-height: 1.6 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .hero-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.875rem !important;
+  }
+
+  .hero-button {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 1rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+    padding: 1.75rem 1rem 2.25rem !important;
+  }
+
+  .feature-card {
+    padding: 1.75rem 1.5rem !important;
+    border-radius: 12px !important;
+  }
+
+  .feature-icon {
+    font-size: 2.25rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .feature-card p {
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 2.5rem 1rem !important;
+    margin: 2.25rem 0 !important;
+  }
+
+  .section-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 1.375rem !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .docs-section p {
+    font-size: 0.875rem !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.7 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .example-demo {
+    padding: 0.875rem !important;
+    margin: 1.125rem 0 !important;
+    border-radius: 10px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo ngxsmk-datepicker {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo>* {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-section {
+    padding: 2rem 1rem !important;
+    margin: 1.75rem 0 !important;
+  }
+
+  .example-title {
+    font-size: 1.375rem !important;
+    margin-bottom: 0.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .example-section p {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.6 !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .mobile-preview-container {
+    margin: 1.25rem auto !important;
+    padding: 6px !important;
+    border-radius: 18px !important;
+    max-width: calc(100vw - 1.5rem) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-preview-frame {
+    height: 650px !important;
+    border-radius: 15px !important;
+  }
+
+  .mobile-preview-header {
+    padding: 0.375rem 0.625rem !important;
+    border-radius: 15px 15px 0 0 !important;
+  }
+
+  .mobile-preview-status-bar {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-time {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-signal-icons {
+    font-size: 0.625rem !important;
+    gap: 0.1875rem !important;
+  }
+
+  .mobile-preview-content {
+    padding: 0.875rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
+  .result-box {
+    padding: 0.875rem !important;
+    font-size: 0.8125rem !important;
+    margin-top: 0.75rem !important;
+    line-height: 1.6 !important;
+    border-radius: 8px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    word-break: break-word !important;
+  }
+
+  .result-box strong {
+    display: block !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .result-box code {
+    font-size: 0.75rem !important;
+    word-break: break-word !important;
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .example-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.625rem !important;
+    margin: 1.125rem 0 !important;
+  }
+
+  .demo-button {
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+    font-size: 0.875rem !important;
+    padding: 0.875rem 1.25rem !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .mobile-size-selector {
+    padding: 0.875rem !important;
+    gap: 0.5rem !important;
+    margin-bottom: 1.125rem !important;
+  }
+
+  .size-button {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.875rem !important;
+    min-width: calc(50% - 0.25rem) !important;
+    flex: 1 1 calc(50% - 0.25rem) !important;
+    min-height: 44px !important;
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  .size-dimension {
+    font-size: 0.6875rem !important;
+  }
+
+  .code-block {
+    margin: 1.125rem -1rem !important;
+    width: calc(100% + 2rem) !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .code-block pre {
+    padding: 1rem !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-block code {
+    font-size: 0.8125rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-header {
+    padding: 0.625rem 0.875rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .code-copy {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important;
+  }
+
+  .format-examples {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .format-examples ul {
+    padding-left: 1.25rem !important;
+  }
+
+  .format-examples li {
+    font-size: 0.8125rem !important;
+    margin: 0.375rem 0 !important;
+  }
+
+  .theme-demo {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.875rem !important;
+  }
+
+  .theme-demo-btn {
+    padding: 0.75rem 1.125rem !important;
+    font-size: 0.875rem !important;
+    min-height: 44px !important;
+  }
+}
+
+/* ============================================
+   MEDIUM MOBILE (480px - 599px)
+   Comfortable navbar spacing
+   ============================================ */
+@media (min-width: 480px) and (max-width: 599px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 64px !important;
+  }
+
+  .navbar-container {
+    padding: 0 1.25rem !important;
+    gap: 1rem !important;
+  }
+
+  .navbar-left {
+    gap: 1rem !important;
+  }
+
+  .mobile-menu-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.625rem !important;
+    border-radius: 10px !important;
+  }
+
+  .navbar-logo {
+    padding: 0.5rem 0.75rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .logo-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .logo-text {
+    font-size: 1rem !important;
+  }
+
+  .logo-version {
+    font-size: 0.625rem !important;
+  }
+
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .navbar-search-wrapper {
+    display: none !important;
+  }
+
+  .navbar-right {
+    gap: 0.625rem !important;
+  }
+
+  .language-selector-btn {
+    height: 44px !important;
+    min-width: 60px !important;
+    max-width: 90px !important;
+    padding: 0 0.75rem !important;
+    padding-right: 2rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 10px !important;
+  }
+
+  .language-selector-text {
+    display: block !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .language-dropdown {
+    min-width: 160px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 10px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .docs-content {
+    margin-top: 64px !important;
+    padding-top: 2.5rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  .docs-sidebar {
+    top: 64px !important;
+    height: calc(100vh - 64px) !important;
+    width: 320px !important;
+    max-width: 85vw !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 1.75rem 1.5rem 1.5rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.875rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .nav-link {
+    padding: 0.875rem 1.125rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem 0.625rem 0.25rem 0 !important;
+    min-height: 44px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 3rem 1.25rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 2.5rem !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font-size: 2.25rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 1.375rem !important;
+    margin-bottom: 0.625rem !important;
+  }
+
+  .hero-version {
+    font-size: 0.875rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .hero-description {
+    font-size: 0.9375rem !important;
+    margin-bottom: 2.25rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .hero-buttons {
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 1rem !important;
+    flex-wrap: wrap !important;
+  }
+
+  .hero-button {
+    flex: 1 1 auto !important;
+    min-width: 140px !important;
+    text-align: center !important;
+    padding: 1rem 1.75rem !important;
+    font-size: 0.875rem !important;
+    min-height: 44px !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+    padding: 2rem 1.25rem 2.5rem !important;
+  }
+
+  .feature-card {
+    padding: 2rem 1.75rem !important;
+    border-radius: 14px !important;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.375rem !important;
+    margin-bottom: 0.875rem !important;
+  }
+
+  .feature-card p {
+    font-size: 0.9375rem !important;
+    line-height: 1.65 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 3rem 1.25rem !important;
+    margin: 2.5rem 0 !important;
+  }
+
+  .section-title {
+    font-size: 2rem !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 1.5rem !important;
+    margin-top: 2.25rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .docs-section p {
+    font-size: 0.9375rem !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.7 !important;
+  }
+  .example-demo {
+    padding: 1rem !important;
+    margin: 1.25rem 0 !important;
+    border-radius: 10px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo ngxsmk-datepicker {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo>* {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-section {
+    padding: 2rem 1rem !important;
+    margin: 2rem 0 !important;
+  }
+
+  .example-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.875rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .example-section p {
+    font-size: 0.875rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .mobile-preview-container {
+    margin: 1.5rem auto !important;
+    padding: 8px !important;
+    border-radius: 20px !important;
+    max-width: calc(100vw - 2rem) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-preview-frame {
+    height: 700px !important;
+    border-radius: 16px !important;
+  }
+
+  .mobile-preview-header {
+    padding: 0.375rem 0.75rem !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+
+  .mobile-preview-status-bar {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-time {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-signal-icons {
+    font-size: 0.625rem !important;
+    gap: 0.1875rem !important;
+  }
+
+  .mobile-preview-content {
+    padding: 1rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
+  .result-box {
+    padding: 1rem !important;
+    font-size: 0.8125rem !important;
+    margin-top: 0.75rem !important;
+    line-height: 1.6 !important;
+    border-radius: 8px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+    word-break: break-word !important;
+  }
+
+  .result-box strong {
+    display: block !important;
+    margin-bottom: 0.25rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .result-box code {
+    font-size: 0.75rem !important;
+    word-break: break-word !important;
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .example-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important;
+    margin: 1.25rem 0 !important;
+  }
+
+  .demo-button {
+    flex: 1 1 auto !important;
+    min-width: 140px !important;
+    font-size: 0.875rem !important;
+    padding: 0.875rem 1.5rem !important;
+    min-height: 44px !important;
+  }
+
+  .mobile-size-selector {
+    padding: 1rem !important;
+    gap: 0.625rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .size-button {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+    min-width: calc(50% - 0.3125rem) !important;
+    flex: 1 1 calc(50% - 0.3125rem) !important;
+    min-height: 44px !important;
+  }
+
+  .size-dimension {
+    font-size: 0.6875rem !important;
+  }
+
+  .code-block {
+    margin: 1.25rem -1rem !important;
+    width: calc(100% + 2rem) !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .code-block pre {
+    padding: 1rem !important;
+    font-size: 0.8125rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-block code {
+    font-size: 0.8125rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .code-header {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .code-copy {
+    padding: 0.375rem 0.875rem !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important;
+  }
+
+  .format-examples {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .format-examples ul {
+    padding-left: 1.25rem !important;
+  }
+
+  .format-examples li {
+    font-size: 0.8125rem !important;
+    margin: 0.375rem 0 !important;
+  }
+
+  .theme-demo {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .theme-demo-btn {
+    padding: 0.75rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    min-height: 44px !important;
+  }
+}
+
+/* ============================================
+   LARGE MOBILE / SMALL TABLET (600px - 767px)
+   Enhanced navbar with better spacing
+   ============================================ */
+@media (min-width: 600px) and (max-width: 767px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 68px !important;
+  }
+
+  .navbar-container {
+    padding: 0 1.5rem !important;
+    gap: 1.25rem !important;
+  }
+
+  .navbar-left {
+    gap: 1.25rem !important;
+  }
+
+  .mobile-menu-toggle {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 0.75rem !important;
+    border-radius: 10px !important;
+  }
+
+  .navbar-logo {
+    padding: 0.625rem 0.875rem !important;
+    gap: 0.875rem !important;
+  }
+
+  .logo-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .logo-text {
+    font-size: 1.0625rem !important;
+  }
+
+  .logo-version {
+    font-size: 0.6875rem !important;
+  }
+
+  .navbar-nav {
+    display: none !important;
+  }
+
+  .navbar-search-wrapper {
+    display: flex !important;
+  }
+
+  .global-search {
+    width: 200px !important;
+    min-width: 180px !important;
+    max-width: 240px !important;
+  }
+
+  .search-input {
+    height: 44px !important;
+    padding: 0.625rem 1rem 0.625rem 2.25rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .search-icon {
+    left: 0.75rem !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .navbar-right {
+    gap: 0.75rem !important;
+  }
+
+  .language-selector-btn {
+    height: 44px !important;
+    min-width: 70px !important;
+    max-width: 110px !important;
+    padding: 0 0.875rem !important;
+    padding-right: 2.25rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 10px !important;
+  }
+
+  .language-selector-text {
+    display: block !important;
+    font-size: 0.875rem !important;
+  }
+
+  .language-dropdown {
+    min-width: 180px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 10px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .docs-content {
+    margin-top: 68px !important;
+    padding-top: 3rem !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  .docs-sidebar {
+    top: 68px !important;
+    height: calc(100vh - 68px) !important;
+    width: 340px !important;
+    max-width: 85vw !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 2rem 1.75rem 1.75rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.875rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1.75rem 1.25rem !important;
+  }
+
+  .nav-link {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem 0.75rem 0.25rem 0 !important;
+    min-height: 44px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 3.5rem 1.5rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 3rem !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .hero-version {
+    font-size: 0.9375rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .hero-description {
+    font-size: 1rem !important;
+    margin-bottom: 2.5rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .hero-buttons {
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 1.25rem !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .hero-button {
+    flex: 1 1 auto !important;
+    min-width: 160px !important;
+    text-align: center !important;
+    padding: 1.125rem 2rem !important;
+    font-size: 0.9375rem !important;
+    min-height: 44px !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2rem !important;
+    padding: 2.5rem 1.5rem 3rem !important;
+  }
+
+  .feature-card {
+    padding: 2.25rem 2rem !important;
+    border-radius: 16px !important;
+  }
+
+  .feature-icon {
+    font-size: 2.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .feature-card p {
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 3.5rem 1.5rem !important;
+    margin: 3rem 0 !important;
+  }
+
+  .section-title {
+    font-size: 2.25rem !important;
+    margin-bottom: 1.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 1.625rem !important;
+    margin-top: 2.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .docs-section p {
+    font-size: 1rem !important;
+    margin-bottom: 1.75rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .example-demo {
+    padding: 1.25rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 12px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo ngxsmk-datepicker {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-section {
+    padding: 2.5rem 1.5rem !important;
+    margin: 2.5rem 0 !important;
+  }
+
+  .example-title {
+    font-size: 1.625rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .example-section p {
+    font-size: 0.9375rem !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .mobile-preview-container {
+    margin: 1.75rem auto !important;
+    padding: 10px !important;
+    border-radius: 22px !important;
+    max-width: 90% !important;
+    width: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-preview-frame {
+    height: 750px !important;
+    border-radius: 18px !important;
+  }
+
+  .mobile-preview-header {
+    padding: 0.5rem 0.875rem !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  .mobile-preview-status-bar {
+    font-size: 0.8125rem !important;
+  }
+
+  .mobile-time {
+    font-size: 0.8125rem !important;
+  }
+
+  .mobile-signal-icons {
+    font-size: 0.6875rem !important;
+    gap: 0.25rem !important;
+  }
+
+  .mobile-preview-content {
+    padding: 1.25rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
+  .result-box {
+    padding: 1.125rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    margin-top: 0.875rem !important;
+    line-height: 1.6 !important;
+    border-radius: 10px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+  }
+
+  .result-box strong {
+    display: inline !important;
+    margin-bottom: 0 !important;
+    font-size: 0.875rem !important;
+  }
+
+  .result-box code {
+    font-size: 0.8125rem !important;
+    word-break: break-word !important;
+    display: inline !important;
+    width: auto !important;
+  }
+
+  .example-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.875rem !important;
+    margin: 1.5rem 0 !important;
+  }
+
+  .demo-button {
+    flex: 1 1 auto !important;
+    min-width: 150px !important;
+    font-size: 0.875rem !important;
+    padding: 0.875rem 1.5rem !important;
+    min-height: 40px !important;
+  }
+
+  .mobile-size-selector {
+    padding: 1.25rem !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .size-button {
+    padding: 0.875rem 1.125rem !important;
+    font-size: 0.875rem !important;
+    min-width: calc(33.333% - 0.5rem) !important;
+    flex: 1 1 calc(33.333% - 0.5rem) !important;
+    min-height: 44px !important;
+  }
+
+  .size-dimension {
+    font-size: 0.75rem !important;
+  }
+
+  .code-block {
+    margin: 1.5rem 0 !important;
+    border-radius: 12px !important;
+    border-left: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .code-block pre {
+    padding: 1.25rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .code-block code {
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .code-header {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .code-copy {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important;
+  }
+
+  .format-examples {
+    padding: 1.125rem !important;
+    margin-top: 1.125rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .format-examples ul {
+    padding-left: 1.5rem !important;
+  }
+
+  .format-examples li {
+    font-size: 0.875rem !important;
+    margin: 0.5rem 0 !important;
+  }
+
+  .theme-demo {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .theme-demo-btn {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.875rem !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .example-demo {
+    padding: 1.5rem !important;
+    margin: 2rem 0 !important;
+    border-radius: 12px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-demo ngxsmk-datepicker {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .example-section {
+    padding: 3rem 2rem !important;
+    margin: 3rem 0 !important;
+  }
+
+  .example-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.25rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .example-section p {
+    font-size: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .mobile-preview-container {
+    margin: 2rem auto !important;
+    padding: 12px !important;
+    border-radius: 24px !important;
+    max-width: 85% !important;
+    width: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-preview-frame {
+    height: 800px !important;
+    border-radius: 20px !important;
+  }
+
+  .mobile-preview-header {
+    padding: 0.625rem 1rem !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+
+  .mobile-preview-status-bar {
+    font-size: 0.875rem !important;
+  }
+
+  .mobile-time {
+    font-size: 0.875rem !important;
+  }
+
+  .mobile-signal-icons {
+    font-size: 0.75rem !important;
+    gap: 0.3125rem !important;
+  }
+
+  .mobile-preview-content {
+    padding: 1.5rem !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+
+  .result-box {
+    padding: 1.25rem 1.5rem !important;
+    font-size: 0.9375rem !important;
+    margin-top: 1rem !important;
+    line-height: 1.65 !important;
+    border-radius: 10px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+  }
+
+  .result-box strong {
+    display: inline !important;
+    margin-bottom: 0 !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .result-box code {
+    font-size: 0.875rem !important;
+    word-break: break-word !important;
+    display: inline !important;
+    width: auto !important;
+  }
+
+  .example-controls {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1rem !important;
+    margin: 1.75rem 0 !important;
+  }
+
+  .demo-button {
+    flex: 1 1 auto !important;
+    min-width: 160px !important;
+    font-size: 0.9375rem !important;
+    padding: 1rem 1.75rem !important;
+    min-height: 40px !important;
+  }
+
+  .mobile-size-selector {
+    padding: 1.5rem !important;
+    gap: 1rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .size-button {
+    padding: 1rem 1.25rem !important;
+    font-size: 0.9375rem !important;
+    min-width: calc(25% - 0.75rem) !important;
+    flex: 1 1 calc(25% - 0.75rem) !important;
+    min-height: 44px !important;
+  }
+
+  .size-dimension {
+    font-size: 0.8125rem !important;
+  }
+
+  .code-block {
+    margin: 2rem 0 !important;
+    border-radius: 12px !important;
+    border-left: 1px solid rgba(0, 0, 0, 0.06) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .code-block pre {
+    padding: 1.5rem !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .code-block code {
+    font-size: 0.9375rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .code-header {
+    padding: 1rem 1.5rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .code-copy {
+    padding: 0.625rem 1.125rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 40px !important;
+  }
+
+  .format-examples {
+    padding: 1.25rem !important;
+    margin-top: 1.25rem !important;
+    font-size: 0.9375rem !important;
+  }
+
+  .format-examples ul {
+    padding-left: 1.75rem !important;
+  }
+
+  .format-examples li {
+    font-size: 0.9375rem !important;
+    margin: 0.625rem 0 !important;
+  }
+
+  .theme-demo {
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 1.25rem !important;
+  }
+
+  .theme-demo-btn {
+    padding: 0.875rem 1.75rem !important;
+    font-size: 0.9375rem !important;
+    min-height: 40px !important;
+  }
+}
+
+/* Allow datepicker popover to escape bounds on mobile */
+@media (max-width: 1023px) {
+  .docs-container,
+  .docs-content,
+  .example-section,
+  .example-demo,
+  .mobile-preview-container,
+  .mobile-preview-content {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    position: relative !important;
+  }
+
+  .example-demo,
+  .mobile-preview-content {
+    isolation: auto !important;
+    contain: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  .example-demo .ngxsmk-datepicker-input-group,
+  .mobile-preview-content .ngxsmk-datepicker-input-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ============================================
+   DESKTOP (1024px+)
+   Full-featured layout with maximum spacing
+   ============================================ */
+@media (min-width: 1024px) {
+  /* ===== Navbar Redesign ===== */
+  .modern-navbar {
+    height: 72px !important;
+  }
+
+  .navbar-container {
+    padding: 0 2rem !important;
+    gap: 2rem !important;
+  }
+
+  .navbar-left {
+    gap: 2rem !important;
+  }
+
+  .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  .navbar-logo {
+    padding: 0.625rem 1rem !important;
+    gap: 0.875rem !important;
+  }
+
+  .logo-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .logo-text {
+    font-size: 1.125rem !important;
+  }
+
+  .logo-version {
+    font-size: 0.6875rem !important;
+  }
+
+  .navbar-nav {
+    display: flex !important;
+    gap: 0.5rem !important;
+  }
+
+  .nav-item {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .navbar-search-wrapper {
+    display: flex !important;
+  }
+
+  .global-search {
+    width: 240px !important;
+    min-width: 200px !important;
+    max-width: 280px !important;
+  }
+
+  .search-input {
+    height: 48px !important;
+    padding: 0.625rem 1rem 0.625rem 2.5rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .navbar-right {
+    gap: 1rem !important;
+  }
+
+  .language-selector-btn {
+    height: 48px !important;
+    min-width: 90px !important;
+    max-width: 160px !important;
+    padding: 0 1rem !important;
+    padding-right: 2.5rem !important;
+    font-size: 0.875rem !important;
+    border-radius: 10px !important;
+  }
+
+  .language-selector-text {
+    display: block !important;
+    font-size: 0.875rem !important;
+  }
+
+  .language-dropdown {
+    min-width: 220px !important;
+    right: 0 !important;
+    left: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .theme-toggle-btn {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    border-radius: 10px !important;
+  }
+
+  .theme-toggle-btn svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .docs-content {
+    margin-top: 72px !important;
+    margin-left: 280px !important;
+    padding-top: 4rem !important;
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+    max-width: calc(100% - 280px) !important;
+  }
+
+  .docs-sidebar {
+    top: 72px !important;
+    height: calc(100vh - 72px) !important;
+    width: 280px !important;
+    max-width: 320px !important;
+    transform: translateX(0) !important;
+  }
+
+  /* ===== Sidebar Redesign ===== */
+  .sidebar-header {
+    padding: 2rem 1.75rem 1.75rem !important;
+  }
+
+  .sidebar-title {
+    font-size: 0.875rem !important;
+  }
+
+  .sidebar-version {
+    font-size: 0.75rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .sidebar-nav {
+    padding: 1.75rem 1.25rem !important;
+  }
+
+  .nav-link {
+    padding: 0.875rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem 0.75rem 0.25rem 0 !important;
+    min-height: 40px !important;
+    border-radius: 0 10px 10px 0 !important;
+  }
+
+  /* ===== Hero Section Redesign ===== */
+  .hero-section {
+    padding: 5rem 3rem !important;
+  }
+
+  .hero-content {
+    margin-bottom: 4rem !important;
+    padding: 0 !important;
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-title {
+    font-size: 3.5rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .hero-tagline {
+    font-size: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-version {
+    font-size: 1.125rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .hero-description {
+    font-size: 1.25rem !important;
+    margin-bottom: 3.5rem !important;
+    line-height: 1.7 !important;
+  }
+
+  .hero-buttons {
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 1.5rem !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+  }
+
+  .hero-button {
+    flex: 0 1 auto !important;
+    min-width: 200px !important;
+    text-align: center !important;
+    padding: 1.375rem 3rem !important;
+    font-size: 1.0625rem !important;
+    min-height: 52px !important;
+  }
+
+  /* ===== Feature Grid Redesign ===== */
+  .feature-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 3rem !important;
+    padding: 4rem 3rem 5rem !important;
+  }
+
+  .feature-card {
+    padding: 3rem 2.5rem !important;
+    border-radius: 20px !important;
+  }
+
+  .feature-icon {
+    font-size: 3.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .feature-card p {
+    font-size: 1.125rem !important;
+    line-height: 1.7 !important;
+  }
+
+  /* ===== Docs Section Redesign ===== */
+  .docs-section {
+    padding: 5rem 3rem !important;
+    margin: 4rem 0 !important;
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .section-title {
+    font-size: 3rem !important;
+    margin-bottom: 2.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .subsection-title {
+    font-size: 2rem !important;
+    margin-top: 4rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .docs-section p {
+    font-size: 1.125rem !important;
+    margin-bottom: 2.5rem !important;
+    line-height: 1.7 !important;
   }
 }

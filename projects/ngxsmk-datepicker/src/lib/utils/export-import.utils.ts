@@ -194,7 +194,7 @@ export function importFromIcs(icsString: string): DatepickerValue {
 
 
 
-function serializeDateValue(value: DatepickerValue, options: ExportOptions): any {
+function serializeDateValue(value: DatepickerValue, options: ExportOptions): unknown {
   if (value === null || value === undefined) {
     return null;
   }
@@ -241,26 +241,41 @@ function serializeDateValue(value: DatepickerValue, options: ExportOptions): any
   return null;
 }
 
-function deserializeDateValue(data: any): DatepickerValue {
+function deserializeDateValue(data: unknown): DatepickerValue {
   if (!data || data === null) {
     return null;
   }
 
-  if (data.type === 'single' && data.iso) {
-    return new Date(data.iso);
-  }
+  if (typeof data === 'object' && data !== null) {
+    const obj = data as Record<string, unknown>;
+    
+    if (obj['type'] === 'single' && typeof obj['iso'] === 'string') {
+      return new Date(obj['iso']);
+    }
 
-  if (data.type === 'multiple' && Array.isArray(data.dates)) {
-    return data.dates
-      .map((d: any) => d.iso ? new Date(d.iso) : null)
-      .filter((d: Date | null) => d !== null) as Date[];
-  }
+    if (obj['type'] === 'multiple' && Array.isArray(obj['dates'])) {
+      return (obj['dates'] as unknown[])
+        .map((d: unknown) => {
+          if (typeof d === 'object' && d !== null && 'iso' in d && typeof (d as { iso: unknown }).iso === 'string') {
+            return new Date((d as { iso: string }).iso);
+          }
+          return null;
+        })
+        .filter((d: Date | null) => d !== null) as Date[];
+    }
 
-  if (data.type === 'range' && data.start?.iso && data.end?.iso) {
-    return {
-      start: new Date(data.start.iso),
-      end: new Date(data.end.iso),
-    };
+    if (obj['type'] === 'range' && 
+        typeof obj['start'] === 'object' && obj['start'] !== null && 'iso' in (obj['start'] as Record<string, unknown>) &&
+        typeof obj['end'] === 'object' && obj['end'] !== null && 'iso' in (obj['end'] as Record<string, unknown>)) {
+      const startObj = obj['start'] as Record<string, unknown>;
+      const endObj = obj['end'] as Record<string, unknown>;
+      if (typeof startObj['iso'] === 'string' && typeof endObj['iso'] === 'string') {
+        return {
+          start: new Date(startObj['iso']),
+          end: new Date(endObj['iso']),
+        };
+      }
+    }
   }
 
   return null;

@@ -10,7 +10,7 @@ export interface DateAdapter {
    * @param value - The value to parse (string, Date, or library-specific type)
    * @returns A Date object or null if parsing fails
    */
-  parse(value: any): Date | null;
+  parse(value: string | Date | number | unknown): Date | null;
 
   /**
    * Format a date to a string
@@ -26,7 +26,7 @@ export interface DateAdapter {
    * @param value - The value to check
    * @returns True if the value is a valid date
    */
-  isValid(value: any): boolean;
+  isValid(value: string | Date | number | unknown): boolean;
 
   /**
    * Get the start of day for a date
@@ -71,7 +71,7 @@ export interface DateAdapter {
  * Default Date Adapter using native JavaScript Date
  */
 export class NativeDateAdapter implements DateAdapter {
-  parse(value: any): Date | null {
+  parse(value: string | Date | number | unknown): Date | null {
     if (!value) return null;
     if (value instanceof Date) {
       return isNaN(value.getTime()) ? null : new Date(value.getTime());
@@ -99,7 +99,7 @@ export class NativeDateAdapter implements DateAdapter {
     return new Intl.DateTimeFormat(locale || 'en-US', options).format(date);
   }
 
-  isValid(value: any): boolean {
+  isValid(value: string | Date | number | unknown): boolean {
     if (!value) return false;
     if (value instanceof Date) {
       return !isNaN(value.getTime());

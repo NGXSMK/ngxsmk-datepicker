@@ -201,7 +201,7 @@ export const Inline: Story = {
       </div>
     `,
     methods: {
-      onValueChange: (value: any) => {
+      onValueChange: (_value: unknown) => {
         // Value changed
       },
     },
@@ -249,7 +249,7 @@ export const DarkTheme: Story = {
       </div>
     `,
     methods: {
-      onValueChange: (value: any) => {
+      onValueChange: (_value: unknown) => {
         // Value changed
       },
     },
@@ -292,7 +292,7 @@ export const WithMinMax: Story = {
         </div>
       `,
       methods: {
-        onValueChange: (value: any) => {
+        onValueChange: (value: unknown) => {
           console.log('Value:', value);
         },
       },
