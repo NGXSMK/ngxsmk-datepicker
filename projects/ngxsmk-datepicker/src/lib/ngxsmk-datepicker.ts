@@ -1378,7 +1378,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.isCalendarOpen = true;
       this.lastToggleTime = now;
       
-      // Close any open month/year dropdowns when calendar opens (especially important for mobile)
       this.closeMonthYearDropdowns();
 
       setTimeout(() => {
@@ -1859,7 +1858,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
 
-    // Don't open calendar if click/touch originated from clear button
     if (event && event.target) {
       const target = event.target as HTMLElement;
       const isClearButton = target.closest('.ngxsmk-clear-button');
@@ -2000,7 +1998,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (willOpen && this.isCalendarOpen) {
       setTimeout(() => {
         this.setupFocusTrap();
-        // Setup touch listeners when calendar opens for mobile support
         if (this.isBrowser) {
           this.setupPassiveTouchListeners();
         }
@@ -2085,7 +2082,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     if (this.disabled) return;
 
-    // Clear touch state to prevent interference
     this.clearTouchHandledFlag();
 
     this.selectedDate = null;
@@ -4092,7 +4088,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
     
     if (this.isBrowser && this.isCalendarOpen) {
-      // Use multiple strategies to ensure DOM is ready
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           setTimeout(() => {
@@ -4176,9 +4171,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     const animationConfig: AnimationConfig = this.globalConfig?.animations || DEFAULT_ANIMATION_CONFIG;
 
-    // Check for reduced motion preference
-    const prefersReducedMotion = animationConfig.respectReducedMotion &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let prefersReducedMotion = false;
+    if (animationConfig.respectReducedMotion) {
+      try {
+        prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      } catch {
+        prefersReducedMotion = false;
+      }
+    }
 
     if (!animationConfig.enabled || prefersReducedMotion) {
       this.elementRef.nativeElement.style.setProperty('--datepicker-transition-duration', '0ms');

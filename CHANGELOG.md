@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.20] - 2025-12-06 (Stable)
+
+### Fixed
+- **Test Environment Compatibility (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
+  - Added try-catch block around `window.matchMedia` call in `applyAnimationConfig()` method
+  - Component now gracefully handles missing `matchMedia` API in test environments
+  - Prevents test failures when running with Vitest and jsdom
+  - Added comprehensive test coverage for `matchMedia` compatibility scenarios
+
+### Changed
+- **Version Update**: Updated to version 1.9.20
+- **Stable Release**: Version 1.9.20 is the current stable version
+
+### Migration Notes
+- This is a patch version update
+- No breaking changes from v1.9.19
+- All changes are backward compatible
+- Compatible with Angular 17-22
+- Fixes test compatibility issues with Vitest and jsdom environments
+
 ## [1.9.19] - 2025-01-XX (Stable)
 
 ### Added

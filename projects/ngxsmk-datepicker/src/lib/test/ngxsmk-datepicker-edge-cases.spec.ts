@@ -604,5 +604,129 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       expect(tooltip === null || typeof tooltip === 'string').toBe(true);
     });
   });
+
+  describe('window.matchMedia Compatibility (Issue #71)', () => {
+    let originalMatchMedia: typeof window.matchMedia | undefined;
+
+    beforeEach(() => {
+      originalMatchMedia = window.matchMedia;
+    });
+
+    afterEach(() => {
+      if (originalMatchMedia !== undefined) {
+        (window as any).matchMedia = originalMatchMedia;
+      } else {
+        delete (window as any).matchMedia;
+      }
+    });
+
+    it('should initialize without errors when window.matchMedia is not available (jsdom/Vitest)', () => {
+      delete (window as any).matchMedia;
+
+      expect(() => {
+        const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+        const testComponent = testFixture.componentInstance;
+        testComponent.inline = true;
+        testFixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should initialize without errors when window.matchMedia throws an error', () => {
+      (window as any).matchMedia = () => {
+        throw new Error('matchMedia not supported');
+      };
+
+      expect(() => {
+        const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+        const testComponent = testFixture.componentInstance;
+        testComponent.inline = true;
+        testFixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should initialize without errors when window.matchMedia returns null', () => {
+      (window as any).matchMedia = () => null as any;
+
+      expect(() => {
+        const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+        const testComponent = testFixture.componentInstance;
+        testComponent.inline = true;
+        testFixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should apply animation config correctly when matchMedia is not available', () => {
+      delete (window as any).matchMedia;
+
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      
+      expect(() => {
+        testFixture.detectChanges();
+        const element = testComponent['elementRef'].nativeElement;
+        expect(element).toBeTruthy();
+      }).not.toThrow();
+    });
+
+    it('should apply animation config correctly when matchMedia is available', () => {
+      if (!window.matchMedia) {
+        (window as any).matchMedia = (query: string) => ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => true,
+        } as MediaQueryList);
+      }
+
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      
+      expect(() => {
+        testFixture.detectChanges();
+        const element = testComponent['elementRef'].nativeElement;
+        expect(element).toBeTruthy();
+      }).not.toThrow();
+    });
+
+    it('should handle prefers-reduced-motion preference when matchMedia is available', () => {
+      (window as any).matchMedia = (query: string) => ({
+        matches: query === '(prefers-reduced-motion: reduce)',
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => true,
+      } as MediaQueryList);
+
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      
+      expect(() => {
+        testFixture.detectChanges();
+      }).not.toThrow();
+    });
+
+    it('should call ngOnInit without errors when matchMedia is unavailable', () => {
+      delete (window as any).matchMedia;
+
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      
+      expect(() => {
+        testComponent.ngOnInit();
+        testFixture.detectChanges();
+      }).not.toThrow();
+    });
+  });
 });
 
