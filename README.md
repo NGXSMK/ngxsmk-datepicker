@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.19` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.20` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -761,6 +761,16 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.20** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.20
+- ✅ **Stable Release**: Version 1.9.20 is the current stable version
+- 🐛 **Bug Fix (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
+  - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
+  - Component now gracefully handles missing `matchMedia` API in test environments
+  - Prevents test failures when running with Vitest and jsdom
+- ✅ **Test Coverage**: Added comprehensive test coverage for `matchMedia` compatibility scenarios
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.19
 
 ### **v1.9.19** (Stable)
 - 🎉 **Version Update**: Updated to version 1.9.19
