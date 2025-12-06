@@ -13,14 +13,7 @@
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngxsmk-datepicker/tsconfig.lib.prod.json",
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "130kB",
-                  "maximumError": "150kB"
-                }
-              ]
+              "tsConfig": "projects/ngxsmk-datepicker/tsconfig.lib.prod.json"
             },
             "development": {
               "tsConfig": "projects/ngxsmk-datepicker/tsconfig.lib.json"
