@@ -6,6 +6,8 @@ Complete example demonstrating ngxsmk-datepicker with Angular Universal (SSR).
 
 ngxsmk-datepicker is fully compatible with Angular Universal and server-side rendering. All browser APIs are properly guarded with platform checks, ensuring the component works seamlessly in both server and browser environments.
 
+> **Note**: For setup instructions and best practices, see the [SSR Guide](./ssr.md).
+
 ## Basic SSR Setup
 
 ### 1. Install Angular Universal

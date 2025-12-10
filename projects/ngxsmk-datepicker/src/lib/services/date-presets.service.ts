@@ -196,7 +196,7 @@ export class DatePresetsService {
           imported++;
         } catch (error) {
           errors++;
-          console.warn('Failed to import preset:', preset, error);
+          // Silently handle import errors
         }
       });
 
@@ -230,7 +230,7 @@ export class DatePresetsService {
         });
       }
     } catch (error) {
-      console.warn('Failed to load presets from localStorage:', error);
+      // Silently handle localStorage load errors
     }
   }
 
@@ -243,7 +243,7 @@ export class DatePresetsService {
       const presetsArray = Array.from(this.presets.values());
       localStorage.setItem(this.storageKey, JSON.stringify(presetsArray));
     } catch (error) {
-      console.warn('Failed to save presets to localStorage:', error);
+      // Silently handle localStorage save errors
     }
   }
 

@@ -152,6 +152,29 @@
   background: var(--datepicker-hover-background);
 }
 
+.ngxsmk-native-input-group {
+  cursor: default;
+}
+
+.ngxsmk-native-input-group .ngxsmk-native-input {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.ngxsmk-native-input-group .ngxsmk-native-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  margin-left: 4px;
+}
+
+.ngxsmk-native-input-group .ngxsmk-native-input::-webkit-inner-spin-button,
+.ngxsmk-native-input-group .ngxsmk-native-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .ngxsmk-display-input {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
@@ -1581,7 +1604,7 @@
 }
 
 @media (min-width: 320px) and (max-width: 1023px) {
-  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container):not(.ngxsmk-bottom-sheet):not(.ngxsmk-fullscreen) {
     position: fixed !important;
     top: 50% !important;
     left: 50% !important;
@@ -1601,6 +1624,59 @@
     max-height: calc(100dvh - 64px) !important;
     z-index: 2147483647 !important;
     margin: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    will-change: transform, opacity !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-bottom-sheet:not(.ngxsmk-inline-container) {
+    position: fixed !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    -webkit-transform: translateY(0) !important;
+    -moz-transform: translateY(0) !important;
+    -ms-transform: translateY(0) !important;
+    -o-transform: translateY(0) !important;
+    transform: translateY(0) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    max-height: 90dvh !important;
+    border-radius: 16px 16px 0 0 !important;
+    margin: 0 !important;
+    z-index: 2147483647 !important;
+    overflow-y: auto !important;
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    will-change: transform, opacity !important;
+    -webkit-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -moz-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -o-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    z-index: 2147483647 !important;
     overflow-y: auto !important;
     overflow-x: visible !important;
     -webkit-overflow-scrolling: touch !important;
@@ -2394,7 +2470,6 @@
   .ngxsmk-decade-grid {
     gap: 12px !important;
     padding: 16px 12px !important;
-    grid-template-columns: repeat(4, 1fr) !important;
   }
 
   .ngxsmk-year-cell,
@@ -3504,7 +3579,6 @@
 
   .ngxsmk-ranges-container ul {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
     gap: 12px !important;
     overflow-x: visible !important;
     overflow-y: visible !important;

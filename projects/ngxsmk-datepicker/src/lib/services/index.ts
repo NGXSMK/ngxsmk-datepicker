@@ -29,4 +29,10 @@ export type { DatepickerTranslations, PartialDatepickerTranslations } from '../i
 
 export { FocusTrapService } from './focus-trap.service';
 export { AriaLiveService } from './aria-live.service';
+export { CalendarGenerationService } from './calendar-generation.service';
+export type { CalendarMonth } from './calendar-generation.service';
+export { DisplayFormattingService } from './display-formatting.service';
+export type { FormattingOptions } from './display-formatting.service';
+export { DateValidationService } from './date-validation.service';
+export type { ValidationConstraints } from './date-validation.service';
 

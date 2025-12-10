@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
+import { getStartOfDay, getEndOfDay, getStartOfWeek, getEndOfWeek, getStartOfQuarter, getEndOfQuarter, getStartOfMonth, getEndOfMonth, getStartOfYear, getEndOfYear } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 
 class TestHolidayProvider implements HolidayProvider {

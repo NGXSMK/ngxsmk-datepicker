@@ -10,6 +10,7 @@ import {
 } from "ngxsmk-datepicker";
 import {CodePipe} from './code.pipe';
 import {DemoTranslationsService, DemoTranslations} from './demo-translations.service';
+import {SnowOverlayComponent} from './snow-overlay.component';
 import {exportToJson, importFromJson, exportToCsv, importFromCsv, exportToIcs, importFromIcs} from 'ngxsmk-datepicker';
 import {ThemeBuilderService, DatePresetsService, DatepickerTheme, DatePreset} from 'ngxsmk-datepicker';
 import {AnimationConfig} from 'ngxsmk-datepicker';
@@ -77,7 +78,7 @@ class SampleHolidayProvider implements HolidayProvider {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe],
+  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })

@@ -294,6 +294,7 @@ export class SSRExampleComponent {
 
 ## Additional Resources
 
+- **[SSR Example](./SSR-EXAMPLE.md)** - Complete working example with code samples
 - [Angular Universal Guide](https://angular.dev/guide/ssr)
 - [Angular SSR Documentation](https://angular.dev/guide/ssr)
 - [Platform Detection](https://angular.dev/api/common/isPlatformBrowser)

@@ -4,6 +4,8 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.20 → v1.9.21](#v1920---v1921)
+- [v1.9.19 → v1.9.20](#v1919---v1920)
 - [v1.9.18 → v1.9.19](#v1918---v1919)
 - [v1.9.17 → v1.9.18](#v1917---v1918)
 - [v1.9.16 → v1.9.17](#v1916---v1917)
@@ -26,6 +28,90 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.20 → v1.9.21
+
+### Installation
+
+Update to the latest version:
+
+```bash
+npm install ngxsmk-datepicker@latest
+```
+
+### New Features
+
+#### Mobile-Specific Features
+
+Version 1.9.21 introduces comprehensive mobile optimization:
+
+```typescript
+// Enable native picker on mobile devices (automatic detection)
+<ngxsmk-datepicker
+  [useNativePicker]="true"
+  [autoDetectMobile]="true"
+  [mobileModalStyle]="'bottom-sheet'"
+  [enableHapticFeedback]="true">
+</ngxsmk-datepicker>
+```
+
+**New Inputs:**
+- `useNativePicker`: Enable native date picker on mobile devices
+- `autoDetectMobile`: Automatically detect mobile devices (default: `true`)
+- `mobileModalStyle`: Choose modal style (`'bottom-sheet'`, `'center'`, `'fullscreen'`)
+- `enableHapticFeedback`: Enable haptic feedback for interactions
+
+#### Advanced Selection Modes
+
+New selection modes extend the existing `mode` input:
+
+```typescript
+// Week selection
+<ngxsmk-datepicker mode="week"></ngxsmk-datepicker>
+
+// Month selection
+<ngxsmk-datepicker mode="month"></ngxsmk-datepicker>
+
+// Quarter selection
+<ngxsmk-datepicker mode="quarter"></ngxsmk-datepicker>
+
+// Year selection
+<ngxsmk-datepicker mode="year"></ngxsmk-datepicker>
+```
+
+#### Enhanced Time Selection
+
+Seconds selection is now available:
+
+```typescript
+<ngxsmk-datepicker
+  [showTime]="true"
+  [showSeconds]="true"
+  [secondInterval]="1">
+</ngxsmk-datepicker>
+```
+
+**New Inputs:**
+- `showSeconds`: Show seconds selector in time picker
+- `secondInterval`: Interval for seconds selection (default: `1`)
+
+### Migration Steps
+
+No migration steps required. This is a patch version with new features that are opt-in:
+
+1. **Existing code continues to work**: All existing implementations remain unchanged
+2. **New features are opt-in**: Mobile features and new selection modes require explicit configuration
+3. **Backward compatible**: All changes maintain full backward compatibility
+
+### Breaking Changes
+
+None. This version is fully backward compatible.
+
+### Compatibility
+
+- Angular 17-22
+- All existing features continue to work
+- New features are additive only
 
 ## v1.9.15 → v1.9.16
 
@@ -62,6 +148,58 @@ None in v1.9.16.
 
 - This version maintains full backward compatibility with v1.9.15. All existing code will continue to work without modifications.
 - The fix ensures that range mode date pickers work correctly when users click on dates from previous months, especially when starting with null initial values.
+
+## v1.9.20 → v1.9.21
+
+### Changed
+- **Version Update**: Updated to version 1.9.21
+- **Stable Release**: Version 1.9.21 is the current stable version
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.21
+```
+
+### Breaking Changes
+None in v1.9.21.
+
+### Deprecations
+None in v1.9.21.
+
+### Migration Steps
+- This version maintains full backward compatibility with v1.9.20. All existing code will continue to work without modifications.
+- No code changes required.
+
+## v1.9.19 → v1.9.20
+
+### Fixed
+- **Test Environment Compatibility (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
+  - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
+  - Component now gracefully handles missing `matchMedia` API in test environments
+  - Prevents test failures when running with Vitest and jsdom
+  - Added comprehensive test coverage for `matchMedia` compatibility scenarios
+
+### Changed
+- **Version Update**: Updated to version 1.9.20
+- **Stable Release**: Version 1.9.20 is the current stable version
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.20
+```
+
+### Breaking Changes
+None in v1.9.20.
+
+### Deprecations
+None in v1.9.20.
+
+### Migration Steps
+- This version maintains full backward compatibility with v1.9.19. All existing code will continue to work without modifications.
+- No code changes required.
+- Fixes test compatibility issues with Vitest and jsdom environments.
 
 ## v1.9.18 → v1.9.19
 

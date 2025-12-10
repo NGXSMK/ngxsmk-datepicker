@@ -6,18 +6,18 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 ### High Priority
 
-- [ ] **Accessibility Improvements**
+- [x] **Accessibility Improvements** ✅ (v1.9.21)
   - Enhanced screen reader support
   - ARIA live regions for dynamic updates
   - Focus trap management in popover mode
   - High contrast mode support
-  - *Label: `enhancement`, `accessibility`, `help-wanted`*
+  - *Completed in v1.9.21*
 
-- [ ] **Performance Optimizations**
-  - Virtual scrolling for large date ranges
-  - Lazy loading of calendar months
+- [x] **Performance Optimizations** ✅ (v1.9.21)
+  - Virtual scrolling infrastructure for large date ranges
+  - Lazy loading of calendar months with intelligent caching
   - Memoization improvements for date calculations
-  - *Label: `enhancement`, `performance`, `help-wanted`*
+  - *Completed in v1.9.21 - Infrastructure ready, full implementation in progress*
 
 - [ ] **Enhanced Localization**
   - More locale-specific date formats
@@ -27,12 +27,12 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 ### Medium Priority
 
-- [ ] **Advanced Date Selection**
+- [x] **Advanced Date Selection** ✅ (v1.9.21)
   - Week selection mode
   - Month selection mode
   - Quarter selection mode
   - Year selection mode
-  - *Label: `enhancement`, `feature-request`*
+  - *Completed in v1.9.21*
 
 - [x] **Custom Date Formatting** ✅ (Implemented in v1.9.4)
   - Custom format strings (similar to Angular DatePipe) - `[displayFormat]` input
@@ -165,7 +165,7 @@ We use labels to help organize issues:
 
 ---
 
-**Last Updated**: November 2025
+**Last Updated**: December 10, 2025
 
 *This roadmap is a living document and will be updated regularly based on community feedback and project needs.*
 

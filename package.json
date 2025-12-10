@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.20",
+  "version": "1.9.21",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -29,7 +29,11 @@
     "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
     "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui",
+    "e2e:debug": "playwright test --debug"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <24.0.0",
@@ -157,6 +161,7 @@
     "@storybook/addon-docs": "^8.6.14",
     "storybook": "^8.6.14",
     "luxon": "^3.4.4",
-    "@types/luxon": "^3.3.7"
+    "@types/luxon": "^3.3.7",
+    "@playwright/test": "^1.48.0"
   }
 }
