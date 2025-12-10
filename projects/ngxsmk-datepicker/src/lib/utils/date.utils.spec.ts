@@ -1,4 +1,4 @@
-import { getStartOfDay, getEndOfDay, addMonths, subtractDays, getStartOfMonth, getEndOfMonth, isSameDay, normalizeDate } from './date.utils';
+import { getStartOfDay, getEndOfDay, addMonths, subtractDays, getStartOfMonth, getEndOfMonth, getStartOfWeek, getEndOfWeek, getStartOfQuarter, getEndOfQuarter, getStartOfYear, getEndOfYear, isSameDay, normalizeDate } from './date.utils';
 
 describe('Date Utils', () => {
   describe('getStartOfDay', () => {
@@ -115,6 +115,109 @@ describe('Date Utils', () => {
       const result = getEndOfMonth(date);
       
       expect(result.getDate()).toBe(28);
+    });
+  });
+
+  describe('getStartOfWeek', () => {
+    it('should return start of week (Sunday)', () => {
+      const date = new Date(2025, 5, 15); // Sunday, June 15, 2025
+      const result = getStartOfWeek(date, 0);
+      
+      expect(result.getDay()).toBe(0); // Sunday
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(0);
+    });
+
+    it('should return start of week (Monday)', () => {
+      const date = new Date(2025, 5, 15); // Sunday, June 15, 2025
+      const result = getStartOfWeek(date, 1);
+      
+      expect(result.getDay()).toBe(1); // Monday
+    });
+  });
+
+  describe('getEndOfWeek', () => {
+    it('should return end of week (Saturday)', () => {
+      const date = new Date(2025, 5, 15); // Sunday, June 15, 2025
+      const result = getEndOfWeek(date, 0);
+      
+      expect(result.getDay()).toBe(6); // Saturday
+      expect(result.getHours()).toBe(23);
+      expect(result.getMinutes()).toBe(59);
+    });
+  });
+
+  describe('getStartOfQuarter', () => {
+    it('should return start of Q1', () => {
+      const date = new Date(2025, 1, 15); // February (Q1)
+      const result = getStartOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(0); // January
+      expect(result.getDate()).toBe(1);
+    });
+
+    it('should return start of Q2', () => {
+      const date = new Date(2025, 5, 15); // June (Q2)
+      const result = getStartOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(3); // April
+      expect(result.getDate()).toBe(1);
+    });
+
+    it('should return start of Q3', () => {
+      const date = new Date(2025, 7, 15); // August (Q3)
+      const result = getStartOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(6); // July
+      expect(result.getDate()).toBe(1);
+    });
+
+    it('should return start of Q4', () => {
+      const date = new Date(2025, 10, 15); // November (Q4)
+      const result = getStartOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(9); // October
+      expect(result.getDate()).toBe(1);
+    });
+  });
+
+  describe('getEndOfQuarter', () => {
+    it('should return end of Q1', () => {
+      const date = new Date(2025, 1, 15); // February (Q1)
+      const result = getEndOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(2); // March
+      expect(result.getDate()).toBe(31);
+    });
+
+    it('should return end of Q2', () => {
+      const date = new Date(2025, 5, 15); // June (Q2)
+      const result = getEndOfQuarter(date);
+      
+      expect(result.getMonth()).toBe(5); // June
+      expect(result.getDate()).toBe(30);
+    });
+  });
+
+  describe('getStartOfYear', () => {
+    it('should return January 1st', () => {
+      const date = new Date(2025, 5, 15);
+      const result = getStartOfYear(date);
+      
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0); // January
+      expect(result.getDate()).toBe(1);
+    });
+  });
+
+  describe('getEndOfYear', () => {
+    it('should return December 31st', () => {
+      const date = new Date(2025, 5, 15);
+      const result = getEndOfYear(date);
+      
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(11); // December
+      expect(result.getDate()).toBe(31);
     });
   });
 

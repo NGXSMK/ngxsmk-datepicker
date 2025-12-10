@@ -23,6 +23,17 @@ export interface AnimationConfig {
   respectReducedMotion?: boolean;
 }
 
+export interface MobileConfig {
+  useNativePicker?: boolean;
+  enableHapticFeedback?: boolean;
+  mobileModalStyle?: 'bottom-sheet' | 'center' | 'fullscreen';
+  mobileTimePickerStyle?: 'wheel' | 'slider' | 'native';
+  enablePullToRefresh?: boolean;
+  mobileTheme?: 'compact' | 'comfortable' | 'spacious';
+  enableVoiceInput?: boolean;
+  autoDetectMobile?: boolean;
+}
+
 export const DEFAULT_ANIMATION_CONFIG: Required<AnimationConfig> = {
   enabled: true,
   duration: 150,

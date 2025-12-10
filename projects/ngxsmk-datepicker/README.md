@@ -8,7 +8,9 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.20` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.21` is the current stable release. For production use, install the latest version from npm.
+
+**Latest Version**: Check [npm](https://www.npmjs.com/package/ngxsmk-datepicker) for the most recent release.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -31,15 +33,19 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 
 ## **✨ Features**
 
-* **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
+* **Multiple Selection Modes**: Supports `single`, `range`, `multiple`, `week`, `month`, `quarter`, and `year` date selection.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
 * **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
 * **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips.
 * **Disabled Dates**: Disable specific dates by passing an array of date strings or Date objects.
-* **Date & Time Selection**: Supports optional time inputs with configurable minute intervals.
+* **Date & Time Selection**: Supports optional time inputs with configurable minute and second intervals.
+* **Seconds Selection**: Optional seconds picker with `showSeconds` input and configurable `secondInterval`.
 * **Time-Only Mode**: Display only time picker without calendar using `[timeOnly]="true"`.
 * **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly **12-hour clock with AM/PM toggle**.
+* **Mobile-Native Integration**: Automatic native date picker on mobile devices with `useNativePicker` input.
+* **Mobile Gestures**: Enhanced touch support with double-tap selection, swipe navigation, and haptic feedback.
+* **Mobile Modal Styles**: Bottom sheet, center, and fullscreen modal options for mobile devices.
 * **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days").
 * **Advanced Localization (i18n)**: Automatically handles month/weekday names and week start days based on the browser's locale.
 * **Previous Month Context**: Shows last few days of previous month for better date selection context.
@@ -49,6 +55,8 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
 * **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
 * **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
+* **E2E Testing**: Comprehensive Playwright-based end-to-end testing infrastructure.
+* **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
 * **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
@@ -736,6 +744,45 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.21** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.21
+- ✅ **Stable Release**: Version 1.9.21 is the current stable version
+- 📱 **Mobile-Specific Features**: Comprehensive mobile optimization
+  - Native date picker integration with automatic mobile detection
+  - Bottom sheet modal with swipe-to-dismiss gestures
+  - Enhanced touch gestures (double-tap, swipe navigation)
+  - Haptic feedback support for better mobile UX
+  - Mobile-optimized animations and keyboard handling
+- 🎯 **Advanced Selection Modes**: Extended selection capabilities
+  - Week selection mode for selecting entire weeks
+  - Month selection mode for selecting full months
+  - Quarter selection mode for quarterly selections
+  - Year selection mode for annual date ranges
+- ⏱️ **Enhanced Time Selection**: Improved time picker
+  - Seconds selection with configurable intervals
+  - Better time picker UX and controls
+- 🏗️ **Code Refactoring**: Improved architecture
+  - New services: CalendarGenerationService, DisplayFormattingService, DateValidationService
+  - Better code organization and maintainability
+  - Reduced component complexity
+- 🧪 **E2E Testing**: Comprehensive end-to-end testing
+  - Playwright setup with multi-browser support
+  - Mobile viewport testing
+  - Automated test execution
+- ♿ **Accessibility Enhancements**: Better screen reader support
+  - Improved ARIA live regions
+  - Enhanced focus management
+  - Better keyboard navigation
+- ⚡ **Performance Optimizations**: Infrastructure improvements
+  - Lazy loading calendar months with intelligent caching
+  - Virtual scrolling infrastructure
+  - Preloading adjacent months
+- 🧪 **Test Coverage**: Comprehensive test suite
+  - 414 tests passing
+  - New service tests
+  - Updated component and utility tests
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.20
 
 ### **v1.9.19** (Stable)
 - 🎉 **Version Update**: Updated to version 1.9.19

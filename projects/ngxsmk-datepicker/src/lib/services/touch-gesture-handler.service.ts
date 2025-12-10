@@ -64,10 +64,6 @@ export class TouchGestureHandlerService {
       state.dateCellTouchStartX = touch.clientX;
       state.dateCellTouchStartY = touch.clientY;
       state.lastDateCellTouchDate = day;
-      
-      // Note: startDate/endDate should be passed separately or accessed via callbacks
-      // For now, we'll handle this in the component
-      // The component will handle the hover logic based on its own state
     } else {
       state.isDateCellTouching = false;
     }
@@ -124,7 +120,8 @@ export class TouchGestureHandlerService {
             }
           }
         } catch (error) {
-          console.warn('[NgxsmkDatepicker] Error in date cell touch move handler:', error);
+          // Silently handle touch move errors - fallback to default behavior
+          // Error is non-critical and doesn't affect core functionality
         }
       }
     }
@@ -174,7 +171,8 @@ export class TouchGestureHandlerService {
           }
         }
       } catch (error) {
-        console.warn('[NgxsmkDatepicker] Error determining touch end date:', error);
+        // Silently handle touch end date determination errors - use fallback
+        // Error is non-critical and fallback value ensures functionality continues
         endDay = day || state.dateCellTouchStartDate;
       }
     }

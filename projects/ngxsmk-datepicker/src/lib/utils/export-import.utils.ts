@@ -89,8 +89,8 @@ export function importFromCsv(csvString: string): DatepickerValue {
       } else if (type === 'Range End') {
         rangeEnd = date;
       }
-    } catch (error) {
-      console.warn(`Failed to parse date: ${dateStr}`, error);
+    } catch {
+      // Silently handle parse errors
     }
   }
 
@@ -166,8 +166,8 @@ export function importFromIcs(icsString: string): DatepickerValue {
           const start = parseIcsDate(currentEvent.dtstart);
           const end = parseIcsDate(currentEvent.dtend);
           events.push({ start, end });
-        } catch (error) {
-          console.warn('Failed to parse ICS event dates', error);
+        } catch {
+          // Silently handle parse errors
         }
       }
       currentEvent = null;
@@ -248,7 +248,7 @@ function deserializeDateValue(data: unknown): DatepickerValue {
 
   if (typeof data === 'object' && data !== null) {
     const obj = data as Record<string, unknown>;
-    
+
     if (obj['type'] === 'single' && typeof obj['iso'] === 'string') {
       return new Date(obj['iso']);
     }
@@ -264,9 +264,9 @@ function deserializeDateValue(data: unknown): DatepickerValue {
         .filter((d: Date | null) => d !== null) as Date[];
     }
 
-    if (obj['type'] === 'range' && 
-        typeof obj['start'] === 'object' && obj['start'] !== null && 'iso' in (obj['start'] as Record<string, unknown>) &&
-        typeof obj['end'] === 'object' && obj['end'] !== null && 'iso' in (obj['end'] as Record<string, unknown>)) {
+    if (obj['type'] === 'range' &&
+      typeof obj['start'] === 'object' && obj['start'] !== null && 'iso' in (obj['start'] as Record<string, unknown>) &&
+      typeof obj['end'] === 'object' && obj['end'] !== null && 'iso' in (obj['end'] as Record<string, unknown>)) {
       const startObj = obj['start'] as Record<string, unknown>;
       const endObj = obj['end'] as Record<string, unknown>;
       if (typeof startObj['iso'] === 'string' && typeof endObj['iso'] === 'string') {

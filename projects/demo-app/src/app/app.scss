@@ -368,6 +368,8 @@
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
+  list-style: none;
+  margin: 0;
 }
 
 .nav-item {
@@ -1105,19 +1107,6 @@
   position: relative;
 }
 
-.nav-link-sub::after {
-  content: '';
-  position: absolute;
-  left: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(99, 102, 241, 0.3);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .nav-link-sub:hover::after {
   background: rgba(99, 102, 241, 0.6);
   transform: translateY(-50%) scale(1.2);
@@ -1316,8 +1305,8 @@
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
   padding-top: 3rem;
@@ -2205,6 +2194,7 @@
    Desktop-like navbar experience
    ============================================ */
 @media (min-width: 768px) and (max-width: 1023px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 72px !important;
@@ -2396,7 +2386,6 @@
 
   /* ===== Feature Grid Redesign ===== */
   .feature-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
     gap: 2.5rem !important;
     padding: 3rem 2rem 4rem !important;
   }
@@ -3301,7 +3290,6 @@
   }
 
   .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 1.75rem;
     padding: 2rem 3rem 3rem;
   }
@@ -3569,11 +3557,13 @@
     padding-bottom: 2rem;
   }
 }
+
 /* ============================================
    EXTRA SMALL MOBILE (320px - 374px)
    Ultra-compact navbar and layout
    ============================================ */
 @media (max-width: 374px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 56px !important;
@@ -4037,6 +4027,7 @@
    Improved navbar spacing
    ============================================ */
 @media (min-width: 375px) and (max-width: 479px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 60px !important;
@@ -4501,6 +4492,7 @@
    Comfortable navbar spacing
    ============================================ */
 @media (min-width: 480px) and (max-width: 599px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 64px !important;
@@ -4679,7 +4671,6 @@
 
   /* ===== Feature Grid Redesign ===== */
   .feature-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
     gap: 1.5rem !important;
     padding: 2rem 1.25rem 2.5rem !important;
   }
@@ -4727,6 +4718,7 @@
     margin-bottom: 1.5rem !important;
     line-height: 1.7 !important;
   }
+
   .example-demo {
     padding: 1rem !important;
     margin: 1.25rem 0 !important;
@@ -4929,6 +4921,7 @@
    Enhanced navbar with better spacing
    ============================================ */
 @media (min-width: 600px) and (max-width: 767px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 68px !important;
@@ -5125,7 +5118,6 @@
 
   /* ===== Feature Grid Redesign ===== */
   .feature-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
     gap: 2rem !important;
     padding: 2.5rem 1.5rem 3rem !important;
   }
@@ -5563,6 +5555,7 @@
 
 /* Allow datepicker popover to escape bounds on mobile */
 @media (max-width: 1023px) {
+
   .docs-container,
   .docs-content,
   .example-section,
@@ -5596,6 +5589,7 @@
    Full-featured layout with maximum spacing
    ============================================ */
 @media (min-width: 1024px) {
+
   /* ===== Navbar Redesign ===== */
   .modern-navbar {
     height: 72px !important;
@@ -5794,7 +5788,6 @@
 
   /* ===== Feature Grid Redesign ===== */
   .feature-grid {
-    grid-template-columns: repeat(4, 1fr) !important;
     gap: 3rem !important;
     padding: 4rem 3rem 5rem !important;
   }

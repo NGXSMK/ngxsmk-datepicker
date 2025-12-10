@@ -26,6 +26,39 @@ export function getEndOfMonth(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0);
 }
 
+export function getStartOfWeek(d: Date, firstDayOfWeek: number = 0): Date {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = (day < firstDayOfWeek ? 7 : 0) + day - firstDayOfWeek;
+  date.setDate(date.getDate() - diff);
+  return getStartOfDay(date);
+}
+
+export function getEndOfWeek(d: Date, firstDayOfWeek: number = 0): Date {
+  const startOfWeek = getStartOfWeek(d, firstDayOfWeek);
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(endOfWeek.getDate() + 6);
+  return getEndOfDay(endOfWeek);
+}
+
+export function getStartOfQuarter(d: Date): Date {
+  const quarter = Math.floor(d.getMonth() / 3);
+  return new Date(d.getFullYear(), quarter * 3, 1);
+}
+
+export function getEndOfQuarter(d: Date): Date {
+  const quarter = Math.floor(d.getMonth() / 3);
+  return new Date(d.getFullYear(), (quarter + 1) * 3, 0);
+}
+
+export function getStartOfYear(d: Date): Date {
+  return new Date(d.getFullYear(), 0, 1);
+}
+
+export function getEndOfYear(d: Date): Date {
+  return new Date(d.getFullYear(), 11, 31);
+}
+
 export function isSameDay(d1: Date | null, d2: Date | null): boolean {
   if (!d1 || !d2) return false;
   return (

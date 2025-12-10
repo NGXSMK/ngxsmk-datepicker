@@ -95,4 +95,7 @@ export type { TranslationService, DatepickerTranslations, PartialDatepickerTrans
 export { ThemeBuilderService, DatePresetsService } from './lib/services';
 export type { DatepickerTheme, DatePreset } from './lib/services';
 
+export { FieldSyncService } from './lib/services/field-sync.service';
+export type { SignalFormField } from './lib/services/field-sync.service';
+
 

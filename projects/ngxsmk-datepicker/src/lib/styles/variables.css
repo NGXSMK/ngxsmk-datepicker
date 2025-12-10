@@ -73,16 +73,142 @@
   :host {
     --datepicker-border-color: #000000;
     --datepicker-text-color: #000000;
-    --datepicker-subtle-text-color: #666666;
+    --datepicker-subtle-text-color: #000000;
+    --datepicker-background: #ffffff;
+    --datepicker-hover-background: #f0f0f0;
+    --datepicker-primary-color: #0000ff;
+    --datepicker-primary-contrast: #ffffff;
+    --datepicker-range-background: #e0e0e0;
+  }
+  
+  /* Ensure all borders are visible */
+  :host * {
+    border-color: #000000 !important;
+  }
+  
+  /* Day cells */
+  .ngxsmk-day-cell {
+    border: 2px solid transparent !important;
+  }
+  
+  .ngxsmk-day-cell:not(.disabled):not(.empty):hover {
+    border-color: #000000 !important;
+    background-color: var(--datepicker-hover-background) !important;
   }
   
   .ngxsmk-day-cell.disabled {
-    opacity: 0.3;
+    opacity: 0.5 !important;
+    border-color: #cccccc !important;
   }
   
+  .ngxsmk-day-cell.selected,
+  .ngxsmk-day-cell.start-date,
+  .ngxsmk-day-cell.end-date {
+    border: 3px solid #000000 !important;
+    background-color: var(--datepicker-primary-color) !important;
+    color: var(--datepicker-primary-contrast) !important;
+  }
+  
+  .ngxsmk-day-cell:focus-visible,
   .ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
-    outline: 3px solid;
-    outline-offset: 2px;
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Navigation buttons */
+  .ngxsmk-nav-button {
+    border: 2px solid #000000 !important;
+  }
+  
+  .ngxsmk-nav-button:focus-visible {
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  .ngxsmk-nav-button:hover:not(:disabled) {
+    background-color: var(--datepicker-hover-background) !important;
+    border-color: #000000 !important;
+  }
+  
+  /* Input group */
+  .ngxsmk-input-group {
+    border: 2px solid #000000 !important;
+  }
+  
+  .ngxsmk-input-group:focus-within {
+    border-color: #000000 !important;
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Buttons */
+  .ngxsmk-clear-button,
+  .ngxsmk-calendar-button {
+    border: 2px solid #000000 !important;
+  }
+  
+  .ngxsmk-clear-button:focus-visible,
+  .ngxsmk-calendar-button:focus-visible {
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Popover container */
+  .ngxsmk-popover-container {
+    border: 3px solid #000000 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  /* Range selection */
+  .ngxsmk-day-cell.in-range {
+    background-color: var(--datepicker-range-background) !important;
+    border-color: #000000 !important;
+  }
+  
+  /* Select elements */
+  .ngxsmk-custom-select {
+    border: 2px solid #000000 !important;
+  }
+  
+  .ngxsmk-custom-select:focus-within {
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Time selection */
+  .ngxsmk-time-input {
+    border: 2px solid #000000 !important;
+  }
+  
+  .ngxsmk-time-input:focus {
+    outline: 3px solid #000000 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Dark theme adjustments for high contrast */
+  :host(.dark-theme) {
+    --datepicker-border-color: #ffffff;
+    --datepicker-text-color: #ffffff;
+    --datepicker-subtle-text-color: #ffffff;
+    --datepicker-background: #000000;
+    --datepicker-hover-background: #333333;
+    --datepicker-primary-color: #ffffff;
+    --datepicker-primary-contrast: #000000;
+    --datepicker-range-background: #333333;
+  }
+  
+  :host(.dark-theme) * {
+    border-color: #ffffff !important;
+  }
+  
+  :host(.dark-theme) .ngxsmk-day-cell:focus-visible,
+  :host(.dark-theme) .ngxsmk-nav-button:focus-visible,
+  :host(.dark-theme) .ngxsmk-input-group:focus-within,
+  :host(.dark-theme) .ngxsmk-clear-button:focus-visible,
+  :host(.dark-theme) .ngxsmk-calendar-button:focus-visible,
+  :host(.dark-theme) .ngxsmk-custom-select:focus-within,
+  :host(.dark-theme) .ngxsmk-time-input:focus {
+    outline-color: #ffffff !important;
   }
 }
 

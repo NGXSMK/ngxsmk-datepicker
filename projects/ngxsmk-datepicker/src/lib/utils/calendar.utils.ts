@@ -30,9 +30,10 @@ export function generateYearOptions(currentYear: number, range: number = 10): { 
   return options;
 }
 
-export function generateTimeOptions(minuteInterval: number = 1): {
+export function generateTimeOptions(minuteInterval: number = 1, secondInterval: number = 1, includeSeconds: boolean = false): {
   hourOptions: { label: string; value: number }[];
   minuteOptions: { label: string; value: number }[];
+  secondOptions?: { label: string; value: number }[];
 } {
   const hourOptions = Array.from({length: 12}).map((_, i) => ({
     label: (i + 1).toString().padStart(2, '0'),
@@ -47,7 +48,24 @@ export function generateTimeOptions(minuteInterval: number = 1): {
     });
   }
 
-  return { hourOptions, minuteOptions };
+  const result: {
+    hourOptions: { label: string; value: number }[];
+    minuteOptions: { label: string; value: number }[];
+    secondOptions?: { label: string; value: number }[];
+  } = { hourOptions, minuteOptions };
+
+  if (includeSeconds) {
+    const secondOptions: { label: string; value: number }[] = [];
+    for (let i = 0; i < 60; i += secondInterval) {
+      secondOptions.push({
+        label: i.toString().padStart(2, '0'),
+        value: i,
+      });
+    }
+    result.secondOptions = secondOptions;
+  }
+
+  return result;
 }
 
 export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): string[] {
@@ -103,6 +121,30 @@ export function generateDecadeGrid(currentDecade: number): number[] {
   const decades: number[] = [];
   for (let i = 0; i < 12; i++) {
     decades.push(currentDecade + (i * 10) - 10);
+  }
+  return decades;
+}
+
+/**
+ * Generate a large year range for virtual scrolling (100 years centered on current)
+ */
+export function generateLargeYearRange(centerYear: number, range: number = 100): number[] {
+  const startYear = centerYear - Math.floor(range / 2);
+  const years: number[] = [];
+  for (let i = 0; i < range; i++) {
+    years.push(startYear + i);
+  }
+  return years;
+}
+
+/**
+ * Generate a large decade range for virtual scrolling (50 decades centered on current)
+ */
+export function generateLargeDecadeRange(centerDecade: number, range: number = 50): number[] {
+  const startDecade = centerDecade - Math.floor(range / 2) * 10;
+  const decades: number[] = [];
+  for (let i = 0; i < range; i++) {
+    decades.push(startDecade + (i * 10));
   }
   return decades;
 }

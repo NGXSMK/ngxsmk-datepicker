@@ -7,7 +7,7 @@ export interface DayCellRenderHook {
 }
 
 export interface ValidationHook {
-  validateDate?(date: Date, currentValue: DatepickerValue, mode: 'single' | 'range' | 'multiple'): boolean;
+  validateDate?(date: Date, currentValue: DatepickerValue, mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'): boolean;
   validateRange?(startDate: Date, endDate: Date): boolean;
   getValidationError?(date: Date): string | null;
 }
@@ -23,7 +23,7 @@ export interface KeyboardShortcutContext {
   startDate: Date | null;
   endDate: Date | null;
   selectedDates: Date[];
-  mode: 'single' | 'range' | 'multiple';
+  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year';
   focusedDate: Date | null;
   isCalendarOpen: boolean;
 }
@@ -35,7 +35,7 @@ export interface KeyboardShortcutHelp {
 }
 
 export interface DateFormatHook {
-  formatDisplayValue?(value: DatepickerValue, mode: 'single' | 'range' | 'multiple'): string;
+  formatDisplayValue?(value: DatepickerValue, mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'): string;
   formatAriaLabel?(date: Date): string;
 }
 

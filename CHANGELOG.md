@@ -5,7 +5,94 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.20] - 2025-12-06 (Stable)
+## [1.9.21] - 2025-12-10 (Stable)
+
+### Added
+- **Mobile-Specific Features**: Comprehensive mobile optimization and native integration
+  - Native date picker integration with `useNativePicker` input for automatic native picker on mobile devices
+  - Bottom sheet modal style with swipe-to-dismiss gesture support
+  - Mobile-optimized time picker with enhanced touch interactions
+  - Enhanced gesture support: double-tap on today to select, swipe up/down for year navigation
+  - Haptic feedback support with `enableHapticFeedback` input (light, medium, heavy vibrations)
+  - Mobile keyboard optimizations for better input experience
+  - Mobile-specific animations and transitions
+  - Auto-detection of mobile devices with `autoDetectMobile` input
+  - Mobile modal styles: `bottom-sheet`, `center`, and `fullscreen` options
+
+- **Advanced Selection Modes**: Extended selection capabilities beyond single/range/multiple
+  - Week selection mode: Select entire weeks with configurable week start day
+  - Month selection mode: Select entire months with start/end dates
+  - Quarter selection mode: Select quarters (Q1, Q2, Q3, Q4) with proper date ranges
+  - Year selection mode: Select entire years with January 1st to December 31st ranges
+  - All new modes work seamlessly with existing validation, constraints, and formatting
+
+- **Enhanced Time Selection**: Improved time picker functionality
+  - Seconds selection with `showSeconds` input and `secondInterval` configuration
+  - `currentSecond` property for programmatic second control
+  - Infrastructure for time range selection (future enhancement)
+
+- **Code Refactoring**: Improved maintainability and performance
+  - `CalendarGenerationService`: Extracted calendar generation logic for better separation of concerns
+  - `DisplayFormattingService`: Centralized display formatting logic with support for all selection modes
+  - `DateValidationService`: Extracted date validation logic for reusable validation across components
+  - Reduced main component size and complexity
+  - Improved code organization and testability
+
+- **E2E Testing Infrastructure**: Comprehensive end-to-end testing setup
+  - Playwright configuration with multi-browser support (Chromium, Firefox, WebKit)
+  - Mobile viewport testing (Pixel 5, iPhone 12)
+  - E2E test suite covering component interactions, navigation, keyboard support, and accessibility
+  - Test scripts: `e2e`, `e2e:headed`, `e2e:ui`, `e2e:debug`
+  - Automated test execution with local dev server integration
+
+- **Accessibility Enhancements**: Improved screen reader and keyboard navigation
+  - Enhanced ARIA live region announcements with debouncing and queue management
+  - Improved focus trap management with proper focus return on close
+  - Better screen reader support for all new selection modes
+  - High contrast mode styling improvements
+
+- **Performance Optimizations**: Infrastructure for better performance
+  - Virtual scrolling infrastructure for year/decade views (ready for future implementation)
+  - Lazy loading calendar months with intelligent caching (up to 24 months)
+  - Calendar month cache with automatic size management
+  - Preloading of adjacent months for smoother navigation
+
+- **Test Coverage**: Comprehensive test suite updates
+  - New service tests: `CalendarGenerationService`, `DisplayFormattingService`, `DateValidationService`
+  - Updated comprehensive component tests with new selection modes
+  - Updated utility function tests for week/month/quarter/year helpers
+  - Updated E2E tests for mobile features and new selection modes
+  - All 414 tests passing with improved coverage
+
+### Changed
+- **Version Update**: Updated to version 1.9.21
+- **Stable Release**: Version 1.9.21 is the current stable version
+- **Hooks Interface**: Extended hooks interface to support new selection modes (`week`, `month`, `quarter`, `year`)
+- **Type Definitions**: Updated `DatepickerValue` type to explicitly handle range mode with `[Date, Date | null]`
+- **Service Architecture**: Refactored component to use new services for better maintainability
+
+### Fixed
+- **Angular 21 Signal Forms Integration (Issue #80)**: Fixed broken `[field]` input binding with Angular 21 Signal Forms
+  - Improved signal detection in `readFieldValue()` to handle Angular 21's `FieldTree<Date, string>` structure
+  - Enhanced effect setup to properly track Signal Forms dependencies when `field.value` is a function returning a signal
+  - Fixed `updateFieldFromInternal()` to handle cases where `field.value` is a function that returns a writable signal
+  - Now correctly handles Angular 21 Signal Forms where `field.value` is a function that returns the actual signal
+  - Resolves [#80](https://github.com/NGXSMK/ngxsmk-datepicker/issues/80)
+- **Build Issues**: Fixed TypeScript compilation errors related to strict null checks
+- **Test Failures**: Fixed async timing issues in AriaLiveService tests
+- **Calendar Generation**: Fixed structural issues in calendar generation method
+- **Type Safety**: Improved type safety with explicit null checks and proper type definitions
+
+### Migration Notes
+- This is a patch version update
+- No breaking changes from v1.9.20
+- All changes are backward compatible
+- Compatible with Angular 17-22
+- New features are opt-in and don't affect existing implementations
+- Mobile features automatically detect mobile devices but can be disabled with `autoDetectMobile="false"`
+- New selection modes extend existing `mode` input with additional options
+
+## [1.9.20] - 2025-12-06
 
 ### Fixed
 - **Test Environment Compatibility (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
@@ -16,7 +103,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.20
-- **Stable Release**: Version 1.9.20 is the current stable version
 
 ### Migration Notes
 - This is a patch version update
@@ -25,7 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compatible with Angular 17-22
 - Fixes test compatibility issues with Vitest and jsdom environments
 
-## [1.9.19] - 2025-01-XX (Stable)
+## [1.9.19] - 2025-01-15
 
 ### Added
 - **Comprehensive Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes
@@ -39,7 +125,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.19
-- **Stable Release**: Version 1.9.19 is the current stable version
 - **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
 - **Code Cleanup**: Removed unnecessary comments from SCSS files for cleaner codebase
 
@@ -50,7 +135,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compatible with Angular 17-22
 - Demo project layout improvements are automatic and require no code changes
 
-## [1.9.18] - 2025-11-22 (Stable)
+## [1.9.18] - 2025-11-22
 
 ### Fixed
 - **Mobile Touch Event Handling**: Improved touch listener attachment when calendar opens on mobile devices
@@ -61,7 +146,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.18
-- **Stable Release**: Version 1.9.18 is the current stable version
 
 ### Migration Notes
 - This is a patch version update
@@ -70,7 +154,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compatible with Angular 17-22
 - Improved mobile experience with better touch event handling
 
-## [1.9.17] - 2025-11-21 (Stable)
+## [1.9.17] - 2025-11-21
 
 ### Added
 - **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
@@ -81,7 +165,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.17
-- **Stable Release**: Version 1.9.17 is the current stable version
 - **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
 
 ### Migration Notes
@@ -102,7 +185,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.16
-- **Stable Release**: Version 1.9.16 is the current stable version
 - **Angular 21 Support**: Updated dependencies and peer dependencies to support Angular 21 (officially released)
   - Updated devDependencies to Angular 21.0.0
   - Updated peer dependencies to support Angular 17-22 (`>=17.0.0 <24.0.0`)
@@ -137,7 +219,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.15
-- **Stable Release**: Version 1.9.15 is the current stable version
 
 ### Migration Notes
 - This is a patch version update with bug fixes only
@@ -161,7 +242,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.14
-- **Stable Release**: Version 1.9.14 is the current stable version
 
 ### Migration Notes
 - This is a patch version update with bug fixes only
@@ -187,7 +267,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.13
-- **Stable Release**: Version 1.9.13 is the current stable version
 
 ### Migration Notes
 - This is a patch version update with bug fixes only
@@ -217,7 +296,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.12
-- **Stable Release**: Version 1.9.12 is the current stable version
 - **Multi-Calendar Spacing**: Increased gap between multiple calendars from 16px to 32px for better visual separation
   - Applied to horizontal, vertical, and auto layouts
   - Improved spacing consistency across all multi-calendar configurations
@@ -275,7 +353,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.10
-- **Stable Release**: Version 1.9.10 is the current stable version
 
 ### Fixed
 - **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously after component initialization
@@ -303,7 +380,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.9
-- **Stable Release**: Version 1.9.9 is the current stable version
 
 ### Fixed
 - **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
@@ -320,7 +396,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.8
-- **Stable Release**: Version 1.9.8 is the current stable version
 
 ### Fixed
 - **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
@@ -336,7 +411,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.7
-- **Stable Release**: Version 1.9.7 is the current stable version
 
 ### Fixed
 - **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened, especially when multiple datepickers were present in the same form
@@ -349,7 +423,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.6
-- **Stable Release**: Version 1.9.6 is the current stable version
 
 ### Fixed
 - **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
@@ -368,7 +441,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.5
-- **Stable Release**: Version 1.9.5 is the current stable version
 
 ### Fixed
 - **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
@@ -380,8 +452,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.9.4] - 2025-11-14
 
 ### Changed
-- **Major Version Release**: Updated to version 1.9.4
-- **Stable Release**: Version 1.9.4 is the current stable version
+- **Version Update**: Updated to version 1.9.4
 
 ### Added
 - **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
@@ -406,8 +477,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.9.3] - 2025-11-13
 
 ### Changed
-- **Major Version Release**: Updated to version 1.9.3
-- **Stable Release**: Version 1.9.3 is the current stable version
+- **Version Update**: Updated to version 1.9.3
 
 ### Added
 - **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar

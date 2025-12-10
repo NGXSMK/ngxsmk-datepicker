@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.20",
+  "version": "1.9.21",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -8,7 +8,8 @@
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <24.0.0",
     "@angular/core": ">=17.0.0 <24.0.0",
-    "@angular/forms": ">=17.0.0 <24.0.0"
+    "@angular/forms": ">=17.0.0 <24.0.0",
+    "luxon": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "zone.js": {
@@ -57,27 +58,13 @@
     "i18n",
     "localization"
   ],
-  "exports": {
-    ".": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs"
-    },
-    "./adapters": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs"
-    },
-    "./utils": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs"
-    },
-    "./services": {
-      "import": "./fesm2022/ngxsmk-datepicker.mjs"
-    }
-  },
   "optimization": {
     "treeShaking": true,
     "sideEffects": false,
     "usedExports": true
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=20.19.0 || >=22.12.0",
+    "npm": ">=10.0.0"
   }
 }
