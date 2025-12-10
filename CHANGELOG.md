@@ -72,6 +72,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Service Architecture**: Refactored component to use new services for better maintainability
 
 ### Fixed
+- **Angular 21 Signal Forms Integration (Issue #80)**: Fixed broken `[field]` input binding with Angular 21 Signal Forms
+  - Improved signal detection in `readFieldValue()` to handle Angular 21's `FieldTree<Date, string>` structure
+  - Enhanced effect setup to properly track Signal Forms dependencies when `field.value` is a function returning a signal
+  - Fixed `updateFieldFromInternal()` to handle cases where `field.value` is a function that returns a writable signal
+  - Now correctly handles Angular 21 Signal Forms where `field.value` is a function that returns the actual signal
+  - Resolves [#80](https://github.com/NGXSMK/ngxsmk-datepicker/issues/80)
 - **Build Issues**: Fixed TypeScript compilation errors related to strict null checks
 - **Test Failures**: Fixed async timing issues in AriaLiveService tests
 - **Calendar Generation**: Fixed structural issues in calendar generation method

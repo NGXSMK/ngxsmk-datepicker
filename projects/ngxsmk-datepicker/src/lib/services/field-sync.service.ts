@@ -105,40 +105,66 @@ export class FieldSyncService {
     try {
       const fieldValue = field.value;
 
-      // Explicitly check for Angular Signal (compatible with all Angular 17+ versions)
-      if (safeIsSignal(fieldValue)) {
-        const result = fieldValue() as DatepickerValue;
-        return result !== undefined ? result : null;
-      }
-
-      // If it's a function (but not a signal), call it
+      // For Angular 21 Signal Forms, field.value might be a function that returns the signal
+      // Try calling it first if it's a function (this handles FieldTree<Date, string> structure)
       if (typeof fieldValue === 'function') {
         try {
-          const result = fieldValue() as DatepickerValue;
-          return result !== undefined ? result : null;
-        } catch {
+          const result = fieldValue();
+          // If result is a signal, call it again to get the actual value
+          if (safeIsSignal(result)) {
+            const signalResult = result() as DatepickerValue;
+            return signalResult !== undefined && signalResult !== null ? signalResult : null;
+          }
+          // If result is a value (Date, object, etc.), return it
+          if (result !== undefined && result !== null) {
+            return result as DatepickerValue;
+          }
+          return null;
+        } catch (error) {
+          // If calling fails, it might be a signal itself that needs to be called
+          // Try checking if it's a signal
+          if (safeIsSignal(fieldValue)) {
+            try {
+              const signalResult = fieldValue() as DatepickerValue;
+              return signalResult !== undefined && signalResult !== null ? signalResult : null;
+            } catch {
+              return null;
+            }
+          }
           return null;
         }
       }
 
-      // If it's an object, it might be a signal that isSignal didn't catch (unlikely for Angular 21)
-      // or a custom signal-like object. Try calling it if it's not a Date.
+      // Explicitly check for Angular Signal (compatible with all Angular 17+ versions)
+      if (safeIsSignal(fieldValue)) {
+        const result = fieldValue() as DatepickerValue;
+        return result !== undefined && result !== null ? result : null;
+      }
+
+      // If it's an object, it might be a Date, range object, or a signal that isSignal didn't catch
       if (fieldValue !== null && typeof fieldValue === 'object') {
         if (fieldValue instanceof Date) {
           return fieldValue as DatepickerValue;
         }
 
-        // Try calling it as a last resort
+        // Try calling it as a last resort (for computed signals that isSignal missed)
         try {
           const result = (fieldValue as unknown as { (): DatepickerValue })() as DatepickerValue;
-          return result !== undefined ? result : null;
+          if (result !== undefined && result !== null) {
+            return result;
+          }
         } catch {
-          // Not callable, treat as value
+          // Not callable, treat as value (could be range object {start, end} or array)
           return fieldValue as DatepickerValue;
         }
       }
 
-      return fieldValue as DatepickerValue;
+      // Direct value (shouldn't happen often, but handle it)
+      if (fieldValue !== undefined && fieldValue !== null) {
+        return fieldValue as DatepickerValue;
+      }
+
+      return null;
     } catch {
       return null;
     }
@@ -212,28 +238,43 @@ export class FieldSyncService {
 
           if (fieldValueRef === undefined || fieldValueRef === null) {
             fieldValue = null;
+          } else if (typeof fieldValueRef === 'function') {
+            // For Angular 21 Signal Forms, field.value is often a function that returns a signal
+            // Call it in effect context to track dependencies properly
+            try {
+              const funcResult = fieldValueRef();
+              // Check if the result is a signal (common in Angular 21 Signal Forms)
+              if (safeIsSignal(funcResult)) {
+                // Read the signal value in effect context to track dependencies
+                const signalResult = funcResult() as DatepickerValue;
+                fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
+              } else if (safeIsSignal(fieldValueRef)) {
+                // If fieldValueRef itself is a signal, read it directly
+                const signalResult = fieldValueRef() as DatepickerValue;
+                fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
+              } else {
+                // Result is a direct value
+                fieldValue = (funcResult !== undefined && funcResult !== null) ? funcResult as DatepickerValue : null;
+              }
+            } catch (error) {
+              // If calling fails, try checking if it's a signal itself
+              if (safeIsSignal(fieldValueRef)) {
+                try {
+                  const signalResult = fieldValueRef() as DatepickerValue;
+                  fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult : null;
+                } catch {
+                  fieldValue = null;
+                }
+              } else {
+                fieldValue = null;
+              }
+            }
           } else if (safeIsSignal(fieldValueRef)) {
             // For signals (including computed), read directly in effect context
             // This ensures computed signals track their underlying dependencies
             // Reading the signal here automatically tracks all its dependencies
             const signalResult = fieldValueRef();
             fieldValue = (signalResult !== undefined && signalResult !== null) ? signalResult as DatepickerValue : null;
-          } else if (typeof fieldValueRef === 'function') {
-            // For functions (including computed signals that isSignal might miss),
-            // call in effect context to track dependencies
-            // This handles computed signals that might not be detected by isSignal()
-            // or custom signal-like objects
-            try {
-              const funcResult = fieldValueRef();
-              // Check if the result is a signal (nested computed scenario)
-              if (safeIsSignal(funcResult)) {
-                fieldValue = (funcResult() !== undefined && funcResult() !== null) ? funcResult() as DatepickerValue : null;
-              } else {
-                fieldValue = (funcResult !== undefined && funcResult !== null) ? funcResult as DatepickerValue : null;
-              }
-            } catch {
-              fieldValue = null;
-            }
           } else if (fieldValueRef instanceof Date) {
             // Direct Date value
             fieldValue = fieldValueRef as DatepickerValue;
@@ -388,21 +429,43 @@ export class FieldSyncService {
       }
 
       // Fallback: try to update the underlying signal directly if field.value is a signal
-      // This handles cases where field.value is a writable signal
+      // This handles cases where field.value is a writable signal or a function returning a signal
       try {
         const val = field.value;
+        
+        // For Angular 21 Signal Forms, field.value might be a function that returns the signal
+        if (typeof val === 'function') {
+          try {
+            const signalOrValue = val();
+            // If it's a signal, try to update it
+            if (safeIsSignal(signalOrValue)) {
+              const writableSignal = signalOrValue as unknown as WritableSignal<DatepickerValue>;
+              if (typeof writableSignal.set === 'function') {
+                writableSignal.set(normalizedValue);
+                // Use microtask delay to ensure effect has time to see the flag
+                Promise.resolve().then(() => {
+                  this._isUpdatingFromInternal = false;
+                });
+                return;
+              }
+            }
+          } catch {
+            // If calling fails, continue to check if val itself is a signal
+          }
+        }
+        
         // Check if it's a writable signal (has .set method)
         // Compatible with all Angular 17+ versions
         if (safeIsSignal(val)) {
           const writableSignal = val as WritableSignal<DatepickerValue>;
           if (typeof writableSignal.set === 'function') {
             writableSignal.set(normalizedValue);
+            // Use microtask delay to ensure effect has time to see the flag
+            Promise.resolve().then(() => {
+              this._isUpdatingFromInternal = false;
+            });
+            return;
           }
-          // Use microtask delay to ensure effect has time to see the flag
-          Promise.resolve().then(() => {
-            this._isUpdatingFromInternal = false;
-          });
-          return;
         }
       } catch {
         // Silently handle - field might not support direct signal updates
