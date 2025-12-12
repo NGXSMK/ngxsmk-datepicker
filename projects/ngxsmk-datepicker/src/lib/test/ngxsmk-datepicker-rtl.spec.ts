@@ -1,5 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SimpleChange } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+
+// Helper function to create SimpleChange objects for testing
+function createSimpleChange<T>(currentValue: T, previousValue: T, firstChange: boolean = false): SimpleChange {
+  return {
+    currentValue,
+    previousValue,
+    firstChange,
+    isFirstChange: () => firstChange
+  };
+}
 
 describe('NgxsmkDatepickerComponent - RTL Support', () => {
   let component: NgxsmkDatepickerComponent;
@@ -22,7 +33,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       component.locale = 'ar-SA';
       fixture.detectChanges();
       // Call ngOnChanges to trigger updateRtlState
-      component.ngOnChanges({ locale: { currentValue: 'ar-SA', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as any);
+      component.ngOnChanges({ locale: createSimpleChange('ar-SA', 'en-US') });
       fixture.detectChanges();
 
       // Verify locale is set correctly
@@ -111,7 +122,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
     it('should apply RTL class when RTL is detected', () => {
       component.locale = 'ar-SA';
       fixture.detectChanges();
-      component.ngOnChanges({ locale: { currentValue: 'ar-SA', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as any);
+      component.ngOnChanges({ locale: createSimpleChange('ar-SA', 'en-US') });
       
       // Explicitly set rtl based on locale
       const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];

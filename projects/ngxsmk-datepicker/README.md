@@ -8,7 +8,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.21` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.22` is the current stable release. For production use, install the latest version from npm.
 
 **Latest Version**: Check [npm](https://www.npmjs.com/package/ngxsmk-datepicker) for the most recent release.
 
@@ -744,6 +744,16 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.22** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.22
+- ✅ **Stable Release**: Version 1.9.22 is the current stable version
+- 🐛 **Fixed**: Form control value initialization issue - datepicker now correctly displays month from form control values
+  - Fixed calendar month display when using Reactive Forms with initial values
+  - Added proper signal updates and change detection in `writeValue()` method
+- 🐛 **Fixed**: Locale week start detection for en-GB and other European locales
+  - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available
+  - Now correctly returns Monday (1) for en-GB and other European locales
 
 ### **v1.9.21** (Stable)
 - 🎉 **Version Update**: Updated to version 1.9.21

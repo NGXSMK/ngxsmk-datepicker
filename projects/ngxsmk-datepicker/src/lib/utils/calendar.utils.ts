@@ -79,9 +79,45 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
 
 export function getFirstDayOfWeek(locale: string): number {
   try {
-    return ((new Intl.Locale(locale) as { weekInfo?: { firstDay?: number } }).weekInfo?.firstDay || 0) % 7;
-  } catch {
+    const localeObj = new Intl.Locale(locale);
+    // Check if weekInfo is available (newer browsers/environments)
+    if ('weekInfo' in localeObj && (localeObj as any).weekInfo?.firstDay !== undefined) {
+      return ((localeObj as any).weekInfo.firstDay) % 7;
+    }
+    
+    // Fallback: Use a known locale-to-firstDay mapping for common locales
+    // en-GB and most European locales use Monday (1) as first day
+    // en-US and some others use Sunday (0) as first day
+    const localeLower = locale.toLowerCase();
+    if (localeLower.startsWith('en-gb') || 
+        localeLower.startsWith('en-au') ||
+        localeLower.startsWith('en-nz') ||
+        localeLower.startsWith('de') ||
+        localeLower.startsWith('fr') ||
+        localeLower.startsWith('es') ||
+        localeLower.startsWith('it') ||
+        localeLower.startsWith('pt') ||
+        localeLower.startsWith('nl') ||
+        localeLower.startsWith('pl') ||
+        localeLower.startsWith('ru') ||
+        localeLower.startsWith('sv') ||
+        localeLower.startsWith('no') ||
+        localeLower.startsWith('da') ||
+        localeLower.startsWith('fi')) {
+      return 1; // Monday
+    }
+    
+    // Default to Sunday for en-US and other locales
     return 0;
+  } catch {
+    // If locale parsing fails, default based on locale string
+    const localeLower = locale.toLowerCase();
+    if (localeLower.startsWith('en-gb') || 
+        localeLower.startsWith('en-au') ||
+        localeLower.startsWith('en-nz')) {
+      return 1; // Monday
+    }
+    return 0; // Sunday (default for en-US and others)
   }
 }
 

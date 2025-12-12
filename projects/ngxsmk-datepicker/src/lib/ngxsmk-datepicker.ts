@@ -285,7 +285,7 @@ import { HapticFeedbackService } from './services/haptic-feedback.service';
                               [class.selected]="year === _currentYear"
                               [class.today]="year === today.getFullYear()"
                               [disabled]="disabled"
-                              (click)="onYearClick(year)"
+                              (click)="onYearClick(year); $event.stopPropagation()"
                               (keydown.enter)="onYearClick(year)"
                               [attr.aria-label]="getTranslation('selectYear', undefined, { year: year })">
                         {{ year }}
@@ -320,7 +320,7 @@ import { HapticFeedbackService } from './services/haptic-feedback.service';
                               class="ngxsmk-decade-cell"
                               [class.selected]="decade === _currentDecade"
                               [disabled]="disabled"
-                              (click)="onDecadeClick(decade)"
+                              (click)="onDecadeClick(decade); $event.stopPropagation()"
                               (keydown.enter)="onDecadeClick(decade)"
                               [attr.aria-label]="getTranslation('selectDecade', undefined, { start: decade, end: decade + 9 })">
                         {{ decade }} - {{ decade + 9 }}
@@ -343,7 +343,7 @@ import { HapticFeedbackService } from './services/haptic-feedback.service';
                         @for (month of timelineMonths; track month.getTime()) {
                           <div class="ngxsmk-timeline-month" 
                                [class.selected]="isTimelineMonthSelected(month)"
-                               (click)="onTimelineMonthClick(month)"
+                               (click)="onTimelineMonthClick(month); $event.stopPropagation()"
                                (keydown.enter)="onTimelineMonthClick(month)"
                                (keydown.space)="onTimelineMonthClick(month); $event.preventDefault()"
                                role="button"
@@ -2065,7 +2065,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       : null;
     this._internalValue = normalizedVal;
     this.initializeValue(normalizedVal);
+    this._updateMemoSignals();
     this.generateCalendar();
+    this.scheduleChangeDetection();
 
     if (this._field) {
       this.fieldSyncService.updateFieldFromInternal(normalizedVal, this._field);

@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.21 → v1.9.22](#v1921---v1922)
 - [v1.9.20 → v1.9.21](#v1920---v1921)
 - [v1.9.19 → v1.9.20](#v1919---v1920)
 - [v1.9.18 → v1.9.19](#v1918---v1919)
@@ -28,6 +29,43 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.21 → v1.9.22
+
+### Installation
+
+Update to the latest version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.22
+```
+
+### Changes
+
+- **Version Update**: Updated to version 1.9.22
+- **Stable Release**: Version 1.9.22 is the current stable version
+
+### Bug Fixes
+
+- **Form Control Value Initialization**: Fixed issue where datepicker was not properly updating the displayed month when initialized with form control values
+  - The datepicker now correctly displays the month from form control values instead of defaulting to the current month
+  - Added proper signal updates and change detection in `writeValue()` method
+  - This fix ensures that when using Reactive Forms with initial date values, the calendar opens to the correct month
+  - Example: If a form control has a value of January 2026, the calendar will now open showing January instead of the current month
+
+- **Locale Week Start Detection**: Fixed `getFirstDayOfWeek()` function to properly return 1 for en-GB locale and other European locales
+  - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available (older browsers/environments)
+  - Now correctly returns Monday (1) for en-GB, en-AU, en-NZ, and most European locales
+  - Maintains backward compatibility with en-US and other locales that use Sunday (0) as first day
+  - All calendar utils tests now passing
+
+### Breaking Changes
+
+None in v1.9.22.
+
+### Deprecations
+
+None in v1.9.22.
 
 ## v1.9.20 → v1.9.21
 

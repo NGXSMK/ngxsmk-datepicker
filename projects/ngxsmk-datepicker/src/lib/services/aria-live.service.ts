@@ -9,6 +9,7 @@ export class AriaLiveService implements OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private politeClearTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private assertiveClearTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private debounceTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private announcementQueue: Array<{ message: string; priority: 'polite' | 'assertive'; timestamp: number }> = [];
   private readonly DEBOUNCE_DELAY = 100;
   private readonly CLEAR_DELAY = 2000;
@@ -26,7 +27,14 @@ export class AriaLiveService implements OnDestroy {
 
     // Debounce rapid announcements
     if (this.announcementQueue.length === 1) {
-      setTimeout(() => this.processAnnouncementQueue(), this.DEBOUNCE_DELAY);
+      // Clear any existing debounce timeout before setting a new one
+      if (this.debounceTimeoutId !== null) {
+        clearTimeout(this.debounceTimeoutId);
+      }
+      this.debounceTimeoutId = setTimeout(() => {
+        this.debounceTimeoutId = null;
+        this.processAnnouncementQueue();
+      }, this.DEBOUNCE_DELAY);
     }
   }
 
@@ -155,6 +163,11 @@ export class AriaLiveService implements OnDestroy {
     if (this.assertiveClearTimeoutId !== null) {
       clearTimeout(this.assertiveClearTimeoutId);
       this.assertiveClearTimeoutId = null;
+    }
+    
+    if (this.debounceTimeoutId !== null) {
+      clearTimeout(this.debounceTimeoutId);
+      this.debounceTimeoutId = null;
     }
     
     if (this.politeRegion && this.isBrowser) {
