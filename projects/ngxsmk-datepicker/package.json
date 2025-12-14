@@ -14,6 +14,12 @@
   "peerDependenciesMeta": {
     "zone.js": {
       "optional": true
+    },
+    "@angular/material": {
+      "optional": true
+    },
+    "@angular/cdk": {
+      "optional": true
     }
   },
   "dependencies": {

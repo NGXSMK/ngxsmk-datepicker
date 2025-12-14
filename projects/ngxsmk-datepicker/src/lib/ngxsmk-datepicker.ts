@@ -69,6 +69,7 @@ import { DatepickerTranslations, PartialDatepickerTranslations } from './interfa
 import { FocusTrapService } from './services/focus-trap.service';
 import { AriaLiveService } from './services/aria-live.service';
 import { HapticFeedbackService } from './services/haptic-feedback.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -521,7 +522,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
   @Input() defaultMonthOffset: number = 0;
   
-  // Mobile-specific inputs
   @Input() useNativePicker: boolean = false;
   @Input() enableHapticFeedback: boolean = false;
   @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
@@ -612,8 +612,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         }
       );
 
-      // Perform initial sync after effect setup
-      // The effect runs immediately, but we also do a manual sync to ensure the value is set
       this.syncFieldValue(field);
 
     } else {
@@ -632,7 +630,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._internalValue = value;
         this.initializeValue(value);
         this.generateCalendar();
-        // Always schedule change detection
         this.scheduleChangeDetection();
       },
       onDisabledChanged: (disabled: boolean) => {
@@ -642,7 +639,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         }
       },
       onSyncError: (_error: unknown) => {
-        // Silently handle errors to prevent console clutter
       },
       normalizeValue: (value: unknown) => {
         return this._normalizeValue(value);
@@ -725,7 +721,83 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private onChange = (_: DatepickerValue) => { };
   private onTouched = () => { };
   public disabled = false;
-  @Input() set disabledState(isDisabled: boolean) { this.disabled = isDisabled; }
+  @Input() set disabledState(isDisabled: boolean) { 
+    if (this.disabled !== isDisabled) {
+      this.disabled = isDisabled;
+      this.stateChanges.next();
+    }
+  }
+
+  public readonly stateChanges = new Subject<void>();
+  private _focused = false;
+  private _required = false;
+  private _errorState = false;
+  
+  get focused(): boolean {
+    return this._focused || this.isCalendarOpen;
+  }
+  
+  get empty(): boolean {
+    const value = this._internalValue;
+    if (!value || value === null) return true;
+    
+    if (this.mode === 'range' || this.mode === 'multiple') {
+      return !Array.isArray(value) || value.length === 0;
+    }
+    
+    return false;
+  }
+  
+  get shouldLabelFloat(): boolean {
+    return this.focused || !this.empty;
+  }
+  
+  get required(): boolean {
+    return this._required;
+  }
+  
+  @Input() set required(value: boolean) {
+    if (this._required !== value) {
+      this._required = value;
+      this.stateChanges.next();
+    }
+  }
+  
+  get errorState(): boolean {
+    return this._errorState;
+  }
+  
+  @Input() set errorState(value: boolean) {
+    if (this._errorState !== value) {
+      this._errorState = value;
+      this.stateChanges.next();
+    }
+  }
+  
+  get controlType(): string {
+    return 'ngxsmk-datepicker';
+  }
+  
+  get autofilled(): boolean {
+    return false;
+  }
+  
+  get id(): string {
+    return this._uniqueId;
+  }
+  
+  get describedBy(): string {
+    return `datepicker-help-${this._uniqueId}`;
+  }
+  
+  setDescribedByIds(_ids: string[]): void {
+  }
+  
+  onContainerClick(_event: MouseEvent): void {
+    if (!this.disabled && !this.isCalendarOpen) {
+      this.focusInput();
+    }
+  }
 
   @Output() valueChange = new EventEmitter<DatepickerValue>();
   @Output() action = new EventEmitter<{ type: string; payload?: unknown }>();
@@ -758,9 +830,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public daysInMonth: (Date | null)[] = [];
   public multiCalendarMonths: Array<{ month: number; year: number; days: (Date | null)[] }> = [];
   
-  // Lazy loading cache for calendar months
   private monthCache = new Map<string, (Date | null)[]>();
-  private readonly MAX_CACHE_SIZE = 24; // Cache up to 24 months (2 years)
+  private readonly MAX_CACHE_SIZE = 24;
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
@@ -1056,8 +1127,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return null;
       }
       if (this.mode === 'range') {
-        // Return array with date and null for range mode (partial range selection)
-        // TypeScript allows this as Date[] can contain Date | null in practice
         return [date, null] as DatepickerValue;
       }
       return date;
@@ -1568,8 +1637,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onInputGroupFocus(): void {
+    if (!this._focused) {
+      this._focused = true;
+      this.stateChanges.next();
+    }
     if (this._field && !this.disabled) {
       this.syncFieldValue(this._field);
+    }
+  }
+  
+  private focusInput(): void {
+    if (this.dateInput?.nativeElement) {
+      this.dateInput.nativeElement.focus();
+    } else if (this.elementRef.nativeElement) {
+      const inputGroup = this.elementRef.nativeElement.querySelector('.ngxsmk-input-group');
+      if (inputGroup) {
+        inputGroup.focus();
+      }
     }
   }
 
@@ -2068,6 +2152,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._updateMemoSignals();
     this.generateCalendar();
     this.scheduleChangeDetection();
+    this.stateChanges.next();
 
     if (this._field) {
       this.fieldSyncService.updateFieldFromInternal(normalizedVal, this._field);
@@ -2083,7 +2168,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    if (this.disabled !== isDisabled) {
+      this.disabled = isDisabled;
+      this.stateChanges.next();
+    }
   }
 
   private emitValue(val: DatepickerValue) {
@@ -2594,7 +2682,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           if (dateCellsRetry.length > 0) {
             this.attachTouchListenersToCells(dateCellsRetry);
           } else if (retryCount < maxRetries && this.isCalendarOpen) {
-            // 50ms interval, max 250ms total wait
             setTimeout(retry, 50);
           }
         };
@@ -3148,6 +3235,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   onInputFocus(_event: FocusEvent): void {
+    if (!this._focused) {
+      this._focused = true;
+      this.stateChanges.next();
+    }
     if (!this.allowTyping) return;
     this.isTyping = true;
     if (!this.typedInputValue || this.typedInputValue === '') {
@@ -3178,6 +3269,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   onInputBlur(event: FocusEvent): void {
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const isMovingWithinComponent = relatedTarget && this.elementRef.nativeElement.contains(relatedTarget);
+    
+    if (!isMovingWithinComponent && this._focused) {
+      this._focused = false;
+      this.stateChanges.next();
+      this.onTouched();
+    }
+    
     if (!this.allowTyping) return;
     this.isTyping = false;
     const input = event.target as HTMLInputElement;
@@ -3677,7 +3777,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       this.hoveredDate = null;
     } else if (this.mode === 'week') {
-      // Week selection mode - select the entire week containing the clicked day
       const weekStart = getStartOfWeek(day, this.firstDayOfWeek);
       const weekEnd = getEndOfWeek(day, this.firstDayOfWeek);
       this.startDate = weekStart;
@@ -3698,7 +3797,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const weekSelectedMsg = `Week selected: ${startFormatted} to ${endFormatted}`;
       this.ariaLiveService.announce(weekSelectedMsg, 'polite');
     } else if (this.mode === 'month') {
-      // Month selection mode - select the entire month
       const monthStart = new Date(day.getFullYear(), day.getMonth(), 1);
       const monthEnd = new Date(day.getFullYear(), day.getMonth() + 1, 0);
       monthEnd.setHours(23, 59, 59, 999);
@@ -3714,7 +3812,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const monthSelectedMsg = `Month selected: ${monthFormatted}`;
       this.ariaLiveService.announce(monthSelectedMsg, 'polite');
     } else if (this.mode === 'quarter') {
-      // Quarter selection mode - select the entire quarter
       const quarter = Math.floor(day.getMonth() / 3);
       const quarterStart = new Date(day.getFullYear(), quarter * 3, 1);
       const quarterEnd = new Date(day.getFullYear(), (quarter + 1) * 3, 0);
@@ -3728,7 +3825,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const quarterSelectedMsg = `Quarter selected: ${quarterFormatted}`;
       this.ariaLiveService.announce(quarterSelectedMsg, 'polite');
     } else if (this.mode === 'year') {
-      // Year selection mode - select the entire year
       const yearStart = new Date(day.getFullYear(), 0, 1);
       const yearEnd = new Date(day.getFullYear(), 11, 31);
       yearEnd.setHours(23, 59, 59, 999);
@@ -4070,17 +4166,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const calMonth = (month + calIndex) % 12;
       const calYear = year + Math.floor((month + calIndex) / 12);
       
-      // Use cache for lazy loading
       const cacheKey = `${calYear}-${calMonth}`;
       let days = this.monthCache.get(cacheKey);
       
       if (!days) {
-        // Generate month if not in cache
         days = this.generateMonthDays(calYear, calMonth);
         
-        // Add to cache and manage cache size
         if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
-          // Remove oldest entry (first key in Map)
           const firstKey = this.monthCache.keys().next().value;
           if (firstKey) {
             this.monthCache.delete(firstKey);
@@ -4669,6 +4761,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     NgxsmkDatepickerComponent._allInstances.delete(this);
 
     this.fieldSyncService.cleanup();
+    this.stateChanges.complete();
 
     if (this._fieldEffectRef) {
       this._fieldEffectRef.destroy();
