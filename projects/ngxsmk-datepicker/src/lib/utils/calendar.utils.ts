@@ -77,17 +77,26 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
   });
 }
 
+/**
+ * Determines the first day of the week (0 = Sunday, 1 = Monday, etc.) for a given locale.
+ * Uses Intl.Locale API when available, with fallback to locale mapping for older browsers.
+ * 
+ * Browser compatibility:
+ * - Intl.Locale: Chrome 74+, Firefox 75+, Safari 14.1+, Node.js 13+
+ * - Fallback: All browsers via locale string matching
+ * 
+ * @param locale - Locale string (e.g., 'en-US', 'en-GB', 'de-DE')
+ * @returns Day of week (0-6) where 0 is Sunday, 1 is Monday, etc.
+ */
 export function getFirstDayOfWeek(locale: string): number {
   try {
-    const localeObj = new Intl.Locale(locale);
-    // Check if weekInfo is available (newer browsers/environments)
-    if ('weekInfo' in localeObj && (localeObj as any).weekInfo?.firstDay !== undefined) {
-      return ((localeObj as any).weekInfo.firstDay) % 7;
+    if (typeof Intl !== 'undefined' && typeof (Intl as any).Locale !== 'undefined') {
+      const localeObj = new (Intl as any).Locale(locale);
+      if ('weekInfo' in localeObj && (localeObj as any).weekInfo?.firstDay !== undefined) {
+        return ((localeObj as any).weekInfo.firstDay) % 7;
+      }
     }
     
-    // Fallback: Use a known locale-to-firstDay mapping for common locales
-    // en-GB and most European locales use Monday (1) as first day
-    // en-US and some others use Sunday (0) as first day
     const localeLower = locale.toLowerCase();
     if (localeLower.startsWith('en-gb') || 
         localeLower.startsWith('en-au') ||

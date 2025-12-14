@@ -11,7 +11,7 @@
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
-**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker
+**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker, Angular datepicker Europe, Angular datepicker Deutschland, Angular datepicker France, Angular datepicker España, Angular datepicker Italia, Angular datepicker Nederland, Angular datepicker Polska, Angular datepicker Portugal, Angular datepicker Sverige, Angular datepicker Norge, Angular datepicker Suomi, Angular datepicker Danmark, Angular datepicker België, Angular datepicker Schweiz, Angular datepicker Österreich
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 * **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
@@ -54,7 +54,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
 * **E2E Testing**: Comprehensive Playwright-based end-to-end testing infrastructure.
 * **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
-* **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
+* **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
 * **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
@@ -154,6 +154,7 @@ The `[field]` input provides automatic two-way binding with signal forms - no ma
 
 ### Documentation
 
+- **[Plugin Architecture](./projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
 - **[Signals Integration Guide](./projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
 - **[Signal Forms Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
 - **[SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
@@ -266,8 +267,9 @@ class MyHolidayProvider implements HolidayProvider {
 
 ### **Angular Material Form Fields**
 
-Integrate with Angular Material's form field components for a seamless Material Design experience:
+Integrate with Angular Material's form field components for a seamless Material Design experience. Works with both standalone and non-standalone components:
 
+**Standalone Components:**
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -302,6 +304,27 @@ export class MaterialFormComponent {
     date: new FormControl<Date | null>(null)
   });
 }
+```
+
+**Non-Standalone Components (NgModules):**
+```typescript
+import { NgModule } from '@angular/core';
+import { MAT_FORM_FIELD_CONTROL } from '@angular/material/form-field';
+import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from 'ngxsmk-datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    NgxsmkDatepickerComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
+  ],
+  providers: [provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL)]
+})
+export class MyModule { }
 ```
 
 **With Date Range:**
@@ -536,6 +559,45 @@ The `locale` input controls all internationalization. It automatically formats m
 ```
 
 The datepicker automatically detects the browser's locale if not specified. For SSR applications, explicitly set the locale to ensure consistent rendering on both server and client.
+
+### **European Localization Support**
+
+ngxsmk-datepicker provides comprehensive support for European locales and date formats:
+
+**Supported European Locales:**
+- 🇩🇪 **Germany**: `de-DE`, `de-AT`, `de-CH` - DD.MM.YYYY format, Monday week start
+- 🇫🇷 **France**: `fr-FR`, `fr-BE`, `fr-CH` - DD/MM/YYYY format, Monday week start
+- 🇪🇸 **Spain**: `es-ES` - DD/MM/YYYY format, Monday week start
+- 🇮🇹 **Italy**: `it-IT`, `it-CH` - DD/MM/YYYY format, Monday week start
+- 🇳🇱 **Netherlands**: `nl-NL`, `nl-BE` - DD-MM-YYYY format, Monday week start
+- 🇵🇱 **Poland**: `pl-PL` - DD.MM.YYYY format, Monday week start
+- 🇵🇹 **Portugal**: `pt-PT` - DD/MM/YYYY format, Monday week start
+- 🇸🇪 **Sweden**: `sv-SE` - YYYY-MM-DD format, Monday week start
+- 🇳🇴 **Norway**: `no-NO` - DD.MM.YYYY format, Monday week start
+- 🇫🇮 **Finland**: `fi-FI` - DD.MM.YYYY format, Monday week start
+- 🇩🇰 **Denmark**: `da-DK` - DD.MM.YYYY format, Monday week start
+- 🇧🇪 **Belgium**: `nl-BE`, `fr-BE` - Regional format support
+- 🇨🇭 **Switzerland**: `de-CH`, `fr-CH`, `it-CH` - Multi-language support
+- 🇦🇹 **Austria**: `de-AT` - German format with Austrian preferences
+- 🇬🇧 **United Kingdom**: `en-GB` - DD/MM/YYYY format, Monday week start
+
+**European Date Format Examples:**
+
+```html
+<!-- German format (DD.MM.YYYY) -->
+<ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
+
+<!-- French format (DD/MM/YYYY) -->
+<ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
+
+<!-- Swedish format (YYYY-MM-DD) -->
+<ngxsmk-datepicker [locale]="'sv-SE'"></ngxsmk-datepicker>
+
+<!-- UK format (DD/MM/YYYY) -->
+<ngxsmk-datepicker [locale]="'en-GB'"></ngxsmk-datepicker>
+```
+
+All European locales automatically use **Monday as the week start day** (ISO 8601 standard), which is the standard in most European countries.
 
 ## **🖥️ Server-Side Rendering (SSR)**
 
@@ -1160,12 +1222,16 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## **🔍 SEO & Discoverability**
 
-This library is optimized for search engine visibility:
+This library is optimized for search engine visibility, especially for European markets:
 - **Keywords**: Angular datepicker, date range picker, calendar component, Angular 17-21, TypeScript, Signal Forms, SSR compatible
-- **Meta Tags**: Comprehensive Open Graph and Twitter Card support
-- **Structured Data**: JSON-LD schema markup for better search results
+- **European SEO**: Optimized for Germany, France, Spain, Italy, Netherlands, Poland, Portugal, Sweden, Norway, Finland, Denmark, Belgium, Switzerland, Austria, and United Kingdom
+- **Multi-language Support**: hreflang tags for 15+ European languages and locales
+- **European Geo-targeting**: Geo tags and structured data optimized for European Union countries
+- **Meta Tags**: Comprehensive Open Graph and Twitter Card support with European locale alternates
+- **Structured Data**: JSON-LD schema markup with European audience targeting and area served information
 - **Documentation**: Complete API documentation with examples
 - **Performance**: Optimized bundle size (~127KB) for fast loading
+- **European Localization**: Full i18n support for European date formats, week start days, and regional preferences
 
 ## **👨‍💻 Author**
 

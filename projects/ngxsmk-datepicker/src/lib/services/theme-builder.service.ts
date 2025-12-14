@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 /**
@@ -7,7 +7,7 @@ import { isPlatformBrowser } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeBuilderService {
+export class ThemeBuilderService implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private styleElement: HTMLStyleElement | null = null;
   private scopedStyleElements: Map<HTMLElement, HTMLStyleElement> = new Map();
@@ -140,34 +140,40 @@ export class ThemeBuilderService {
         targetElement.id = elementId;
       }
       
-      const css = `#${elementId} {\n${themeCss}\n}\n#${elementId} {\n${themeCss}\n}`;
+      // Optimized CSS generation - avoid duplication
+      const css = `#${elementId} {\n${themeCss}\n}`;
       scopedStyle.textContent = css;
       document.head.appendChild(scopedStyle);
       this.scopedStyleElements.set(targetElement, scopedStyle);
       
-      // Also apply as inline styles for immediate effect
-      Object.entries(styles).forEach(([property, value]) => {
-        targetElement.style.setProperty(property, value);
+      // Apply inline styles for immediate effect using batch updates
+      requestAnimationFrame(() => {
+        Object.entries(styles).forEach(([property, value]) => {
+          targetElement.style.setProperty(property, value);
+        });
       });
     } else {
-      // Apply globally (original behavior)
-      const css = `:root {\n${themeCss}\n}\nngxsmk-datepicker[data-theme-applied] {\n${themeCss}\n}\nngxsmk-datepicker {\n${themeCss}\n}`;
-      
+      // Apply globally (original behavior) - optimized version
       if (!this.styleElement) {
         this.styleElement = document.createElement('style');
         this.styleElement.setAttribute('data-datepicker-theme', '');
         document.head.appendChild(this.styleElement);
       }
 
+      // Optimized CSS - avoid redundant selectors
+      const css = `:root {\n${themeCss}\n}`;
       this.styleElement.textContent = css;
       
-      // Also apply directly to all existing datepicker elements
-      this.applyToElements(theme);
+      // Apply to elements more efficiently using requestAnimationFrame
+      requestAnimationFrame(() => {
+        this.applyToElements(theme);
+      });
     }
   }
 
   /**
    * Apply theme variables directly to all datepicker elements (for global theme)
+   * Optimized version with batch DOM operations
    */
   private applyToElements(theme: DatepickerTheme): void {
     if (!isPlatformBrowser(this.platformId)) {
@@ -177,13 +183,14 @@ export class ThemeBuilderService {
     const datepickerElements = document.querySelectorAll('ngxsmk-datepicker');
     const styles = this.generateStyleObject(theme);
     
+    // Batch DOM operations for better performance
     datepickerElements.forEach((element: Element) => {
       const htmlElement = element as HTMLElement;
       // Mark element as having theme applied for CSS selector specificity
       htmlElement.setAttribute('data-theme-applied', '');
       
+      // Batch style property updates
       Object.entries(styles).forEach(([property, value]) => {
-        // Set CSS custom properties on the element - they will cascade to :host
         htmlElement.style.setProperty(property, value, 'important');
       });
     });
@@ -346,6 +353,27 @@ export class ThemeBuilderService {
     });
 
     return theme;
+  }
+
+  /**
+   * Clean up all themes and resources when service is destroyed
+   */
+  cleanupAllThemes(): void {
+    // Remove global theme
+    if (this.styleElement) {
+      this.styleElement.remove();
+      this.styleElement = null;
+    }
+
+    // Remove all scoped themes
+    this.scopedStyleElements.forEach(styleElement => {
+      styleElement.remove();
+    });
+    this.scopedStyleElements.clear();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupAllThemes();
   }
 }
 

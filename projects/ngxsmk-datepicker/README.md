@@ -57,7 +57,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
 * **E2E Testing**: Comprehensive Playwright-based end-to-end testing infrastructure.
 * **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
-* **Extension Points & Hooks**: Comprehensive customization system with hooks for rendering, validation, keyboard shortcuts, and events.
+* **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
 * **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
@@ -157,13 +157,14 @@ The `[field]` input provides automatic two-way binding with signal forms - no ma
 
 ### Documentation
 
-- **[Signals Integration Guide](./projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
-- **[Signal Forms Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
-- **[SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
-- **[SSR Example](./projects/ngxsmk-datepicker/docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
-- **[Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
-- **[Theme Tokens Reference](./projects/ngxsmk-datepicker/docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
-- **[API Documentation](./projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
+- **[Plugin Architecture](./docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
+- **[Signals Integration Guide](./docs/signals.md)** - Complete guide to using signals with the datepicker
+- **[Signal Forms Guide](./docs/signal-forms.md)** - Deep dive into Signal Forms integration
+- **[SSR Guide](./docs/ssr.md)** - Server-side rendering setup and best practices
+- **[SSR Example](./docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
+- **[Extension Points Guide](./docs/extension-points.md)** - Customization hooks and extension points
+- **[Theme Tokens Reference](./docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
+- **[API Documentation](./docs/API.md)** - Complete public API reference
 
 #### **1. Import the Component**
 
@@ -269,8 +270,9 @@ class MyHolidayProvider implements HolidayProvider {
 
 ### **Angular Material Form Fields**
 
-Integrate with Angular Material's form field components for a seamless Material Design experience:
+Integrate with Angular Material's form field components for a seamless Material Design experience. Works with both standalone and non-standalone components:
 
+**Standalone Components:**
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -305,6 +307,27 @@ export class MaterialFormComponent {
     date: new FormControl<Date | null>(null)
   });
 }
+```
+
+**Non-Standalone Components (NgModules):**
+```typescript
+import { NgModule } from '@angular/core';
+import { MAT_FORM_FIELD_CONTROL } from '@angular/material/form-field';
+import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from 'ngxsmk-datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    NgxsmkDatepickerComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
+  ],
+  providers: [provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL)]
+})
+export class MyModule { }
 ```
 
 **With Date Range:**

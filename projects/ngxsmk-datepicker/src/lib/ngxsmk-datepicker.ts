@@ -831,6 +831,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public multiCalendarMonths: Array<{ month: number; year: number; days: (Date | null)[] }> = [];
   
   private monthCache = new Map<string, (Date | null)[]>();
+  private monthCacheAccessOrder = new Map<string, number>();
+  private monthCacheAccessCounter = 0;
   private readonly MAX_CACHE_SIZE = 24;
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
@@ -851,6 +853,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private dateCellTouchHandledTime: number = 0;
   private touchHandledTimeout: ReturnType<typeof setTimeout> | null = null;
   private activeTimeouts: Set<ReturnType<typeof setTimeout>> = new Set();
+  private activeAnimationFrames: Set<number> = new Set();
+  private fieldSyncTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private touchListenersSetup = new WeakMap<HTMLElement, boolean>();
   private touchListenersAttached = new WeakMap<HTMLElement, boolean>();
 
@@ -925,6 +929,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private _changeDetectionScheduled = false;
 
+  /**
+   * Schedules change detection to run in the next microtask.
+   * Prevents multiple change detection cycles from being scheduled simultaneously.
+   */
   private scheduleChangeDetection(): void {
     if (this._changeDetectionScheduled) {
       return;
@@ -934,6 +942,114 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._changeDetectionScheduled = false;
       this.cdr.markForCheck();
     });
+  }
+
+  /**
+   * Creates a tracked setTimeout that is automatically cleaned up on component destroy.
+   * All timeouts created through this method are stored in activeTimeouts for proper cleanup.
+   * 
+   * @param callback - Function to execute after delay
+   * @param delay - Delay in milliseconds
+   * @returns Timeout ID that can be used with clearTimeout
+   */
+  private trackedSetTimeout(callback: () => void, delay: number): ReturnType<typeof setTimeout> {
+    const timeoutId = setTimeout(() => {
+      this.activeTimeouts.delete(timeoutId);
+      callback();
+    }, delay);
+    this.activeTimeouts.add(timeoutId);
+    return timeoutId;
+  }
+
+  /**
+   * Creates a tracked requestAnimationFrame that is automatically cancelled on component destroy.
+   * All animation frames created through this method are stored in activeAnimationFrames for proper cleanup.
+   * 
+   * @param callback - Function to execute on next animation frame
+   * @returns Animation frame ID that can be used with cancelAnimationFrame
+   */
+  private trackedRequestAnimationFrame(callback: () => void): number {
+    const frameId = requestAnimationFrame(() => {
+      this.activeAnimationFrames.delete(frameId);
+      callback();
+    });
+    this.activeAnimationFrames.add(frameId);
+    return frameId;
+  }
+
+  /**
+   * Executes a callback after two animation frames, ensuring DOM updates are complete.
+   * Useful for operations that need to run after Angular's change detection and browser rendering.
+   * 
+   * @param callback - Function to execute after double animation frame
+   */
+  private trackedDoubleRequestAnimationFrame(callback: () => void): void {
+    this.trackedRequestAnimationFrame(() => {
+      this.trackedRequestAnimationFrame(callback);
+    });
+  }
+
+  /**
+   * Updates the access timestamp for a cache entry to implement LRU eviction.
+   * 
+   * @param cacheKey - Cache key to update access time for
+   */
+  private updateCacheAccess(cacheKey: string): void {
+    this.monthCacheAccessCounter++;
+    this.monthCacheAccessOrder.set(cacheKey, this.monthCacheAccessCounter);
+  }
+
+  /**
+   * Evicts the least recently used (LRU) entry from the month cache.
+   * Called when cache reaches MAX_CACHE_SIZE to prevent unbounded memory growth.
+   */
+  private evictLRUCacheEntry(): void {
+    if (this.monthCache.size === 0) return;
+
+    let lruKey: string | null = null;
+    let lruAccessTime = Infinity;
+
+    for (const [key, accessTime] of this.monthCacheAccessOrder.entries()) {
+      if (accessTime < lruAccessTime) {
+        lruAccessTime = accessTime;
+        lruKey = key;
+      }
+    }
+
+    if (lruKey) {
+      this.monthCache.delete(lruKey);
+      this.monthCacheAccessOrder.delete(lruKey);
+    }
+  }
+
+  /**
+   * Invalidates the entire month cache and resets access tracking.
+   * Called when locale or weekStart changes to ensure cache consistency.
+   */
+  private invalidateMonthCache(): void {
+    this.monthCache.clear();
+    this.monthCacheAccessOrder.clear();
+    this.monthCacheAccessCounter = 0;
+  }
+
+  /**
+   * Debounces field synchronization to prevent race conditions from rapid updates.
+   * Cancels any pending sync operation before scheduling a new one.
+   * 
+   * @param delay - Debounce delay in milliseconds (default: 100ms)
+   */
+  private debouncedFieldSync(delay: number = 100): void {
+    if (this.fieldSyncTimeoutId) {
+      clearTimeout(this.fieldSyncTimeoutId);
+      this.activeTimeouts.delete(this.fieldSyncTimeoutId);
+    }
+    
+    this.fieldSyncTimeoutId = this.trackedSetTimeout(() => {
+      this.fieldSyncTimeoutId = null;
+      if (this._field) {
+        this.syncFieldValue(this._field);
+      }
+    }, delay);
   }
 
   private _currentMonthSignal = signal<number>(this.currentDate.getMonth());
@@ -979,7 +1095,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     if (this.inline === 'auto' && this.isBrowser) {
       try {
-        return window.matchMedia('(min-width: 768px)').matches;
+        const mediaQuery = window.matchMedia('(min-width: 768px)');
+        return mediaQuery !== null && mediaQuery.matches;
       } catch {
         return false;
       }
@@ -1014,7 +1131,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       clearTimeout(this.touchHandledTimeout);
     }
 
-    this.touchHandledTimeout = setTimeout(() => {
+    this.touchHandledTimeout = this.trackedSetTimeout(() => {
       this.clearTouchHandledFlag();
     }, duration);
   }
@@ -1025,7 +1142,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     if (this.isBrowser) {
       try {
-        const isMobileWidth = window.matchMedia('(max-width: 1024px)').matches;
+        const mediaQuery = window.matchMedia('(max-width: 1024px)');
+        const isMobileWidth = mediaQuery !== null && mediaQuery.matches;
         const hasTouchSupport = 'ontouchstart' in window ||
           ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0);
         const hasPointerEvents = 'onpointerdown' in window;
@@ -1430,7 +1548,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (stateChanged) {
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this._disabledStateSignal.set(currentDisabledState);
       }, 0);
     }
@@ -1711,7 +1829,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       this.closeMonthYearDropdowns();
 
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this.touchStartTime = 0;
         this.touchStartElement = null;
       }, 500);
@@ -1734,19 +1852,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.updateOpeningState(true);
 
       if (this.isBrowser) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            this.setupPassiveTouchListeners();
-            this.scheduleChangeDetection();
-            const timeoutDelay = this.isMobileDevice() ? 800 : 300;
-            if (this.isOpeningCalendar) {
-              setTimeout(() => {
-                this.isOpeningCalendar = false;
-                this.setupPassiveTouchListeners();
-                this.scheduleChangeDetection();
-              }, timeoutDelay);
-            }
-          });
+        this.trackedDoubleRequestAnimationFrame(() => {
+          this.setupPassiveTouchListeners();
+          this.scheduleChangeDetection();
+          const timeoutDelay = this.isMobileDevice() ? 800 : 300;
+          if (this.isOpeningCalendar) {
+            this.trackedSetTimeout(() => {
+              this.isOpeningCalendar = false;
+              this.setupPassiveTouchListeners();
+              this.scheduleChangeDetection();
+            }, timeoutDelay);
+          }
         });
       }
     } else {
@@ -1831,15 +1947,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.updateOpeningState(true);
 
       if (this.isBrowser) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            this.setupPassiveTouchListeners();
-            this.scheduleChangeDetection();
-          });
+        this.trackedDoubleRequestAnimationFrame(() => {
+          this.setupPassiveTouchListeners();
+          this.scheduleChangeDetection();
         });
 
         const timeoutDelay = this.isMobileDevice() ? 800 : 350;
-        this.openCalendarTimeoutId = setTimeout(() => {
+        this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
           this.isOpeningCalendar = false;
           this.setupPassiveTouchListeners();
           this.openCalendarTimeoutId = null;
@@ -2237,14 +2351,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.closeMonthYearDropdowns();
 
         if (this.isBrowser) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              this.setupPassiveTouchListeners();
-            });
-          });
+        this.trackedDoubleRequestAnimationFrame(() => {
+          this.setupPassiveTouchListeners();
+        });
         }
 
-        setTimeout(() => {
+        this.trackedSetTimeout(() => {
           this.setupFocusTrap();
           if (this.isBrowser) {
             this.setupPassiveTouchListeners();
@@ -2337,7 +2449,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.updateOpeningState(willOpen && this.isCalendarOpen);
 
     if (willOpen && this.isCalendarOpen) {
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this.setupFocusTrap();
         if (this.isBrowser) {
           this.setupPassiveTouchListeners();
@@ -2378,7 +2490,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
 
       const timeoutDelay = this.isMobileDevice() ? 800 : 200;
-      this.openCalendarTimeoutId = setTimeout(() => {
+      this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
         this.cdr.markForCheck();
@@ -2547,29 +2659,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.generateCalendar();
 
     if (this._field && this.isBrowser) {
-      setTimeout(() => {
-        if (this._field) {
-          this.syncFieldValue(this._field);
-        }
-      }, 50);
-
-      setTimeout(() => {
-        if (this._field) {
-          this.syncFieldValue(this._field);
-        }
-      }, 200);
-
-      setTimeout(() => {
-        if (this._field) {
-          this.syncFieldValue(this._field);
-        }
-      }, 500);
-
-      setTimeout(() => {
-        if (this._field) {
-          this.syncFieldValue(this._field);
-        }
-      }, 1000);
+      this.debouncedFieldSync();
     }
   }
 
@@ -2578,56 +2668,36 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.typedInputValue = this.displayValue;
     }
 
-    if (this.isBrowser) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+      if (this.isBrowser) {
+        this.trackedDoubleRequestAnimationFrame(() => {
           this.setupPassiveTouchListeners();
           this.setupInputGroupPassiveListeners();
 
-          setTimeout(() => {
+          this.trackedSetTimeout(() => {
             this.setupInputGroupPassiveListeners();
           }, 100);
         });
-      });
 
-      if (this._field) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
+        if (this._field) {
+          this.trackedDoubleRequestAnimationFrame(() => {
             this.syncFieldValue(this._field);
           });
-        });
 
-        setTimeout(() => {
-          if (this._field) {
-            this.syncFieldValue(this._field);
-          }
-        }, 100);
-
-        setTimeout(() => {
-          if (this._field) {
-            this.syncFieldValue(this._field);
-          }
-        }, 300);
-
-        setTimeout(() => {
-          if (this._field) {
-            this.syncFieldValue(this._field);
-          }
-        }, 700);
+          this.debouncedFieldSync(100);
+        }
       }
-    }
   }
 
   private setupInputGroupPassiveListeners(): void {
     const nativeElement = this.elementRef.nativeElement;
     if (!nativeElement) {
-      setTimeout(() => this.setupInputGroupPassiveListeners(), 50);
+      this.trackedSetTimeout(() => this.setupInputGroupPassiveListeners(), 50);
       return;
     }
 
     const inputGroup = nativeElement.querySelector('.ngxsmk-input-group') as HTMLElement;
     if (!inputGroup) {
-      setTimeout(() => this.setupInputGroupPassiveListeners(), 50);
+      this.trackedSetTimeout(() => this.setupInputGroupPassiveListeners(), 50);
       return;
     }
 
@@ -2654,6 +2724,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private _touchListenersSetupTimeout: ReturnType<typeof setTimeout> | null = null;
 
+  /**
+   * Sets up passive touch event listeners on calendar day cells for improved mobile performance.
+   * Implements retry logic to handle cases where DOM elements aren't immediately available.
+   * All listeners are tracked for proper cleanup on component destroy.
+   */
   private setupPassiveTouchListeners(): void {
     if (!this.isBrowser) return;
 
@@ -2667,8 +2742,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    this._touchListenersSetupTimeout = setTimeout(() => {
+    this._touchListenersSetupTimeout = this.trackedSetTimeout(() => {
       this._touchListenersSetupTimeout = null;
+      if (!this.isBrowser || !nativeElement) return;
+      
       const dateCells = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
 
       if (dateCells.length > 0) {
@@ -2676,16 +2753,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       } else if (this.isCalendarOpen) {
         let retryCount = 0;
         const maxRetries = 5;
+        let retryTimeoutId: ReturnType<typeof setTimeout> | null = null;
+        
         const retry = () => {
+          if (!this.isBrowser || !nativeElement || !this.isCalendarOpen) {
+            if (retryTimeoutId) {
+              this.activeTimeouts.delete(retryTimeoutId);
+              clearTimeout(retryTimeoutId);
+            }
+            return;
+          }
+          
           retryCount++;
           const dateCellsRetry = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
           if (dateCellsRetry.length > 0) {
             this.attachTouchListenersToCells(dateCellsRetry);
+            retryTimeoutId = null;
           } else if (retryCount < maxRetries && this.isCalendarOpen) {
-            setTimeout(retry, 50);
+            retryTimeoutId = this.trackedSetTimeout(retry, 50);
+          } else {
+            retryTimeoutId = null;
           }
         };
-        setTimeout(retry, 50);
+        retryTimeoutId = this.trackedSetTimeout(retry, 50);
       }
     }, 10);
   }
@@ -2745,6 +2835,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (changes['locale'] || changes['rtl']) {
       this.updateRtlState();
       if (changes['locale']) {
+        this.invalidateMonthCache();
         this.initializeTranslations();
         this.generateLocaleData();
         this.generateCalendar();
@@ -2757,6 +2848,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (changes['weekStart'] || changes['minuteInterval'] || changes['holidayProvider'] || changes['yearRange'] || changes['timezone']) {
       this.applyGlobalConfig();
       if (changes['weekStart'] || changes['yearRange']) {
+        if (changes['weekStart']) {
+          this.invalidateMonthCache();
+        }
         this.generateLocaleData();
         this.generateCalendar();
         needsChangeDetection = false;
@@ -2789,29 +2883,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.syncFieldValue(newField);
 
         if (this.isBrowser) {
-          setTimeout(() => {
-            if (this._field === newField) {
-              this.syncFieldValue(newField);
-            }
-          }, 50);
-
-          setTimeout(() => {
-            if (this._field === newField) {
-              this.syncFieldValue(newField);
-            }
-          }, 150);
-
-          setTimeout(() => {
-            if (this._field === newField) {
-              this.syncFieldValue(newField);
-            }
-          }, 300);
-
-          setTimeout(() => {
-            if (this._field === newField) {
-              this.syncFieldValue(newField);
-            }
-          }, 600);
+          this.debouncedFieldSync(50);
         }
       }
     }
@@ -3260,7 +3332,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (input.value !== this.typedInputValue) {
       const cursorPosition = input.selectionStart || 0;
       input.value = this.typedInputValue;
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         input.setSelectionRange(cursorPosition, cursorPosition);
       }, 0);
     }
@@ -3677,12 +3749,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
         if (this.isBrowser && this.isCalendarOpen) {
           this.cdr.markForCheck();
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setTimeout(() => {
-                this.setupPassiveTouchListeners();
-              }, 50);
-            });
+          this.trackedDoubleRequestAnimationFrame(() => {
+            this.trackedSetTimeout(() => {
+              this.setupPassiveTouchListeners();
+            }, 50);
           });
         }
       }
@@ -3711,12 +3781,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
         if (this.isBrowser && this.isCalendarOpen) {
           this.cdr.markForCheck();
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setTimeout(() => {
-                this.setupPassiveTouchListeners();
-              }, 50);
-            });
+          this.trackedDoubleRequestAnimationFrame(() => {
+            this.trackedSetTimeout(() => {
+              this.setupPassiveTouchListeners();
+            }, 50);
           });
         }
       }
@@ -3848,12 +3916,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
         if (this.isBrowser && this.isCalendarOpen) {
           this.cdr.markForCheck();
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              setTimeout(() => {
-                this.setupPassiveTouchListeners();
-              }, 50);
-            });
+          this.trackedDoubleRequestAnimationFrame(() => {
+            this.trackedSetTimeout(() => {
+              this.setupPassiveTouchListeners();
+            }, 50);
           });
         }
       }
@@ -4136,7 +4202,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (this.mode === 'range') {
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this.hoveredDate = null;
         this.cdr.markForCheck();
       }, 300);
@@ -4171,14 +4237,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       
       if (!days) {
         days = this.generateMonthDays(calYear, calMonth);
-        
+
         if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
-          const firstKey = this.monthCache.keys().next().value;
-          if (firstKey) {
-            this.monthCache.delete(firstKey);
-          }
+          this.evictLRUCacheEntry();
         }
         this.monthCache.set(cacheKey, days);
+        this.updateCacheAccess(cacheKey);
+      } else {
+        this.updateCacheAccess(cacheKey);
       }
 
       this.multiCalendarMonths.push({
@@ -4192,7 +4258,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
     
-    // Pre-generate adjacent months for smoother navigation (lazy loading optimization)
     this.preloadAdjacentMonths(year, month);
 
     this.cdr.markForCheck();
@@ -4219,7 +4284,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   /**
-   * Generate days for a specific month (extracted for lazy loading)
+   * Generates an array of dates for a specific month, including padding days from adjacent months.
+   * Used for calendar grid rendering and month cache population.
+   * 
+   * @param year - Year (e.g., 2025)
+   * @param month - Month (0-11, where 0 is January)
+   * @returns Array of Date objects and null values for empty grid cells
    */
   private generateMonthDays(year: number, month: number): (Date | null)[] {
     const days: (Date | null)[] = [];
@@ -4244,10 +4314,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   /**
-   * Preload adjacent months for smoother navigation (lazy loading optimization)
+   * Preloads adjacent months (previous and next) into the cache for smoother navigation.
+   * Implements lazy loading optimization to improve performance when users navigate between months.
+   * 
+   * @param currentYear - Current calendar year
+   * @param currentMonth - Current calendar month (0-11)
    */
   private preloadAdjacentMonths(currentYear: number, currentMonth: number): void {
-    // Preload previous and next months
     const monthsToPreload = [
       { year: currentMonth === 0 ? currentYear - 1 : currentYear, month: currentMonth === 0 ? 11 : currentMonth - 1 },
       { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: currentMonth === 11 ? 0 : currentMonth + 1 }
@@ -4258,12 +4331,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (!this.monthCache.has(cacheKey)) {
         const days = this.generateMonthDays(year, month);
         if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
-          const firstKey = this.monthCache.keys().next().value;
-          if (firstKey) {
-            this.monthCache.delete(firstKey);
-          }
+          this.evictLRUCacheEntry();
         }
         this.monthCache.set(cacheKey, days);
+        this.updateCacheAccess(cacheKey);
+      } else {
+        this.updateCacheAccess(cacheKey);
       }
     }
   }
@@ -4294,7 +4367,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
 
     if (wasInYearView && this.isBrowser && this.isCalendarOpen) {
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this.setupPassiveTouchListeners();
       }, 50);
     }
@@ -4331,7 +4404,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
 
     if (this.isBrowser && this.isCalendarOpen && this.calendarViewMode === 'month') {
-      setTimeout(() => {
+      this.trackedSetTimeout(() => {
         this.setupPassiveTouchListeners();
       }, 50);
     }
@@ -4500,7 +4573,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const deltaTime = Date.now() - this.calendarSwipeStartTime;
     const absDeltaX = Math.abs(deltaX);
 
-    // Swipe up/down for year navigation
     if (absDeltaY > this.SWIPE_THRESHOLD && absDeltaY > absDeltaX && deltaTime < this.SWIPE_TIME_THRESHOLD) {
       if (deltaY < 0) {
         this._currentYear = this._currentYear + 1;
@@ -4648,7 +4720,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     let prefersReducedMotion = false;
     if (animationConfig.respectReducedMotion) {
       try {
-        prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        prefersReducedMotion = mediaQuery !== null && mediaQuery.matches;
       } catch {
         prefersReducedMotion = false;
       }
@@ -4756,6 +4829,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Component lifecycle hook: Cleanup all resources, subscriptions, and event listeners.
+   * Ensures no memory leaks by:
+   * - Removing instance from static registry
+   * - Cleaning up field sync service
+   * - Completing stateChanges subject
+   * - Clearing all tracked timeouts and animation frames
+   * - Removing touch event listeners
+   * - Invalidating month cache
+   */
   ngOnDestroy(): void {
     this.removeFocusTrap();
     NgxsmkDatepickerComponent._allInstances.delete(this);
@@ -4795,10 +4878,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.activeTimeouts.clear();
     }
 
-    // Clear month cache
-    if (this.monthCache) {
-      this.monthCache.clear();
+    if (this.activeAnimationFrames) {
+      this.activeAnimationFrames.forEach((frameId: number) => cancelAnimationFrame(frameId));
+      this.activeAnimationFrames.clear();
     }
+
+    if (this._touchListenersSetupTimeout) {
+      clearTimeout(this._touchListenersSetupTimeout);
+      this._touchListenersSetupTimeout = null;
+    }
+
+    if (this.fieldSyncTimeoutId) {
+      clearTimeout(this.fieldSyncTimeoutId);
+      this.activeTimeouts.delete(this.fieldSyncTimeoutId);
+      this.fieldSyncTimeoutId = null;
+    }
+
+    this.invalidateMonthCache();
   }
 
   private setupFocusTrap(): void {

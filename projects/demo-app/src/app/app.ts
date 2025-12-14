@@ -7,6 +7,8 @@ import {
   HolidayProvider,
   DatepickerValue,
   PartialDatepickerTranslations,
+  DatepickerHooks,
+  KeyboardShortcutContext,
 } from "ngxsmk-datepicker";
 import {CodePipe} from './code.pipe';
 import {DemoTranslationsService, DemoTranslations} from './demo-translations.service';
@@ -75,6 +77,15 @@ class SampleHolidayProvider implements HolidayProvider {
   }
 }
 
+// Navigation item interface
+interface NavItem {
+  id: string;
+  label: string;
+  sub: boolean;
+  keywords: string;
+  children?: NavItem[];
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -93,41 +104,77 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public selectedMobileSize: number = 375;
   public currentTime: string = '9:41';
   public searchQuery: string = '';
-  // Computed navigation items with translations
+  public expandedSections = signal<Set<string>>(new Set(['architecture', 'examples'])); // Default to expanded 'architecture' and 'examples' sections
+  public npmDownloads = signal<number | null>(null);
+  public npmDownloadsLoading = signal<boolean>(false);
+
+  // Computed navigation items with translations and hierarchical structure
   public navigationItems = computed(() => {
     const t = this.t();
-    return [
+    const items: NavItem[] = [
       { id: 'getting-started', label: t.gettingStarted, sub: false, keywords: 'getting started introduction overview' },
       { id: 'installation', label: t.installation, sub: false, keywords: 'install setup npm package' },
       { id: 'basic-usage', label: t.basicUsage, sub: false, keywords: 'basic usage example simple' },
       { id: 'framework-integration', label: t.frameworkIntegration, sub: false, keywords: 'angular material ionic html input form field' },
       { id: 'api-reference', label: t.apiReference, sub: false, keywords: 'api reference documentation' },
       { id: 'theming', label: t.theming, sub: false, keywords: 'theme dark light styling css' },
-      { id: 'examples', label: t.examples, sub: false, keywords: 'examples demo showcase' },
-      { id: 'signal-forms', label: t.signalForms, sub: true, keywords: 'signal forms angular 21 reactive' },
-      { id: 'signal-forms-field', label: t.signalFormsField, sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
-      { id: 'angular-21-features', label: t.angular21Features, sub: true, keywords: 'angular 21 zoneless vitest aria compatibility' },
-      { id: 'single-date', label: t.singleDate, sub: true, keywords: 'single date picker selection' },
-      { id: 'customization-a11y', label: t.customizationA11y, sub: true, keywords: 'customization accessibility a11y aria' },
-      { id: 'date-range', label: t.dateRange, sub: true, keywords: 'date range selection start end' },
-      { id: 'range-previous-month', label: 'Range - Previous Month Selection', sub: true, keywords: 'range previous month selection cross month boundaries null initial values' },
-      { id: 'time-only', label: t.timeOnly, sub: true, keywords: 'time only picker time selection no calendar' },
-      { id: 'allow-typing', label: 'Editable Input / Typing Support', sub: true, keywords: 'allow typing editable input type date keyboard input mask format' },
-      { id: 'custom-format', label: t.customFormat, sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
-      { id: 'moment-js-integration', label: t.momentJsIntegration, sub: true, keywords: 'moment js integration custom format fix' },
-      { id: 'rtl-support', label: t.rtlSupport, sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
-      { id: 'translations-i18n', label: t.translationsI18n, sub: true, keywords: 'translations i18n internationalization locale language translation service' },
-      { id: 'timezone-support', label: t.timezoneSupport, sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
-      { id: 'multiple-dates', label: t.multipleDates, sub: true, keywords: 'multiple dates selection array' },
-      { id: 'programmatic-value', label: t.programmaticValue, sub: true, keywords: 'programmatic set value api' },
-      { id: 'inline-calendar', label: t.inlineCalendar, sub: true, keywords: 'inline calendar always visible' },
-      { id: 'min-max-date', label: t.minMaxDate, sub: true, keywords: 'min max date limit restriction' },
-      { id: 'calendar-views', label: t.calendarViews, sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
-      { id: 'multi-calendar', label: 'Multi-Calendar', sub: true, keywords: 'multi calendar multiple months side by side calendar count' },
-      { id: 'mobile-playground', label: t.mobilePlayground, sub: true, keywords: 'mobile responsive playground test' },
+      { 
+        id: 'architecture', 
+        label: t.architecture, 
+        sub: false, 
+        keywords: 'architecture plugin hooks extension points system design',
+        children: [
+          { id: 'plugin-architecture', label: t.pluginArchitecture, sub: true, keywords: 'plugin architecture hooks extension points validation rendering formatting events' },
+        ]
+      },
+      { 
+        id: 'examples', 
+        label: t.examples, 
+        sub: false, 
+        keywords: 'examples demo showcase',
+        children: [
+          { id: 'signal-forms', label: t.signalForms, sub: true, keywords: 'signal forms angular 21 reactive' },
+          { id: 'signal-forms-field', label: t.signalFormsField, sub: true, keywords: 'signal forms field input angular 21 FieldTree type compatibility' },
+          { id: 'angular-21-features', label: t.angular21Features, sub: true, keywords: 'angular 21 zoneless vitest aria compatibility' },
+          { id: 'single-date', label: t.singleDate, sub: true, keywords: 'single date picker selection' },
+          { id: 'customization-a11y', label: t.customizationA11y, sub: true, keywords: 'customization accessibility a11y aria' },
+          { id: 'date-range', label: t.dateRange, sub: true, keywords: 'date range selection start end' },
+          { id: 'range-previous-month', label: t.rangePreviousMonth, sub: true, keywords: 'range previous month selection cross month boundaries null initial values' },
+          { id: 'time-only', label: t.timeOnly, sub: true, keywords: 'time only picker time selection no calendar' },
+          { id: 'allow-typing', label: t.editableInputTyping, sub: true, keywords: 'allow typing editable input type date keyboard input mask format' },
+          { id: 'custom-format', label: t.customFormat, sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
+          { id: 'moment-js-integration', label: t.momentJsIntegration, sub: true, keywords: 'moment js integration custom format fix' },
+          { id: 'rtl-support', label: t.rtlSupport, sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
+          { id: 'translations-i18n', label: t.translationsI18n, sub: true, keywords: 'translations i18n internationalization locale language translation service' },
+          { id: 'timezone-support', label: t.timezoneSupport, sub: true, keywords: 'timezone time zone utc iana formatting parsing' },
+          { id: 'multiple-dates', label: t.multipleDates, sub: true, keywords: 'multiple dates selection array' },
+          { id: 'programmatic-value', label: t.programmaticValue, sub: true, keywords: 'programmatic set value api' },
+          { id: 'inline-calendar', label: t.inlineCalendar, sub: true, keywords: 'inline calendar always visible' },
+          { id: 'min-max-date', label: t.minMaxDate, sub: true, keywords: 'min max date limit restriction' },
+          { id: 'calendar-views', label: t.calendarViews, sub: true, keywords: 'year picker decade picker timeline time slider view mode' },
+          { id: 'multi-calendar', label: t.multiCalendar, sub: true, keywords: 'multi calendar multiple months side by side calendar count' },
+          { id: 'mobile-playground', label: t.mobilePlayground, sub: true, keywords: 'mobile responsive playground test' },
+        ]
+      },
       { id: 'inputs', label: t.inputs, sub: false, keywords: 'inputs properties @input parameters' },
       { id: 'outputs', label: t.outputs, sub: false, keywords: 'outputs events @output emitters' },
     ];
+    return items;
+  });
+
+  // Flatten navigation items for search (includes all children)
+  public allNavigationItems = computed(() => {
+    const items: NavItem[] = [];
+    const flatten = (navItems: NavItem[]) => {
+      for (const item of navItems) {
+        items.push(item);
+        if (item.children) {
+          flatten(item.children);
+        }
+      }
+    };
+    flatten(this.navigationItems());
+    return items;
   });
 
   public filteredNavigationItems = computed(() => {
@@ -135,12 +182,52 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       return this.navigationItems();
     }
     const lowerQuery = this.searchQuery.toLowerCase().trim();
-    return this.navigationItems().filter(item => {
-      const labelMatch = item.label.toLowerCase().includes(lowerQuery);
-      const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
-      return labelMatch || keywordMatch;
-    });
+    const filterItems = (items: NavItem[]): NavItem[] => {
+      return items.map(item => {
+        const labelMatch = item.label.toLowerCase().includes(lowerQuery);
+        const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
+        
+        if (item.children) {
+          const filteredChildren = filterItems(item.children);
+          const hasMatchingChildren = filteredChildren.length > 0;
+          
+          if (labelMatch || keywordMatch || hasMatchingChildren) {
+            return {
+              ...item,
+              children: filteredChildren
+            };
+          }
+          return null;
+        } else {
+          if (labelMatch || keywordMatch) {
+            return item;
+          }
+          return null;
+        }
+      }).filter((item): item is NavItem => item !== null);
+    };
+    return filterItems(this.navigationItems());
   });
+
+  toggleSubMenu(sectionId: string, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.expandedSections.update(expanded => {
+      const newExpanded = new Set(expanded);
+      if (newExpanded.has(sectionId)) {
+        newExpanded.delete(sectionId);
+      } else {
+        newExpanded.add(sectionId);
+      }
+      return newExpanded;
+    });
+  }
+
+  isSectionExpanded(sectionId: string): boolean {
+    return this.expandedSections().has(sectionId);
+  }
 
   // Computed features with translations
   public features = computed(() => {
@@ -340,6 +427,214 @@ export class MomentIntegrationComponent {
     closeBtn: 'btn btn-primary'
   };
 
+  // Plugin Architecture Examples
+  public weekendBlockerPlugin: DatepickerHooks = {
+    validateDate: (date: Date) => {
+      const day = date.getDay();
+      return day !== 0 && day !== 6; // Block weekends
+    },
+    getDayCellClasses: (date, isSelected, isDisabled, isToday, isHoliday) => {
+      const day = date.getDay();
+      if (day === 0 || day === 6) {
+        return ['weekend-disabled'];
+      }
+      return [];
+    },
+    getValidationError: (date: Date) => {
+      const day = date.getDay();
+      if (day === 0 || day === 6) {
+        return 'Weekends are not selectable';
+      }
+      return null;
+    }
+  };
+
+  public businessDaysPlugin: DatepickerHooks = {
+    validateDate: (date: Date) => {
+      const day = date.getDay();
+      return day >= 1 && day <= 5; // Monday to Friday
+    },
+    validateRange: (startDate: Date, endDate: Date) => {
+      const diffTime = endDate.getTime() - startDate.getTime();
+      const diffDays = diffTime / (1000 * 60 * 60 * 24);
+      return diffDays >= 3 && diffDays <= 30; // 3-30 days range
+    },
+    getValidationError: (date: Date) => {
+      const day = date.getDay();
+      if (day === 0 || day === 6) {
+        return 'Only business days (Mon-Fri) are allowed';
+      }
+      return null;
+    },
+    getDayCellClasses: (date) => {
+      const day = date.getDay();
+      if (day === 0 || day === 6) {
+        return ['non-business-day'];
+      }
+      return [];
+    }
+  };
+
+  public formattingPlugin: DatepickerHooks = {
+    formatDisplayValue: (value: DatepickerValue) => {
+      if (value instanceof Date) {
+        return value.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+      return '';
+    },
+    getDayCellTooltip: (date: Date) => {
+      return `Select ${date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      })}`;
+    }
+  };
+
+  public eventTrackingPlugin: DatepickerHooks = {
+    beforeDateSelect: (date: Date) => {
+      console.log('🔍 About to select date:', date.toLocaleDateString());
+      return true; // Allow selection
+    },
+    afterDateSelect: (date: Date, newValue: DatepickerValue) => {
+      console.log('✅ Date selected:', date.toLocaleDateString());
+      console.log('📊 New value:', newValue);
+    },
+    onCalendarOpen: () => {
+      console.log('📅 Calendar opened');
+    },
+    onCalendarClose: () => {
+      console.log('🔒 Calendar closed');
+    }
+  };
+
+  public weekendBlockerPluginCode = `import { DatepickerHooks } from 'ngxsmk-datepicker';
+
+const weekendBlockerPlugin: DatepickerHooks = {
+  validateDate: (date: Date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // Block weekends
+  },
+  getDayCellClasses: (date, isSelected, isDisabled, isToday, isHoliday) => {
+    const day = date.getDay();
+    if (day === 0 || day === 6) {
+      return ['weekend-disabled'];
+    }
+    return [];
+  },
+  getValidationError: (date: Date) => {
+    const day = date.getDay();
+    if (day === 0 || day === 6) {
+      return 'Weekends are not selectable';
+    }
+    return null;
+  }
+};
+
+// Usage
+<ngxsmk-datepicker
+  [hooks]="weekendBlockerPlugin"
+  mode="single">
+</ngxsmk-datepicker>`;
+
+  public businessDaysPluginCode = `import { DatepickerHooks } from 'ngxsmk-datepicker';
+
+const businessDaysPlugin: DatepickerHooks = {
+  validateDate: (date: Date) => {
+    const day = date.getDay();
+    return day >= 1 && day <= 5; // Monday to Friday
+  },
+  validateRange: (startDate: Date, endDate: Date) => {
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays >= 3 && diffDays <= 30; // 3-30 days range
+  },
+  getValidationError: (date: Date) => {
+    const day = date.getDay();
+    if (day === 0 || day === 6) {
+      return 'Only business days (Mon-Fri) are allowed';
+    }
+    return null;
+  },
+  getDayCellClasses: (date) => {
+    const day = date.getDay();
+    if (day === 0 || day === 6) {
+      return ['non-business-day'];
+    }
+    return [];
+  }
+};
+
+// Usage
+<ngxsmk-datepicker
+  [hooks]="businessDaysPlugin"
+  mode="range">
+</ngxsmk-datepicker>`;
+
+  public formattingPluginCode = `import { DatepickerHooks, DatepickerValue } from 'ngxsmk-datepicker';
+
+const formattingPlugin: DatepickerHooks = {
+  formatDisplayValue: (value: DatepickerValue) => {
+    if (value instanceof Date) {
+      return value.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    return '';
+  },
+  getDayCellTooltip: (date: Date) => {
+    return \`Select \${date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    })}\`;
+  }
+};
+
+// Usage
+<ngxsmk-datepicker
+  [hooks]="formattingPlugin"
+  mode="single">
+</ngxsmk-datepicker>`;
+
+  public eventTrackingPluginCode = `import { DatepickerHooks, DatepickerValue } from 'ngxsmk-datepicker';
+
+const eventTrackingPlugin: DatepickerHooks = {
+  beforeDateSelect: (date: Date) => {
+    console.log('About to select date:', date.toLocaleDateString());
+    return true; // Allow selection
+  },
+  afterDateSelect: (date: Date, newValue: DatepickerValue) => {
+    console.log('Date selected:', date.toLocaleDateString());
+    console.log('New value:', newValue);
+    // Track analytics, perform side effects, etc.
+  },
+  onCalendarOpen: () => {
+    console.log('Calendar opened');
+    // Track analytics
+  },
+  onCalendarClose: () => {
+    console.log('Calendar closed');
+    // Cleanup
+  }
+};
+
+// Usage
+<ngxsmk-datepicker
+  [hooks]="eventTrackingPlugin"
+  mode="single">
+</ngxsmk-datepicker>`;
+
   public datepickerForm = new FormGroup({
     singleDate: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
     singleDate2: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
@@ -360,6 +655,10 @@ export class MomentIntegrationComponent {
     multipleDates: new FormControl<Date[] | null>(null),
     minDateDemo: new FormControl(),
     disabledDatesDemo: new FormControl(),
+    pluginWeekend: new FormControl<DatepickerValue>(null),
+    pluginBusinessDays: new FormControl<{ start: Date | null; end: Date | null }>({ start: null, end: null }),
+    pluginFormatting: new FormControl<DatepickerValue>(null),
+    pluginEvents: new FormControl<DatepickerValue>(null),
   });
 
   public myRanges: DateRange = {
@@ -1253,7 +1552,7 @@ export class DateFormComponent {
   }
 
   getPreviewWidth(): number {
-    if (typeof window === 'undefined') {
+    if (!isPlatformBrowser(this.platformId)) {
       return this.selectedMobileSize;
     }
     
@@ -1284,6 +1583,46 @@ export class DateFormComponent {
     this.updateTime();
     this.timeInterval = setInterval(() => this.updateTime(), 1000);
     this.detectAndSetLocale();
+    this.fetchNpmDownloads();
+  }
+
+  /**
+   * Fetches npm download count for the package
+   */
+  private async fetchNpmDownloads(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    this.npmDownloadsLoading.set(true);
+    try {
+      // Fetch last 30 days downloads
+      const response = await fetch('https://api.npmjs.org/downloads/point/last-month/ngxsmk-datepicker');
+      if (response.ok) {
+        const data = await response.json();
+        if (data.downloads !== undefined) {
+          this.npmDownloads.set(data.downloads);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to fetch npm download count:', error);
+    } finally {
+      this.npmDownloadsLoading.set(false);
+    }
+  }
+
+  /**
+   * Formats download count for display
+   */
+  public formatDownloads(count: number | null): string {
+    if (count === null) return '';
+    
+    if (count >= 1000000) {
+      return (count / 1000000).toFixed(1) + 'M';
+    } else if (count >= 1000) {
+      return (count / 1000).toFixed(1) + 'k';
+    }
+    return count.toString();
   }
   
   /**

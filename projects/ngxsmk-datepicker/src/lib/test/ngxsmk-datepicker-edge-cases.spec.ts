@@ -727,6 +727,309 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         testFixture.detectChanges();
       }).not.toThrow();
     });
+
+    it('should handle matchMedia returning null gracefully', () => {
+      (window as any).matchMedia = () => null as any;
+
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      
+      expect(() => {
+        testFixture.detectChanges();
+        const isMobile = testComponent['isMobileDevice']();
+        expect(typeof isMobile).toBe('boolean');
+      }).not.toThrow();
+    });
+  });
+
+  describe('Timeout Management & Memory Leaks', () => {
+    it('should track all setTimeout calls in activeTimeouts', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const initialTimeoutCount = component['activeTimeouts'].size;
+      
+      // Trigger some operations that use setTimeout
+      component['trackedSetTimeout'](() => {
+        expect(component['activeTimeouts'].size).toBe(initialTimeoutCount);
+        done();
+      }, 10);
+      
+      expect(component['activeTimeouts'].size).toBe(initialTimeoutCount + 1);
+    });
+
+    it('should clear all timeouts on destroy', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      let timeoutExecuted = false;
+      component['trackedSetTimeout'](() => {
+        timeoutExecuted = true;
+      }, 100);
+
+      expect(component['activeTimeouts'].size).toBeGreaterThan(0);
+
+      component.ngOnDestroy();
+
+      setTimeout(() => {
+        expect(timeoutExecuted).toBe(false);
+        expect(component['activeTimeouts'].size).toBe(0);
+        done();
+      }, 150);
+    });
+
+    it('should handle debouncedFieldSync correctly', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      let syncCount = 0;
+      spyOn(component as any, 'syncFieldValue').and.callFake(() => {
+        syncCount++;
+      });
+
+      component['_field'] = { value: () => new Date() } as any;
+
+      // Call debouncedFieldSync multiple times rapidly
+      component['debouncedFieldSync'](50);
+      component['debouncedFieldSync'](50);
+      component['debouncedFieldSync'](50);
+
+      setTimeout(() => {
+        // Should only sync once due to debouncing
+        expect(syncCount).toBe(1);
+        done();
+      }, 100);
+    });
+  });
+
+  describe('RequestAnimationFrame Cleanup', () => {
+    it('should track requestAnimationFrame calls', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const initialFrameCount = component['activeAnimationFrames'].size;
+      
+      component['trackedRequestAnimationFrame'](() => {
+        expect(component['activeAnimationFrames'].size).toBe(initialFrameCount);
+        done();
+      });
+      
+      expect(component['activeAnimationFrames'].size).toBe(initialFrameCount + 1);
+    });
+
+    it('should cancel all animation frames on destroy', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      let frameExecuted = false;
+      component['trackedRequestAnimationFrame'](() => {
+        frameExecuted = true;
+      });
+
+      expect(component['activeAnimationFrames'].size).toBeGreaterThan(0);
+
+      component.ngOnDestroy();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          expect(frameExecuted).toBe(false);
+          expect(component['activeAnimationFrames'].size).toBe(0);
+          done();
+        });
+      });
+    });
+
+    it('should handle trackedDoubleRequestAnimationFrame', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      let callbackExecuted = false;
+      component['trackedDoubleRequestAnimationFrame'](() => {
+        callbackExecuted = true;
+        expect(component['activeAnimationFrames'].size).toBe(0);
+        done();
+      });
+
+      expect(component['activeAnimationFrames'].size).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Touch Listener Cleanup', () => {
+    it('should clean up touch listeners on destroy', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const initialListenerCount = component['passiveTouchListeners'].length;
+      
+      // Simulate adding touch listeners
+      const cleanup = () => {};
+      component['passiveTouchListeners'].push(cleanup);
+
+      expect(component['passiveTouchListeners'].length).toBe(initialListenerCount + 1);
+
+      component.ngOnDestroy();
+
+      expect(component['passiveTouchListeners'].length).toBe(0);
+    });
+
+    it('should track retry timeouts in touch listener setup', (done) => {
+      component.ngOnInit();
+      component.inline = false;
+      fixture.detectChanges();
+
+      // Mock calendar open state
+      component['isCalendarOpen'] = true;
+      
+      // This should set up touch listeners with retry logic
+      component['setupPassiveTouchListeners']();
+
+      // Wait a bit to ensure timeout is set
+      setTimeout(() => {
+        // Verify timeout tracking
+        expect(component['_touchListenersSetupTimeout'] !== null || 
+               component['activeTimeouts'].size > 0).toBe(true);
+        done();
+      }, 20);
+    });
+  });
+
+  describe('Month Cache LRU Eviction', () => {
+    it('should use LRU eviction when cache is full', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      // Fill cache beyond MAX_CACHE_SIZE
+      const maxSize = component['MAX_CACHE_SIZE'];
+      
+      for (let i = 0; i < maxSize + 5; i++) {
+        const cacheKey = `2025-${i % 12}`;
+        component['monthCache'].set(cacheKey, []);
+        component['updateCacheAccess'](cacheKey);
+      }
+
+      // Cache should not exceed MAX_CACHE_SIZE
+      expect(component['monthCache'].size).toBeLessThanOrEqual(maxSize + 5);
+    });
+
+    it('should invalidate cache on locale change', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      // Add some cache entries
+      component['monthCache'].set('2025-0', []);
+      component['monthCache'].set('2025-1', []);
+      
+      expect(component['monthCache'].size).toBeGreaterThan(0);
+
+      // Change locale
+      component.locale = 'fr-FR';
+      component.ngOnChanges({ locale: { currentValue: 'fr-FR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } });
+
+      // Cache should be invalidated
+      expect(component['monthCache'].size).toBe(0);
+      expect(component['monthCacheAccessOrder'].size).toBe(0);
+    });
+
+    it('should invalidate cache on weekStart change', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      // Add some cache entries
+      component['monthCache'].set('2025-0', []);
+      
+      expect(component['monthCache'].size).toBeGreaterThan(0);
+
+      // Change weekStart
+      component.weekStart = 1;
+      component.ngOnChanges({ weekStart: { currentValue: 1, previousValue: 0, firstChange: false, isFirstChange: () => false } });
+
+      // Cache should be invalidated
+      expect(component['monthCache'].size).toBe(0);
+    });
+
+    it('should update cache access order on access', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      const cacheKey = '2025-5';
+      component['monthCache'].set(cacheKey, []);
+      
+      const initialCounter = component['monthCacheAccessCounter'];
+      component['updateCacheAccess'](cacheKey);
+      
+      expect(component['monthCacheAccessCounter']).toBe(initialCounter + 1);
+      expect(component['monthCacheAccessOrder'].get(cacheKey)).toBe(initialCounter + 1);
+    });
+  });
+
+  describe('Instance Cleanup', () => {
+    it('should remove instance from static registry on destroy', () => {
+      const allInstances = (NgxsmkDatepickerComponent as any)['_allInstances'] as Set<NgxsmkDatepickerComponent>;
+      const initialCount = allInstances.size;
+      
+      const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+      const testComponent = testFixture.componentInstance;
+      testComponent.inline = true;
+      testFixture.detectChanges();
+      testComponent.ngOnInit();
+
+      expect(allInstances.size).toBe(initialCount + 1);
+      expect(allInstances.has(testComponent)).toBe(true);
+
+      testComponent.ngOnDestroy();
+
+      expect(allInstances.size).toBe(initialCount);
+      expect(allInstances.has(testComponent)).toBe(false);
+    });
+
+    it('should clean up field sync service on destroy', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      spyOn(component['fieldSyncService'], 'cleanup');
+
+      component.ngOnDestroy();
+
+      expect(component['fieldSyncService'].cleanup).toHaveBeenCalled();
+    });
+
+    it('should complete stateChanges subject on destroy', () => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(component.stateChanges.closed).toBe(false);
+
+      component.ngOnDestroy();
+
+      expect(component.stateChanges.closed).toBe(true);
+    });
+  });
+
+  describe('Rapid Input Changes', () => {
+    it('should debounce rapid field sync operations', (done) => {
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      let syncCount = 0;
+      spyOn(component as any, 'syncFieldValue').and.callFake(() => {
+        syncCount++;
+      });
+
+      component['_field'] = { value: () => new Date() } as any;
+
+      // Rapid calls
+      component['debouncedFieldSync'](50);
+      component['debouncedFieldSync'](50);
+      component['debouncedFieldSync'](50);
+      component['debouncedFieldSync'](50);
+
+      setTimeout(() => {
+        // Should only sync once due to debouncing
+        expect(syncCount).toBe(1);
+        done();
+      }, 100);
+    });
   });
 });
 

@@ -97,6 +97,63 @@ describe('Calendar Utils', () => {
     it('should return 1 for en-GB locale', () => {
       expect(getFirstDayOfWeek('en-GB')).toBe(1);
     });
+
+    it('should fallback to locale mapping when Intl.Locale is not available', () => {
+      const originalIntl = (global as any).Intl;
+      const originalLocale = (global as any).Intl?.Locale;
+      
+      // Mock Intl without Locale constructor
+      (global as any).Intl = {
+        ...originalIntl,
+        Locale: undefined
+      };
+
+      // Should still work with fallback
+      expect(getFirstDayOfWeek('en-US')).toBe(0);
+      expect(getFirstDayOfWeek('en-GB')).toBe(1);
+      expect(getFirstDayOfWeek('de-DE')).toBe(1);
+      expect(getFirstDayOfWeek('fr-FR')).toBe(1);
+
+      // Restore
+      if (originalLocale) {
+        (global as any).Intl = originalIntl;
+      } else {
+        delete (global as any).Intl.Locale;
+      }
+    });
+
+    it('should handle Intl.Locale when available', () => {
+      // This test verifies the function works with Intl.Locale when it exists
+      // The actual behavior depends on browser support
+      const result = getFirstDayOfWeek('en-US');
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
+      expect(result).toBeLessThan(7);
+    });
+
+    it('should handle unknown locales with fallback', () => {
+      const originalIntl = (global as any).Intl;
+      const originalLocale = (global as any).Intl?.Locale;
+      
+      // Mock Intl without Locale constructor
+      (global as any).Intl = {
+        ...originalIntl,
+        Locale: undefined
+      };
+
+      // Unknown locale should default to Sunday (0) or use fallback logic
+      const result = getFirstDayOfWeek('xx-XX');
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
+      expect(result).toBeLessThan(7);
+
+      // Restore
+      if (originalLocale) {
+        (global as any).Intl = originalIntl;
+      } else {
+        delete (global as any).Intl.Locale;
+      }
+    });
   });
 
   describe('get24Hour', () => {
