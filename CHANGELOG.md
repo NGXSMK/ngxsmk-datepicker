@@ -5,18 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.22] - 2025-12-15 (Stable)
-
-### Added
-- **Angular Material Form Field Integration**: Full support for using ngxsmk-datepicker inside `mat-form-field` in both standalone and non-standalone components
-  - Implemented `MatFormFieldControl` interface with all required properties and methods
-  - Added `provideMaterialFormFieldControl()` helper function for easy integration with NgModules
-  - Component now properly integrates with Material form field's label floating, error states, and focus management
-  - Works seamlessly with Angular Material's form field appearance options (outline, fill, standard)
-  - Added `id`, `focused`, `empty`, `shouldLabelFloat`, `required`, `errorState`, `controlType`, `autofilled`, and `describedBy` properties
-  - Implemented `setDescribedByIds()` and `onContainerClick()` methods for Material form field compatibility
-  - Added `stateChanges` Subject for proper state change notifications to Material form field
-  - Added `@angular/material` and `@angular/cdk` as optional peer dependencies
+## [1.9.22] - 2025-12-14 (Stable)
 
 ### Fixed
 - **Form Control Value Initialization**: Fixed issue where datepicker was not properly updating the displayed month when initialized with form control values
@@ -33,14 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Maintains backward compatibility with en-US and other locales that use Sunday (0) as first day
   - All calendar utils tests now passing (19/19 tests)
 
-- **Non-Standalone Component Support**: Fixed issue where datepicker could not be used inside `mat-form-field` in non-standalone components
-  - Added `provideMaterialFormFieldControl()` helper function to properly provide Material form field control token
-  - Component now works correctly in both standalone and NgModule-based applications
-
 ### Changed
 - **Version Update**: Updated to version 1.9.22
 - **Stable Release**: Version 1.9.22 is the current stable version
-- **Code Optimization**: Removed unnecessary comments and optimized `empty()` getter for better performance
 
 ## [1.9.21] - 2025-12-10 (Stable)
 

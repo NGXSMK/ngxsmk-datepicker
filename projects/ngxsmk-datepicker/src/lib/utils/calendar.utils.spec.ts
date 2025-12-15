@@ -99,11 +99,11 @@ describe('Calendar Utils', () => {
     });
 
     it('should fallback to locale mapping when Intl.Locale is not available', () => {
-      const originalIntl = (global as any).Intl;
-      const originalLocale = (global as any).Intl?.Locale;
+      const originalIntl = (globalThis as any).Intl;
+      const originalLocale = (globalThis as any).Intl?.Locale;
       
       // Mock Intl without Locale constructor
-      (global as any).Intl = {
+      (globalThis as any).Intl = {
         ...originalIntl,
         Locale: undefined
       };
@@ -116,9 +116,9 @@ describe('Calendar Utils', () => {
 
       // Restore
       if (originalLocale) {
-        (global as any).Intl = originalIntl;
+        (globalThis as any).Intl = originalIntl;
       } else {
-        delete (global as any).Intl.Locale;
+        delete (globalThis as any).Intl.Locale;
       }
     });
 
@@ -132,11 +132,11 @@ describe('Calendar Utils', () => {
     });
 
     it('should handle unknown locales with fallback', () => {
-      const originalIntl = (global as any).Intl;
-      const originalLocale = (global as any).Intl?.Locale;
+      const originalIntl = (globalThis as any).Intl;
+      const originalLocale = (globalThis as any).Intl?.Locale;
       
       // Mock Intl without Locale constructor
-      (global as any).Intl = {
+      (globalThis as any).Intl = {
         ...originalIntl,
         Locale: undefined
       };
@@ -149,9 +149,9 @@ describe('Calendar Utils', () => {
 
       // Restore
       if (originalLocale) {
-        (global as any).Intl = originalIntl;
+        (globalThis as any).Intl = originalIntl;
       } else {
-        delete (global as any).Intl.Locale;
+        delete (globalThis as any).Intl.Locale;
       }
     });
   });

@@ -165,7 +165,7 @@ We use labels to help organize issues:
 
 ---
 
-**Last Updated**: December 15, 2025
+**Last Updated**: December 14, 2025
 
 *This roadmap is a living document and will be updated regularly based on community feedback and project needs.*
 

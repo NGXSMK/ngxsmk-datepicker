@@ -748,15 +748,18 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.ngOnInit();
       fixture.detectChanges();
 
-      const initialTimeoutCount = component['activeTimeouts'].size;
-      
-      // Trigger some operations that use setTimeout
-      component['trackedSetTimeout'](() => {
-        expect(component['activeTimeouts'].size).toBe(initialTimeoutCount);
-        done();
-      }, 10);
-      
-      expect(component['activeTimeouts'].size).toBe(initialTimeoutCount + 1);
+      // Wait for any timeouts created during initialization to complete
+      setTimeout(() => {
+        const initialTimeoutCount = component['activeTimeouts'].size;
+        
+        // Trigger some operations that use setTimeout
+        component['trackedSetTimeout'](() => {
+          expect(component['activeTimeouts'].size).toBe(initialTimeoutCount);
+          done();
+        }, 10);
+        
+        expect(component['activeTimeouts'].size).toBe(initialTimeoutCount + 1);
+      }, 200);
     });
 
     it('should clear all timeouts on destroy', (done) => {
@@ -912,40 +915,50 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       expect(component['monthCache'].size).toBeLessThanOrEqual(maxSize + 5);
     });
 
-    it('should invalidate cache on locale change', () => {
+    it('should invalidate cache on locale change', (done) => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      // Add some cache entries
-      component['monthCache'].set('2025-0', []);
-      component['monthCache'].set('2025-1', []);
-      
-      expect(component['monthCache'].size).toBeGreaterThan(0);
+      // Wait for any timeouts created during initialization to complete
+      setTimeout(() => {
+        // Add some cache entries
+        component['monthCache'].set('2025-0', []);
+        component['monthCache'].set('2025-1', []);
+        
+        expect(component['monthCache'].size).toBeGreaterThan(0);
 
-      // Change locale
-      component.locale = 'fr-FR';
-      component.ngOnChanges({ locale: { currentValue: 'fr-FR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } });
+        // Change locale
+        component.locale = 'fr-FR';
+        component.ngOnChanges({ locale: { currentValue: 'fr-FR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } });
 
-      // Cache should be invalidated
-      expect(component['monthCache'].size).toBe(0);
-      expect(component['monthCacheAccessOrder'].size).toBe(0);
+        // Cache should be invalidated
+        expect(component['monthCache'].size).toBe(0);
+        expect(component['monthCacheAccessOrder'].size).toBe(0);
+        expect(component['activeTimeouts'].size).toBe(0);
+        done();
+      }, 200);
     });
 
-    it('should invalidate cache on weekStart change', () => {
+    it('should invalidate cache on weekStart change', (done) => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      // Add some cache entries
-      component['monthCache'].set('2025-0', []);
-      
-      expect(component['monthCache'].size).toBeGreaterThan(0);
+      // Wait for any timeouts created during initialization to complete
+      setTimeout(() => {
+        // Add some cache entries
+        component['monthCache'].set('2025-0', []);
+        
+        expect(component['monthCache'].size).toBeGreaterThan(0);
 
-      // Change weekStart
-      component.weekStart = 1;
-      component.ngOnChanges({ weekStart: { currentValue: 1, previousValue: 0, firstChange: false, isFirstChange: () => false } });
+        // Change weekStart
+        component.weekStart = 1;
+        component.ngOnChanges({ weekStart: { currentValue: 1, previousValue: 0, firstChange: false, isFirstChange: () => false } });
 
-      // Cache should be invalidated
-      expect(component['monthCache'].size).toBe(0);
+        // Cache should be invalidated
+        expect(component['monthCache'].size).toBe(0);
+        expect(component['activeTimeouts'].size).toBe(0);
+        done();
+      }, 200);
     });
 
     it('should update cache access order on access', () => {
@@ -999,9 +1012,13 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       fixture.detectChanges();
 
       expect(component.stateChanges.closed).toBe(false);
+      expect(component.stateChanges.isStopped).toBe(false);
 
       component.ngOnDestroy();
 
+      // Check both closed and isStopped properties
+      // In RxJS, isStopped is set to true when complete() is called
+      expect(component.stateChanges.isStopped).toBe(true);
       expect(component.stateChanges.closed).toBe(true);
     });
   });
