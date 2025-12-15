@@ -149,7 +149,7 @@ export class ThemeBuilderService implements OnDestroy {
       // Apply inline styles for immediate effect using batch updates
       requestAnimationFrame(() => {
         Object.entries(styles).forEach(([property, value]) => {
-          targetElement.style.setProperty(property, value);
+          targetElement.style.setProperty(property, value, 'important');
         });
       });
     } else {
@@ -160,8 +160,8 @@ export class ThemeBuilderService implements OnDestroy {
         document.head.appendChild(this.styleElement);
       }
 
-      // Optimized CSS - avoid redundant selectors
-      const css = `:root {\n${themeCss}\n}`;
+      // Optimized CSS - use more specific selector to override global :root variables
+      const css = `:root, :root > body {\n${themeCss}\n}`;
       this.styleElement.textContent = css;
       
       // Apply to elements more efficiently using requestAnimationFrame

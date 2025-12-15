@@ -81,6 +81,22 @@ ngxsmk-datepicker uses CSS custom properties for theming, allowing you to custom
 |----------|---------|-------------|
 | `--datepicker-transition` | `opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)` | Default transition for animations |
 
+## Global CSS Variables Override
+
+When CSS variables are defined in a global `:root` selector, the ThemeBuilderService will now properly override them with enhanced specificity and `!important` flags to ensure your theme values take precedence.
+
+```css
+/* When CSS variables are defined in global :root selector */
+:root {
+  --datepicker-primary-color: #ff0000;
+  --datepicker-primary-contrast: #ffffff;
+}
+
+/* ThemeBuilderService will now properly override these global variables */
+```
+
+**Note**: If you have CSS variables defined in a global `:root` selector, ThemeBuilderService will now properly override them with enhanced specificity and `!important` flags to ensure your theme values take precedence.
+
 ## Usage Examples
 
 ### Basic Theme Override
