@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.22` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.23` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -829,6 +829,16 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - Follow conventional commit messages
 
 ## **📄 Changelog**
+
+### **v1.9.23** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.23
+- ✅ **Stable Release**: Version 1.9.23 is the current stable version
+- 🐛 **Fixed**: CSS Variables Theming (Issue #84) - CSS variables theming now works when variables are defined in global `:root` selector
+  - Enhanced CSS selector from `:root` to `:root, :root > body` for higher specificity
+  - Added `!important` flags to inline styles to ensure they override existing styles
+  - ThemeBuilderService now properly overrides global stylesheet variables
+  - Updated documentation to explain the fix and provide guidance
+  - Resolves issue where theme variables defined in global stylesheets were not being applied
 
 ### **v1.9.22** (Stable)
 - 🎉 **Version Update**: Updated to version 1.9.22

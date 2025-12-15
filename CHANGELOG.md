@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.23] - 2025-12-15 (Stable)
+
+### Fixed
+- **CSS Variables Theming (Issue #84)**: Fixed issue where CSS variables theming was not working when variables were defined in the global `:root` selector
+  - Enhanced CSS selector from `:root` to `:root, :root > body` for higher specificity
+  - Added `!important` flags to inline styles to ensure they override existing styles
+  - ThemeBuilderService now properly overrides global stylesheet variables
+  - Updated documentation to explain the fix and provide guidance
+  - Resolves [#84](https://github.com/NGXSMK/ngxsmk-datepicker/issues/84)
+
+### Changed
+- **Version Update**: Updated to version 1.9.23
+- **Stable Release**: Version 1.9.23 is the current stable version
+
 ## [1.9.22] - 2025-12-14 (Stable)
 
 ### Fixed
