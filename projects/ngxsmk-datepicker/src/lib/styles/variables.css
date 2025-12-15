@@ -68,6 +68,16 @@
   --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
+/* Ensure dark theme variables cascade properly to child components */
+:host(.dark-theme) * {
+  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-background: #1f2937;
+  --datepicker-text-color: #f3f4f6;
+  --datepicker-subtle-text-color: #9ca3af;
+  --datepicker-border-color: #374151;
+  --datepicker-hover-background: #374151;
+}
+
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
   :host {
@@ -79,110 +89,7 @@
     --datepicker-primary-color: #0000ff;
     --datepicker-primary-contrast: #ffffff;
     --datepicker-range-background: #e0e0e0;
-  }
-  
-  /* Ensure all borders are visible */
-  :host * {
-    border-color: #000000 !important;
-  }
-  
-  /* Day cells */
-  .ngxsmk-day-cell {
-    border: 2px solid transparent !important;
-  }
-  
-  .ngxsmk-day-cell:not(.disabled):not(.empty):hover {
-    border-color: #000000 !important;
-    background-color: var(--datepicker-hover-background) !important;
-  }
-  
-  .ngxsmk-day-cell.disabled {
-    opacity: 0.5 !important;
-    border-color: #cccccc !important;
-  }
-  
-  .ngxsmk-day-cell.selected,
-  .ngxsmk-day-cell.start-date,
-  .ngxsmk-day-cell.end-date {
-    border: 3px solid #000000 !important;
-    background-color: var(--datepicker-primary-color) !important;
-    color: var(--datepicker-primary-contrast) !important;
-  }
-  
-  .ngxsmk-day-cell:focus-visible,
-  .ngxsmk-day-cell:focus-visible .ngxsmk-day-number {
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
-  }
-  
-  /* Navigation buttons */
-  .ngxsmk-nav-button {
-    border: 2px solid #000000 !important;
-  }
-  
-  .ngxsmk-nav-button:focus-visible {
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
-  }
-  
-  .ngxsmk-nav-button:hover:not(:disabled) {
-    background-color: var(--datepicker-hover-background) !important;
-    border-color: #000000 !important;
-  }
-  
-  /* Input group */
-  .ngxsmk-input-group {
-    border: 2px solid #000000 !important;
-  }
-  
-  .ngxsmk-input-group:focus-within {
-    border-color: #000000 !important;
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
-  }
-  
-  /* Buttons */
-  .ngxsmk-clear-button,
-  .ngxsmk-calendar-button {
-    border: 2px solid #000000 !important;
-  }
-  
-  .ngxsmk-clear-button:focus-visible,
-  .ngxsmk-calendar-button:focus-visible {
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
-  }
-  
-  /* Popover container */
-  .ngxsmk-popover-container {
-    border: 3px solid #000000 !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-  }
-  
-  /* Range selection */
-  .ngxsmk-day-cell.in-range {
-    background-color: var(--datepicker-range-background) !important;
-    border-color: #000000 !important;
-  }
-  
-  /* Select elements */
-  .ngxsmk-custom-select {
-    border: 2px solid #000000 !important;
-  }
-  
-  .ngxsmk-custom-select:focus-within {
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
-  }
-  
-  /* Time selection */
-  .ngxsmk-time-input {
-    border: 2px solid #000000 !important;
-  }
-  
-  .ngxsmk-time-input:focus {
-    outline: 3px solid #000000 !important;
-    outline-offset: 2px !important;
+    --datepicker-focus-outline: #000000; /* Added for consistent focus styling */
   }
   
   /* Dark theme adjustments for high contrast */
@@ -195,20 +102,116 @@
     --datepicker-primary-color: #ffffff;
     --datepicker-primary-contrast: #000000;
     --datepicker-range-background: #333333;
+    --datepicker-focus-outline: #ffffff; /* Added for consistent focus styling */
   }
   
-  :host(.dark-theme) * {
-    border-color: #ffffff !important;
+  /* Ensure all borders are visible with consistent thickness */
+  :host * {
+    border-color: var(--datepicker-border-color) !important;
   }
   
-  :host(.dark-theme) .ngxsmk-day-cell:focus-visible,
-  :host(.dark-theme) .ngxsmk-nav-button:focus-visible,
-  :host(.dark-theme) .ngxsmk-input-group:focus-within,
-  :host(.dark-theme) .ngxsmk-clear-button:focus-visible,
-  :host(.dark-theme) .ngxsmk-calendar-button:focus-visible,
-  :host(.dark-theme) .ngxsmk-custom-select:focus-within,
-  :host(.dark-theme) .ngxsmk-time-input:focus {
-    outline-color: #ffffff !important;
+  /* Day cells with improved focus indicators */
+  .ngxsmk-day-cell {
+    border: 2px solid transparent !important;
+  }
+  
+  .ngxsmk-day-cell:not(.disabled):not(.empty):hover {
+    border-color: var(--datepicker-border-color) !important;
+    background-color: var(--datepicker-hover-background) !important;
+  }
+  
+  .ngxsmk-day-cell.disabled {
+    opacity: 0.5 !important;
+    border-color: #cccccc !important;
+  }
+  
+  .ngxsmk-day-cell.selected,
+  .ngxsmk-day-cell.start-date,
+  .ngxsmk-day-cell.end-date {
+    border: 3px solid var(--datepicker-border-color) !important;
+    background-color: var(--datepicker-primary-color) !important;
+    color: var(--datepicker-primary-contrast) !important;
+  }
+  
+  .ngxsmk-day-cell.focused,
+  .ngxsmk-day-cell:focus-visible {
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Navigation buttons with consistent focus */
+  .ngxsmk-nav-button {
+    border: 2px solid var(--datepicker-border-color) !important;
+  }
+  
+  .ngxsmk-nav-button.focused,
+  .ngxsmk-nav-button:focus-visible {
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
+  }
+  
+  .ngxsmk-nav-button:hover:not(:disabled) {
+    background-color: var(--datepicker-hover-background) !important;
+    border-color: var(--datepicker-border-color) !important;
+  }
+  
+  /* Input group with improved focus handling */
+  .ngxsmk-input-group {
+    border: 2px solid var(--datepicker-border-color) !important;
+  }
+  
+  .ngxsmk-input-group:focus-within {
+    border-color: var(--datepicker-border-color) !important;
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Buttons with consistent focus styling */
+  .ngxsmk-clear-button,
+  .ngxsmk-calendar-button {
+    border: 2px solid var(--datepicker-border-color) !important;
+  }
+  
+  .ngxsmk-clear-button.focused,
+  .ngxsmk-clear-button:focus-visible,
+  .ngxsmk-calendar-button.focused,
+  .ngxsmk-calendar-button:focus-visible {
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Popover container */
+  .ngxsmk-popover-container {
+    border: 3px solid var(--datepicker-border-color) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  /* Range selection */
+  .ngxsmk-day-cell.in-range {
+    background-color: var(--datepicker-range-background) !important;
+    border-color: var(--datepicker-border-color) !important;
+  }
+  
+  /* Select elements */
+  .ngxsmk-custom-select {
+    border: 2px solid var(--datepicker-border-color) !important;
+  }
+  
+  .ngxsmk-custom-select.focused,
+  .ngxsmk-custom-select:focus-within {
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Time selection */
+  .ngxsmk-time-input {
+    border: 2px solid var(--datepicker-border-color) !important;
+  }
+  
+  .ngxsmk-time-input.focused,
+  .ngxsmk-time-input:focus {
+    outline: 3px solid var(--datepicker-focus-outline) !important;
+    outline-offset: 2px !important;
   }
 }
 

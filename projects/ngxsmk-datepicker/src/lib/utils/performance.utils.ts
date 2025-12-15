@@ -102,21 +102,35 @@ export function createDateComparator() {
   };
 }
 
+// Module-level cache for createFilteredArray
+const filteredArrayCache = new Map<string, unknown[]>();
+const MAX_FILTERED_ARRAY_CACHE_SIZE = 100;
+
 export function createFilteredArray<T>(
   source: T[],
   filterFn: (item: T) => boolean,
   cacheKey?: string
 ): T[] {
-  const cache = new Map<string, T[]>();
   const key = cacheKey || JSON.stringify(source);
   
-  if (cache.has(key)) {
-    return cache.get(key)!;
+  if (filteredArrayCache.has(key)) {
+    return filteredArrayCache.get(key) as T[];
   }
   
   const result = source.filter(filterFn);
-  cache.set(key, result);
+  
+  // Limit cache size to prevent memory leaks
+  if (filteredArrayCache.size >= MAX_FILTERED_ARRAY_CACHE_SIZE) {
+    const firstKey = filteredArrayCache.keys().next().value;
+    if (firstKey !== undefined) {
+      filteredArrayCache.delete(firstKey);
+    }
+  }
+  
+  filteredArrayCache.set(key, result);
   return result;
 }
 
-export function clearAllCaches(): void {}
+export function clearAllCaches(): void {
+  filteredArrayCache.clear();
+}

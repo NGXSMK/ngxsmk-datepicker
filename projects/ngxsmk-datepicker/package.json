@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.21",
+  "version": "1.9.22",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -13,6 +13,12 @@
   },
   "peerDependenciesMeta": {
     "zone.js": {
+      "optional": true
+    },
+    "@angular/material": {
+      "optional": true
+    },
+    "@angular/cdk": {
       "optional": true
     }
   },

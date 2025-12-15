@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { getStartOfDay } from '../utils/date.utils';
 
 export interface TouchGestureState {
@@ -122,6 +122,9 @@ export class TouchGestureHandlerService {
         } catch (error) {
           // Silently handle touch move errors - fallback to default behavior
           // Error is non-critical and doesn't affect core functionality
+          if (isDevMode()) {
+            console.warn('[ngxsmk-datepicker] Touch gesture error:', error);
+          }
         }
       }
     }

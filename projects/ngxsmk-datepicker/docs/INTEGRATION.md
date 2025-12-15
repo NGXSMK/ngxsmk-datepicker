@@ -16,7 +16,7 @@ This document provides integration examples for using ngxsmk-datepicker with pop
 npm install @angular/material @angular/cdk ngxsmk-datepicker
 ```
 
-### Basic Integration
+### Basic Integration (Standalone Components)
 
 ```typescript
 import { Component } from '@angular/core';
@@ -51,7 +51,7 @@ export class DatepickerComponent {
   
   materialTheme = {
     colors: {
-      primary: '#3f51b5', // Material Indigo
+      primary: '#3f51b5',
       background: '#ffffff',
       text: '#212121',
       border: '#e0e0e0',
@@ -61,6 +61,96 @@ export class DatepickerComponent {
       md: '4px'
     }
   };
+}
+```
+
+### Integration with Non-Standalone Components (NgModules)
+
+For non-standalone components, you need to provide the Material form field control token using the `provideMaterialFormFieldControl` helper:
+
+```typescript
+import { NgModule } from '@angular/core';
+import { MAT_FORM_FIELD_CONTROL } from '@angular/material/form-field';
+import { NgxsmkDatepickerComponent, provideMaterialFormFieldControl } from 'ngxsmk-datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    NgxsmkDatepickerComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule
+  ],
+  providers: [provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL)]
+})
+export class MyModule { }
+```
+
+Then use it in your component:
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
+@Component({
+  selector: 'app-material-form',
+  template: `
+    <form [formGroup]="myForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="date"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </mat-form-field>
+    </form>
+  `
+})
+export class MaterialFormComponent {
+  myForm = new FormGroup({
+    date: new FormControl<Date | null>(null)
+  });
+}
+```
+
+### Using with Reactive Forms
+
+```typescript
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+@Component({
+  selector: 'app-material-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgxsmkDatepickerComponent
+  ],
+  template: `
+    <form [formGroup]="myForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <ngxsmk-datepicker
+          mode="single"
+          formControlName="date"
+          placeholder="Choose a date">
+        </ngxsmk-datepicker>
+      </mat-form-field>
+    </form>
+  `
+})
+export class MaterialFormComponent {
+  myForm = new FormGroup({
+    date: new FormControl<Date | null>(null)
+  });
 }
 ```
 

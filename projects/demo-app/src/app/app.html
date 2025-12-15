@@ -22,7 +22,29 @@
           </div>
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
-            <span class="logo-version">v1.9.21</span>
+            <div class="logo-meta">
+              <span class="logo-version">v1.9.22</span>
+              @if (npmDownloads() !== null) {
+                <a 
+                  href="https://www.npmjs.com/package/ngxsmk-datepicker" 
+                  target="_blank" 
+                  class="npm-downloads"
+                  title="Monthly downloads on npm"
+                  rel="noopener noreferrer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  </svg>
+                  <span>{{ formatDownloads(npmDownloads()) }}/mo</span>
+                </a>
+              } @else if (npmDownloadsLoading()) {
+                <span class="npm-downloads-loading">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+                    <circle cx="12" cy="12" r="10" opacity="0.25"/>
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                </span>
+              }
+            </div>
           </div>
         </a>
       </div>
@@ -133,12 +155,48 @@
         </div>
       } @else {
         @for (navItem of filteredNavigationItems(); track navItem.id) {
-          <a 
-            [href]="'#' + navItem.id" 
-            (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
-            [class]="'nav-link' + (navItem.sub ? ' nav-link-sub' : '')">
-            {{ navItem.label }}
-          </a>
+          @if (navItem.children && navItem.children.length > 0) {
+            <div class="nav-group">
+              <button 
+                class="nav-link nav-link-parent"
+                (click)="toggleSubMenu(navItem.id, $event)"
+                [class.expanded]="isSectionExpanded(navItem.id)"
+                [attr.aria-expanded]="isSectionExpanded(navItem.id)"
+                [attr.aria-label]="navItem.label + ' menu'">
+                <span class="nav-link-text">{{ navItem.label }}</span>
+                <svg 
+                  class="nav-chevron" 
+                  width="12" 
+                  height="12" 
+                  viewBox="0 0 12 12" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  stroke-width="2"
+                  [class.expanded]="isSectionExpanded(navItem.id)">
+                  <path d="M4.5 3L7.5 6L4.5 9" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              @if (isSectionExpanded(navItem.id)) {
+                <div class="nav-submenu">
+                  @for (child of navItem.children; track child.id) {
+                    <a 
+                      [href]="'#' + child.id" 
+                      (click)="scrollToSection($event, child.id); closeMobileMenu()" 
+                      class="nav-link nav-link-sub">
+                      {{ child.label }}
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          } @else {
+            <a 
+              [href]="'#' + navItem.id" 
+              (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
+              class="nav-link">
+              {{ navItem.label }}
+            </a>
+          }
         }
       }
     </nav>
@@ -149,7 +207,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.21)</p>
+        <p class="hero-version">(v1.9.22)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
@@ -652,6 +710,116 @@
         </div>
       </div>
 
+      <div id="plugin-architecture" class="example-section">
+        <h3 class="example-title">{{ t().pluginArchitecture }}</h3>
+        <p>Extend the datepicker with custom plugins using hooks. Create reusable plugins for validation, rendering, formatting, and events.</p>
+        
+        <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
+          <strong style="color: white;">🎯 Plugin Architecture</strong>
+          <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">The datepicker features a powerful plugin system that allows you to extend functionality without modifying core code. See the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md" target="_blank" style="color: white; text-decoration: underline;">Plugin Architecture Guide</a> for complete documentation.</p>
+        </div>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 1: Weekend Blocker Plugin</h4>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Blocks weekend dates and adds custom styling.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [hooks]="weekendBlockerPlugin"
+            [theme]="currentTheme"
+            [locale]="selectedLocale()"
+            [placeholder]="'Select a weekday'"
+            formControlName="pluginWeekend">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(weekendBlockerPluginCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="weekendBlockerPluginCode | code"></code></pre>
+        </div>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 2: Business Days Plugin</h4>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Validates business days with custom error messages and range validation.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="range"
+            [hooks]="businessDaysPlugin"
+            [theme]="currentTheme"
+            [locale]="selectedLocale()"
+            [placeholder]="'Select business days range'"
+            formControlName="pluginBusinessDays">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(businessDaysPluginCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="businessDaysPluginCode | code"></code></pre>
+        </div>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 3: Custom Formatting Plugin</h4>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Custom date display formatting with enhanced tooltips.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [hooks]="formattingPlugin"
+            [theme]="currentTheme"
+            [locale]="selectedLocale()"
+            [placeholder]="'Select a date'"
+            formControlName="pluginFormatting">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(formattingPluginCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="formattingPluginCode | code"></code></pre>
+        </div>
+
+        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 4: Event Tracking Plugin</h4>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Track calendar events and date selections.</p>
+        
+        <div class="example-demo">
+          <ngxsmk-datepicker
+            mode="single"
+            [hooks]="eventTrackingPlugin"
+            [theme]="currentTheme"
+            [locale]="selectedLocale()"
+            [placeholder]="'Select a date (check console)'"
+            formControlName="pluginEvents">
+          </ngxsmk-datepicker>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">typescript</span>
+            <button class="code-copy" (click)="copyCode(eventTrackingPluginCode)">{{ t().copy }}</button>
+          </div>
+          <pre><code [innerHTML]="eventTrackingPluginCode | code"></code></pre>
+        </div>
+
+        <div class="info-box" style="margin-top: 2rem;">
+          <strong>Plugin Types:</strong>
+          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+            <li><strong>Rendering Plugins:</strong> Customize day cell rendering, classes, and tooltips</li>
+            <li><strong>Validation Plugins:</strong> Add custom validation rules and error messages</li>
+            <li><strong>Formatting Plugins:</strong> Customize date display and aria labels</li>
+            <li><strong>Event Plugins:</strong> React to calendar lifecycle events</li>
+            <li><strong>Keyboard Shortcut Plugins:</strong> Add custom keyboard shortcuts</li>
+          </ul>
+          <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Learn More:</strong> See the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md" target="_blank">Plugin Architecture Guide</a> for complete documentation, patterns, and best practices.</p>
+        </div>
+      </div>
+
       <div id="date-range" class="example-section">
         <h3 class="example-title">{{ t().dateRangeSelection }}</h3>
         <p>{{ t().selectDateRangeWithTime }}</p>
@@ -760,7 +928,7 @@
       </div>
 
       <div id="allow-typing" class="example-section">
-        <h3 class="example-title">Editable Input with Typing Support</h3>
+        <h3 class="example-title">{{ t().editableInputTyping }}</h3>
         <p>Enable users to type dates directly into the input field with automatic formatting and validation. Perfect for users who prefer keyboard input over mouse/touch interactions.</p>
         
         <div class="example-demo">
@@ -1657,7 +1825,7 @@
 
       <!-- Multi-Calendar Section -->
       <div id="multi-calendar" class="example-section">
-        <h3 class="example-title">Multi-Calendar Support</h3>
+        <h3 class="example-title">{{ t().multiCalendarSupport }}</h3>
         <p>Display multiple months side-by-side with configurable calendar count (1-12 calendars). Perfect for range selection and viewing multiple months at once.</p>
         
         <div class="example-demo">

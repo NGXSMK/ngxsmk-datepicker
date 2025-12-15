@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.22] - 2025-12-14 (Stable)
+
+### Fixed
+- **Form Control Value Initialization**: Fixed issue where datepicker was not properly updating the displayed month when initialized with form control values
+  - Added `_updateMemoSignals()` call in `writeValue()` method to ensure month/year signals are properly updated
+  - Added `scheduleChangeDetection()` to trigger UI updates when form control values are set
+  - Ensures datepicker correctly displays the month from form control values instead of defaulting to current month
+  - Resolves issue where demo app datepickers were showing December instead of the correct month from form control values
+  - Fixes calendar month display when using Reactive Forms with initial values
+
+- **Locale Week Start Detection**: Fixed `getFirstDayOfWeek()` function to properly return 1 for en-GB locale
+  - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available (older browsers/environments)
+  - Implemented locale-based mapping for common locales (en-GB, en-AU, en-NZ, and most European locales return 1 for Monday)
+  - Now correctly returns Monday (1) for en-GB and other European locales
+  - Maintains backward compatibility with en-US and other locales that use Sunday (0) as first day
+  - All calendar utils tests now passing (19/19 tests)
+
+### Changed
+- **Version Update**: Updated to version 1.9.22
+- **Stable Release**: Version 1.9.22 is the current stable version
+
 ## [1.9.21] - 2025-12-10 (Stable)
 
 ### Added

@@ -1,7 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { SimpleChange } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
+
+// Helper function to create SimpleChange objects for testing
+function createSimpleChange<T>(currentValue: T, previousValue: T, firstChange: boolean = false): SimpleChange {
+  return {
+    currentValue,
+    previousValue,
+    firstChange,
+    isFirstChange: () => firstChange
+  };
+}
 
 describe('NgxsmkDatepickerComponent - Time Handling', () => {
   let component: NgxsmkDatepickerComponent;
@@ -103,7 +114,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.inline = true; // Ensure calendar is visible
       component.timeOnly = true; // Set timeOnly BEFORE generating calendar
       component.calendarViewMode = 'month'; // Ensure we're in month view
-      component.ngOnChanges({ timeOnly: { currentValue: true, previousValue: false, firstChange: false, isFirstChange: () => false } as any });
+      component.ngOnChanges({ timeOnly: createSimpleChange(true, false) });
       component.generateCalendar(); // Generate calendar AFTER setting timeOnly
       fixture.detectChanges();
 
@@ -175,7 +186,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
   describe('Minute Interval', () => {
     it('should generate minute options based on minuteInterval', () => {
       component.minuteInterval = 15;
-      component.ngOnChanges({ minuteInterval: { currentValue: 15, previousValue: 1, firstChange: false, isFirstChange: () => false } as any });
+      component.ngOnChanges({ minuteInterval: createSimpleChange(15, 1) });
       fixture.detectChanges();
 
       const minuteOptions = component.minuteOptions;
@@ -188,7 +199,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
     it('should generate minute options with interval of 5', () => {
       component.minuteInterval = 5;
-      component.ngOnChanges({ minuteInterval: { currentValue: 5, previousValue: 1, firstChange: false, isFirstChange: () => false } as any });
+      component.ngOnChanges({ minuteInterval: createSimpleChange(5, 1) });
       fixture.detectChanges();
 
       const minuteOptions = component.minuteOptions;

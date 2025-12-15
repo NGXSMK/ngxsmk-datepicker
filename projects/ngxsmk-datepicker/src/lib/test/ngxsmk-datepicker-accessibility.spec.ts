@@ -91,8 +91,8 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     if (announcedMessage === '') {
       const monthName = component.currentDate.toLocaleDateString(component.locale, { month: 'long' });
       const year = String(component.currentDate.getFullYear());
-      const testTranslation = component.getTranslation('calendarOpened' as any, undefined, { month: monthName, year });
-      console.log('getTranslation returned:', testTranslation, 'monthName:', monthName, 'year:', year);
+      // calendarOpened is a valid key in DatepickerTranslations
+      const testTranslation = component.getTranslation('calendarOpened', undefined, { month: monthName, year });
     }
     
     expect(announcedMessage.length).toBeGreaterThan(0, 

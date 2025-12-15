@@ -2,6 +2,8 @@
 
 ngxsmk-datepicker provides comprehensive extension points through the `hooks` input, allowing you to customize rendering, validation, keyboard shortcuts, formatting, and event handling.
 
+> **📚 For a complete understanding of the plugin architecture, see the [Plugin Architecture Guide](./PLUGIN-ARCHITECTURE.md)** which covers architecture principles, plugin patterns, lifecycle, and advanced use cases.
+
 ## Overview
 
 The `hooks` input accepts a `DatepickerHooks` object that implements various hook interfaces:

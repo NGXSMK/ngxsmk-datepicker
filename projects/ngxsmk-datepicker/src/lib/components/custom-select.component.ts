@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'ngxsmk-custom-select',
@@ -223,6 +223,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private resizeObserver: ResizeObserver | null = null;
   private scrollListener: (() => void) | null = null;
@@ -296,13 +297,15 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
       
       // On mobile, also close when calendar modal opens
       // Check if calendar backdrop or popover container is present (indicates calendar is open on mobile)
-      const calendarBackdrop = document.querySelector('.ngxsmk-backdrop');
-      const popoverOpen = document.querySelector('.ngxsmk-popover-container.ngxsmk-popover-open');
-      if (calendarBackdrop || popoverOpen) {
-        // Small delay to ensure calendar is fully opened before closing dropdowns
-        setTimeout(() => {
-          this.isOpen = false;
-        }, 50);
+      if (this.isBrowser) {
+        const calendarBackdrop = this.document.querySelector('.ngxsmk-backdrop');
+        const popoverOpen = this.document.querySelector('.ngxsmk-popover-container.ngxsmk-popover-open');
+        if (calendarBackdrop || popoverOpen) {
+          // Small delay to ensure calendar is fully opened before closing dropdowns
+          setTimeout(() => {
+            this.isOpen = false;
+          }, 50);
+        }
       }
     }
   }
@@ -311,7 +314,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   onDocumentTouchStart(event: TouchEvent): void {
     // On mobile, close dropdown when calendar opens
     if (this.isBrowser && this.isOpen) {
-      const calendarBackdrop = document.querySelector('.ngxsmk-backdrop');
+      const calendarBackdrop = this.document.querySelector('.ngxsmk-backdrop');
       if (calendarBackdrop) {
         const target = event.target as Node;
         // Only close if touch is outside the dropdown

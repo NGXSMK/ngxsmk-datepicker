@@ -1,4 +1,4 @@
-import { Injectable, effect, EffectRef, Injector, runInInjectionContext, inject, Signal } from '@angular/core';
+import { Injectable, effect, EffectRef, Injector, runInInjectionContext, inject, Signal, isDevMode } from '@angular/core';
 import { DatepickerValue } from '../utils/calendar.utils';
 
 // Type for Angular core module accessed via globalThis (for dynamic isSignal detection)
@@ -475,9 +475,12 @@ export class FieldSyncService {
       // If no update method worked, reset flag immediately
       this._isUpdatingFromInternal = false;
 
-    } catch {
+    } catch (error) {
       // Silently handle errors to prevent breaking the application
       // The error might be due to readonly signals or other constraints
+      if (isDevMode()) {
+        console.warn('[ngxsmk-datepicker] Field sync error:', error);
+      }
       this._isUpdatingFromInternal = false;
     }
   }
