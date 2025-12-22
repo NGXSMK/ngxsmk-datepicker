@@ -204,7 +204,7 @@
     "@storybook/addon-interactions": "^8.6.14",
     "@storybook/addon-controls": "^8.6.14",
     "@storybook/addon-actions": "^8.6.14",
-    "@storybook/addon-docs": "^8.6.14",
+    "@storybook/addon-docs": "^10.1.10",
     "storybook": "^8.6.14",
     "luxon": "^3.4.4",
     "@types/luxon": "^3.3.7",
