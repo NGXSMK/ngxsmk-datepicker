@@ -1,12 +1,14 @@
 <div class="docs-container" [class.dark-theme]="currentTheme === 'dark'">
   @if (mobileMenuOpen) {
-    <div class="mobile-menu-overlay" (click)="closeMobileMenu()" (keydown.enter)="closeMobileMenu()" (keydown.escape)="closeMobileMenu()" tabindex="0" role="button" [attr.aria-label]="t().closeMenu"></div>
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()" (keydown.enter)="closeMobileMenu()"
+    (keydown.escape)="closeMobileMenu()" tabindex="0" role="button" [attr.aria-label]="t().closeMenu"></div>
   }
 
   <header class="modern-navbar">
     <div class="navbar-container">
       <div class="navbar-left">
-        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [attr.aria-label]="mobileMenuOpen ? t().closeMenu : t().openMenu">
+        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()"
+          [attr.aria-label]="mobileMenuOpen ? t().closeMenu : t().openMenu">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
@@ -23,121 +25,114 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v2.0.0</span>
+              <span class="logo-version">v3.0.0</span>
               @if (npmDownloads() !== null) {
-                <a 
-                  href="https://www.npmjs.com/package/ngxsmk-datepicker" 
-                  target="_blank" 
-                  class="npm-downloads"
-                  title="Monthly downloads on npm"
-                  rel="noopener noreferrer">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                  </svg>
-                  <span>{{ formatDownloads(npmDownloads()) }}/mo</span>
-                </a>
+              <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
+                title="Monthly downloads on npm" rel="noopener noreferrer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                <span>{{ formatDownloads(npmDownloads()) }}/mo</span>
+              </a>
               } @else if (npmDownloadsLoading()) {
-                <span class="npm-downloads-loading">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
-                    <circle cx="12" cy="12" r="10" opacity="0.25"/>
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                  </svg>
-                </span>
+              <span class="npm-downloads-loading">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="animation: spin 1s linear infinite;">
+                  <circle cx="12" cy="12" r="10" opacity="0.25" />
+                  <path
+                    d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              </span>
               }
             </div>
           </div>
         </a>
       </div>
-      
+
       <nav class="navbar-nav">
         @for (navItem of navigationItems().slice(0, 5); track navItem.id) {
-          <a 
-            [href]="'#' + navItem.id" 
-            (click)="scrollToSection($event, navItem.id)" 
-            class="nav-item">
-            {{ navItem.label }}
-          </a>
+        <a [href]="'#' + navItem.id" (click)="scrollToSection($event, navItem.id)" class="nav-item">
+          {{ navItem.label }}
+        </a>
         }
       </nav>
 
       <div class="navbar-right">
         <div class="navbar-search-wrapper">
           <div class="global-search">
-            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.35-4.35"></path>
             </svg>
-            <input 
-              type="text" 
-              class="search-input" 
-              [placeholder]="t().searchPlaceholder" 
-              [(ngModel)]="searchQuery"
-              (input)="onSearchChange($any($event.target).value || '')"
-              (keydown.escape)="clearSearch()"
+            <input type="text" class="search-input" [placeholder]="t().searchPlaceholder" [(ngModel)]="searchQuery"
+              (input)="onSearchChange($any($event.target).value || '')" (keydown.escape)="clearSearch()"
               [attr.aria-label]="t().search">
             @if (searchQuery) {
-              <button class="search-clear" (click)="clearSearch()" [attr.aria-label]="t().clear">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
+            <button class="search-clear" (click)="clearSearch()" [attr.aria-label]="t().clear">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
             }
           </div>
         </div>
         <div class="language-selector-wrapper">
-          <button 
-            class="language-selector-btn"
-            (click)="toggleLanguageDropdown()"
-            [attr.aria-label]="t().selectLanguage"
-            [attr.aria-expanded]="languageDropdownOpen()"
+          <button class="language-selector-btn" (click)="toggleLanguageDropdown()"
+            [attr.aria-label]="t().selectLanguage" [attr.aria-expanded]="languageDropdownOpen()"
             [title]="t().selectLanguage">
             <span class="language-selector-text">{{ getSelectedLocaleName() }}</span>
-            <svg class="language-selector-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" [class.open]="languageDropdownOpen()">
-              <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg class="language-selector-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none"
+              [class.open]="languageDropdownOpen()">
+              <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
             </svg>
           </button>
           @if (languageDropdownOpen()) {
-            <div class="language-dropdown">
-              @for (locale of availableLocales; track locale.code) {
-                <button 
-                  class="language-option"
-                  [class.active]="selectedLocale() === locale.code"
-                  (click)="onLocaleChange(locale.code)"
-                  [attr.aria-label]="locale.nativeName">
-                  <span class="language-option-text">{{ locale.nativeName }}</span>
-                  @if (selectedLocale() === locale.code) {
-                    <svg class="language-option-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  }
-                </button>
+          <div class="language-dropdown">
+            @for (locale of availableLocales; track locale.code) {
+            <button class="language-option" [class.active]="selectedLocale() === locale.code"
+              (click)="onLocaleChange(locale.code)" [attr.aria-label]="locale.nativeName">
+              <span class="language-option-text">{{ locale.nativeName }}</span>
+              @if (selectedLocale() === locale.code) {
+              <svg class="language-option-check" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
               }
-            </div>
+            </button>
+            }
+          </div>
           }
         </div>
-        <button class="theme-toggle-btn" (click)="toggleTheme()" [attr.aria-label]="currentTheme === 'dark' ? t().switchToLightMode : t().switchToDarkMode">
+        <button class="theme-toggle-btn" (click)="toggleTheme()"
+          [attr.aria-label]="currentTheme === 'dark' ? t().switchToLightMode : t().switchToDarkMode">
           @if (currentTheme === 'dark') {
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
           } @else {
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
           }
         </button>
-        <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="github-link" [attr.aria-label]="t().viewOnGitHub">
+        <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="github-link"
+          [attr.aria-label]="t().viewOnGitHub">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
           </svg>
         </a>
       </div>
@@ -150,54 +145,39 @@
     </div>
     <nav class="sidebar-nav">
       @if (searchQuery && filteredNavigationItems().length === 0) {
-        <div class="search-no-results">
-          <p>{{ t().noResultsFound }} "{{ searchQuery }}"</p>
-        </div>
+      <div class="search-no-results">
+        <p>{{ t().noResultsFound }} "{{ searchQuery }}"</p>
+      </div>
       } @else {
-        @for (navItem of filteredNavigationItems(); track navItem.id) {
-          @if (navItem.children && navItem.children.length > 0) {
-            <div class="nav-group">
-              <button 
-                class="nav-link nav-link-parent"
-                (click)="toggleSubMenu(navItem.id, $event)"
-                [class.expanded]="isSectionExpanded(navItem.id)"
-                [attr.aria-expanded]="isSectionExpanded(navItem.id)"
-                [attr.aria-label]="navItem.label + ' menu'">
-                <span class="nav-link-text">{{ navItem.label }}</span>
-                <svg 
-                  class="nav-chevron" 
-                  width="12" 
-                  height="12" 
-                  viewBox="0 0 12 12" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  stroke-width="2"
-                  [class.expanded]="isSectionExpanded(navItem.id)">
-                  <path d="M4.5 3L7.5 6L4.5 9" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </button>
-              @if (isSectionExpanded(navItem.id)) {
-                <div class="nav-submenu">
-                  @for (child of navItem.children; track child.id) {
-                    <a 
-                      [href]="'#' + child.id" 
-                      (click)="scrollToSection($event, child.id); closeMobileMenu()" 
-                      class="nav-link nav-link-sub">
-                      {{ child.label }}
-                    </a>
-                  }
-                </div>
-              }
-            </div>
-          } @else {
-            <a 
-              [href]="'#' + navItem.id" 
-              (click)="scrollToSection($event, navItem.id); closeMobileMenu()" 
-              class="nav-link">
-              {{ navItem.label }}
-            </a>
+      @for (navItem of filteredNavigationItems(); track navItem.id) {
+      @if (navItem.children && navItem.children.length > 0) {
+      <div class="nav-group">
+        <button class="nav-link nav-link-parent" (click)="toggleSubMenu(navItem.id, $event)"
+          [class.expanded]="isSectionExpanded(navItem.id)" [attr.aria-expanded]="isSectionExpanded(navItem.id)"
+          [attr.aria-label]="navItem.label + ' menu'">
+          <span class="nav-link-text">{{ navItem.label }}</span>
+          <svg class="nav-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor"
+            stroke-width="2" [class.expanded]="isSectionExpanded(navItem.id)">
+            <path d="M4.5 3L7.5 6L4.5 9" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        @if (isSectionExpanded(navItem.id)) {
+        <div class="nav-submenu">
+          @for (child of navItem.children; track child.id) {
+          <a [href]="'#' + child.id" (click)="scrollToSection($event, child.id); closeMobileMenu()"
+            class="nav-link nav-link-sub">
+            {{ child.label }}
+          </a>
           }
+        </div>
         }
+      </div>
+      } @else {
+      <a [href]="'#' + navItem.id" (click)="scrollToSection($event, navItem.id); closeMobileMenu()" class="nav-link">
+        {{ navItem.label }}
+      </a>
+      }
+      }
       }
     </nav>
   </aside>
@@ -207,21 +187,23 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v2.0.0)</p>
+        <p class="hero-version">(v3.0.0)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
-          <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
-          <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="hero-button secondary">{{ t().viewOnGitHub }}</a>
+          <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{
+            t().getStarted }}</a>
+          <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="hero-button secondary">{{
+            t().viewOnGitHub }}</a>
         </div>
       </div>
-      
+
       <div class="feature-grid">
         @for (feature of features(); track feature.title) {
-          <div class="feature-card">
-            <div class="feature-icon">{{ feature.icon }}</div>
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
-          </div>
+        <div class="feature-card">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
         }
       </div>
     </section>
@@ -235,10 +217,7 @@
 
       <div class="example-demo">
         <div class="theme-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
+          <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
             [placeholder]="t().selectADate">
           </ngxsmk-datepicker>
           <button class="theme-demo-btn" (click)="toggleTheme()">
@@ -251,11 +230,9 @@
       <p>{{ t().cssVariablesDescription }}</p>
 
       <div class="example-demo">
-        <div style="--datepicker-primary-color:#3b82f6; --datepicker-primary-contrast:#ffffff; --datepicker-range-background:#dbeafe; --datepicker-radius-md:10px;">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
+        <div
+          style="--datepicker-primary-color:#3b82f6; --datepicker-primary-contrast:#ffffff; --datepicker-range-background:#dbeafe; --datepicker-radius-md:10px;">
+          <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
             [placeholder]="t().customBlueTheme">
           </ngxsmk-datepicker>
         </div>
@@ -281,10 +258,7 @@
       <p>{{ t().classesDescription }}</p>
 
       <div class="example-demo">
-        <ngxsmk-datepicker
-          mode="single"
-          [theme]="currentTheme"
-          [locale]="selectedLocale()"
+        <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
           [classes]="datepickerClasses">
         </ngxsmk-datepicker>
       </div>
@@ -308,7 +282,9 @@
         <pre><code [innerHTML]="designSystemCode | code"></code></pre>
       </div>
 
-      <p>{{ t().forCompleteThemingDocumentation }} <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md#13-theming-and-customization" target="_blank">{{ t().themingSection }}</a> in the API documentation.</p>
+      <p>{{ t().forCompleteThemingDocumentation }} <a
+          href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md#13-theming-and-customization"
+          target="_blank">{{ t().themingSection }}</a> in the API documentation.</p>
     </section>
 
     <section id="global-configuration" class="docs-section">
@@ -341,18 +317,11 @@
         <p style="margin-bottom: 1rem; color: var(--datepicker-subtle-text-color);">
           <strong>{{ t().note }}</strong> {{ t().demoAppGlobalConfigNote }}
         </p>
-        <ngxsmk-datepicker
-          mode="single"
-          [theme]="currentTheme"
-          [locale]="selectedLocale()"
-            [placeholder]="t().usesGlobalConfig">
+        <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
+          [placeholder]="t().usesGlobalConfig">
         </ngxsmk-datepicker>
         <div style="margin-top: 1rem;">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [minuteInterval]="5"
+          <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()" [minuteInterval]="5"
             [placeholder]="t().overridesMinuteInterval">
           </ngxsmk-datepicker>
         </div>
@@ -373,11 +342,11 @@
     <section id="basic-usage" class="docs-section">
       <h2 class="section-title">{{ t().basicUsage }}</h2>
       <p>{{ t().importComponentDescription }}</p>
-      
+
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(basicUsageCode)">{{ t().copy }}</button>
+          <button class="code-copy" (click)="copyCode(basicUsageCode)">{{ t().copy }}</button>
         </div>
         <pre><code [innerHTML]="basicUsageCode | code"></code></pre>
       </div>
@@ -386,7 +355,7 @@
       <div class="code-block">
         <div class="code-header">
           <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(basicTemplateCode)">{{ t().copy }}</button>
+          <button class="code-copy" (click)="copyCode(basicTemplateCode)">{{ t().copy }}</button>
         </div>
         <pre><code [innerHTML]="basicTemplateCode | code"></code></pre>
       </div>
@@ -465,7 +434,7 @@
 
     <section id="api-reference" class="docs-section">
       <h2 class="section-title">{{ t().apiReference }}</h2>
-      
+
       <div id="inputs" class="api-subsection">
         <h3 class="subsection-title">{{ t().inputs }}</h3>
         <div class="api-table">
@@ -480,12 +449,12 @@
             </thead>
             <tbody>
               @for (input of inputProperties; track input.property) {
-                <tr>
-                  <td><code>{{ input.property }}</code></td>
-                  <td><code>{{ input.type }}</code></td>
-                  <td><code>{{ input.default }}</code></td>
-                  <td>{{ input.description }}</td>
-                </tr>
+              <tr>
+                <td><code>{{ input.property }}</code></td>
+                <td><code>{{ input.type }}</code></td>
+                <td><code>{{ input.default }}</code></td>
+                <td>{{ input.description }}</td>
+              </tr>
               }
             </tbody>
           </table>
@@ -505,11 +474,11 @@
             </thead>
             <tbody>
               @for (output of outputProperties; track output.event) {
-                <tr>
-                  <td><code>{{ output.event }}</code></td>
-                  <td><code>{{ output.type }}</code></td>
-                  <td>{{ output.description }}</td>
-                </tr>
+              <tr>
+                <td><code>{{ output.event }}</code></td>
+                <td><code>{{ output.type }}</code></td>
+                <td>{{ output.description }}</td>
+              </tr>
               }
             </tbody>
           </table>
@@ -521,1123 +490,1032 @@
       <h2 class="section-title">{{ t().examples }}</h2>
       <form [formGroup]="datepickerForm">
 
-      <div id="signal-forms" class="example-section">
-        <h3 class="example-title">{{ t().signalFormsTitle }}</h3>
-        <p>{{ t().bindDirectlyToSignal }}</p>
+        <div id="signal-forms" class="example-section">
+          <h3 class="example-title">{{ t().signalFormsTitle }}</h3>
+          <p>{{ t().bindDirectlyToSignal }}</p>
 
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().selectADateSignals"
-            [value]="signalDate()"
-            (valueChange)="signalDate.set($event)">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="result-box">
-          <strong>{{ t().signalValue }}</strong>
-          <code>{{ JSON.stringify(signalDate()) }}</code>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(signalFormsTsCode)">{{ t().copy }}</button>
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
+              [placeholder]="t().selectADateSignals" [value]="signalDate()" (valueChange)="signalDate.set($event)">
+            </ngxsmk-datepicker>
           </div>
-          <pre><code [innerHTML]="signalFormsTsCode | code"></code></pre>
-        </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(signalFormsHtmlCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="signalFormsHtmlCode | code"></code></pre>
-        </div>
-      </div>
-
-      <div id="signal-forms-field" class="example-section">
-        <h3 class="example-title">{{ t().signalFormsFieldTitle }}</h3>
-        <p>{{ t().useFieldInputDescription }}</p>
-        <p class="info-note"><strong>{{ t().note }}</strong> {{ t().thisFeatureRequiresAngular21 }}</p>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(signalFormsFieldTsCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="signalFormsFieldTsCode | code"></code></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(signalFormsFieldHtmlCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="signalFormsFieldHtmlCode | code"></code></pre>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(signalFormsFieldExampleCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="signalFormsFieldExampleCode | code"></code></pre>
-        </div>
-
-        <div class="info-box">
-          <strong>{{ t().benefitsOfFieldInput }}</strong>
-          <ul>
-            <li>{{ t().automaticTwoWayBinding }}</li>
-            <li>{{ t().automaticDisabledState }}</li>
-            <li>{{ t().automaticDirtyStateTracking }}</li>
-            <li>{{ t().worksWithSignalForms }}</li>
-            <li>{{ t().typeSafeWithFieldTree }}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="angular-21-features" class="example-section">
-        <h3 class="example-title">{{ t().angular21FeaturesTitle }}</h3>
-        <p>{{ t().angular21FeaturesDescription }}</p>
-        
-        <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
-          <strong style="color: white;">🎉 Angular 21 Officially Released!</strong>
-          <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">ngxsmk-datepicker is fully compatible with all Angular 21 features. No migration needed!</p>
-        </div>
-
-        <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
-          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
-            <h4 style="margin: 0 0 0.5rem 0;">Signal Forms</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's Signal Forms API with [field] input binding and automatic dirty state tracking</p>
-          </div>
-          
-          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
-            <h4 style="margin: 0 0 0.5rem 0;">Zoneless by Default</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Works perfectly without Zone.js using OnPush + Signals for optimal performance</p>
-          </div>
-          
-          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">🧪</div>
-            <h4 style="margin: 0 0 0.5rem 0;">Vitest Compatible</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Fully compatible with Vitest (Angular 21's default test runner) - no changes needed</p>
-          </div>
-          
-          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">♿</div>
-            <h4 style="margin: 0 0 0.5rem 0;">Angular Aria Compatible</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Built-in ARIA support works seamlessly alongside Angular Aria components</p>
-          </div>
-          
-          <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-            <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">✅</div>
-            <h4 style="margin: 0 0 0.5rem 0;">Comprehensive Testing</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">67.6% statement coverage, 1034+ tests covering all features, edge cases, and integration scenarios</p>
-          </div>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(angular21FeaturesCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="angular21FeaturesCode | code"></code></pre>
-        </div>
-
-        <div class="info-box">
-          <strong>{{ t().angular21Ready }}</strong>
-          <ul>
-            <li>{{ t().signalFormsFullSupport }}</li>
-            <li>{{ t().zonelessCompatible }}</li>
-            <li>{{ t().vitestCompatible }}</li>
-            <li>{{ t().angularAriaCompatible }}</li>
-            <li>{{ t().noMigrationNeeded }}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="single-date" class="example-section">
-        <h3 class="example-title">{{ t().singleDateSelection }}</h3>
-        <p>{{ t().basicSingleDatePicker }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().selectADate"
-            formControlName="singleDate">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(singleDateCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="singleDateCode | code"></code></pre>
-        </div>
-
-        @if (datepickerForm.controls.singleDate.value) {
           <div class="result-box">
-            <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</code>
+            <strong>{{ t().signalValue }}</strong>
+            <code>{{ JSON.stringify(signalDate()) }}</code>
           </div>
-        }
-      </div>
 
-      <div id="customization-a11y" class="example-section">
-        <h3 class="example-title">Customization & A11y</h3>
-        <p>Demonstrates week start, year range, custom labels, aria labels, and styling via classes.</p>
-
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [weekStart]="weekStartDemo"
-            [yearRange]="yearRangeDemo"
-            [clearLabel]="clearLabelDemo"
-            [closeLabel]="closeLabelDemo"
-            [prevMonthAriaLabel]="prevLabelDemo"
-            [nextMonthAriaLabel]="nextLabelDemo"
-            [classes]="datepickerClasses">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(customizationCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(signalFormsTsCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="signalFormsTsCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="customizationCode | code"></code></pre>
-        </div>
-      </div>
 
-      <div id="plugin-architecture" class="example-section">
-        <h3 class="example-title">{{ t().pluginArchitecture }}</h3>
-        <p>Extend the datepicker with custom plugins using hooks. Create reusable plugins for validation, rendering, formatting, and events.</p>
-        
-        <div class="info-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
-          <strong style="color: white;">🎯 Plugin Architecture</strong>
-          <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">The datepicker features a powerful plugin system that allows you to extend functionality without modifying core code. See the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md" target="_blank" style="color: white; text-decoration: underline;">Plugin Architecture Guide</a> for complete documentation.</p>
-        </div>
-
-        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 1: Weekend Blocker Plugin</h4>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Blocks weekend dates and adds custom styling.</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [hooks]="weekendBlockerPlugin"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="'Select a weekday'"
-            formControlName="pluginWeekend">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(weekendBlockerPluginCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(signalFormsHtmlCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="signalFormsHtmlCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="weekendBlockerPluginCode | code"></code></pre>
         </div>
 
-        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 2: Business Days Plugin</h4>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Validates business days with custom error messages and range validation.</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="range"
-            [hooks]="businessDaysPlugin"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="'Select business days range'"
-            formControlName="pluginBusinessDays">
-          </ngxsmk-datepicker>
-        </div>
+        <div id="signal-forms-field" class="example-section">
+          <h3 class="example-title">{{ t().signalFormsFieldTitle }}</h3>
+          <p>{{ t().useFieldInputDescription }}</p>
+          <p class="info-note"><strong>{{ t().note }}</strong> {{ t().thisFeatureRequiresAngular21 }}</p>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(businessDaysPluginCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(signalFormsFieldTsCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="signalFormsFieldTsCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="businessDaysPluginCode | code"></code></pre>
-        </div>
 
-        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 3: Custom Formatting Plugin</h4>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Custom date display formatting with enhanced tooltips.</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [hooks]="formattingPlugin"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="'Select a date'"
-            formControlName="pluginFormatting">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(formattingPluginCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(signalFormsFieldHtmlCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="signalFormsFieldHtmlCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="formattingPluginCode | code"></code></pre>
-        </div>
 
-        <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 4: Event Tracking Plugin</h4>
-        <p style="margin-bottom: 1rem; color: var(--text-secondary);">Track calendar events and date selections.</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [hooks]="eventTrackingPlugin"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="'Select a date (check console)'"
-            formControlName="pluginEvents">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(eventTrackingPluginCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(signalFormsFieldExampleCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="signalFormsFieldExampleCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="eventTrackingPluginCode | code"></code></pre>
-        </div>
 
-        <div class="info-box" style="margin-top: 2rem;">
-          <strong>Plugin Types:</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li><strong>Rendering Plugins:</strong> Customize day cell rendering, classes, and tooltips</li>
-            <li><strong>Validation Plugins:</strong> Add custom validation rules and error messages</li>
-            <li><strong>Formatting Plugins:</strong> Customize date display and aria labels</li>
-            <li><strong>Event Plugins:</strong> React to calendar lifecycle events</li>
-            <li><strong>Keyboard Shortcut Plugins:</strong> Add custom keyboard shortcuts</li>
-          </ul>
-          <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Learn More:</strong> See the <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md" target="_blank">Plugin Architecture Guide</a> for complete documentation, patterns, and best practices.</p>
-        </div>
-      </div>
-
-      <div id="date-range" class="example-section">
-        <h3 class="example-title">{{ t().dateRangeSelection }}</h3>
-        <p>{{ t().selectDateRangeWithTime }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="range"
-            [showTime]="true"
-            [minuteInterval]="15"
-            [ranges]="myRanges"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            formControlName="rangeWithTime">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(rangeDateCode)">{{ t().copy }}</button>
+          <div class="info-box">
+            <strong>{{ t().benefitsOfFieldInput }}</strong>
+            <ul>
+              <li>{{ t().automaticTwoWayBinding }}</li>
+              <li>{{ t().automaticDisabledState }}</li>
+              <li>{{ t().automaticDirtyStateTracking }}</li>
+              <li>{{ t().worksWithSignalForms }}</li>
+              <li>{{ t().typeSafeWithFieldTree }}</li>
+            </ul>
           </div>
-          <pre><code [innerHTML]="rangeDateCode | code"></code></pre>
         </div>
 
-        @if (datepickerForm.controls.rangeWithTime.value) {
+        <div id="angular-21-features" class="example-section">
+          <h3 class="example-title">{{ t().angular21FeaturesTitle }}</h3>
+          <p>{{ t().angular21FeaturesDescription }}</p>
+
+          <div class="info-box"
+            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
+            <strong style="color: white;">🎉 Angular 21 Officially Released!</strong>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">ngxsmk-datepicker is fully compatible with all
+              Angular 21 features. No migration needed!</p>
+          </div>
+
+          <div class="feature-grid"
+            style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+            <div class="feature-card"
+              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
+              <h4 style="margin: 0 0 0.5rem 0;">Signal Forms</h4>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's
+                Signal Forms API with [field] input binding and automatic dirty state tracking</p>
+            </div>
+
+            <div class="feature-card"
+              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+              <h4 style="margin: 0 0 0.5rem 0;">Zoneless by Default</h4>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Works perfectly without Zone.js
+                using OnPush + Signals for optimal performance</p>
+            </div>
+
+            <div class="feature-card"
+              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">🧪</div>
+              <h4 style="margin: 0 0 0.5rem 0;">Vitest Compatible</h4>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Fully compatible with Vitest
+                (Angular 21's default test runner) - no changes needed</p>
+            </div>
+
+            <div class="feature-card"
+              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">♿</div>
+              <h4 style="margin: 0 0 0.5rem 0;">Angular Aria Compatible</h4>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Built-in ARIA support works
+                seamlessly alongside Angular Aria components</p>
+            </div>
+
+            <div class="feature-card"
+              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
+              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">✅</div>
+              <h4 style="margin: 0 0 0.5rem 0;">Comprehensive Testing</h4>
+              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">67.6% statement coverage, 1034+
+                tests covering all features, edge cases, and integration scenarios</p>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(angular21FeaturesCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="angular21FeaturesCode | code"></code></pre>
+          </div>
+
+          <div class="info-box">
+            <strong>{{ t().angular21Ready }}</strong>
+            <ul>
+              <li>{{ t().signalFormsFullSupport }}</li>
+              <li>{{ t().zonelessCompatible }}</li>
+              <li>{{ t().vitestCompatible }}</li>
+              <li>{{ t().angularAriaCompatible }}</li>
+              <li>{{ t().noMigrationNeeded }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="single-date" class="example-section">
+          <h3 class="example-title">{{ t().singleDateSelection }}</h3>
+          <p>{{ t().basicSingleDatePicker }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
+              [placeholder]="t().selectADate" formControlName="singleDate">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(singleDateCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="singleDateCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.singleDate.value) {
           <div class="result-box">
-            <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</code>
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.singleDate.value) }}</code>
           </div>
-        }
-      </div>
-
-      <div id="range-previous-month" class="example-section">
-        <h3 class="example-title">Range Mode - Previous Month Selection</h3>
-        <p>This example demonstrates the fix for selecting dates from previous months in range mode. Try clicking on dates from the previous month (shown in gray) - the calendar will navigate correctly and allow you to select ranges across month boundaries.</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="range"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            formControlName="rangePreviousMonth"
-            placeholder="Select date range (try clicking previous month dates)">
-          </ngxsmk-datepicker>
+          }
         </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(rangePreviousMonthCode)">{{ t().copy }}</button>
+        <div id="customization-a11y" class="example-section">
+          <h3 class="example-title">Customization & A11y</h3>
+          <p>Demonstrates week start, year range, custom labels, aria labels, and styling via classes.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
+              [weekStart]="weekStartDemo" [yearRange]="yearRangeDemo" [clearLabel]="clearLabelDemo"
+              [closeLabel]="closeLabelDemo" [prevMonthAriaLabel]="prevLabelDemo" [nextMonthAriaLabel]="nextLabelDemo"
+              [classes]="datepickerClasses">
+            </ngxsmk-datepicker>
           </div>
-          <pre><code [innerHTML]="rangePreviousMonthCode | code"></code></pre>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(customizationCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="customizationCode | code"></code></pre>
+          </div>
         </div>
 
-        @if (datepickerForm.controls.rangePreviousMonth.value) {
+        <div id="plugin-architecture" class="example-section">
+          <h3 class="example-title">{{ t().pluginArchitecture }}</h3>
+          <p>Extend the datepicker with custom plugins using hooks. Create reusable plugins for validation, rendering,
+            formatting, and events.</p>
+
+          <div class="info-box"
+            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; margin-bottom: 2rem;">
+            <strong style="color: white;">🎯 Plugin Architecture</strong>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 0.5rem;">The datepicker features a powerful plugin
+              system that allows you to extend functionality without modifying core code. See the <a
+                href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md"
+                target="_blank" style="color: white; text-decoration: underline;">Plugin Architecture Guide</a> for
+              complete documentation.</p>
+          </div>
+
+          <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 1: Weekend
+            Blocker Plugin</h4>
+          <p style="margin-bottom: 1rem; color: var(--text-secondary);">Blocks weekend dates and adds custom styling.
+          </p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [hooks]="weekendBlockerPlugin" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="'Select a weekday'" formControlName="pluginWeekend">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(weekendBlockerPluginCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="weekendBlockerPluginCode | code"></code></pre>
+          </div>
+
+          <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 2: Business
+            Days Plugin</h4>
+          <p style="margin-bottom: 1rem; color: var(--text-secondary);">Validates business days with custom error
+            messages and range validation.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="range" [hooks]="businessDaysPlugin" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="'Select business days range'"
+              formControlName="pluginBusinessDays">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(businessDaysPluginCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="businessDaysPluginCode | code"></code></pre>
+          </div>
+
+          <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 3: Custom
+            Formatting Plugin</h4>
+          <p style="margin-bottom: 1rem; color: var(--text-secondary);">Custom date display formatting with enhanced
+            tooltips.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [hooks]="formattingPlugin" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="'Select a date'" formControlName="pluginFormatting">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(formattingPluginCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="formattingPluginCode | code"></code></pre>
+          </div>
+
+          <h4 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Example 4: Event
+            Tracking Plugin</h4>
+          <p style="margin-bottom: 1rem; color: var(--text-secondary);">Track calendar events and date selections.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [hooks]="eventTrackingPlugin" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="'Select a date (check console)'"
+              formControlName="pluginEvents">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(eventTrackingPluginCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="eventTrackingPluginCode | code"></code></pre>
+          </div>
+
+          <div class="info-box" style="margin-top: 2rem;">
+            <strong>Plugin Types:</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Rendering Plugins:</strong> Customize day cell rendering, classes, and tooltips</li>
+              <li><strong>Validation Plugins:</strong> Add custom validation rules and error messages</li>
+              <li><strong>Formatting Plugins:</strong> Customize date display and aria labels</li>
+              <li><strong>Event Plugins:</strong> React to calendar lifecycle events</li>
+              <li><strong>Keyboard Shortcut Plugins:</strong> Add custom keyboard shortcuts</li>
+            </ul>
+            <p style="margin-top: 1rem; margin-bottom: 0;"><strong>Learn More:</strong> See the <a
+                href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md"
+                target="_blank">Plugin Architecture Guide</a> for complete documentation, patterns, and best practices.
+            </p>
+          </div>
+        </div>
+
+        <div id="date-range" class="example-section">
+          <h3 class="example-title">{{ t().dateRangeSelection }}</h3>
+          <p>{{ t().selectDateRangeWithTime }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="range" [showTime]="true" [minuteInterval]="15" [ranges]="myRanges"
+              [theme]="currentTheme" [locale]="selectedLocale()" formControlName="rangeWithTime">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(rangeDateCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="rangeDateCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.rangeWithTime.value) {
           <div class="result-box">
-            <strong>{{ t().formValue }}</strong> 
-            @if (datepickerForm.controls.rangePreviousMonth.value.start && datepickerForm.controls.rangePreviousMonth.value.end) {
-              <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.end, 'medium') }}</code>
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTime.value) }}</code>
+          </div>
+          }
+        </div>
+
+        <div id="range-previous-month" class="example-section">
+          <h3 class="example-title">Range Mode - Previous Month Selection</h3>
+          <p>This example demonstrates the fix for selecting dates from previous months in range mode. Try clicking on
+            dates from the previous month (shown in gray) - the calendar will navigate correctly and allow you to select
+            ranges across month boundaries.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="range" [theme]="currentTheme" [locale]="selectedLocale()"
+              formControlName="rangePreviousMonth" placeholder="Select date range (try clicking previous month dates)">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(rangePreviousMonthCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="rangePreviousMonthCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.rangePreviousMonth.value) {
+          <div class="result-box">
+            <strong>{{ t().formValue }}</strong>
+            @if (datepickerForm.controls.rangePreviousMonth.value.start &&
+            datepickerForm.controls.rangePreviousMonth.value.end) {
+            <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.end, 'medium') }}</code>
             } @else if (datepickerForm.controls.rangePreviousMonth.value.start) {
-              <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: Not selected</code>
+            <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: Not selected</code>
             } @else {
-              <code>{{ JSON.stringify(datepickerForm.controls.rangePreviousMonth.value) }}</code>
+            <code>{{ JSON.stringify(datepickerForm.controls.rangePreviousMonth.value) }}</code>
             }
           </div>
-        } @else {
+          } @else {
           <div class="result-box">
             <strong>{{ t().formValue }}</strong> <code>{{ '{ start: null, end: null }' }}</code>
           </div>
-        }
-      </div>
-
-      <div id="time-only" class="example-section">
-        <h3 class="example-title">{{ t().timeOnlyPicker }}</h3>
-        <p>{{ t().displayOnlyTimePicker }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [timeOnly]="true"
-            [minuteInterval]="15"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            formControlName="timeOnly">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(timeOnlyCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="timeOnlyCode | code"></code></pre>
-        </div>
-
-        @if (datepickerForm.controls.timeOnly.value) {
-          <div class="result-box">
-            @if (isDate(datepickerForm.controls.timeOnly.value)) {
-              <strong>{{ t().formValue }}</strong> <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'short') }}</code>
-              <br>
-              <strong>{{ t().timeOnlyLabel }}</strong> <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'shortTime') }}</code>
-            } @else {
-              <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
-            }
-          </div>
-        }
-      </div>
-
-      <div id="allow-typing" class="example-section">
-        <h3 class="example-title">{{ t().editableInputTyping }}</h3>
-        <p>Enable users to type dates directly into the input field with automatic formatting and validation. Perfect for users who prefer keyboard input over mouse/touch interactions.</p>
-        
-        <div class="example-demo">
-          <div style="margin-bottom: 1rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Custom Format (MM/DD/YYYY)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates directly into the input field. The input mask formats your input as you type.</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [allowTyping]="true"
-              [displayFormat]="'MM/DD/YYYY'"
-              [showCalendarButton]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="'MM/DD/YYYY'"
-              formControlName="allowTypingDate">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div style="margin-bottom: 1rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Date and Time (MM/DD/YYYY hh:mm A)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates with time. Press Enter to apply or Escape to revert.</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [allowTyping]="true"
-              [displayFormat]="'MM/DD/YYYY hh:mm A'"
-              [showTime]="true"
-              [showCalendarButton]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="'MM/DD/YYYY hh:mm AM/PM'"
-              formControlName="allowTypingDateTime">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div style="margin-bottom: 1rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Without Custom Format (Auto-detect)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates in common formats like MM/DD/YYYY, YYYY-MM-DD, or DD/MM/YYYY. The datepicker will automatically parse your input.</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [allowTyping]="true"
-              [showCalendarButton]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().selectADate"
-              formControlName="allowTypingAuto">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div style="margin-bottom: 1rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Range Mode with Typing (DD/MM/YYYY)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type date ranges directly. Use format like "DD/MM/YYYY - DD/MM/YYYY" or select from calendar. The input mask helps format your input as you type.</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [allowTyping]="true"
-              [displayFormat]="'DD/MM/YYYY'"
-              [showCalendarButton]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="'DD/MM/YYYY - DD/MM/YYYY'"
-              formControlName="rangeWithTyping">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div style="margin-bottom: 1rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Alternative Format (YYYY-MM-DD)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">ISO format example. Type dates in YYYY-MM-DD format with automatic formatting.</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [allowTyping]="true"
-              [displayFormat]="'YYYY-MM-DD'"
-              [showCalendarButton]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="'YYYY-MM-DD'"
-              formControlName="allowTypingISO">
-            </ngxsmk-datepicker>
-          </div>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(allowTypingCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="allowTypingCode | code"></code></pre>
-        </div>
-
-        <div class="info-box">
-          <strong>Features:</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li><strong>Input Mask:</strong> Automatically formats input based on <code>displayFormat</code></li>
-            <li><strong>Smart Parsing:</strong> Supports multiple date formats when <code>displayFormat</code> is not set</li>
-            <li><strong>Validation:</strong> Validates against min/max dates, disabled dates, and custom validation functions</li>
-            <li><strong>Keyboard Shortcuts:</strong> Press Enter to apply, Escape to revert to previous value</li>
-            <li><strong>Auto-sync:</strong> Typed dates automatically sync with calendar selection and vice versa</li>
-            <li><strong>Error Handling:</strong> Invalid input reverts to the current display value on blur</li>
-          </ul>
-        </div>
-
-        @if (datepickerForm.controls.allowTypingDate.value || datepickerForm.controls.allowTypingDateTime.value || datepickerForm.controls.allowTypingAuto.value || datepickerForm.controls.allowTypingISO.value || datepickerForm.controls.rangeWithTyping.value) {
-          <div class="result-box">
-            <strong>Form Values:</strong>
-            @if (datepickerForm.controls.allowTypingDate.value && isDate(datepickerForm.controls.allowTypingDate.value)) {
-              <div style="margin-top: 0.5rem;">
-                <strong>MM/DD/YYYY:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingDate.value, 'short') }}</code>
-              </div>
-            }
-            @if (datepickerForm.controls.allowTypingDateTime.value && isDate(datepickerForm.controls.allowTypingDateTime.value)) {
-              <div style="margin-top: 0.5rem;">
-                <strong>With Time:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingDateTime.value, 'medium') }}</code>
-              </div>
-            }
-            @if (datepickerForm.controls.allowTypingAuto.value && isDate(datepickerForm.controls.allowTypingAuto.value)) {
-              <div style="margin-top: 0.5rem;">
-                <strong>Auto-detect:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingAuto.value, 'short') }}</code>
-              </div>
-            }
-            @if (datepickerForm.controls.allowTypingISO.value && isDate(datepickerForm.controls.allowTypingISO.value)) {
-              <div style="margin-top: 0.5rem;">
-                <strong>ISO Format:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingISO.value, 'short') }}</code>
-              </div>
-            }
-            @if (datepickerForm.controls.rangeWithTyping.value) {
-              @if (datepickerForm.controls.rangeWithTyping.value.start || datepickerForm.controls.rangeWithTyping.value.end) {
-                <div style="margin-top: 0.5rem;">
-                  <strong>Range:</strong> 
-                  @if (datepickerForm.controls.rangeWithTyping.value.start && datepickerForm.controls.rangeWithTyping.value.end) {
-                    <code>{{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} - {{ formatDate(datepickerForm.controls.rangeWithTyping.value.end, 'short') }}</code>
-                  } @else if (datepickerForm.controls.rangeWithTyping.value.start) {
-                    <code>Start: {{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} | End: Not selected</code>
-                  } @else {
-                    <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTyping.value) }}</code>
-                  }
-                </div>
-              }
-            }
-          </div>
-        }
-      </div>
-
-      <div id="custom-format" class="example-section">
-        <h3 class="example-title">{{ t().customDateFormat }}</h3>
-        <p>{{ t().displayDatesInCustomFormats }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [displayFormat]="'MM/DD/YYYY hh:mm A'"
-            [showTime]="true"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().selectDateAndTime"
-            formControlName="customFormat">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(customFormatCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="customFormatCode | code"></code></pre>
-        </div>
-
-        @if (datepickerForm.controls.customFormat.value) {
-          <div class="result-box">
-            @if (isDate(datepickerForm.controls.customFormat.value)) {
-              <strong>{{ t().formValue }}</strong> <code>{{ formatDate(datepickerForm.controls.customFormat.value, 'short') }}</code>
-              <br>
-              <strong>Display Format:</strong> <code>MM/DD/YYYY hh:mm A</code>
-            } @else {
-              <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.customFormat.value) }}</code>
-            }
-          </div>
-        }
-
-        <div class="format-examples">
-          <h4>{{ t().formatTokenReference }}</h4>
-          <ul>
-            <li><code>YYYY</code> - {{ t().formatTokenYYYY }}</li>
-            <li><code>YY</code> - {{ t().formatTokenYY }}</li>
-            <li><code>MM</code> - {{ t().formatTokenMM }}</li>
-            <li><code>M</code> - {{ t().formatTokenM }}</li>
-            <li><code>DD</code> - {{ t().formatTokenDD }}</li>
-            <li><code>D</code> - {{ t().formatTokenD }}</li>
-            <li><code>hh</code> - {{ t().formatTokenHH12 }}</li>
-            <li><code>h</code> - {{ t().formatTokenH12 }}</li>
-            <li><code>HH</code> - {{ t().formatTokenHH }}</li>
-            <li><code>H</code> - {{ t().formatTokenH }}</li>
-            <li><code>mm</code> - {{ t().formatTokenMMMinutes }}</li>
-            <li><code>m</code> - {{ t().formatTokenMMinutes }}</li>
-            <li><code>ss</code> - {{ t().formatTokenSS }}</li>
-            <li><code>s</code> - {{ t().formatTokenS }}</li>
-            <li><code>A</code> - {{ t().formatTokenA }}</li>
-            <li><code>a</code> - {{ t().formatTokena }}</li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="moment-js-integration" class="example-section">
-        <h3 class="example-title">{{ t().momentJsIntegrationTitle }}</h3>
-        <p>{{ t().momentJsIntegrationDescription }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [displayFormat]="'MM/DD/YYYY hh:mm a'"
-            [showTime]="true"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().selectDateAndTimeCustomFormat"
-            [value]="momentDateValue()"
-            (valueChange)="onDateChange($event)">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="example-controls" style="margin-top: 1rem;">
-          <button class="demo-button" (click)="setCurrentDate()">{{ t().setCurrentDate }}</button>
-          <button class="demo-button" (click)="setFormattedDate()">{{ t().setFormattedDate }}</button>
-          <button class="demo-button" (click)="clearDate()">{{ t().clear }}</button>
-        </div>
-
-        <div class="result-box">
-          <strong>Date Value:</strong>
-          @if (momentDateValue()) {
-            <code>{{ formatMomentDateValue() }}</code>
-          } @else {
-            <code>{{ t().notSet }}</code>
           }
         </div>
 
-        <div class="info-box">
-          <strong>{{ t().whatThisFixSolves }}</strong>
-          <ul>
-            <li><strong>{{ t().before }}</strong> Passing <code>moment(this.date).utcOffset(timezone).format('MM/DD/YYYY hh:mm a')</code> to the datepicker with <code>displayFormat="MM/DD/YYYY hh:mm a"</code> would not populate correctly</li>
-            <li><strong>{{ t().after }}</strong> The datepicker now detects Moment.js objects and extracts the date value directly, bypassing the string parsing</li>
-            <li><strong>{{ t().backwardCompatible }}</strong> Still works with string dates, Date objects, and all other supported formats</li>
-          </ul>
-        </div>
+        <div id="time-only" class="example-section">
+          <h3 class="example-title">{{ t().timeOnlyPicker }}</h3>
+          <p>{{ t().displayOnlyTimePicker }}</p>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(momentIntegrationTsCode)">{{ t().copy }}</button>
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [timeOnly]="true" [minuteInterval]="15" [theme]="currentTheme"
+              [locale]="selectedLocale()" formControlName="timeOnly">
+            </ngxsmk-datepicker>
           </div>
-          <pre><code [innerHTML]="momentIntegrationTsCode | code"></code></pre>
-        </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(momentIntegrationHtmlCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(timeOnlyCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="timeOnlyCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="momentIntegrationHtmlCode | code"></code></pre>
-        </div>
-      </div>
 
-      <div id="rtl-support" class="example-section">
-        <h3 class="example-title">{{ t().rtlSupportTitle }}</h3>
-        <p>{{ t().fullRtlLayoutSupport }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [rtl]="true"
-            [locale]="'ar-SA'"
-            [theme]="currentTheme"
-            placeholder="اختر تاريخ"
-            formControlName="rtlDate">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(rtlCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="rtlCode | code"></code></pre>
-        </div>
-
-        <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().autoDetection }}</h4>
-        <p>{{ t().datepickerCanAutoDetectRtl }}</p>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(rtlAutoCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="rtlAutoCode | code"></code></pre>
-        </div>
-
-        <div class="result-box">
-          <strong>{{ t().rtlFeatures }}</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>{{ t().uiElementsMirrored }}</li>
-            <li>{{ t().dayGridUsesRtl }}</li>
-            <li>{{ t().weekDayHeadersOrdered }}</li>
-            <li>{{ t().keyboardNavigationReversed }}</li>
-            <li>{{ t().popoverPositioningAdjusted }}</li>
-            <li>{{ t().autoDetectionFromDocument }}</li>
-          </ul>
-        </div>
-
-        @if (datepickerForm.controls.rtlDate.value) {
+          @if (datepickerForm.controls.timeOnly.value) {
           <div class="result-box">
-            <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.rtlDate.value) }}</code>
+            @if (isDate(datepickerForm.controls.timeOnly.value)) {
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'short') }}</code>
+            <br>
+            <strong>{{ t().timeOnlyLabel }}</strong>
+            <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'shortTime') }}</code>
+            } @else {
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
+            }
           </div>
-        }
-      </div>
+          }
+        </div>
 
-      <div id="translations-i18n" class="example-section">
-        <h3 class="example-title">{{ t().translationsI18nTitle }}</h3>
-        <p>{{ t().fullInternationalizationSupport }}</p>
-        
-        <h4 class="subsection-title">{{ t().automaticTranslations }}</h4>
-        <p>{{ t().simplySetLocale }}</p>
-        
-        <div class="example-demo">
-          <div style="margin-bottom: 1rem;">
-            <label for="locale-select" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
-              {{ t().selectLocale }}
-              @if (isLocaleAutoDetected() && detectedLocale()) {
-                <span style="font-size: 0.875rem; font-weight: normal; color: var(--text-secondary); margin-left: 0.5rem;">
+        <div id="allow-typing" class="example-section">
+          <h3 class="example-title">{{ t().editableInputTyping }}</h3>
+          <p>Enable users to type dates directly into the input field with automatic formatting and validation. Perfect
+            for users who prefer keyboard input over mouse/touch interactions.</p>
+
+          <div class="example-demo">
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Custom Format (MM/DD/YYYY)</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates directly into the input
+                field. The input mask formats your input as you type.</p>
+              <ngxsmk-datepicker mode="single" [allowTyping]="true" [displayFormat]="'MM/DD/YYYY'"
+                [showCalendarButton]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+                [placeholder]="'MM/DD/YYYY'" formControlName="allowTypingDate">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">With Date and Time (MM/DD/YYYY hh:mm
+                A)</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates with time. Press Enter to
+                apply or Escape to revert.</p>
+              <ngxsmk-datepicker mode="single" [allowTyping]="true" [displayFormat]="'MM/DD/YYYY hh:mm A'"
+                [showTime]="true" [showCalendarButton]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+                [placeholder]="'MM/DD/YYYY hh:mm AM/PM'" formControlName="allowTypingDateTime">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Without Custom Format (Auto-detect)
+              </h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type dates in common formats like
+                MM/DD/YYYY, YYYY-MM-DD, or DD/MM/YYYY. The datepicker will automatically parse your input.</p>
+              <ngxsmk-datepicker mode="single" [allowTyping]="true" [showCalendarButton]="true" [theme]="currentTheme"
+                [locale]="selectedLocale()" [placeholder]="t().selectADate" formControlName="allowTypingAuto">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Range Mode with Typing (DD/MM/YYYY)
+              </h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Type date ranges directly. Use format
+                like "DD/MM/YYYY - DD/MM/YYYY" or select from calendar. The input mask helps format your input as you
+                type.</p>
+              <ngxsmk-datepicker mode="range" [allowTyping]="true" [displayFormat]="'DD/MM/YYYY'"
+                [showCalendarButton]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+                [placeholder]="'DD/MM/YYYY - DD/MM/YYYY'" formControlName="rangeWithTyping">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Alternative Format (YYYY-MM-DD)</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">ISO format example. Type dates in
+                YYYY-MM-DD format with automatic formatting.</p>
+              <ngxsmk-datepicker mode="single" [allowTyping]="true" [displayFormat]="'YYYY-MM-DD'"
+                [showCalendarButton]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+                [placeholder]="'YYYY-MM-DD'" formControlName="allowTypingISO">
+              </ngxsmk-datepicker>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(allowTypingCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="allowTypingCode | code"></code></pre>
+          </div>
+
+          <div class="info-box">
+            <strong>Features:</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li><strong>Input Mask:</strong> Automatically formats input based on <code>displayFormat</code></li>
+              <li><strong>Smart Parsing:</strong> Supports multiple date formats when <code>displayFormat</code> is not
+                set</li>
+              <li><strong>Validation:</strong> Validates against min/max dates, disabled dates, and custom validation
+                functions</li>
+              <li><strong>Keyboard Shortcuts:</strong> Press Enter to apply, Escape to revert to previous value</li>
+              <li><strong>Auto-sync:</strong> Typed dates automatically sync with calendar selection and vice versa</li>
+              <li><strong>Error Handling:</strong> Invalid input reverts to the current display value on blur</li>
+            </ul>
+          </div>
+
+          @if (datepickerForm.controls.allowTypingDate.value || datepickerForm.controls.allowTypingDateTime.value ||
+          datepickerForm.controls.allowTypingAuto.value || datepickerForm.controls.allowTypingISO.value ||
+          datepickerForm.controls.rangeWithTyping.value) {
+          <div class="result-box">
+            <strong>Form Values:</strong>
+            @if (datepickerForm.controls.allowTypingDate.value && isDate(datepickerForm.controls.allowTypingDate.value))
+            {
+            <div style="margin-top: 0.5rem;">
+              <strong>MM/DD/YYYY:</strong>
+              <code>{{ formatDate(datepickerForm.controls.allowTypingDate.value, 'short') }}</code>
+            </div>
+            }
+            @if (datepickerForm.controls.allowTypingDateTime.value &&
+            isDate(datepickerForm.controls.allowTypingDateTime.value)) {
+            <div style="margin-top: 0.5rem;">
+              <strong>With Time:</strong>
+              <code>{{ formatDate(datepickerForm.controls.allowTypingDateTime.value, 'medium') }}</code>
+            </div>
+            }
+            @if (datepickerForm.controls.allowTypingAuto.value && isDate(datepickerForm.controls.allowTypingAuto.value))
+            {
+            <div style="margin-top: 0.5rem;">
+              <strong>Auto-detect:</strong>
+              <code>{{ formatDate(datepickerForm.controls.allowTypingAuto.value, 'short') }}</code>
+            </div>
+            }
+            @if (datepickerForm.controls.allowTypingISO.value && isDate(datepickerForm.controls.allowTypingISO.value)) {
+            <div style="margin-top: 0.5rem;">
+              <strong>ISO Format:</strong>
+              <code>{{ formatDate(datepickerForm.controls.allowTypingISO.value, 'short') }}</code>
+            </div>
+            }
+            @if (datepickerForm.controls.rangeWithTyping.value) {
+            @if (datepickerForm.controls.rangeWithTyping.value.start ||
+            datepickerForm.controls.rangeWithTyping.value.end) {
+            <div style="margin-top: 0.5rem;">
+              <strong>Range:</strong>
+              @if (datepickerForm.controls.rangeWithTyping.value.start &&
+              datepickerForm.controls.rangeWithTyping.value.end) {
+              <code>{{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} - {{ formatDate(datepickerForm.controls.rangeWithTyping.value.end, 'short') }}</code>
+              } @else if (datepickerForm.controls.rangeWithTyping.value.start) {
+              <code>Start: {{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} | End: Not selected</code>
+              } @else {
+              <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTyping.value) }}</code>
+              }
+            </div>
+            }
+            }
+          </div>
+          }
+        </div>
+
+        <div id="custom-format" class="example-section">
+          <h3 class="example-title">{{ t().customDateFormat }}</h3>
+          <p>{{ t().displayDatesInCustomFormats }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [displayFormat]="'MM/DD/YYYY hh:mm A'" [showTime]="true"
+              [theme]="currentTheme" [locale]="selectedLocale()" [placeholder]="t().selectDateAndTime"
+              formControlName="customFormat">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(customFormatCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="customFormatCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.customFormat.value) {
+          <div class="result-box">
+            @if (isDate(datepickerForm.controls.customFormat.value)) {
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ formatDate(datepickerForm.controls.customFormat.value, 'short') }}</code>
+            <br>
+            <strong>Display Format:</strong> <code>MM/DD/YYYY hh:mm A</code>
+            } @else {
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.customFormat.value) }}</code>
+            }
+          </div>
+          }
+
+          <div class="format-examples">
+            <h4>{{ t().formatTokenReference }}</h4>
+            <ul>
+              <li><code>YYYY</code> - {{ t().formatTokenYYYY }}</li>
+              <li><code>YY</code> - {{ t().formatTokenYY }}</li>
+              <li><code>MM</code> - {{ t().formatTokenMM }}</li>
+              <li><code>M</code> - {{ t().formatTokenM }}</li>
+              <li><code>DD</code> - {{ t().formatTokenDD }}</li>
+              <li><code>D</code> - {{ t().formatTokenD }}</li>
+              <li><code>hh</code> - {{ t().formatTokenHH12 }}</li>
+              <li><code>h</code> - {{ t().formatTokenH12 }}</li>
+              <li><code>HH</code> - {{ t().formatTokenHH }}</li>
+              <li><code>H</code> - {{ t().formatTokenH }}</li>
+              <li><code>mm</code> - {{ t().formatTokenMMMinutes }}</li>
+              <li><code>m</code> - {{ t().formatTokenMMinutes }}</li>
+              <li><code>ss</code> - {{ t().formatTokenSS }}</li>
+              <li><code>s</code> - {{ t().formatTokenS }}</li>
+              <li><code>A</code> - {{ t().formatTokenA }}</li>
+              <li><code>a</code> - {{ t().formatTokena }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="moment-js-integration" class="example-section">
+          <h3 class="example-title">{{ t().momentJsIntegrationTitle }}</h3>
+          <p>{{ t().momentJsIntegrationDescription }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [displayFormat]="'MM/DD/YYYY hh:mm a'" [showTime]="true"
+              [theme]="currentTheme" [locale]="selectedLocale()" [placeholder]="t().selectDateAndTimeCustomFormat"
+              [value]="momentDateValue()" (valueChange)="onDateChange($event)">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="example-controls" style="margin-top: 1rem;">
+            <button class="demo-button" (click)="setCurrentDate()">{{ t().setCurrentDate }}</button>
+            <button class="demo-button" (click)="setFormattedDate()">{{ t().setFormattedDate }}</button>
+            <button class="demo-button" (click)="clearDate()">{{ t().clear }}</button>
+          </div>
+
+          <div class="result-box">
+            <strong>Date Value:</strong>
+            @if (momentDateValue()) {
+            <code>{{ formatMomentDateValue() }}</code>
+            } @else {
+            <code>{{ t().notSet }}</code>
+            }
+          </div>
+
+          <div class="info-box">
+            <strong>{{ t().whatThisFixSolves }}</strong>
+            <ul>
+              <li><strong>{{ t().before }}</strong> Passing
+                <code>moment(this.date).utcOffset(timezone).format('MM/DD/YYYY hh:mm a')</code> to the datepicker with
+                <code>displayFormat="MM/DD/YYYY hh:mm a"</code> would not populate correctly</li>
+              <li><strong>{{ t().after }}</strong> The datepicker now detects Moment.js objects and extracts the date
+                value directly, bypassing the string parsing</li>
+              <li><strong>{{ t().backwardCompatible }}</strong> Still works with string dates, Date objects, and all
+                other supported formats</li>
+            </ul>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(momentIntegrationTsCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="momentIntegrationTsCode | code"></code></pre>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(momentIntegrationHtmlCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="momentIntegrationHtmlCode | code"></code></pre>
+          </div>
+        </div>
+
+        <div id="rtl-support" class="example-section">
+          <h3 class="example-title">{{ t().rtlSupportTitle }}</h3>
+          <p>{{ t().fullRtlLayoutSupport }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [rtl]="true" [locale]="'ar-SA'" [theme]="currentTheme"
+              placeholder="اختر تاريخ" formControlName="rtlDate">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(rtlCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="rtlCode | code"></code></pre>
+          </div>
+
+          <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().autoDetection }}</h4>
+          <p>{{ t().datepickerCanAutoDetectRtl }}</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(rtlAutoCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="rtlAutoCode | code"></code></pre>
+          </div>
+
+          <div class="result-box">
+            <strong>{{ t().rtlFeatures }}</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>{{ t().uiElementsMirrored }}</li>
+              <li>{{ t().dayGridUsesRtl }}</li>
+              <li>{{ t().weekDayHeadersOrdered }}</li>
+              <li>{{ t().keyboardNavigationReversed }}</li>
+              <li>{{ t().popoverPositioningAdjusted }}</li>
+              <li>{{ t().autoDetectionFromDocument }}</li>
+            </ul>
+          </div>
+
+          @if (datepickerForm.controls.rtlDate.value) {
+          <div class="result-box">
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.rtlDate.value) }}</code>
+          </div>
+          }
+        </div>
+
+        <div id="translations-i18n" class="example-section">
+          <h3 class="example-title">{{ t().translationsI18nTitle }}</h3>
+          <p>{{ t().fullInternationalizationSupport }}</p>
+
+          <h4 class="subsection-title">{{ t().automaticTranslations }}</h4>
+          <p>{{ t().simplySetLocale }}</p>
+
+          <div class="example-demo">
+            <div style="margin-bottom: 1rem;">
+              <label for="locale-select" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                {{ t().selectLocale }}
+                @if (isLocaleAutoDetected() && detectedLocale()) {
+                <span
+                  style="font-size: 0.875rem; font-weight: normal; color: var(--text-secondary); margin-left: 0.5rem;">
                   ({{ t().autoDetected }} {{ detectedLocale() }})
                 </span>
-              }
-            </label>
-            <select
-              id="locale-select"
-              [value]="selectedLocale()"
-              (change)="selectedLocale.set($any($event.target).value); isLocaleAutoDetected.set(false);"
-              style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-primary);">
-              @for (locale of availableLocales; track locale.code) {
+                }
+              </label>
+              <select id="locale-select" [value]="selectedLocale()"
+                (change)="selectedLocale.set($any($event.target).value); isLocaleAutoDetected.set(false);"
+                style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-primary);">
+                @for (locale of availableLocales; track locale.code) {
                 <option [value]="locale.code">
                   {{ locale.name }} ({{ locale.code }})
                   @if (isLocaleAutoDetected() && selectedLocale() === locale.code) {
-                    ⭐
+                  ⭐
                   }
                 </option>
-              }
-            </select>
-            @if (isLocaleAutoDetected()) {
+                }
+              </select>
+              @if (isLocaleAutoDetected()) {
               <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
-                🌍 {{ t().yourBrowserLocale }} (<code>{{ detectedLocale() }}</code>) {{ t().wasAutomaticallyDetected }} <code>{{ selectedLocale() }}</code>
+                🌍 {{ t().yourBrowserLocale }} (<code>{{ detectedLocale() }}</code>) {{ t().wasAutomaticallyDetected }}
+                <code>{{ selectedLocale() }}</code>
               </p>
-            }
-          </div>
-          <ngxsmk-datepicker
-            mode="single"
-            [locale]="selectedLocale()"
-            [theme]="currentTheme"
-            [(value)]="translationDatepickerValue">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(translationsAutoCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="translationsAutoCode | code"></code></pre>
-        </div>
-
-        <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().customTranslations }}</h4>
-        <p>{{ t().overrideSpecificTranslations }}</p>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(translationsCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="translationsCode | code"></code></pre>
-        </div>
-
-        <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().translationServiceIntegration }}</h4>
-        <p>{{ t().integrateWithAngularI18n }}</p>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(translationServiceCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="translationServiceCode | code"></code></pre>
-        </div>
-
-        <div class="result-box">
-          <strong>{{ t().translationFeatures }}</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>{{ t().builtInTranslationsForLanguages }}</li>
-            <li><strong>{{ t().automaticLocaleDetection }}</strong></li>
-            <li>{{ t().intelligentLocaleMapping }}</li>
-            <li>{{ t().customTranslationsViaInput }}</li>
-            <li>{{ t().translationServiceViaInput }}</li>
-            <li>{{ t().parameterInterpolationSupport }}</li>
-            <li>{{ t().allUiStringsTranslatable }}</li>
-            <li>{{ t().backwardCompatibleWithLegacy }}</li>
-          </ul>
-        </div>
-
-        <div class="result-box" style="margin-top: 1rem;">
-          <strong>{{ t().availableLocales }}</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem; columns: 2; column-gap: 2rem;">
-            @for (locale of availableLocales; track locale.code) {
-              <li><code>{{ locale.code }}</code> - {{ locale.name }}</li>
-            }
-          </ul>
-        </div>
-      </div>
-
-      <div id="timezone-support" class="example-section">
-        <h3 class="example-title">{{ t().timezoneSupportTitle }}</h3>
-        <p>{{ t().formatDatesInSpecificTimezones }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [timezone]="'America/New_York'"
-            [showTime]="true"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().newYorkTime">
-          </ngxsmk-datepicker>
-          <div style="margin-top: 1rem;">
-            <ngxsmk-datepicker
-              mode="single"
-              [timezone]="'Europe/London'"
-              [showTime]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().londonTime">
+              }
+            </div>
+            <ngxsmk-datepicker mode="single" [locale]="selectedLocale()" [theme]="currentTheme"
+              [(value)]="translationDatepickerValue">
             </ngxsmk-datepicker>
           </div>
-          <div style="margin-top: 1rem;">
-            <ngxsmk-datepicker
-              mode="single"
-              [timezone]="'Asia/Tokyo'"
-              [showTime]="true"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().tokyoTime">
-            </ngxsmk-datepicker>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(translationsAutoCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="translationsAutoCode | code"></code></pre>
           </div>
-        </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(timezoneCode)">{{ t().copy }}</button>
+          <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().customTranslations }}</h4>
+          <p>{{ t().overrideSpecificTranslations }}</p>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(translationsCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="translationsCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="timezoneCode | code"></code></pre>
-        </div>
 
-        <div class="result-box">
-          <strong>{{ t().importantNotes }}</strong>
-          <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
-            <li>{{ t().javascriptDatesAlwaysUtc }}</li>
-            <li>{{ t().timezoneOnlyAffectsDisplay }}</li>
-            <li>{{ t().useIanaTimezoneNames }}</li>
-            <li>{{ t().forAdvancedTimezoneOperations }}</li>
-            <li>{{ t().seeTimezoneDocumentation }} <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/TIMEZONE.md" target="_blank">Timezone Documentation</a> for detailed information</li>
-          </ul>
-        </div>
-      </div>
+          <h4 class="subsection-title" style="margin-top: 1.5rem;">{{ t().translationServiceIntegration }}</h4>
+          <p>{{ t().integrateWithAngularI18n }}</p>
 
-      <div id="multiple-dates" class="example-section">
-        <h3 class="example-title">{{ t().multipleDateSelection }}</h3>
-        <p>{{ t().selectMultipleNonContiguousDates }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="multiple"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            (action)="handleDatepickerAction($event)"
-            formControlName="multipleDates">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(multipleDatesCode)">{{ t().copy }}</button>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(translationServiceCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="translationServiceCode | code"></code></pre>
           </div>
-          <pre><code [innerHTML]="multipleDatesCode | code"></code></pre>
-        </div>
 
-        @if (datepickerForm.controls.multipleDates.value) {
           <div class="result-box">
-            <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</code>
+            <strong>{{ t().translationFeatures }}</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>{{ t().builtInTranslationsForLanguages }}</li>
+              <li><strong>{{ t().automaticLocaleDetection }}</strong></li>
+              <li>{{ t().intelligentLocaleMapping }}</li>
+              <li>{{ t().customTranslationsViaInput }}</li>
+              <li>{{ t().translationServiceViaInput }}</li>
+              <li>{{ t().parameterInterpolationSupport }}</li>
+              <li>{{ t().allUiStringsTranslatable }}</li>
+              <li>{{ t().backwardCompatibleWithLegacy }}</li>
+            </ul>
           </div>
-        }
-      </div>
 
-      <div id="programmatic-value" class="example-section">
-        <h3 class="example-title">{{ t().programmaticValueSetting }}</h3>
-        <p>{{ t().setDatepickerValueProgrammatically }}</p>
-        
-        <div class="example-controls">
-          @for (action of programmaticActions(); track action.label) {
+          <div class="result-box" style="margin-top: 1rem;">
+            <strong>{{ t().availableLocales }}</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem; columns: 2; column-gap: 2rem;">
+              @for (locale of availableLocales; track locale.code) {
+              <li><code>{{ locale.code }}</code> - {{ locale.name }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <div id="timezone-support" class="example-section">
+          <h3 class="example-title">{{ t().timezoneSupportTitle }}</h3>
+          <p>{{ t().formatDatesInSpecificTimezones }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [timezone]="'America/New_York'" [showTime]="true" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="t().newYorkTime">
+            </ngxsmk-datepicker>
+            <div style="margin-top: 1rem;">
+              <ngxsmk-datepicker mode="single" [timezone]="'Europe/London'" [showTime]="true" [theme]="currentTheme"
+                [locale]="selectedLocale()" [placeholder]="t().londonTime">
+              </ngxsmk-datepicker>
+            </div>
+            <div style="margin-top: 1rem;">
+              <ngxsmk-datepicker mode="single" [timezone]="'Asia/Tokyo'" [showTime]="true" [theme]="currentTheme"
+                [locale]="selectedLocale()" [placeholder]="t().tokyoTime">
+              </ngxsmk-datepicker>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(timezoneCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="timezoneCode | code"></code></pre>
+          </div>
+
+          <div class="result-box">
+            <strong>{{ t().importantNotes }}</strong>
+            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+              <li>{{ t().javascriptDatesAlwaysUtc }}</li>
+              <li>{{ t().timezoneOnlyAffectsDisplay }}</li>
+              <li>{{ t().useIanaTimezoneNames }}</li>
+              <li>{{ t().forAdvancedTimezoneOperations }}</li>
+              <li>{{ t().seeTimezoneDocumentation }} <a
+                  href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/TIMEZONE.md"
+                  target="_blank">Timezone Documentation</a> for detailed information</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="multiple-dates" class="example-section">
+          <h3 class="example-title">{{ t().multipleDateSelection }}</h3>
+          <p>{{ t().selectMultipleNonContiguousDates }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="multiple" [theme]="currentTheme" [locale]="selectedLocale()"
+              (action)="handleDatepickerAction($event)" formControlName="multipleDates">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(multipleDatesCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="multipleDatesCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.multipleDates.value) {
+          <div class="result-box">
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ JSON.stringify(datepickerForm.controls.multipleDates.value) }}</code>
+          </div>
+          }
+        </div>
+
+        <div id="programmatic-value" class="example-section">
+          <h3 class="example-title">{{ t().programmaticValueSetting }}</h3>
+          <p>{{ t().setDatepickerValueProgrammatically }}</p>
+
+          <div class="example-controls">
+            @for (action of programmaticActions(); track action.label) {
             <button class="demo-button" (click)="action.action()">{{ action.label }}</button>
-          }
-        </div>
-
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [value]="programmaticSingleDate"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().singleDatePicker"
-            (valueChange)="onProgrammaticValueChange($event)">
-          </ngxsmk-datepicker>
-
-          <div style="height: 1rem;"></div>
-
-          <ngxsmk-datepicker
-            mode="range"
-            [value]="programmaticRange"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().rangePicker"
-            (valueChange)="onProgrammaticRangeChange($event)">
-          </ngxsmk-datepicker>
-
-          <div style="height: 1rem;"></div>
-
-          <ngxsmk-datepicker
-            mode="multiple"
-            [value]="programmaticMultipleDates"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().multipleDatesPicker"
-            (valueChange)="onProgrammaticMultipleChange($event)">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">typescript</span>
-            <button class="code-copy" (click)="copyCode(programmaticCode)">{{ t().copy }}</button>
+            }
           </div>
-          <pre><code [innerHTML]="programmaticCode | code"></code></pre>
-        </div>
 
-        <div class="result-box">
-          <strong>{{ t().currentValue }}</strong> 
-          @if (programmaticSingleDate) {
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [value]="programmaticSingleDate" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="t().singleDatePicker"
+              (valueChange)="onProgrammaticValueChange($event)">
+            </ngxsmk-datepicker>
+
+            <div style="height: 1rem;"></div>
+
+            <ngxsmk-datepicker mode="range" [value]="programmaticRange" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="t().rangePicker"
+              (valueChange)="onProgrammaticRangeChange($event)">
+            </ngxsmk-datepicker>
+
+            <div style="height: 1rem;"></div>
+
+            <ngxsmk-datepicker mode="multiple" [value]="programmaticMultipleDates" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="t().multipleDatesPicker"
+              (valueChange)="onProgrammaticMultipleChange($event)">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">typescript</span>
+              <button class="code-copy" (click)="copyCode(programmaticCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="programmaticCode | code"></code></pre>
+          </div>
+
+          <div class="result-box">
+            <strong>{{ t().currentValue }}</strong>
+            @if (programmaticSingleDate) {
             <code>{{ formatDate(programmaticSingleDate, 'medium') }}</code>
-          } @else {
+            } @else {
             <code>{{ t().notSet }}</code>
-          }
-        </div>
+            }
+          </div>
 
-        <div class="result-box">
-          <strong>{{ t().currentRange }}</strong> 
-          @if (programmaticRange) {
+          <div class="result-box">
+            <strong>{{ t().currentRange }}</strong>
+            @if (programmaticRange) {
             <code>{{ formatDate(programmaticRange.start, 'medium') }} - {{ formatDate(programmaticRange.end, 'medium') }}</code>
-          } @else {
+            } @else {
             <code>{{ t().notSet }}</code>
-          }
-        </div>
+            }
+          </div>
 
-        <div class="result-box">
-          <strong>{{ t().currentMultiple }}</strong> 
-          @if (programmaticMultipleDates?.length) {
+          <div class="result-box">
+            <strong>{{ t().currentMultiple }}</strong>
+            @if (programmaticMultipleDates?.length) {
             <code>{{ JSON.stringify(programmaticMultipleDates) }}</code>
-          } @else {
+            } @else {
             <code>{{ t().notSet }}</code>
-          }
-        </div>
-      </div>
-
-      <div id="inline-calendar" class="example-section">
-        <h3 class="example-title">{{ t().inlineCalendarTitle }}</h3>
-        <p>{{ t().calendarAlwaysVisible }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="range"
-            [inline]="true"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            formControlName="inlineRange">
-          </ngxsmk-datepicker>
-        </div>
-
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(inlineCode)">{{ t().copy }}</button>
+            }
           </div>
-          <pre><code [innerHTML]="inlineCode | code"></code></pre>
-        </div>
-      </div>
-
-      <div id="min-max-date" class="example-section">
-        <h3 class="example-title">{{ t().minMaxDateTitle }}</h3>
-        <p>{{ t().restrictDateSelection }}</p>
-        
-        <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [minDate]="minDate"
-            [maxDate]="maxDate"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            [placeholder]="t().selectADate"
-            formControlName="singleDate2">
-          </ngxsmk-datepicker>
         </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(minMaxCode)">{{ t().copy }}</button>
-          </div>
-          <pre><code [innerHTML]="minMaxCode | code"></code></pre>
-        </div>
-      </div>
+        <div id="inline-calendar" class="example-section">
+          <h3 class="example-title">{{ t().inlineCalendarTitle }}</h3>
+          <p>{{ t().calendarAlwaysVisible }}</p>
 
-      <div id="calendar-views" class="example-section">
-        <h3 class="example-title">{{ t().customizableCalendarViews }}</h3>
-        <p>{{ t().switchBetweenCalendarViewModes }}</p>
-        
-        <div class="example-demo">
-          <div style="margin-bottom: 2rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().yearPicker }}</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().perfectForBirthDateSelection }}</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [calendarViewMode]="yearPickerView"
-              [value]="yearPickerValue"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().selectBirthYear"
-              (valueChange)="yearPickerValue = $event">
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="range" [inline]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+              formControlName="inlineRange">
             </ngxsmk-datepicker>
           </div>
 
-          <div style="margin-bottom: 2rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().decadePicker }}</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().navigateDecadesQuickly }}</p>
-            <ngxsmk-datepicker
-              mode="single"
-              [calendarViewMode]="decadePickerView"
-              [value]="decadePickerValue"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().selectDecade"
-              (valueChange)="decadePickerValue = $event">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div style="margin-bottom: 2rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().timelineView }}</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().horizontalTimelineForRanges }}</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarViewMode]="timelineView"
-              [value]="timelineRange"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().selectDateRange"
-              (valueChange)="timelineRange = $event">
-            </ngxsmk-datepicker>
-          </div>
-
-          <div>
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().timeSliderView }}</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().dualSlidersForTimes }}</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarViewMode]="timeSliderView"
-              [showTime]="true"
-              [value]="timeSliderRange"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              [placeholder]="t().selectTimeRange"
-              (valueChange)="timeSliderRange = $event">
-            </ngxsmk-datepicker>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(inlineCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="inlineCode | code"></code></pre>
           </div>
         </div>
 
-        <div class="code-block">
-          <div class="code-header">
-            <span class="code-lang">html</span>
-            <button class="code-copy" (click)="copyCode(calendarViewsCode)">{{ t().copy }}</button>
+        <div id="min-max-date" class="example-section">
+          <h3 class="example-title">{{ t().minMaxDateTitle }}</h3>
+          <p>{{ t().restrictDateSelection }}</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [minDate]="minDate" [maxDate]="maxDate" [theme]="currentTheme"
+              [locale]="selectedLocale()" [placeholder]="t().selectADate" formControlName="singleDate2">
+            </ngxsmk-datepicker>
           </div>
-          <pre><code [innerHTML]="calendarViewsCode | code"></code></pre>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(minMaxCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="minMaxCode | code"></code></pre>
+          </div>
         </div>
-      </div>
+
+        <div id="calendar-views" class="example-section">
+          <h3 class="example-title">{{ t().customizableCalendarViews }}</h3>
+          <p>{{ t().switchBetweenCalendarViewModes }}</p>
+
+          <div class="example-demo">
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().yearPicker }}</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().perfectForBirthDateSelection
+                }}</p>
+              <ngxsmk-datepicker mode="single" [calendarViewMode]="yearPickerView" [value]="yearPickerValue"
+                [theme]="currentTheme" [locale]="selectedLocale()" [placeholder]="t().selectBirthYear"
+                (valueChange)="yearPickerValue = $event">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().decadePicker }}</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().navigateDecadesQuickly }}</p>
+              <ngxsmk-datepicker mode="single" [calendarViewMode]="decadePickerView" [value]="decadePickerValue"
+                [theme]="currentTheme" [locale]="selectedLocale()" [placeholder]="t().selectDecade"
+                (valueChange)="decadePickerValue = $event">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().timelineView }}</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().horizontalTimelineForRanges }}
+              </p>
+              <ngxsmk-datepicker mode="range" [calendarViewMode]="timelineView" [value]="timelineRange"
+                [theme]="currentTheme" [locale]="selectedLocale()" [placeholder]="t().selectDateRange"
+                (valueChange)="timelineRange = $event">
+              </ngxsmk-datepicker>
+            </div>
+
+            <div>
+              <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">{{ t().timeSliderView }}</h4>
+              <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">{{ t().dualSlidersForTimes }}</p>
+              <ngxsmk-datepicker mode="range" [calendarViewMode]="timeSliderView" [showTime]="true"
+                [value]="timeSliderRange" [theme]="currentTheme" [locale]="selectedLocale()"
+                [placeholder]="t().selectTimeRange" (valueChange)="timeSliderRange = $event">
+              </ngxsmk-datepicker>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(calendarViewsCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="calendarViewsCode | code"></code></pre>
+          </div>
+        </div>
       </form>
 
       <div id="mobile-playground" class="example-section">
         <h3 class="example-title">{{ t().mobilePlaygroundTitle }}</h3>
         <p>{{ t().mobilePlaygroundDescription }}</p>
-        
+
         <div class="mobile-size-selector">
           @for (size of mobileSizes; track size.label) {
-          <button 
-            class="size-button"
-            [class.active]="selectedMobileSize === size.width"
+          <button class="size-button" [class.active]="selectedMobileSize === size.width"
             (click)="selectMobileSize(size.width)">
             {{ size.label }}
             <span class="size-dimension">({{ size.width }}px)</span>
@@ -1658,11 +1536,7 @@
               </div>
             </div>
             <div class="mobile-preview-content">
-              <ngxsmk-datepicker
-                mode="range"
-                [inline]="true"
-                [theme]="currentTheme"
-                [locale]="selectedLocale()">
+              <ngxsmk-datepicker mode="range" [inline]="true" [theme]="currentTheme" [locale]="selectedLocale()">
               </ngxsmk-datepicker>
             </div>
           </div>
@@ -1680,16 +1554,12 @@
       <!-- Export/Import Section -->
       <div id="export-import" class="example-section">
         <h3 class="example-title">{{ t().exportImport }}</h3>
-        <p>Export and import dates in JSON, CSV, and ICS (iCalendar) formats for data exchange and calendar integration.</p>
-        
+        <p>Export and import dates in JSON, CSV, and ICS (iCalendar) formats for data exchange and calendar integration.
+        </p>
+
         <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [value]="exportImportValue"
-            (valueChange)="exportImportValue = $event"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            placeholder="Select a date to export">
+          <ngxsmk-datepicker mode="single" [value]="exportImportValue" (valueChange)="exportImportValue = $event"
+            [theme]="currentTheme" [locale]="selectedLocale()" placeholder="Select a date to export">
           </ngxsmk-datepicker>
 
           <div class="example-controls" style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -1699,30 +1569,34 @@
           </div>
 
           @if (exportJsonResult) {
-            <div style="margin-top: 1rem;">
-              <button class="demo-button" (click)="downloadJson()">Download JSON</button>
-              <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.875rem;"><code>{{ exportJsonResult }}</code></pre>
-            </div>
+          <div style="margin-top: 1rem;">
+            <button class="demo-button" (click)="downloadJson()">Download JSON</button>
+            <pre
+              style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.875rem;"><code>{{ exportJsonResult }}</code></pre>
+          </div>
           }
 
           @if (exportCsvResult) {
-            <div style="margin-top: 1rem;">
-              <button class="demo-button" (click)="downloadCsv()">Download CSV</button>
-              <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.875rem;"><code>{{ exportCsvResult }}</code></pre>
-            </div>
+          <div style="margin-top: 1rem;">
+            <button class="demo-button" (click)="downloadCsv()">Download CSV</button>
+            <pre
+              style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; font-size: 0.875rem;"><code>{{ exportCsvResult }}</code></pre>
+          </div>
           }
 
           @if (exportIcsResult) {
-            <div style="margin-top: 1rem;">
-              <button class="demo-button" (click)="downloadIcs()">Download ICS</button>
-              <pre style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; white-space: pre-wrap; font-size: 0.875rem;"><code>{{ exportIcsResult }}</code></pre>
-            </div>
+          <div style="margin-top: 1rem;">
+            <button class="demo-button" (click)="downloadIcs()">Download ICS</button>
+            <pre
+              style="background: var(--code-bg); padding: 1rem; border-radius: 4px; overflow-x: auto; margin-top: 0.5rem; white-space: pre-wrap; font-size: 0.875rem;"><code>{{ exportIcsResult }}</code></pre>
+          </div>
           }
 
           <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
             <h4 style="margin-bottom: 0.5rem;">Import</h4>
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <textarea id="import-json" [(ngModel)]="importJsonInput" placeholder="Paste JSON here..." style="min-height: 80px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: monospace;"></textarea>
+              <textarea id="import-json" [(ngModel)]="importJsonInput" placeholder="Paste JSON here..."
+                style="min-height: 80px; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: monospace;"></textarea>
               <button class="demo-button" (click)="importFromJsonString()">Import from JSON</button>
             </div>
           </div>
@@ -1740,17 +1614,23 @@
       <!-- Animation Customization Section -->
       <div id="animation-customization" class="example-section">
         <h3 class="example-title">{{ t().animationCustomization }}</h3>
-        <p>Configure animations with custom durations, easing functions, and respect for user's reduced motion preferences.</p>
-        
+        <p>Configure animations with custom durations, easing functions, and respect for user's reduced motion
+          preferences.</p>
+
         <div class="example-demo">
-          <div style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div
+            style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <div>
               <label for="animation-duration" style="display: block; margin-bottom: 0.5rem;">Duration (ms):</label>
-              <input id="animation-duration" type="number" [(ngModel)]="animationConfig.duration" (ngModelChange)="onAnimationConfigChange()" min="0" max="1000" step="50" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; width: 100%;">
+              <input id="animation-duration" type="number" [(ngModel)]="animationConfig.duration"
+                (ngModelChange)="onAnimationConfigChange()" min="0" max="1000" step="50"
+                style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; width: 100%;">
             </div>
             <div>
               <label for="animation-easing" style="display: block; margin-bottom: 0.5rem;">Easing:</label>
-              <select id="animation-easing" [(ngModel)]="animationConfig.easing" (ngModelChange)="onAnimationConfigChange()" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; width: 100%;">
+              <select id="animation-easing" [(ngModel)]="animationConfig.easing"
+                (ngModelChange)="onAnimationConfigChange()"
+                style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; width: 100%;">
                 <option value="ease-in-out">ease-in-out</option>
                 <option value="ease-in">ease-in</option>
                 <option value="ease-out">ease-out</option>
@@ -1760,17 +1640,14 @@
             </div>
             <div style="display: flex; align-items: flex-end;">
               <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0;">
-                <input type="checkbox" [(ngModel)]="animationConfig.enabled" (ngModelChange)="onAnimationConfigChange()">
+                <input type="checkbox" [(ngModel)]="animationConfig.enabled"
+                  (ngModelChange)="onAnimationConfigChange()">
                 <span>Enable animations</span>
               </label>
             </div>
           </div>
 
-          <ngxsmk-datepicker
-            #animationDatepicker
-            mode="single"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
+          <ngxsmk-datepicker #animationDatepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
             placeholder="Test animation">
           </ngxsmk-datepicker>
         </div>
@@ -1788,20 +1665,27 @@
       <div id="advanced-styling" class="example-section">
         <h3 class="example-title">{{ t().advancedStyling }}</h3>
         <p>Use the theme builder to create custom themes with CSS-in-JS support and programmatic theme generation.</p>
-        
+
         <div class="example-demo">
-          <div style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <div
+            style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
             <div>
               <label for="primary-color" style="display: block; margin-bottom: 0.5rem;">Primary Color:</label>
-              <input id="primary-color" type="color" [value]="customTheme.colors?.['primary'] || '#6d28d9'" (input)="customTheme.colors!['primary'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="primary-color" type="color" [value]="customTheme.colors?.['primary'] || '#6d28d9'"
+                (input)="customTheme.colors!['primary'] = $any($event.target).value; onColorChange()"
+                style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
             <div>
               <label for="background-color" style="display: block; margin-bottom: 0.5rem;">Background:</label>
-              <input id="background-color" type="color" [value]="customTheme.colors?.['background'] || '#ffffff'" (input)="customTheme.colors!['background'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="background-color" type="color" [value]="customTheme.colors?.['background'] || '#ffffff'"
+                (input)="customTheme.colors!['background'] = $any($event.target).value; onColorChange()"
+                style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
             <div>
               <label for="text-color" style="display: block; margin-bottom: 0.5rem;">Text Color:</label>
-              <input id="text-color" type="color" [value]="customTheme.colors?.['text'] || '#1f2937'" (input)="customTheme.colors!['text'] = $any($event.target).value; onColorChange()" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              <input id="text-color" type="color" [value]="customTheme.colors?.['text'] || '#1f2937'"
+                (input)="customTheme.colors!['text'] = $any($event.target).value; onColorChange()"
+                style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
             </div>
           </div>
 
@@ -1811,11 +1695,7 @@
           </div>
 
           <div #themeBuilderWrapper>
-            <ngxsmk-datepicker
-              #themeBuilderDatepicker
-              mode="single"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
+            <ngxsmk-datepicker #themeBuilderDatepicker mode="single" [theme]="currentTheme" [locale]="selectedLocale()"
               placeholder="Themed datepicker">
             </ngxsmk-datepicker>
           </div>
@@ -1833,80 +1713,65 @@
       <!-- Multi-Calendar Section -->
       <div id="multi-calendar" class="example-section">
         <h3 class="example-title">{{ t().multiCalendarSupport }}</h3>
-        <p>Display multiple months side-by-side with configurable calendar count (1-12 calendars). Perfect for range selection and viewing multiple months at once.</p>
-        
+        <p>Display multiple months side-by-side with configurable calendar count (1-12 calendars). Perfect for range
+          selection and viewing multiple months at once.</p>
+
         <div class="example-demo">
           <div style="margin-bottom: 2rem;">
             <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Vertical Layout (One by One Down)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Display calendars vertically stacked.</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarCount]="2"
-              calendarLayout="vertical"
-              [value]="multiCalendarVertical"
-              (valueChange)="multiCalendarVertical = $event"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              placeholder="Select a date">
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Display calendars vertically stacked.
+            </p>
+            <ngxsmk-datepicker mode="range" [calendarCount]="2" calendarLayout="vertical"
+              [value]="multiCalendarVertical" (valueChange)="multiCalendarVertical = $event" [theme]="currentTheme"
+              [locale]="selectedLocale()" placeholder="Select a date">
             </ngxsmk-datepicker>
           </div>
 
           <div style="margin-bottom: 2rem;">
-            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Horizontal Layout (One by One Right)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Display calendars horizontally side-by-side.</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarCount]="2"
-              calendarLayout="horizontal"
-              [value]="multiCalendarHorizontal"
-              (valueChange)="multiCalendarHorizontal = $event"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
-              placeholder="Select a date">
+            <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Horizontal Layout (One by One Right)
+            </h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Display calendars horizontally
+              side-by-side.</p>
+            <ngxsmk-datepicker mode="range" [calendarCount]="2" calendarLayout="horizontal"
+              [value]="multiCalendarHorizontal" (valueChange)="multiCalendarHorizontal = $event" [theme]="currentTheme"
+              [locale]="selectedLocale()" placeholder="Select a date">
             </ngxsmk-datepicker>
           </div>
 
           <div style="margin-bottom: 2rem;">
             <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Auto Layout (Responsive)</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Horizontal on desktop, vertical on mobile (default).</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarCount]="2"
-              calendarLayout="auto"
-              [value]="multiCalendarAuto"
-              (valueChange)="multiCalendarAuto = $event"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Horizontal on desktop, vertical on
+              mobile (default).</p>
+            <ngxsmk-datepicker mode="range" [calendarCount]="2" calendarLayout="auto" [value]="multiCalendarAuto"
+              (valueChange)="multiCalendarAuto = $event" [theme]="currentTheme" [locale]="selectedLocale()"
               placeholder="Select a date">
             </ngxsmk-datepicker>
           </div>
 
           <div style="margin-bottom: 2rem;">
             <h4 style="margin-bottom: 0.5rem; font-size: 1rem; font-weight: 600;">Configurable Calendar Count</h4>
-            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Adjust the number of calendars displayed (1-12).</p>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">Adjust the number of calendars
+              displayed (1-12).</p>
             <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
               <label style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="min-width: 120px;">Calendar Count:</span>
-                <input type="range" min="1" max="6" [(ngModel)]="calendarCountSlider" (ngModelChange)="onCalendarCountChange($event)" style="flex: 1;">
+                <input type="range" min="1" max="6" [(ngModel)]="calendarCountSlider"
+                  (ngModelChange)="onCalendarCountChange($event)" style="flex: 1;">
                 <span style="min-width: 30px; text-align: center;">{{ calendarCountSlider }}</span>
               </label>
               <label style="display: flex; align-items: center; gap: 0.5rem;">
                 <span style="min-width: 120px;">Layout:</span>
-                <select [(ngModel)]="calendarLayoutSlider" style="flex: 1; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+                <select [(ngModel)]="calendarLayoutSlider"
+                  style="flex: 1; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
                   <option value="auto">Auto (Responsive)</option>
                   <option value="horizontal">Horizontal (Right)</option>
                   <option value="vertical">Vertical (Down)</option>
                 </select>
               </label>
             </div>
-            <ngxsmk-datepicker
-              mode="single"
-              [calendarCount]="calendarCountSlider"
-              [calendarLayout]="calendarLayoutSlider"
-              [value]="multiCalendarConfigurable"
-              (valueChange)="multiCalendarConfigurable = $event"
-              [theme]="currentTheme"
-              [locale]="selectedLocale()"
+            <ngxsmk-datepicker mode="single" [calendarCount]="calendarCountSlider"
+              [calendarLayout]="calendarLayoutSlider" [value]="multiCalendarConfigurable"
+              (valueChange)="multiCalendarConfigurable = $event" [theme]="currentTheme" [locale]="selectedLocale()"
               placeholder="Select a date">
             </ngxsmk-datepicker>
           </div>
@@ -1933,61 +1798,64 @@
       <div id="date-presets" class="example-section">
         <h3 class="example-title">{{ t().datePresets }}</h3>
         <p>Create, save, and manage user-defined date presets with localStorage persistence.</p>
-        
+
         <div class="example-demo">
-          <ngxsmk-datepicker
-            mode="single"
-            [value]="exportImportValue"
-            (valueChange)="exportImportValue = $event"
-            [theme]="currentTheme"
-            [locale]="selectedLocale()"
-            placeholder="Select a date to save as preset">
+          <ngxsmk-datepicker mode="single" [value]="exportImportValue" (valueChange)="exportImportValue = $event"
+            [theme]="currentTheme" [locale]="selectedLocale()" placeholder="Select a date to save as preset">
           </ngxsmk-datepicker>
 
           <div style="margin-top: 1rem; padding: 1rem; background: var(--code-bg); border-radius: 4px;">
             <h4 style="margin-bottom: 0.5rem;">Save Preset</h4>
             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
-              <input id="preset-name" type="text" [(ngModel)]="presetName" placeholder="Preset name" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
-              <input id="preset-category" type="text" [(ngModel)]="presetCategory" placeholder="Category (optional)" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
-              <textarea id="preset-description" [(ngModel)]="presetDescription" placeholder="Description (optional)" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; min-height: 60px; resize: vertical;"></textarea>
+              <input id="preset-name" type="text" [(ngModel)]="presetName" placeholder="Preset name"
+                style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+              <input id="preset-category" type="text" [(ngModel)]="presetCategory" placeholder="Category (optional)"
+                style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;">
+              <textarea id="preset-description" [(ngModel)]="presetDescription" placeholder="Description (optional)"
+                style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; min-height: 60px; resize: vertical;"></textarea>
             </div>
             <button class="demo-button" (click)="savePreset()">Save Preset</button>
           </div>
 
           @if (savedPresets.length > 0) {
-            <div style="margin-top: 1rem;">
-              <h4 style="margin-bottom: 0.5rem;">Saved Presets</h4>
-              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                @for (preset of savedPresets; track preset.id) {
-                  <div style="padding: 0.75rem; background: var(--code-bg); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-                    <div>
-                      <strong>{{ preset.name }}</strong>
-                      @if (preset.category) {
-                        <span style="color: var(--subtle-text); margin-left: 0.5rem;">({{ preset.category }})</span>
-                      }
-                      @if (preset.description) {
-                        <div style="font-size: 0.875rem; color: var(--subtle-text); margin-top: 0.25rem;">{{ preset.description }}</div>
-                      }
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                      <button class="demo-button" (click)="applyPreset(preset.id)" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Apply</button>
-                      <button class="demo-button" (click)="deletePreset(preset.id)" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #ef4444;">Delete</button>
-                    </div>
-                  </div>
-                }
+          <div style="margin-top: 1rem;">
+            <h4 style="margin-bottom: 0.5rem;">Saved Presets</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              @for (preset of savedPresets; track preset.id) {
+              <div
+                style="padding: 0.75rem; background: var(--code-bg); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                  <strong>{{ preset.name }}</strong>
+                  @if (preset.category) {
+                  <span style="color: var(--subtle-text); margin-left: 0.5rem;">({{ preset.category }})</span>
+                  }
+                  @if (preset.description) {
+                  <div style="font-size: 0.875rem; color: var(--subtle-text); margin-top: 0.25rem;">{{
+                    preset.description }}</div>
+                  }
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="demo-button" (click)="applyPreset(preset.id)"
+                    style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Apply</button>
+                  <button class="demo-button" (click)="deletePreset(preset.id)"
+                    style="padding: 0.25rem 0.75rem; font-size: 0.875rem; background: #ef4444;">Delete</button>
+                </div>
               </div>
-              <div class="example-controls" style="margin-top: 1rem;">
-                <button class="demo-button" (click)="exportPresets()">Export Presets</button>
-                <label class="demo-button" style="cursor: pointer;">
-                  Import Presets
-                  <input type="file" accept=".json" (change)="importPresets($event)" style="display: none;">
-                </label>
-              </div>
+              }
             </div>
+            <div class="example-controls" style="margin-top: 1rem;">
+              <button class="demo-button" (click)="exportPresets()">Export Presets</button>
+              <label class="demo-button" style="cursor: pointer;">
+                Import Presets
+                <input type="file" accept=".json" (change)="importPresets($event)" style="display: none;">
+              </label>
+            </div>
+          </div>
           } @else {
-            <div style="margin-top: 1rem; padding: 1rem; background: var(--code-bg); border-radius: 4px; text-align: center; color: var(--subtle-text);">
-              No presets saved yet. Select a date and save it as a preset.
-            </div>
+          <div
+            style="margin-top: 1rem; padding: 1rem; background: var(--code-bg); border-radius: 4px; text-align: center; color: var(--subtle-text);">
+            No presets saved yet. Select a date and save it as a preset.
+          </div>
           }
         </div>
 
@@ -2009,8 +1877,10 @@
         <h4>{{ t().poweredByTokiForge }}</h4>
         <p>{{ t().tokiForgeDescription }}</p>
       </div>
-      <a href="https://tokiforge.github.io/tokiforge/" target="_blank" class="promotion-button" [attr.aria-label]="t().visitTokiForgeWebsite">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a href="https://tokiforge.github.io/tokiforge/" target="_blank" class="promotion-button"
+        [attr.aria-label]="t().visitTokiForgeWebsite">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
           <polyline points="15 3 21 3 21 9"></polyline>
           <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -2019,8 +1889,7 @@
       </a>
     </div>
   </aside>
-  
+
   <!-- Christmas Snow Overlay -->
   <app-snow-overlay></app-snow-overlay>
 </div>
-

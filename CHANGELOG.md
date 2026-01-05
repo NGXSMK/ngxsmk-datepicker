@@ -5,9 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2025-01-05 (Stable)
+## [3.0.0] - 2026-01-06 (Stable)
 
 ### Changed
+- **Major Version Update**: Updated to version 3.0.0
+- **Stable Release**: Version 3.0.0 is the current stable version
+- **Code Quality**: Resolved all linting warnings and issues
+- **Infrastructure**: Removed End-to-End (E2E) testing infrastructure
+- **Type Safety**: Improved type safety by using strict types instead of `any`
 - **Version Update**: Updated to version 2.0.0
 - **Stable Release**: Version 2.0.0 is the current stable version
 - **Major Version**: This is a major version release
