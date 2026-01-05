@@ -292,7 +292,7 @@ export const WithMinMax: Story = {
         </div>
       `,
       methods: {
-        onValueChange: (value: unknown) => {
+        onValueChange: (_value: unknown) => {
           // Value change handler for story
         },
       },

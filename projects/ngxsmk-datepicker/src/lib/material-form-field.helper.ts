@@ -35,7 +35,7 @@ import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
  * export class MyComponent { }
  * ```
  */
-export function provideMaterialFormFieldControl(matFormFieldControlToken: any): Provider {
+export function provideMaterialFormFieldControl(matFormFieldControlToken: unknown): Provider {
   return {
     provide: matFormFieldControlToken,
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
