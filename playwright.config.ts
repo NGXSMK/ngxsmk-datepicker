@@ -65,7 +65,11 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run start',
+    // In CI: build and serve the production app (completes after tests)
+    // In dev: reuse existing dev server or start a new one
+    command: process.env.CI 
+      ? 'npm run build:demo && npx http-server dist/demo-app/browser -p 4200 -s' 
+      : 'npm run start',
     url: 'http://localhost:4200',
     reuseExistingServer: !process.env.CI,
     timeout: 180 * 1000, // Increased timeout to 3 minutes
