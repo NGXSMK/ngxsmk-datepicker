@@ -53,6 +53,8 @@ export interface DatepickerTranslations {
   rangeSelected: string; // "Range selected: {start} to {end}"
   monthChanged: string; // "Changed to {month} {year}"
   yearChanged: string; // "Changed to year {year}"
+  calendarLoading: string; // "Loading calendar..."
+  calendarReady: string; // "Calendar ready"
 }
 
 /**
