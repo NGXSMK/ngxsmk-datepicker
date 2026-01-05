@@ -19,7 +19,7 @@
     "test": "npx ng test ngxsmk-datepicker",
     "demo": "npx ng serve demo-app",
     "lint": "npx ng lint",
-    "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
+    "deploy": "npm run build:demo && node scripts/manual-deploy.js",
     "prepublishOnly": "npm run build:optimized",
     "prepublish:copy-assets": "node -e \"const fs = require('fs'); fs.copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE'); fs.copyFileSync('README.md', 'dist/ngxsmk-datepicker/README.md')\"",
     "publish:lib": "npm run build:optimized && npm run prepublish:copy-assets",
