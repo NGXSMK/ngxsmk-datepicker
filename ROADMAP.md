@@ -156,12 +156,6 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - *Label: `testing`, `performance`*
   - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#51-add-performance-benchmarks)*
 
-- [ ] **Add E2E Tests for Virtual Scrolling**
-  - Playwright tests for year/decade grid scrolling
-  - Test with large year ranges
-  - *Label: `testing`, `e2e`*
-  - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#52-add-e2e-tests-for-virtual-scrolling)*
-
 - [ ] **Add Accessibility Testing**
   - Automated accessibility testing with axe-core
   - Catch accessibility regressions automatically
@@ -312,12 +306,6 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - Verify error recovery mechanisms
   - *Label: `testing`, `good-first-issue`*
   - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#54-add-tests-for-error-recovery)*
-
-- [ ] **Add Cross-Browser Testing**
-  - Expand Playwright browser matrix
-  - Test on Safari, Firefox, Edge, mobile browsers
-  - *Label: `testing`, `compatibility`*
-  - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#55-add-cross-browser-testing)*
 
 ### Security & Input Sanitization (Medium Priority)
 
@@ -484,7 +472,6 @@ We use labels to help organize issues:
 - `compliance` - Compliance and standards
 - `mobile` - Mobile-specific improvements
 - `build` - Build and distribution improvements
-- `e2e` - End-to-end testing
 - `needs-triage` - Needs review/prioritization
 
 ---
@@ -522,10 +509,10 @@ A comprehensive analysis of the codebase (v2.0.0) has identified **47 concrete i
    - Keyboard navigation improvements
    - ARIA descriptions
 
-5. **Testing Coverage** (5 improvements)
+5. **Testing Coverage** (3 improvements)
    - Performance benchmarks
-   - E2E tests for virtual scrolling
    - Automated accessibility testing
+   - Error recovery tests
 
 6. **Documentation & Developer Experience** (4 improvements)
    - Complete JSDoc for public APIs

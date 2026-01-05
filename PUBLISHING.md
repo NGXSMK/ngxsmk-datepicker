@@ -87,7 +87,6 @@ BREAKING CHANGE: The datepicker API has been redesigned. See MIGRATION.md for de
 Before triggering a release:
 
 - [ ] All tests pass (`npm test`)
-- [ ] E2E tests pass (`npm run e2e`)
 - [ ] Build succeeds (`npm run build:optimized`)
 - [ ] No console errors
 - [ ] Documentation is up to date

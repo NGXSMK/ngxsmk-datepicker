@@ -52,7 +52,6 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
 * **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
 * **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
-* **E2E Testing**: Comprehensive Playwright-based end-to-end testing infrastructure.
 * **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
 * **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
@@ -916,10 +915,6 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - New services: CalendarGenerationService, DisplayFormattingService, DateValidationService
   - Better code organization and maintainability
   - Reduced component complexity
-- 🧪 **E2E Testing**: Comprehensive end-to-end testing
-  - Playwright setup with multi-browser support
-  - Mobile viewport testing
-  - Automated test execution
 - ♿ **Accessibility Enhancements**: Better screen reader support
   - Improved ARIA live regions
   - Enhanced focus management
