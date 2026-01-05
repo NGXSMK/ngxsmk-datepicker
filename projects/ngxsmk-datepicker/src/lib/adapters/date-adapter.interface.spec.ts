@@ -95,14 +95,14 @@ describe('NativeDateAdapter', () => {
     it('should handle parse errors gracefully', () => {
       const onError = jasmine.createSpy('onError');
       // Create a value that will cause an error
-      const result = adapter.parse({} as any, onError);
+      const result = adapter.parse({} as unknown, onError);
       expect(result).toBeNull();
     });
 
     it('should return null for unsupported types', () => {
-      expect(adapter.parse(true as any)).toBeNull();
-      expect(adapter.parse([] as any)).toBeNull();
-      expect(adapter.parse({} as any)).toBeNull();
+      expect(adapter.parse(true as unknown)).toBeNull();
+      expect(adapter.parse([] as unknown)).toBeNull();
+      expect(adapter.parse({} as unknown)).toBeNull();
     });
   });
 
@@ -121,7 +121,7 @@ describe('NativeDateAdapter', () => {
     });
 
     it('should return empty string for null date', () => {
-      expect(adapter.format(null as any)).toBe('');
+      expect(adapter.format(null as unknown as Date)).toBe('');
     });
 
     it('should return empty string for invalid date', () => {
@@ -130,7 +130,7 @@ describe('NativeDateAdapter', () => {
     });
 
     it('should return empty string for undefined date', () => {
-      expect(adapter.format(undefined as any)).toBe('');
+      expect(adapter.format(undefined as unknown as Date)).toBe('');
     });
   });
 

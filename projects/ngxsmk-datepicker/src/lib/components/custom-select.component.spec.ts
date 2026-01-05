@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { CustomSelectComponent } from './custom-select.component';
-import { PLATFORM_ID, DOCUMENT } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { PLATFORM_ID } from '@angular/core';
 
 describe('CustomSelectComponent', () => {
   let component: CustomSelectComponent;
@@ -329,7 +328,6 @@ describe('CustomSelectComponent', () => {
 
     const options = fixture.nativeElement.querySelectorAll('li');
     const clickEvent = new MouseEvent('click', { bubbles: true });
-    const stopPropagationSpy = spyOn(clickEvent, 'stopPropagation');
     options[0].dispatchEvent(clickEvent);
     fixture.detectChanges();
 
