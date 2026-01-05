@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -21,10 +21,10 @@
     "lint": "npx ng lint",
     "deploy": "npm run build:demo && npx gh-pages -d dist/demo-app/browser",
     "prepublishOnly": "npm run build:optimized",
-    "prepublish:copy-license": "node -e \"require('fs').copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE')\"",
-    "publish:lib": "npm run build:optimized && npm run prepublish:copy-license",
+    "prepublish:copy-assets": "node -e \"const fs = require('fs'); fs.copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE'); fs.copyFileSync('README.md', 'dist/ngxsmk-datepicker/README.md')\"",
+    "publish:lib": "npm run build:optimized && npm run prepublish:copy-assets",
     "unpublish:version": "node scripts/unpublish-version.js",
-    "publish:patch": "npm run build:optimized && npm run prepublish:copy-license && cd dist/ngxsmk-datepicker && npm publish --tag latest",
+    "publish:patch": "npm run build:optimized && npm run prepublish:copy-assets && cd dist/ngxsmk-datepicker && npm publish --tag latest",
     "semantic-release": "semantic-release",
     "docs": "typedoc --options typedoc.json && node scripts/enhance-api-docs.js",
     "docs:serve": "npm run docs && npx http-server docs/api -p 8080 -o",

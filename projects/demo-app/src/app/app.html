@@ -25,7 +25,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v3.0.0</span>
+              <span class="logo-version">v3.0.1</span>
               @if (npmDownloads() !== null) {
               <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
                 title="Monthly downloads on npm" rel="noopener noreferrer">
@@ -187,7 +187,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v3.0.0)</p>
+        <p class="hero-version">(v3.0.1)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{
@@ -1112,7 +1112,8 @@
             <ul>
               <li><strong>{{ t().before }}</strong> Passing
                 <code>moment(this.date).utcOffset(timezone).format('MM/DD/YYYY hh:mm a')</code> to the datepicker with
-                <code>displayFormat="MM/DD/YYYY hh:mm a"</code> would not populate correctly</li>
+                <code>displayFormat="MM/DD/YYYY hh:mm a"</code> would not populate correctly
+              </li>
               <li><strong>{{ t().after }}</strong> The datepicker now detects Moment.js objects and extracts the date
                 value directly, bypassing the string parsing</li>
               <li><strong>{{ t().backwardCompatible }}</strong> Still works with string dates, Date objects, and all
