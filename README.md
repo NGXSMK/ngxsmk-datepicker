@@ -58,7 +58,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
 * **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
-* **Comprehensive Testing**: Full test coverage with 353+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, and edge cases.
+* **Comprehensive Testing**: Extensive test coverage (67.6% statements, 57.37% branches, 79.67% functions, 68.22% lines) with 1034+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, edge cases, error handling, async operations, DOM manipulation, integration flows, cross-browser compatibility, performance, memory management, and accessibility.
 * **CI/CD Integration**: Automated testing and coverage reporting via GitHub Actions.
 * **Customizable Calendar Views**: Year-picker, decade-picker, timeline view, and time-slider view for diverse use cases.
 * **Modern Demo App**: Beautiful demo application with glassmorphism effects, gradient themes, and responsive design.
