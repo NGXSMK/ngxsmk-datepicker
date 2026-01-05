@@ -2,13 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import * as AngularCore from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { getStartOfDay, getEndOfDay, getStartOfWeek, getEndOfWeek, getStartOfQuarter, getEndOfQuarter, getStartOfMonth, getEndOfMonth, getStartOfYear, getEndOfYear } from '../utils/date.utils';
+import { getStartOfDay, getEndOfDay, getStartOfMonth, getEndOfMonth } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 
-// Conditional access to Signal Forms API (Angular 21+)
-// These may not be available in all Angular versions, so we access them dynamically
 const form = (AngularCore as any).form;
 const objectSchema = (AngularCore as any).objectSchema;
 
@@ -210,7 +208,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
     });
 
     it('should override week start when weekStart input is provided', () => {
-      component.weekStart = 1; // Monday
+      component.weekStart = 1;
       component.ngOnInit();
       fixture.detectChanges();
 
@@ -225,7 +223,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.yearOptions.length).toBe(21); // 10 before + current + 10 after
+      expect(component.yearOptions.length).toBe(21);
     });
 
     it('should use custom year range', () => {
@@ -233,7 +231,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.yearOptions.length).toBe(11); // 5 before + current + 5 after
+      expect(component.yearOptions.length).toBe(11);
     });
   });
 
@@ -397,7 +395,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       fixture.detectChanges();
 
       expect(component.selectedDate).toBeTruthy();
-      expect(component.selectedDate?.getHours()).toBe(14); // 2 PM = 14:00
+      expect(component.selectedDate?.getHours()).toBe(14);
       expect(component.selectedDate?.getMinutes()).toBe(30);
     });
   });
@@ -479,7 +477,6 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
   describe('FormControl Integration', () => {
     it('should work with FormControl', () => {
-      const _formControl = new FormControl<DatepickerValue>(null);
       fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       component = fixture.componentInstance;
       component.inline = true;
@@ -674,12 +671,10 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      // Initialize with null values
       component.writeValue(null);
       fixture.detectChanges();
 
-      // Start in a specific month
-      const currentMonth = new Date(2024, 6, 15); // July
+      const currentMonth = new Date(2024, 6, 15);
       component.currentDate = currentMonth;
       component.generateCalendar();
       fixture.detectChanges();
@@ -687,7 +682,6 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       expect(component.startDate).toBeNull();
       expect(component.endDate).toBeNull();
 
-      // Click on a date from previous month (June)
       const previousMonthDate = getStartOfDay(new Date(2024, 5, 25));
       const isDisabled = component.isDateDisabled(previousMonthDate);
       
@@ -696,11 +690,9 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
         component.onDateClick(previousMonthDate);
         fixture.detectChanges();
 
-        // Should navigate to previous month and set as start date
         expect(component.startDate).toBeTruthy();
-        expect(component.startDate!.getMonth()).toBe(5); // June
+        expect(component.startDate!.getMonth()).toBe(5);
         expect(component.endDate).toBeNull();
-        // valueChange.emit is only called when both start and end dates are set in range mode
         expect(component.valueChange.emit).not.toHaveBeenCalled();
       }
     });
@@ -781,10 +773,5 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
     });
   });
 
-  describe('Angular 21 Compatibility Note', () => {
-    it('should be compatible with Angular 21', () => {
-      expect(component).toBeTruthy();
-    });
-  });
 });
 

@@ -8,7 +8,6 @@ import {
   DatepickerValue,
   PartialDatepickerTranslations,
   DatepickerHooks,
-  KeyboardShortcutContext,
 } from "ngxsmk-datepicker";
 import {CodePipe} from './code.pipe';
 import {DemoTranslationsService, DemoTranslations} from './demo-translations.service';
@@ -77,7 +76,6 @@ class SampleHolidayProvider implements HolidayProvider {
   }
 }
 
-// Navigation item interface
 interface NavItem {
   id: string;
   label: string;
@@ -89,7 +87,7 @@ interface NavItem {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
+  imports: [CommonModule,NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
@@ -104,11 +102,10 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public selectedMobileSize: number = 375;
   public currentTime: string = '9:41';
   public searchQuery: string = '';
-  public expandedSections = signal<Set<string>>(new Set(['architecture', 'examples'])); // Default to expanded 'architecture' and 'examples' sections
+  public expandedSections = signal<Set<string>>(new Set(['architecture', 'examples']));
   public npmDownloads = signal<number | null>(null);
   public npmDownloadsLoading = signal<boolean>(false);
 
-  // Computed navigation items with translations and hierarchical structure
   public navigationItems = computed(() => {
     const t = this.t();
     const items: NavItem[] = [
@@ -162,7 +159,6 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     return items;
   });
 
-  // Flatten navigation items for search (includes all children)
   public allNavigationItems = computed(() => {
     const items: NavItem[] = [];
     const flatten = (navItems: NavItem[]) => {
@@ -229,7 +225,6 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
     return this.expandedSections().has(sectionId);
   }
 
-  // Computed features with translations
   public features = computed(() => {
     const t = this.t();
     return [
@@ -323,7 +318,6 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
 
   public signalDate = signal<DatepickerValue>(null);
   
-  // Moment.js Integration properties
   public momentDateValue = signal<DatepickerValue>(null);
   public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
@@ -367,7 +361,6 @@ export class MomentIntegrationComponent {
   }
   
   setFormattedDate() {
-    // This was the problematic case that is now fixed
     this.dateValue.set('11/17/2025 09:30 am');
   }
   
@@ -427,7 +420,6 @@ export class MomentIntegrationComponent {
     closeBtn: 'btn btn-primary'
   };
 
-  // Plugin Architecture Examples
   public weekendBlockerPlugin: DatepickerHooks = {
     validateDate: (date: Date) => {
       const day = date.getDay();
@@ -537,7 +529,6 @@ const weekendBlockerPlugin: DatepickerHooks = {
   }
 };
 
-// Usage
 <ngxsmk-datepicker
   [hooks]="weekendBlockerPlugin"
   mode="single">
@@ -571,7 +562,6 @@ const businessDaysPlugin: DatepickerHooks = {
   }
 };
 
-// Usage
 <ngxsmk-datepicker
   [hooks]="businessDaysPlugin"
   mode="range">
@@ -601,7 +591,6 @@ const formattingPlugin: DatepickerHooks = {
   }
 };
 
-// Usage
 <ngxsmk-datepicker
   [hooks]="formattingPlugin"
   mode="single">
@@ -617,19 +606,15 @@ const eventTrackingPlugin: DatepickerHooks = {
   afterDateSelect: (date: Date, newValue: DatepickerValue) => {
     console.log('Date selected:', date.toLocaleDateString());
     console.log('New value:', newValue);
-    // Track analytics, perform side effects, etc.
-  },
-  onCalendarOpen: () => {
-    console.log('Calendar opened');
-    // Track analytics
-  },
-  onCalendarClose: () => {
-    console.log('Calendar closed');
-    // Cleanup
-  }
+    },
+    onCalendarOpen: () => {
+      console.log('Calendar opened');
+    },
+    onCalendarClose: () => {
+      console.log('Calendar closed');
+    }
 };
 
-// Usage
 <ngxsmk-datepicker
   [hooks]="eventTrackingPlugin"
   mode="single">
@@ -841,10 +826,8 @@ export class PlainFormComponent {
   </ngxsmk-datepicker>
 </form>`;
 
-  public rangePreviousMonthCode = `// Initialize with null values
-public date = { start: null, end: null };
+  public rangePreviousMonthCode = `public date = { start: null, end: null };
 
-// In template
 <form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
     mode="range"
@@ -853,13 +836,7 @@ public date = { start: null, end: null };
     [locale]="selectedLocale()"
     placeholder="Select date range (try clicking previous month dates)">
   </ngxsmk-datepicker>
-</form>
-
-<!-- 
-  This demonstrates the fix for selecting dates from previous months
-  in range mode. You can now click on dates from previous months
-  (shown in gray) and the calendar will navigate correctly.
--->`;
+</form>`;
 
   public timeOnlyCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -921,14 +898,7 @@ public date = { start: null, end: null };
   </ngxsmk-datepicker>
 </form>
 
-<!-- Features: -->
-<!-- - Input mask formats input as you type based on displayFormat -->
-<!-- - Press Enter to apply, Escape to revert -->
-<!-- - Invalid input reverts to display value on blur -->
-<!-- - Validates against min/max dates and disabled dates -->
-<!-- - Automatically syncs with calendar selection -->
-<!-- - Works with single, range, and multiple modes -->
-<!-- - Supports various date formats: MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD, etc. -->`;
+`;
 
   public customFormatCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -940,11 +910,7 @@ public date = { start: null, end: null };
   </ngxsmk-datepicker>
 </form>
 
-<!-- Other format examples: -->
-<!-- [displayFormat]="'YYYY-MM-DD'" -->
-<!-- [displayFormat]="'DD/MM/YYYY'" -->
-<!-- [displayFormat]="'MMM DD, YYYY hh:mm A'" -->
-<!-- [displayFormat]="'MM/DD/YYYY'" -->`;
+`;
 
   public rtlCode = `<form [formGroup]="datepickerForm">
   <ngxsmk-datepicker
@@ -961,7 +927,7 @@ public date = { start: null, end: null };
   [locale]="'ar-SA'">
 </ngxsmk-datepicker>
 
-<!-- Auto-detects RTL from locale or document.dir -->`;
+`;
 
   public translationsCode = `import { Component } from '@angular/core';
 import { NgxsmkDatepickerComponent, PartialDatepickerTranslations } from 'ngxsmk-datepicker';
@@ -999,9 +965,7 @@ export class TranslationsComponent {
   [locale]="'es-ES'">
 </ngxsmk-datepicker>
 
-<!-- The datepicker automatically uses translations for the specified locale -->
-<!-- In production, you can detect the user's locale using: -->
-<!-- navigator.language or Intl.DateTimeFormat().resolvedOptions().locale -->`;
+`;
 
   public translationServiceCode = `import { Component, inject } from '@angular/core';
 import { NgxsmkDatepickerComponent, TranslationService } from 'ngxsmk-datepicker';
@@ -1046,16 +1010,13 @@ export class I18nComponent {
   private readonly demoTranslationsService = inject(DemoTranslationsService);
   private readonly cdr = inject(ChangeDetectorRef);
   
-  // Computed translations based on selected locale
   public t = computed<DemoTranslations>(() => {
     return this.demoTranslationsService.getTranslations(this.selectedLocale());
   });
 
-  // New feature services
   private readonly themeBuilder = inject(ThemeBuilderService);
   private readonly datePresets = inject(DatePresetsService);
 
-  // Export/Import demo
   public exportImportValue: DatepickerValue = null;
   public exportJsonResult: string = '';
   public exportCsvResult: string = '';
@@ -1064,7 +1025,6 @@ export class I18nComponent {
   public importCsvInput: string = '';
   public importIcsInput: string = '';
 
-  // Theme builder demo
   public customTheme: DatepickerTheme = {
     colors: {
       primary: '#6d28d9',
@@ -1078,14 +1038,12 @@ export class I18nComponent {
   };
   public themeApplied: boolean = false;
 
-  // Date presets demo
   public presetName: string = '';
   public presetCategory: string = '';
   public presetDescription: string = '';
   public savedPresets: DatePreset[] = [];
   public selectedPresetId: string | null = null;
 
-  // Animation config demo
   public animationConfig: AnimationConfig = {
     enabled: true,
     duration: 150,
@@ -1095,13 +1053,11 @@ export class I18nComponent {
   };
 
   constructor() {
-    // Effect to ensure locale changes trigger change detection
     effect(() => {
       this.selectedLocale();
       this.cdr.markForCheck();
     });
 
-    // Load saved presets
     this.loadPresets();
   }
 
@@ -1111,11 +1067,11 @@ import { provideDatepickerConfig } from 'ngxsmk-datepicker';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideDatepickerConfig({
-      weekStart: 1, // Monday as first day of week
-      minuteInterval: 15, // 15-minute intervals
-      yearRange: 20, // Show 20 years before/after
-      holidayProvider: myHolidayProvider, // Optional
-      locale: 'en-US' // Optional
+      weekStart: 1,
+      minuteInterval: 15,
+      yearRange: 20,
+      holidayProvider: myHolidayProvider,
+      locale: 'en-US'
     })
   ]
 };`;
@@ -1192,8 +1148,6 @@ export class FormComponent {
     myDate: objectSchema<Date>()
   }));
   
-  // The form automatically tracks dirty state
-  // myForm().dirty() returns true after user selects a date
 }`;
 
   public signalFormsFieldHtmlCode = `<form>
@@ -1206,11 +1160,7 @@ export class FormComponent {
   <button [disabled]="!myForm().dirty()">Save Changes</button>
 </form>
 
-<!-- The [field] input automatically:
-     - Syncs value from form to datepicker
-     - Updates form when datepicker value changes
-     - Tracks dirty state (form().dirty() returns true after date selection)
-     - Handles disabled state automatically -->`;
+`;
 
   public signalFormsFieldExampleCode = `// Example: Using with validation and dirty state tracking
 import { Component, signal, form, objectSchema, validators } from '@angular/core';
@@ -1233,11 +1183,9 @@ export class ValidatedFormComponent {
       console.log('No changes to save');
       return;
     }
-    // Submit form...
   }
 }
 
-// Example: Date range with Signal Forms
 export class RangeFormComponent {
   localObject = signal({
     startDate: new Date(),
@@ -1269,14 +1217,9 @@ export class RangeFormComponent {
   mode="range">
 </ngxsmk-datepicker>
 
-<!-- The [field] binding automatically tracks dirty state -->
 <button [disabled]="!myForm().dirty()">Save</button>`;
 
-  public angular21FeaturesCode = `// Angular 21 is officially released! 🎉
-// ngxsmk-datepicker is fully compatible with all Angular 21 features
-
-// ✅ Signal Forms
-import { Component, signal, form, objectSchema } from '@angular/core';
+  public angular21FeaturesCode = `import { Component, signal, form, objectSchema } from '@angular/core';
 
 @Component({
   selector: 'app-date-form',
@@ -1295,19 +1238,7 @@ export class DateFormComponent {
   myForm = form(this.localObject, objectSchema({
     date: objectSchema<Date>()
   }));
-}
-
-// ✅ Zoneless by Default
-// Works perfectly without Zone.js
-// Uses OnPush + Signals for optimal performance
-
-// ✅ Vitest Compatible
-// Library works seamlessly in Angular 21 apps using Vitest
-// No changes needed - just use the library as-is
-
-// ✅ Angular Aria Compatible
-// Built-in ARIA support works alongside Angular Aria components
-// All interactive elements have proper accessibility attributes`;
+}`;
 
   public calendarViewsCode = `
 <!-- Year Picker -->
@@ -1621,7 +1552,6 @@ export class DateFormComponent {
 
     this.npmDownloadsLoading.set(true);
     try {
-      // Fetch last 30 days downloads
       const response = await fetch('https://api.npmjs.org/downloads/point/last-month/ngxsmk-datepicker');
       if (response.ok) {
         const data = await response.json();
@@ -1655,29 +1585,23 @@ export class DateFormComponent {
    */
   private detectAndSetLocale(): void {
     if (!isPlatformBrowser(this.platformId)) {
-      // SSR: Use default locale
       this.selectedLocale.set('en-US');
       return;
     }
     
-    // Try multiple methods to detect locale
     let browserLocale: string | null = null;
     
-    // Method 1: navigator.language (most common)
     if (typeof navigator !== 'undefined' && navigator.language) {
       browserLocale = navigator.language;
     }
     
-    // Method 2: Intl.DateTimeFormat().resolvedOptions().locale (more accurate)
     if (!browserLocale && typeof Intl !== 'undefined') {
       try {
         browserLocale = Intl.DateTimeFormat().resolvedOptions().locale;
       } catch {
-        // Fallback if Intl is not available
       }
     }
     
-    // Method 3: navigator.languages (first preferred language)
     if (!browserLocale && typeof navigator !== 'undefined' && navigator.languages && navigator.languages.length > 0) {
       browserLocale = navigator.languages[0];
     }
@@ -1688,7 +1612,6 @@ export class DateFormComponent {
       this.selectedLocale.set(mappedLocale);
       this.isLocaleAutoDetected.set(true);
     } else {
-      // Fallback to default
       this.selectedLocale.set('en-US');
       this.isLocaleAutoDetected.set(false);
     }
@@ -1701,7 +1624,6 @@ export class DateFormComponent {
   private mapBrowserLocaleToSupported(browserLocale: string): string {
     const normalized = browserLocale.toLowerCase();
     
-    // Try exact match first
     const exactMatch = this.availableLocales.find(locale => 
       locale.code.toLowerCase() === normalized
     );
@@ -1709,7 +1631,6 @@ export class DateFormComponent {
       return exactMatch.code;
     }
     
-    // Try language code match (e.g., 'en' from 'en-CA' -> 'en-US')
     const languageCode = normalized.split('-')[0];
     const languageMatch = this.availableLocales.find(locale => {
       const localeLang = locale.code.toLowerCase().split('-')[0];
@@ -1719,7 +1640,6 @@ export class DateFormComponent {
       return languageMatch.code;
     }
     
-    // Try common locale mappings
     const localeMappings: { [key: string]: string } = {
       'en-ca': 'en-US',
       'en-au': 'en-GB',
@@ -1752,7 +1672,6 @@ export class DateFormComponent {
       return mapped;
     }
     
-    // Default fallback
     return 'en-US';
   }
 
@@ -1799,7 +1718,6 @@ export class DateFormComponent {
   getLocaleDisplayName(localeCode: string): string {
     const locale = this.availableLocales.find(l => l.code === localeCode);
     if (locale) {
-      // Return language code in uppercase (e.g., "EN", "ES", "FR")
       const langCode = localeCode.split('-')[0].toUpperCase();
       return langCode;
     }
@@ -1812,12 +1730,10 @@ export class DateFormComponent {
 
   onSearchChange(query: string): void {
     this.searchQuery = query;
-    // filteredNavigationItems is now computed, so it will update automatically
   }
 
   clearSearch(): void {
     this.searchQuery = '';
-    // filteredNavigationItems is now computed, so it will update automatically
   }
 
   private updateTime(): void {
@@ -1861,14 +1777,11 @@ export class DateFormComponent {
     }
   }
 
-  // Moment.js Integration methods
   setCurrentDate(): void {
     this.momentDateValue.set(new Date());
   }
 
   setFormattedDate(): void {
-    // This was the problematic case that is now fixed
-    // Create a Date object that matches the format
     const date = new Date();
     date.setHours(9, 30); // 9:30 AM
     this.momentDateValue.set(date);
@@ -1880,7 +1793,6 @@ export class DateFormComponent {
 
   onDateChange(newDate: DatepickerValue): void {
     console.log('Date changed:', newDate);
-    // Update the signal value
     this.momentDateValue.set(newDate);
   }
 
@@ -1893,7 +1805,6 @@ export class DateFormComponent {
     return JSON.stringify(value);
   }
 
-  // Export/Import methods
   exportAsJson(): void {
     if (this.exportImportValue) {
       this.exportJsonResult = exportToJson(this.exportImportValue, { includeTime: true });
@@ -1979,14 +1890,10 @@ export class DateFormComponent {
     }
   }
 
-  // Theme builder methods
   @ViewChild('themeBuilderDatepicker', { static: false, read: ElementRef }) themeBuilderDatepickerEl?: ElementRef<HTMLElement>;
-  
-  // Animation config methods
   @ViewChild('animationDatepicker', { static: false, read: ElementRef }) animationDatepickerEl?: ElementRef<HTMLElement>;
 
   ngAfterViewInit(): void {
-    // Apply initial theme after view is initialized
     setTimeout(() => {
       this.applyCustomTheme();
       this.applyAnimationConfig();
@@ -1994,13 +1901,10 @@ export class DateFormComponent {
   }
 
   applyCustomTheme(): void {
-    // Use setTimeout to ensure view is ready
     setTimeout(() => {
       if (this.themeBuilderDatepickerEl?.nativeElement) {
         const datepickerElement = this.themeBuilderDatepickerEl.nativeElement;
-        // First remove any existing theme
         this.themeBuilder.removeTheme(datepickerElement);
-        // Apply theme directly to datepicker element - this overrides :host variables
         this.themeBuilder.applyTheme(this.customTheme, datepickerElement);
         this.themeApplied = true;
       }
@@ -2010,7 +1914,6 @@ export class DateFormComponent {
   removeCustomTheme(): void {
     setTimeout(() => {
       if (this.themeBuilderDatepickerEl?.nativeElement) {
-        // Remove theme from datepicker element
         this.themeBuilder.removeTheme(this.themeBuilderDatepickerEl.nativeElement);
         this.themeApplied = false;
       }
@@ -2018,7 +1921,6 @@ export class DateFormComponent {
   }
 
   onColorChange(): void {
-    // Automatically apply theme when color changes
     this.applyCustomTheme();
   }
 
@@ -2026,9 +1928,7 @@ export class DateFormComponent {
     return this.themeBuilder.generateStyleObject(this.customTheme);
   }
 
-  // Animation config methods
   onAnimationConfigChange(): void {
-    // Automatically apply animation config when it changes
     this.applyAnimationConfig();
   }
 
@@ -2061,12 +1961,10 @@ export class DateFormComponent {
     }, 0);
   }
 
-  // Multi-calendar methods
   onCalendarCountChange(count: number): void {
     this.calendarCountSlider = count;
   }
 
-  // Date presets methods
   savePreset(): void {
     if (!this.presetName || !this.exportImportValue) {
       alert('Please provide a preset name and select a date value');
@@ -2137,29 +2035,18 @@ export class DateFormComponent {
     reader.readAsText(file);
   }
 
-  // Code examples
   public exportImportCode = `import { exportToJson, exportToCsv, exportToIcs, importFromJson, importFromCsv, importFromIcs } from 'ngxsmk-datepicker';
 
-// Export to JSON
 const json = exportToJson(dateValue, { includeTime: true });
-
-// Export to CSV
 const csv = exportToCsv(dateValue, { includeTime: true });
-
-// Export to ICS (iCalendar)
 const ics = exportToIcs(dateValue, { 
   includeTime: true,
   summary: 'Event Title',
   description: 'Event Description'
 });
 
-// Import from JSON
 const importedValue = importFromJson(jsonString);
-
-// Import from CSV
 const importedValue = importFromCsv(csvString);
-
-// Import from ICS
 const importedValue = importFromIcs(icsString);`;
 
   public animationConfigCode = `import { provideDatepickerConfig, AnimationConfig } from 'ngxsmk-datepicker';
@@ -2197,10 +2084,7 @@ export class MyComponent {
       },
     };
 
-    // Apply globally
     this.themeBuilder.applyTheme(theme);
-
-    // Or generate CSS-in-JS style object
     const styles = this.themeBuilder.generateStyleObject(theme);
   }
 }`;
@@ -2222,7 +2106,6 @@ export class MyComponent {
 
   loadPreset(id: string) {
     const value = this.presets.applyPreset(id);
-    // Use the value...
   }
 
   getAllPresets() {
