@@ -25,9 +25,7 @@ import {
 import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
 import {
   ControlValueAccessor,
-  FormsModule,
   NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   getStartOfDay,
@@ -75,7 +73,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'ngxsmk-datepicker',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSelectComponent, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, CustomSelectComponent, DatePipe],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
@@ -372,8 +370,8 @@ import { Subject } from 'rxjs';
                              [min]="0"
                              [max]="1440"
                              [step]="minuteInterval"
-                             [(ngModel)]="startTimeSlider"
-                             (ngModelChange)="onStartTimeSliderChange($event)"
+                             [value]="startTimeSlider"
+                             (input)="onStartTimeSliderChange(+($any($event.target).value))"
                              [disabled]="disabled">
                     </div>
                     <div class="ngxsmk-time-slider-header">
@@ -386,8 +384,8 @@ import { Subject } from 'rxjs';
                              [min]="0"
                              [max]="1440"
                              [step]="minuteInterval"
-                             [(ngModel)]="endTimeSlider"
-                             (ngModelChange)="onEndTimeSliderChange($event)"
+                             [value]="endTimeSlider"
+                             (input)="onEndTimeSliderChange(+($any($event.target).value))"
                              [disabled]="disabled">
                     </div>
                   </div>
@@ -5751,11 +5749,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const spaceBelow = viewportHeight - inputRect.bottom;
       const spaceAbove = inputRect.top;
       const spaceRight = viewportWidth - inputRect.left;
-      const spaceLeft = inputRect.left;
       
-      // Minimum space needed for popover (approximate)
-      const minHeight = 400; // Approximate popover height
-      const minWidth = 280; // Minimum popover width
+      // Use actual popover dimensions or fallback to minimums
+      const minHeight = popoverRect.height || 400;
+      const minWidth = popoverRect.width || 280;
       
       // If there's enough space below, position below input
       if (spaceBelow >= minHeight && spaceRight >= minWidth) {

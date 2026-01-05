@@ -538,7 +538,7 @@
 
         <div class="result-box">
           <strong>{{ t().signalValue }}</strong>
-          <code>{{ signalDate() | json }}</code>
+          <code>{{ JSON.stringify(signalDate()) }}</code>
         </div>
 
         <div class="code-block">
@@ -878,9 +878,9 @@
           <div class="result-box">
             <strong>{{ t().formValue }}</strong> 
             @if (datepickerForm.controls.rangePreviousMonth.value.start && datepickerForm.controls.rangePreviousMonth.value.end) {
-              <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: {{ datepickerForm.controls.rangePreviousMonth.value.end | date:'medium' }}</code>
+              <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.end, 'medium') }}</code>
             } @else if (datepickerForm.controls.rangePreviousMonth.value.start) {
-              <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: Not selected</code>
+              <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: Not selected</code>
             } @else {
               <code>{{ JSON.stringify(datepickerForm.controls.rangePreviousMonth.value) }}</code>
             }
@@ -918,9 +918,9 @@
         @if (datepickerForm.controls.timeOnly.value) {
           <div class="result-box">
             @if (isDate(datepickerForm.controls.timeOnly.value)) {
-              <strong>{{ t().formValue }}</strong> <code>{{ datepickerForm.controls.timeOnly.value | date:'short' }}</code>
+              <strong>{{ t().formValue }}</strong> <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'short') }}</code>
               <br>
-              <strong>{{ t().timeOnlyLabel }}</strong> <code>{{ datepickerForm.controls.timeOnly.value | date:'shortTime' }}</code>
+              <strong>{{ t().timeOnlyLabel }}</strong> <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'shortTime') }}</code>
             } @else {
               <strong>{{ t().formValue }}</strong> <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
             }
@@ -1034,22 +1034,22 @@
             <strong>Form Values:</strong>
             @if (datepickerForm.controls.allowTypingDate.value && isDate(datepickerForm.controls.allowTypingDate.value)) {
               <div style="margin-top: 0.5rem;">
-                <strong>MM/DD/YYYY:</strong> <code>{{ datepickerForm.controls.allowTypingDate.value | date:'short' }}</code>
+                <strong>MM/DD/YYYY:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingDate.value, 'short') }}</code>
               </div>
             }
             @if (datepickerForm.controls.allowTypingDateTime.value && isDate(datepickerForm.controls.allowTypingDateTime.value)) {
               <div style="margin-top: 0.5rem;">
-                <strong>With Time:</strong> <code>{{ datepickerForm.controls.allowTypingDateTime.value | date:'medium' }}</code>
+                <strong>With Time:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingDateTime.value, 'medium') }}</code>
               </div>
             }
             @if (datepickerForm.controls.allowTypingAuto.value && isDate(datepickerForm.controls.allowTypingAuto.value)) {
               <div style="margin-top: 0.5rem;">
-                <strong>Auto-detect:</strong> <code>{{ datepickerForm.controls.allowTypingAuto.value | date:'short' }}</code>
+                <strong>Auto-detect:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingAuto.value, 'short') }}</code>
               </div>
             }
             @if (datepickerForm.controls.allowTypingISO.value && isDate(datepickerForm.controls.allowTypingISO.value)) {
               <div style="margin-top: 0.5rem;">
-                <strong>ISO Format:</strong> <code>{{ datepickerForm.controls.allowTypingISO.value | date:'short' }}</code>
+                <strong>ISO Format:</strong> <code>{{ formatDate(datepickerForm.controls.allowTypingISO.value, 'short') }}</code>
               </div>
             }
             @if (datepickerForm.controls.rangeWithTyping.value) {
@@ -1057,9 +1057,9 @@
                 <div style="margin-top: 0.5rem;">
                   <strong>Range:</strong> 
                   @if (datepickerForm.controls.rangeWithTyping.value.start && datepickerForm.controls.rangeWithTyping.value.end) {
-                    <code>{{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} - {{ datepickerForm.controls.rangeWithTyping.value.end | date:'short' }}</code>
+                    <code>{{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} - {{ formatDate(datepickerForm.controls.rangeWithTyping.value.end, 'short') }}</code>
                   } @else if (datepickerForm.controls.rangeWithTyping.value.start) {
-                    <code>Start: {{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} | End: Not selected</code>
+                    <code>Start: {{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} | End: Not selected</code>
                   } @else {
                     <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTyping.value) }}</code>
                   }
@@ -1097,7 +1097,7 @@
         @if (datepickerForm.controls.customFormat.value) {
           <div class="result-box">
             @if (isDate(datepickerForm.controls.customFormat.value)) {
-              <strong>{{ t().formValue }}</strong> <code>{{ datepickerForm.controls.customFormat.value | date:'short' }}</code>
+              <strong>{{ t().formValue }}</strong> <code>{{ formatDate(datepickerForm.controls.customFormat.value, 'short') }}</code>
               <br>
               <strong>Display Format:</strong> <code>MM/DD/YYYY hh:mm A</code>
             } @else {
@@ -1477,7 +1477,7 @@
         <div class="result-box">
           <strong>{{ t().currentValue }}</strong> 
           @if (programmaticSingleDate) {
-            <code>{{ programmaticSingleDate | date:'medium' }}</code>
+            <code>{{ formatDate(programmaticSingleDate, 'medium') }}</code>
           } @else {
             <code>{{ t().notSet }}</code>
           }
@@ -1486,7 +1486,7 @@
         <div class="result-box">
           <strong>{{ t().currentRange }}</strong> 
           @if (programmaticRange) {
-            <code>{{ programmaticRange.start | date:'medium' }} - {{ programmaticRange.end | date:'medium' }}</code>
+            <code>{{ formatDate(programmaticRange.start, 'medium') }} - {{ formatDate(programmaticRange.end, 'medium') }}</code>
           } @else {
             <code>{{ t().notSet }}</code>
           }
@@ -1495,7 +1495,7 @@
         <div class="result-box">
           <strong>{{ t().currentMultiple }}</strong> 
           @if (programmaticMultipleDates?.length) {
-            <code>{{ programmaticMultipleDates | json }}</code>
+            <code>{{ JSON.stringify(programmaticMultipleDates) }}</code>
           } @else {
             <code>{{ t().notSet }}</code>
           }

@@ -1011,15 +1011,13 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.stateChanges.closed).toBe(false);
       expect(component.stateChanges.isStopped).toBe(false);
 
       component.ngOnDestroy();
 
-      // Check both closed and isStopped properties
-      // In RxJS, isStopped is set to true when complete() is called
+      // Check that isStopped is set to true when complete() is called
+      // This is the reliable indicator that complete() was called on the Subject
       expect(component.stateChanges.isStopped).toBe(true);
-      expect(component.stateChanges.closed).toBe(true);
     });
   });
 

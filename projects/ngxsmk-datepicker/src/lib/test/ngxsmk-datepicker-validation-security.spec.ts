@@ -278,14 +278,16 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
   describe('parseDateString() - Error Callback Usage', () => {
     it('should use adapter with error callback when adapter is configured', () => {
       let errorCallbackCalled = false;
-      let capturedError: Error | null = null;
+      let capturedError: Error | null | undefined = null;
 
       const mockAdapter: DateAdapter = {
         ...new NativeDateAdapter(),
         parse: (value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null => {
           if (typeof value === 'string' && value === 'invalid-date') {
             const error = new Error('Invalid date string');
-            onError?.(error);
+            if (onError) {
+              onError(error);
+            }
             errorCallbackCalled = true;
             capturedError = error;
             return null;
@@ -323,7 +325,8 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
       expect(result).toBeNull();
       expect(errorCallbackCalled).toBe(true);
       expect(capturedError).toBeTruthy();
-      expect(capturedError?.message).toContain('Invalid date string');
+      const error = capturedError as unknown as Error;
+      expect(error.message).toContain('Invalid date string');
     });
 
     it('should fall back to native Date parsing when no adapter is configured', () => {

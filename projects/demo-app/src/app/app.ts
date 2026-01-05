@@ -1829,6 +1829,38 @@ export class DateFormComponent {
     return value instanceof Date;
   }
 
+  formatDate(value: Date | null | undefined, format: 'short' | 'medium' | 'shortTime' = 'short'): string {
+    if (!value || !(value instanceof Date) || isNaN(value.getTime())) {
+      return '';
+    }
+    
+    const date = value as Date;
+    
+    switch (format) {
+      case 'short':
+        return date.toLocaleDateString('en-US', {
+          month: 'numeric',
+          day: 'numeric',
+          year: 'numeric'
+        });
+      case 'medium':
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+      case 'shortTime':
+        return date.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit'
+        });
+      default:
+        return date.toLocaleString('en-US');
+    }
+  }
+
   // Moment.js Integration methods
   setCurrentDate(): void {
     this.momentDateValue.set(new Date());

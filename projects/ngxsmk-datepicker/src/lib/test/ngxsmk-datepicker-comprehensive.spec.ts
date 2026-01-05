@@ -1,10 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, signal, form, objectSchema } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import * as AngularCore from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay, getEndOfDay, getStartOfWeek, getEndOfWeek, getStartOfQuarter, getEndOfQuarter, getStartOfMonth, getEndOfMonth, getStartOfYear, getEndOfYear } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
+
+// Conditional access to Signal Forms API (Angular 21+)
+// These may not be available in all Angular versions, so we access them dynamically
+const form = (AngularCore as any).form;
+const objectSchema = (AngularCore as any).objectSchema;
 
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
@@ -508,7 +514,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
         myForm = form(this.localObject, objectSchema({
-          dateField: objectSchema<Date>()
+          dateField: (objectSchema as any)()
         }));
       }
 
@@ -549,7 +555,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
         myForm = form(this.localObject, objectSchema({
-          dateField: objectSchema<Date>()
+          dateField: (objectSchema as any)()
         }));
       }
 
