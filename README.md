@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.23` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `2.0.0` is the current stable release. For production use, install the latest version from npm.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -84,6 +84,41 @@ For detailed compatibility information, see [COMPATIBILITY.md](projects/ngxsmk-d
 
 **Peer Dependencies**: `@angular/core >=17.0.0 <24.0.0`
 
+## **🔒 API Stability & Deprecation Policy**
+
+### API Stability Guarantees
+
+- **Public API**: All public APIs (inputs, outputs, methods) are stable within a major version
+- **Experimental Features**: Features marked as `experimental` may change in minor versions
+- **Internal APIs**: Private methods and internal services are not part of the public API and may change without notice
+
+### Deprecation Policy
+
+- **Deprecation Period**: Features are deprecated for at least **2 major versions** before removal
+- **Deprecation Warnings**: 
+  - `@deprecated` JSDoc tags in code
+  - Console warnings in development mode
+  - Clear documentation in CHANGELOG.md
+- **Migration Guides**: Provided in `MIGRATION.md` for all breaking changes
+- **Breaking Changes**: Only occur in major version releases (semver)
+
+### Stable APIs
+
+The following are considered stable public APIs:
+- Component inputs and outputs (`@Input()`, `@Output()`)
+- Public methods documented in API docs
+- Exported types and interfaces
+- Service APIs (when marked as public)
+
+### Experimental Features
+
+Features marked as experimental may change:
+- Signal Forms support (`[field]` input) - Experimental in v1.9.x, stable in v2.0.0+
+- Some advanced selection modes
+- Plugin architecture hooks (subject to refinement)
+
+For details, see [CONTRIBUTING.md](CONTRIBUTING.md#deprecation-policy).
+
 ## **🚀 Installation**
 
 Install the package using npm:
@@ -121,7 +156,7 @@ This pattern is also compatible with computed/linked signals produced by `httpRe
 
 ### Signal Forms with `[field]` Input (Angular 21+)
 
-For direct integration with Angular Signal Forms, use the `[field]` input:
+For direct integration with Angular Signal Forms, use the `[field]` input. The datepicker automatically tracks dirty state when using this binding:
 
 ```typescript
 import { Component, signal, form, objectSchema } from '@angular/core';
@@ -150,7 +185,9 @@ export class FormComponent {
 }
 ```
 
-The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed!
+The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed! It also automatically tracks the form's dirty state, so `form().dirty()` will return `true` after a user selects a date.
+
+For detailed Signal Forms integration including dirty state tracking, see the [Signal Forms Integration Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md).
 
 ### Documentation
 
@@ -830,9 +867,19 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.23** (Stable)
-- 🎉 **Version Update**: Updated to version 1.9.23
-- ✅ **Stable Release**: Version 1.9.23 is the current stable version
+### **v2.0.0** (Stable)
+- 🎉 **Version Update**: Updated to version 2.0.0
+- ✅ **Stable Release**: Version 2.0.0 is the current stable version
+
+### **v1.10.0** (Stable)
+- 🎉 **Version Update**: Updated to version 1.10.0
+- ✅ **Stable Release**: Version 1.10.0 is the current stable version
+
+### **v1.9.24**
+- 🎉 **Version Update**: Updated to version 1.9.24
+- ✅ **Stable Release**: Version 1.9.24 is the current stable version
+
+### **v1.9.23**
 - 🐛 **Fixed**: CSS Variables Theming (Issue #84) - CSS variables theming now works when variables are defined in global `:root` selector
   - Enhanced CSS selector from `:root` to `:root, :root > body` for higher specificity
   - Added `!important` flags to inline styles to ensure they override existing styles
@@ -840,9 +887,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Updated documentation to explain the fix and provide guidance
   - Resolves issue where theme variables defined in global stylesheets were not being applied
 
-### **v1.9.22** (Stable)
+### **v1.9.22**
 - 🎉 **Version Update**: Updated to version 1.9.22
-- ✅ **Stable Release**: Version 1.9.22 is the current stable version
 - 🐛 **Fixed**: Form control value initialization issue - datepicker now correctly displays month from form control values
   - Fixed calendar month display when using Reactive Forms with initial values
   - Added proper signal updates and change detection in `writeValue()` method
@@ -850,9 +896,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available
   - Now correctly returns Monday (1) for en-GB and other European locales
 
-### **v1.9.21** (Stable)
+### **v1.9.21**
 - 🎉 **Version Update**: Updated to version 1.9.21
-- ✅ **Stable Release**: Version 1.9.21 is the current stable version
 - 📱 **Mobile-Specific Features**: Comprehensive mobile optimization
   - Native date picker integration with automatic mobile detection
   - Bottom sheet modal with swipe-to-dismiss gestures
@@ -889,9 +934,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Updated component and utility tests
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.20
 
-### **v1.9.20** (Stable)
+### **v1.9.20**
 - 🎉 **Version Update**: Updated to version 1.9.20
-- ✅ **Stable Release**: Version 1.9.20 is the current stable version
 - 🐛 **Bug Fix (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
   - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
   - Component now gracefully handles missing `matchMedia` API in test environments
@@ -899,25 +943,23 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - ✅ **Test Coverage**: Added comprehensive test coverage for `matchMedia` compatibility scenarios
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.19
 
-### **v1.9.19** (Stable)
+### **v1.9.19**
 - 🎉 **Version Update**: Updated to version 1.9.19
-- ✅ **Stable Release**: Version 1.9.19 is the current stable version
 - 🎨 **Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes (320px to desktop)
 - 📱 **Mobile Optimization**: Enhanced mobile experience with improved navbar, sidebar, hero section, and feature grid
 - 🧹 **Code Cleanup**: Removed unnecessary comments for cleaner codebase
 - 🔧 **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.18
 
-### **v1.9.18** (Stable)
+### **v1.9.18**
 - 🐛 **Mobile Touch Event Handling**: Fixed touch listener attachment when calendar opens on mobile devices
   - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
   - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
   - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
 - 🎉 **Version Update**: Updated to version 1.9.18
-- ✅ **Stable Release**: Version 1.9.18 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.17
 
-### **v1.9.17** (Stable)
+### **v1.9.17**
 - 🎉 **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
   - Defaults to `false` for a cleaner, more minimal UI
   - When set to `true`, displays the calendar icon button next to the input field
@@ -928,14 +970,12 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Resolves TypeScript compilation issues when using `[field]` input with Angular 21 Signal Forms
   - Maintains full backward compatibility with Angular 17-20
 - 🎉 **Version Update**: Updated to version 1.9.17
-- ✅ **Stable Release**: Version 1.9.17 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
 - ✅ **Angular 17-22 Compatible**: Verified compatibility with Angular 17-22 (including Angular 21)
 
 ### **v1.9.16**
 - 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
 - 🎉 **Version Update**: Updated to version 1.9.16
-- ✅ **Stable Release**: Version 1.9.16 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.15
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
@@ -943,7 +983,6 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🐛 **Moment Object Binding Fix**: Fixed Moment.js objects not binding correctly with ngModel
 - 🐛 **Date Clicks After Navigation**: Fixed dates becoming unclickable after month navigation
 - 🎉 **Version Update**: Updated to version 1.9.15
-- ✅ **Stable Release**: Version 1.9.15 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.14
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
@@ -951,7 +990,6 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🐛 **Date Picker Selection Fix**: Fixed date picker selection issues, especially in range mode
 - 🐛 **Moment.js Timezone Support**: Fixed timezone offset preservation for Moment.js objects
 - 🎉 **Version Update**: Updated to version 1.9.14
-- ✅ **Stable Release**: Version 1.9.14 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.13
 
 ### **v1.9.13**
@@ -959,12 +997,10 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🐛 **Bug Fixes**: Fixed date selection becoming disabled after month navigation in range mode
 - 🐛 **Bug Fixes**: Fixed Moment.js object handling in range values and arrays
 - 🎉 **Version Update**: Updated to version 1.9.13
-- ✅ **Stable Release**: Version 1.9.13 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.12
 
 ### **v1.9.12**
 - 🎉 **Version Update**: Updated to version 1.9.12
-- ✅ **Stable Release**: Version 1.9.12 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.11
 - 📚 **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for detailed migration instructions
 

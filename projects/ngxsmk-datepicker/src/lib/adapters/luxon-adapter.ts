@@ -34,15 +34,32 @@ export class LuxonAdapter implements DateAdapter {
     }
   }
 
-  parse(value: string | Date | number | unknown): Date | null {
+  parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    if (value instanceof Date) {
-      return this.DateTime.fromJSDate(value).isValid ? new Date(value.getTime()) : null;
+    
+    try {
+      if (value instanceof Date) {
+        const dt = this.DateTime.fromJSDate(value);
+        if (!dt.isValid) {
+          onError?.(new Error(`Invalid Date object: ${value}`));
+          return null;
+        }
+        return new Date(value.getTime());
+      }
+      
+      if (typeof value === 'string') {
+        const parsed = this.DateTime.fromISO(value) || this.DateTime.fromFormat(value, 'yyyy-MM-dd');
+        if (!parsed.isValid) {
+          onError?.(new Error(`Invalid date string: "${value}"`));
+          return null;
+        }
+        return parsed.toJSDate();
+      }
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+      return null;
     }
-    if (typeof value === 'string') {
-      const parsed = this.DateTime.fromISO(value) || this.DateTime.fromFormat(value, 'yyyy-MM-dd');
-      return parsed.isValid ? parsed.toJSDate() : null;
-    }
+    
     return null;
   }
 

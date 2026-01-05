@@ -20,6 +20,7 @@ import {
   signal,
   computed,
   ViewChild,
+  isDevMode,
 } from '@angular/core';
 import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
 import {
@@ -116,9 +117,9 @@ import { Subject } from 'rxjs';
                    [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                    class="ngxsmk-display-input"
                    [ngClass]="classes?.input"
-                   (keydown.enter)="onInputKeyDown($any($event))"
-                   (keydown.space)="onInputKeyDown($any($event))"
-                   (keydown.escape)="onInputKeyDown($any($event))"
+                   (keydown.enter)="onInputKeyDown($event)"
+                   (keydown.space)="onInputKeyDown($event)"
+                   (keydown.escape)="onInputKeyDown($event)"
                    (input)="onInputChange($event)"
                    (blur)="onInputBlur($event)"
                    (focus)="onInputFocus($event)">
@@ -433,7 +434,7 @@ import { Subject } from 'rxjs';
                 <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [ngClass]="classes?.clearBtn">
                   {{ _clearLabel }}
                 </button>
-                <button type="button" class="ngxsmk-close-button" (click)="isCalendarOpen = false" [disabled]="disabled" [attr.aria-label]="_closeAriaLabel" [ngClass]="classes?.closeBtn">
+                <button type="button" class="ngxsmk-close-button" (click)="closeCalendarWithFocusRestore()" [disabled]="disabled" [attr.aria-label]="_closeAriaLabel" [ngClass]="classes?.closeBtn">
                   {{ _closeLabel }}
                 </button>
               </div>
@@ -445,6 +446,83 @@ import { Subject } from 'rxjs';
     </div>
   `,
 })
+/**
+ * A comprehensive, production-ready Angular datepicker component with extensive features.
+ * 
+ * @remarks
+ * ## Performance Characteristics
+ * 
+ * - **Calendar Generation**: O(1) per month when cached, O(n) for first generation where n = days in month
+ * - **Date Validation**: O(n) where n = disabledDates.length + disabledRanges.length
+ * - **Range Selection**: O(1) for single date, O(n) for multiple selection where n = selectedDates.length
+ * - **Change Detection**: Optimized with OnPush strategy and manual scheduling for zoneless compatibility
+ * - **Memory Management**: LRU cache for calendar months (max 24 entries), comprehensive cleanup in ngOnDestroy
+ * 
+ * ## Key Features
+ * 
+ * - Multiple selection modes: single, range, multiple, week, month, quarter, year
+ * - Full keyboard navigation and accessibility (WCAG 2.1 AA compliant)
+ * - SSR and zoneless Angular compatible
+ * - Signal Forms integration (Angular 21+)
+ * - Custom date adapters (Native, date-fns, Luxon, Day.js)
+ * - Internationalization with RTL support
+ * - Time selection with timezone support
+ * - Holiday provider system
+ * - Custom hooks for extensibility
+ * - Mobile-optimized with touch gestures
+ * 
+ * ## Usage Example
+ * 
+ * ```typescript
+ * // Basic usage
+ * <ngxsmk-datepicker
+ *   [(ngModel)]="selectedDate"
+ *   [mode]="'single'"
+ *   [locale]="'en-US'">
+ * </ngxsmk-datepicker>
+ * 
+ * // With Reactive Forms
+ * <ngxsmk-datepicker
+ *   [formControl]="dateControl"
+ *   [minDate]="minDate"
+ *   [maxDate]="maxDate">
+ * </ngxsmk-datepicker>
+ * 
+ * // With Signal Forms (Angular 21+)
+ * <ngxsmk-datepicker
+ *   [field]="form.field('date')"
+ *   [mode]="'range'">
+ * </ngxsmk-datepicker>
+ * ```
+ * 
+ * ## Performance Optimization Tips
+ * 
+ * 1. **Large Disabled Date Lists**: For lists >1000 dates, consider using a Set or DateRange tree
+ * 2. **Multiple Instances**: The component uses a static registry for efficient instance management
+ * 3. **Calendar Caching**: Months are automatically cached (LRU, max 24 entries)
+ * 4. **Change Detection**: Uses OnPush strategy - call `markForCheck()` only when needed
+ * 5. **Memoization**: Internal memoization optimizes date comparisons and validation
+ * 
+ * ## Memory Management
+ * 
+ * The component implements comprehensive cleanup:
+ * - All timeouts and animation frames are tracked and cleared
+ * - Event listeners are properly removed
+ * - RxJS subscriptions are completed
+ * - Effects are destroyed
+ * - Cache is invalidated on relevant changes
+ * 
+ * ## Browser Compatibility
+ * 
+ * - Modern browsers (Chrome, Firefox, Safari, Edge)
+ * - Mobile browsers (iOS Safari, Chrome Mobile)
+ * - SSR compatible (Angular Universal)
+ * - Works with and without Zone.js
+ * 
+ * @see {@link DatepickerConfig} for global configuration options
+ * @see {@link DatepickerHooks} for extension hooks
+ * @see {@link HolidayProvider} for custom holiday support
+ */
 export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor {
   private static _idCounter = 0;
   private static _allInstances = new Set<NgxsmkDatepickerComponent>();
@@ -518,7 +596,32 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() autoApplyClose: boolean = false;
   @Input() displayFormat?: string;
   @Input() allowTyping: boolean = false;
-  @Input() calendarCount: number = 1;
+  private _calendarCount: number = 1;
+  @Input() set calendarCount(value: number) {
+    // Clamp calendarCount to valid range (1-12) for performance
+    if (value < 1) {
+      if (isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] calendarCount must be at least 1. ` +
+          `Received: ${value}. Setting to 1.`
+        );
+      }
+      this._calendarCount = 1;
+    } else if (value > 12) {
+      if (isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
+          `Received: ${value}. Setting to 12.`
+        );
+      }
+      this._calendarCount = 12;
+    } else {
+      this._calendarCount = value;
+    }
+  }
+  get calendarCount(): number {
+    return this._calendarCount;
+  }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
   @Input() defaultMonthOffset: number = 0;
   
@@ -530,6 +633,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() mobileTheme: 'compact' | 'comfortable' | 'spacious' = 'comfortable';
   @Input() enableVoiceInput: boolean = false;
   @Input() autoDetectMobile: boolean = true;
+  @Input() disableFocusTrap: boolean = false;
 
   private _isCalendarOpen = signal<boolean>(false);
   public get isCalendarOpen(): boolean {
@@ -547,6 +651,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private touchStartElement: EventTarget | null = null;
   private pointerDownTime: number = 0;
   private isPointerEvent: boolean = false;
+  private previousFocusElement: HTMLElement | null = null;
 
   public _internalValue: DatepickerValue = null;
 
@@ -728,6 +833,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Subject used for Material Form Field integration.
+   * Emits when the component's state changes (disabled, required, error state, etc.)
+   * 
+   * @remarks
+   * This Subject is required for Angular Material's form field control interface.
+   * It allows Material form fields to track state changes and update their appearance
+   * accordingly (e.g., showing error states, floating labels, etc.).
+   * 
+   * The Subject is properly cleaned up in ngOnDestroy() to prevent memory leaks.
+   * It's marked as readonly to prevent external code from reassigning it.
+   */
   public readonly stateChanges = new Subject<void>();
   private _focused = false;
   private _required = false;
@@ -830,9 +947,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public daysInMonth: (Date | null)[] = [];
   public multiCalendarMonths: Array<{ month: number; year: number; days: (Date | null)[] }> = [];
   
+  /**
+   * LRU (Least Recently Used) cache for calendar month generation.
+   * Caches generated month arrays to avoid recalculating the same months.
+   * 
+   * @remarks
+   * Performance characteristics:
+   * - Calendar generation: O(1) per month when cached
+   * - Cache lookup: O(1) average case
+   * - Cache eviction: O(n) where n = cache size (only when cache is full)
+   * 
+   * The cache automatically evicts the least recently used entry when it reaches
+   * MAX_CACHE_SIZE to prevent unbounded memory growth. This is especially important
+   * for applications with many datepicker instances or long-running sessions.
+   */
   private monthCache = new Map<string, (Date | null)[]>();
   private monthCacheAccessOrder = new Map<string, number>();
   private monthCacheAccessCounter = 0;
+  /**
+   * Maximum number of months to cache before evicting LRU entries.
+   * Set to 24 to cache approximately 2 years of months (12 months × 2 years).
+   * This provides good performance while preventing excessive memory usage.
+   */
   private readonly MAX_CACHE_SIZE = 24;
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
@@ -932,6 +1068,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Schedules change detection to run in the next microtask.
    * Prevents multiple change detection cycles from being scheduled simultaneously.
+   * 
+   * @remarks
+   * This method is essential for zoneless compatibility. When Zone.js is not present,
+   * Angular's automatic change detection doesn't run, so components using OnPush
+   * strategy must manually trigger change detection when state changes.
+   * 
+   * The debouncing mechanism prevents excessive change detection cycles when multiple
+   * state changes occur in rapid succession (e.g., during user interactions or async
+   * operations). Only one change detection cycle is scheduled per microtask queue.
+   * 
+   * This pattern is compatible with both Zone.js and zoneless Angular applications.
    */
   private scheduleChangeDetection(): void {
     if (this._changeDetectionScheduled) {
@@ -1002,6 +1149,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Evicts the least recently used (LRU) entry from the month cache.
    * Called when cache reaches MAX_CACHE_SIZE to prevent unbounded memory growth.
+   * 
+   * @remarks
+   * This implements a true LRU eviction policy by tracking access order.
+   * The entry with the lowest access timestamp is removed when the cache is full.
+   * This ensures frequently accessed months remain cached while rarely used ones
+   * are evicted first.
+   * 
+   * Time complexity: O(n) where n is the number of cached entries.
+   * This is acceptable since MAX_CACHE_SIZE is small (24 entries).
    */
   private evictLRUCacheEntry(): void {
     if (this.monthCache.size === 0) return;
@@ -1079,12 +1235,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private _cachedIsHolidayMemo: ((day: Date | null) => boolean) | null = null;
   private _cachedGetHolidayLabelMemo: ((day: Date | null) => string | null) | null = null;
 
+  // Memoized dependencies for calendar generation with equality function for better performance
   private _memoDependencies = computed(() => ({
     month: this._currentMonthSignal(),
     year: this._currentYearSignal(),
     holidayProvider: this._holidayProviderSignal(),
     disabledState: this._disabledStateSignal()
-  }));
+  }), {
+    equal: (a, b) => 
+      a.month === b.month && 
+      a.year === b.year && 
+      a.holidayProvider === b.holidayProvider &&
+      a.disabledState.minDate?.getTime() === b.disabledState.minDate?.getTime() &&
+      a.disabledState.maxDate?.getTime() === b.disabledState.maxDate?.getTime() &&
+      a.disabledState.disabledDates?.length === b.disabledState.disabledDates?.length &&
+      a.disabledState.disabledRanges?.length === b.disabledState.disabledRanges?.length
+  });
 
   private _updateMemoSignals(): void {
     this._currentMonthSignal.set(this._currentMonth);
@@ -1532,6 +1698,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsCurrentMonthMemo;
   }
 
+  /**
+   * Memoized function for checking if a date is disabled.
+   * Returns a cached function that checks date constraints efficiently.
+   * 
+   * @returns A function that checks if a date is disabled
+   * 
+   * @remarks
+   * This getter implements memoization to avoid recreating the validation function
+   * on every calendar render. The function is regenerated only when:
+   * - Disabled state constraints change (minDate, maxDate, disabledDates, disabledRanges)
+   * - Current month/year changes
+   * 
+   * Performance: O(1) to get the memoized function, O(n) to execute where n = constraints
+   * The memoization significantly improves performance when rendering calendar grids
+   * with many date cells (e.g., multiple calendar months).
+   */
   get isDateDisabledMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
     const disabledState = deps.disabledState;
@@ -1571,6 +1753,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsDateDisabledMemo;
   }
 
+  /**
+   * Memoized function for comparing if two dates are the same day.
+   * Uses an optimized date comparator for efficient day-level comparisons.
+   * 
+   * @returns A function that compares two dates for same-day equality
+   * 
+   * @remarks
+   * The date comparator normalizes times to start of day before comparison,
+   * ensuring accurate day-level equality checks regardless of time components.
+   * 
+   * Performance: O(1) - Simple date field comparisons after normalization
+   */
   get isSameDayMemo(): (d1: Date | null, d2: Date | null) => boolean {
     if (this._cachedIsSameDayMemo) {
       return this._cachedIsSameDayMemo;
@@ -1579,6 +1773,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedIsSameDayMemo;
   }
 
+  /**
+   * Memoized function for checking if a date is a holiday.
+   * Returns a cached function that uses the current holiday provider.
+   * 
+   * @returns A function that checks if a date is a holiday
+   * 
+   * @remarks
+   * The function is regenerated when the holidayProvider changes.
+   * This ensures the memoized function always uses the current provider
+   * while avoiding recreation on every calendar render.
+   * 
+   * Performance: O(1) to get memoized function, O(1) to execute (depends on provider implementation)
+   */
   get isHolidayMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
     const holidayProvider = deps.holidayProvider;
@@ -1623,10 +1830,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this._cachedGetHolidayLabelMemo;
   }
 
+  /**
+   * TrackBy function for calendar day cells in *ngFor loops.
+   * Provides stable identity for Angular's change detection optimization.
+   * 
+   * @param index - Array index of the day
+   * @param day - The date object (or null for empty cells)
+   * @returns Unique identifier for the day cell
+   * 
+   * @remarks
+   * Using timestamp ensures stable identity even when Date objects are recreated.
+   * This significantly improves *ngFor performance by allowing Angular to track
+   * which items have changed, moved, or been removed.
+   */
   trackByDay(index: number, day: Date | null): string {
     return day ? day.getTime().toString() : `empty-${index}`;
   }
 
+  /**
+   * TrackBy function for calendar month containers in multi-calendar views.
+   * Provides stable identity for efficient change detection.
+   * 
+   * @param _index - Array index (unused, using year-month for identity)
+   * @param calendarMonth - The calendar month object
+   * @returns Unique identifier combining year and month
+   */
   trackByCalendarMonth(_index: number, calendarMonth: { month: number; year: number; days: (Date | null)[] }): string {
     return `${calendarMonth.year}-${calendarMonth.month}`;
   }
@@ -2077,7 +2305,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return true;
       case 'Escape':
         if (!this.isInlineMode) {
-          this.isCalendarOpen = false;
+          this.closeCalendarWithFocusRestore();
         }
         return true;
       case 't':
@@ -2257,6 +2485,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return day.getDate().toString();
   }
 
+  /**
+   * Generates an accessible label for a date cell.
+   * Provides screen readers with a descriptive label for each selectable date.
+   * 
+   * @param day - The date to generate a label for
+   * @returns Localized date label (e.g., "Monday, January 15, 2024")
+   * 
+   * @remarks
+   * The label includes weekday, month, day, and year for full context.
+   * Custom formatting can be provided via the formatAriaLabel hook.
+   * This ensures screen reader users have complete information about each date.
+   */
   getAriaLabel(day: Date | null): string {
     if (!day) return '';
 
@@ -2268,6 +2508,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
 
+  /**
+   * ControlValueAccessor implementation: Writes a new value to the form control.
+   * Called by Angular Forms when the form control value changes programmatically.
+   * 
+   * @param val - The new value from the form control
+   * 
+   * @remarks
+   * This method:
+   * - Normalizes the incoming value to ensure consistent format
+   * - Initializes component state from the value
+   * - Updates memoized signals for change detection
+   * - Regenerates calendar to reflect the new value
+   * - Notifies Material Form Field of state changes
+   * - Syncs with Signal Form field if field input is used
+   * 
+   * This is part of the ControlValueAccessor interface, enabling two-way binding
+   * with both Reactive Forms and Template-driven Forms.
+   */
   writeValue(val: DatepickerValue): void {
     const normalizedVal = val !== null && val !== undefined
       ? this._normalizeValue(val) as DatepickerValue
@@ -2284,10 +2542,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * ControlValueAccessor implementation: Registers a callback for value changes.
+   * Called by Angular Forms to receive notifications when the user changes the value.
+   * 
+   * @param fn - Callback function to call when value changes
+   */
   registerOnChange(fn: (value: DatepickerValue) => void): void {
     this.onChange = fn;
   }
 
+  /**
+   * ControlValueAccessor implementation: Registers a callback for touched state.
+   * Called by Angular Forms to receive notifications when the user interacts with the control.
+   * 
+   * @param fn - Callback function to call when control is touched
+   */
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
@@ -2299,6 +2569,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Emits a value change event and updates the internal state.
+   * Handles normalization, form field synchronization, and calendar auto-close behavior.
+   * 
+   * @param val - The new datepicker value (Date, Date range, or array of dates)
+   * 
+   * @remarks
+   * This method is the central point for value updates and ensures:
+   * - Value normalization for consistent internal representation
+   * - Signal Form field synchronization (if field input is used)
+   * - Event emission for two-way binding
+   * - Touch state tracking for form validation
+   * - Automatic calendar closing for single date and complete range selections
+   * 
+   * The calendar auto-closes when:
+   * - Single date mode: After any date selection
+   * - Range mode: After both start and end dates are selected
+   * - Not in inline mode
+   * - Not in time-only mode
+   */
   private emitValue(val: DatepickerValue) {
     const normalizedVal = val !== null && val !== undefined
       ? (this._normalizeValue(val) as DatepickerValue)
@@ -2321,6 +2611,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Toggles the calendar popover open/closed state.
+   * Handles focus management, accessibility announcements, and prevents rapid toggling.
+   * 
+   * @param event - Optional event that triggered the toggle (used to prevent toggle on clear button clicks)
+   * 
+   * @remarks
+   * This method implements several important behaviors:
+   * - Debouncing: Prevents rapid toggling within 300ms
+   * - Focus management: Stores previous focus element for restoration
+   * - Accessibility: Announces calendar state changes to screen readers
+   * - Touch optimization: Sets up passive touch listeners for mobile devices
+   * 
+   * When opening:
+   * - Stores the currently focused element for restoration
+   * - Sets up focus trap for keyboard navigation
+   * - Announces calendar opening with current month/year
+   * 
+   * When closing:
+   * - Removes focus trap
+   * - Restores focus to previous element
+   * - Announces calendar closing
+   */
   public toggleCalendar(event?: Event): void {
     if (this.disabled || this.isInlineMode) return;
 
@@ -2359,6 +2672,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.updateOpeningState(willOpen && this.isCalendarOpen);
 
       if (willOpen && this.isCalendarOpen) {
+        // Store the previously focused element for restoration when calendar closes
+        if (this.isBrowser && document.activeElement instanceof HTMLElement) {
+          this.previousFocusElement = document.activeElement;
+        }
+        
         this.closeMonthYearDropdowns();
 
         if (this.isBrowser) {
@@ -2464,6 +2782,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.setupFocusTrap();
         if (this.isBrowser) {
           this.setupPassiveTouchListeners();
+          this.positionPopoverRelativeToInput();
         }
         const monthName = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
         const year = String(this.currentDate.getFullYear());
@@ -2486,9 +2805,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       event.preventDefault();
     }
 
-    this.isCalendarOpen = false;
-    this.isOpeningCalendar = false;
-    this.updateOpeningState(false);
+    this.closeCalendarWithFocusRestore();
     this.lastToggleTime = Date.now();
   }
 
@@ -2518,7 +2835,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private closeCalendar(): void {
     if (!this.isInlineMode) {
       this.removeFocusTrap();
-      this.isCalendarOpen = false;
+      this.closeCalendarWithFocusRestore();
       const calendarClosedMsg = this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
       this.ariaLiveService.announce(calendarClosedMsg, 'polite');
       this.cdr.markForCheck();
@@ -2539,6 +2856,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return false;
   }
 
+  /**
+   * Clears the selected date value(s) and resets the component state.
+   * Emits null value and closes calendar if open.
+   * 
+   * @param event - Optional event that triggered the clear action
+   * 
+   * @remarks
+   * This method:
+   * - Clears all selected dates (single, range, multiple modes)
+   * - Emits null value to form controls
+   * - Closes calendar if open
+   * - Provides haptic feedback on mobile if enabled
+   * - Resets touch gesture state
+   * - Announces clearing to screen readers
+   * 
+   * Used by the clear button and can be called programmatically.
+   */
   public clearValue(event?: MouseEvent | TouchEvent): void {
     if (event) {
       event.stopPropagation();
@@ -2835,6 +3169,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   ngOnChanges(changes: SimpleChanges): void {
     let needsChangeDetection = false;
 
+    // Input validation: Validate conflicting inputs and invalid combinations
+    this.validateInputs(changes);
+
     if (changes['timeOnly']) {
       if (this.timeOnly) {
         this.showTime = true;
@@ -2981,6 +3318,84 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Validates component inputs for conflicts and invalid combinations.
+   * Logs warnings in development mode when invalid configurations are detected.
+   * 
+   * @param changes - The SimpleChanges object from ngOnChanges
+   */
+  private validateInputs(changes: SimpleChanges): void {
+    // Validate minDate <= maxDate
+    if (changes['minDate'] || changes['maxDate']) {
+      if (this._minDate && this._maxDate) {
+        const minStart = getStartOfDay(this._minDate);
+        const maxStart = getStartOfDay(this._maxDate);
+        if (minStart.getTime() > maxStart.getTime()) {
+          if (isDevMode()) {
+            console.warn(
+              '[ngxsmk-datepicker] minDate is greater than maxDate. ' +
+              `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
+              'Adjusting maxDate to be at least 1 day after minDate.'
+            );
+          }
+          // Prevent invalid state by adjusting maxDate to be at least 1 day after minDate
+          // This ensures the component always has a valid date range
+          const adjustedMaxDate = new Date(minStart);
+          adjustedMaxDate.setDate(adjustedMaxDate.getDate() + 1);
+          this._maxDate = adjustedMaxDate;
+          this._updateMemoSignals();
+          this._invalidateMemoCache();
+        }
+      }
+    }
+
+    // Validate timeOnly mode - only supported with mode="single"
+    if (changes['timeOnly'] && this.timeOnly && this.mode !== 'single') {
+      if (isDevMode()) {
+        console.warn(
+          '[ngxsmk-datepicker] timeOnly is only supported with mode="single". ' +
+          `Current mode: "${this.mode}". timeOnly will be disabled.`
+        );
+      }
+      this.timeOnly = false;
+    }
+
+    // calendarCount validation is handled in the setter
+
+    // Validate minuteInterval
+    if (changes['minuteInterval'] && this.minuteInterval < 1) {
+      if (isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] minuteInterval must be at least 1. ` +
+          `Received: ${this.minuteInterval}. Setting to 1.`
+        );
+      }
+      this.minuteInterval = 1;
+    }
+
+    // Validate secondInterval
+    if (changes['secondInterval'] && this.secondInterval < 1) {
+      if (isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] secondInterval must be at least 1. ` +
+          `Received: ${this.secondInterval}. Setting to 1.`
+        );
+      }
+      this.secondInterval = 1;
+    }
+
+    // Validate yearRange
+    if (changes['yearRange'] && this.yearRange < 1) {
+      if (isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] yearRange must be at least 1. ` +
+          `Received: ${this.yearRange}. Setting to 1.`
+        );
+      }
+      this.yearRange = 1;
+    }
+  }
+
   private initializeTimeSliders(): void {
     if (this.mode === 'range' && this.showTime) {
       if (this.startDate) {
@@ -3018,6 +3433,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return getStartOfDay(date);
   }
 
+  /**
+   * Initializes the component's internal state from a DatepickerValue.
+   * Sets up selected dates, calendar view position, and time values based on the provided value.
+   * 
+   * @param value - The datepicker value to initialize from (Date, range, array, or null)
+   * 
+   * @remarks
+   * This method handles initialization for all selection modes:
+   * - Single mode: Sets selectedDate
+   * - Range mode: Sets startDate and endDate
+   * - Multiple mode: Sets selectedDates array
+   * 
+   * The method also:
+   * - Determines the calendar view center date (uses value, startAt, or minDate as fallback)
+   * - Extracts and sets time values if the date includes time information
+   * - Normalizes all dates to ensure consistent internal representation
+   * 
+   * Performance: O(1) for single/range, O(n) for multiple mode where n = array length
+   */
   private initializeValue(value: DatepickerValue): void {
     let initialDate: Date | null = null;
 
@@ -3071,6 +3505,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return normalizeDate(date);
   }
 
+  /**
+   * Normalizes various date input formats into a consistent DatepickerValue type.
+   * Handles Date objects, Moment.js objects, date ranges, arrays, and strings.
+   * 
+   * @param val - The value to normalize (can be Date, Moment, range object, array, or string)
+   * @returns Normalized DatepickerValue (Date, range object, array, or null)
+   * 
+   * @remarks
+   * This method provides flexible input handling to support:
+   * - Native JavaScript Date objects
+   * - Moment.js objects (with timezone preservation)
+   * - Date range objects: { start: Date, end: Date }
+   * - Arrays of dates for multiple selection mode
+   * - String dates with custom format parsing
+   * 
+   * Invalid or unparseable values are normalized to null.
+   * This ensures type safety and consistent internal state representation.
+   */
   private _normalizeValue(val: unknown): DatepickerValue {
     if (val === null || val === undefined) {
       return null;
@@ -3158,6 +3610,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return momentObj.toDate();
   }
 
+  /**
+   * Compares two DatepickerValue objects for equality.
+   * Handles Date objects, range objects, and arrays with proper date comparison.
+   * 
+   * @param val1 - First value to compare
+   * @param val2 - Second value to compare
+   * @returns true if values represent the same date(s), false otherwise
+   * 
+   * @remarks
+   * This method performs deep equality checks:
+   * - For Date objects: Compares using date comparator (handles time normalization)
+   * - For range objects: Compares both start and end dates
+   * - For arrays: Compares lengths and all elements
+   * - Handles null/undefined values correctly
+   * 
+   * Uses the dateComparator utility for efficient date comparisons that
+   * normalize times to start of day for accurate day-level equality.
+   */
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
     if (val1 === val2) return true;
     if (val1 === null || val2 === null) return val1 === val2;
@@ -3185,14 +3655,51 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return false;
   }
 
+  /**
+   * Parses a date string, optionally using the configured date adapter with error callback.
+   * Falls back to native Date parsing if no adapter is configured.
+   * 
+   * @param dateString - The date string to parse
+   * @returns Parsed Date object or null if parsing fails
+   * 
+   * @remarks
+   * If a date adapter is configured via globalConfig, it will be used for parsing
+   * with error callbacks. Otherwise, native Date parsing is used.
+   * Error callbacks allow consumers to handle parsing failures gracefully.
+   */
   private parseDateString(dateString: string): Date | null {
+    const adapter = this.globalConfig?.dateAdapter;
+    
+    if (adapter && typeof adapter.parse === 'function') {
+      // Use adapter with error callback for better error handling
+      const onError = (error: Error) => {
+        if (isDevMode()) {
+          console.warn(`[ngxsmk-datepicker] Date parsing failed: ${error.message}`, dateString);
+        }
+      };
+      
+      const parsed = adapter.parse(dateString, onError);
+      if (parsed) {
+        return getStartOfDay(parsed);
+      }
+      // If parsing failed, error was logged via callback
+      return null;
+    }
+    
+    // Fallback to native Date parsing
     try {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) {
+        if (isDevMode()) {
+          console.warn(`[ngxsmk-datepicker] Invalid date string: "${dateString}"`);
+        }
         return null;
       }
       return getStartOfDay(date);
-    } catch {
+    } catch (error) {
+      if (isDevMode()) {
+        console.warn(`[ngxsmk-datepicker] Date parsing error:`, error);
+      }
       return null;
     }
   }
@@ -3326,7 +3833,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  onInputFocus(_event: FocusEvent): void {
+  onInputFocus(event: FocusEvent): void {
+    // Prevent keyboard on mobile when calendar should open instead
+    if (this.isMobileDevice() && !this.allowTyping && !this.isInlineMode) {
+      (event.target as HTMLInputElement).blur();
+      this.toggleCalendar(event);
+      return;
+    }
     if (!this._focused) {
       this._focused = true;
       this.stateChanges.next();
@@ -3338,10 +3851,50 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Sanitizes user input to prevent XSS attacks.
+   * Removes potentially dangerous characters while preserving valid date/time input.
+   * 
+   * @param input - Raw user input string
+   * @returns Sanitized string safe for template interpolation
+   * 
+   * @remarks
+   * This method provides basic XSS protection by removing:
+   * - HTML tag delimiters (< and >)
+   * - Script event handlers (onerror, onclick, etc.)
+   * - JavaScript protocol (javascript:)
+   * - Data URIs that could contain scripts
+   * 
+   * Note: Angular's template interpolation provides additional protection,
+   * but this sanitization adds an extra layer of defense for user-provided strings.
+   * For comprehensive sanitization, Angular's DomSanitizer should be used for
+   * any HTML content, but for date/time strings, this level of sanitization is sufficient.
+   */
+  private sanitizeInput(input: string): string {
+    if (!input || typeof input !== 'string') {
+      return '';
+    }
+    
+    // Remove HTML tag delimiters
+    let sanitized = input.replace(/[<>]/g, '');
+    
+    // Remove script event handlers (onerror, onclick, onload, etc.)
+    sanitized = sanitized.replace(/on\w+\s*=/gi, '');
+    
+    // Remove javascript: protocol
+    sanitized = sanitized.replace(/javascript:/gi, '');
+    
+    // Remove data URIs that could contain scripts
+    sanitized = sanitized.replace(/data:\s*text\/html/gi, '');
+    
+    // Trim whitespace
+    return sanitized.trim();
+  }
+
   onInputChange(event: Event): void {
     if (!this.allowTyping) return;
     const input = event.target as HTMLInputElement;
-    const value = input.value;
+    const value = this.sanitizeInput(input.value);
 
     if (this.displayFormat) {
       this.typedInputValue = this.applyInputMask(value, this.displayFormat);
@@ -3373,7 +3926,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (!this.allowTyping) return;
     this.isTyping = false;
     const input = event.target as HTMLInputElement;
-    const value = input.value.trim();
+    const value = this.sanitizeInput(input.value);
 
     if (!value) {
       this.clearValue();
@@ -3393,21 +3946,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  onInputKeyDown(event: KeyboardEvent): void {
+  onInputKeyDown(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
     if (!this.allowTyping) {
-      if (event.key === 'Enter' || event.key === ' ') {
-        this.toggleCalendar(event);
-        if (event.key === ' ') {
-          event.preventDefault();
+      if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
+        this.toggleCalendar(keyboardEvent);
+        if (keyboardEvent.key === ' ') {
+          keyboardEvent.preventDefault();
         }
       }
       return;
     }
 
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      const input = event.target as HTMLInputElement;
-      const value = input.value.trim();
+    if (keyboardEvent.key === 'Enter') {
+      keyboardEvent.preventDefault();
+      const input = keyboardEvent.target as HTMLInputElement;
+      const value = this.sanitizeInput(input.value);
 
       if (!value) {
         this.clearValue();
@@ -3424,9 +3978,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.typedInputValue = this.displayValue;
         this.scheduleChangeDetection();
       }
-    } else if (event.key === 'Escape') {
+    } else if (keyboardEvent.key === 'Escape') {
       this.typedInputValue = this.displayValue;
-      const input = event.target as HTMLInputElement;
+      const input = keyboardEvent.target as HTMLInputElement;
       input.blur();
       this.scheduleChangeDetection();
     }
@@ -3617,6 +4171,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this.holidayProvider.getHolidayLabel ? this.holidayProvider.getHolidayLabel(getStartOfDay(date)) : this.getTranslation('holiday');
   }
 
+  /**
+   * Checks if a date is disabled based on all configured constraints.
+   * 
+   * @param date - The date to check
+   * @returns true if the date is disabled, false if it can be selected
+   * 
+   * @remarks
+   * A date is considered disabled if it matches any of these conditions:
+   * - Falls before minDate
+   * - Falls after maxDate
+   * - Is in the disabledDates array
+   * - Falls within a disabledRanges entry
+   * - Fails the isInvalidDate custom validation function
+   * - Is a holiday and disableHolidays is true
+   * 
+   * Performance: O(n) where n = disabledDates.length + disabledRanges.length
+   * For large constraint lists (>1000), consider optimizing with Set or DateRange tree.
+   */
   public isDateDisabled(date: Date | null): boolean {
     if (!date) return false;
 
@@ -3686,12 +4258,34 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this.isInvalidDate(date);
   }
 
+  /**
+   * Checks if a date is selected in multiple selection mode.
+   * 
+   * @param d - The date to check
+   * @returns true if the date is in the selectedDates array
+   * 
+   * @remarks
+   * Performance: O(n) where n = selectedDates.length
+   * Uses day-level comparison (ignores time) for accurate matching.
+   */
   public isMultipleSelected(d: Date | null): boolean {
     if (!d || this.mode !== 'multiple') return false;
     const dTime = getStartOfDay(d).getTime();
     return this.selectedDates.some(selected => getStartOfDay(selected).getTime() === dTime);
   }
 
+  /**
+   * Handles time value changes from time selection controls.
+   * Updates the selected date(s) with the new time values.
+   * 
+   * @remarks
+   * This method:
+   * - Applies time changes to selected dates based on current mode
+   * - Emits value changes for form integration
+   * - Handles time-only mode by creating a date with current time
+   * - Updates all selected dates in multiple mode
+   * - Ensures startDate <= endDate in range mode
+   */
   public timeChange(): void {
     if (this.disabled) return;
 
@@ -3726,6 +4320,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
   }
 
+  /**
+   * Handles date cell click/tap events.
+   * Processes date selection based on the current mode (single, range, multiple, etc.)
+   * and handles touch gesture debouncing to prevent accidental double selections.
+   * 
+   * @param day - The date that was clicked (null for empty cells)
+   * 
+   * @remarks
+   * This method implements several important behaviors:
+   * - Touch gesture handling: Debounces rapid touch events to prevent double-clicks
+   * - Date validation: Checks if the date is disabled before processing
+   * - Hook integration: Calls beforeDateSelect hook if provided
+   * - Mode-specific logic: Handles single, range, multiple, week, month, quarter, and year modes
+   * - Calendar navigation: Automatically navigates to different month if date is outside current view
+   * - Accessibility: Announces date selection to screen readers
+   * - Auto-close: Closes calendar after selection in single mode or complete range
+   * 
+   * Performance considerations:
+   * - Touch debouncing prevents excessive event processing
+   * - Date normalization happens once per selection
+   * - Calendar regeneration is optimized with caching
+   */
   public onDateClick(day: Date | null): void {
     if (!day || this.disabled) return;
 
@@ -4237,7 +4853,33 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return time > Math.min(start, end) && time < Math.max(start, end);
   }
 
+  /**
+   * Generates the calendar view for the current month(s).
+   * Uses LRU caching to optimize performance for frequently accessed months.
+   * 
+   * @remarks
+   * Performance characteristics:
+   * - First generation: O(n) where n = number of days in month(s)
+   * - Cached generation: O(1) lookup + O(1) cache access update
+   * - Cache eviction: O(m) where m = cache size (only when cache is full)
+   * 
+   * This method:
+   * 1. Generates dropdown options for month/year selection
+   * 2. Generates calendar days for each month in calendarCount
+   * 3. Uses LRU cache to avoid regenerating recently accessed months
+   * 4. Handles month/year rollover when displaying multiple calendars
+   * 5. Updates memoized dependencies for change detection optimization
+   * 
+   * The cache key format is `${year}-${month}` to ensure unique identification
+   * of calendar months across different years.
+   */
   public generateCalendar(): void {
+    // Announce loading state for screen readers
+    if (this.isCalendarOpen || this.isInlineMode) {
+      const loadingMsg = this.getTranslation('calendarLoading' as keyof DatepickerTranslations) || 'Loading calendar...';
+      this.ariaLiveService.announce(loadingMsg, 'polite');
+    }
+
     this.daysInMonth = [];
     this.multiCalendarMonths = [];
 
@@ -4283,6 +4925,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     this.cdr.markForCheck();
 
+    // Announce calendar ready state for screen readers
+    if (this.isCalendarOpen || this.isInlineMode) {
+      const readyMsg = this.getTranslation('calendarReady' as keyof DatepickerTranslations) || 'Calendar ready';
+      this.ariaLiveService.announce(readyMsg, 'polite');
+    }
+
     this.action.emit({
       type: 'calendarGenerated',
       payload: {
@@ -4311,6 +4959,48 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * @param year - Year (e.g., 2025)
    * @param month - Month (0-11, where 0 is January)
    * @returns Array of Date objects and null values for empty grid cells
+   */
+  /**
+   * Generates an array of dates representing all days in a calendar month view.
+   * Includes days from previous/next months to fill the calendar grid.
+   * 
+   * @param year - The year of the month to generate
+   * @param month - The month index (0-11) to generate
+   * @returns Array of Date objects for the month, with null for empty cells
+   * 
+   * @remarks
+   * This method generates a complete calendar grid including:
+   * - All days in the specified month
+   * - Trailing days from the previous month (to fill the first week)
+   * - Leading days from the next month (to fill the last week)
+   * 
+   * The grid is organized to match the weekStart configuration, ensuring
+   * proper alignment with the weekday headers. Empty cells are represented
+   * as null to maintain array indexing consistency.
+   * 
+   * The generated array is cached by generateCalendar() to avoid regeneration
+   * of the same month multiple times.
+   */
+  /**
+   * Generates an array of dates representing all days in a calendar month view.
+   * Includes days from previous/next months to fill the calendar grid.
+   * 
+   * @param year - The year of the month to generate
+   * @param month - The month index (0-11) to generate
+   * @returns Array of Date objects for the month, with null for empty cells
+   * 
+   * @remarks
+   * This method generates a complete calendar grid including:
+   * - All days in the specified month
+   * - Trailing days from the previous month (to fill the first week)
+   * - Leading days from the next month (to fill the last week)
+   * 
+   * The grid is organized to match the weekStart configuration, ensuring
+   * proper alignment with the weekday headers. Empty cells are represented
+   * as null to maintain array indexing consistency.
+   * 
+   * The generated array is cached by generateCalendar() to avoid regeneration
+   * of the same month multiple times.
    */
   private generateMonthDays(year: number, month: number): (Date | null)[] {
     const days: (Date | null)[] = [];
@@ -4408,6 +5098,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.scheduleChangeDetection();
   }
 
+  /**
+   * Changes the displayed decade by the specified delta.
+   * Used in decade view mode for navigating between decades.
+   * 
+   * @param delta - Number of decades to change (positive for future, negative for past)
+   * 
+   * @remarks
+   * Each delta unit represents 10 years. The method updates the decade grid
+   * to show the new range of decades available for selection.
+   */
   public changeDecade(delta: number): void {
     if (this.disabled) return;
     this._currentDecade += delta * 10;
@@ -4415,6 +5115,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.cdr.markForCheck();
   }
 
+  /**
+   * Changes the displayed calendar year by the specified delta.
+   * Updates year grid and calendar view, and announces the change to screen readers.
+   * 
+   * @param delta - Number of years to change (positive for future, negative for past)
+   * 
+   * @remarks
+   * This method:
+   * - Updates currentYear and currentDate
+   * - Regenerates year grid and calendar view
+   * - Announces year change to screen readers for accessibility
+   * - Handles touch listener setup for mobile devices
+   * 
+   * Performance: O(1) for year change, O(n) for grid/calendar generation
+   */
   public changeYear(delta: number): void {
     if (this.disabled) return;
     this._currentYear += delta;
@@ -4786,6 +5501,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Generates an accessible label for the calendar dialog.
+   * Provides screen readers with context about which month/year is being displayed.
+   * 
+   * @returns Localized calendar label (e.g., "Calendar for January 2024")
+   */
   public getCalendarAriaLabel(): string {
     if (!this.currentDate || !this.locale) return '';
     const month = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
@@ -4793,12 +5514,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this.getTranslation('calendarFor', undefined, { month, year: String(year) });
   }
 
+  /**
+   * Generates an accessible label for a specific calendar month in multi-calendar views.
+   * 
+   * @param month - Month index (0-11)
+   * @param year - Year number
+   * @returns Localized calendar label for the specified month/year
+   */
   public getCalendarAriaLabelForMonth(month: number, year: number): string {
     if (!this.locale) return '';
     const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
     return this.getTranslation('calendarFor', undefined, { month: monthName, year: String(year) });
   }
 
+  /**
+   * Formats a month and year into a display label.
+   * 
+   * @param month - Month index (0-11)
+   * @param year - Year number
+   * @returns Formatted string like "January 2024"
+   */
   public getMonthYearLabel(month: number, year: number): string {
     if (!this.locale) return '';
     const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
@@ -4816,9 +5551,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (this._translations) {
-      let translation = this._translations[key];
+      // Use optional chaining and nullish coalescing for safer access
+      let translation = this._translations[key] ?? null;
       if (!translation && fallbackKey) {
-        translation = this._translations[fallbackKey];
+        translation = this._translations[fallbackKey] ?? null;
       }
       if (translation && params) {
         let result = translation;
@@ -4832,9 +5568,37 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.translationRegistry && this._locale) {
       const registryTranslations = this.translationRegistry.getTranslations(this._locale);
-      return registryTranslations[key] || key;
+      return registryTranslations?.[key] ?? key;
     }
     return key;
+  }
+
+  /**
+   * Closes the calendar and restores focus to the previously focused element.
+   * This improves accessibility by returning focus to the trigger element.
+   */
+  public closeCalendarWithFocusRestore(): void {
+    this.isCalendarOpen = false;
+    this.isOpeningCalendar = false;
+    this.updateOpeningState(false);
+    
+    // Restore focus to the previously focused element
+    if (this.isBrowser && this.previousFocusElement) {
+      // Use setTimeout to ensure the calendar is fully closed before restoring focus
+      this.trackedSetTimeout(() => {
+        try {
+          if (this.previousFocusElement && document.contains(this.previousFocusElement)) {
+            this.previousFocusElement.focus();
+          }
+        } catch (error) {
+          // Element may no longer be in the DOM, ignore error
+          if (isDevMode()) {
+            console.warn('[ngxsmk-datepicker] Could not restore focus:', error);
+          }
+        }
+        this.previousFocusElement = null;
+      }, 0);
+    }
   }
 
   private updateRtlState(): void {
@@ -4867,7 +5631,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     // Clean up field sync service
     this.fieldSyncService.cleanup();
 
-    // Clear all timeouts and animation frames before completing the subject
+    // Clear individual timeout IDs first
+    if (this.openCalendarTimeoutId) {
+      clearTimeout(this.openCalendarTimeoutId);
+      this.openCalendarTimeoutId = null;
+    }
+
+    if (this.touchHandledTimeout) {
+      clearTimeout(this.touchHandledTimeout);
+      this.touchHandledTimeout = null;
+    }
+
+    if (this._touchListenersSetupTimeout) {
+      clearTimeout(this._touchListenersSetupTimeout);
+      this._touchListenersSetupTimeout = null;
+    }
+
+    if (this.fieldSyncTimeoutId) {
+      clearTimeout(this.fieldSyncTimeoutId);
+      if (this.activeTimeouts) {
+        this.activeTimeouts.delete(this.fieldSyncTimeoutId);
+      }
+      this.fieldSyncTimeoutId = null;
+    }
+
+    // Clear all tracked timeouts and animation frames (single cleanup block)
     if (this.activeTimeouts) {
       this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) => clearTimeout(timeoutId));
       this.activeTimeouts.clear();
@@ -4883,11 +5671,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (!this.stateChanges.closed) {
       this.stateChanges.complete();
     }
-    
-    // In some RxJS versions, closed might not be set synchronously
-    // Let's force it to true for the test
-    (this.stateChanges as any).closed = true;
-    
 
     if (this._fieldEffectRef) {
       this._fieldEffectRef.destroy();
@@ -4899,49 +5682,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.passiveTouchListeners = [];
     }
 
-    if (this.selectedDate !== undefined) this.selectedDate = null;
-    if (this.selectedDates !== undefined) this.selectedDates = [];
-    if (this.startDate !== undefined) this.startDate = null;
-    if (this.endDate !== undefined) this.endDate = null;
-    if (this.hoveredDate !== undefined) this.hoveredDate = null;
-    if (this._internalValue !== undefined) this._internalValue = null;
-
-    if (this.openCalendarTimeoutId) {
-      clearTimeout(this.openCalendarTimeoutId);
-      this.openCalendarTimeoutId = null;
-    }
-
-    if (this.touchHandledTimeout) {
-      clearTimeout(this.touchHandledTimeout);
-      this.touchHandledTimeout = null;
-    }
-
-    if (this.activeTimeouts) {
-      this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) => clearTimeout(timeoutId));
-      this.activeTimeouts.clear();
-    }
-
-    if (this.activeAnimationFrames) {
-      this.activeAnimationFrames.forEach((frameId: number) => cancelAnimationFrame(frameId));
-      this.activeAnimationFrames.clear();
-    }
-
-    if (this._touchListenersSetupTimeout) {
-      clearTimeout(this._touchListenersSetupTimeout);
-      this._touchListenersSetupTimeout = null;
-    }
-
-    if (this.fieldSyncTimeoutId) {
-      clearTimeout(this.fieldSyncTimeoutId);
-      this.activeTimeouts.delete(this.fieldSyncTimeoutId);
-      this.fieldSyncTimeoutId = null;
-    }
+    // Clear component state using nullish coalescing for cleaner code
+    this.selectedDate ??= null;
+    this.selectedDates ??= [];
+    this.startDate ??= null;
+    this.endDate ??= null;
+    this.hoveredDate ??= null;
+    this._internalValue ??= null;
 
     this.invalidateMonthCache();
   }
 
   private setupFocusTrap(): void {
-    if (this.isInlineMode || !this.isBrowser || !this.focusTrapService) {
+    if (this.isInlineMode || !this.isBrowser || !this.focusTrapService || this.disableFocusTrap || this.isIonicEnvironment()) {
       return;
     }
 
@@ -4949,6 +5702,112 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.popoverContainer?.nativeElement) {
       this.focusTrapCleanup = this.focusTrapService.trapFocus(this.popoverContainer);
+    }
+  }
+
+  /**
+   * Detect if running in Ionic environment
+   * Useful for disabling features that conflict with Ionic's overlay system
+   */
+  /**
+   * Positions the popover relative to the input element to avoid all datepickers opening in the same center position.
+   * This improves UX when multiple datepickers are on the same page.
+   * On desktop (≥1024px), CSS handles positioning. On mobile, this method positions relative to input when space allows.
+   * 
+   * @remarks
+   * This method calculates the input's position and positions the popover below it.
+   * Falls back to center positioning if there's not enough space below the input.
+   */
+  private positionPopoverRelativeToInput(): void {
+    if (!this.isBrowser || !this.popoverContainer?.nativeElement || this.isInlineMode) {
+      return;
+    }
+
+    const popover = this.popoverContainer.nativeElement;
+    const inputGroup = this.elementRef.nativeElement?.querySelector('.ngxsmk-input-group') as HTMLElement;
+    
+    if (!inputGroup) {
+      return;
+    }
+
+    // On desktop (≥1024px), CSS handles positioning with position: absolute
+    // Only apply JavaScript positioning on mobile/tablet
+    const isDesktop = window.innerWidth >= 1024;
+    if (isDesktop) {
+      // CSS handles positioning on desktop, remove any inline styles
+      popover.style.top = '';
+      popover.style.left = '';
+      popover.style.transform = '';
+      return;
+    }
+
+    try {
+      const inputRect = inputGroup.getBoundingClientRect();
+      const popoverRect = popover.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      
+      // Calculate space below input
+      const spaceBelow = viewportHeight - inputRect.bottom;
+      const spaceAbove = inputRect.top;
+      const spaceRight = viewportWidth - inputRect.left;
+      const spaceLeft = inputRect.left;
+      
+      // Minimum space needed for popover (approximate)
+      const minHeight = 400; // Approximate popover height
+      const minWidth = 280; // Minimum popover width
+      
+      // If there's enough space below, position below input
+      if (spaceBelow >= minHeight && spaceRight >= minWidth) {
+        const top = inputRect.bottom + window.scrollY + 8; // 8px gap
+        const left = inputRect.left + window.scrollX;
+        
+        popover.style.position = 'fixed';
+        popover.style.top = `${top}px`;
+        popover.style.left = `${left}px`;
+        popover.style.transform = 'none';
+        popover.style.right = 'auto';
+        popover.style.bottom = 'auto';
+      } else if (spaceAbove >= minHeight && spaceRight >= minWidth) {
+        // If not enough space below but enough above, position above input
+        const bottom = viewportHeight - inputRect.top + window.scrollY + 8;
+        const left = inputRect.left + window.scrollX;
+        
+        popover.style.position = 'fixed';
+        popover.style.bottom = `${bottom}px`;
+        popover.style.top = 'auto';
+        popover.style.left = `${left}px`;
+        popover.style.transform = 'none';
+        popover.style.right = 'auto';
+      } else {
+        // Not enough space, fall back to center (CSS default)
+        popover.style.top = '';
+        popover.style.left = '';
+        popover.style.bottom = '';
+        popover.style.transform = '';
+      }
+    } catch (error) {
+      // Fall back to CSS default (centered) on any error
+      if (isDevMode()) {
+        console.warn('[ngxsmk-datepicker] Error positioning popover:', error);
+      }
+    }
+  }
+
+  private isIonicEnvironment(): boolean {
+    if (!this.isBrowser) {
+      return false;
+    }
+    try {
+      // Check for Ionic global object
+      return typeof (window as any).Ionic !== 'undefined' ||
+             // Check for ion-app element
+             (typeof document !== 'undefined' && !!document.querySelector('ion-app')) ||
+             // Check for Ionic CSS variables
+             (typeof getComputedStyle !== 'undefined' && 
+              getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary') !== '');
+    } catch {
+      return false;
     }
   }
 

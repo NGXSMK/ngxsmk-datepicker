@@ -730,6 +730,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IonItem, IonLabel } from '@ionic/angular/standalone';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 
+// Add to your global.scss:
+// @import 'ngxsmk-datepicker/styles/ionic-integration.css';
+
 @Component({
   selector: 'app-ionic-form',
   standalone: true,
@@ -745,6 +748,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         <ion-label position="stacked">Appointment Date</ion-label>
         <ngxsmk-datepicker
           mode="single"
+          [inline]="true"
+          [disableFocusTrap]="true"
           formControlName="appointmentDate"
           placeholder="Select date">
         </ngxsmk-datepicker>
@@ -799,8 +804,9 @@ export class PlainFormComponent {
   <ion-label>Check-in / Check-out</ion-label>
   <ngxsmk-datepicker
     mode="range"
-    [theme]="'light'"
-    formControlName="bookingDates">
+    [inline]="true"
+    [disableFocusTrap]="true"
+    formControlName="dateRange">
   </ngxsmk-datepicker>
 </ion-item>`;
 
@@ -1174,6 +1180,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         mode="single"
         placeholder="Select a date">
       </ngxsmk-datepicker>
+      
+      <button [disabled]="!myForm().dirty()">Save Changes</button>
     </form>
   \`
 })
@@ -1183,6 +1191,9 @@ export class FormComponent {
   myForm = form(this.localObject, objectSchema({
     myDate: objectSchema<Date>()
   }));
+  
+  // The form automatically tracks dirty state
+  // myForm().dirty() returns true after user selects a date
 }`;
 
   public signalFormsFieldHtmlCode = `<form>
@@ -1191,14 +1202,17 @@ export class FormComponent {
     mode="single"
     placeholder="Select a date">
   </ngxsmk-datepicker>
+  
+  <button [disabled]="!myForm().dirty()">Save Changes</button>
 </form>
 
 <!-- The [field] input automatically:
      - Syncs value from form to datepicker
      - Updates form when datepicker value changes
+     - Tracks dirty state (form().dirty() returns true after date selection)
      - Handles disabled state automatically -->`;
 
-  public signalFormsFieldExampleCode = `// Example: Using with validation
+  public signalFormsFieldExampleCode = `// Example: Using with validation and dirty state tracking
 import { Component, signal, form, objectSchema, validators } from '@angular/core';
 
 export class ValidatedFormComponent {
@@ -1213,6 +1227,14 @@ export class ValidatedFormComponent {
       ]
     })
   }));
+  
+  submitForm() {
+    if (!this.myForm().dirty()) {
+      console.log('No changes to save');
+      return;
+    }
+    // Submit form...
+  }
 }
 
 // Example: Date range with Signal Forms
@@ -1245,12 +1267,15 @@ export class RangeFormComponent {
 <ngxsmk-datepicker
   [field]="myForm.dateRange"
   mode="range">
-</ngxsmk-datepicker>`;
+</ngxsmk-datepicker>
+
+<!-- The [field] binding automatically tracks dirty state -->
+<button [disabled]="!myForm().dirty()">Save</button>`;
 
   public angular21FeaturesCode = `// Angular 21 is officially released! 🎉
 // ngxsmk-datepicker is fully compatible with all Angular 21 features
 
-// ✅ Signal Forms (Experimental)
+// ✅ Signal Forms
 import { Component, signal, form, objectSchema } from '@angular/core';
 
 @Component({

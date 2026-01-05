@@ -1,27 +1,32 @@
 import { Component, OnInit, OnDestroy, PLATFORM_ID, inject, AfterViewInit } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-snow-overlay',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
-    <div class="snow-overlay" *ngIf="isActive">
-      <div class="snowflake" *ngFor="let flake of snowflakes; trackBy: trackByIndex" 
-           [style.left.%]="flake.left"
-           [style.animation-delay.s]="flake.delay"
-           [style.animation-duration.s]="flake.duration">
-        ❄
+    @if (isActive) {
+      <div class="snow-overlay">
+        @for (flake of snowflakes; track $index) {
+          <div class="snowflake" 
+               [style.left.%]="flake.left"
+               [style.animation-delay.s]="flake.delay"
+               [style.animation-duration.s]="flake.duration">
+            ❄
+          </div>
+        }
       </div>
-    </div>
-    <button 
-      *ngIf="isBrowser"
-      class="snow-toggle-btn"
-      (click)="toggleSnow()"
-      [attr.aria-label]="isActive ? 'Disable snow effect' : 'Enable snow effect'"
-      [title]="isActive ? 'Disable snow effect' : 'Enable snow effect'">
-      {{ isActive ? '❄️' : '☃️' }}
-    </button>
+    }
+    @if (isBrowser) {
+      <button 
+        class="snow-toggle-btn"
+        (click)="toggleSnow()"
+        [attr.aria-label]="isActive ? 'Disable snow effect' : 'Enable snow effect'"
+        [title]="isActive ? 'Disable snow effect' : 'Enable snow effect'">
+        {{ isActive ? '❄️' : '☃️' }}
+      </button>
+    }
   `,
   styles: [`
     .snow-overlay {
@@ -209,10 +214,6 @@ export class SnowOverlayComponent implements OnInit, OnDestroy, AfterViewInit {
         duration: 3 + Math.random() * 7 // 3-10 seconds
       });
     }
-  }
-
-  trackByIndex(index: number): number {
-    return index;
   }
 
   ngOnDestroy(): void {

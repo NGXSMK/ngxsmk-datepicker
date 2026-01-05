@@ -67,6 +67,7 @@
             "outputPath": "dist/demo-app",
             "browser": "projects/demo-app/src/main.ts",
             "tsConfig": "projects/demo-app/tsconfig.app.json",
+            "preserveSymlinks": true,
             "polyfills": [
               "zone.js"
             ],

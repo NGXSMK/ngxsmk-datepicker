@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { HolidayProvider } from '../utils/calendar.utils';
 import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 
@@ -75,8 +75,15 @@ export class DateValidationService {
 
     // Check holidays
     if (constraints.disableHolidays && constraints.holidayProvider) {
-      if (constraints.holidayProvider.isHoliday(date)) {
-        return false;
+      try {
+        if (constraints.holidayProvider.isHoliday(date)) {
+          return false;
+        }
+      } catch (error) {
+        if (isDevMode()) {
+          console.warn('[ngxsmk-datepicker] Error in holidayProvider.isHoliday:', error);
+        }
+        // On error, don't disable the date - allow it to be selectable
       }
     }
 
@@ -102,7 +109,14 @@ export class DateValidationService {
       return false;
     }
 
-    return holidayProvider.isHoliday(date);
+    try {
+      return holidayProvider.isHoliday(date);
+    } catch (error) {
+      if (isDevMode()) {
+        console.warn('[ngxsmk-datepicker] Error in holidayProvider.isHoliday:', error);
+      }
+      return false;
+    }
   }
 
   /**
@@ -113,7 +127,14 @@ export class DateValidationService {
       return null;
     }
 
-    return holidayProvider.getHolidayLabel(date);
+    try {
+      return holidayProvider.getHolidayLabel(date);
+    } catch (error) {
+      if (isDevMode()) {
+        console.warn('[ngxsmk-datepicker] Error in holidayProvider.getHolidayLabel:', error);
+      }
+      return null;
+    }
   }
 
   /**

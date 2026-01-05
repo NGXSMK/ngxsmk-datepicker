@@ -23,7 +23,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v1.9.23</span>
+              <span class="logo-version">v2.0.0</span>
               @if (npmDownloads() !== null) {
                 <a 
                   href="https://www.npmjs.com/package/ngxsmk-datepicker" 
@@ -207,7 +207,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.23)</p>
+        <p class="hero-version">(v2.0.0)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{ t().getStarted }}</a>
@@ -592,6 +592,7 @@
           <ul>
             <li>{{ t().automaticTwoWayBinding }}</li>
             <li>{{ t().automaticDisabledState }}</li>
+            <li>{{ t().automaticDirtyStateTracking }}</li>
             <li>{{ t().worksWithSignalForms }}</li>
             <li>{{ t().typeSafeWithFieldTree }}</li>
           </ul>
@@ -611,7 +612,7 @@
           <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
             <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
             <h4 style="margin: 0 0 0.5rem 0;">Signal Forms</h4>
-            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's experimental Signal Forms API with [field] input binding</p>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's Signal Forms API with [field] input binding and automatic dirty state tracking</p>
           </div>
           
           <div class="feature-card" style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">

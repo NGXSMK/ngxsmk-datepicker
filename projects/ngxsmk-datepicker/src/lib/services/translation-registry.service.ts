@@ -102,7 +102,9 @@ export class TranslationRegistryService {
       dateSelected: 'Fecha seleccionada: {{date}}',
       rangeSelected: 'Rango seleccionado: {{start}} a {{end}}',
       monthChanged: 'Cambiado a {{month}} {{year}}',
-      yearChanged: 'Cambiado al año {{year}}'
+      yearChanged: 'Cambiado al año {{year}}',
+      calendarLoading: 'Cargando calendario...',
+      calendarReady: 'Calendario listo'
     };
     this.register('es', spanishTranslations);
     this.register('es-ES', spanishTranslations);
@@ -144,7 +146,9 @@ export class TranslationRegistryService {
       dateSelected: 'Date sélectionnée : {{date}}',
       rangeSelected: 'Plage sélectionnée : {{start}} à {{end}}',
       monthChanged: 'Changé pour {{month}} {{year}}',
-      yearChanged: 'Changé pour l\'année {{year}}'
+      yearChanged: 'Changé pour l\'année {{year}}',
+      calendarLoading: 'Chargement du calendrier...',
+      calendarReady: 'Calendrier prêt'
     };
     this.register('fr', frenchTranslations);
     this.register('fr-FR', frenchTranslations);
@@ -186,7 +190,9 @@ export class TranslationRegistryService {
       dateSelected: 'Datum ausgewählt: {{date}}',
       rangeSelected: 'Bereich ausgewählt: {{start}} bis {{end}}',
       monthChanged: 'Geändert zu {{month}} {{year}}',
-      yearChanged: 'Geändert zu Jahr {{year}}'
+      yearChanged: 'Geändert zu Jahr {{year}}',
+      calendarLoading: 'Kalender wird geladen...',
+      calendarReady: 'Kalender bereit'
     };
     this.register('de', germanTranslations);
     this.register('de-DE', germanTranslations);
@@ -228,7 +234,9 @@ export class TranslationRegistryService {
       dateSelected: 'تم تحديد التاريخ: {{date}}',
       rangeSelected: 'تم تحديد النطاق: {{start}} إلى {{end}}',
       monthChanged: 'تم التغيير إلى {{month}} {{year}}',
-      yearChanged: 'تم التغيير إلى السنة {{year}}'
+      yearChanged: 'تم التغيير إلى السنة {{year}}',
+      calendarLoading: 'جارٍ تحميل التقويم...',
+      calendarReady: 'التقويم جاهز'
     };
     this.register('ar', arabicTranslations);
     this.register('ar-SA', arabicTranslations);
@@ -270,7 +278,9 @@ export class TranslationRegistryService {
       dateSelected: '已选择日期: {{date}}',
       rangeSelected: '已选择范围: {{start}} 至 {{end}}',
       monthChanged: '已更改为 {{month}} {{year}}',
-      yearChanged: '已更改为 {{year}} 年'
+      yearChanged: '已更改为 {{year}} 年',
+      calendarLoading: '正在加载日历...',
+      calendarReady: '日历已就绪'
     };
     this.register('zh', chineseSimplifiedTranslations);
     this.register('zh-CN', chineseSimplifiedTranslations);
@@ -312,7 +322,9 @@ export class TranslationRegistryService {
       dateSelected: '日付を選択しました: {{date}}',
       rangeSelected: '範囲を選択しました: {{start}} から {{end}}',
       monthChanged: '{{month}} {{year}}に変更しました',
-      yearChanged: '{{year}}年に変更しました'
+      yearChanged: '{{year}}年に変更しました',
+      calendarLoading: 'カレンダーを読み込み中...',
+      calendarReady: 'カレンダーの準備ができました'
     };
     this.register('ja', japaneseTranslations);
     this.register('ja-JP', japaneseTranslations);
@@ -354,7 +366,9 @@ export class TranslationRegistryService {
       dateSelected: 'Data selecionada: {{date}}',
       rangeSelected: 'Intervalo selecionado: {{start}} a {{end}}',
       monthChanged: 'Alterado para {{month}} {{year}}',
-      yearChanged: 'Alterado para o ano {{year}}'
+      yearChanged: 'Alterado para o ano {{year}}',
+      calendarLoading: 'Carregando calendário...',
+      calendarReady: 'Calendário pronto'
     };
     this.register('pt', portugueseTranslations);
     this.register('pt-BR', portugueseTranslations);
@@ -396,7 +410,9 @@ export class TranslationRegistryService {
       dateSelected: 'Выбрана дата: {{date}}',
       rangeSelected: 'Выбран диапазон: {{start}} по {{end}}',
       monthChanged: 'Изменено на {{month}} {{year}}',
-      yearChanged: 'Изменено на год {{year}}'
+      yearChanged: 'Изменено на год {{year}}',
+      calendarLoading: 'Загрузка календаря...',
+      calendarReady: 'Календарь готов'
     };
     this.register('ru', russianTranslations);
     this.register('ru-RU', russianTranslations);
@@ -438,7 +454,9 @@ export class TranslationRegistryService {
       dateSelected: 'Datum valt: {{date}}',
       rangeSelected: 'Omfång valt: {{start}} till {{end}}',
       monthChanged: 'Ändrat till {{month}} {{year}}',
-      yearChanged: 'Ändrat till år {{year}}'
+      yearChanged: 'Ändrat till år {{year}}',
+      calendarLoading: 'Laddar kalender...',
+      calendarReady: 'Kalender redo'
     };
     this.register('sv', swedishTranslations);
     this.register('sv-SE', swedishTranslations);
@@ -480,7 +498,9 @@ export class TranslationRegistryService {
       dateSelected: '날짜 선택됨: {{date}}',
       rangeSelected: '범위 선택됨: {{start}} ~ {{end}}',
       monthChanged: '{{month}} {{year}}로 변경됨',
-      yearChanged: '{{year}}년으로 변경됨'
+      yearChanged: '{{year}}년으로 변경됨',
+      calendarLoading: '달력 로딩 중...',
+      calendarReady: '달력 준비됨'
     };
     this.register('ko', koreanTranslations);
     this.register('ko-KR', koreanTranslations);
@@ -522,7 +542,9 @@ export class TranslationRegistryService {
       dateSelected: '已選擇日期: {{date}}',
       rangeSelected: '已選擇範圍: {{start}} 至 {{end}}',
       monthChanged: '已更改為 {{month}} {{year}}',
-      yearChanged: '已更改為 {{year}} 年'
+      yearChanged: '已更改為 {{year}} 年',
+      calendarLoading: '正在載入日曆...',
+      calendarReady: '日曆已就緒'
     });
   }
   
@@ -566,7 +588,9 @@ export class TranslationRegistryService {
       dateSelected: 'Date selected: {{date}}',
       rangeSelected: 'Range selected: {{start}} to {{end}}',
       monthChanged: 'Changed to {{month}} {{year}}',
-      yearChanged: 'Changed to year {{year}}'
+      yearChanged: 'Changed to year {{year}}',
+      calendarLoading: 'Loading calendar...',
+      calendarReady: 'Calendar ready'
     };
   }
 }

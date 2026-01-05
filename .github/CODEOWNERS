@@ -1,0 +1,21 @@
+# This file defines code owners for the repository
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for the entire repository
+* @NGXSMK/sachindilshan
+
+# Core library files
+/projects/ngxsmk-datepicker/src/ @NGXSMK/sachindilshan
+
+# Documentation
+/docs/ @NGXSMK/sachindilshan
+*.md @NGXSMK/sachindilshan
+
+# Configuration files
+package.json @NGXSMK/sachindilshan
+angular.json @NGXSMK/sachindilshan
+tsconfig.json @NGXSMK/sachindilshan
+
+# GitHub workflows
+/.github/workflows/ @NGXSMK/sachindilshan
+
