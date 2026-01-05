@@ -335,7 +335,7 @@ describe('Performance and Memory Tests', () => {
       
       // Compare all dates
       for (let i = 0; i < dates.length - 1; i++) {
-        dates[i].getTime() - dates[i + 1].getTime();
+        void (dates[i].getTime() - dates[i + 1].getTime());
       }
       
       const endTime = performance.now();

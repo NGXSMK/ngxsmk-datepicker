@@ -1,5 +1,5 @@
 import {Component, HostBinding, OnInit, OnDestroy, AfterViewInit, HostListener, signal, inject, PLATFORM_ID, computed, ChangeDetectorRef, effect, ViewChild, ElementRef} from '@angular/core';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {
   DateRange,
@@ -87,7 +87,7 @@ interface NavItem {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule,NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })

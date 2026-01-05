@@ -217,7 +217,8 @@ export class SnowOverlayComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    // Cleanup if needed
+    // No cleanup needed - component handles its own lifecycle
+    void 0;
   }
 }
 

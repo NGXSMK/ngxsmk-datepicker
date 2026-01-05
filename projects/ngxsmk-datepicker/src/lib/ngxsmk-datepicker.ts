@@ -4442,6 +4442,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.scheduleChangeDetection();
         }
         else if (dayTime === startTime!) {
+          // No action needed when dayTime equals startTime
         }
         else {
           const potentialEndDate = this.applyTimeIfNeeded(day);
