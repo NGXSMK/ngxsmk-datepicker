@@ -1,6 +1,6 @@
-import {Component, HostBinding, OnInit, OnDestroy, AfterViewInit, HostListener, signal, inject, PLATFORM_ID, computed, ChangeDetectorRef, effect, ViewChild, ElementRef} from '@angular/core';
-import {isPlatformBrowser} from '@angular/common';
-import {FormControl, FormGroup, ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { Component, HostBinding, OnInit, OnDestroy, AfterViewInit, HostListener, signal, inject, PLATFORM_ID, computed, ChangeDetectorRef, effect, ViewChild, ElementRef } from '@angular/core';
+import { isPlatformBrowser, DatePipe, JsonPipe } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import {
   DateRange,
   NgxsmkDatepickerComponent,
@@ -9,12 +9,12 @@ import {
   PartialDatepickerTranslations,
   DatepickerHooks,
 } from "ngxsmk-datepicker";
-import {CodePipe} from './code.pipe';
-import {DemoTranslationsService, DemoTranslations} from './demo-translations.service';
-import {SnowOverlayComponent} from './snow-overlay.component';
-import {exportToJson, importFromJson, exportToCsv, importFromCsv, exportToIcs, importFromIcs} from 'ngxsmk-datepicker';
-import {ThemeBuilderService, DatePresetsService, DatepickerTheme, DatePreset} from 'ngxsmk-datepicker';
-import {AnimationConfig} from 'ngxsmk-datepicker';
+import { CodePipe } from './code.pipe';
+import { DemoTranslationsService, DemoTranslations } from './demo-translations.service';
+import { SnowOverlayComponent } from './snow-overlay.component';
+import { exportToJson, importFromJson, exportToCsv, importFromCsv, exportToIcs, importFromIcs } from 'ngxsmk-datepicker';
+import { ThemeBuilderService, DatePresetsService, DatepickerTheme, DatePreset } from 'ngxsmk-datepicker';
+import { AnimationConfig } from 'ngxsmk-datepicker';
 
 function getStartOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
@@ -87,7 +87,7 @@ interface NavItem {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent],
+  imports: [NgxsmkDatepickerComponent, ReactiveFormsModule, FormsModule, CodePipe, SnowOverlayComponent, DatePipe, JsonPipe],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
@@ -115,19 +115,19 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       { id: 'framework-integration', label: t.frameworkIntegration, sub: false, keywords: 'angular material ionic html input form field' },
       { id: 'api-reference', label: t.apiReference, sub: false, keywords: 'api reference documentation' },
       { id: 'theming', label: t.theming, sub: false, keywords: 'theme dark light styling css' },
-      { 
-        id: 'architecture', 
-        label: t.architecture, 
-        sub: false, 
+      {
+        id: 'architecture',
+        label: t.architecture,
+        sub: false,
         keywords: 'architecture plugin hooks extension points system design',
         children: [
           { id: 'plugin-architecture', label: t.pluginArchitecture, sub: true, keywords: 'plugin architecture hooks extension points validation rendering formatting events' },
         ]
       },
-      { 
-        id: 'examples', 
-        label: t.examples, 
-        sub: false, 
+      {
+        id: 'examples',
+        label: t.examples,
+        sub: false,
         keywords: 'examples demo showcase',
         children: [
           { id: 'signal-forms', label: t.signalForms, sub: true, keywords: 'signal forms angular 21 reactive' },
@@ -182,11 +182,11 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
       return items.map(item => {
         const labelMatch = item.label.toLowerCase().includes(lowerQuery);
         const keywordMatch = (item.keywords || '').toLowerCase().includes(lowerQuery);
-        
+
         if (item.children) {
           const filteredChildren = filterItems(item.children);
           const hasMatchingChildren = filteredChildren.length > 0;
-          
+
           if (labelMatch || keywordMatch || hasMatchingChildren) {
             return {
               ...item,
@@ -285,7 +285,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public minDate: Date = getStartOfDay(this.today);
   public maxDate: Date = getEndOfDay(addMonths(this.today, 1));
   public lastAction: { type: string; payload?: unknown } | null = null;
-  
+
   public holidayProvider: HolidayProvider = new SampleHolidayProvider();
   public disableHolidays: boolean = true;
 
@@ -317,7 +317,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public calendarLayoutSlider: 'horizontal' | 'vertical' | 'auto' = 'auto';
 
   public signalDate = signal<DatepickerValue>(null);
-  
+
   public momentDateValue = signal<DatepickerValue>(null);
   public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
@@ -624,7 +624,7 @@ const eventTrackingPlugin: DatepickerHooks = {
     singleDate: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
     singleDate2: new FormControl<DatepickerValue>(getStartOfDay(addMonths(this.today, 1))),
     inlineRange: new FormControl({
-      value: {start: getStartOfDay(this.today), end: getEndOfDay(this.today)},
+      value: { start: getStartOfDay(this.today), end: getEndOfDay(this.today) },
       disabled: true
     }),
     rangeWithTime: new FormControl(),
@@ -1005,11 +1005,11 @@ export class I18nComponent {
   public languageDropdownOpen = signal<boolean>(false);
   public customTranslations: PartialDatepickerTranslations = {};
   public translationDatepickerValue: DatepickerValue = null;
-  
+
   private readonly platformId = inject(PLATFORM_ID);
   private readonly demoTranslationsService = inject(DemoTranslationsService);
   private readonly cdr = inject(ChangeDetectorRef);
-  
+
   public t = computed<DemoTranslations>(() => {
     return this.demoTranslationsService.getTranslations(this.selectedLocale());
   });
@@ -1380,7 +1380,7 @@ export class DateFormComponent {
     }
 
     this.darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     this.darkModeHandler = (e: MediaQueryList | MediaQueryListEvent) => {
       if (!this.manualThemeOverride) {
         this.currentTheme = e.matches ? 'dark' : 'light';
@@ -1390,7 +1390,7 @@ export class DateFormComponent {
     if (this.darkModeHandler) {
       this.darkModeHandler(this.darkModeMediaQuery);
     }
-    
+
     if (this.darkModeMediaQuery.addEventListener) {
       this.darkModeMediaQuery.addEventListener('change', this.darkModeHandler);
     } else {
@@ -1511,14 +1511,14 @@ export class DateFormComponent {
     if (!isPlatformBrowser(this.platformId)) {
       return this.selectedMobileSize;
     }
-    
+
     const viewportWidth = window.innerWidth;
-    const maxWidth = viewportWidth <= 480 
+    const maxWidth = viewportWidth <= 480
       ? viewportWidth - 24 // 1.5rem padding
       : viewportWidth <= 768
-      ? viewportWidth - 32 // 2rem padding
-      : this.selectedMobileSize;
-    
+        ? viewportWidth - 32 // 2rem padding
+        : this.selectedMobileSize;
+
     return Math.min(this.selectedMobileSize, maxWidth);
   }
 
@@ -1571,7 +1571,7 @@ export class DateFormComponent {
    */
   public formatDownloads(count: number | null): string {
     if (count === null) return '';
-    
+
     if (count >= 1000000) {
       return (count / 1000000).toFixed(1) + 'M';
     } else if (count >= 1000) {
@@ -1579,7 +1579,7 @@ export class DateFormComponent {
     }
     return count.toString();
   }
-  
+
   /**
    * Detects the user's browser locale and maps it to a supported locale
    */
@@ -1588,24 +1588,24 @@ export class DateFormComponent {
       this.selectedLocale.set('en-US');
       return;
     }
-    
+
     let browserLocale: string | null = null;
-    
+
     if (typeof navigator !== 'undefined' && navigator.language) {
       browserLocale = navigator.language;
     }
-    
+
     if (!browserLocale && typeof Intl !== 'undefined') {
       try {
         browserLocale = Intl.DateTimeFormat().resolvedOptions().locale;
       } catch {
       }
     }
-    
+
     if (!browserLocale && typeof navigator !== 'undefined' && navigator.languages && navigator.languages.length > 0) {
       browserLocale = navigator.languages[0];
     }
-    
+
     if (browserLocale) {
       const mappedLocale = this.mapBrowserLocaleToSupported(browserLocale);
       this.detectedLocale.set(browserLocale);
@@ -1616,21 +1616,21 @@ export class DateFormComponent {
       this.isLocaleAutoDetected.set(false);
     }
   }
-  
+
   /**
    * Maps a browser locale to one of the supported locales
    * Uses fallback logic: exact match -> language code match -> default
    */
   private mapBrowserLocaleToSupported(browserLocale: string): string {
     const normalized = browserLocale.toLowerCase();
-    
-    const exactMatch = this.availableLocales.find(locale => 
+
+    const exactMatch = this.availableLocales.find(locale =>
       locale.code.toLowerCase() === normalized
     );
     if (exactMatch) {
       return exactMatch.code;
     }
-    
+
     const languageCode = normalized.split('-')[0];
     const languageMatch = this.availableLocales.find(locale => {
       const localeLang = locale.code.toLowerCase().split('-')[0];
@@ -1639,7 +1639,7 @@ export class DateFormComponent {
     if (languageMatch) {
       return languageMatch.code;
     }
-    
+
     const localeMappings: { [key: string]: string } = {
       'en-ca': 'en-US',
       'en-au': 'en-GB',
@@ -1666,12 +1666,12 @@ export class DateFormComponent {
       'ko-kp': 'ko-KR',
       'ja-jp': 'ja-JP',
     };
-    
+
     const mapped = localeMappings[normalized];
     if (mapped) {
       return mapped;
     }
-    
+
     return 'en-US';
   }
 
@@ -1681,7 +1681,7 @@ export class DateFormComponent {
       clearInterval(this.timeInterval);
     }
   }
-  
+
   /**
    * Handles locale change from header selector
    */
@@ -1690,20 +1690,20 @@ export class DateFormComponent {
     this.isLocaleAutoDetected.set(false);
     this.languageDropdownOpen.set(false);
   }
-  
+
   toggleLanguageDropdown(): void {
     this.languageDropdownOpen.update(open => !open);
   }
-  
+
   closeLanguageDropdown(): void {
     this.languageDropdownOpen.set(false);
   }
-  
+
   getSelectedLocaleName(): string {
     const locale = this.availableLocales.find(l => l.code === this.selectedLocale());
     return locale ? locale.nativeName : 'English';
   }
-  
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -1711,7 +1711,7 @@ export class DateFormComponent {
       this.languageDropdownOpen.set(false);
     }
   }
-  
+
   /**
    * Gets a short display name for the locale (e.g., "EN" for "en-US", "ES" for "es-ES")
    */
@@ -1749,9 +1749,9 @@ export class DateFormComponent {
     if (!value || !(value instanceof Date) || isNaN(value.getTime())) {
       return '';
     }
-    
+
     const date = value as Date;
-    
+
     switch (format) {
       case 'short':
         return date.toLocaleDateString('en-US', {
@@ -1936,7 +1936,7 @@ export class DateFormComponent {
     setTimeout(() => {
       if (this.animationDatepickerEl?.nativeElement) {
         const element = this.animationDatepickerEl.nativeElement;
-        const prefersReducedMotion = this.animationConfig.respectReducedMotion && 
+        const prefersReducedMotion = this.animationConfig.respectReducedMotion &&
           window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (!this.animationConfig.enabled || prefersReducedMotion) {
