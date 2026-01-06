@@ -38,7 +38,7 @@ export class DatePresetsService {
   savePreset(preset: Omit<DatePreset, 'id' | 'createdAt' | 'updatedAt'>): DatePreset {
     const id = this.generateId();
     const now = new Date();
-    
+
     const fullPreset: DatePreset = {
       ...preset,
       id,
@@ -48,7 +48,7 @@ export class DatePresetsService {
 
     this.presets.set(id, fullPreset);
     this.persistPresets();
-    
+
     return fullPreset;
   }
 
@@ -69,7 +69,7 @@ export class DatePresetsService {
 
     this.presets.set(id, updated);
     this.persistPresets();
-    
+
     return updated;
   }
 
@@ -194,7 +194,7 @@ export class DatePresetsService {
             this.presets.set(processedPreset.id, processedPreset);
           }
           imported++;
-        } catch (error) {
+        } catch {
           errors++;
           // Silently handle import errors
         }
@@ -229,7 +229,7 @@ export class DatePresetsService {
           this.presets.set(processedPreset.id, processedPreset);
         });
       }
-    } catch (error) {
+    } catch {
       // Silently handle localStorage load errors
     }
   }
@@ -242,7 +242,7 @@ export class DatePresetsService {
     try {
       const presetsArray = Array.from(this.presets.values());
       localStorage.setItem(this.storageKey, JSON.stringify(presetsArray));
-    } catch (error) {
+    } catch {
       // Silently handle localStorage save errors
     }
   }
@@ -294,13 +294,13 @@ export class DatePresetsService {
 
     if (typeof value === 'object' && value !== null && 'start' in value && 'end' in value) {
       const rangeValue = value as { start: unknown; end: unknown };
-      const start = typeof rangeValue.start === 'string' 
-        ? new Date(rangeValue.start) 
+      const start = typeof rangeValue.start === 'string'
+        ? new Date(rangeValue.start)
         : (rangeValue.start instanceof Date ? rangeValue.start : null);
-      const end = typeof rangeValue.end === 'string' 
-        ? new Date(rangeValue.end) 
+      const end = typeof rangeValue.end === 'string'
+        ? new Date(rangeValue.end)
         : (rangeValue.end instanceof Date ? rangeValue.end : null);
-      
+
       if (start && end) {
         return { start, end };
       }

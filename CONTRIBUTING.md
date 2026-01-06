@@ -147,9 +147,27 @@ Breaking changes require:
 
 ### Deprecation Policy
 
-- Deprecated features remain for at least one major version
-- Clear deprecation warnings in code and docs
-- Migration path provided
+We follow a clear deprecation strategy to ensure smooth upgrades:
+
+- **Deprecation Period**: Deprecated features remain available for at least **2 major versions** before removal
+- **Deprecation Warnings**: 
+  - `@deprecated` JSDoc tags in code
+  - Console warnings in development mode (when applicable)
+  - Clear documentation in CHANGELOG.md
+- **Migration Path**: 
+  - Migration guides provided in `MIGRATION.md`
+  - Code examples for upgrading
+  - Alternative APIs documented
+- **Breaking Changes**: 
+  - Only occur in major version releases
+  - Clearly documented in CHANGELOG.md
+  - Migration guides provided for all breaking changes
+
+#### Example Deprecation Process
+
+1. **Version X.0.0**: Feature marked as deprecated with `@deprecated` tag
+2. **Version X+1.0.0**: Feature still available, deprecation warnings continue
+3. **Version X+2.0.0**: Feature removed, breaking change documented
 
 ## Testing
 

@@ -8,7 +8,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.23` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.24` is the current stable release. For production use, install the latest version from npm.
 
 **Latest Version**: Check [npm](https://www.npmjs.com/package/ngxsmk-datepicker) for the most recent release.
 

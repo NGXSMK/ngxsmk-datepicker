@@ -39,7 +39,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 |-------|------|---------|--------|-------------|---------|
 | `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Stable | Selection mode | `mode="single"` or `[mode]="'range'"` |
 | `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
-| `field` | `any` | `null` | Stable | Signal form field (Angular 21+) | `[field]="myForm.dateField"` |
+| `field` | `any` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. | `[field]="myForm.dateField"` |
 | `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
 | `disabledState` | `boolean` | `false` | Stable | Disable the datepicker | `[disabledState]="isDisabled"` |
 | `minDate` | `DateInput \| null` | `null` | Stable | Minimum selectable date | `[minDate]="today"` |
@@ -980,7 +980,7 @@ export class ServerFormComponent {
 
 ### 5. Signal Forms with Manual Binding (Stabilized Pattern)
 
-**Scenario**: Using manual `[value]` and `(valueChange)` binding with Signal Forms to prevent stability issues. This pattern directly mutates the form value, avoiding change detection loops.
+**Scenario**: Using manual `[value]` and `(valueChange)` binding with Signal Forms to prevent stability issues. **Important**: To ensure dirty state tracking works correctly, use the field's `setValue()` or `updateValue()` methods instead of direct mutation.
 
 ```typescript
 import { Component, signal, computed, form, objectSchema } from '@angular/core';
@@ -1011,8 +1011,15 @@ export class StableFormComponent {
   myDate = computed(() => this.myForm.value().myDate);
   
   onMyDateChange(newDate: Date): void {
-    // Directly mutate the form value object to avoid change detection loops
-    this.myForm.value().myDate = newDate;
+    // Use setValue to ensure dirty state tracking works correctly
+    if (typeof this.myForm.myDate.setValue === 'function') {
+      this.myForm.myDate.setValue(newDate);
+    } else if (typeof this.myForm.myDate.updateValue === 'function') {
+      this.myForm.myDate.updateValue(() => newDate);
+    } else {
+      // Fallback: directly mutate (may not track dirty state)
+      this.myForm.value().myDate = newDate;
+    }
   }
 }
 ```

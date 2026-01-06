@@ -8,9 +8,10 @@ export interface DateAdapter {
   /**
    * Parse a date from a string or value
    * @param value - The value to parse (string, Date, or library-specific type)
+   * @param onError - Optional callback for error handling. Called when parsing fails.
    * @returns A Date object or null if parsing fails
    */
-  parse(value: string | Date | number | unknown): Date | null;
+  parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null;
 
   /**
    * Format a date to a string
@@ -71,19 +72,40 @@ export interface DateAdapter {
  * Default Date Adapter using native JavaScript Date
  */
 export class NativeDateAdapter implements DateAdapter {
-  parse(value: string | Date | number | unknown): Date | null {
+  parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    if (value instanceof Date) {
-      return isNaN(value.getTime()) ? null : new Date(value.getTime());
+    
+    try {
+      if (value instanceof Date) {
+        if (isNaN(value.getTime())) {
+          onError?.(new Error(`Invalid Date object: ${value}`));
+          return null;
+        }
+        return new Date(value.getTime());
+      }
+      
+      if (typeof value === 'string') {
+        const parsed = new Date(value);
+        if (isNaN(parsed.getTime())) {
+          onError?.(new Error(`Invalid date string: "${value}"`));
+          return null;
+        }
+        return parsed;
+      }
+      
+      if (typeof value === 'number') {
+        const parsed = new Date(value);
+        if (isNaN(parsed.getTime())) {
+          onError?.(new Error(`Invalid date timestamp: ${value}`));
+          return null;
+        }
+        return parsed;
+      }
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+      return null;
     }
-    if (typeof value === 'string') {
-      const parsed = new Date(value);
-      return isNaN(parsed.getTime()) ? null : parsed;
-    }
-    if (typeof value === 'number') {
-      const parsed = new Date(value);
-      return isNaN(parsed.getTime()) ? null : parsed;
-    }
+    
     return null;
   }
 

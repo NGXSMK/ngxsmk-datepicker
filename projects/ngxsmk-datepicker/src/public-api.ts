@@ -92,7 +92,7 @@ export type { LocaleData, CalendarSystem } from './lib/services/locale-registry.
 export { TranslationRegistryService, DefaultTranslationService } from './lib/services';
 export type { TranslationService, DatepickerTranslations, PartialDatepickerTranslations } from './lib/services';
 
-export { ThemeBuilderService, DatePresetsService } from './lib/services';
+export { ThemeBuilderService, DatePresetsService, AriaLiveService, FocusTrapService, HapticFeedbackService } from './lib/services';
 export type { DatepickerTheme, DatePreset } from './lib/services';
 
 export { FieldSyncService } from './lib/services/field-sync.service';

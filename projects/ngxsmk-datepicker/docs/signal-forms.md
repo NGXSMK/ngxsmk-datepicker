@@ -113,6 +113,69 @@ export class TwoWayComponent {
 }
 ```
 
+## Dirty State Tracking
+
+When using the `[field]` binding, the datepicker automatically tracks the form's dirty state. The form will be marked as dirty when a user selects a date:
+
+```typescript
+@Component({
+  selector: 'app-form',
+  standalone: true,
+  imports: [NgxsmkDatepickerComponent],
+  template: `
+    <form>
+      <ngxsmk-datepicker
+        [field]="myForm.dateDue"
+        mode="single"
+        placeholder="Select a date">
+      </ngxsmk-datepicker>
+      
+      <button 
+        type="submit" 
+        [disabled]="!myForm().dirty()">
+        Save Changes
+      </button>
+    </form>
+  `
+})
+export class FormComponent {
+  action = signal({ dateDue: new Date() });
+  myForm = form(this.action, objectSchema({
+    dateDue: objectSchema<Date>()
+  }));
+  
+  submitForm() {
+    if (!this.myForm().dirty()) {
+      console.log('No changes to save');
+      return;
+    }
+    // Submit form...
+  }
+}
+```
+
+**Important Notes:**
+
+1. **Use `[field]` binding for automatic dirty tracking**: The datepicker uses the field's `setValue()` or `updateValue()` methods when available, which properly track dirty state in Angular Signal Forms.
+
+2. **Avoid mixing `[field]` with manual `(valueChange)` handlers**: If you use both `[field]` and `(valueChange)="dateField.set($event)"`, the manual handler bypasses the form API and may prevent dirty state tracking. Use one or the other:
+   - ✅ **Recommended**: Use only `[field]="myForm.dateField"` for automatic dirty tracking
+   - ⚠️ **Alternative**: Use `[value]` and `(valueChange)` with proper form API methods if you need manual control
+
+3. **Manual binding pattern**: If you must use manual binding (e.g., for stability issues), ensure you update the form using the field's API methods:
+   ```typescript
+   onDateChange(newDate: Date): void {
+     // Use setValue to ensure dirty tracking works
+     if (typeof this.myForm.dateField.setValue === 'function') {
+       this.myForm.dateField.setValue(newDate);
+     } else if (typeof this.myForm.dateField.updateValue === 'function') {
+       this.myForm.dateField.updateValue(() => newDate);
+     }
+   }
+   ```
+
+4. **Dev mode warnings**: If the datepicker cannot use `setValue()` or `updateValue()` (e.g., field doesn't provide these methods), it will fall back to direct signal mutation and log a warning in dev mode. This fallback may not track dirty state correctly.
+
 ## Manual Updates
 
 You can also manually update form values:
@@ -145,7 +208,7 @@ export class ManualUpdateComponent {
 
 ## Alternative: Manual Binding with valueChange (Stabilized Pattern)
 
-If you experience stability issues with the `[field]` binding, you can use manual binding with `[value]` and `(valueChange)`. This pattern directly mutates the form value, which can help prevent change detection loops:
+If you experience stability issues with the `[field]` binding, you can use manual binding with `[value]` and `(valueChange)`. **Important**: To ensure dirty state tracking works correctly, use the field's API methods instead of direct mutation:
 
 ```typescript
 import { Component, signal, computed, form, objectSchema } from '@angular/core';
@@ -176,19 +239,29 @@ export class StableFormComponent {
   myDate = computed(() => this.myForm.value().myDate);
   
   onMyDateChange(newDate: Date): void {
-    // Directly mutate the form value object
-    this.myForm.value().myDate = newDate;
+    // Use setValue to ensure dirty state tracking works
+    if (typeof this.myForm.myDate.setValue === 'function') {
+      this.myForm.myDate.setValue(newDate);
+    } else if (typeof this.myForm.myDate.updateValue === 'function') {
+      this.myForm.myDate.updateValue(() => newDate);
+    } else {
+      // Fallback: directly mutate the form value object
+      // Note: This may not track dirty state correctly
+      this.myForm.value().myDate = newDate;
+    }
   }
 }
 ```
 
 **Why this pattern works:**
-- Direct mutation of the form value avoids creating new object references
+- Uses form API methods (`setValue`/`updateValue`) to ensure dirty state tracking
 - Prevents potential change detection loops
 - More explicit control over when updates occur
 - Useful when `[field]` binding causes stability issues
 
 **Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
+
+**⚠️ Warning**: Direct mutation (`this.myForm.value().myDate = newDate`) bypasses Angular's dirty tracking mechanism. Always prefer using `setValue()` or `updateValue()` when available.
 
 ## Validation
 
@@ -448,4 +521,37 @@ The datepicker automatically reads `field.disabled()`. If it's not working:
 1. Ensure the field has a `disabled` property or function
 2. Check that the form validation is set up correctly
 3. When using manual binding, you may need to manually bind `[disabledState]`
+
+### Form not marking as dirty
+
+If `form().dirty()` returns `false` after selecting a date:
+
+1. **Ensure you're using `[field]` binding**: The `[field]` input automatically uses the form's API methods to track dirty state.
+   ```html
+   <!-- ✅ Correct - uses [field] binding -->
+   <ngxsmk-datepicker [field]="myForm.dateField" mode="single"></ngxsmk-datepicker>
+   ```
+
+2. **Avoid mixing `[field]` with manual `(valueChange)`**: Don't use both together, as the manual handler may bypass form tracking:
+   ```html
+   <!-- ❌ Incorrect - manual handler bypasses form API -->
+   <ngxsmk-datepicker 
+     [field]="myForm.dateField"
+     (valueChange)="dateField.set($event)"
+     mode="single">
+   </ngxsmk-datepicker>
+   ```
+
+3. **Use form API methods in manual handlers**: If you must use manual binding, use `setValue()` or `updateValue()`:
+   ```typescript
+   onDateChange(newDate: Date): void {
+     // ✅ Correct - uses form API
+     this.myForm.dateField.setValue(newDate);
+     
+     // ❌ Incorrect - bypasses dirty tracking
+     // this.dateField.set(newDate);
+   }
+   ```
+
+4. **Check dev console warnings**: In development mode, the datepicker logs warnings if it falls back to direct signal mutation, which may not track dirty state correctly.
 

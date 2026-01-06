@@ -7,33 +7,23 @@ assignees: ''
 ---
 
 ## Feature Description
-
 A clear and concise description of the feature you'd like to see.
 
 ## Problem Statement
-
-What problem does this feature solve? What use case does it address?
+Is your feature request related to a problem? Please describe.
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 ## Proposed Solution
-
-Describe how you envision this feature working.
+Describe the solution you'd like to see implemented.
 
 ## Alternatives Considered
-
 Describe any alternative solutions or features you've considered.
 
-## Use Cases
-
-Provide specific examples of how this feature would be used:
-
-```typescript
-// Example usage
-```
+## Use Case
+Describe a specific use case for this feature.
 
 ## Additional Context
-
 Add any other context, mockups, or examples about the feature request here.
 
 ## Implementation Notes
-
-If you have technical ideas about how this could be implemented, share them here.
+If you have ideas on how this could be implemented, please share them.

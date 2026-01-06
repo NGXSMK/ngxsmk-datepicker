@@ -45,3 +45,38 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.secret
+*.key
+.npmrc
+.npm-token
+*.pem
+
+# Build artifacts that shouldn't be committed
+*.log
+*.tsbuildinfo
+.cache/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE specific
+*.swp
+*.swo
+*~
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+!.vscode/extensions.json
+!.vscode/settings.json.example

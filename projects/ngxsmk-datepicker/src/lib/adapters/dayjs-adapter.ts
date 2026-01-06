@@ -30,13 +30,29 @@ export class DayjsAdapter implements DateAdapter {
     }
   }
 
-  parse(value: string | Date | number | unknown): Date | null {
+  parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    if (value instanceof Date) {
-      return this.dayjs(value).isValid() ? new Date(value.getTime()) : null;
+    
+    try {
+      if (value instanceof Date) {
+        const dayjsDate = this.dayjs(value);
+        if (!dayjsDate.isValid()) {
+          onError?.(new Error(`Invalid Date object: ${value}`));
+          return null;
+        }
+        return new Date(value.getTime());
+      }
+      
+      const parsed = this.dayjs(value);
+      if (!parsed.isValid()) {
+        onError?.(new Error(`Invalid date value: ${String(value)}`));
+        return null;
+      }
+      return parsed.toDate();
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+      return null;
     }
-    const parsed = this.dayjs(value);
-    return parsed.isValid() ? parsed.toDate() : null;
   }
 
   format(date: Date, formatStr: string = 'MMM DD, YYYY', locale?: string): string {

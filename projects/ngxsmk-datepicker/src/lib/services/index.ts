@@ -35,4 +35,5 @@ export { DisplayFormattingService } from './display-formatting.service';
 export type { FormattingOptions } from './display-formatting.service';
 export { DateValidationService } from './date-validation.service';
 export type { ValidationConstraints } from './date-validation.service';
+export { HapticFeedbackService } from './haptic-feedback.service';
 

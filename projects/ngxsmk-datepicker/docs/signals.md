@@ -60,7 +60,7 @@ export class ExampleComponent {
 
 ### Using the `[field]` Input
 
-For Angular 21+ Signal Forms, use the `[field]` input for direct integration:
+For Angular 21+ Signal Forms, use the `[field]` input for direct integration. The datepicker automatically tracks dirty state when using this binding:
 
 ```typescript
 import { Component, signal, form, objectSchema } from '@angular/core';
@@ -77,6 +77,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         mode="single"
         placeholder="Select a date">
       </ngxsmk-datepicker>
+      
+      <button [disabled]="!myForm().dirty()">Save</button>
     </form>
   `
 })
@@ -90,6 +92,8 @@ export class FormComponent {
   }));
 }
 ```
+
+**Important**: The `[field]` binding automatically tracks dirty state. Avoid mixing it with manual `(valueChange)` handlers that bypass the form API, as this may prevent proper dirty tracking. See the [Signal Forms Integration Guide](signal-forms.md) for detailed documentation.
 
 ### Manual Signal Updates
 
@@ -225,16 +229,20 @@ export class MultipleComponent {
 
 1. **Use `signal()` for local state**: For component-local date selection, use writable signals.
 
-2. **Use `[field]` for forms**: When using Angular Signal Forms, prefer the `[field]` input for automatic synchronization.
+2. **Use `[field]` for forms**: When using Angular Signal Forms, prefer the `[field]` input for automatic synchronization and dirty state tracking.
 
-3. **Use `computed()` for derived values**: Derive formatted dates, validation states, or other computed properties.
+3. **Avoid mixing `[field]` with manual handlers**: Don't use both `[field]` and `(valueChange)` together, as the manual handler may bypass form dirty tracking.
 
-4. **Handle null values**: Always check for null/undefined when working with datepicker values.
+4. **Use `computed()` for derived values**: Derive formatted dates, validation states, or other computed properties.
 
-5. **Type safety**: Use the `DatepickerValue` type for better TypeScript support:
+5. **Handle null values**: Always check for null/undefined when working with datepicker values.
+
+6. **Type safety**: Use the `DatepickerValue` type for better TypeScript support:
    ```typescript
    import { DatepickerValue } from 'ngxsmk-datepicker';
    ```
+
+For detailed Signal Forms integration including dirty state tracking, see the [Signal Forms Integration Guide](signal-forms.md).
 
 ## Migration from Reactive Forms
 

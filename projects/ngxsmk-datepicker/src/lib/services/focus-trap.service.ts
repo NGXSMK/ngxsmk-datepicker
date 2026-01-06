@@ -6,7 +6,9 @@ interface FocusTrapState {
   previousActiveElement: HTMLElement | null;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class FocusTrapService implements OnDestroy {
   private activeTraps = new Map<ElementRef<HTMLElement>, FocusTrapState>();
   private focusableSelectors = [
@@ -23,7 +25,7 @@ export class FocusTrapService implements OnDestroy {
    */
   trapFocus(elementRef: ElementRef<HTMLElement>): () => void {
     if (!elementRef?.nativeElement) {
-      return () => {};
+      return () => { };
     }
 
     const element = elementRef.nativeElement;
@@ -88,7 +90,7 @@ export class FocusTrapService implements OnDestroy {
     }
 
     state.element.removeEventListener('keydown', state.handleKeyDown);
-    
+
     // Restore focus to previous element if it still exists in the DOM
     if (state.previousActiveElement && document.body.contains(state.previousActiveElement)) {
       // Use requestAnimationFrame to ensure focus restoration happens after trap removal

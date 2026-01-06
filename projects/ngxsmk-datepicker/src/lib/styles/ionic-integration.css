@@ -1,0 +1,204 @@
+/**
+ * Ionic Framework Integration Styles
+ * 
+ * This file contains CSS fixes and overrides to ensure ngxsmk-datepicker
+ * works correctly with Ionic Angular applications.
+ * 
+ * Import this file in your global styles or Ionic app stylesheet:
+ * @import 'ngxsmk-datepicker/styles/ionic-integration.css';
+ */
+
+/* ============================================
+   1. Z-INDEX CONFLICTS FIX
+   ============================================ */
+
+/* Default z-index for Ionic compatibility */
+ion-app ngxsmk-datepicker {
+  --datepicker-z-index-base: 10001; /* Below ion-alert (20001), above ion-popover (10000) */
+  --datepicker-z-index-backdrop: 10000;
+}
+
+/* When inside ion-modal, use higher z-index */
+ion-modal ngxsmk-datepicker {
+  --datepicker-z-index-base: 20001; /* Above modal backdrop (20000) */
+  --datepicker-z-index-backdrop: 20000;
+}
+
+/* When inside ion-popover, use appropriate z-index */
+ion-popover ngxsmk-datepicker {
+  --datepicker-z-index-base: 10001; /* Above popover (10000) */
+  --datepicker-z-index-backdrop: 10000;
+}
+
+/* ============================================
+   2. BODY SCROLL LOCK DISABLE
+   ============================================ */
+
+/* Disable body scroll lock in Ionic apps */
+ion-app body:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode)),
+ion-app html:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode)) {
+  overflow: auto !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Use Ionic's scroll lock instead */
+ion-content:has(.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode)) {
+  --overflow: hidden;
+}
+
+/* ============================================
+   3. POSITIONING IN ION-CONTENT
+   ============================================ */
+
+/* Fix positioning when inside ion-content */
+ion-content .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+  /* Use absolute positioning relative to ion-content */
+  position: absolute !important;
+  /* Position will be calculated by JavaScript or use inline mode */
+}
+
+/* Alternative: Use inline mode in ion-content (recommended) */
+ion-content ngxsmk-datepicker {
+  /* Inline mode avoids all positioning issues */
+}
+
+/* ============================================
+   4. SAFE AREA INSETS (iOS)
+   ============================================ */
+
+/* Bottom sheet with safe area insets */
+.ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-bottom-sheet:not(.ngxsmk-inline-container) {
+  padding-bottom: env(safe-area-inset-bottom) !important;
+  max-height: calc(90vh - env(safe-area-inset-bottom)) !important;
+  max-height: calc(90dvh - env(safe-area-inset-bottom)) !important;
+}
+
+/* Fullscreen with safe area insets */
+.ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
+  padding-top: env(safe-area-inset-top) !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+  height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+}
+
+/* ============================================
+   5. CSS VARIABLE MAPPING (Ionic Theming)
+   ============================================ */
+
+/* Map Ionic theme variables to datepicker variables */
+ion-app ngxsmk-datepicker {
+  --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
+  --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
+  --datepicker-background: var(--ion-background-color, #ffffff);
+  --datepicker-text-color: var(--ion-text-color, #1f2937);
+  --datepicker-subtle-text-color: var(--ion-text-color-step-400, #6b7280);
+  --datepicker-border-color: var(--ion-border-color, #e5e7eb);
+  --datepicker-hover-background: var(--ion-color-light, #f3f4f6);
+  --datepicker-range-background: var(--ion-color-primary-tint, #f5f3ff);
+}
+
+/* Dark theme mapping */
+ion-app.ion-theme-dark ngxsmk-datepicker {
+  --datepicker-background: var(--ion-background-color, #1f2937);
+  --datepicker-text-color: var(--ion-text-color, #f3f4f6);
+  --datepicker-subtle-text-color: var(--ion-text-color-step-400, #9ca3af);
+  --datepicker-border-color: var(--ion-border-color, #374151);
+  --datepicker-hover-background: var(--ion-color-step-100, #374151);
+  --datepicker-range-background: rgba(var(--ion-color-primary-rgb), 0.15);
+}
+
+/* ============================================
+   6. TOUCH GESTURE COMPATIBILITY
+   ============================================ */
+
+/* Allow Ionic gestures to work when datepicker is in inline mode */
+ion-content ngxsmk-datepicker[inline="true"] {
+  /* Touch events work normally in inline mode */
+}
+
+/* Prevent touch event conflicts in popover mode */
+.ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+  /* Ionic gestures may be blocked - use inline mode instead */
+  touch-action: pan-y; /* Allow vertical scrolling */
+}
+
+/* ============================================
+   7. FOCUS MANAGEMENT
+   ============================================ */
+
+/* When inside ion-modal, let Ionic handle focus */
+ion-modal .ngxsmk-popover-container {
+  /* Focus trapping is handled by ion-modal */
+}
+
+/* ============================================
+   8. KEYBOARD BEHAVIOR
+   ============================================ */
+
+/* Prevent keyboard from covering datepicker on iOS */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari */
+  .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
+    /* Adjust position when keyboard is visible */
+    max-height: calc(100dvh - env(keyboard-inset-height, 0px)) !important;
+  }
+}
+
+/* ============================================
+   9. SHADOW DOM SUPPORT
+   ============================================ */
+
+/* Ensure variables cascade into Shadow DOM */
+ion-content::part(scroll) ngxsmk-datepicker,
+ion-item::part(native) ngxsmk-datepicker {
+  /* Variables defined on :host will work here */
+}
+
+/* Global variables for Shadow DOM */
+:root {
+  --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
+  --datepicker-background: var(--ion-background-color, #ffffff);
+  --datepicker-text-color: var(--ion-text-color, #1f2937);
+}
+
+/* ============================================
+   10. ION-ITEM INTEGRATION
+   ============================================ */
+
+/* Better integration with ion-item */
+ion-item ngxsmk-datepicker {
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+}
+
+ion-item ngxsmk-datepicker .ngxsmk-input-group {
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+/* ============================================
+   11. RESPONSIVE BEHAVIOR
+   ============================================ */
+
+/* On mobile, prefer inline mode in Ionic */
+@media (max-width: 768px) {
+  ion-content ngxsmk-datepicker:not([inline]) {
+    /* Suggest using inline mode on mobile */
+  }
+}
+
+/* ============================================
+   12. CAPACITOR SPECIFIC
+   ============================================ */
+
+/* Capacitor status bar spacing */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
+    padding-top: calc(env(safe-area-inset-top) + var(--ion-safe-area-top, 0px)) !important;
+  }
+}
+

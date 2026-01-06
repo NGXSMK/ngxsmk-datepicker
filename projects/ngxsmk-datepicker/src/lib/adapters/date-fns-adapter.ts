@@ -30,15 +30,31 @@ export class DateFnsAdapter implements DateAdapter {
     }
   }
 
-  parse(value: string | Date | number | unknown): Date | null {
+  parse(value: string | Date | number | unknown, onError?: (error: Error) => void): Date | null {
     if (!value) return null;
-    if (value instanceof Date) {
-      return this.dateFns.isValid(value) ? new Date(value.getTime()) : null;
+    
+    try {
+      if (value instanceof Date) {
+        if (!this.dateFns.isValid(value)) {
+          onError?.(new Error(`Invalid Date object: ${value}`));
+          return null;
+        }
+        return new Date(value.getTime());
+      }
+      
+      if (typeof value === 'string') {
+        const parsed = this.dateFns.parseISO(value) || this.dateFns.parse(value, 'yyyy-MM-dd', new Date());
+        if (!this.dateFns.isValid(parsed)) {
+          onError?.(new Error(`Invalid date string: "${value}"`));
+          return null;
+        }
+        return parsed;
+      }
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+      return null;
     }
-    if (typeof value === 'string') {
-      const parsed = this.dateFns.parseISO(value) || this.dateFns.parse(value, 'yyyy-MM-dd', new Date());
-      return this.dateFns.isValid(parsed) ? parsed : null;
-    }
+    
     return null;
   }
 

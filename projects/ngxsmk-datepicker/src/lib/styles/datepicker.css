@@ -1648,6 +1648,10 @@
     max-width: 100% !important;
     max-height: 90vh !important;
     max-height: 90dvh !important;
+    /* Safe area insets for iOS */
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    max-height: calc(90vh - env(safe-area-inset-bottom, 0px)) !important;
+    max-height: calc(90dvh - env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 16px 16px 0 0 !important;
     margin: 0 !important;
     z-index: 2147483647 !important;
@@ -1674,6 +1678,11 @@
     max-width: 100% !important;
     max-height: 100vh !important;
     max-height: 100dvh !important;
+    /* Safe area insets for iOS */
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
     border-radius: 0 !important;
     margin: 0 !important;
     z-index: 2147483647 !important;
