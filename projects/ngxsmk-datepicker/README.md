@@ -2,19 +2,16 @@
 
 [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-red.svg)](https://angular.io/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
 [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-green.svg)](https://bundlephobia.com/package/ngxsmk-datepicker)
-[![Downloads](https://img.shields.io/npm/dm/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
 
 **npm i ngxsmk-datepicker**
 
 > **Stable Version**: `1.9.24` is the current stable release. For production use, install the latest version from npm.
 
-**Latest Version**: Check [npm](https://www.npmjs.com/package/ngxsmk-datepicker) for the most recent release.
-
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
-**SEO Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker, open source datepicker, free Angular datepicker, MIT license datepicker, accessible datepicker, responsive datepicker, mobile datepicker, touch-friendly datepicker, keyboard accessible datepicker, RTL datepicker, internationalized datepicker, i18n datepicker, localized datepicker, holiday calendar, date time picker, time selection, 12 hour clock, 24 hour clock, date validation, min max dates, disabled dates, date presets, recurring dates, timezone support
+**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker, Angular datepicker Europe, Angular datepicker Deutschland, Angular datepicker France, Angular datepicker España, Angular datepicker Italia, Angular datepicker Nederland, Angular datepicker Polska, Angular datepicker Portugal, Angular datepicker Sverige, Angular datepicker Norge, Angular datepicker Suomi, Angular datepicker Danmark, Angular datepicker België, Angular datepicker Schweiz, Angular datepicker Österreich
 
 * Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
 * **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
@@ -33,7 +30,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 
 ## **✨ Features**
 
-* **Multiple Selection Modes**: Supports `single`, `range`, `multiple`, `week`, `month`, `quarter`, and `year` date selection.
+* **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
 * **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
@@ -55,20 +52,19 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
 * **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
 * **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
-* **E2E Testing**: Comprehensive Playwright-based end-to-end testing infrastructure.
 * **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
 * **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
 * **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
 * **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
-* **Comprehensive Testing**: Full test coverage with 353+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, and edge cases.
+* **Comprehensive Testing**: Extensive test coverage (67.6% statements, 57.37% branches, 79.67% functions, 68.22% lines) with 1034+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, edge cases, error handling, async operations, DOM manipulation, integration flows, cross-browser compatibility, performance, memory management, and accessibility.
 * **CI/CD Integration**: Automated testing and coverage reporting via GitHub Actions.
 * **Customizable Calendar Views**: Year-picker, decade-picker, timeline view, and time-slider view for diverse use cases.
 * **Modern Demo App**: Beautiful demo application with glassmorphism effects, gradient themes, and responsive design.
 
 ## **📋 Compatibility**
 
-For detailed compatibility information, see [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
+For detailed compatibility information, see [COMPATIBILITY.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/COMPATIBILITY.md).
 
 ### Quick Reference
 
@@ -78,7 +74,7 @@ For detailed compatibility information, see [docs/COMPATIBILITY.md](docs/COMPATI
 | Angular 18 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
 | Angular 19 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
 | Angular 20 | ✅ Fully Supported | ✅ All | ❌ | ✅ | ✅ |
-| Angular 21 | ✅ Fully Supported | ✅ All | ✅ | ✅ | ✅ | **Officially Released** |
+| Angular 21 | ✅ Fully Supported | ✅ All | ✅ | ✅ | ✅ |
 | Angular 22+ | 🔄 Future Support | ✅ All | ✅ | ✅ | ✅ |
 
 **Zone.js**: Optional - The library works with or without Zone.js (zoneless apps supported)
@@ -86,6 +82,41 @@ For detailed compatibility information, see [docs/COMPATIBILITY.md](docs/COMPATI
 **SSR**: ✅ Fully compatible with Angular Universal and server-side rendering
 
 **Peer Dependencies**: `@angular/core >=17.0.0 <24.0.0`
+
+## **🔒 API Stability & Deprecation Policy**
+
+### API Stability Guarantees
+
+- **Public API**: All public APIs (inputs, outputs, methods) are stable within a major version
+- **Experimental Features**: Features marked as `experimental` may change in minor versions
+- **Internal APIs**: Private methods and internal services are not part of the public API and may change without notice
+
+### Deprecation Policy
+
+- **Deprecation Period**: Features are deprecated for at least **2 major versions** before removal
+- **Deprecation Warnings**: 
+  - `@deprecated` JSDoc tags in code
+  - Console warnings in development mode
+  - Clear documentation in CHANGELOG.md
+- **Migration Guides**: Provided in `MIGRATION.md` for all breaking changes
+- **Breaking Changes**: Only occur in major version releases (semver)
+
+### Stable APIs
+
+The following are considered stable public APIs:
+- Component inputs and outputs (`@Input()`, `@Output()`)
+- Public methods documented in API docs
+- Exported types and interfaces
+- Service APIs (when marked as public)
+
+### Experimental Features
+
+Features marked as experimental may change:
+- Signal Forms support (`[field]` input) - Experimental in v1.9.x, stable in v2.0.0+
+- Some advanced selection modes
+- Plugin architecture hooks (subject to refinement)
+
+For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CONTRIBUTING.md#deprecation-policy).
 
 ## **🚀 Installation**
 
@@ -124,7 +155,7 @@ This pattern is also compatible with computed/linked signals produced by `httpRe
 
 ### Signal Forms with `[field]` Input (Angular 21+)
 
-For direct integration with Angular Signal Forms, use the `[field]` input:
+For direct integration with Angular Signal Forms, use the `[field]` input. The datepicker automatically tracks dirty state when using this binding:
 
 ```typescript
 import { Component, signal, form, objectSchema } from '@angular/core';
@@ -153,18 +184,20 @@ export class FormComponent {
 }
 ```
 
-The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed!
+The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed! It also automatically tracks the form's dirty state, so `form().dirty()` will return `true` after a user selects a date.
+
+For detailed Signal Forms integration including dirty state tracking, see the [Signal Forms Integration Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signal-forms.md).
 
 ### Documentation
 
-- **[Plugin Architecture](./docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
-- **[Signals Integration Guide](./docs/signals.md)** - Complete guide to using signals with the datepicker
-- **[Signal Forms Guide](./docs/signal-forms.md)** - Deep dive into Signal Forms integration
-- **[SSR Guide](./docs/ssr.md)** - Server-side rendering setup and best practices
-- **[SSR Example](./docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
-- **[Extension Points Guide](./docs/extension-points.md)** - Customization hooks and extension points
-- **[Theme Tokens Reference](./docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
-- **[API Documentation](./docs/API.md)** - Complete public API reference
+- **[Plugin Architecture](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
+- **[Signals Integration Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
+- **[Signal Forms Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
+- **[SSR Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
+- **[SSR Example](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
+- **[Extension Points Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
+- **[Theme Tokens Reference](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
+- **[API Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
 
 #### **1. Import the Component**
 
@@ -462,6 +495,7 @@ export class PlainFormComponent {
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
+| showCalendarButton | boolean                                        | false                 | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
 | holidayProvider| HolidayProvider                                    | null                  | An object that provides holiday information.                                                                  |
@@ -475,7 +509,7 @@ export class PlainFormComponent {
 | nextMonthAriaLabel | string                                        | 'Next month'          | Aria label for next month navigation button.                                                                  |
 | clearAriaLabel | string                                            | 'Clear selection'     | Aria label for clear button.                                                                                 |
 | closeAriaLabel | string                                            | 'Close calendar'      | Aria label for close button.                                                                                 |
-| classes        | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, closeBtn? } | undefined | Tailwind-friendly class overrides for theming. |
+| classes        | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, calendarBtn?, closeBtn? } | undefined | Tailwind-friendly class overrides for theming. |
 
 ### **Outputs**
 
@@ -512,6 +546,7 @@ For Tailwind CSS or custom class-based theming, use the `classes` input:
     dayCell: 'hover:bg-indigo-50',
     footer: 'flex justify-end gap-2',
     clearBtn: 'btn btn-ghost',
+    calendarBtn: 'btn btn-icon',
     closeBtn: 'btn btn-primary'
   }">
 </ngxsmk-datepicker>
@@ -525,6 +560,30 @@ To enable the dark theme, simply bind the theme input:
 <ngxsmk-datepicker [theme]="'dark'"></ngxsmk-datepicker>
 ```
 
+### Calendar Button Visibility
+
+Control the visibility of the calendar icon button:
+
+```html
+<!-- Hide calendar button (default - users can still click input to open calendar) -->
+<ngxsmk-datepicker
+  mode="single">
+</ngxsmk-datepicker>
+
+<!-- Show calendar button -->
+<ngxsmk-datepicker
+  [showCalendarButton]="true"
+  mode="single">
+</ngxsmk-datepicker>
+
+<!-- Useful with allowTyping for custom UI -->
+<ngxsmk-datepicker
+  [allowTyping]="true"
+  [showCalendarButton]="false"
+  mode="single">
+</ngxsmk-datepicker>
+```
+
 ## **🌍 Localization**
 
 The `locale` input controls all internationalization. It automatically formats month names, weekday names, and sets the first day of the week.
@@ -536,6 +595,45 @@ The `locale` input controls all internationalization. It automatically formats m
 ```
 
 The datepicker automatically detects the browser's locale if not specified. For SSR applications, explicitly set the locale to ensure consistent rendering on both server and client.
+
+### **European Localization Support**
+
+ngxsmk-datepicker provides comprehensive support for European locales and date formats:
+
+**Supported European Locales:**
+- 🇩🇪 **Germany**: `de-DE`, `de-AT`, `de-CH` - DD.MM.YYYY format, Monday week start
+- 🇫🇷 **France**: `fr-FR`, `fr-BE`, `fr-CH` - DD/MM/YYYY format, Monday week start
+- 🇪🇸 **Spain**: `es-ES` - DD/MM/YYYY format, Monday week start
+- 🇮🇹 **Italy**: `it-IT`, `it-CH` - DD/MM/YYYY format, Monday week start
+- 🇳🇱 **Netherlands**: `nl-NL`, `nl-BE` - DD-MM-YYYY format, Monday week start
+- 🇵🇱 **Poland**: `pl-PL` - DD.MM.YYYY format, Monday week start
+- 🇵🇹 **Portugal**: `pt-PT` - DD/MM/YYYY format, Monday week start
+- 🇸🇪 **Sweden**: `sv-SE` - YYYY-MM-DD format, Monday week start
+- 🇳🇴 **Norway**: `no-NO` - DD.MM.YYYY format, Monday week start
+- 🇫🇮 **Finland**: `fi-FI` - DD.MM.YYYY format, Monday week start
+- 🇩🇰 **Denmark**: `da-DK` - DD.MM.YYYY format, Monday week start
+- 🇧🇪 **Belgium**: `nl-BE`, `fr-BE` - Regional format support
+- 🇨🇭 **Switzerland**: `de-CH`, `fr-CH`, `it-CH` - Multi-language support
+- 🇦🇹 **Austria**: `de-AT` - German format with Austrian preferences
+- 🇬🇧 **United Kingdom**: `en-GB` - DD/MM/YYYY format, Monday week start
+
+**European Date Format Examples:**
+
+```html
+<!-- German format (DD.MM.YYYY) -->
+<ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
+
+<!-- French format (DD/MM/YYYY) -->
+<ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
+
+<!-- Swedish format (YYYY-MM-DD) -->
+<ngxsmk-datepicker [locale]="'sv-SE'"></ngxsmk-datepicker>
+
+<!-- UK format (DD/MM/YYYY) -->
+<ngxsmk-datepicker [locale]="'en-GB'"></ngxsmk-datepicker>
+```
+
+All European locales automatically use **Monday as the week start day** (ISO 8601 standard), which is the standard in most European countries.
 
 ## **🖥️ Server-Side Rendering (SSR)**
 
@@ -742,7 +840,7 @@ ngxsmk-datepicker/
 
 ## **🗺️ Roadmap**
 
-Check out our [Roadmap](ROADMAP.md) to see planned features, improvements, and how you can contribute. We're always looking for contributors, especially for issues labeled `good-first-issue` and `help-wanted`!
+Check out our [Roadmap](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/ROADMAP.md) to see planned features, improvements, and how you can contribute. We're always looking for contributors, especially for issues labeled `good-first-issue` and `help-wanted`!
 
 ## **🤝 Contributions**
 
@@ -768,9 +866,33 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.22** (Stable)
+### **v3.0.0** (Stable)
+- 🎉 **Version Update**: Updated to version 3.0.0
+- ✅ **Stable Release**: Version 3.0.0 is the current stable version
+- ✨ **Improvements**: Removed E2E infrastructure, fixed lint warnings, improved type safety
+
+### **v2.0.0** (Stable)
+- 🎉 **Version Update**: Updated to version 2.0.0
+- ✅ **Stable Release**: Version 2.0.0 is the current stable version
+
+### **v1.10.0** (Stable)
+- 🎉 **Version Update**: Updated to version 1.10.0
+- ✅ **Stable Release**: Version 1.10.0 is the current stable version
+
+### **v1.9.24**
+- 🎉 **Version Update**: Updated to version 1.9.24
+- ✅ **Stable Release**: Version 1.9.24 is the current stable version
+
+### **v1.9.23**
+- 🐛 **Fixed**: CSS Variables Theming (Issue #84) - CSS variables theming now works when variables are defined in global `:root` selector
+  - Enhanced CSS selector from `:root` to `:root, :root > body` for higher specificity
+  - Added `!important` flags to inline styles to ensure they override existing styles
+  - ThemeBuilderService now properly overrides global stylesheet variables
+  - Updated documentation to explain the fix and provide guidance
+  - Resolves issue where theme variables defined in global stylesheets were not being applied
+
+### **v1.9.22**
 - 🎉 **Version Update**: Updated to version 1.9.22
-- ✅ **Stable Release**: Version 1.9.22 is the current stable version
 - 🐛 **Fixed**: Form control value initialization issue - datepicker now correctly displays month from form control values
   - Fixed calendar month display when using Reactive Forms with initial values
   - Added proper signal updates and change detection in `writeValue()` method
@@ -778,9 +900,8 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Added fallback logic for locales where `Intl.Locale.weekInfo` is not available
   - Now correctly returns Monday (1) for en-GB and other European locales
 
-### **v1.9.21** (Stable)
+### **v1.9.21**
 - 🎉 **Version Update**: Updated to version 1.9.21
-- ✅ **Stable Release**: Version 1.9.21 is the current stable version
 - 📱 **Mobile-Specific Features**: Comprehensive mobile optimization
   - Native date picker integration with automatic mobile detection
   - Bottom sheet modal with swipe-to-dismiss gestures
@@ -799,10 +920,6 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - New services: CalendarGenerationService, DisplayFormattingService, DateValidationService
   - Better code organization and maintainability
   - Reduced component complexity
-- 🧪 **E2E Testing**: Comprehensive end-to-end testing
-  - Playwright setup with multi-browser support
-  - Mobile viewport testing
-  - Automated test execution
 - ♿ **Accessibility Enhancements**: Better screen reader support
   - Improved ARIA live regions
   - Enhanced focus management
@@ -817,64 +934,77 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Updated component and utility tests
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.20
 
-### **v1.9.19** (Stable)
+### **v1.9.20**
+- 🎉 **Version Update**: Updated to version 1.9.20
+- 🐛 **Bug Fix (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
+  - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
+  - Component now gracefully handles missing `matchMedia` API in test environments
+  - Prevents test failures when running with Vitest and jsdom
+- ✅ **Test Coverage**: Added comprehensive test coverage for `matchMedia` compatibility scenarios
+- 🔄 **Backward Compatible**: Full backward compatibility with v1.9.19
+
+### **v1.9.19**
 - 🎉 **Version Update**: Updated to version 1.9.19
-- ✅ **Stable Release**: Version 1.9.19 is the current stable version
 - 🎨 **Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes (320px to desktop)
 - 📱 **Mobile Optimization**: Enhanced mobile experience with improved navbar, sidebar, hero section, and feature grid
 - 🧹 **Code Cleanup**: Removed unnecessary comments for cleaner codebase
 - 🔧 **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.18
 
-### **v1.9.18** (Stable)
+### **v1.9.18**
+- 🐛 **Mobile Touch Event Handling**: Fixed touch listener attachment when calendar opens on mobile devices
+  - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
+  - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
+  - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
 - 🎉 **Version Update**: Updated to version 1.9.18
-- ✅ **Stable Release**: Version 1.9.18 is the current stable version
-- 🐛 **Fixed**: Improved mobile touch event handling - touch listeners now properly attach when calendar opens
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.17
 
-### **v1.9.17** (Stable)
+### **v1.9.17**
+- 🎉 **Calendar Button Visibility Control**: Added `showCalendarButton` input property to show/hide the calendar icon button
+  - Defaults to `false` for a cleaner, more minimal UI
+  - When set to `true`, displays the calendar icon button next to the input field
+  - When set to `false`, users can still open the calendar by clicking the input field
+  - Perfect for custom UI designs or when using `allowTyping` with custom calendar triggers
+- 🎨 **Calendar Button Styling**: Added `calendarBtn` to `DatepickerClasses` for custom styling of the calendar button
+- 🔧 **Type Compatibility**: Updated `SignalFormField` type to be fully compatible with Angular 21's `FieldTree<Date, string>` types
+  - Resolves TypeScript compilation issues when using `[field]` input with Angular 21 Signal Forms
+  - Maintains full backward compatibility with Angular 17-20
 - 🎉 **Version Update**: Updated to version 1.9.17
-- ✅ **Stable Release**: Version 1.9.17 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.16
-- ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
+- ✅ **Angular 17-22 Compatible**: Verified compatibility with Angular 17-22 (including Angular 21)
 
-### **v1.9.16** (Stable)
+### **v1.9.16**
 - 🐛 **Range Mode Previous Month Selection**: Fixed issue where users could not select dates from previous months in range mode when starting with `{ start: null, end: null }`
 - 🎉 **Version Update**: Updated to version 1.9.16
-- ✅ **Stable Release**: Version 1.9.16 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.15
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
-### **v1.9.15** (Stable)
+### **v1.9.15**
 - 🐛 **Moment Object Binding Fix**: Fixed Moment.js objects not binding correctly with ngModel
 - 🐛 **Date Clicks After Navigation**: Fixed dates becoming unclickable after month navigation
 - 🎉 **Version Update**: Updated to version 1.9.15
-- ✅ **Stable Release**: Version 1.9.15 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.14
 - ✅ **Angular 17+ Compatible**: Verified compatibility with Angular 17 and up versions
 
-### **v1.9.14** (Stable)
+### **v1.9.14**
 - 🐛 **Date Picker Selection Fix**: Fixed date picker selection issues, especially in range mode
 - 🐛 **Moment.js Timezone Support**: Fixed timezone offset preservation for Moment.js objects
 - 🎉 **Version Update**: Updated to version 1.9.14
-- ✅ **Stable Release**: Version 1.9.14 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.13
 
-### **v1.9.13** (Stable)
+### **v1.9.13**
 - 🐛 **Bug Fixes**: Fixed `valueChange` event emitting null for range mode with ngModel
 - 🐛 **Bug Fixes**: Fixed date selection becoming disabled after month navigation in range mode
 - 🐛 **Bug Fixes**: Fixed Moment.js object handling in range values and arrays
 - 🎉 **Version Update**: Updated to version 1.9.13
-- ✅ **Stable Release**: Version 1.9.13 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.12
 
-### **v1.9.12** (Stable)
+### **v1.9.12**
 - 🎉 **Version Update**: Updated to version 1.9.12
-- ✅ **Stable Release**: Version 1.9.12 is the current stable version
 - 🔄 **Backward Compatible**: Full backward compatibility with v1.9.11
-- 📚 **Migration Guide**: See [MIGRATION.md](../../MIGRATION.md) for detailed migration instructions
+- 📚 **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for detailed migration instructions
 
-### **v1.9.11** (Stable)
+### **v1.9.11**
 - 🐛 **Moment.js Integration**: Fixed critical issue where Moment.js objects with custom date formats would not populate correctly
   - Added `isMomentObject()` helper method to safely detect Moment.js instances
   - Enhanced `_normalizeValue()` method to handle Moment.js objects directly
@@ -885,7 +1015,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 🔍 **Moment.js Detection**: More robust detection of Moment.js objects across different versions
 - 🎮 **Demo Application**: Added working Moment.js integration example with interactive controls
 
-### **v1.9.10** (Stable)
+### **v1.9.10**
 - 🐛 **Async Database Value Loading**: Enhanced datepicker to properly handle database values that load asynchronously
   - Added fallback sync mechanism in `ngAfterViewInit` to catch async database loads
   - Added delayed sync checks in `ngOnInit`, `ngOnChanges`, and `ngAfterViewInit`
@@ -900,25 +1030,25 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Simplified karma.conf.js to remove deprecated plugins
   - Updated test script to target correct project
 
-### **v1.9.9** (Stable)
+### **v1.9.9**
 - 🐛 **Database Value Population**: Fixed critical issue where datepicker would not populate with values from database when using `[field]` input binding
   - Added `_normalizeValue()` helper method to properly handle all value types
   - Updated field effect and related methods to use `_normalizeValue()` instead of `_normalizeDate()`
   - Fixed issue where string dates from database were not being parsed and displayed correctly
   - Now properly handles Date objects, string dates, range objects, and arrays of dates
 
-### **v1.9.8** (Stable)
+### **v1.9.8**
 - 🐛 **Date Selection Reset Issue**: Fixed critical bug where selected dates would reset to today's date when using `[field]` input binding
   - Fixed `applyCurrentTime` to create a new Date object instead of mutating the original
   - Added `_isUpdatingFromInternal` flag to prevent field effect from resetting the value
   - This ensures selected dates are properly stored in the form field
 
-### **v1.9.7** (Stable)
+### **v1.9.7**
 - 🐛 **Calendar Population**: Fixed critical issue where datepicker calendar would not populate with dates when opened
   - Fixed issue when multiple datepickers were present in the same form
   - Ensured `generateCalendar()` is called when opening the datepicker via click, touch, or programmatic methods
 
-### **v1.9.6** (Stable)
+### **v1.9.6**
 - 🐛 **Multiple Datepicker Management**: Fixed issue where multiple datepickers in the same form would open in the same centered location
 - 🖱️ **Outside Click Detection**: Improved click detection to properly close datepicker when clicking outside
 - 🔄 **Auto-close Other Datepickers**: When opening a datepicker, all other open datepickers in the same form are now automatically closed
@@ -926,14 +1056,14 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 - 📱 **Datepicker Closing on Mobile**: Fixed issue where datepicker would open and immediately disappear on mobile devices
 - 👆 **Select Box Cursor**: Added pointer cursor to all select boxes (month, year, hour, minute, AM/PM) in the datepicker
 
-### **v1.9.5** (Stable)
+### **v1.9.5**
 - 🔧 **Angular 21+ Signal Forms Type Compatibility**: Fixed TypeScript compilation error with Angular 21+ Signal Forms
   - Fixed `Type '() => string' is not assignable to type 'never'` error when using `[field]` input
   - Updated `SignalFormField` type definition to be compatible with Angular 21's `FieldTree<Date, string>` types
   - Maintains backward compatibility with Angular 17-20 where field input is optional
   - Resolves [#33](https://github.com/NGXSMK/ngxsmk-datepicker/issues/33)
 
-### **v1.9.4** (Stable)
+### **v1.9.4**
 - ✨ **Custom Date Format**: New `[displayFormat]` input property to display dates in custom formats
   - Supports format strings like "MM/DD/YYYY hh:mm A"
   - Works with date adapters (date-fns, dayjs, luxon) or built-in simple formatter
@@ -945,7 +1075,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Removed unnecessary scrollbars from datepicker wrapper
   - Resolves [#32](https://github.com/NGXSMK/ngxsmk-datepicker/issues/32)
 
-### **v1.9.3** (Stable)
+### **v1.9.3**
 - ✨ **Time-Only Picker**: New `[timeOnly]` input property to display only time selection without calendar
   - Hides calendar grid and shows only time controls (hour, minute, AM/PM)
   - Automatically enables `showTime` when `timeOnly` is true
@@ -966,7 +1096,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Fixed calendar views tests, recurring dates utils tests
   - All 353 tests now pass successfully
 
-### **v1.9.2** (Stable)
+### **v1.9.2**
 - 📦 **Bundle Optimization**: Optimized bundle size with improved TypeScript compiler settings
   - Main bundle: ~127KB (source maps excluded from published package)
   - Enhanced tree-shaking with optimized imports and compiler options
@@ -990,7 +1120,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
   - Build warnings from conflicting export conditions resolved
   - Source map removal script made more resilient for build environments
 
-### **v1.9.1** (Stable)
+### **v1.9.1**
 - 🐛 Minor bug fixes and improvements
 
 ### **v1.9.0**
@@ -1138,12 +1268,16 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## **🔍 SEO & Discoverability**
 
-This library is optimized for search engine visibility:
+This library is optimized for search engine visibility, especially for European markets:
 - **Keywords**: Angular datepicker, date range picker, calendar component, Angular 17-21, TypeScript, Signal Forms, SSR compatible
-- **Meta Tags**: Comprehensive Open Graph and Twitter Card support
-- **Structured Data**: JSON-LD schema markup for better search results
+- **European SEO**: Optimized for Germany, France, Spain, Italy, Netherlands, Poland, Portugal, Sweden, Norway, Finland, Denmark, Belgium, Switzerland, Austria, and United Kingdom
+- **Multi-language Support**: hreflang tags for 15+ European languages and locales
+- **European Geo-targeting**: Geo tags and structured data optimized for European Union countries
+- **Meta Tags**: Comprehensive Open Graph and Twitter Card support with European locale alternates
+- **Structured Data**: JSON-LD schema markup with European audience targeting and area served information
 - **Documentation**: Complete API documentation with examples
 - **Performance**: Optimized bundle size (~127KB) for fast loading
+- **European Localization**: Full i18n support for European date formats, week start days, and regional preferences
 
 ## **👨‍💻 Author**
 

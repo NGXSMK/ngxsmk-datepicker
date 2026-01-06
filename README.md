@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-red.svg)](https://angular.io/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
 [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-green.svg)](https://bundlephobia.com/package/ngxsmk-datepicker)
 
 **npm i ngxsmk-datepicker**
@@ -64,7 +64,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 
 ## **📋 Compatibility**
 
-For detailed compatibility information, see [COMPATIBILITY.md](projects/ngxsmk-datepicker/docs/COMPATIBILITY.md).
+For detailed compatibility information, see [COMPATIBILITY.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/COMPATIBILITY.md).
 
 ### Quick Reference
 
@@ -116,7 +116,7 @@ Features marked as experimental may change:
 - Some advanced selection modes
 - Plugin architecture hooks (subject to refinement)
 
-For details, see [CONTRIBUTING.md](CONTRIBUTING.md#deprecation-policy).
+For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CONTRIBUTING.md#deprecation-policy).
 
 ## **🚀 Installation**
 
@@ -186,18 +186,18 @@ export class FormComponent {
 
 The `[field]` input provides automatic two-way binding with signal forms - no manual event handling needed! It also automatically tracks the form's dirty state, so `form().dirty()` will return `true` after a user selects a date.
 
-For detailed Signal Forms integration including dirty state tracking, see the [Signal Forms Integration Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md).
+For detailed Signal Forms integration including dirty state tracking, see the [Signal Forms Integration Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signal-forms.md).
 
 ### Documentation
 
-- **[Plugin Architecture](./projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
-- **[Signals Integration Guide](./projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
-- **[Signal Forms Guide](./projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
-- **[SSR Guide](./projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
-- **[SSR Example](./projects/ngxsmk-datepicker/docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
-- **[Extension Points Guide](./projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
-- **[Theme Tokens Reference](./projects/ngxsmk-datepicker/docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
-- **[API Documentation](./projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
+- **[Plugin Architecture](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/PLUGIN-ARCHITECTURE.md)** - Complete guide to the plugin architecture and hook system
+- **[Signals Integration Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signals.md)** - Complete guide to using signals with the datepicker
+- **[Signal Forms Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/signal-forms.md)** - Deep dive into Signal Forms integration
+- **[SSR Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/ssr.md)** - Server-side rendering setup and best practices
+- **[SSR Example](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/SSR-EXAMPLE.md)** - Complete Angular Universal example with hydration notes
+- **[Extension Points Guide](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/extension-points.md)** - Customization hooks and extension points
+- **[Theme Tokens Reference](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/THEME-TOKENS.md)** - Complete CSS custom properties reference with examples
+- **[API Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md)** - Complete public API reference
 
 #### **1. Import the Component**
 
@@ -840,7 +840,7 @@ ngxsmk-datepicker/
 
 ## **🗺️ Roadmap**
 
-Check out our [Roadmap](ROADMAP.md) to see planned features, improvements, and how you can contribute. We're always looking for contributors, especially for issues labeled `good-first-issue` and `help-wanted`!
+Check out our [Roadmap](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/ROADMAP.md) to see planned features, improvements, and how you can contribute. We're always looking for contributors, especially for issues labeled `good-first-issue` and `help-wanted`!
 
 ## **🤝 Contributions**
 

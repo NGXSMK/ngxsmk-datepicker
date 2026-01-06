@@ -5,66 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.1] - 2026-01-06 (Stable)
-
+## [1.9.24] - 2026-01-06 (Stable)
+ 
 ### Fixed
+- **IDE Support**: Fixed "This component requires inline template type-checking" error by including all source files in tsconfig
+  - Ensures accurate template type checking in VS Code and other IDEs
 - **NPM Package**: Fixed issue where `README.md` was missing from the npm package
   - Updated build scripts to ensure `README.md` is correctly included in the distribution
   - Ensures proper documentation rendering on npmjs.com
-- **Major Version Update**: Updated to version 3.0.0
-- **Stable Release**: Version 3.0.0 is the current stable version
-- **Code Quality**: Resolved all linting warnings and issues
-- **Infrastructure**: Removed End-to-End (E2E) testing infrastructure
-- **Type Safety**: Improved type safety by using strict types instead of `any`
-- **Version Update**: Updated to version 2.0.0
-- **Stable Release**: Version 2.0.0 is the current stable version
-- **Major Version**: This is a major version release
-- **Test Coverage Improvements**: Significantly improved test coverage across all metrics
-  - **Statements**: 67.6% (3113/4605) - up from ~22%
-  - **Branches**: 57.37% (1584/2761) - up from ~10%
-  - **Functions**: 79.67% (486/610) - up from ~28%
-  - **Lines**: 68.22% (3001/4399) - up from ~22%
-  - **Total Tests**: 1034+ tests covering comprehensive scenarios
-  - Added tests for error injection, edge cases, async operations, DOM manipulation
-  - Added integration tests for complex user flows
-  - Added cross-browser compatibility tests
-  - Added performance and memory leak detection tests
-  - Added comprehensive accessibility tests
-
-### Fixed
-- **Multiple Datepickers Positioning (Issue #36)**: Enhanced popover positioning logic
-  - Added JavaScript positioning to position popovers relative to input elements on mobile
-  - Falls back to center positioning when not enough space
-  - Desktop positioning already handled by CSS
-  - Improves UX when multiple datepickers are on the same page
-- **Test Suite Stability**: Fixed ResizeObserver mock cleanup issues affecting multiple tests
-  - Added proper cleanup in `afterEach` hooks to prevent test pollution
-  - Fixed memory leak detection tests to be more lenient with test environment overhead
-  - Improved test isolation and reliability
-
-## [1.10.0] - 2025-01-27 (Stable)
-
-### Changed
-- **Version Update**: Updated to version 1.10.0
-- **Stable Release**: Version 1.10.0 is the current stable version
-- **Open Source Release**: Project prepared for public open source release
-
-### Added
-- **Ionic Compatibility**: Enhanced compatibility with Ionic Angular applications
-  - Z-index adjustments for Ionic overlays
-  - Body scroll lock disabled for ion-content compatibility
-  - Touch gesture conflict resolution
-  - Safe area insets support for iOS
-  - CSS variable mapping for Ionic themes
-  - Focus management improvements for Ionic environments
-- **Documentation**: Comprehensive open source documentation
-  - CODE_OF_CONDUCT.md
-  - SECURITY.md (updated with v1.10.0 support)
-  - GitHub issue and PR templates
-  - CI/CD workflows
-  - Open source preparation checklist
-
-## [1.9.24] - 2025-01-04 (Stable)
 
 ### Changed
 - **Version Update**: Updated to version 1.9.24
