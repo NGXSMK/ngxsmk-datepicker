@@ -866,18 +866,10 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v3.0.0** (Stable)
-- 🎉 **Version Update**: Updated to version 3.0.0
-- ✅ **Stable Release**: Version 3.0.0 is the current stable version
-- ✨ **Improvements**: Removed E2E infrastructure, fixed lint warnings, improved type safety
-
-### **v2.0.0** (Stable)
-- 🎉 **Version Update**: Updated to version 2.0.0
-- ✅ **Stable Release**: Version 2.0.0 is the current stable version
-
-### **v1.10.0** (Stable)
-- 🎉 **Version Update**: Updated to version 1.10.0
-- ✅ **Stable Release**: Version 1.10.0 is the current stable version
+### **v1.9.25** (Stable)
+- 🎉 **Version Update**: Updated to version 1.9.25
+- ✅ **Stable Release**: Version 1.9.25 is the current stable version
+- ✨ **Improvements**: Fixed IDE template type-checking, fixed NPM README issues, updated docs with European localization support
 
 ### **v1.9.24**
 - 🎉 **Version Update**: Updated to version 1.9.24
@@ -1264,7 +1256,7 @@ Perfect for managing design tokens, creating theme systems, and implementing dar
 
 ## **📜 License**
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE) file for details.
 
 ## **🔍 SEO & Discoverability**
 
