@@ -1,25 +1,15 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { AriaLiveService } from './aria-live.service';
-import { PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
 
 describe('AriaLiveService', () => {
   let service: AriaLiveService;
-  let rendererMock: jasmine.SpyObj<Renderer2>;
-  let rendererFactoryMock: jasmine.SpyObj<RendererFactory2>;
 
   beforeEach(() => {
-    rendererMock = jasmine.createSpyObj('Renderer2', ['createElement', 'setAttribute', 'setStyle', 'appendChild', 'removeChild']);
-    rendererFactoryMock = jasmine.createSpyObj('RendererFactory2', ['createRenderer']);
-    rendererFactoryMock.createRenderer.and.returnValue(rendererMock);
-
-    const createdElement = document.createElement('div');
-    rendererMock.createElement.and.returnValue(createdElement);
-
     TestBed.configureTestingModule({
       providers: [
         AriaLiveService,
-        { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: RendererFactory2, useValue: rendererFactoryMock }
+        { provide: PLATFORM_ID, useValue: 'browser' }
       ]
     });
 
@@ -27,100 +17,111 @@ describe('AriaLiveService', () => {
   });
 
   afterEach(() => {
-    // Clean up any live regions in document.body
-    const regions = document.body.querySelectorAll('.ngxsmk-aria-live-region');
-    regions.forEach(region => region.remove());
     service.ngOnDestroy();
+    // Clean up any remaining regions in the body
+    document.querySelectorAll('.ngxsmk-aria-live-region').forEach(el => el.remove());
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should announce messages', fakeAsync(() => {
-    const message = 'Test announcement';
-    service.announce(message);
+  it('should announce a polite message', fakeAsync(() => {
+    service.announce('Hello world', 'polite');
+    tick(100); // Wait for debounce
+    tick(16);  // Wait for setAnnouncement delay
 
-    // Wait for debounce delay
-    tick(100);
-
-    // requestAnimationFrame is not easily testable with fakeAsync
-    // Instead, verify that the service attempted to create the element
-    expect(rendererMock.createElement).toHaveBeenCalledWith('div');
-
-    // Verify appendChild was called (even if async)
-    expect(rendererMock.appendChild).toHaveBeenCalled();
-
-    // The actual textContent setting happens in requestAnimationFrame
-    // which we can't easily test with fakeAsync, so we verify the structure
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
-    if (liveRegion) {
-      // If region exists, it means the async operations completed
-      expect(liveRegion).toBeTruthy();
-    } else {
-      // If not, at least verify the service was called
-      expect(rendererMock.createElement).toHaveBeenCalled();
-    }
+    const region = document.querySelector('.ngxsmk-aria-live-polite') as HTMLElement;
+    expect(region).toBeTruthy();
+    expect(region.getAttribute('aria-live')).toBe('polite');
+    expect(region.textContent).toBe('Hello world');
   }));
 
-  it('should support assertive priority', fakeAsync(() => {
-    service.announce('Urgent message', 'assertive');
+  it('should announce an assertive message', fakeAsync(() => {
+    service.announce('Alert!', 'assertive');
+    tick(100); // Wait for debounce
+    tick(16);  // Wait for setAnnouncement delay
 
-    // Wait for debounce delay
-    tick(100);
-
-    // Verify element creation was attempted
-    expect(rendererMock.createElement).toHaveBeenCalledWith('div');
-    expect(rendererMock.setAttribute).toHaveBeenCalledWith(jasmine.any(HTMLElement), 'aria-live', 'assertive');
-
-    // Check for assertive region (may be async due to requestAnimationFrame)
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region.ngxsmk-aria-live-assertive') as HTMLElement;
-    if (liveRegion) {
-      expect(liveRegion.getAttribute('aria-live')).toBe('assertive');
-    } else {
-      // At least verify the service attempted to set the attribute
-      expect(rendererMock.setAttribute).toHaveBeenCalled();
-    }
+    const region = document.querySelector('.ngxsmk-aria-live-assertive') as HTMLElement;
+    expect(region).toBeTruthy();
+    expect(region.getAttribute('aria-live')).toBe('assertive');
+    expect(region.textContent).toBe('Alert!');
   }));
 
-  it('should clear message after timeout', fakeAsync(() => {
+  it('should debounce rapid announcements', fakeAsync(() => {
+    service.announce('Message 1');
+    service.announce('Message 2');
+    service.announce('Message 3');
+
+    tick(50); // Less than debounce delay
+    let region = document.querySelector('.ngxsmk-aria-live-polite');
+    expect(region).toBeFalsy(); // Should not have been created yet
+
+    tick(100); // Wait for debounce
+    tick(16);  // Wait for setAnnouncement delay
+    region = document.querySelector('.ngxsmk-aria-live-polite');
+    expect(region?.textContent).toBe('Message 3');
+  }));
+
+  it('should clear announcement after delay', fakeAsync(() => {
     service.announce('Temporary message');
+    tick(100); // Wait for debounce
+    tick(16);  // Wait for setAnnouncement delay
 
-    // Wait for debounce
-    tick(100);
+    const region = document.querySelector('.ngxsmk-aria-live-polite') as HTMLElement;
+    expect(region.textContent).toBe('Temporary message');
 
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
-
-    // Wait for clear delay (2000ms) - this includes the timeout set in setAnnouncement
-    tick(2000);
-
-    // The textContent clearing happens in requestAnimationFrame which is hard to test
-    // So we verify the timeout was set up correctly by checking the service state
-    // The actual clearing is tested indirectly through the timeout mechanism
-    if (liveRegion) {
-      // If region exists, verify it was created
-      expect(liveRegion).toBeTruthy();
-    }
-
-    // Verify the service processed the announcement
-    expect(rendererMock.createElement).toHaveBeenCalled();
+    tick(2000); // Wait for CLEAR_DELAY
+    expect(region.textContent).toBe('');
   }));
 
-  it('should destroy live region', fakeAsync(() => {
-    service.announce('Test');
+  it('should manage queue correctly with mixed priorities', fakeAsync(() => {
+    service.announce('Polite 1', 'polite');
+    service.announce('Assertive 1', 'assertive');
+    service.announce('Polite 2', 'polite');
 
-    // Wait for debounce delay
-    tick(100);
+    tick(100); // Wait for debounce
+    tick(16);  // Wait for setAnnouncement delay
 
-    // Verify element was created
-    expect(rendererMock.createElement).toHaveBeenCalled();
+    const politeRegion = document.querySelector('.ngxsmk-aria-live-polite');
+    const assertiveRegion = document.querySelector('.ngxsmk-aria-live-assertive');
 
-    // Call destroy
+    expect(politeRegion?.textContent).toBe('Polite 2');
+    expect(assertiveRegion?.textContent).toBe('Assertive 1');
+  }));
+
+  it('should check for empty/missing messages', fakeAsync(() => {
+    service.announce('');
+    service.announce('   ');
+
+    tick(200);
+    const region = document.querySelector('.ngxsmk-aria-live-region');
+    expect(region).toBeFalsy();
+  }));
+
+  it('should not do anything if not in browser', () => {
+    // Reset TestBed to simulate server environment
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        AriaLiveService,
+        { provide: PLATFORM_ID, useValue: 'server' }
+      ]
+    });
+    const serverService = TestBed.inject(AriaLiveService);
+
+    serverService.announce('Test');
+    const region = document.querySelector('.ngxsmk-aria-live-region');
+    expect(region).toBeFalsy();
+  });
+
+  it('should clean up regions on destroy', fakeAsync(() => {
+    service.announce('Cleanup test');
+    tick(120); // Wait for debounce + delay
+
+    expect(document.querySelector('.ngxsmk-aria-live-polite')).toBeTruthy();
+
     service.ngOnDestroy();
-
-    // Verify removeChild was called (the service removes regions in ngOnDestroy)
-    // Note: removeChild might be called even if region wasn't fully created due to async nature
-    expect(rendererMock.removeChild).toHaveBeenCalled();
+    expect(document.querySelector('.ngxsmk-aria-live-polite')).toBeFalsy();
   }));
 });
-
