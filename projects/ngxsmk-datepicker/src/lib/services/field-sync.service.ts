@@ -71,6 +71,7 @@ export type SignalFormField = ({
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
+  markAsDirty?: () => void;
 } & {
   [key: string]: unknown;
 }) | null | undefined;
@@ -402,6 +403,9 @@ export class FieldSyncService {
       if (typeof field.setValue === 'function') {
         try {
           field.setValue(normalizedValue);
+          if (typeof field.markAsDirty === 'function') {
+            field.markAsDirty();
+          }
           // Use microtask delay to ensure effect has time to see the flag
           // This prevents race condition where effect runs after flag is reset
           Promise.resolve().then(() => {
@@ -418,6 +422,9 @@ export class FieldSyncService {
       if (typeof field.updateValue === 'function') {
         try {
           field.updateValue(() => normalizedValue);
+          if (typeof field.markAsDirty === 'function') {
+            field.markAsDirty();
+          }
           // Use microtask delay to ensure effect has time to see the flag
           Promise.resolve().then(() => {
             this._isUpdatingFromInternal = false;
@@ -432,7 +439,7 @@ export class FieldSyncService {
       // This handles cases where field.value is a writable signal or a function returning a signal
       try {
         const val = field.value;
-        
+
         // For Angular 21 Signal Forms, field.value might be a function that returns the signal
         if (typeof val === 'function') {
           try {
@@ -442,6 +449,9 @@ export class FieldSyncService {
               const writableSignal = signalOrValue as unknown as WritableSignal<DatepickerValue>;
               if (typeof writableSignal.set === 'function') {
                 writableSignal.set(normalizedValue);
+                if (typeof field.markAsDirty === 'function') {
+                  field.markAsDirty();
+                }
                 // Use microtask delay to ensure effect has time to see the flag
                 Promise.resolve().then(() => {
                   this._isUpdatingFromInternal = false;
@@ -453,13 +463,16 @@ export class FieldSyncService {
             // If calling fails, continue to check if val itself is a signal
           }
         }
-        
+
         // Check if it's a writable signal (has .set method)
         // Compatible with all Angular 17+ versions
         if (safeIsSignal(val)) {
           const writableSignal = val as WritableSignal<DatepickerValue>;
           if (typeof writableSignal.set === 'function') {
             writableSignal.set(normalizedValue);
+            if (typeof field.markAsDirty === 'function') {
+              field.markAsDirty();
+            }
             // Use microtask delay to ensure effect has time to see the flag
             Promise.resolve().then(() => {
               this._isUpdatingFromInternal = false;
