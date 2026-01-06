@@ -78,7 +78,7 @@ import { Subject } from 'rxjs';
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
     multi: true
-  }, FieldSyncService, FocusTrapService, AriaLiveService, HapticFeedbackService],
+  }, FieldSyncService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./styles/variables.css', './styles/datepicker.css'],
   template: `
@@ -440,7 +440,6 @@ import { Subject } from 'rxjs';
           </div>
         </div>
       }
-      <div class="ngxsmk-aria-live-region" aria-live="polite" aria-atomic="true" style="position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;"></div>
     </div>
   `,
 })

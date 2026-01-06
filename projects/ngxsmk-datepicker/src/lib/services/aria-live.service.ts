@@ -1,9 +1,12 @@
-import { Injectable, Renderer2, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2, PLATFORM_ID, inject, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AriaLiveService implements OnDestroy {
-  private readonly renderer = inject(Renderer2);
+  private readonly rendererFactory = inject(RendererFactory2);
+  private readonly renderer: Renderer2;
   private politeRegion: HTMLElement | null = null;
   private assertiveRegion: HTMLElement | null = null;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -13,6 +16,10 @@ export class AriaLiveService implements OnDestroy {
   private announcementQueue: Array<{ message: string; priority: 'polite' | 'assertive'; timestamp: number }> = [];
   private readonly DEBOUNCE_DELAY = 100;
   private readonly CLEAR_DELAY = 2000;
+
+  constructor() {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
+  }
 
   /**
    * Announce a message to screen readers with improved timing and queue management
@@ -50,7 +57,7 @@ export class AriaLiveService implements OnDestroy {
     const latestPolite = this.announcementQueue
       .filter(a => a.priority === 'polite')
       .sort((a, b) => b.timestamp - a.timestamp)[0];
-    
+
     const latestAssertive = this.announcementQueue
       .filter(a => a.priority === 'assertive')
       .sort((a, b) => b.timestamp - a.timestamp)[0];
@@ -60,7 +67,7 @@ export class AriaLiveService implements OnDestroy {
     if (latestPolite) {
       this.announceToRegion(latestPolite.message, 'polite');
     }
-    
+
     if (latestAssertive) {
       this.announceToRegion(latestAssertive.message, 'assertive');
     }
@@ -101,11 +108,11 @@ export class AriaLiveService implements OnDestroy {
   private setAnnouncement(region: HTMLElement, message: string, priority: 'polite' | 'assertive'): void {
     // Clear and set new content to ensure screen readers detect the change
     region.textContent = '';
-    
+
     // Use requestAnimationFrame to ensure DOM update is processed
     requestAnimationFrame(() => {
       region.textContent = message;
-      
+
       const timeoutId = setTimeout(() => {
         if (region) {
           region.textContent = '';
@@ -159,22 +166,22 @@ export class AriaLiveService implements OnDestroy {
       clearTimeout(this.politeClearTimeoutId);
       this.politeClearTimeoutId = null;
     }
-    
+
     if (this.assertiveClearTimeoutId !== null) {
       clearTimeout(this.assertiveClearTimeoutId);
       this.assertiveClearTimeoutId = null;
     }
-    
+
     if (this.debounceTimeoutId !== null) {
       clearTimeout(this.debounceTimeoutId);
       this.debounceTimeoutId = null;
     }
-    
+
     if (this.politeRegion && this.isBrowser) {
       this.renderer.removeChild(document.body, this.politeRegion);
       this.politeRegion = null;
     }
-    
+
     if (this.assertiveRegion && this.isBrowser) {
       this.renderer.removeChild(document.body, this.assertiveRegion);
       this.assertiveRegion = null;
@@ -187,4 +194,3 @@ export class AriaLiveService implements OnDestroy {
     this.ngOnDestroy();
   }
 }
-
