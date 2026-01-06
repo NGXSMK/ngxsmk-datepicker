@@ -17,33 +17,10 @@ interface WritableSignal<T> extends Signal<T> {
   set(value: T): void;
 }
 
-/**
- * Safely detects if a value is an Angular Signal.
- * Handles compatibility across Angular 17.0.0 - 21.x
- * 
- * @param value - The value to check
- * @returns true if value is a Signal
- * 
- * @remarks
- * This function uses runtime detection because isSignal() 
- * may not be available in Angular 17.0.0. The detection
- * works by checking if the value is a callable function
- * with no required arguments, which is characteristic
- * of Angular signals.
- * 
- * The function first attempts to use the official isSignal()
- * function if available via dynamic access to avoid build-time
- * import resolution issues. If not available, it falls back
- * to heuristic detection based on function characteristics.
- * 
- * @example
- * ```typescript
- * const mySignal = signal(42);
- * if (safeIsSignal(mySignal)) {
- *   const value = mySignal(); // Type-safe access
- * }
- * ```
- */
+// Safe isSignal detection - works with all Angular 17+ versions including 17.0.0
+// In Angular 17.0.0, isSignal might not be available, so we use function-based detection
+// We avoid importing isSignal directly to prevent build errors in Angular 17.0.0
+// This function provides compatibility across all Angular 17 sub-versions
 function safeIsSignal(value: unknown): value is Signal<unknown> {
   if (value === null || value === undefined) {
     return false;
@@ -94,6 +71,7 @@ export type SignalFormField = ({
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
+  markAsDirty?: () => void;
 } & {
   [key: string]: unknown;
 }) | null | undefined;
@@ -116,22 +94,9 @@ export class FieldSyncService {
   private readonly injector = inject(Injector);
 
   /**
-   * Helper function to safely read a field value, handling both functions and signals.
-   * This handles Angular 21 Signal Forms where field.value can be a signal directly.
-   * 
-   * @param field - The form field to read from
-   * @returns The field value or null if not available
-   * 
-   * @remarks
-   * Angular signals (including computed) are detected as 'function' type.
-   * This function handles multiple scenarios:
-   * - Direct signal values (Angular 21 Signal Forms)
-   * - Functions that return signals
-   * - Functions that return direct values
-   * - Direct Date objects or range objects
-   * 
-   * The function safely handles errors and returns null on any failure,
-   * ensuring the component doesn't crash on invalid field structures.
+   * Helper function to safely read a field value, handling both functions and signals
+   * This handles Angular 21 Signal Forms where field.value can be a signal directly
+   * Note: Angular signals (including computed) are detected as 'function' type
    */
   private readFieldValue(field: SignalFormField): DatepickerValue | null {
     if (!field || typeof field !== 'object' || field.value === undefined) {
@@ -207,19 +172,8 @@ export class FieldSyncService {
   }
 
   /**
-   * Helper function to safely read disabled state.
-   * Handles both direct values, functions, and signals (Angular 21 Signal Forms).
-   * 
-   * @param field - The form field to read from
-   * @returns true if the field is disabled, false otherwise
-   * 
-   * @remarks
-   * This function safely extracts the disabled state from various field formats:
-   * - Direct boolean values
-   * - Signal<boolean> values
-   * - Functions that return boolean or Signal<boolean>
-   * 
-   * Returns false on any error to allow graceful degradation.
+   * Helper function to safely read disabled state
+   * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    */
   private readDisabledState(field: SignalFormField): boolean {
     if (!field || typeof field !== 'object') {
@@ -259,35 +213,6 @@ export class FieldSyncService {
     }
   }
 
-  /**
-   * Sets up reactive synchronization between a Signal Form field and the datepicker component.
-   * 
-   * @param field - The Signal Form field to sync with
-   * @param callbacks - Callback functions for handling value changes, disabled state, and errors
-   * @returns An EffectRef that can be used to destroy the sync, or null if setup failed
-   * 
-   * @remarks
-   * This method creates an Angular effect that automatically tracks changes to the field's
-   * value and disabled state. The effect runs in a reactive context, ensuring all signal
-   * dependencies (including computed signals) are properly tracked.
-   * 
-   * The sync prevents circular updates by tracking when updates originate from the component
-   * itself vs. external changes to the field.
-   * 
-   * @example
-   * ```typescript
-   * const effectRef = fieldSyncService.setupFieldSync(
-   *   myForm.dateField,
-   *   {
-   *     onValueChanged: (value) => component.setValue(value),
-   *     onDisabledChanged: (disabled) => component.disabled = disabled,
-   *     onSyncError: (error) => console.error(error),
-   *     normalizeValue: (value) => normalizeDate(value),
-   *     isValueEqual: (a, b) => isSameDay(a, b)
-   *   }
-   * );
-   * ```
-   */
   setupFieldSync(
     field: SignalFormField,
     callbacks: FieldSyncCallbacks
@@ -462,112 +387,110 @@ export class FieldSyncService {
       return;
     }
 
+    // Set flag to prevent effect from processing this update
+    // This prevents circular updates when we update the field from component
     this._isUpdatingFromInternal = true;
 
     try {
+      // The value passed in should already be normalized by the component
+      // Store it as the last known value BEFORE updating the field
+      // This ensures the effect sees a match if it runs, preventing overwrites
       const normalizedValue = value;
       this._lastKnownFieldValue = normalizedValue;
 
-      let updateSucceeded = false;
-      let lastError: unknown = null;
-
+      // Try setValue first (preferred method for Angular 21 Signal Forms)
+      // This works with computed signal patterns where setValue updates the underlying signal
       if (typeof field.setValue === 'function') {
         try {
           field.setValue(normalizedValue);
-          updateSucceeded = true;
+          if (typeof field.markAsDirty === 'function') {
+            field.markAsDirty();
+          }
+          // Use microtask delay to ensure effect has time to see the flag
+          // This prevents race condition where effect runs after flag is reset
           Promise.resolve().then(() => {
             this._isUpdatingFromInternal = false;
           });
           return;
-        } catch (error) {
-          lastError = error;
+        } catch {
+          // If setValue fails, try updateValue as fallback
+          // Don't return here, continue to try updateValue
         }
       }
 
-      if (!updateSucceeded && typeof field.updateValue === 'function') {
+      // Try updateValue as alternative method
+      if (typeof field.updateValue === 'function') {
         try {
           field.updateValue(() => normalizedValue);
-          updateSucceeded = true;
+          if (typeof field.markAsDirty === 'function') {
+            field.markAsDirty();
+          }
+          // Use microtask delay to ensure effect has time to see the flag
           Promise.resolve().then(() => {
             this._isUpdatingFromInternal = false;
           });
           return;
-        } catch (error) {
-          lastError = error;
+        } catch {
+          // If updateValue also fails, continue to fallback
         }
       }
 
-      if (!updateSucceeded) {
-        let fallbackUsed = false;
-        try {
-          const val = field.value;
-          
-          if (typeof val === 'function') {
-            try {
-              const signalOrValue = val();
-              if (safeIsSignal(signalOrValue)) {
-                const writableSignal = signalOrValue as unknown as WritableSignal<DatepickerValue>;
-                if (typeof writableSignal.set === 'function') {
-                  writableSignal.set(normalizedValue);
-                  fallbackUsed = true;
-                  Promise.resolve().then(() => {
-                    this._isUpdatingFromInternal = false;
-                  });
-                  
-                  if (isDevMode()) {
-                    console.warn(
-                      '[ngxsmk-datepicker] Using direct signal mutation as fallback. ' +
-                      'This may prevent the form from tracking dirty state correctly. ' +
-                      'Ensure your Signal Form field provides setValue() or updateValue() methods. ' +
-                      'Error from setValue/updateValue:', lastError
-                    );
-                  }
-                  return;
+      // Fallback: try to update the underlying signal directly if field.value is a signal
+      // This handles cases where field.value is a writable signal or a function returning a signal
+      try {
+        const val = field.value;
+
+        // For Angular 21 Signal Forms, field.value might be a function that returns the signal
+        if (typeof val === 'function') {
+          try {
+            const signalOrValue = val();
+            // If it's a signal, try to update it
+            if (safeIsSignal(signalOrValue)) {
+              const writableSignal = signalOrValue as unknown as WritableSignal<DatepickerValue>;
+              if (typeof writableSignal.set === 'function') {
+                writableSignal.set(normalizedValue);
+                if (typeof field.markAsDirty === 'function') {
+                  field.markAsDirty();
                 }
+                // Use microtask delay to ensure effect has time to see the flag
+                Promise.resolve().then(() => {
+                  this._isUpdatingFromInternal = false;
+                });
+                return;
               }
-            } catch {
-              // Continue to check if val itself is a signal
             }
+          } catch {
+            // If calling fails, continue to check if val itself is a signal
           }
-          
-          if (!fallbackUsed && safeIsSignal(val)) {
-            const writableSignal = val as WritableSignal<DatepickerValue>;
-            if (typeof writableSignal.set === 'function') {
-              writableSignal.set(normalizedValue);
-              fallbackUsed = true;
-              Promise.resolve().then(() => {
-                this._isUpdatingFromInternal = false;
-              });
-              
-              if (isDevMode()) {
-                console.warn(
-                  '[ngxsmk-datepicker] Using direct signal mutation as fallback. ' +
-                  'This may prevent the form from tracking dirty state correctly. ' +
-                  'Ensure your Signal Form field provides setValue() or updateValue() methods. ' +
-                  'Error from setValue/updateValue:', lastError
-                );
-              }
-              return;
-            }
-          }
-        } catch (error) {
-          lastError = error;
         }
 
-        if (!fallbackUsed && isDevMode()) {
-          console.error(
-            '[ngxsmk-datepicker] Failed to update field value. ' +
-            'Field does not provide setValue(), updateValue(), or a writable signal. ' +
-            'Last error:', lastError
-          );
+        // Check if it's a writable signal (has .set method)
+        // Compatible with all Angular 17+ versions
+        if (safeIsSignal(val)) {
+          const writableSignal = val as WritableSignal<DatepickerValue>;
+          if (typeof writableSignal.set === 'function') {
+            writableSignal.set(normalizedValue);
+            if (typeof field.markAsDirty === 'function') {
+              field.markAsDirty();
+            }
+            // Use microtask delay to ensure effect has time to see the flag
+            Promise.resolve().then(() => {
+              this._isUpdatingFromInternal = false;
+            });
+            return;
+          }
         }
+      } catch {
+        // Silently handle - field might not support direct signal updates
+        // This is expected for computed signals which are read-only
       }
 
-      if (!updateSucceeded) {
-        this._isUpdatingFromInternal = false;
-      }
+      // If no update method worked, reset flag immediately
+      this._isUpdatingFromInternal = false;
 
     } catch (error) {
+      // Silently handle errors to prevent breaking the application
+      // The error might be due to readonly signals or other constraints
       if (isDevMode()) {
         console.warn('[ngxsmk-datepicker] Field sync error:', error);
       }

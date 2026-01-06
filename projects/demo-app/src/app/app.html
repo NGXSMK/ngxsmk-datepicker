@@ -25,7 +25,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v3.0.1</span>
+              <span class="logo-version">v1.9.25</span>
               @if (npmDownloads() !== null) {
               <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
                 title="Monthly downloads on npm" rel="noopener noreferrer">
@@ -187,7 +187,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v3.0.1)</p>
+        <p class="hero-version">(v1.9.25)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{
@@ -502,7 +502,7 @@
 
           <div class="result-box">
             <strong>{{ t().signalValue }}</strong>
-            <code>{{ JSON.stringify(signalDate()) }}</code>
+            <code>{{ signalDate() | json }}</code>
           </div>
 
           <div class="code-block">
@@ -556,7 +556,6 @@
             <ul>
               <li>{{ t().automaticTwoWayBinding }}</li>
               <li>{{ t().automaticDisabledState }}</li>
-              <li>{{ t().automaticDirtyStateTracking }}</li>
               <li>{{ t().worksWithSignalForms }}</li>
               <li>{{ t().typeSafeWithFieldTree }}</li>
             </ul>
@@ -581,7 +580,7 @@
               <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
               <h4 style="margin: 0 0 0.5rem 0;">Signal Forms</h4>
               <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Full support for Angular 21's
-                Signal Forms API with [field] input binding and automatic dirty state tracking</p>
+                experimental Signal Forms API with [field] input binding</p>
             </div>
 
             <div class="feature-card"
@@ -606,14 +605,6 @@
               <h4 style="margin: 0 0 0.5rem 0;">Angular Aria Compatible</h4>
               <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">Built-in ARIA support works
                 seamlessly alongside Angular Aria components</p>
-            </div>
-
-            <div class="feature-card"
-              style="background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px;">
-              <div class="feature-icon" style="font-size: 2rem; margin-bottom: 1rem;">✅</div>
-              <h4 style="margin: 0 0 0.5rem 0;">Comprehensive Testing</h4>
-              <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">67.6% statement coverage, 1034+
-                tests covering all features, edge cases, and integration scenarios</p>
             </div>
           </div>
 
@@ -843,9 +834,9 @@
             <strong>{{ t().formValue }}</strong>
             @if (datepickerForm.controls.rangePreviousMonth.value.start &&
             datepickerForm.controls.rangePreviousMonth.value.end) {
-            <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.end, 'medium') }}</code>
+            <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: {{ datepickerForm.controls.rangePreviousMonth.value.end | date:'medium' }}</code>
             } @else if (datepickerForm.controls.rangePreviousMonth.value.start) {
-            <code>Start: {{ formatDate(datepickerForm.controls.rangePreviousMonth.value.start, 'medium') }} | End: Not selected</code>
+            <code>Start: {{ datepickerForm.controls.rangePreviousMonth.value.start | date:'medium' }} | End: Not selected</code>
             } @else {
             <code>{{ JSON.stringify(datepickerForm.controls.rangePreviousMonth.value) }}</code>
             }
@@ -879,10 +870,10 @@
           <div class="result-box">
             @if (isDate(datepickerForm.controls.timeOnly.value)) {
             <strong>{{ t().formValue }}</strong>
-            <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'short') }}</code>
+            <code>{{ datepickerForm.controls.timeOnly.value | date:'short' }}</code>
             <br>
             <strong>{{ t().timeOnlyLabel }}</strong>
-            <code>{{ formatDate(datepickerForm.controls.timeOnly.value, 'shortTime') }}</code>
+            <code>{{ datepickerForm.controls.timeOnly.value | date:'shortTime' }}</code>
             } @else {
             <strong>{{ t().formValue }}</strong>
             <code>{{ JSON.stringify(datepickerForm.controls.timeOnly.value) }}</code>
@@ -982,27 +973,27 @@
             {
             <div style="margin-top: 0.5rem;">
               <strong>MM/DD/YYYY:</strong>
-              <code>{{ formatDate(datepickerForm.controls.allowTypingDate.value, 'short') }}</code>
+              <code>{{ datepickerForm.controls.allowTypingDate.value | date:'short' }}</code>
             </div>
             }
             @if (datepickerForm.controls.allowTypingDateTime.value &&
             isDate(datepickerForm.controls.allowTypingDateTime.value)) {
             <div style="margin-top: 0.5rem;">
               <strong>With Time:</strong>
-              <code>{{ formatDate(datepickerForm.controls.allowTypingDateTime.value, 'medium') }}</code>
+              <code>{{ datepickerForm.controls.allowTypingDateTime.value | date:'medium' }}</code>
             </div>
             }
             @if (datepickerForm.controls.allowTypingAuto.value && isDate(datepickerForm.controls.allowTypingAuto.value))
             {
             <div style="margin-top: 0.5rem;">
               <strong>Auto-detect:</strong>
-              <code>{{ formatDate(datepickerForm.controls.allowTypingAuto.value, 'short') }}</code>
+              <code>{{ datepickerForm.controls.allowTypingAuto.value | date:'short' }}</code>
             </div>
             }
             @if (datepickerForm.controls.allowTypingISO.value && isDate(datepickerForm.controls.allowTypingISO.value)) {
             <div style="margin-top: 0.5rem;">
               <strong>ISO Format:</strong>
-              <code>{{ formatDate(datepickerForm.controls.allowTypingISO.value, 'short') }}</code>
+              <code>{{ datepickerForm.controls.allowTypingISO.value | date:'short' }}</code>
             </div>
             }
             @if (datepickerForm.controls.rangeWithTyping.value) {
@@ -1012,9 +1003,9 @@
               <strong>Range:</strong>
               @if (datepickerForm.controls.rangeWithTyping.value.start &&
               datepickerForm.controls.rangeWithTyping.value.end) {
-              <code>{{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} - {{ formatDate(datepickerForm.controls.rangeWithTyping.value.end, 'short') }}</code>
+              <code>{{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} - {{ datepickerForm.controls.rangeWithTyping.value.end | date:'short' }}</code>
               } @else if (datepickerForm.controls.rangeWithTyping.value.start) {
-              <code>Start: {{ formatDate(datepickerForm.controls.rangeWithTyping.value.start, 'short') }} | End: Not selected</code>
+              <code>Start: {{ datepickerForm.controls.rangeWithTyping.value.start | date:'short' }} | End: Not selected</code>
               } @else {
               <code>{{ JSON.stringify(datepickerForm.controls.rangeWithTyping.value) }}</code>
               }
@@ -1048,7 +1039,7 @@
           <div class="result-box">
             @if (isDate(datepickerForm.controls.customFormat.value)) {
             <strong>{{ t().formValue }}</strong>
-            <code>{{ formatDate(datepickerForm.controls.customFormat.value, 'short') }}</code>
+            <code>{{ datepickerForm.controls.customFormat.value | date:'short' }}</code>
             <br>
             <strong>Display Format:</strong> <code>MM/DD/YYYY hh:mm A</code>
             } @else {
@@ -1393,7 +1384,7 @@
           <div class="result-box">
             <strong>{{ t().currentValue }}</strong>
             @if (programmaticSingleDate) {
-            <code>{{ formatDate(programmaticSingleDate, 'medium') }}</code>
+            <code>{{ programmaticSingleDate | date:'medium' }}</code>
             } @else {
             <code>{{ t().notSet }}</code>
             }
@@ -1402,7 +1393,7 @@
           <div class="result-box">
             <strong>{{ t().currentRange }}</strong>
             @if (programmaticRange) {
-            <code>{{ formatDate(programmaticRange.start, 'medium') }} - {{ formatDate(programmaticRange.end, 'medium') }}</code>
+            <code>{{ programmaticRange.start | date:'medium' }} - {{ programmaticRange.end | date:'medium' }}</code>
             } @else {
             <code>{{ t().notSet }}</code>
             }
@@ -1411,7 +1402,7 @@
           <div class="result-box">
             <strong>{{ t().currentMultiple }}</strong>
             @if (programmaticMultipleDates?.length) {
-            <code>{{ JSON.stringify(programmaticMultipleDates) }}</code>
+            <code>{{ programmaticMultipleDates | json }}</code>
             } @else {
             <code>{{ t().notSet }}</code>
             }
