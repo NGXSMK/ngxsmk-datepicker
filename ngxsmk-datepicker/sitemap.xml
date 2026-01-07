@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  
+  <!-- Homepage with European Language Alternates -->
+  <url>
+    <loc>https://ngxsmk.github.io/ngxsmk-datepicker/</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="en-GB" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="fr-FR" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="es-ES" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="it-IT" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="pl-PL" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="pt-PT" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="sv-SE" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="no-NO" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="fi-FI" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="da" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="da-DK" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngxsmk.github.io/ngxsmk-datepicker/"/>
+  </url>
+  
+  <!-- Documentation Pages -->
+  <url>
+    <loc>https://ngxsmk.github.io/ngxsmk-datepicker/#installation</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ngxsmk.github.io/ngxsmk-datepicker/#usage</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ngxsmk.github.io/ngxsmk-datepicker/#api</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://ngxsmk.github.io/ngxsmk-datepicker/#examples</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- GitHub Repository -->
+  <url>
+    <loc>https://github.com/NGXSMK/ngxsmk-datepicker</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- NPM Package -->
+  <url>
+    <loc>https://www.npmjs.com/package/ngxsmk-datepicker</loc>
+    <lastmod>2025-01-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+</urlset>
