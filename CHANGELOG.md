@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Version Update**: Updated to version 1.9.26
 
-## [1.9.25] - 2026-01-06 (Stable)
+## [1.9.25] - 2026-01-06
  
 ### Fixed
 - **IDE Support**: Fixed "This component requires inline template type-checking" error by including all source files in tsconfig
@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Version Update**: Updated to version 1.9.25
-- **Stable Release**: Version 1.9.25 is the current stable version
+
 
 ## [1.9.23] - 2025-12-15
 
