@@ -52,25 +52,25 @@ describe('CalendarHeaderComponent', () => {
     expect(component.nextMonth.emit).toHaveBeenCalled();
   });
 
-  it('should emit yearChange when year select changes', () => {
-    spyOn(component.yearChange, 'emit');
-    component.yearChange.emit(2025);
-    expect(component.yearChange.emit).toHaveBeenCalledWith(2025);
+  it('should emit currentYearChange when year select changes', () => {
+    spyOn(component.currentYearChange, 'emit');
+    component.currentYearChange.emit(2025);
+    expect(component.currentYearChange.emit).toHaveBeenCalledWith(2025);
   });
 
-    it('should disable buttons when disabled is true', () => {
-      component.disabled = true;
-      // Force change detection for OnPush component
-      const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
-      cdr.markForCheck();
-      fixture.detectChanges();
-      
-      const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
-      expect(buttons.length).toBeGreaterThan(0);
-      buttons.forEach((button: HTMLButtonElement) => {
-        expect(button.hasAttribute('disabled')).toBe(true);
-      });
+  it('should disable buttons when disabled is true', () => {
+    component.disabled = true;
+    // Force change detection for OnPush component
+    const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
+    cdr.markForCheck();
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
+    expect(buttons.length).toBeGreaterThan(0);
+    buttons.forEach((button: HTMLButtonElement) => {
+      expect(button.hasAttribute('disabled')).toBe(true);
     });
+  });
 
   it('should disable previous button when isBackArrowDisabled is true', () => {
     component.isBackArrowDisabled = true;
@@ -78,7 +78,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const prevButton = buttons[0] as HTMLButtonElement;
@@ -91,7 +91,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const header = fixture.nativeElement.querySelector('.ngxsmk-header');
     expect(header).toBeTruthy();
     if (header) {
@@ -106,7 +106,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const prevButton = buttons[0] as HTMLElement;
@@ -119,7 +119,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const nextButton = buttons[1] as HTMLElement;
@@ -132,7 +132,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const prevButton = buttons[0];
@@ -145,7 +145,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const nextButton = buttons[1];
@@ -158,7 +158,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const prevButton = buttons[0];
@@ -171,7 +171,7 @@ describe('CalendarHeaderComponent', () => {
     const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
     cdr.markForCheck();
     fixture.detectChanges();
-    
+
     const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
     expect(buttons.length).toBeGreaterThan(0);
     const nextButton = buttons[1];
@@ -184,7 +184,7 @@ describe('CalendarHeaderComponent', () => {
       { label: 'February', value: 1 }
     ];
     fixture.detectChanges();
-    
+
     // The options are passed to CustomSelectComponent
     expect(component.monthOptions.length).toBe(2);
   });
@@ -195,28 +195,28 @@ describe('CalendarHeaderComponent', () => {
       { label: '2025', value: 2025 }
     ];
     fixture.detectChanges();
-    
+
     expect(component.yearOptions.length).toBe(2);
   });
 
   it('should pass currentMonth to month select', () => {
     component.currentMonth = 5;
     fixture.detectChanges();
-    
+
     expect(component.currentMonth).toBe(5);
   });
 
   it('should pass currentYear to year select', () => {
     component.currentYear = 2025;
     fixture.detectChanges();
-    
+
     expect(component.currentYear).toBe(2025);
   });
 
   it('should pass disabled to selects', () => {
     component.disabled = true;
     fixture.detectChanges();
-    
+
     // The disabled state is passed to CustomSelectComponent
     expect(component.disabled).toBe(true);
   });

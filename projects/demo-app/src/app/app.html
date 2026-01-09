@@ -25,7 +25,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v1.9.25</span>
+              <span class="logo-version">v1.9.26</span>
               @if (npmDownloads() !== null) {
               <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
                 title="Monthly downloads on npm" rel="noopener noreferrer">
@@ -91,7 +91,7 @@
           </button>
           @if (languageDropdownOpen()) {
           <div class="language-dropdown">
-            @for (locale of availableLocales; track locale.code) {
+            @for(locale of availableLocales; track locale.code) {
             <button class="language-option" [class.active]="selectedLocale() === locale.code"
               (click)="onLocaleChange(locale.code)" [attr.aria-label]="locale.nativeName">
               <span class="language-option-text">{{ locale.nativeName }}</span>
@@ -187,7 +187,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.25)</p>
+        <p class="hero-version">(v1.9.26)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{

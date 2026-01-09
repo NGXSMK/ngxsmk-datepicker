@@ -14,7 +14,7 @@ import { CustomSelectComponent } from './custom-select.component';
         class="hour-select"
         [options]="hourOptions"
         [(value)]="currentDisplayHour"
-        (valueChange)="timeChange.emit()"
+        (valueChange)="currentDisplayHourChange.emit($any($event)); timeChange.emit()"
         [disabled]="disabled">
       </ngxsmk-custom-select>
       <span class="ngxsmk-time-separator">:</span>
@@ -22,7 +22,7 @@ import { CustomSelectComponent } from './custom-select.component';
         class="minute-select"
         [options]="minuteOptions"
         [(value)]="currentMinute"
-        (valueChange)="timeChange.emit()"
+        (valueChange)="currentMinuteChange.emit($any($event)); timeChange.emit()"
         [disabled]="disabled">
       </ngxsmk-custom-select>
       <ngxsmk-custom-select
@@ -30,19 +30,27 @@ import { CustomSelectComponent } from './custom-select.component';
         class="second-select"
         [options]="secondOptions"
         [(value)]="currentSecond"
-        (valueChange)="timeChange.emit()"
+        (valueChange)="currentSecondChange.emit($any($event)); timeChange.emit()"
         [disabled]="disabled">
       </ngxsmk-custom-select>
       <ngxsmk-custom-select
         class="ampm-select"
         [options]="ampmOptions"
         [(value)]="isPm"
-        (valueChange)="timeChange.emit()"
+        (valueChange)="isPmChange.emit($any($event)); timeChange.emit()"
         [disabled]="disabled">
       </ngxsmk-custom-select>
     </div>
   `
 })
+/**
+ * Component for selecting time (Hours, Minutes, Seconds, AM/PM).
+ * 
+ * @remarks
+ * Renders a row of custom select dropdowns for each time component.
+ * It handles the display logic and emits individual changes which are aggregated
+ * by the parent component into a full date-time update.
+ */
 export class TimeSelectionComponent {
   @Input() hourOptions: { label: string; value: number }[] = [];
   @Input() minuteOptions: { label: string; value: number }[] = [];
@@ -60,5 +68,9 @@ export class TimeSelectionComponent {
   @Input() showSeconds: boolean = false;
 
   @Output() timeChange = new EventEmitter<void>();
+  @Output() currentDisplayHourChange = new EventEmitter<number>();
+  @Output() currentMinuteChange = new EventEmitter<number>();
+  @Output() currentSecondChange = new EventEmitter<number>();
+  @Output() isPmChange = new EventEmitter<boolean>();
 }
 

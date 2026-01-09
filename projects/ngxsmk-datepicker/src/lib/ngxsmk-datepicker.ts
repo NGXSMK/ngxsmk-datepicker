@@ -18,11 +18,11 @@ import {
   EffectRef,
   AfterViewInit,
   signal,
-  computed,
+
   ViewChild,
   isDevMode,
 } from '@angular/core';
-import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -53,6 +53,10 @@ import {
   generateYearGrid,
   generateDecadeGrid,
 } from './utils/calendar.utils';
+import { CalendarHeaderComponent } from './components/calendar-header.component';
+import { CalendarMonthViewComponent } from './components/calendar-month-view.component';
+import { CalendarYearViewComponent } from './components/calendar-year-view.component';
+import { TimeSelectionComponent } from './components/time-selection.component';
 import { CustomSelectComponent } from './components/custom-select.component';
 import { createDateComparator } from './utils/performance.utils';
 import {
@@ -73,7 +77,13 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'ngxsmk-datepicker',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent, DatePipe],
+  imports: [
+    CommonModule,
+    CalendarHeaderComponent,
+    CalendarMonthViewComponent,
+    CalendarYearViewComponent,
+    TimeSelectionComponent
+  ],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
@@ -176,27 +186,22 @@ import { Subject } from 'rxjs';
                  [ngClass]="classes?.calendar">
               @if (!timeOnly) {
                 @if (calendarViewMode === 'month') {
-                <div class="ngxsmk-header" [ngClass]="classes?.header">
-                  <div class="ngxsmk-month-year-selects">
-                    <ngxsmk-custom-select #monthSelect class="month-select" [options]="monthOptions"
-                                      [(value)]="currentMonth" [disabled]="disabled"></ngxsmk-custom-select>
-                      <ngxsmk-custom-select #yearSelect class="year-select" [options]="yearOptions" [(value)]="currentYear" [disabled]="disabled" (valueChange)="onYearSelectChange($event)"></ngxsmk-custom-select>
-                  </div>
-                  <div class="ngxsmk-nav-buttons">
-                    <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(-1)" [disabled]="disabled || isBackArrowDisabled" [attr.aria-label]="_prevMonthAriaLabel" [title]="_prevMonthAriaLabel" [ngClass]="classes?.navPrev">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                              d="M328 112L184 256l144 144"/>
-                      </svg>
-                    </button>
-                    <button type="button" class="ngxsmk-nav-button" (click)="changeMonth(1)" [disabled]="disabled" [attr.aria-label]="_nextMonthAriaLabel" [title]="_nextMonthAriaLabel" [ngClass]="classes?.navNext">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                              d="M184 112l144 144-144 144"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+                  <ngxsmk-calendar-header
+                    [headerClass]="classes?.header ?? ''"
+                    [navPrevClass]="classes?.navPrev ?? ''"
+                    [navNextClass]="classes?.navNext ?? ''"
+                    [monthOptions]="monthOptions"
+                    [(currentMonth)]="currentMonth"
+                    [yearOptions]="yearOptions"
+                    [(currentYear)]="currentYear"
+                    [disabled]="disabled"
+                    [isBackArrowDisabled]="isBackArrowDisabled"
+                    [prevMonthAriaLabel]="_prevMonthAriaLabel"
+                    [nextMonthAriaLabel]="_nextMonthAriaLabel"
+                    (previousMonth)="changeMonth(-1)"
+                    (nextMonth)="changeMonth(1)"
+                    (currentYearChange)="onYearSelectChange($event)">
+                  </ngxsmk-calendar-header>
                 <div class="ngxsmk-multi-calendar-container" 
                      [class.ngxsmk-multi-calendar]="calendarCount > 1"
                      [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
@@ -209,124 +214,81 @@ import { Subject } from 'rxjs';
                           <span class="ngxsmk-calendar-month-title">{{ getMonthYearLabel(calendarMonth.month, calendarMonth.year) }}</span>
                         </div>
                       }
-                  <div class="ngxsmk-days-grid-wrapper" 
-                       (touchstart)="onCalendarSwipeStart($event)"
-                       (touchmove)="onCalendarSwipeMove($event)"
-                       (touchend)="onCalendarSwipeEnd($event)">
-                        <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)">
-                    @for (day of weekDays; track day) {
-                      <div class="ngxsmk-day-name">{{ day }}</div>
-                    }
-                          @for (day of calendarMonth.days; track trackByDay($index, day)) {
-                      <div class="ngxsmk-day-cell" [ngClass]="classes?.dayCell"
-                                [class.empty]="!isCurrentMonthForCalendar(day, calendarMonth.month, calendarMonth.year)" [class.disabled]="isDateDisabledMemo(day)" 
-                          [class.today]="isSameDayMemo(day, today)"
-                          [class.holiday]="isHolidayMemo(day)"
-                          [class.selected]="mode === 'single' && isSameDayMemo(day, selectedDate)"
-                          [class.multiple-selected]="mode === 'multiple' && isMultipleSelected(day)"
-                          [class.start-date]="mode === 'range' && isSameDayMemo(day, startDate)"
-                          [class.end-date]="mode === 'range' && isSameDayMemo(day, endDate)"
-                          [class.in-range]="mode === 'range' && isInRange(day)"
-                          [class.preview-range]="isPreviewInRange(day)"
-                          [class.focused]="day && focusedDate && isSameDayMemo(day, focusedDate)"
-                          [attr.tabindex]="day && !isDateDisabledMemo(day) ? 0 : -1"
-                          [attr.role]="day ? 'gridcell' : null"
-                          [attr.aria-selected]="day && (mode === 'single' && isSameDayMemo(day, selectedDate)) ? 'true' : null"
-                          [attr.aria-label]="day ? getAriaLabel(day) : null"
-                          [ngClass]="getDayCellCustomClasses(day)"
-                          [attr.title]="day ? getDayCellTooltip(day) : null"
-                          [attr.data-date]="day ? day.getTime() : null"
-                          (click)="onDateClick(day)" 
-                          (touchstart)="onDateCellTouchStart($event, day)"
-                          (touchend)="onDateCellTouchEnd($event, day)"
-                          (touchmove)="onDateCellTouchMove($event)"
-                          (keydown.enter)="onDateClick(day)"
-                          (keydown.space)="onDateClick(day); $event.preventDefault()"
-                          (mouseenter)="onDateHover(day)"
-                          (focus)="onDateFocus(day)">
-                        @if (day) {
-                          <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
-                        }
-                      </div>
-                    }
-                        </div>
-                  </div>
+                      <ngxsmk-calendar-month-view
+                        [days]="calendarMonth.days"
+                        [weekDays]="weekDays"
+                        [classes]="classes"
+                        [mode]="mode"
+                        [selectedDate]="selectedDate"
+                        [startDate]="startDate"
+                        [endDate]="endDate"
+                        [focusedDate]="focusedDate"
+                        [today]="today"
+                        [currentMonth]="calendarMonth.month"
+                        [currentYear]="calendarMonth.year"
+                        [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
+                        
+                        [isDateDisabled]="boundIsDateDisabled"
+                        [isSameDay]="boundIsSameDay"
+                        [isHoliday]="boundIsHoliday"
+                        [isMultipleSelected]="boundIsMultipleSelected"
+                        [isInRange]="boundIsInRange"
+                        [isPreviewInRange]="boundIsPreviewInRange"
+                        [getAriaLabel]="boundGetAriaLabel"
+                        [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
+                        [getDayCellTooltip]="boundGetDayCellTooltip"
+                        [formatDayNumber]="boundFormatDayNumber"
+                        
+                        (dateClick)="onDateClick($event)"
+                        (dateHover)="onDateHover($event)"
+                        (dateFocus)="onDateFocus($event)"
+                        
+                        (swipeStart)="onCalendarSwipeStart($event)"
+                        (swipeMove)="onCalendarSwipeMove($event)"
+                        (swipeEnd)="onCalendarSwipeEnd($event)"
+                        
+                        (touchStart)="onDateCellTouchStart($event.event, $event.day)"
+                        (touchMove)="onDateCellTouchMove($event)"
+                        (touchEnd)="onDateCellTouchEnd($event.event, $event.day)">
+                      </ngxsmk-calendar-month-view>
                     </div>
                   }
                 </div>
                 }
                 
                 @if (calendarViewMode === 'year') {
-                  <div class="ngxsmk-header" [ngClass]="classes?.header">
-                    <div class="ngxsmk-year-display">
-                      <button type="button" class="ngxsmk-view-toggle" (click)="calendarViewMode = 'decade'" [disabled]="disabled">
-                        {{ _currentDecade }} - {{ _currentDecade + 9 }}
-                      </button>
-                    </div>
-                    <div class="ngxsmk-nav-buttons">
-                      <button type="button" class="ngxsmk-nav-button" (click)="changeYear(-12)" [disabled]="disabled" [attr.aria-label]="getTranslation('previousYears')" [ngClass]="classes?.navPrev">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                                d="M328 112L184 256l144 144"/>
-                        </svg>
-                      </button>
-                      <button type="button" class="ngxsmk-nav-button" (click)="changeYear(12)" [disabled]="disabled" [attr.aria-label]="getTranslation('nextYears')" [ngClass]="classes?.navNext">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                                d="M184 112l144 144-144 144"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="ngxsmk-year-grid">
-                    @for (year of yearGrid; track $index) {
-                      <button type="button" 
-                              class="ngxsmk-year-cell"
-                              [class.selected]="year === _currentYear"
-                              [class.today]="year === today.getFullYear()"
-                              [disabled]="disabled"
-                              (click)="onYearClick(year); $event.stopPropagation()"
-                              (keydown.enter)="onYearClick(year)"
-                              [attr.aria-label]="getTranslation('selectYear', undefined, { year: year })">
-                        {{ year }}
-                      </button>
-                    }
-                  </div>
+                  <ngxsmk-calendar-year-view
+                    viewMode="year"
+                    [yearGrid]="yearGrid"
+                    [currentYear]="_currentYear"
+                    [currentDecade]="_currentDecade"
+                    [today]="today"
+                    [disabled]="disabled"
+                    [headerClass]="classes?.header ?? ''"
+                    [navPrevClass]="classes?.navPrev ?? ''"
+                    [navNextClass]="classes?.navNext ?? ''"
+                    [previousYearsLabel]="getTranslation('previousYears')"
+                    [nextYearsLabel]="getTranslation('nextYears')"
+                    (viewModeChange)="calendarViewMode = $event"
+                    (changeYear)="changeYear($event)"
+                    (yearClick)="onYearClick($event)">
+                  </ngxsmk-calendar-year-view>
                 }
                 
                 @if (calendarViewMode === 'decade') {
-                  <div class="ngxsmk-header" [ngClass]="classes?.header">
-                    <div class="ngxsmk-decade-display">
-                      {{ _currentDecade }} - {{ _currentDecade + 99 }}
-                    </div>
-                    <div class="ngxsmk-nav-buttons">
-                      <button type="button" class="ngxsmk-nav-button" (click)="changeDecade(-1)" [disabled]="disabled" [attr.aria-label]="getTranslation('previousDecade')" [ngClass]="classes?.navPrev">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                                d="M328 112L184 256l144 144"/>
-                        </svg>
-                      </button>
-                      <button type="button" class="ngxsmk-nav-button" (click)="changeDecade(1)" [disabled]="disabled" [attr.aria-label]="getTranslation('nextDecade')" [ngClass]="classes?.navNext">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
-                                d="M184 112l144 144-144 144"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div class="ngxsmk-decade-grid">
-                    @for (decade of decadeGrid; track $index) {
-                      <button type="button" 
-                              class="ngxsmk-decade-cell"
-                              [class.selected]="decade === _currentDecade"
-                              [disabled]="disabled"
-                              (click)="onDecadeClick(decade); $event.stopPropagation()"
-                              (keydown.enter)="onDecadeClick(decade)"
-                              [attr.aria-label]="getTranslation('selectDecade', undefined, { start: decade, end: decade + 9 })">
-                        {{ decade }} - {{ decade + 9 }}
-                      </button>
-                    }
-                  </div>
+                  <ngxsmk-calendar-year-view
+                    viewMode="decade"
+                    [decadeGrid]="decadeGrid"
+                    [currentDecade]="_currentDecade"
+                    [disabled]="disabled"
+                    [headerClass]="classes?.header ?? ''"
+                    [navPrevClass]="classes?.navPrev ?? ''"
+                    [navNextClass]="classes?.navNext ?? ''"
+                    [previousDecadeLabel]="getTranslation('previousDecade')"
+                    [nextDecadeLabel]="getTranslation('nextDecade')"
+                    (changeDecade)="changeDecade($event)"
+                    (decadeClick)="onDecadeClick($event)">
+                  </ngxsmk-calendar-year-view>
                 }
                 
                 @if (calendarViewMode === 'timeline' && mode === 'range') {
@@ -393,39 +355,20 @@ import { Subject } from 'rxjs';
               }
 
               @if (showTime || timeOnly) {
-                <div class="ngxsmk-time-selection">
-                  <span class="ngxsmk-time-label">{{ getTranslation('time') }}</span>
-                  <ngxsmk-custom-select
-                    class="hour-select"
-                    [options]="hourOptions"
-                    [(value)]="currentDisplayHour"
-                    (valueChange)="timeChange()"
-                    [disabled]="disabled"
-                  ></ngxsmk-custom-select>
-                  <span class="ngxsmk-time-separator">:</span>
-                  <ngxsmk-custom-select
-                    class="minute-select"
-                    [options]="minuteOptions"
-                    [(value)]="currentMinute"
-                    (valueChange)="timeChange()"
-                    [disabled]="disabled"
-                  ></ngxsmk-custom-select>
-                  <ngxsmk-custom-select
-                    *ngIf="showSeconds"
-                    class="second-select"
-                    [options]="secondOptions"
-                    [(value)]="currentSecond"
-                    (valueChange)="timeChange()"
-                    [disabled]="disabled"
-                  ></ngxsmk-custom-select>
-                  <ngxsmk-custom-select
-                    class="ampm-select"
-                    [options]="ampmOptions"
-                    [(value)]="isPm"
-                    (valueChange)="timeChange()"
-                    [disabled]="disabled"
-                  ></ngxsmk-custom-select>
-                </div>
+                <ngxsmk-time-selection
+                  [hourOptions]="hourOptions"
+                  [minuteOptions]="minuteOptions"
+                  [secondOptions]="secondOptions"
+                  [ampmOptions]="ampmOptions"
+                  [(currentDisplayHour)]="currentDisplayHour"
+                  [(currentMinute)]="currentMinute"
+                  [(currentSecond)]="currentSecond"
+                  [(isPm)]="isPm"
+                  [showSeconds]="showSeconds"
+                  [disabled]="disabled"
+                  [timeLabel]="getTranslation('time')"
+                  (timeChange)="timeChange()">
+                </ngxsmk-time-selection>
               }
               
               <div class="ngxsmk-footer" *ngIf="!isInlineMode" [ngClass]="classes?.footer">
@@ -1232,22 +1175,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private _cachedIsHolidayMemo: ((day: Date | null) => boolean) | null = null;
   private _cachedGetHolidayLabelMemo: ((day: Date | null) => string | null) | null = null;
 
+
   // Memoized dependencies for calendar generation with equality function for better performance
-  private _memoDependencies = computed(() => ({
-    month: this._currentMonthSignal(),
-    year: this._currentYearSignal(),
-    holidayProvider: this._holidayProviderSignal(),
-    disabledState: this._disabledStateSignal()
-  }), {
-    equal: (a, b) =>
-      a.month === b.month &&
-      a.year === b.year &&
-      a.holidayProvider === b.holidayProvider &&
-      a.disabledState.minDate?.getTime() === b.disabledState.minDate?.getTime() &&
-      a.disabledState.maxDate?.getTime() === b.disabledState.maxDate?.getTime() &&
-      a.disabledState.disabledDates?.length === b.disabledState.disabledDates?.length &&
-      a.disabledState.disabledRanges?.length === b.disabledState.disabledRanges?.length
-  });
+  // Helper to get dependencies for memoization
+  private _memoDependencies() {
+    return {
+      month: this._currentMonthSignal(),
+      year: this._currentYearSignal(),
+      holidayProvider: this._holidayProviderSignal(),
+      disabledState: this._disabledStateSignal()
+    };
+  }
 
   private _updateMemoSignals(): void {
     this._currentMonthSignal.set(this._currentMonth);
@@ -1491,11 +1429,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         popoverContainer.style.opacity = '';
       }
 
+
       this.bottomSheetSwipeStartY = 0;
       this.bottomSheetSwipeCurrentY = 0;
       this.isBottomSheetSwiping = false;
     }
   }
+
+
+
+  // Bind methods for child components to preserve 'this' context
+  public readonly boundIsDateDisabled = (d: Date | null) => this.isDateDisabledMemo(d);
+  public readonly boundIsSameDay = (d1: Date | null, d2: Date | null) => this.isSameDayMemo(d1, d2);
+  public readonly boundIsHoliday = (d: Date | null) => this.isHolidayMemo(d);
+  public readonly boundIsMultipleSelected = (d: Date | null) => this.isMultipleSelected(d);
+  public readonly boundIsInRange = (d: Date | null) => this.isInRange(d);
+  public readonly boundIsPreviewInRange = (d: Date | null) => this.isPreviewInRange(d);
+  public readonly boundGetAriaLabel = (d: Date | null) => this.getAriaLabel(d);
+  public readonly boundGetDayCellCustomClasses = (d: Date | null) => this.getDayCellCustomClasses(d);
+  public readonly boundGetDayCellTooltip = (d: Date | null) => this.getDayCellTooltip(d);
+  public readonly boundFormatDayNumber = (d: Date | null) => this.formatDayNumber(d);
 
   get isCalendarVisible(): boolean {
     return this.isInlineMode || this.isCalendarOpen;
@@ -3166,7 +3119,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   ngOnChanges(changes: SimpleChanges): void {
     let needsChangeDetection = false;
 
-    // Input validation: Validate conflicting inputs and invalid combinations
+    // Verify that the new inputs don't create an invalid state (e.g. minDate > maxDate)
+    // and adjust them if necessary to prevent runtime errors.
     this.validateInputs(changes);
 
     if (changes['timeOnly']) {

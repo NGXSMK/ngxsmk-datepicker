@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonItem, 
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonItem,
   IonLabel,
   IonButton,
   ModalController,
@@ -248,9 +248,11 @@ export class IonicTestComponent {
         [(ngModel)]="selectedDate">
       </ngxsmk-datepicker>
       
-      <p *ngIf="selectedDate">
-        Selected: {{ selectedDate | date:'medium' }}
-      </p>
+      @if (selectedDate) {
+        <p>
+          Selected: {{ selectedDate | date:'medium' }}
+        </p>
+      }
     </ion-content>
   `
 })
@@ -286,9 +288,11 @@ export class DatepickerModalPage {
         [(ngModel)]="selectedDate">
       </ngxsmk-datepicker>
       
-      <p *ngIf="selectedDate">
-        Selected: {{ selectedDate | date:'short' }}
-      </p>
+      @if (selectedDate) {
+        <p>
+          Selected: {{ selectedDate | date:'short' }}
+        </p>
+      }
     </div>
   `
 })
