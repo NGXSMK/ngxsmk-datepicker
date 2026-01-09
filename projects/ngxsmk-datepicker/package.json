@@ -46,7 +46,8 @@
     "**/*.metadata.json",
     "README.md",
     "LICENSE",
-    "docs"
+    "docs",
+    "styles"
   ],
   "keywords": [
     "angular",
