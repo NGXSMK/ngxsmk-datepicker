@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -38,10 +38,14 @@ jobs:
         run: |
           cp dist/demo-app/browser/index.html dist/demo-app/browser/404.html
           touch dist/demo-app/browser/.nojekyll
+          # Create the directory structure for GitHub Pages
+          mkdir -p deploy/ngxsmk-datepicker
+          # Copy all files to the subdirectory
+          rsync -av dist/demo-app/browser/ deploy/ngxsmk-datepicker/ --exclude=''
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist/demo-app/browser
+          folder: deploy
           branch: gh-pages
           clean: true

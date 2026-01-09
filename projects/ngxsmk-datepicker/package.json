@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.25",
+  "version": "1.9.26",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -72,5 +72,10 @@
   "engines": {
     "node": ">=20.19.0 || >=22.12.0",
     "npm": ">=10.0.0"
+  },
+  "exports": {
+    "./styles/*": {
+      "default": "./styles/*"
+    }
   }
 }

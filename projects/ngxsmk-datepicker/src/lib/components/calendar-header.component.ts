@@ -14,14 +14,15 @@ import { CustomSelectComponent } from './custom-select.component';
           class="month-select" 
           [options]="monthOptions"
           [(value)]="currentMonth" 
-          [disabled]="disabled">
+          [disabled]="disabled"
+          (valueChange)="currentMonthChange.emit($any($event))">
         </ngxsmk-custom-select>
         <ngxsmk-custom-select 
           class="year-select" 
           [options]="yearOptions" 
           [(value)]="currentYear" 
           [disabled]="disabled" 
-          (valueChange)="yearChange.emit($event)">
+          (valueChange)="currentYearChange.emit($any($event))">
         </ngxsmk-custom-select>
       </div>
       <div class="ngxsmk-nav-buttons">
@@ -55,6 +56,14 @@ import { CustomSelectComponent } from './custom-select.component';
     </div>
   `
 })
+/**
+ * The header section of the calendar, containing navigation and selection controls.
+ * 
+ * Includes:
+ * - Month selection dropdown
+ * - Year selection dropdown
+ * - Previous/Next month navigation buttons
+ */
 export class CalendarHeaderComponent {
   @Input() monthOptions: { label: string; value: number }[] = [];
   @Input() yearOptions: { label: string; value: number }[] = [];
@@ -68,7 +77,8 @@ export class CalendarHeaderComponent {
   @Input() navPrevClass?: string;
   @Input() navNextClass?: string;
 
-  @Output() yearChange = new EventEmitter<number>();
+  @Output() currentYearChange = new EventEmitter<number>();
+  @Output() currentMonthChange = new EventEmitter<number>();
   @Output() previousMonth = new EventEmitter<void>();
   @Output() nextMonth = new EventEmitter<void>();
 }

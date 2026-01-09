@@ -4,6 +4,9 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.25 → v1.9.26](#v1925---v1926)
+- [v1.9.23 → v1.9.25](#v1923---v1925)
+- [v1.9.22 → v1.9.23](#v1922---v1923)
 - [v1.9.21 → v1.9.22](#v1921---v1922)
 - [v1.9.20 → v1.9.21](#v1920---v1921)
 - [v1.9.19 → v1.9.20](#v1919---v1920)
@@ -29,6 +32,64 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.25 → v1.9.26
+
+### Installation
+
+Update to the latest version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.26
+```
+
+### Changes
+
+- **Core Architecture**: Major internal refactoring to improve maintainability and performance.
+- **Ionic Integration**: Fixed localized style exporting issues.
+
+### Breaking Changes
+
+None in v1.9.26.
+
+### Migration Steps
+
+No code changes required. The refactoring is internal and maintains full backward compatibility.
+
+## v1.9.23 → v1.9.25
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.25
+```
+
+### Changes
+
+- **Strict Mode**: Improved support for strict template type checking in IDEs.
+- **NPM Package**: Fixed missing README in package distribution.
+
+### Breaking Changes
+
+None in v1.9.25.
+
+## v1.9.22 → v1.9.23
+
+### Installation
+
+```bash
+npm install ngxsmk-datepicker@1.9.23
+```
+
+### Changes
+
+- **Signal Forms**: Fixed dirty state tracking for `[field]` binding.
+- **CSS Variables**: Improved theming specificity for global variables.
+
+### Breaking Changes
+
+None in v1.9.23.
+
 
 ## v1.9.21 → v1.9.22
 

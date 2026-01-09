@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.26] - 2026-01-09
+
+### Refactored
+- **Core Architecture**: Major refactoring of `NgxsmkDatepickerComponent` to address "God Component" issues
+  - Split monolithic component into dedicated sub-components: `CalendarMonthViewComponent`, `CalendarYearViewComponent`
+  - Integrated `CalendarHeaderComponent` and `TimeSelectionComponent` to handle specific functional areas
+  - Removed 1000+ lines of inline template code, significantly improving maintainability and readability
+  - Improved strict template type checking support
+  - **No breaking changes** to the public API
+
+### Fixed
+- **Ionic Integration**: Fixed issue where `ionic-integration.css` was not exported in the package bundle
+  - Moved styles to allow correct exporting via package logic
+  - Ensures `@import 'ngxsmk-datepicker/styles/ionic-integration.css'` works as documented
+  - Resolves [#123](https://github.com/NGXSMK/ngxsmk-datepicker/issues/123)
+
+### Changed
+- **Version Update**: Updated to version 1.9.26
+
 ## [1.9.25] - 2026-01-06 (Stable)
  
 ### Fixed
