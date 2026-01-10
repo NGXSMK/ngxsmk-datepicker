@@ -3,7 +3,7 @@
  * These variables can be overridden for custom theming
  */
 
-:host {
+ngxsmk-datepicker {
   /* Color Palette */
   --datepicker-primary-color: #6d28d9;
   --datepicker-primary-contrast: #ffffff;
@@ -13,13 +13,13 @@
   --datepicker-subtle-text-color: #6b7280;
   --datepicker-border-color: #e5e7eb;
   --datepicker-hover-background: #f3f4f6;
-  
+
   /* Shadows */
   --datepicker-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --datepicker-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
+
   /* Typography */
   --datepicker-font-size-xs: 10px;
   --datepicker-font-size-sm: 12px;
@@ -28,7 +28,7 @@
   --datepicker-font-size-xl: 18px;
   --datepicker-line-height: 1.5;
   --datepicker-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  
+
   /* Spacing */
   --datepicker-spacing-xs: 4px;
   --datepicker-spacing-sm: 8px;
@@ -36,27 +36,27 @@
   --datepicker-spacing-lg: 16px;
   --datepicker-spacing-xl: 20px;
   --datepicker-spacing-2xl: 24px;
-  
+
   /* Border Radius */
   --datepicker-radius-sm: 6px;
   --datepicker-radius-md: 8px;
   --datepicker-radius-lg: 12px;
   --datepicker-radius-xl: 16px;
   --datepicker-border-radius: var(--datepicker-radius-md);
-  
+
   /* Transitions - Can be customized via AnimationConfig */
   --datepicker-transition-duration: 150ms;
   --datepicker-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
   --datepicker-transition-property: all;
   --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration) var(--datepicker-transition-easing);
-  
+
   /* Z-index */
   --datepicker-z-index-base: 2147483647;
   --datepicker-z-index-backdrop: 2147483646;
 }
 
 /* Dark Theme Override */
-:host(.dark-theme) {
+ngxsmk-datepicker.dark-theme {
   --datepicker-range-background: rgba(139, 92, 246, 0.15);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
@@ -69,7 +69,7 @@
 }
 
 /* Ensure dark theme variables cascade properly to child components */
-:host(.dark-theme) * {
+ngxsmk-datepicker.dark-theme * {
   --datepicker-range-background: rgba(139, 92, 246, 0.15);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
@@ -80,7 +80,7 @@
 
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
-  :host {
+  ngxsmk-datepicker {
     --datepicker-border-color: #000000;
     --datepicker-text-color: #000000;
     --datepicker-subtle-text-color: #000000;
@@ -89,11 +89,12 @@
     --datepicker-primary-color: #0000ff;
     --datepicker-primary-contrast: #ffffff;
     --datepicker-range-background: #e0e0e0;
-    --datepicker-focus-outline: #000000; /* Added for consistent focus styling */
+    --datepicker-focus-outline: #000000;
+    /* Added for consistent focus styling */
   }
-  
+
   /* Dark theme adjustments for high contrast */
-  :host(.dark-theme) {
+  ngxsmk-datepicker.dark-theme {
     --datepicker-border-color: #ffffff;
     --datepicker-text-color: #ffffff;
     --datepicker-subtle-text-color: #ffffff;
@@ -102,29 +103,30 @@
     --datepicker-primary-color: #ffffff;
     --datepicker-primary-contrast: #000000;
     --datepicker-range-background: #333333;
-    --datepicker-focus-outline: #ffffff; /* Added for consistent focus styling */
+    --datepicker-focus-outline: #ffffff;
+    /* Added for consistent focus styling */
   }
-  
+
   /* Ensure all borders are visible with consistent thickness */
-  :host * {
+  ngxsmk-datepicker * {
     border-color: var(--datepicker-border-color) !important;
   }
-  
+
   /* Day cells with improved focus indicators */
   .ngxsmk-day-cell {
     border: 2px solid transparent !important;
   }
-  
+
   .ngxsmk-day-cell:not(.disabled):not(.empty):hover {
     border-color: var(--datepicker-border-color) !important;
     background-color: var(--datepicker-hover-background) !important;
   }
-  
+
   .ngxsmk-day-cell.disabled {
     opacity: 0.5 !important;
     border-color: #cccccc !important;
   }
-  
+
   .ngxsmk-day-cell.selected,
   .ngxsmk-day-cell.start-date,
   .ngxsmk-day-cell.end-date {
@@ -132,46 +134,46 @@
     background-color: var(--datepicker-primary-color) !important;
     color: var(--datepicker-primary-contrast) !important;
   }
-  
+
   .ngxsmk-day-cell.focused,
   .ngxsmk-day-cell:focus-visible {
     outline: 3px solid var(--datepicker-focus-outline) !important;
     outline-offset: 2px !important;
   }
-  
+
   /* Navigation buttons with consistent focus */
   .ngxsmk-nav-button {
     border: 2px solid var(--datepicker-border-color) !important;
   }
-  
+
   .ngxsmk-nav-button.focused,
   .ngxsmk-nav-button:focus-visible {
     outline: 3px solid var(--datepicker-focus-outline) !important;
     outline-offset: 2px !important;
   }
-  
+
   .ngxsmk-nav-button:hover:not(:disabled) {
     background-color: var(--datepicker-hover-background) !important;
     border-color: var(--datepicker-border-color) !important;
   }
-  
+
   /* Input group with improved focus handling */
   .ngxsmk-input-group {
     border: 2px solid var(--datepicker-border-color) !important;
   }
-  
+
   .ngxsmk-input-group:focus-within {
     border-color: var(--datepicker-border-color) !important;
     outline: 3px solid var(--datepicker-focus-outline) !important;
     outline-offset: 2px !important;
   }
-  
+
   /* Buttons with consistent focus styling */
   .ngxsmk-clear-button,
   .ngxsmk-calendar-button {
     border: 2px solid var(--datepicker-border-color) !important;
   }
-  
+
   .ngxsmk-clear-button.focused,
   .ngxsmk-clear-button:focus-visible,
   .ngxsmk-calendar-button.focused,
@@ -179,35 +181,35 @@
     outline: 3px solid var(--datepicker-focus-outline) !important;
     outline-offset: 2px !important;
   }
-  
+
   /* Popover container */
   .ngxsmk-popover-container {
     border: 3px solid var(--datepicker-border-color) !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
   }
-  
+
   /* Range selection */
   .ngxsmk-day-cell.in-range {
     background-color: var(--datepicker-range-background) !important;
     border-color: var(--datepicker-border-color) !important;
   }
-  
+
   /* Select elements */
   .ngxsmk-custom-select {
     border: 2px solid var(--datepicker-border-color) !important;
   }
-  
+
   .ngxsmk-custom-select.focused,
   .ngxsmk-custom-select:focus-within {
     outline: 3px solid var(--datepicker-focus-outline) !important;
     outline-offset: 2px !important;
   }
-  
+
   /* Time selection */
   .ngxsmk-time-input {
     border: 2px solid var(--datepicker-border-color) !important;
   }
-  
+
   .ngxsmk-time-input.focused,
   .ngxsmk-time-input:focus {
     outline: 3px solid var(--datepicker-focus-outline) !important;
@@ -217,17 +219,16 @@
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  :host {
+  ngxsmk-datepicker {
     --datepicker-transition: none;
   }
-  
-  :host *,
-  :host *::before,
-  :host *::after {
+
+  ngxsmk-datepicker *,
+  ngxsmk-datepicker *::before,
+  ngxsmk-datepicker *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
-

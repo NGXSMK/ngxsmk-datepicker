@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, PLATFORM_ID, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'ngxsmk-custom-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   host: {
     '[attr.data-open]': 'isOpen'
   },
@@ -39,7 +39,9 @@ import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
   styles: [`
     :host { 
       position: relative; 
-      display: inline-block;
+      display: flex;
+      flex: 1;
+      min-width: 0;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -55,11 +57,14 @@ import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
     .ngxsmk-select-container { 
       cursor: pointer; 
       position: relative;
+      display: flex;
+      width: 100%;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       z-index: inherit;
+      outline: none;
     }
     .ngxsmk-select-container.is-open {
       z-index: 10000000;
@@ -71,7 +76,7 @@ import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
       display: flex; 
       align-items: center; 
       justify-content: space-between;
-      width: var(--custom-select-width, 120px); 
+      width: 100%; 
       background: var(--datepicker-background, #fff);
       border: 1.5px solid var(--datepicker-border-color, #e5e7eb); 
       color: var(--datepicker-text-color, #1f2937);
@@ -88,15 +93,17 @@ import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
     }
     .ngxsmk-select-display:hover:not(:disabled) {
       border-color: var(--datepicker-primary-color, #6d28d9);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-    .ngxsmk-select-display:focus {
-      outline: none;
+    .ngxsmk-select-container:focus-within .ngxsmk-select-display {
       border-color: var(--datepicker-primary-color, #6d28d9);
-      box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 0 3px rgba(var(--datepicker-primary-rgb, 109, 40, 217), 0.15);
     }
     .ngxsmk-select-display:disabled {
       background-color: var(--datepicker-hover-background, #f3f4f6);
@@ -214,7 +221,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('container', { static: false }) container!: ElementRef<HTMLDivElement>;
   @ViewChild('button', { static: false }) button!: ElementRef<HTMLButtonElement>;
   @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
-  
+
   public isOpen = false;
   public panelPosition: string = 'absolute';
   public panelTop: number = 0;
@@ -294,7 +301,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
       if (target && !this.elementRef.nativeElement.contains(target)) {
         this.isOpen = false;
       }
-      
+
       // On mobile, also close when calendar modal opens
       // Check if calendar backdrop or popover container is present (indicates calendar is open on mobile)
       if (this.isBrowser) {
@@ -309,7 +316,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
       }
     }
   }
-  
+
   @HostListener('document:touchstart', ['$event'])
   onDocumentTouchStart(event: TouchEvent): void {
     // On mobile, close dropdown when calendar opens

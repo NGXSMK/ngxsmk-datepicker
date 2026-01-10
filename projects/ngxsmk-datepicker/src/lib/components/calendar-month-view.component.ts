@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'ngxsmk-calendar-month-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [NgClass],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ngxsmk-days-grid-wrapper" 

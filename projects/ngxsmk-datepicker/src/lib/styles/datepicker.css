@@ -1,4 +1,4 @@
-:host {
+ngxsmk-datepicker {
   display: inline-block;
   position: relative;
   font-family: var(--datepicker-font-family);
@@ -35,7 +35,9 @@
     z-index: auto !important;
   }
 
-  :host {
+  ngxsmk-datepicker {
+    display: block !important;
+    width: 100% !important;
     overflow: visible !important;
     position: relative !important;
     isolation: auto !important;
@@ -44,7 +46,7 @@
     contain: none !important;
   }
 
-  :host:has(.ngxsmk-calendar-open:not(.ngxsmk-inline-mode)) {
+  ngxsmk-datepicker:has(.ngxsmk-calendar-open:not(.ngxsmk-inline-mode)) {
     overflow: visible !important;
     isolation: auto !important;
     transform: none !important;
@@ -413,15 +415,12 @@
     transform: translate(-50%, -50%) !important;
     z-index: 2147483647 !important;
     pointer-events: none !important;
-    width: -webkit-fit-content !important;
-    width: -moz-fit-content !important;
-    width: fit-content !important;
-    min-width: -webkit-fit-content !important;
-    min-width: -moz-fit-content !important;
-    min-width: fit-content !important;
-    max-width: -webkit-fit-content !important;
-    max-width: -moz-fit-content !important;
-    max-width: fit-content !important;
+    width: calc(100% - 32px) !important;
+    min-width: 280px !important;
+    max-width: 400px !important;
+    height: -webkit-fit-content !important;
+    height: -moz-fit-content !important;
+    height: fit-content !important;
   }
 
   .ngxsmk-popover-container:not(.ngxsmk-popover-open):not(.ngxsmk-inline-container) {
@@ -462,11 +461,51 @@
     pointer-events: auto !important;
   }
 
-  /* Mobile specific adjustments */
-  .ngxsmk-calendar-container {
-    padding: 16px !important;
+  /* Bottom Sheet Style */
+  .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-bottom-sheet:not(.ngxsmk-inline-container) {
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
     width: 100% !important;
-    max-width: 360px !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin: 0 !important;
+    -webkit-animation: slideUpMobile 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    -moz-animation: slideUpMobile 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    animation: slideUpMobile 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Fullscreen Style */
+  .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    -webkit-animation: fadeInScale 0.2s ease-out !important;
+    -moz-animation: fadeInScale 0.2s ease-out !important;
+    animation: fadeInScale 0.2s ease-out !important;
+  }
+
+  /* Mobile specific adjustments */
+  .ngxsmk-datepicker-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .ngxsmk-calendar-container {
+    padding: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .ngxsmk-nav-button {
@@ -477,15 +516,30 @@
 
   .ngxsmk-month-year-selects ngxsmk-custom-select {
     height: 44px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
   }
 
-  .ngxsmk-days-grid {
+  .ngxsmk-header {
     gap: 4px !important;
   }
 
+  .ngxsmk-month-year-selects {
+    gap: 4px !important;
+  }
+
+  .ngxsmk-days-grid {
+    gap: 2px !important;
+    margin: 0 !important;
+  }
+
+  .ngxsmk-days-grid>* {
+    margin: 0 !important;
+  }
+
   .ngxsmk-day-name {
-    font-size: 14px !important;
-    width: 44px !important;
+    font-size: 13px !important;
+    width: 100% !important;
   }
 }
 
@@ -624,6 +678,36 @@
     -moz-transform: translate(-50%, -50%) scale(1);
     -ms-transform: translate(-50%, -50%) scale(1);
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@-webkit-keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@-moz-keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
   }
 }
 
@@ -893,6 +977,11 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
   gap: var(--datepicker-spacing-sm);
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -908,6 +997,8 @@
 
 .ngxsmk-month-year-selects ngxsmk-custom-select {
   cursor: pointer;
+  flex: 1;
+  min-width: 0;
 }
 
 .ngxsmk-nav-buttons {
@@ -985,7 +1076,7 @@
 .ngxsmk-nav-button svg {
   width: 18px;
   height: 18px;
-  stroke-width: 2.5;
+  stroke-width: 32;
 }
 
 .ngxsmk-days-grid-wrapper {
@@ -1002,10 +1093,8 @@
 }
 
 .ngxsmk-days-grid {
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: repeat(7, auto);
-  grid-template-columns: repeat(7, auto);
+  grid-template-columns: repeat(7, 1fr);
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
@@ -1055,25 +1144,36 @@
 
 @media (max-width: 1024px) {
   .ngxsmk-day-cell {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    max-width: 44px;
-    min-height: 44px;
-    max-height: 44px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    min-width: 0;
+    max-width: none;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .ngxsmk-day-number {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    max-width: none;
+    min-height: 0;
+    max-height: none;
+    font-size: 14px;
   }
 
   .ngxsmk-nav-button {
-    min-width: 48px;
-    min-height: 48px;
-    padding: var(--datepicker-spacing-md);
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px;
   }
 
   .ngxsmk-clear-button,
   .ngxsmk-close-button,
   .ngxsmk-clear-button-footer {
-    min-height: 44px;
-    padding: var(--datepicker-spacing-md) var(--datepicker-spacing-lg);
+    min-height: 40px;
+    padding: 8px 12px;
   }
 
   .ngxsmk-input-group {
@@ -2040,6 +2140,7 @@
    Desktop-like padding, multi-column ranges, full header spacing
    ============================================ */
 @media (min-width: 600px) and (max-width: 767px) {
+
   /* ===== Input Group & Input Field ===== */
   .ngxsmk-display-input {
     font-size: 15px !important;
@@ -3467,6 +3568,7 @@
    Tablet optimizations, better multi-calendar layouts, orientation-aware
    ============================================ */
 @media (min-width: 768px) and (max-width: 1023px) {
+
   /* ===== Input Group & Input Field ===== */
   .ngxsmk-display-input {
     font-size: 15px !important;
@@ -4007,6 +4109,7 @@
    Comfortable spacing, 2-column ranges grid, side-by-side footer
    ============================================ */
 @media (min-width: 480px) and (max-width: 599px) {
+
   /* ===== Input Group & Input Field ===== */
   .ngxsmk-display-input {
     font-size: 14px !important;
@@ -4491,6 +4594,7 @@
    Improved spacing, better header layout
    ============================================ */
 @media (min-width: 375px) and (max-width: 479px) {
+
   /* ===== Input Group & Input Field ===== */
   .ngxsmk-display-input {
     font-size: 14px !important;
@@ -4967,12 +5071,14 @@
     height: 44px !important;
   }
 }
+
 /* Extra small mobile devices (320px - 374px) - iPhone SE, small Android */
 /* ============================================
    EXTRA SMALL MOBILE (320px - 374px)
    Ultra-compact layout with all elements stacked
    ============================================ */
 @media (max-width: 374px) {
+
   /* ===== Input Group & Input Field ===== */
   .ngxsmk-input-group {
     min-width: 100%;
@@ -5022,7 +5128,7 @@
     min-height: 16px;
     max-width: 16px;
     max-height: 16px;
-}
+  }
 
   /* ===== Calendar Container & Popover ===== */
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {

@@ -18,11 +18,14 @@ import {
   EffectRef,
   AfterViewInit,
   signal,
-
   ViewChild,
   isDevMode,
+  ApplicationRef,
+  EmbeddedViewRef,
+  TemplateRef,
+  ViewEncapsulation
 } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { isPlatformBrowser, NgClass, NgTemplateOutlet, DatePipe, DOCUMENT } from '@angular/common';
 import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
@@ -78,7 +81,9 @@ import { Subject } from 'rxjs';
   selector: 'ngxsmk-datepicker',
   standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
+    NgTemplateOutlet,
+    DatePipe,
     CalendarHeaderComponent,
     CalendarMonthViewComponent,
     CalendarYearViewComponent,
@@ -90,6 +95,7 @@ import { Subject } from 'rxjs';
     multi: true
   }, FieldSyncService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./styles/variables.css', './styles/datepicker.css'],
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode" [class.ngxsmk-rtl]="isRtl" [class.ngxsmk-native-picker]="shouldUseNativePicker()" [ngClass]="classes?.wrapper">
@@ -109,9 +115,11 @@ import { Subject } from 'rxjs';
                    [ngClass]="classes?.input"
                    (change)="onNativeInputChange($event)"
                    (blur)="onInputBlur($event)">
-            <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" [disabled]="disabled" *ngIf="formatValueForNativeInput(_internalValue)" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
-            </button>
+            @if (formatValueForNativeInput(_internalValue)) {
+              <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+              </button>
+            }
           </div>
         } @else {
           <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (focus)="onInputGroupFocus()" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
@@ -131,257 +139,271 @@ import { Subject } from 'rxjs';
                    (input)="onInputChange($event)"
                    (blur)="onInputBlur($event)"
                    (focus)="onInputFocus($event)">
-            <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" (touchstart)="$event.stopPropagation()" (touchend)="$event.stopPropagation()" (pointerdown)="$event.stopPropagation()" (pointerup)="$event.stopPropagation()" [disabled]="disabled" *ngIf="displayValue" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
-            </button>
-            <button type="button" class="ngxsmk-calendar-button" (click)="toggleCalendar($event); $event.stopPropagation()" [disabled]="disabled" *ngIf="showCalendarButton" [attr.aria-label]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [ngClass]="classes?.calendarBtn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"/></svg>
-            </button>
+            @if (displayValue) {
+              <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" (touchstart)="$event.stopPropagation()" (touchend)="$event.stopPropagation()" (pointerdown)="$event.stopPropagation()" (pointerup)="$event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+              </button>
+            }
+            @if (showCalendarButton) {
+              <button type="button" class="ngxsmk-calendar-button" (click)="toggleCalendar($event); $event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [ngClass]="classes?.calendarBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"/></svg>
+              </button>
+            }
           </div>
         }
       }
 
-      @if (isCalendarVisible) {
-        @if (!isInlineMode && isCalendarOpen) {
-          <div
-            class="ngxsmk-backdrop"
-            role="button"
-            tabindex="0"
-            [attr.aria-label]="getTranslation('closeCalendarOverlay')"
-            (click)="onBackdropInteract($event)"
-            (keydown.enter)="onBackdropInteract($event)"
-            (keydown.space)="onBackdropInteract($event)"
-          ></div>
-        }
-        <div #popoverContainer class="ngxsmk-popover-container" 
-             [class.ngxsmk-inline-container]="isInlineMode" 
-             [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" 
-             [class.ngxsmk-time-only-popover]="timeOnly" 
-             [class.ngxsmk-has-time-selection]="showTime || timeOnly"
-             [class.ngxsmk-bottom-sheet]="isMobileDevice() && mobileModalStyle === 'bottom-sheet' && !isInlineMode"
-             [class.ngxsmk-fullscreen]="isMobileDevice() && mobileModalStyle === 'fullscreen' && !isInlineMode"
-             [ngClass]="classes?.popover" 
-             role="dialog" 
-             [attr.aria-label]="getCalendarAriaLabel()" 
-             [attr.aria-modal]="!isInlineMode"
-             (touchstart)="onBottomSheetTouchStart($event)"
-             (touchmove)="onBottomSheetTouchMove($event)"
-             (touchend)="onBottomSheetTouchEnd($event)">
-          <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
-            @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
-              <div class="ngxsmk-ranges-container">
-                <ul>
-                  @for (range of rangesArray; track trackByRange($index, range)) {
-                    <li (click)="selectRange(range.value)" (keydown.enter)="selectRange(range.value)" (keydown.space)="selectRange(range.value); $event.preventDefault()" [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" role="button" [attr.aria-disabled]="disabled">{{ range.key }}</li>
-                  }
-                </ul>
-              </div>
-            }
-            <div class="ngxsmk-calendar-container" 
-                 [class.ngxsmk-time-only-mode]="timeOnly"
-                 [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
-                 [class.ngxsmk-calendar-layout-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
-                 [class.ngxsmk-calendar-layout-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
-                 [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
-                 [ngClass]="classes?.calendar">
-              @if (!timeOnly) {
-                @if (calendarViewMode === 'month') {
-                  <ngxsmk-calendar-header
-                    [headerClass]="classes?.header ?? ''"
-                    [navPrevClass]="classes?.navPrev ?? ''"
-                    [navNextClass]="classes?.navNext ?? ''"
-                    [monthOptions]="monthOptions"
-                    [(currentMonth)]="currentMonth"
-                    [yearOptions]="yearOptions"
-                    [(currentYear)]="currentYear"
-                    [disabled]="disabled"
-                    [isBackArrowDisabled]="isBackArrowDisabled"
-                    [prevMonthAriaLabel]="_prevMonthAriaLabel"
-                    [nextMonthAriaLabel]="_nextMonthAriaLabel"
-                    (previousMonth)="changeMonth(-1)"
-                    (nextMonth)="changeMonth(1)"
-                    (currentYearChange)="onYearSelectChange($event)">
-                  </ngxsmk-calendar-header>
-                <div class="ngxsmk-multi-calendar-container" 
-                     [class.ngxsmk-multi-calendar]="calendarCount > 1"
-                     [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
-                     [class.ngxsmk-calendar-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
-                     [class.ngxsmk-calendar-auto]="calendarCount > 1 && calendarLayout === 'auto'">
-                  @for (calendarMonth of multiCalendarMonths; track trackByCalendarMonth($index, calendarMonth)) {
-                    <div class="ngxsmk-calendar-month" [class.ngxsmk-calendar-month-multi]="calendarCount > 1">
-                      @if (calendarCount > 1) {
-                        <div class="ngxsmk-calendar-month-header">
-                          <span class="ngxsmk-calendar-month-title">{{ getMonthYearLabel(calendarMonth.month, calendarMonth.year) }}</span>
-                        </div>
-                      }
-                      <ngxsmk-calendar-month-view
-                        [days]="calendarMonth.days"
-                        [weekDays]="weekDays"
-                        [classes]="classes"
-                        [mode]="mode"
-                        [selectedDate]="selectedDate"
-                        [startDate]="startDate"
-                        [endDate]="endDate"
-                        [focusedDate]="focusedDate"
-                        [today]="today"
-                        [currentMonth]="calendarMonth.month"
-                        [currentYear]="calendarMonth.year"
-                        [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
-                        
-                        [isDateDisabled]="boundIsDateDisabled"
-                        [isSameDay]="boundIsSameDay"
-                        [isHoliday]="boundIsHoliday"
-                        [isMultipleSelected]="boundIsMultipleSelected"
-                        [isInRange]="boundIsInRange"
-                        [isPreviewInRange]="boundIsPreviewInRange"
-                        [getAriaLabel]="boundGetAriaLabel"
-                        [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
-                        [getDayCellTooltip]="boundGetDayCellTooltip"
-                        [formatDayNumber]="boundFormatDayNumber"
-                        
-                        (dateClick)="onDateClick($event)"
-                        (dateHover)="onDateHover($event)"
-                        (dateFocus)="onDateFocus($event)"
-                        
-                        (swipeStart)="onCalendarSwipeStart($event)"
-                        (swipeMove)="onCalendarSwipeMove($event)"
-                        (swipeEnd)="onCalendarSwipeEnd($event)"
-                        
-                        (touchStart)="onDateCellTouchStart($event.event, $event.day)"
-                        (touchMove)="onDateCellTouchMove($event)"
-                        (touchEnd)="onDateCellTouchEnd($event.event, $event.day)">
-                      </ngxsmk-calendar-month-view>
-                    </div>
-                  }
+
+      
+      <ng-template #portalContent>
+        @if (isCalendarVisible) {
+          @if (!isInlineMode && isCalendarOpen) {
+            <div
+              class="ngxsmk-backdrop"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="getTranslation('closeCalendarOverlay')"
+              (click)="onBackdropInteract($event)"
+              (keydown.enter)="onBackdropInteract($event)"
+              (keydown.space)="onBackdropInteract($event)"
+            ></div>
+          }
+          <div #popoverContainer class="ngxsmk-popover-container" 
+               [class.ngxsmk-inline-container]="isInlineMode" 
+               [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" 
+               [class.ngxsmk-time-only-popover]="timeOnly" 
+               [class.ngxsmk-has-time-selection]="showTime || timeOnly"
+               [class.ngxsmk-bottom-sheet]="isMobileDevice() && mobileModalStyle === 'bottom-sheet' && !isInlineMode"
+               [class.ngxsmk-fullscreen]="isMobileDevice() && mobileModalStyle === 'fullscreen' && !isInlineMode"
+               [ngClass]="classes?.popover" 
+               role="dialog" 
+               [attr.aria-label]="getCalendarAriaLabel()" 
+               [attr.aria-modal]="!isInlineMode"
+               (touchstart)="onBottomSheetTouchStart($event)"
+               (touchmove)="onBottomSheetTouchMove($event)"
+               (touchend)="onBottomSheetTouchEnd($event)">
+            <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
+              @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
+                <div class="ngxsmk-ranges-container">
+                  <ul>
+                    @for (range of rangesArray; track trackByRange($index, range)) {
+                      <li (click)="selectRange(range.value)" (keydown.enter)="selectRange(range.value)" (keydown.space)="selectRange(range.value); $event.preventDefault()" [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" role="button" [attr.aria-disabled]="disabled">{{ range.key }}</li>
+                    }
+                  </ul>
                 </div>
-                }
-                
-                @if (calendarViewMode === 'year') {
-                  <ngxsmk-calendar-year-view
-                    viewMode="year"
-                    [yearGrid]="yearGrid"
-                    [currentYear]="_currentYear"
-                    [currentDecade]="_currentDecade"
-                    [today]="today"
-                    [disabled]="disabled"
-                    [headerClass]="classes?.header ?? ''"
-                    [navPrevClass]="classes?.navPrev ?? ''"
-                    [navNextClass]="classes?.navNext ?? ''"
-                    [previousYearsLabel]="getTranslation('previousYears')"
-                    [nextYearsLabel]="getTranslation('nextYears')"
-                    (viewModeChange)="calendarViewMode = $event"
-                    (changeYear)="changeYear($event)"
-                    (yearClick)="onYearClick($event)">
-                  </ngxsmk-calendar-year-view>
-                }
-                
-                @if (calendarViewMode === 'decade') {
-                  <ngxsmk-calendar-year-view
-                    viewMode="decade"
-                    [decadeGrid]="decadeGrid"
-                    [currentDecade]="_currentDecade"
-                    [disabled]="disabled"
-                    [headerClass]="classes?.header ?? ''"
-                    [navPrevClass]="classes?.navPrev ?? ''"
-                    [navNextClass]="classes?.navNext ?? ''"
-                    [previousDecadeLabel]="getTranslation('previousDecade')"
-                    [nextDecadeLabel]="getTranslation('nextDecade')"
-                    (changeDecade)="changeDecade($event)"
-                    (decadeClick)="onDecadeClick($event)">
-                  </ngxsmk-calendar-year-view>
-                }
-                
-                @if (calendarViewMode === 'timeline' && mode === 'range') {
-                  <div class="ngxsmk-timeline-view">
-                    <div class="ngxsmk-timeline-header">
-                      <div class="ngxsmk-timeline-controls">
-                        <button type="button" class="ngxsmk-timeline-zoom-out" (click)="timelineZoomOut()" [disabled]="disabled">-</button>
-                        <span class="ngxsmk-timeline-range">{{ timelineStartDate | date:'shortDate' }} - {{ timelineEndDate | date:'shortDate' }}</span>
-                        <button type="button" class="ngxsmk-timeline-zoom-in" (click)="timelineZoomIn()" [disabled]="disabled">+</button>
-                      </div>
-                    </div>
-                    <div class="ngxsmk-timeline-container" #timelineContainer>
-                      <div class="ngxsmk-timeline-track">
-                        @for (month of timelineMonths; track month.getTime()) {
-                          <div class="ngxsmk-timeline-month" 
-                               [class.selected]="isTimelineMonthSelected(month)"
-                               (click)="onTimelineMonthClick(month); $event.stopPropagation()"
-                               (keydown.enter)="onTimelineMonthClick(month)"
-                               (keydown.space)="onTimelineMonthClick(month); $event.preventDefault()"
-                               role="button"
-                               tabindex="0"
-                               [attr.aria-label]="month | date:'MMMM yyyy'">
-                            <div class="ngxsmk-timeline-month-label">{{ month | date:'MMM' }}</div>
-                            <div class="ngxsmk-timeline-month-year">{{ month | date:'yyyy' }}</div>
+              }
+              <div class="ngxsmk-calendar-container" 
+                   [class.ngxsmk-time-only-mode]="timeOnly"
+                   [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
+                   [class.ngxsmk-calendar-layout-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+                   [class.ngxsmk-calendar-layout-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+                   [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
+                   [ngClass]="classes?.calendar">
+                @if (!timeOnly) {
+                  @if (calendarViewMode === 'month') {
+                    <ngxsmk-calendar-header
+                      [headerClass]="classes?.header ?? ''"
+                      [navPrevClass]="classes?.navPrev ?? ''"
+                      [navNextClass]="classes?.navNext ?? ''"
+                      [monthOptions]="monthOptions"
+                      [(currentMonth)]="currentMonth"
+                      [yearOptions]="yearOptions"
+                      [(currentYear)]="currentYear"
+                      [disabled]="disabled"
+                      [isBackArrowDisabled]="isBackArrowDisabled"
+                      [prevMonthAriaLabel]="_prevMonthAriaLabel"
+                      [nextMonthAriaLabel]="_nextMonthAriaLabel"
+                      (previousMonth)="changeMonth(-1)"
+                      (nextMonth)="changeMonth(1)"
+                      (currentYearChange)="onYearSelectChange($event)">
+                    </ngxsmk-calendar-header>
+                  <div class="ngxsmk-multi-calendar-container" 
+                       [class.ngxsmk-multi-calendar]="calendarCount > 1"
+                       [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
+                       [class.ngxsmk-calendar-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
+                       [class.ngxsmk-calendar-auto]="calendarCount > 1 && calendarLayout === 'auto'">
+                    @for (calendarMonth of multiCalendarMonths; track trackByCalendarMonth($index, calendarMonth)) {
+                      <div class="ngxsmk-calendar-month" [class.ngxsmk-calendar-month-multi]="calendarCount > 1">
+                        @if (calendarCount > 1) {
+                          <div class="ngxsmk-calendar-month-header">
+                            <span class="ngxsmk-calendar-month-title">{{ getMonthYearLabel(calendarMonth.month, calendarMonth.year) }}</span>
                           </div>
                         }
+                        <ngxsmk-calendar-month-view
+                          [days]="calendarMonth.days"
+                          [weekDays]="weekDays"
+                          [classes]="classes"
+                          [mode]="mode"
+                          [selectedDate]="selectedDate"
+                          [startDate]="startDate"
+                          [endDate]="endDate"
+                          [focusedDate]="focusedDate"
+                          [today]="today"
+                          [currentMonth]="calendarMonth.month"
+                          [currentYear]="calendarMonth.year"
+                          [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
+                          
+                          [isDateDisabled]="boundIsDateDisabled"
+                          [isSameDay]="boundIsSameDay"
+                          [isHoliday]="boundIsHoliday"
+                          [isMultipleSelected]="boundIsMultipleSelected"
+                          [isInRange]="boundIsInRange"
+                          [isPreviewInRange]="boundIsPreviewInRange"
+                          [getAriaLabel]="boundGetAriaLabel"
+                          [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
+                          [getDayCellTooltip]="boundGetDayCellTooltip"
+                          [formatDayNumber]="boundFormatDayNumber"
+                          
+                          (dateClick)="onDateClick($event)"
+                          (dateHover)="onDateHover($event)"
+                          (dateFocus)="onDateFocus($event)"
+                          
+                          (swipeStart)="onCalendarSwipeStart($event)"
+                          (swipeMove)="onCalendarSwipeMove($event)"
+                          (swipeEnd)="onCalendarSwipeEnd($event)"
+                          
+                          (touchStart)="onDateCellTouchStart($event.event, $event.day)"
+                          (touchMove)="onDateCellTouchMove($event)"
+                          (touchEnd)="onDateCellTouchEnd($event.event, $event.day)">
+                        </ngxsmk-calendar-month-view>
+                      </div>
+                    }
+                  </div>
+                  }
+                  
+                  @if (calendarViewMode === 'year') {
+                    <ngxsmk-calendar-year-view
+                      viewMode="year"
+                      [yearGrid]="yearGrid"
+                      [currentYear]="_currentYear"
+                      [currentDecade]="_currentDecade"
+                      [today]="today"
+                      [disabled]="disabled"
+                      [headerClass]="classes?.header ?? ''"
+                      [navPrevClass]="classes?.navPrev ?? ''"
+                      [navNextClass]="classes?.navNext ?? ''"
+                      [previousYearsLabel]="getTranslation('previousYears')"
+                      [nextYearsLabel]="getTranslation('nextYears')"
+                      (viewModeChange)="calendarViewMode = $event"
+                      (changeYear)="changeYear($event)"
+                      (yearClick)="onYearClick($event)">
+                    </ngxsmk-calendar-year-view>
+                  }
+                  
+                  @if (calendarViewMode === 'decade') {
+                    <ngxsmk-calendar-year-view
+                      viewMode="decade"
+                      [decadeGrid]="decadeGrid"
+                      [currentDecade]="_currentDecade"
+                      [disabled]="disabled"
+                      [headerClass]="classes?.header ?? ''"
+                      [navPrevClass]="classes?.navPrev ?? ''"
+                      [navNextClass]="classes?.navNext ?? ''"
+                      [previousDecadeLabel]="getTranslation('previousDecade')"
+                      [nextDecadeLabel]="getTranslation('nextDecade')"
+                      (changeDecade)="changeDecade($event)"
+                      (decadeClick)="onDecadeClick($event)">
+                    </ngxsmk-calendar-year-view>
+                  }
+                  
+                  @if (calendarViewMode === 'timeline' && mode === 'range') {
+                    <div class="ngxsmk-timeline-view">
+                      <div class="ngxsmk-timeline-header">
+                        <div class="ngxsmk-timeline-controls">
+                          <button type="button" class="ngxsmk-timeline-zoom-out" (click)="timelineZoomOut()" [disabled]="disabled">-</button>
+                          <span class="ngxsmk-timeline-range">{{ timelineStartDate | date:'shortDate' }} - {{ timelineEndDate | date:'shortDate' }}</span>
+                          <button type="button" class="ngxsmk-timeline-zoom-in" (click)="timelineZoomIn()" [disabled]="disabled">+</button>
+                        </div>
+                      </div>
+                      <div class="ngxsmk-timeline-container" #timelineContainer>
+                        <div class="ngxsmk-timeline-track">
+                          @for (month of timelineMonths; track month.getTime()) {
+                            <div class="ngxsmk-timeline-month" 
+                                 [class.selected]="isTimelineMonthSelected(month)"
+                                 (click)="onTimelineMonthClick(month); $event.stopPropagation()"
+                                 (keydown.enter)="onTimelineMonthClick(month)"
+                                 (keydown.space)="onTimelineMonthClick(month); $event.preventDefault()"
+                                 role="button"
+                                 tabindex="0"
+                                 [attr.aria-label]="month | date:'MMMM yyyy'">
+                              <div class="ngxsmk-timeline-month-label">{{ month | date:'MMM' }}</div>
+                              <div class="ngxsmk-timeline-month-year">{{ month | date:'yyyy' }}</div>
+                            </div>
+                          }
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  }
+                  
+                  @if (calendarViewMode === 'time-slider' && mode === 'range' && showTime) {
+                    <div class="ngxsmk-time-slider-view">
+                      <div class="ngxsmk-time-slider-header">
+                        <div class="ngxsmk-time-slider-label">{{ getTranslation('startTime') }}</div>
+                        <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(startTimeSlider) }}</div>
+                      </div>
+                      <div class="ngxsmk-time-slider-container">
+                        <input type="range" 
+                               class="ngxsmk-time-slider"
+                               [min]="0"
+                               [max]="1440"
+                               [step]="minuteInterval"
+                               [value]="startTimeSlider"
+                               (input)="onStartTimeSliderChange(+($any($event.target).value))"
+                               [disabled]="disabled">
+                      </div>
+                      <div class="ngxsmk-time-slider-header">
+                        <div class="ngxsmk-time-slider-label">{{ getTranslation('endTime') }}</div>
+                        <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(endTimeSlider) }}</div>
+                      </div>
+                      <div class="ngxsmk-time-slider-container">
+                        <input type="range" 
+                               class="ngxsmk-time-slider"
+                               [min]="0"
+                               [max]="1440"
+                               [step]="minuteInterval"
+                               [value]="endTimeSlider"
+                               (input)="onEndTimeSliderChange(+($any($event.target).value))"
+                               [disabled]="disabled">
+                      </div>
+                    </div>
+                  }
+                }
+
+                @if (showTime || timeOnly) {
+                  <ngxsmk-time-selection
+                    [hourOptions]="hourOptions"
+                    [minuteOptions]="minuteOptions"
+                    [secondOptions]="secondOptions"
+                    [ampmOptions]="ampmOptions"
+                    [(currentDisplayHour)]="currentDisplayHour"
+                    [(currentMinute)]="currentMinute"
+                    [(currentSecond)]="currentSecond"
+                    [(isPm)]="isPm"
+                    [showSeconds]="showSeconds"
+                    [disabled]="disabled"
+                    [timeLabel]="getTranslation('time')"
+                    (timeChange)="timeChange()">
+                  </ngxsmk-time-selection>
                 }
                 
-                @if (calendarViewMode === 'time-slider' && mode === 'range' && showTime) {
-                  <div class="ngxsmk-time-slider-view">
-                    <div class="ngxsmk-time-slider-header">
-                      <div class="ngxsmk-time-slider-label">{{ getTranslation('startTime') }}</div>
-                      <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(startTimeSlider) }}</div>
-                    </div>
-                    <div class="ngxsmk-time-slider-container">
-                      <input type="range" 
-                             class="ngxsmk-time-slider"
-                             [min]="0"
-                             [max]="1440"
-                             [step]="minuteInterval"
-                             [value]="startTimeSlider"
-                             (input)="onStartTimeSliderChange(+($any($event.target).value))"
-                             [disabled]="disabled">
-                    </div>
-                    <div class="ngxsmk-time-slider-header">
-                      <div class="ngxsmk-time-slider-label">{{ getTranslation('endTime') }}</div>
-                      <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(endTimeSlider) }}</div>
-                    </div>
-                    <div class="ngxsmk-time-slider-container">
-                      <input type="range" 
-                             class="ngxsmk-time-slider"
-                             [min]="0"
-                             [max]="1440"
-                             [step]="minuteInterval"
-                             [value]="endTimeSlider"
-                             (input)="onEndTimeSliderChange(+($any($event.target).value))"
-                             [disabled]="disabled">
-                    </div>
+                @if (!isInlineMode) {
+                  <div class="ngxsmk-footer" [ngClass]="classes?.footer">
+                    <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [ngClass]="classes?.clearBtn">
+                      {{ _clearLabel }}
+                    </button>
+                    <button type="button" class="ngxsmk-close-button" (click)="closeCalendarWithFocusRestore()" [disabled]="disabled" [attr.aria-label]="_closeAriaLabel" [ngClass]="classes?.closeBtn">
+                      {{ _closeLabel }}
+                    </button>
                   </div>
                 }
-              }
-
-              @if (showTime || timeOnly) {
-                <ngxsmk-time-selection
-                  [hourOptions]="hourOptions"
-                  [minuteOptions]="minuteOptions"
-                  [secondOptions]="secondOptions"
-                  [ampmOptions]="ampmOptions"
-                  [(currentDisplayHour)]="currentDisplayHour"
-                  [(currentMinute)]="currentMinute"
-                  [(currentSecond)]="currentSecond"
-                  [(isPm)]="isPm"
-                  [showSeconds]="showSeconds"
-                  [disabled]="disabled"
-                  [timeLabel]="getTranslation('time')"
-                  (timeChange)="timeChange()">
-                </ngxsmk-time-selection>
-              }
-              
-              <div class="ngxsmk-footer" *ngIf="!isInlineMode" [ngClass]="classes?.footer">
-                <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [ngClass]="classes?.clearBtn">
-                  {{ _clearLabel }}
-                </button>
-                <button type="button" class="ngxsmk-close-button" (click)="closeCalendarWithFocusRestore()" [disabled]="disabled" [attr.aria-label]="_closeAriaLabel" [ngClass]="classes?.closeBtn">
-                  {{ _closeLabel }}
-                </button>
               </div>
             </div>
           </div>
-        </div>
+        }
+      </ng-template>
+
+      @if (isCalendarVisible && !_shouldAppendToBody) {
+        <ng-container *ngTemplateOutlet="portalContent"></ng-container>
       }
     </div>
   `,
@@ -574,6 +596,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() enableVoiceInput: boolean = false;
   @Input() autoDetectMobile: boolean = true;
   @Input() disableFocusTrap: boolean = false;
+  @Input() appendToBody: boolean = false;
+
+  private appRef = inject(ApplicationRef);
+  private document = inject(DOCUMENT);
+
+  @ViewChild('portalContent', { static: true }) portalTemplate!: TemplateRef<any>;
+  private portalViewRef: EmbeddedViewRef<any> | null = null;
+
+  get _shouldAppendToBody(): boolean {
+    return this.appendToBody ||
+      (this.autoDetectMobile && this.isMobileDevice() &&
+        (this.mobileModalStyle === 'bottom-sheet' || this.mobileModalStyle === 'fullscreen'));
+  }
 
   private _isCalendarOpen = signal<boolean>(false);
   public get isCalendarOpen(): boolean {
@@ -2763,6 +2798,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (isOpening) {
       this.isOpeningCalendar = true;
 
+      // Handle Append To Body
+      if (this._shouldAppendToBody) {
+        this.renderInBody();
+      }
+
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
       }
@@ -2775,10 +2815,53 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }, timeoutDelay);
     } else {
       this.isOpeningCalendar = false;
+
+      // Cleanup Append To Body
+      if (this.portalViewRef) {
+        this.destroyBodyView();
+      }
+
       if (this.openCalendarTimeoutId) {
         clearTimeout(this.openCalendarTimeoutId);
         this.openCalendarTimeoutId = null;
       }
+    }
+  }
+
+  private renderInBody(): void {
+    if (this.portalViewRef) return; // Already rendered
+
+    // Create the view
+    this.portalViewRef = this.portalTemplate.createEmbeddedView(null);
+
+    // Attach to application logic for change detection
+    this.appRef.attachView(this.portalViewRef);
+
+    // Append root nodes to body
+    this.portalViewRef.rootNodes.forEach((node: any) => {
+      this.document.body.appendChild(node);
+    });
+
+    // Schedule check
+    this.cdr.markForCheck();
+  }
+
+  private destroyBodyView(): void {
+    if (this.portalViewRef) {
+      this.appRef.detachView(this.portalViewRef);
+      // Remove nodes (destroy does this usually if attached to VCR, but here we appended manually so we might need to remove unless detach handles it via cleanup? 
+      // createEmbeddedView returns a view that is not attached to VCR unless we call insert.
+      // appRef.attachView enables CD.
+      // destroy() removes it from DOM if it knew where it was? No, EmbeddedViewRef.destroy() removes from DOM if it was inserted via VCR.
+      // Since we manually appended, we should manually remove.
+      this.portalViewRef.rootNodes.forEach((node: any) => {
+        if (node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+      });
+
+      this.portalViewRef.destroy();
+      this.portalViewRef = null;
     }
   }
 

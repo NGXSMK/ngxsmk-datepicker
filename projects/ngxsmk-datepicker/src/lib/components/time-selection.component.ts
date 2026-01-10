@@ -1,11 +1,10 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
 @Component({
   selector: 'ngxsmk-time-selection',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent],
+  imports: [CustomSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ngxsmk-time-selection">
@@ -25,14 +24,15 @@ import { CustomSelectComponent } from './custom-select.component';
         (valueChange)="currentMinuteChange.emit($any($event)); timeChange.emit()"
         [disabled]="disabled">
       </ngxsmk-custom-select>
-      <ngxsmk-custom-select
-        *ngIf="showSeconds"
-        class="second-select"
-        [options]="secondOptions"
-        [(value)]="currentSecond"
-        (valueChange)="currentSecondChange.emit($any($event)); timeChange.emit()"
-        [disabled]="disabled">
-      </ngxsmk-custom-select>
+      @if (showSeconds) {
+        <ngxsmk-custom-select
+          class="second-select"
+          [options]="secondOptions"
+          [(value)]="currentSecond"
+          (valueChange)="currentSecondChange.emit($any($event)); timeChange.emit()"
+          [disabled]="disabled">
+        </ngxsmk-custom-select>
+      }
       <ngxsmk-custom-select
         class="ampm-select"
         [options]="ampmOptions"
