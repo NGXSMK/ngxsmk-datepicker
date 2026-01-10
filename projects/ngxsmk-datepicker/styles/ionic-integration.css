@@ -14,19 +14,22 @@
 
 /* Default z-index for Ionic compatibility */
 ion-app ngxsmk-datepicker {
-  --datepicker-z-index-base: 10001; /* Below ion-alert (20001), above ion-popover (10000) */
+  --datepicker-z-index-base: 10001;
+  /* Below ion-alert (20001), above ion-popover (10000) */
   --datepicker-z-index-backdrop: 10000;
 }
 
 /* When inside ion-modal, use higher z-index */
 ion-modal ngxsmk-datepicker {
-  --datepicker-z-index-base: 20001; /* Above modal backdrop (20000) */
+  --datepicker-z-index-base: 20001;
+  /* Above modal backdrop (20000) */
   --datepicker-z-index-backdrop: 20000;
 }
 
 /* When inside ion-popover, use appropriate z-index */
 ion-popover ngxsmk-datepicker {
-  --datepicker-z-index-base: 10001; /* Above popover (10000) */
+  --datepicker-z-index-base: 10001;
+  /* Above popover (10000) */
   --datepicker-z-index-backdrop: 10000;
 }
 
@@ -60,9 +63,7 @@ ion-content .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-con
 }
 
 /* Alternative: Use inline mode in ion-content (recommended) */
-ion-content ngxsmk-datepicker {
-  /* Inline mode avoids all positioning issues */
-}
+
 
 /* ============================================
    4. SAFE AREA INSETS (iOS)
@@ -114,14 +115,13 @@ ion-app.ion-theme-dark ngxsmk-datepicker {
    ============================================ */
 
 /* Allow Ionic gestures to work when datepicker is in inline mode */
-ion-content ngxsmk-datepicker[inline="true"] {
-  /* Touch events work normally in inline mode */
-}
+
 
 /* Prevent touch event conflicts in popover mode */
 .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
   /* Ionic gestures may be blocked - use inline mode instead */
-  touch-action: pan-y; /* Allow vertical scrolling */
+  touch-action: pan-y;
+  /* Allow vertical scrolling */
 }
 
 /* ============================================
@@ -129,9 +129,7 @@ ion-content ngxsmk-datepicker[inline="true"] {
    ============================================ */
 
 /* When inside ion-modal, let Ionic handle focus */
-ion-modal .ngxsmk-popover-container {
-  /* Focus trapping is handled by ion-modal */
-}
+
 
 /* ============================================
    8. KEYBOARD BEHAVIOR
@@ -139,6 +137,7 @@ ion-modal .ngxsmk-popover-container {
 
 /* Prevent keyboard from covering datepicker on iOS */
 @supports (-webkit-touch-callout: none) {
+
   /* iOS Safari */
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
     /* Adjust position when keyboard is visible */
@@ -151,10 +150,7 @@ ion-modal .ngxsmk-popover-container {
    ============================================ */
 
 /* Ensure variables cascade into Shadow DOM */
-ion-content::part(scroll) ngxsmk-datepicker,
-ion-item::part(native) ngxsmk-datepicker {
-  /* Variables defined on :host will work here */
-}
+
 
 /* Global variables for Shadow DOM */
 :root {
@@ -185,11 +181,7 @@ ion-item ngxsmk-datepicker .ngxsmk-input-group {
    ============================================ */
 
 /* On mobile, prefer inline mode in Ionic */
-@media (max-width: 768px) {
-  ion-content ngxsmk-datepicker:not([inline]) {
-    /* Suggest using inline mode on mobile */
-  }
-}
+
 
 /* ============================================
    12. CAPACITOR SPECIFIC
@@ -202,3 +194,33 @@ ion-item ngxsmk-datepicker .ngxsmk-input-group {
   }
 }
 
+/* ============================================
+   13. POSITIONING FIXES (Mobile)
+   ============================================ */
+
+/* Bottom Sheet Positioning */
+.ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-bottom-sheet:not(.ngxsmk-inline-container) {
+  top: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 20px 20px 0 0 !important;
+  margin: 0 !important;
+}
+
+/* Fullscreen Positioning */
+.ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}

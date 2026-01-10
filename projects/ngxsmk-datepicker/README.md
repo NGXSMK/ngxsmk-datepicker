@@ -7,7 +7,9 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `1.9.26` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `1.9.27` is the current stable release. For production use, install the latest version from npm.
+> 
+> ⚠️ **Warning**: Version `1.9.26` contains broken styles. If you are using `1.9.26`, please upgrade to `1.9.27` or downgrade to `1.9.25` immediately.
 
 ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
 
@@ -51,7 +53,10 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Signal Forms Support**: First-class support for Angular 21+ Signal Forms with `[field]` input (experimental feature).
 * **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
 * **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
-* **Angular 21 Ready**: Full compatibility with Angular 21 new features including Signal Forms, Vitest, and zoneless by default.
+* **Angular 21 Ready**: Fully compatible with the officially released Angular 21, including Signal Forms, Vitest, and zoneless by default.
+* **Modern Control Flow**: Uses Angular's latest `@if` and `@for` block syntax for superior performance and reduced bundle overhead.
+* **Optimized Imports**: Leverages modern standalone architecture with individual directive imports for maximum tree-shaking efficiency.
+* **Monorepo Compatible**: Enhanced static analysis and module resolution for seamless integration in Nx or other monorepo setups.
 * **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
 * **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
 * **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.

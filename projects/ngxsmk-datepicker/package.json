@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.26",
+  "version": "1.9.27",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -46,6 +46,12 @@
     "**/*.metadata.json",
     "README.md",
     "LICENSE",
+    "CHANGELOG.md",
+    "MIGRATION.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "ROADMAP.md",
+    "SECURITY.md",
     "docs",
     "styles"
   ],

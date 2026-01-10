@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "1.9.26",
+  "version": "1.9.27",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -21,7 +21,7 @@
     "lint": "npx ng lint",
     "deploy": "npm run build:demo && node scripts/manual-deploy.js",
     "prepublishOnly": "npm run build:optimized",
-    "prepublish:copy-assets": "node -e \"const fs = require('fs'); fs.copyFileSync('LICENSE', 'dist/ngxsmk-datepicker/LICENSE'); fs.copyFileSync('README.md', 'dist/ngxsmk-datepicker/README.md')\"",
+    "prepublish:copy-assets": "node -e \"const fs = require('fs'); const files = ['LICENSE', 'README.md', 'CHANGELOG.md', 'MIGRATION.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'ROADMAP.md', 'SECURITY.md']; files.forEach(f => { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/ngxsmk-datepicker/' + f); });\"",
     "publish:lib": "npm run build:optimized && npm run prepublish:copy-assets",
     "unpublish:version": "node scripts/unpublish-version.js",
     "publish:patch": "npm run build:optimized && npm run prepublish:copy-assets && cd dist/ngxsmk-datepicker && npm publish --tag latest",

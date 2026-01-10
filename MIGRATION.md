@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.26 → v1.9.27](#v1926---v1927)
 - [v1.9.25 → v1.9.26](#v1925---v1926)
 - [v1.9.23 → v1.9.25](#v1923---v1925)
 - [v1.9.22 → v1.9.23](#v1922---v1923)
@@ -33,7 +34,32 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## v1.9.26 → v1.9.27
+
+### Installation
+
+Update to the latest version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.27
+```
+
+### Changes
+
+- **Modern Control Flow**: Components migrated to Angular's built-in `@if` and `@for` blocks.
+- **Improved Resolution**: Resolved static analysis and module resolution issues in monorepos.
+
+### Breaking Changes
+
+None in v1.9.27.
+
+### Migration Steps
+
+No code changes required. The changes are focused on internal library architecture and build compatibility.
+
 ## v1.9.25 → v1.9.26
+
+> ⚠️ **Warning**: Version `1.9.26` has broken styles. It is highly recommended to skip this version and upgrade directly to `1.9.27`.
 
 ### Installation
 

@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
 @Component({
   selector: 'ngxsmk-calendar-header',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent],
+  imports: [NgClass, CustomSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ngxsmk-header" [ngClass]="headerClass">

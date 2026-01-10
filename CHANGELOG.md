@@ -5,7 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.27] - 2026-01-10
+
+### Refactored
+- **Modern Control Flow**: Fully migrated all standalone components (`NgxsmkDatepickerComponent`, `CalendarHeaderComponent`, `CalendarMonthViewComponent`, `CalendarYearViewComponent`, `TimeSelectionComponent`, `CustomSelectComponent`) to modern Angular `@if` and `@for` block syntax.
+- **Optimized Imports**: Replaced monolithic `CommonModule` with individual directive and pipe imports (`NgClass`, `NgTemplateOutlet`, `DatePipe`) in all standalone components. This improves tree-shaking and resolves resolution conflicts in some environments.
+
+### Fixed
+- **Module Resolution**: Resolved "Value could not be determined statically" error when importing standalone library components into traditional NgModules in some monorepo configurations.
+- **Build Process**: Fixed library compilation error (`TS6133`) caused by unused `CommonModule` after migration to modern control flow.
+- **Monorepo Compatibility**: Improved Angular core dependency resolution for example applications to prevent "duplicate symbol" and "exported symbol not found" errors during development.
+
+### Maintenance
+- **Git**: Added `/examples` directory to `.gitignore` to prevent committing experimental test applications.
+
+### Changed
+- **Version Update**: Updated to version 1.9.27
+
 ## [1.9.26] - 2026-01-09
+
+> ⚠️ **DO NOT USE**: This version contains broken styles. Please use v1.9.27 or v1.9.25 instead.
 
 ### Refactored
 - **Core Architecture**: Major refactoring of `NgxsmkDatepickerComponent` to address "God Component" issues
@@ -20,6 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Moved styles to allow correct exporting via package logic
   - Ensures `@import 'ngxsmk-datepicker/styles/ionic-integration.css'` works as documented
   - Resolves [#123](https://github.com/NGXSMK/ngxsmk-datepicker/issues/123)
+
+### Fixed (Mobile UI)
+- **Mobile View Styles**: Enhanced mobile UI styles for both Angular and Ionic projects
+  - Added proper positioning and animations for `bottom-sheet` and `fullscreen` mobile modes
+  - Fixed missing styles in core `datepicker.css` that prevented `mobileModalStyle` from working correctly
+  - Improved gesture handling and transition animations for mobile devices
 
 ### Changed
 - **Version Update**: Updated to version 1.9.26
