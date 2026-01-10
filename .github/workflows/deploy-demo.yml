@@ -41,7 +41,7 @@ jobs:
           # Create the directory structure for GitHub Pages
           mkdir -p deploy/ngxsmk-datepicker
           # Copy all files to the subdirectory
-          rsync -av dist/demo-app/browser/ deploy/ngxsmk-datepicker/ --exclude=''
+          rsync -av dist/demo-app/browser/ deploy/ngxsmk-datepicker/
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
