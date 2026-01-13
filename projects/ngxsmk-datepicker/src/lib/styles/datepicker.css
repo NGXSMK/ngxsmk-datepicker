@@ -1001,6 +1001,15 @@ ngxsmk-datepicker {
   min-width: 0;
 }
 
+.ngxsmk-month-year-selects .month-select {
+  flex: 1 !important;
+}
+
+.ngxsmk-month-year-selects .year-select {
+  flex: 0 0 100px !important;
+  min-width: 100px !important;
+}
+
 .ngxsmk-nav-buttons {
   display: -webkit-box;
   display: -webkit-flex;
