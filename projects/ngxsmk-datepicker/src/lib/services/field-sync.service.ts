@@ -135,7 +135,7 @@ export class FieldSyncService {
             return result as DatepickerValue;
           }
           return null;
-        } catch (error) {
+        } catch {
           // If calling fails, it might be a signal itself that needs to be called
           // Try checking if it's a signal
           if (safeIsSignal(fieldValue)) {
@@ -400,7 +400,7 @@ export class FieldSyncService {
 
       // Generic fallback for getters
       try {
-        const result = (field as Function)();
+        const result = (field as () => unknown)();
         if (result && typeof result === 'object') {
           return result as SignalFormFieldConfig;
         }
@@ -463,7 +463,7 @@ export class FieldSyncService {
                 // Result is a direct value
                 fieldValue = (funcResult !== undefined && funcResult !== null) ? funcResult as DatepickerValue : null;
               }
-            } catch (error) {
+            } catch {
               // If calling fails, try checking if it's a signal itself
               if (safeIsSignal(fieldValueRef)) {
                 try {
@@ -558,7 +558,7 @@ export class FieldSyncService {
     }
   }
 
-  syncFieldValue(fieldInput: SignalFormField | Signal<SignalFormField> | Function | unknown, callbacks: FieldSyncCallbacks): boolean {
+  syncFieldValue(fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown, callbacks: FieldSyncCallbacks): boolean {
     const field = this.resolveField(fieldInput);
     if (!field) return false;
 
@@ -608,7 +608,7 @@ export class FieldSyncService {
 
   updateFieldFromInternal(
     value: DatepickerValue,
-    fieldInput: SignalFormField | Signal<SignalFormField> | Function | unknown
+    fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown
   ): void {
     const field = this.resolveField(fieldInput);
     if (!field || typeof field !== 'object') {

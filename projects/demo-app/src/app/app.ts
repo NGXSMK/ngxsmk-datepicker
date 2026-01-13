@@ -445,7 +445,7 @@ export class MomentIntegrationComponent {
       const day = date.getDay();
       return day !== 0 && day !== 6; // Block weekends
     },
-    getDayCellClasses: (date, isSelected, isDisabled, isToday, isHoliday) => {
+    getDayCellClasses: (date, _isSelected, _isDisabled, _isToday, _isHoliday) => {
       const day = date.getDay();
       if (day === 0 || day === 6) {
         return ['weekend-disabled'];
