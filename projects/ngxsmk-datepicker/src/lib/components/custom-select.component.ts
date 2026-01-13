@@ -263,7 +263,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
           this.updatePanelPosition();
         }
       };
-      window.addEventListener('scroll', this.scrollListener, true);
+      window.addEventListener('scroll', this.scrollListener, { passive: true, capture: true });
     }
   }
 

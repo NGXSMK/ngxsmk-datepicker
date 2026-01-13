@@ -1717,7 +1717,7 @@ ngxsmk-datepicker {
     transform: translate(-50%, -50%) !important;
     width: -webkit-fit-content !important;
     width: -moz-fit-content !important;
-    width: fit-content !important;
+    width: 100% !important;
     min-width: 280px !important;
     max-width: min(calc(100vw - 32px), 500px) !important;
     max-height: calc(100vh - 64px) !important;

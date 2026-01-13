@@ -3225,7 +3225,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const touchEndHandler = (event: TouchEvent) => {
       this.onTouchEnd(event);
     };
-    inputGroup.addEventListener('touchend', touchEndHandler, { passive: false });
+    inputGroup.addEventListener('touchend', touchEndHandler, { passive: true });
     this.passiveTouchListeners.push(() => {
       this.touchListenersSetup.delete(inputGroup);
       inputGroup.removeEventListener('touchstart', touchStartHandler);
@@ -3316,12 +3316,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const touchEndHandler = (event: TouchEvent) => {
         this.onDateCellTouchEnd(event, day);
       };
-      cell.addEventListener('touchend', touchEndHandler, { passive: false });
+      cell.addEventListener('touchend', touchEndHandler, { passive: true });
 
       const touchMoveHandler = (event: TouchEvent) => {
         this.onDateCellTouchMove(event);
       };
-      cell.addEventListener('touchmove', touchMoveHandler, { passive: false });
+      cell.addEventListener('touchmove', touchMoveHandler, { passive: true });
 
       this.passiveTouchListeners.push(() => {
         this.touchListenersAttached.delete(cell);
