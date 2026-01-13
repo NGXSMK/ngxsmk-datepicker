@@ -123,11 +123,11 @@ Features marked as experimental may change:
 
 For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CONTRIBUTING.md#deprecation-policy).
 
-## **🚀 Installation**
+## **📦 Installation**
 
-Install the package using npm:
-
-    npm install ngxsmk-datepicker  
+```bash
+npm install ngxsmk-datepicker@1.9.30
+```
 
 ## **Usage**
 
