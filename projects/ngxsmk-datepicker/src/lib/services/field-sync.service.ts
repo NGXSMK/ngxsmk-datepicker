@@ -69,6 +69,7 @@ function safeIsSignal(value: unknown): value is Signal<unknown> {
 export type SignalFormField = ({
   value?: DatepickerValue | (() => DatepickerValue) | { (): DatepickerValue } | Signal<DatepickerValue>;
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
+  required?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
   markAsDirty?: () => void;
@@ -79,6 +80,7 @@ export type SignalFormField = ({
 export interface FieldSyncCallbacks {
   onValueChanged: (value: DatepickerValue) => void;
   onDisabledChanged: (disabled: boolean) => void;
+  onRequiredChanged?: (required: boolean) => void;
   onSyncError: (error: unknown) => void;
   normalizeValue: (value: unknown) => DatepickerValue;
   isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => boolean;
@@ -213,6 +215,47 @@ export class FieldSyncService {
     }
   }
 
+  /**
+   * Helper function to safely read required state
+   * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
+   */
+  private readRequiredState(field: SignalFormField): boolean {
+    if (!field || typeof field !== 'object') {
+      return false;
+    }
+
+    try {
+      // Check required property first
+      if ('required' in field && field.required !== undefined) {
+        const requiredVal = field.required;
+
+        // Explicitly check for Angular Signal (compatible with all Angular 17+ versions)
+        if (safeIsSignal(requiredVal)) {
+          return !!requiredVal();
+        }
+
+        if (typeof requiredVal === 'function') {
+          return !!(requiredVal as () => boolean)();
+        }
+
+        // Handle signals detected as objects
+        if (typeof requiredVal === 'object' && requiredVal !== null) {
+          try {
+            return !!(requiredVal as unknown as { (): boolean })();
+          } catch {
+            return !!requiredVal;
+          }
+        }
+
+        return !!requiredVal;
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
+  }
+
   setupFieldSync(
     field: SignalFormField,
     callbacks: FieldSyncCallbacks
@@ -327,6 +370,10 @@ export class FieldSyncService {
         // Always update disabled state
         const disabled = this.readDisabledState(field);
         callbacks.onDisabledChanged(disabled);
+
+        // Always update required state
+        const required = this.readRequiredState(field);
+        callbacks.onRequiredChanged?.(required);
       }));
 
       this._fieldEffectRef = effectRef;
@@ -366,6 +413,9 @@ export class FieldSyncService {
 
       const disabled = this.readDisabledState(field);
       callbacks.onDisabledChanged(disabled);
+
+      const required = this.readRequiredState(field);
+      callbacks.onRequiredChanged?.(required);
       return true;
     }
 
@@ -376,6 +426,9 @@ export class FieldSyncService {
 
     const disabled = this.readDisabledState(field);
     callbacks.onDisabledChanged(disabled);
+
+    const required = this.readRequiredState(field);
+    callbacks.onRequiredChanged?.(required);
     return false;
   }
 

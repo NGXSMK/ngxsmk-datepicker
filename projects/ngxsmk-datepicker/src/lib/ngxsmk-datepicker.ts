@@ -106,10 +106,16 @@ import { Subject } from 'rxjs';
                    #nativeDateInput
                    [value]="formatValueForNativeInput(_internalValue)"
                    [placeholder]="placeholder"
+                   [id]="inputId || _uniqueId"
+                   [name]="name"
+                   [autocomplete]="autocomplete"
                    [disabled]="disabled"
+                   [required]="required"
                    [attr.min]="getMinDateForNativeInput()"
                    [attr.max]="getMaxDateForNativeInput()"
                    [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+                   [attr.aria-required]="required"
+                   [attr.aria-invalid]="errorState"
                    [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                    class="ngxsmk-display-input ngxsmk-native-input"
                    [ngClass]="classes?.input"
@@ -127,9 +133,15 @@ import { Subject } from 'rxjs';
                    #dateInput
                    [value]="allowTyping ? (typedInputValue || displayValue) : displayValue" 
                    [placeholder]="placeholder" 
+                   [id]="inputId || _uniqueId"
+                   [name]="name"
+                   [autocomplete]="autocomplete"
                    [readonly]="!allowTyping"
                    [disabled]="disabled"
+                   [required]="required"
                    [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+                   [attr.aria-required]="required"
+                   [attr.aria-invalid]="errorState"
                    [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                    class="ngxsmk-display-input"
                    [ngClass]="classes?.input"
@@ -517,6 +529,33 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   @Input() inline: boolean | 'always' | 'auto' = false;
 
+  private _inputId: string = '';
+  @Input() set inputId(value: string) {
+    this._inputId = value;
+    this.scheduleChangeDetection();
+  }
+  get inputId(): string {
+    return this._inputId;
+  }
+
+  private _name: string = '';
+  @Input() set name(value: string) {
+    this._name = value;
+    this.scheduleChangeDetection();
+  }
+  get name(): string {
+    return this._name;
+  }
+
+  private _autocomplete: string = 'off';
+  @Input() set autocomplete(value: string) {
+    this._autocomplete = value;
+    this.scheduleChangeDetection();
+  }
+  get autocomplete(): string {
+    return this._autocomplete;
+  }
+
   @Input() translations?: PartialDatepickerTranslations;
   @Input() translationService?: TranslationService;
 
@@ -676,6 +715,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
               this.scheduleChangeDetection();
             }
           },
+          onRequiredChanged: (required: boolean) => {
+            this.required = required;
+          },
           onSyncError: (_error: unknown) => {
           },
           normalizeValue: (value: unknown) => {
@@ -717,6 +759,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.disabled = disabled;
           this.scheduleChangeDetection();
         }
+      },
+      onRequiredChanged: (required: boolean) => {
+        this.required = required;
       },
       onSyncError: (_error: unknown) => {
       },
@@ -852,6 +897,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._required !== value) {
       this._required = value;
       this.stateChanges.next();
+      this.scheduleChangeDetection();
     }
   }
 
@@ -863,6 +909,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._errorState !== value) {
       this._errorState = value;
       this.stateChanges.next();
+      this.scheduleChangeDetection();
     }
   }
 
