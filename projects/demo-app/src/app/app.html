@@ -25,7 +25,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v1.9.29</span>
+              <span class="logo-version">v1.9.30</span>
               @if (npmDownloads() !== null) {
               <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
                 title="Monthly downloads on npm" rel="noopener noreferrer">
@@ -187,7 +187,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v1.9.29)</p>
+        <p class="hero-version">(v1.9.30)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{
@@ -526,6 +526,35 @@
           <h3 class="example-title">{{ t().signalFormsFieldTitle }}</h3>
           <p>{{ t().useFieldInputDescription }}</p>
           <p class="info-note"><strong>{{ t().note }}</strong> {{ t().thisFeatureRequiresAngular21 }}</p>
+
+          <div class="example-demo">
+            <h4 class="subsection-title">Live Demo (v1.9.30+)</h4>
+            <p style="margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+              This demo uses a mock Signal Form Field that mimics Angular 21's FieldTree structure.
+              The datepicker automatically resolves the value, disabled status, and required state.
+            </p>
+            <ngxsmk-datepicker [field]="mockSignalField" mode="single" [theme]="currentTheme"
+              [locale]="selectedLocale()" placeholder="Select date using [field] binding">
+            </ngxsmk-datepicker>
+
+            <div class="result-box" style="margin-top: 1rem;">
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div><strong>Current Value:</strong> <code>{{ mockSignalField.value() | date:'medium' }}</code></div>
+                <div><strong>Required:</strong> <code
+                    [style.color]="mockSignalField.required() ? '#ef4444' : 'inherit'">{{ mockSignalField.required() }}</code>
+                </div>
+                <div><strong>Disabled:</strong> <code>{{ mockSignalField.disabled() }}</code></div>
+              </div>
+              <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                <button class="demo-button" (click)="mockSignalField.required.set(!mockSignalField.required())">
+                  Toggle Required
+                </button>
+                <button class="demo-button" (click)="mockSignalField.disabled.set(!mockSignalField.disabled())">
+                  Toggle Disabled
+                </button>
+              </div>
+            </div>
+          </div>
 
           <div class="code-block">
             <div class="code-header">

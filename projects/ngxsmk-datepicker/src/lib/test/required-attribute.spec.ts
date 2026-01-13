@@ -1,7 +1,6 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { signal } from '@angular/core';
 import { SignalFormField } from '../services/field-sync.service';
 
 describe('NgxsmkDatepickerComponent Required Attribute', () => {
@@ -38,7 +37,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
         const mockField: Partial<SignalFormField> = {
             value: null,
             required: true,
-            setValue: (val: any) => { }
+            setValue: (_val: unknown) => { }
         };
 
         component.field = mockField as SignalFormField;
@@ -58,7 +57,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
         const mockField: Partial<SignalFormField> = {
             value: null,
             required: () => true,
-            setValue: (val: any) => { }
+            setValue: (_val: unknown) => { }
         };
 
         component.field = mockField as SignalFormField;
@@ -79,7 +78,7 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
         const signalFn = () => null;
         Object.assign(signalFn, {
             required: true,
-            setValue: (val: any) => { }
+            setValue: (_val: unknown) => { }
         });
 
         component.field = signalFn as unknown as SignalFormField;

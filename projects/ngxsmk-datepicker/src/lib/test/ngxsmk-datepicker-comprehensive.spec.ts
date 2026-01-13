@@ -4,11 +4,11 @@ import * as AngularCore from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { getStartOfDay, getEndOfDay, getStartOfMonth, getEndOfMonth } from '../utils/date.utils';
+import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 
-const form = (AngularCore as any).form;
-const objectSchema = (AngularCore as any).objectSchema;
+const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (...args: unknown[]) => ({ (): { dirty: () => boolean }, dateField: unknown });
+const objectSchema = (AngularCore as unknown as Record<string, unknown>)['objectSchema'] as (...args: unknown[]) => unknown;
 
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
@@ -511,7 +511,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
         myForm = form(this.localObject, objectSchema({
-          dateField: (objectSchema as any)()
+          dateField: (objectSchema as (...args: unknown[]) => unknown)()
         }));
       }
 
@@ -552,7 +552,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
         myForm = form(this.localObject, objectSchema({
-          dateField: (objectSchema as any)()
+          dateField: (objectSchema as (...args: unknown[]) => unknown)()
         }));
       }
 
@@ -565,9 +565,9 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       ).componentInstance as NgxsmkDatepickerComponent;
 
       const field = testComponent.myForm.dateField;
-      const hasSetValue = typeof (field as any).setValue === 'function';
-      const hasUpdateValue = typeof (field as any).updateValue === 'function';
-      
+      const hasSetValue = typeof (field as unknown as { setValue: unknown }).setValue === 'function';
+      const hasUpdateValue = typeof (field as unknown as { updateValue: unknown }).updateValue === 'function';
+
       expect(hasSetValue || hasUpdateValue).toBe(true);
 
       const newDate = getStartOfDay(new Date(2025, 5, 15));
@@ -684,7 +684,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       const previousMonthDate = getStartOfDay(new Date(2024, 5, 25));
       const isDisabled = component.isDateDisabled(previousMonthDate);
-      
+
       if (!isDisabled) {
         spyOn(component.valueChange, 'emit');
         component.onDateClick(previousMonthDate);

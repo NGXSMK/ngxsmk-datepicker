@@ -2,11 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
+import { SignalFormField } from '../services/field-sync.service';
 
 /**
  * Mock Moment.js object for testing
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createMockMomentObject(date: Date, utcOffset?: number): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const momentObj: any = {
     _d: date,
     format: (formatString?: string) => {
@@ -54,7 +57,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       component.mode = 'single';
       const testDate = new Date(2025, 5, 15, 10, 30, 0);
       const momentObj = createMockMomentObject(testDate);
-      
+
       component.writeValue(momentObj);
       fixture.detectChanges();
 
@@ -70,7 +73,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       const testDate = new Date(2025, 5, 15, 10, 30, 0);
       const utcOffset = -360; // -6 hours
       const momentObj = createMockMomentObject(testDate, utcOffset);
-      
+
       component.writeValue(momentObj);
       fixture.detectChanges();
 
@@ -84,7 +87,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
 
     it('should bind moment object correctly after setting null first', () => {
       component.mode = 'single';
-      
+
       // First set to null
       component.writeValue(null);
       fixture.detectChanges();
@@ -93,7 +96,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Then set moment object (simulating API call scenario)
       const testDate = new Date(2025, 5, 15, 10, 30, 0);
       const momentObj = createMockMomentObject(testDate);
-      
+
       component.writeValue(momentObj);
       fixture.detectChanges();
 
@@ -108,10 +111,10 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       component.mode = 'single';
       const testDate = new Date(2025, 5, 15, 10, 30, 0);
       const momentObj = createMockMomentObject(testDate);
-      
+
       // Spy on _normalizeValue to ensure it's called
-      const normalizeValueSpy = spyOn(component as any, '_normalizeValue').and.callThrough();
-      
+      const normalizeValueSpy = spyOn(component as unknown as { _normalizeValue: (v: unknown) => unknown }, '_normalizeValue').and.callThrough();
+
       component.writeValue(momentObj);
       fixture.detectChanges();
 
@@ -136,7 +139,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Click a date in June
       const june15 = getStartOfDay(new Date(2024, 5, 15));
       expect(component.isDateDisabled(june15)).toBe(false);
-      
+
       spyOn(component.valueChange, 'emit');
       component.onDateClick(june15);
       fixture.detectChanges();
@@ -151,7 +154,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Click a date in July (should be clickable)
       const july10 = getStartOfDay(new Date(2024, 6, 10));
       expect(component.isDateDisabled(july10)).toBe(false);
-      
+
       component.onDateClick(july10);
       fixture.detectChanges();
 
@@ -185,7 +188,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Click a date in May (should be clickable)
       const may20 = getStartOfDay(new Date(2024, 4, 20));
       expect(component.isDateDisabled(may20)).toBe(false);
-      
+
       spyOn(component.valueChange, 'emit');
       component.onDateClick(may20);
       fixture.detectChanges();
@@ -217,7 +220,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
 
       // Get the memoized function again - should be invalidated and recreated
       const memo2 = component.isDateDisabledMemo;
-      
+
       // The function reference might be the same, but the closure should use new month/year
       // Test that dates in July are correctly evaluated
       const july10 = getStartOfDay(new Date(2024, 6, 10));
@@ -243,7 +246,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // July calendar should show some days from previous month (June) in empty cells
       // These should be clickable
       const june30 = getStartOfDay(new Date(2024, 5, 30)); // Last day of June
-      
+
       // Check if date is disabled (should not be if within valid range)
       const isDisabled = component.isDateDisabled(june30);
       if (!isDisabled) {
@@ -274,7 +277,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // May calendar should show some days from next month (June) in empty cells
       // These should be clickable
       const june1 = getStartOfDay(new Date(2024, 5, 1)); // First day of June
-      
+
       // Check if date is disabled (should not be if within valid range)
       const isDisabled = component.isDateDisabled(june1);
       if (!isDisabled) {
@@ -312,7 +315,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Dates in July should be clickable
       const july15 = getStartOfDay(new Date(2024, 6, 15));
       expect(component.isDateDisabled(july15)).toBe(false);
-      
+
       spyOn(component.valueChange, 'emit');
       component.onDateClick(july15);
       fixture.detectChanges();
@@ -329,8 +332,8 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       component.inline = true;
       fixture.detectChanges();
 
-        // Start with null values
-        component.writeValue(null);
+      // Start with null values
+      component.writeValue(null);
       fixture.detectChanges();
 
       // Start in July 2024
@@ -345,7 +348,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
 
       // Click on a date from previous month (June) - should navigate and select
       const june30 = getStartOfDay(new Date(2024, 5, 30)); // Last day of June
-      
+
       // Check if date is disabled (should not be if within valid range)
       const isDisabled = component.isDateDisabled(june30);
       if (!isDisabled) {
@@ -386,7 +389,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
 
       // Click on a date from previous month (June) - should update start date
       const june30 = getStartOfDay(new Date(2024, 5, 30));
-      
+
       const isDisabled = component.isDateDisabled(june30);
       if (!isDisabled) {
         spyOn(component.valueChange, 'emit');
@@ -416,7 +419,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       fixture.detectChanges();
 
       // Get initial memo function
-      const _memo1 = component.isDateDisabledMemo;
+      expect(component.isDateDisabledMemo).toBeTruthy();
       const june30 = getStartOfDay(new Date(2024, 5, 30));
 
       // Click on date from previous month - should navigate and invalidate cache
@@ -427,11 +430,11 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
 
         // After navigation, memo should be updated
         const memo2 = component.isDateDisabledMemo;
-        
+
         // The memo function should now use the new month/year (June)
         expect(component.currentMonth).toBe(5); // June
         expect(component.currentYear).toBe(2024);
-        
+
         // Dates in June should be correctly evaluated
         const june15 = getStartOfDay(new Date(2024, 5, 15));
         expect(memo2(june15)).toBe(false);
@@ -453,7 +456,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Click on date from previous month (June) as start
       const june30 = getStartOfDay(new Date(2024, 5, 30));
       const isDisabledJune = component.isDateDisabled(june30);
-      
+
       if (!isDisabledJune) {
         component.onDateClick(june30);
         fixture.detectChanges();
@@ -471,7 +474,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
         // Select end date in July
         const july5 = getStartOfDay(new Date(2024, 6, 5));
         const isDisabledJuly = component.isDateDisabled(july5);
-        
+
         if (!isDisabledJuly) {
           spyOn(component.valueChange, 'emit');
           component.onDateClick(july5);
@@ -489,9 +492,9 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
     it('should work with null start and end values', () => {
       component.mode = 'range';
       component.inline = true;
-      
-        // Initialize with null values
-        component.writeValue(null);
+
+      // Initialize with null values
+      component.writeValue(null);
       fixture.detectChanges();
 
       expect(component.startDate).toBeNull();
@@ -506,7 +509,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       // Click on date from previous month
       const june25 = getStartOfDay(new Date(2024, 5, 25));
       const isDisabled = component.isDateDisabled(june25);
-      
+
       if (!isDisabled) {
         spyOn(component.valueChange, 'emit');
         component.onDateClick(june25);
@@ -537,7 +540,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
         updateValue: jasmine.createSpy('updateValue')
       };
 
-      component.field = mockField as any;
+      component.field = mockField as unknown as SignalFormField;
       fixture.detectChanges();
 
       expect(component.value).toEqual(mockField.value);

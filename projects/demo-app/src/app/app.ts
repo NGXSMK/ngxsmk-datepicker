@@ -322,6 +322,24 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
 
   public signalDate = signal<DatepickerValue>(null);
 
+  /**
+   * Mock Signal Form Field (v1.9.30+)
+   * Demonstrates a signal that has field properties attached to it.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public mockSignalField = ((): any => {
+    const s = signal<Date | null>(new Date());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const field: any = s;
+    field.value = s;
+    field.disabled = signal(false);
+    field.required = signal(true);
+    field.errors = signal([]);
+    field.setValue = (val: Date | null) => s.set(val);
+    field.markAsDirty = () => console.log('Field marked as dirty');
+    return field;
+  })();
+
   public momentDateValue = signal<DatepickerValue>(null);
   public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
@@ -429,7 +447,7 @@ export class MomentIntegrationComponent {
       const day = date.getDay();
       return day !== 0 && day !== 6; // Block weekends
     },
-    getDayCellClasses: (date, isSelected, isDisabled, isToday, isHoliday) => {
+    getDayCellClasses: (date, _isSelected, _isDisabled, _isToday, _isHoliday) => {
       const day = date.getDay();
       if (day === 0 || day === 6) {
         return ['weekend-disabled'];
@@ -1398,7 +1416,7 @@ export class DateFormComponent {
     if (this.darkModeMediaQuery.addEventListener) {
       this.darkModeMediaQuery.addEventListener('change', this.darkModeHandler);
     } else {
-      this.darkModeMediaQuery.addListener(this.darkModeHandler as any);
+      this.darkModeMediaQuery.addListener(this.darkModeHandler as unknown as (ev: MediaQueryListEvent) => void);
     }
   }
 
@@ -1407,7 +1425,7 @@ export class DateFormComponent {
       if (this.darkModeMediaQuery.removeEventListener) {
         this.darkModeMediaQuery.removeEventListener('change', this.darkModeHandler);
       } else {
-        this.darkModeMediaQuery.removeListener(this.darkModeHandler as any);
+        this.darkModeMediaQuery.removeListener(this.darkModeHandler as unknown as (ev: MediaQueryListEvent) => void);
       }
       this.darkModeMediaQuery = null;
       this.darkModeHandler = null;
@@ -1745,7 +1763,7 @@ export class DateFormComponent {
     this.currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
   }
 
-  isDate(value: any): value is Date {
+  isDate(value: unknown): value is Date {
     return value instanceof Date;
   }
 

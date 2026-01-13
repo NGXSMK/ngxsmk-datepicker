@@ -164,7 +164,7 @@ describe('TranslationRegistryService', () => {
     });
 
     it('should return English for null locale', () => {
-      const translations = service.getTranslations(null as any);
+      const translations = service.getTranslations(null as unknown as string);
       expect(translations).toBeTruthy();
     });
   });

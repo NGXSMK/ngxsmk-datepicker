@@ -51,7 +51,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       // isDateValid checks constraints, not if date is NaN
       // An invalid date will fail constraints if minDate/maxDate are set
       // For this test, we expect it to pass validation if no constraints are set
-      const _isValid = !isNaN(invalidDate.getTime());
+      expect(invalidDate.getTime()).toBeNaN();
       // Since isDateValid doesn't check NaN, we just check it doesn't throw
       expect(() => component['isDateValid'](invalidDate)).not.toThrow();
     });
@@ -61,7 +61,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should normalize date input', () => {
       const date = new Date(2025, 5, 15, 14, 30, 45);
       const normalized = component['_normalizeDate'](date);
-      
+
       expect(normalized).toBeTruthy();
       if (normalized) {
         // _normalizeDate just converts to Date, doesn't normalize time to zero
@@ -86,28 +86,28 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should compare single date values', () => {
       const date1 = getStartOfDay(new Date(2025, 5, 15));
       const date2 = getStartOfDay(new Date(2025, 5, 15));
-      
+
       expect(component['isValueEqual'](date1, date2)).toBe(true);
     });
 
     it('should compare range values', () => {
       const range1 = { start: getStartOfDay(new Date(2025, 5, 10)), end: getEndOfDay(new Date(2025, 5, 15)) };
       const range2 = { start: getStartOfDay(new Date(2025, 5, 10)), end: getEndOfDay(new Date(2025, 5, 15)) };
-      
+
       expect(component['isValueEqual'](range1, range2)).toBe(true);
     });
 
     it('should compare multiple date arrays', () => {
       const dates1 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
       const dates2 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
-      
+
       expect(component['isValueEqual'](dates1, dates2)).toBe(true);
     });
 
     it('should return false for different values', () => {
       const date1 = getStartOfDay(new Date(2025, 5, 15));
       const date2 = getStartOfDay(new Date(2025, 5, 16));
-      
+
       expect(component['isValueEqual'](date1, date2)).toBe(false);
     });
   });
@@ -131,10 +131,10 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should regenerate calendar when month changes', () => {
-      const _initialDays = component.daysInMonth.length;
+      expect(component.daysInMonth.length).toBeGreaterThan(0);
       component.changeMonth(1);
       fixture.detectChanges();
-      
+
       expect(component.daysInMonth.length).toBeGreaterThan(0);
     });
   });
@@ -144,7 +144,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.mode = 'range';
       component.showTime = true;
       component['initializeTimeSliders']();
-      
+
       expect(component.startTimeSlider).toBeDefined();
       expect(component.endTimeSlider).toBeDefined();
     });
@@ -169,7 +169,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.isPm = true; // 2 PM = 14:00
       component.currentMinute = 30;
       const result = component['applyCurrentTime'](date);
-      
+
       expect(result.getHours()).toBe(14);
       expect(result.getMinutes()).toBe(30);
     });
@@ -190,7 +190,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         { start: getStartOfDay(new Date(2025, 5, 10)), end: getEndOfDay(new Date(2025, 5, 15)) }
       ];
       fixture.detectChanges();
-      
+
       const dateInRange = new Date(2025, 5, 12);
       expect(component.isDateDisabled(dateInRange)).toBe(true);
     });
@@ -216,10 +216,10 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         'Test Range': [getStartOfDay(new Date(2025, 5, 10)), getEndOfDay(new Date(2025, 5, 15))]
       };
       fixture.detectChanges();
-      
+
       component.selectRange([getStartOfDay(new Date(2025, 5, 10)), getEndOfDay(new Date(2025, 5, 15))]);
       fixture.detectChanges();
-      
+
       expect(component.startDate).toBeTruthy();
       expect(component.endDate).toBeTruthy();
     });
@@ -230,7 +230,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.mode = 'multiple';
       component.selectedDates = [getStartOfDay(new Date(2025, 5, 15))];
       fixture.detectChanges();
-      
+
       const isSelected = component.isMultipleSelected(getStartOfDay(new Date(2025, 5, 15)));
       expect(isSelected).toBe(true);
     });
@@ -247,7 +247,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.startDate = getStartOfDay(new Date(2025, 5, 10));
       component.hoveredDate = getStartOfDay(new Date(2025, 5, 15));
       fixture.detectChanges();
-      
+
       const dateInRange = new Date(2025, 5, 12);
       expect(typeof component.isPreviewInRange(dateInRange)).toBe('boolean');
     });
@@ -261,10 +261,10 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         touches: [{ clientX: 100, clientY: 100 }],
         changedTouches: [],
         targetTouches: [],
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      } as any;
-      
+        preventDefault: () => { },
+        stopPropagation: () => { }
+      } as unknown as TouchEvent;
+
       expect(() => component.onTouchStart(mockEvent)).not.toThrow();
     });
 
@@ -275,10 +275,10 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         touches: [],
         changedTouches: [{ clientX: 100, clientY: 100 }],
         targetTouches: [],
-        preventDefault: () => {},
-        stopPropagation: () => {}
-      } as any;
-      
+        preventDefault: () => { },
+        stopPropagation: () => { }
+      } as unknown as TouchEvent;
+
       expect(() => component.onTouchEnd(mockEvent)).not.toThrow();
     });
   });
@@ -299,7 +299,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should determine calendar visibility', () => {
       component.inline = true;
       expect(component.isCalendarVisible).toBe(true);
-      
+
       component.inline = false;
       component.isCalendarOpen = true;
       expect(component.isCalendarVisible).toBe(true);
@@ -324,7 +324,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       const date = getStartOfDay(new Date(2025, 5, 15));
       component['initializeValue'](date);
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
 
@@ -336,7 +336,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.mode = 'range';
       component['initializeValue'](range);
       fixture.detectChanges();
-      
+
       expect(component.startDate).toBeTruthy();
       expect(component.endDate).toBeTruthy();
     });
@@ -349,7 +349,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.mode = 'multiple';
       component['initializeValue'](dates);
       fixture.detectChanges();
-      
+
       expect(component.selectedDates.length).toBe(2);
     });
   });
@@ -359,28 +359,28 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       const date = getStartOfDay(new Date(2025, 5, 15));
       component.writeValue(date);
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
 
     it('should register onChange callback', () => {
-      const callback = () => {};
+      const callback = () => { };
       component.registerOnChange(callback);
-      
+
       expect(component['onChange']).toBe(callback);
     });
 
     it('should register onTouched callback', () => {
-      const callback = () => {};
+      const callback = () => { };
       component.registerOnTouched(callback);
-      
+
       expect(component['onTouched']).toBe(callback);
     });
 
     it('should set disabled state', () => {
       component.setDisabledState(true);
       expect(component.disabled).toBe(true);
-      
+
       component.setDisabledState(false);
       expect(component.disabled).toBe(false);
     });
@@ -395,7 +395,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       const date = new Date(2025, 5, 15);
       component.minDate = getStartOfDay(new Date(2025, 5, 20));
       fixture.detectChanges();
-      
+
       expect(() => component.onDateClick(date)).not.toThrow();
     });
   });
@@ -405,49 +405,49 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.focusedDate = getStartOfDay(new Date(2025, 5, 15));
       component['navigateDate'](1, 0);
       fixture.detectChanges();
-      
+
       expect(component.focusedDate).toBeTruthy();
     });
 
     it('should navigate to first day', () => {
       component['navigateToFirstDay']();
       fixture.detectChanges();
-      
+
       expect(component.focusedDate).toBeTruthy();
     });
 
     it('should navigate to last day', () => {
       component['navigateToLastDay']();
       fixture.detectChanges();
-      
+
       expect(component.focusedDate).toBeTruthy();
     });
 
     it('should select today', () => {
       component['selectToday']();
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
 
     it('should select yesterday', () => {
       component['selectYesterday']();
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
 
     it('should select tomorrow', () => {
       component['selectTomorrow']();
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
 
     it('should select next week', () => {
       component['selectNextWeek']();
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeTruthy();
     });
   });
@@ -456,7 +456,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should handle arrow key navigation', () => {
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
       component.focusedDate = getStartOfDay(new Date(2025, 5, 15));
-      
+
       const handled = component['handleKeyboardNavigation'](event);
       expect(typeof handled).toBe('boolean');
     });
@@ -485,14 +485,14 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.locale = 'en-US';
       component['generateLocaleData']();
       fixture.detectChanges();
-      
+
       expect(component.weekDays.length).toBe(7);
     });
 
     it('should format day number', () => {
       const date = new Date(2025, 5, 15);
       const formatted = component.formatDayNumber(date);
-      
+
       expect(formatted).toBe('15');
     });
   });
@@ -502,7 +502,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.minuteInterval = 15;
       component['generateTimeOptions']();
       fixture.detectChanges();
-      
+
       expect(component.minuteOptions.length).toBeGreaterThan(0);
     });
   });
@@ -515,7 +515,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       };
       component['updateRangesArray']();
       fixture.detectChanges();
-      
+
       expect(component.rangesArray.length).toBe(2);
     });
   });
@@ -525,11 +525,11 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.inline = false;
       component.isCalendarOpen = false;
       component['lastToggleTime'] = 0; // Reset toggle time to allow immediate toggle
-      
+
       component.toggleCalendar();
       fixture.detectChanges();
       expect(component.isCalendarOpen).toBe(true);
-      
+
       component['lastToggleTime'] = 0; // Reset toggle time again to allow immediate toggle
       component.toggleCalendar();
       fixture.detectChanges();
@@ -543,7 +543,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.selectedDate = getStartOfDay(new Date(2025, 5, 15));
       component.clearValue();
       fixture.detectChanges();
-      
+
       expect(component.selectedDate).toBeNull();
     });
 
@@ -553,7 +553,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.endDate = getEndOfDay(new Date(2025, 5, 15));
       component.clearValue();
       fixture.detectChanges();
-      
+
       expect(component.startDate).toBeNull();
       expect(component.endDate).toBeNull();
     });
@@ -563,7 +563,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.selectedDates = [getStartOfDay(new Date(2025, 5, 15))];
       component.clearValue();
       fixture.detectChanges();
-      
+
       expect(component.selectedDates.length).toBe(0);
     });
   });
@@ -574,7 +574,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.isCalendarOpen = true;
       component.onBackdropInteract(new MouseEvent('click'));
       fixture.detectChanges();
-      
+
       expect(component.isCalendarOpen).toBe(false);
     });
   });
@@ -583,7 +583,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should get custom classes for day cell', () => {
       const date = new Date(2025, 5, 15);
       const classes = component.getDayCellCustomClasses(date);
-      
+
       expect(typeof classes).toBe('object');
     });
   });
@@ -592,7 +592,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should generate aria label for date', () => {
       const date = new Date(2025, 5, 15);
       const label = component.getAriaLabel(date);
-      
+
       expect(typeof label).toBe('string');
       expect(label.length).toBeGreaterThan(0);
     });
@@ -600,7 +600,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     it('should get tooltip for date', () => {
       const date = new Date(2025, 5, 15);
       const tooltip = component.getDayCellTooltip(date);
-      
+
       expect(tooltip === null || typeof tooltip === 'string').toBe(true);
     });
   });
@@ -614,14 +614,14 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
     afterEach(() => {
       if (originalMatchMedia !== undefined) {
-        (window as any).matchMedia = originalMatchMedia;
+        (window as unknown as Record<string, unknown>)['matchMedia'] = originalMatchMedia;
       } else {
-        delete (window as any).matchMedia;
+        delete (window as unknown as Record<string, unknown>)['matchMedia'];
       }
     });
 
     it('should initialize without errors when window.matchMedia is not available (jsdom/Vitest)', () => {
-      delete (window as any).matchMedia;
+      delete (window as unknown as Record<string, unknown>)['matchMedia'];
 
       expect(() => {
         const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -632,9 +632,9 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should initialize without errors when window.matchMedia throws an error', () => {
-      (window as any).matchMedia = () => {
+      (window as unknown as Record<string, unknown>)['matchMedia'] = (() => {
         throw new Error('matchMedia not supported');
-      };
+      }) as unknown as typeof window.matchMedia;
 
       expect(() => {
         const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -645,7 +645,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should initialize without errors when window.matchMedia returns null', () => {
-      (window as any).matchMedia = () => null as any;
+      (window as unknown as Record<string, unknown>)['matchMedia'] = (() => null) as unknown as typeof window.matchMedia;
 
       expect(() => {
         const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -656,12 +656,12 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should apply animation config correctly when matchMedia is not available', () => {
-      delete (window as any).matchMedia;
+      delete (window as unknown as Record<string, unknown>)['matchMedia'];
 
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
-      
+
       expect(() => {
         testFixture.detectChanges();
         const element = testComponent['elementRef'].nativeElement;
@@ -671,22 +671,22 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
     it('should apply animation config correctly when matchMedia is available', () => {
       if (!window.matchMedia) {
-        (window as any).matchMedia = (query: string) => ({
+        (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) => ({
           matches: false,
           media: query,
           onchange: null,
-          addListener: () => {},
-          removeListener: () => {},
-          addEventListener: () => {},
-          removeEventListener: () => {},
+          addListener: () => { },
+          removeListener: () => { },
+          addEventListener: () => { },
+          removeEventListener: () => { },
           dispatchEvent: () => true,
-        } as MediaQueryList);
+        } as unknown as MediaQueryList)) as unknown as typeof window.matchMedia;
       }
 
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
-      
+
       expect(() => {
         testFixture.detectChanges();
         const element = testComponent['elementRef'].nativeElement;
@@ -695,33 +695,33 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should handle prefers-reduced-motion preference when matchMedia is available', () => {
-      (window as any).matchMedia = (query: string) => ({
+      (window as unknown as Record<string, unknown>)['matchMedia'] = ((query: string) => ({
         matches: query === '(prefers-reduced-motion: reduce)',
         media: query,
         onchange: null,
-        addListener: () => {},
-        removeListener: () => {},
-        addEventListener: () => {},
-        removeEventListener: () => {},
+        addListener: () => { },
+        removeListener: () => { },
+        addEventListener: () => { },
+        removeEventListener: () => { },
         dispatchEvent: () => true,
-      } as MediaQueryList);
+      } as unknown as MediaQueryList)) as unknown as typeof window.matchMedia;
 
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
-      
+
       expect(() => {
         testFixture.detectChanges();
       }).not.toThrow();
     });
 
     it('should call ngOnInit without errors when matchMedia is unavailable', () => {
-      delete (window as any).matchMedia;
+      delete (window as unknown as Record<string, unknown>)['matchMedia'];
 
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
-      
+
       expect(() => {
         testComponent.ngOnInit();
         testFixture.detectChanges();
@@ -729,12 +729,12 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
     });
 
     it('should handle matchMedia returning null gracefully', () => {
-      (window as any).matchMedia = () => null as any;
+      (window as unknown as Record<string, unknown>)['matchMedia'] = (() => null) as unknown as typeof window.matchMedia;
 
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
-      
+
       expect(() => {
         testFixture.detectChanges();
         const isMobile = testComponent['isMobileDevice']();
@@ -751,13 +751,13 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       // Wait for any timeouts created during initialization to complete
       setTimeout(() => {
         const initialTimeoutCount = component['activeTimeouts'].size;
-        
+
         // Trigger some operations that use setTimeout
         component['trackedSetTimeout'](() => {
           expect(component['activeTimeouts'].size).toBe(initialTimeoutCount);
           done();
         }, 10);
-        
+
         expect(component['activeTimeouts'].size).toBe(initialTimeoutCount + 1);
       }, 200);
     });
@@ -787,11 +787,11 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       fixture.detectChanges();
 
       let syncCount = 0;
-      spyOn(component as any, 'syncFieldValue').and.callFake(() => {
+      spyOn(component as unknown as { syncFieldValue: () => void }, 'syncFieldValue').and.callFake(() => {
         syncCount++;
       });
 
-      component['_field'] = { value: () => new Date() } as any;
+      component['_field'] = { value: () => new Date() } as unknown as { value: () => Date };
 
       // Call debouncedFieldSync multiple times rapidly
       component['debouncedFieldSync'](50);
@@ -812,12 +812,12 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       fixture.detectChanges();
 
       const initialFrameCount = component['activeAnimationFrames'].size;
-      
+
       component['trackedRequestAnimationFrame'](() => {
         expect(component['activeAnimationFrames'].size).toBe(initialFrameCount);
         done();
       });
-      
+
       expect(component['activeAnimationFrames'].size).toBe(initialFrameCount + 1);
     });
 
@@ -847,9 +847,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       component.ngOnInit();
       fixture.detectChanges();
 
-      let callbackExecuted = false;
       component['trackedDoubleRequestAnimationFrame'](() => {
-        callbackExecuted = true;
         expect(component['activeAnimationFrames'].size).toBe(0);
         done();
       });
@@ -864,9 +862,9 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       fixture.detectChanges();
 
       const initialListenerCount = component['passiveTouchListeners'].length;
-      
+
       // Simulate adding touch listeners
-      const cleanup = () => {};
+      const cleanup = () => { };
       component['passiveTouchListeners'].push(cleanup);
 
       expect(component['passiveTouchListeners'].length).toBe(initialListenerCount + 1);
@@ -883,15 +881,15 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
       // Mock calendar open state
       component['isCalendarOpen'] = true;
-      
+
       // This should set up touch listeners with retry logic
       component['setupPassiveTouchListeners']();
 
       // Wait a bit to ensure timeout is set
       setTimeout(() => {
         // Verify timeout tracking
-        expect(component['_touchListenersSetupTimeout'] !== null || 
-               component['activeTimeouts'].size > 0).toBe(true);
+        expect(component['_touchListenersSetupTimeout'] !== null ||
+          component['activeTimeouts'].size > 0).toBe(true);
         done();
       }, 20);
     });
@@ -904,7 +902,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
       // Fill cache beyond MAX_CACHE_SIZE
       const maxSize = component['MAX_CACHE_SIZE'];
-      
+
       for (let i = 0; i < maxSize + 5; i++) {
         const cacheKey = `2025-${i % 12}`;
         component['monthCache'].set(cacheKey, []);
@@ -924,7 +922,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
         // Add some cache entries
         component['monthCache'].set('2025-0', []);
         component['monthCache'].set('2025-1', []);
-        
+
         expect(component['monthCache'].size).toBeGreaterThan(0);
 
         // Change locale
@@ -947,7 +945,7 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       setTimeout(() => {
         // Add some cache entries
         component['monthCache'].set('2025-0', []);
-        
+
         expect(component['monthCache'].size).toBeGreaterThan(0);
 
         // Change weekStart
@@ -967,10 +965,10 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
       const cacheKey = '2025-5';
       component['monthCache'].set(cacheKey, []);
-      
+
       const initialCounter = component['monthCacheAccessCounter'];
       component['updateCacheAccess'](cacheKey);
-      
+
       expect(component['monthCacheAccessCounter']).toBe(initialCounter + 1);
       expect(component['monthCacheAccessOrder'].get(cacheKey)).toBe(initialCounter + 1);
     });
@@ -978,9 +976,9 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
 
   describe('Instance Cleanup', () => {
     it('should remove instance from static registry on destroy', () => {
-      const allInstances = (NgxsmkDatepickerComponent as any)['_allInstances'] as Set<NgxsmkDatepickerComponent>;
+      const allInstances = (NgxsmkDatepickerComponent as unknown as { _allInstances: Set<NgxsmkDatepickerComponent> })['_allInstances'];
       const initialCount = allInstances.size;
-      
+
       const testFixture = TestBed.createComponent(NgxsmkDatepickerComponent);
       const testComponent = testFixture.componentInstance;
       testComponent.inline = true;
@@ -1027,11 +1025,11 @@ describe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () =
       fixture.detectChanges();
 
       let syncCount = 0;
-      spyOn(component as any, 'syncFieldValue').and.callFake(() => {
+      spyOn(component as unknown as { syncFieldValue: () => void }, 'syncFieldValue').and.callFake(() => {
         syncCount++;
       });
 
-      component['_field'] = { value: () => new Date() } as any;
+      component['_field'] = { value: () => new Date() } as unknown as { value: () => Date };
 
       // Rapid calls
       component['debouncedFieldSync'](50);

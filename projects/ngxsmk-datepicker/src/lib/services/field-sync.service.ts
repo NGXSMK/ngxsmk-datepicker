@@ -71,7 +71,7 @@ export interface ValidationError {
   message?: string;
 }
 
-export type SignalFormField = ({
+export type SignalFormFieldConfig = {
   value?: DatepickerValue | (() => DatepickerValue) | { (): DatepickerValue } | Signal<DatepickerValue>;
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   required?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
@@ -84,7 +84,9 @@ export type SignalFormField = ({
   markAsDirty?: () => void;
 } & {
   [key: string]: unknown;
-}) | null | undefined;
+};
+
+export type SignalFormField = SignalFormFieldConfig | Signal<SignalFormFieldConfig> | (() => SignalFormFieldConfig) | null | undefined;
 
 export interface FieldSyncCallbacks {
   onValueChanged: (value: DatepickerValue) => void;
@@ -110,7 +112,7 @@ export class FieldSyncService {
    * This handles Angular 21 Signal Forms where field.value can be a signal directly
    * Note: Angular signals (including computed) are detected as 'function' type
    */
-  private readFieldValue(field: SignalFormField): DatepickerValue | null {
+  private readFieldValue(field: SignalFormFieldConfig): DatepickerValue | null {
     if (!field || typeof field !== 'object' || field.value === undefined) {
       return null;
     }
@@ -133,7 +135,7 @@ export class FieldSyncService {
             return result as DatepickerValue;
           }
           return null;
-        } catch (error) {
+        } catch {
           // If calling fails, it might be a signal itself that needs to be called
           // Try checking if it's a signal
           if (safeIsSignal(fieldValue)) {
@@ -187,7 +189,7 @@ export class FieldSyncService {
    * Helper function to safely read disabled state
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    */
-  private readDisabledState(field: SignalFormField): boolean {
+  private readDisabledState(field: SignalFormFieldConfig): boolean {
     if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
@@ -229,7 +231,7 @@ export class FieldSyncService {
    * Helper function to safely read validation errors from Angular Signal Forms
    * Returns the errors array from the field's errors signal
    */
-  private readFieldErrors(field: SignalFormField): ValidationError[] {
+  private readFieldErrors(field: SignalFormFieldConfig): ValidationError[] {
     if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return [];
     }
@@ -273,7 +275,7 @@ export class FieldSyncService {
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    * Also checks for 'required' validation errors in Angular Signal Forms
    */
-  private readRequiredState(field: SignalFormField): boolean {
+  private readRequiredState(field: SignalFormFieldConfig): boolean {
     if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
@@ -322,7 +324,7 @@ export class FieldSyncService {
    * Helper function to determine if the field has validation errors
    * Used to set the error state on the datepicker component
    */
-  private hasValidationErrors(field: SignalFormField): boolean {
+  private hasValidationErrors(field: SignalFormFieldConfig): boolean {
     if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
@@ -358,14 +360,65 @@ export class FieldSyncService {
       return false;
     }
   }
+  /**
+   * Helper to resolve the actual field object from a potential signal or function
+   */
+  private resolveField(field: unknown): SignalFormFieldConfig | null {
+    if (!field) return null;
+
+    // Handle objects directly
+    if (typeof field === 'object') {
+      return field as SignalFormFieldConfig;
+    }
+
+    // Handle functions (Signals or getters)
+    if (typeof field === 'function') {
+      const fieldFn = field as unknown as Record<string, unknown>;
+
+      // If the function itself has field properties (like value, disabled, setValue),
+      // it's likely a Signal that IS the field (Angular Signal Forms pattern).
+      // We check for some common properties to identify it as a field config.
+      const hasFieldProps = 'value' in fieldFn || 'disabled' in fieldFn || 'required' in fieldFn ||
+        'setValue' in fieldFn || 'markAsDirty' in fieldFn || 'errors' in fieldFn;
+
+      if (hasFieldProps) {
+        return fieldFn as SignalFormFieldConfig;
+      }
+
+      // If it doesn't have properties, it might be a getter or a Signal returning the field config
+      if (safeIsSignal(field)) {
+        try {
+          const result = field();
+          // If the result is an object, that's our field config
+          if (result && typeof result === 'object') {
+            return result as SignalFormFieldConfig;
+          }
+        } catch {
+          // Fall through
+        }
+      }
+
+      // Generic fallback for getters
+      try {
+        const result = (field as () => unknown)();
+        if (result && typeof result === 'object') {
+          return result as SignalFormFieldConfig;
+        }
+      } catch {
+        // Fall through
+      }
+    }
+
+    return null;
+  }
 
   setupFieldSync(
-    field: SignalFormField,
+    fieldInput: SignalFormField,
     callbacks: FieldSyncCallbacks
   ): EffectRef | null {
     this.cleanup();
 
-    if (!field || typeof field !== 'object') {
+    if (!fieldInput) {
       return null;
     }
 
@@ -373,6 +426,13 @@ export class FieldSyncService {
       const effectRef = runInInjectionContext(this.injector, () => effect(() => {
         // Skip if we're updating from internal to prevent circular updates
         if (this._isUpdatingFromInternal) {
+          return;
+        }
+
+        // Resolve the field object. If fieldInput is a signal, this line tracks it as a dependency.
+        const field = this.resolveField(fieldInput);
+
+        if (!field) {
           return;
         }
 
@@ -403,7 +463,7 @@ export class FieldSyncService {
                 // Result is a direct value
                 fieldValue = (funcResult !== undefined && funcResult !== null) ? funcResult as DatepickerValue : null;
               }
-            } catch (error) {
+            } catch {
               // If calling fails, try checking if it's a signal itself
               if (safeIsSignal(fieldValueRef)) {
                 try {
@@ -493,13 +553,14 @@ export class FieldSyncService {
     } catch (error) {
       // Fall back to manual sync if effect setup fails
       callbacks.onSyncError?.(error);
-      this.syncFieldValue(field, callbacks);
+      this.syncFieldValue(fieldInput, callbacks);
       return null;
     }
   }
 
-  syncFieldValue(field: SignalFormField, callbacks: FieldSyncCallbacks): boolean {
-    if (!field || (typeof field !== 'object' && typeof field !== 'function')) return false;
+  syncFieldValue(fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown, callbacks: FieldSyncCallbacks): boolean {
+    const field = this.resolveField(fieldInput);
+    if (!field) return false;
 
     const fieldValue = this.readFieldValue(field);
     const normalizedValue = callbacks.normalizeValue(fieldValue);
@@ -547,8 +608,9 @@ export class FieldSyncService {
 
   updateFieldFromInternal(
     value: DatepickerValue,
-    field: SignalFormField
+    fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown
   ): void {
+    const field = this.resolveField(fieldInput);
     if (!field || typeof field !== 'object') {
       return;
     }

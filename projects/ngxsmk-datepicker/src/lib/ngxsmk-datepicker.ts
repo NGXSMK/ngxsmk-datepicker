@@ -67,7 +67,8 @@ import {
   KeyboardShortcutContext
 } from './interfaces/datepicker-hooks.interface';
 import { DATEPICKER_CONFIG, DatepickerConfig, DEFAULT_ANIMATION_CONFIG, AnimationConfig } from './config/datepicker.config';
-import { FieldSyncService, SignalFormField } from './services/field-sync.service';
+import { FieldSyncService } from './services/field-sync.service';
+import { SignalFormField } from './services/field-sync.service';
 import { LocaleRegistryService } from './services/locale-registry.service';
 import { TranslationRegistryService } from './services/translation-registry.service';
 import { TranslationService } from './services/translation.service';
@@ -76,6 +77,7 @@ import { FocusTrapService } from './services/focus-trap.service';
 import { AriaLiveService } from './services/aria-live.service';
 import { HapticFeedbackService } from './services/haptic-feedback.service';
 import { Subject } from 'rxjs';
+import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -701,8 +703,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private appRef = inject(ApplicationRef);
   private document = inject(DOCUMENT);
 
-  @ViewChild('portalContent', { static: true }) portalTemplate!: TemplateRef<any>;
-  private portalViewRef: EmbeddedViewRef<any> | null = null;
+  @ViewChild('portalContent', { static: true }) portalTemplate!: TemplateRef<unknown>;
+  private portalViewRef: EmbeddedViewRef<unknown> | null = null;
 
   get _shouldAppendToBody(): boolean {
     return this.appendToBody ||
@@ -822,13 +824,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         if (this.disabled !== disabled) {
           this.disabled = disabled;
           this.scheduleChangeDetection();
+          this.stateChanges.next();
         }
       },
       onRequiredChanged: (required: boolean) => {
-        this.required = required;
+        this._required = required;
+        this.stateChanges.next();
       },
       onErrorStateChanged: (hasError: boolean) => {
-        this.errorState = hasError;
+        this._errorState = hasError;
+        this.stateChanges.next();
       },
       onSyncError: (_error: unknown) => {
       },
@@ -839,8 +844,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return this.isValueEqual(val1, val2);
       },
       onCalendarGenerated: () => {
+        this.generateCalendar();
       },
       onStateChanged: () => {
+        this.stateChanges.next();
         this.scheduleChangeDetection();
       }
     });
@@ -893,22 +900,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   @HostBinding('class.ngxsmk-rtl') get rtlClass() { return this.isRtl; }
 
-  @Input() classes?: {
-    wrapper?: string;
-    inputGroup?: string;
-    input?: string;
-    clearBtn?: string;
-    calendarBtn?: string;
-    popover?: string;
-    container?: string;
-    calendar?: string;
-    header?: string;
-    navPrev?: string;
-    navNext?: string;
-    dayCell?: string;
-    footer?: string;
-    closeBtn?: string;
-  };
+  @Input() classes?: DatepickerClasses | undefined;
 
   private onChange = (_: DatepickerValue) => { };
   private onTouched = () => { };
@@ -2965,7 +2957,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.appRef.attachView(this.portalViewRef);
 
     // Append root nodes to body
-    this.portalViewRef.rootNodes.forEach((node: any) => {
+    this.portalViewRef.rootNodes.forEach((node: Node) => {
       this.document.body.appendChild(node);
     });
 
@@ -2981,7 +2973,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       // appRef.attachView enables CD.
       // destroy() removes it from DOM if it knew where it was? No, EmbeddedViewRef.destroy() removes from DOM if it was inserted via VCR.
       // Since we manually appended, we should manually remove.
-      this.portalViewRef.rootNodes.forEach((node: any) => {
+      this.portalViewRef.rootNodes.forEach((node: Node) => {
         if (node.parentNode) {
           node.parentNode.removeChild(node);
         }
@@ -3144,8 +3136,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     let initialValue: DatepickerValue = null;
     if (this._field) {
       try {
-        const fieldValue = typeof this._field.value === 'function' ? this._field.value() : this._field.value;
-        initialValue = this._normalizeValue(fieldValue);
+        // Resolve field first to handle wrapper signals/functions
+        let resolvedField: unknown = this._field;
+
+        // Simple resolution logic similar to service but inline for legacy
+        if (typeof resolvedField === 'function' && !('set' in resolvedField) && !('update' in resolvedField)) {
+          try {
+            const res = (resolvedField as () => unknown)();
+            if (res && typeof res === 'object') resolvedField = res;
+          } catch { }
+        }
+
+        if (resolvedField && typeof resolvedField === 'object') {
+          const rf = resolvedField as Record<string, unknown>;
+          const fieldValue = typeof rf['value'] === 'function' ? (rf['value'] as () => unknown)() : rf['value'];
+          initialValue = this._normalizeValue(fieldValue);
+        }
       } catch {
         initialValue = null;
       }
@@ -5985,7 +5991,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     try {
       // Check for Ionic global object or key Ionic DOM elements/styles
-      return typeof (window as any)['Ionic'] !== 'undefined' ||
+      return typeof (window as unknown as Record<string, unknown>)['Ionic'] !== 'undefined' ||
         (typeof document !== 'undefined' && !!document.querySelector('ion-app')) ||
         (typeof getComputedStyle !== 'undefined' &&
           Boolean(getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')));

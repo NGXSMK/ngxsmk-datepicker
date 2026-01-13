@@ -96,7 +96,7 @@ export { ThemeBuilderService, DatePresetsService, AriaLiveService, FocusTrapServ
 export type { DatepickerTheme, DatePreset } from './lib/services';
 
 export { FieldSyncService } from './lib/services/field-sync.service';
-export type { SignalFormField } from './lib/services/field-sync.service';
+export type { SignalFormField, SignalFormFieldConfig } from './lib/services/field-sync.service';
 
 export { provideMaterialFormFieldControl } from './lib/material-form-field.helper';
 

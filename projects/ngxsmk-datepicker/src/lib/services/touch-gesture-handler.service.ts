@@ -53,10 +53,10 @@ export class TouchGestureHandlerService {
     }
 
     event.stopPropagation();
-    
+
     state.dateCellTouchHandled = false;
     state.isDateCellTouching = true;
-    
+
     const touch = event.touches[0];
     if (touch) {
       state.dateCellTouchStartTime = Date.now();
@@ -89,11 +89,11 @@ export class TouchGestureHandlerService {
         const deltaX = Math.abs(touch.clientX - state.dateCellTouchStartX);
         const deltaY = Math.abs(touch.clientY - state.dateCellTouchStartY);
         const isSignificantMove = deltaX > 5 || deltaY > 5;
-        
+
         if (isSignificantMove) {
           event.preventDefault();
         }
-        
+
         try {
           const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
           if (elementFromPoint) {
@@ -107,7 +107,7 @@ export class TouchGestureHandlerService {
                   if (day && !isNaN(day.getTime()) && !callbacks.isDateDisabled(day)) {
                     const dayTime = getStartOfDay(day).getTime();
                     const startTime = getStartOfDay(startDate).getTime();
-                    
+
                     if (dayTime >= startTime) {
                       callbacks.onHoverChanged(day);
                       state.lastDateCellTouchDate = day;
@@ -153,7 +153,7 @@ export class TouchGestureHandlerService {
     const now = Date.now();
     const touchDuration = state.dateCellTouchStartTime > 0 ? now - state.dateCellTouchStartTime : 0;
     const touch = event.changedTouches[0];
-    
+
     let endDay: Date | null = day || state.dateCellTouchStartDate;
     if (touch) {
       try {
@@ -173,15 +173,15 @@ export class TouchGestureHandlerService {
             }
           }
         }
-      } catch (error) {
+      } catch {
         // Silently handle touch end date determination errors - use fallback
         // Error is non-critical and fallback value ensures functionality continues
         endDay = day || state.dateCellTouchStartDate;
       }
     }
-    
+
     const finalDay = state.lastDateCellTouchDate || endDay || state.dateCellTouchStartDate;
-    
+
     if (!finalDay || callbacks.isDateDisabled(finalDay)) {
       this.resetDateCellTouchState(state);
       return;
@@ -225,12 +225,12 @@ export class TouchGestureHandlerService {
     state: TouchGestureState
   ): void {
     if (!state.isCalendarSwiping) return;
-    
+
     const touch = event.touches[0];
     if (touch) {
       const deltaX = Math.abs(touch.clientX - state.calendarSwipeStartX);
       const deltaY = Math.abs(touch.clientY - state.calendarSwipeStartY);
-      
+
       // If significant movement, prevent default scrolling
       if (deltaX > 10 || deltaY > 10) {
         event.preventDefault();

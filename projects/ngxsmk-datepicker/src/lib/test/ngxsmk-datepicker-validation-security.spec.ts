@@ -265,9 +265,9 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
 
     it('should handle non-string inputs', () => {
-      expect(component['sanitizeInput'](null as any)).toBe('');
-      expect(component['sanitizeInput'](undefined as any)).toBe('');
-      expect(component['sanitizeInput'](123 as any)).toBe('');
+      expect(component['sanitizeInput'](null as unknown as string)).toBe('');
+      expect(component['sanitizeInput'](undefined as unknown as string)).toBe('');
+      expect(component['sanitizeInput'](123 as unknown as string)).toBe('');
     });
 
     it('should trim whitespace', () => {
@@ -350,7 +350,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
 
   describe('Input Sanitization Integration', () => {
     it('should sanitize input in onInputChange', () => {
-      const sanitizeSpy = spyOn(component as any, 'sanitizeInput').and.callThrough();
+      const sanitizeSpy = spyOn(component as unknown as { sanitizeInput: (v: string) => string }, 'sanitizeInput').and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
 
@@ -365,7 +365,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
 
     it('should sanitize input in onInputBlur', () => {
-      const sanitizeSpy = spyOn(component as any, 'sanitizeInput').and.callThrough();
+      const sanitizeSpy = spyOn(component as unknown as { sanitizeInput: (v: string) => string }, 'sanitizeInput').and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
 
@@ -380,7 +380,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
 
     it('should sanitize input in onInputKeyDown', () => {
-      const sanitizeSpy = spyOn(component as any, 'sanitizeInput').and.callThrough();
+      const sanitizeSpy = spyOn(component as unknown as { sanitizeInput: (v: string) => string }, 'sanitizeInput').and.callThrough();
       component.allowTyping = true;
       fixture.detectChanges();
 
