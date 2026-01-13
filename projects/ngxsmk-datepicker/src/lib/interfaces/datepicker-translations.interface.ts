@@ -8,7 +8,7 @@ export interface DatepickerTranslations {
   clear: string;
   close: string;
   today: string;
-  
+
   // Navigation
   previousMonth: string;
   nextMonth: string;
@@ -18,7 +18,7 @@ export interface DatepickerTranslations {
   nextYears: string;
   previousDecade: string;
   nextDecade: string;
-  
+
   // ARIA labels
   clearSelection: string;
   closeCalendar: string;
@@ -26,26 +26,26 @@ export interface DatepickerTranslations {
   calendarFor: string; // "Calendar for {month} {year}"
   selectYear: string; // "Select year {year}"
   selectDecade: string; // "Select decade {start} - {end}"
-  
+
   // Multiple selection
   datesSelected: string; // "{count} dates selected"
   timesSelected: string; // "{count} times selected"
-  
+
   // Time selection
   time: string;
   startTime: string;
   endTime: string;
-  
+
   // Holiday
   holiday: string;
-  
+
   // View modes
   month: string;
   year: string;
   decade: string;
   timeline: string;
   timeSlider: string;
-  
+
   // ARIA live announcements
   calendarOpened: string; // "Calendar opened for {month} {year}"
   calendarClosed: string;
@@ -55,6 +55,7 @@ export interface DatepickerTranslations {
   yearChanged: string; // "Changed to year {year}"
   calendarLoading: string; // "Loading calendar..."
   calendarReady: string; // "Calendar ready"
+  keyboardShortcuts: string;
 }
 
 /**

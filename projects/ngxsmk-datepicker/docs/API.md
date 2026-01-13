@@ -66,7 +66,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `yearRange` | `number` | `10` | Stable | Years to show in year selector | `[yearRange]="20"` |
 | `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes | `[classes]="{ inputGroup: 'custom-class' }"` |
 | `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization | `[hooks]="customHooks"` |
-| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts | `[enableKeyboardShortcuts]="false"` |
+| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts. Press '?' for help. | `[enableKeyboardShortcuts]="false"` |
 | `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map | `[customShortcuts]="myShortcuts"` |
 | `autoApplyClose` | `boolean` | `false` | Stable | Auto-close calendar after selection | `[autoApplyClose]="true"` |
 | `clearLabel` | `string` | `'Clear'` | Stable | Custom label for clear button | `clearLabel="Reset"` |
@@ -2288,7 +2288,22 @@ export function getDaysInMonth(year: number, month: number): number;
 export function getFirstDayOfMonth(year: number, month: number): number;
 ```
 
-## Experimental APIs
+## Keyboard Support
+ 
+The datepicker comes with comprehensive keyboard support:
+ 
+ - **Navigation**: Arrow keys to navigate dates.
+ - **Selection**: Enter/Space to select.
+ - **Views**: Page Up/Down for months, Shift + Page Up/Down for years.
+ - **Shortcuts**:
+   - `T`: Today
+   - `Y`: Yesterday
+   - `N`: Tomorrow
+   - `W`: Next Week
+   - `?` or `Shift + /`: **Toggle Keyboard Help Dialog**
+   - `Esc`: Close calendar
+ 
+ ## Experimental APIs
 
 The following APIs are experimental and may change:
 

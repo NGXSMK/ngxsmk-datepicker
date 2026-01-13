@@ -8,18 +8,18 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
 @Injectable({ providedIn: 'root' })
 export class TranslationRegistryService {
   private translations: Map<string, DatepickerTranslations> = new Map();
-  
+
   constructor() {
     this.registerDefaultTranslations();
   }
-  
+
   /**
    * Register translations for a locale
    */
   register(locale: string, translations: DatepickerTranslations): void {
     this.translations.set(locale.toLowerCase(), translations);
   }
-  
+
   /**
    * Get translations for a locale with fallback support
    */
@@ -27,13 +27,13 @@ export class TranslationRegistryService {
     if (!locale) {
       return this.translations.get('en') || this.getEnglishTranslations();
     }
-    
+
     const normalized = locale.toLowerCase();
-    
+
     if (this.translations.has(normalized)) {
       return this.translations.get(normalized)!;
     }
-    
+
     if (normalized.startsWith('zh-')) {
       if (normalized === 'zh-tw' || normalized === 'zh-hk' || normalized === 'zh-mo') {
         if (this.translations.has('zh-tw')) {
@@ -46,17 +46,17 @@ export class TranslationRegistryService {
       }
       return this.translations.get('en') || this.getEnglishTranslations();
     }
-    
+
     // Try language code only (for all other languages)
     const parts = normalized.split('-');
     const languageCode = parts.length > 0 ? parts[0] : normalized;
     if (languageCode && languageCode !== normalized && this.translations.has(languageCode)) {
       return this.translations.get(languageCode)!;
     }
-    
+
     return this.translations.get('en') || this.getEnglishTranslations();
   }
-  
+
   /**
    * Register default translations for major languages
    */
@@ -64,8 +64,11 @@ export class TranslationRegistryService {
     this.register('en', this.getEnglishTranslations());
     this.register('en-US', this.getEnglishTranslations());
     this.register('en-GB', this.getEnglishTranslations());
-    
-    // Spanish
+
+    /**
+     * Spanish (Español)
+     * Includes support for ES and ES-ES locales
+     */
     const spanishTranslations: DatepickerTranslations = {
       selectDate: 'Seleccionar fecha',
       selectTime: 'Seleccionar hora',
@@ -104,12 +107,16 @@ export class TranslationRegistryService {
       monthChanged: 'Cambiado a {{month}} {{year}}',
       yearChanged: 'Cambiado al año {{year}}',
       calendarLoading: 'Cargando calendario...',
-      calendarReady: 'Calendario listo'
+      calendarReady: 'Calendario listo',
+      keyboardShortcuts: 'Atajos de teclado'
     };
     this.register('es', spanishTranslations);
     this.register('es-ES', spanishTranslations);
-    
-    // French
+
+    /**
+     * French (Français)
+     * Includes support for FR and FR-FR locales
+     */
     const frenchTranslations: DatepickerTranslations = {
       selectDate: 'Sélectionner une date',
       selectTime: 'Sélectionner une heure',
@@ -148,12 +155,16 @@ export class TranslationRegistryService {
       monthChanged: 'Changé pour {{month}} {{year}}',
       yearChanged: 'Changé pour l\'année {{year}}',
       calendarLoading: 'Chargement du calendrier...',
-      calendarReady: 'Calendrier prêt'
+      calendarReady: 'Calendrier prêt',
+      keyboardShortcuts: 'Raccourcis clavier'
     };
     this.register('fr', frenchTranslations);
     this.register('fr-FR', frenchTranslations);
-    
-    // German
+
+    /**
+     * German (Deutsch)
+     * Includes support for DE and DE-DE locales
+     */
     const germanTranslations: DatepickerTranslations = {
       selectDate: 'Datum auswählen',
       selectTime: 'Uhrzeit auswählen',
@@ -192,12 +203,16 @@ export class TranslationRegistryService {
       monthChanged: 'Geändert zu {{month}} {{year}}',
       yearChanged: 'Geändert zu Jahr {{year}}',
       calendarLoading: 'Kalender wird geladen...',
-      calendarReady: 'Kalender bereit'
+      calendarReady: 'Kalender bereit',
+      keyboardShortcuts: 'Tastaturkürzel'
     };
     this.register('de', germanTranslations);
     this.register('de-DE', germanTranslations);
-    
-    // Arabic (RTL)
+
+    /**
+     * Arabic (العربية)
+     * Includes support for AR and AR-SA locales (RTL)
+     */
     const arabicTranslations: DatepickerTranslations = {
       selectDate: 'اختر التاريخ',
       selectTime: 'اختر الوقت',
@@ -236,12 +251,16 @@ export class TranslationRegistryService {
       monthChanged: 'تم التغيير إلى {{month}} {{year}}',
       yearChanged: 'تم التغيير إلى السنة {{year}}',
       calendarLoading: 'جارٍ تحميل التقويم...',
-      calendarReady: 'التقويم جاهز'
+      calendarReady: 'التقويم جاهز',
+      keyboardShortcuts: 'اختصارات لوحة المفاتيح'
     };
     this.register('ar', arabicTranslations);
     this.register('ar-SA', arabicTranslations);
-    
-    // Chinese (Simplified)
+
+    /**
+     * Chinese Simplified (简体中文)
+     * Includes support for ZH and ZH-CN locales
+     */
     const chineseSimplifiedTranslations: DatepickerTranslations = {
       selectDate: '选择日期',
       selectTime: '选择时间',
@@ -280,12 +299,16 @@ export class TranslationRegistryService {
       monthChanged: '已更改为 {{month}} {{year}}',
       yearChanged: '已更改为 {{year}} 年',
       calendarLoading: '正在加载日历...',
-      calendarReady: '日历已就绪'
+      calendarReady: '日历已就绪',
+      keyboardShortcuts: '键盘快捷键'
     };
     this.register('zh', chineseSimplifiedTranslations);
     this.register('zh-CN', chineseSimplifiedTranslations);
-    
-    // Japanese
+
+    /**
+     * Japanese (日本語)
+     * Includes support for JA and JA-JP locales
+     */
     const japaneseTranslations: DatepickerTranslations = {
       selectDate: '日付を選択',
       selectTime: '時刻を選択',
@@ -324,12 +347,16 @@ export class TranslationRegistryService {
       monthChanged: '{{month}} {{year}}に変更しました',
       yearChanged: '{{year}}年に変更しました',
       calendarLoading: 'カレンダーを読み込み中...',
-      calendarReady: 'カレンダーの準備ができました'
+      calendarReady: 'カレンダーの準備ができました',
+      keyboardShortcuts: 'キーボードショートカット'
     };
     this.register('ja', japaneseTranslations);
     this.register('ja-JP', japaneseTranslations);
-    
-    // Portuguese (Brazil)
+
+    /**
+     * Portuguese - Brazil (Português)
+     * Includes support for PT and PT-BR locales
+     */
     const portugueseTranslations: DatepickerTranslations = {
       selectDate: 'Selecionar data',
       selectTime: 'Selecionar hora',
@@ -368,12 +395,16 @@ export class TranslationRegistryService {
       monthChanged: 'Alterado para {{month}} {{year}}',
       yearChanged: 'Alterado para o ano {{year}}',
       calendarLoading: 'Carregando calendário...',
-      calendarReady: 'Calendário pronto'
+      calendarReady: 'Calendário pronto',
+      keyboardShortcuts: 'Atalhos de teclado'
     };
     this.register('pt', portugueseTranslations);
     this.register('pt-BR', portugueseTranslations);
-    
-    // Russian
+
+    /**
+     * Russian (Русский)
+     * Includes support for RU and RU-RU locales
+     */
     const russianTranslations: DatepickerTranslations = {
       selectDate: 'Выбрать дату',
       selectTime: 'Выбрать время',
@@ -412,12 +443,16 @@ export class TranslationRegistryService {
       monthChanged: 'Изменено на {{month}} {{year}}',
       yearChanged: 'Изменено на год {{year}}',
       calendarLoading: 'Загрузка календаря...',
-      calendarReady: 'Календарь готов'
+      calendarReady: 'Календарь готов',
+      keyboardShortcuts: 'Сочетания клавиш'
     };
     this.register('ru', russianTranslations);
     this.register('ru-RU', russianTranslations);
-    
-    // Swedish
+
+    /**
+     * Swedish (Svenska)
+     * Includes support for SV and SV-SE locales
+     */
     const swedishTranslations: DatepickerTranslations = {
       selectDate: 'Välj datum',
       selectTime: 'Välj tid',
@@ -456,12 +491,16 @@ export class TranslationRegistryService {
       monthChanged: 'Ändrat till {{month}} {{year}}',
       yearChanged: 'Ändrat till år {{year}}',
       calendarLoading: 'Laddar kalender...',
-      calendarReady: 'Kalender redo'
+      calendarReady: 'Kalender redo',
+      keyboardShortcuts: 'Kortkommandon'
     };
     this.register('sv', swedishTranslations);
     this.register('sv-SE', swedishTranslations);
-    
-    // Korean
+
+    /**
+     * Korean (한국어)
+     * Includes support for KO and KO-KR locales
+     */
     const koreanTranslations: DatepickerTranslations = {
       selectDate: '날짜 선택',
       selectTime: '시간 선택',
@@ -500,12 +539,16 @@ export class TranslationRegistryService {
       monthChanged: '{{month}} {{year}}로 변경됨',
       yearChanged: '{{year}}년으로 변경됨',
       calendarLoading: '달력 로딩 중...',
-      calendarReady: '달력 준비됨'
+      calendarReady: '달력 준비됨',
+      keyboardShortcuts: '키보드 단축키'
     };
     this.register('ko', koreanTranslations);
     this.register('ko-KR', koreanTranslations);
-    
-    // Chinese (Traditional)
+
+    /**
+     * Chinese Traditional (繁體中文)
+     * Specific support for ZH-TW locale
+     */
     this.register('zh-TW', {
       selectDate: '選擇日期',
       selectTime: '選擇時間',
@@ -544,10 +587,11 @@ export class TranslationRegistryService {
       monthChanged: '已更改為 {{month}} {{year}}',
       yearChanged: '已更改為 {{year}} 年',
       calendarLoading: '正在載入日曆...',
-      calendarReady: '日曆已就緒'
+      calendarReady: '日曆已就緒',
+      keyboardShortcuts: '鍵盤快捷鍵'
     });
   }
-  
+
   /**
    * Get English translations (default)
    */
@@ -590,7 +634,8 @@ export class TranslationRegistryService {
       monthChanged: 'Changed to {{month}} {{year}}',
       yearChanged: 'Changed to year {{year}}',
       calendarLoading: 'Loading calendar...',
-      calendarReady: 'Calendar ready'
+      calendarReady: 'Calendar ready',
+      keyboardShortcuts: 'Keyboard shortcuts'
     };
   }
 }

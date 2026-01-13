@@ -42,7 +42,8 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
     monthChanged: 'Changed to {{month}} {{year}}',
     yearChanged: 'Changed to year {{year}}',
     calendarLoading: 'Loading calendar...',
-    calendarReady: 'Calendar ready'
+    calendarReady: 'Calendar ready',
+    keyboardShortcuts: 'Keyboard shortcuts'
   };
   return { ...defaults, ...overrides };
 }
@@ -54,7 +55,7 @@ describe('TranslationRegistryService', () => {
     TestBed.configureTestingModule({
       providers: [TranslationRegistryService]
     });
-    
+
     service = TestBed.inject(TranslationRegistryService);
   });
 
@@ -70,7 +71,7 @@ describe('TranslationRegistryService', () => {
 
       service.register('test-locale', translations);
       const retrieved = service.getTranslations('test-locale');
-      
+
       expect(retrieved.selectDate).toBe('Test Select Date');
     });
 
@@ -81,7 +82,7 @@ describe('TranslationRegistryService', () => {
 
       service.register('TEST-LOCALE', translations);
       const retrieved = service.getTranslations('test-locale');
-      
+
       expect(retrieved.selectDate).toBe('Test');
     });
   });

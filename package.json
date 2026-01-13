@@ -17,6 +17,7 @@
     "optimize": "node scripts/optimize-build.js",
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test ngxsmk-datepicker",
+    "test:coverage": "npx ng test ngxsmk-datepicker --code-coverage --watch=false --browsers=ChromeHeadless",
     "demo": "npx ng serve demo-app",
     "lint": "npx ng lint",
     "deploy": "npm run build:demo && node scripts/manual-deploy.js",

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core
 import { By } from '@angular/platform-browser';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { signal } from '@angular/core';
+import { SignalFormField } from '../services/field-sync.service';
 
 describe('NgxsmkDatepickerComponent Required Attribute', () => {
     let component: NgxsmkDatepickerComponent;
@@ -34,13 +35,13 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     }));
 
     it('should handle required as a direct boolean in field', fakeAsync(() => {
-        const mockField = {
+        const mockField: Partial<SignalFormField> = {
             value: null,
             required: true,
             setValue: (val: any) => { }
         };
 
-        component.field = mockField as any;
+        component.field = mockField as SignalFormField;
         fixture.detectChanges();
         tick(100);
         fixture.detectChanges();
@@ -54,13 +55,13 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
     }));
 
     it('should handle required as a function in field', fakeAsync(() => {
-        const mockField = {
+        const mockField: Partial<SignalFormField> = {
             value: null,
             required: () => true,
             setValue: (val: any) => { }
         };
 
-        component.field = mockField as any;
+        component.field = mockField as SignalFormField;
         fixture.detectChanges();
         tick(100);
         fixture.detectChanges();

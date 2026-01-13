@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `name`: Form name attribute support
   - `autocomplete`: Autocomplete attribute support (defaults to 'off')
   - `aria-invalid`: Accessibility support for invalid state visibility
+- **Keyboard Shortcuts Help Dialog**: Added a built-in help dialog for keyboard shortcuts, accessible via `?` or `Shift + /`.
+- **New Shortcut**: Added `?` keyboard shortcut to toggle the help dialog.
 - **Required Attribute Fix**: Fixed issue where `required` attribute from schema was not properly reflected on the input
 
 ### Changed
