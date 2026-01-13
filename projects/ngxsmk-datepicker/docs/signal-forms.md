@@ -113,6 +113,29 @@ export class TwoWayComponent {
 }
 ```
 
+### Signal Field Resolution (v1.9.30+)
+
+The datepicker includes a robust resolution mechanism for signal-based fields. It can handle:
+- **Direct Signals**: A signal that contains the field configuration.
+- **Signals with Properties**: A signal function that has field properties (like `value`, `disabled`, `setValue`) attached directly to it (common in some Signal Form implementations).
+- **Nested Signals**: Signals that return a field configuration object when executed.
+
+The datepicker intelligently detects these patterns and unwraps them automatically.
+
+### Enhanced Type Safety
+
+The library now exports `SignalFormFieldConfig` to allow you to strictly type your field configurations:
+
+```typescript
+import { SignalFormFieldConfig } from 'ngxsmk-datepicker';
+
+const config: SignalFormFieldConfig = {
+  value: signal(new Date()),
+  disabled: () => false,
+  required: true
+};
+```
+
 ## Dirty State Tracking
 
 When using the `[field]` binding, the datepicker automatically tracks the form's dirty state. The form will be marked as dirty when a user selects a date:

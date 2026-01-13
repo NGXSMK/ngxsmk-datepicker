@@ -39,7 +39,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 |-------|------|---------|--------|-------------|---------|
 | `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Stable | Selection mode | `mode="single"` or `[mode]="'range'"` |
 | `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
-| `field` | `any` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. | `[field]="myForm.dateField"` |
+| `field` | `SignalFormField \| SignalFormFieldConfig` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. Supports direct signals, signals with properties, and resolution of nested signals. | `[field]="myForm.dateField"` |
 | `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
 | `inputId` | `string` | `''` | Stable | Custom ID for the input element | `inputId="my-date-input"` |
 | `name` | `string` | `''` | Stable | Name attribute for the input element | `name="my-date-field"` |
@@ -2178,6 +2178,34 @@ type DateInput =
   | string 
   | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
 ```
+
+
+### SignalFormField (v1.9.30+)
+
+**Status**: Stable
+
+Type representing a signal-based form field.
+
+```typescript
+type SignalFormField = any; // Compatible with Angular 21 FieldTree
+```
+
+### SignalFormFieldConfig (v1.9.30+)
+
+**Status**: Stable
+
+Interface for a resolved or direct signal form field configuration.
+
+```typescript
+interface SignalFormFieldConfig {
+  value: Signal<DatepickerValue> | WritableSignal<DatepickerValue> | (() => DatepickerValue);
+  disabled: Signal<boolean> | (() => boolean) | boolean;
+  required?: Signal<boolean> | (() => boolean) | boolean;
+  setValue?: (value: DatepickerValue) => void;
+  updateValue?: (updater: (prev: DatepickerValue) => DatepickerValue) => void;
+  markAsDirty?: () => void;
+  errors?: Signal<ValidationError[]> | (() => ValidationError[]);
+}
 
 ### DatepickerHooks
 

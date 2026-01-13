@@ -322,6 +322,22 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
 
   public signalDate = signal<DatepickerValue>(null);
 
+  /**
+   * Mock Signal Form Field (v1.9.30+)
+   * Demonstrates a signal that has field properties attached to it.
+   */
+  public mockSignalField = ((): any => {
+    const s = signal<Date | null>(new Date());
+    const field: any = s;
+    field.value = s;
+    field.disabled = signal(false);
+    field.required = signal(true);
+    field.errors = signal([]);
+    field.setValue = (val: Date | null) => s.set(val);
+    field.markAsDirty = () => console.log('Field marked as dirty');
+    return field;
+  })();
+
   public momentDateValue = signal<DatepickerValue>(null);
   public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';

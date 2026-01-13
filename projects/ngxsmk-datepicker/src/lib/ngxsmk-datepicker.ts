@@ -67,7 +67,8 @@ import {
   KeyboardShortcutContext
 } from './interfaces/datepicker-hooks.interface';
 import { DATEPICKER_CONFIG, DatepickerConfig, DEFAULT_ANIMATION_CONFIG, AnimationConfig } from './config/datepicker.config';
-import { FieldSyncService, SignalFormField } from './services/field-sync.service';
+import { FieldSyncService } from './services/field-sync.service';
+import { SignalFormField } from './services/field-sync.service';
 import { LocaleRegistryService } from './services/locale-registry.service';
 import { TranslationRegistryService } from './services/translation-registry.service';
 import { TranslationService } from './services/translation.service';
@@ -822,13 +823,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         if (this.disabled !== disabled) {
           this.disabled = disabled;
           this.scheduleChangeDetection();
+          this.stateChanges.next();
         }
       },
       onRequiredChanged: (required: boolean) => {
-        this.required = required;
+        this._required = required;
+        this.stateChanges.next();
       },
       onErrorStateChanged: (hasError: boolean) => {
-        this.errorState = hasError;
+        this._errorState = hasError;
+        this.stateChanges.next();
       },
       onSyncError: (_error: unknown) => {
       },
@@ -839,8 +843,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return this.isValueEqual(val1, val2);
       },
       onCalendarGenerated: () => {
+        this.generateCalendar();
       },
       onStateChanged: () => {
+        this.stateChanges.next();
         this.scheduleChangeDetection();
       }
     });
@@ -3144,8 +3150,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     let initialValue: DatepickerValue = null;
     if (this._field) {
       try {
-        const fieldValue = typeof this._field.value === 'function' ? this._field.value() : this._field.value;
-        initialValue = this._normalizeValue(fieldValue);
+        // Resolve field first to handle wrapper signals/functions
+        let resolvedField: any = this._field;
+
+        // Simple resolution logic similar to service but inline for legacy
+        if (typeof resolvedField === 'function' && !resolvedField.set && !resolvedField.update) {
+          try {
+            const res = resolvedField();
+            if (res && typeof res === 'object') resolvedField = res;
+          } catch { }
+        }
+
+        if (resolvedField && typeof resolvedField === 'object') {
+          const fieldValue = typeof resolvedField.value === 'function' ? resolvedField.value() : resolvedField.value;
+          initialValue = this._normalizeValue(fieldValue);
+        }
       } catch {
         initialValue = null;
       }
