@@ -45,18 +45,22 @@ describe('NgxsmkDatepickerComponent Month Navigation Bug', () => {
         fixture.detectChanges();
 
         // At this point, range is Jan 31 - Feb 3.
-        // Component logic (checked in emitValue/initializeValue) resets view to startDate (Jan 31).
-        // Let's verify that.
+
+
+        // Component logic should PRESERVE the current view (Feb) because the end date is visible.
+        // It should NOT reset to startDate (Jan 31).
         expect(component.startDate?.getDate()).toBe(31);
         expect(component.endDate?.getDate()).toBe(3);
-        expect(component.currentDate.getMonth()).toBe(0); // Should be back to Jan
 
-        // 3. User navigates Next Month again (from Jan).
-        // BUG: Jan 31 + 1 month -> March 2/3 (skip Feb) if naive addMonths is used.
+        // VERIFY FIX: View should remain in Feb
+        expect(component.currentDate.getMonth()).toBe(1, 'Should remain in Feb view');
+
+        // 3. User navigates Next Month again (from Feb).
+        // Since we are correctly in Feb, adding 1 month should go to March.
         component.changeMonth(1);
         fixture.detectChanges();
 
-        // Expectation: Should be Feb (1)
-        expect(component.currentDate.getMonth()).toBe(1);
+        // Expectation: Should be March (2)
+        expect(component.currentDate.getMonth()).toBe(2, 'Should navigate to March');
     }));
 });

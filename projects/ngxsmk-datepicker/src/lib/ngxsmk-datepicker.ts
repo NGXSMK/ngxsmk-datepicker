@@ -3651,6 +3651,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       viewCenterDate = new Date();
     }
 
+    // Fix for range selection jumping back to start month:
+    // When a user selects a range spanning months (e.g., Jan 31 - Feb 3), they:
+    // 1. Select Jan 31 (startDate). View is Jan.
+    // 2. Navigate to Feb. View is Feb.
+    // 3. Select Feb 3 (endDate).
+    // 4. Component updates value -> emits change -> parent updates bound value -> writeValue called.
+    // 5. writeValue calls initializeValue.
+    // 6. initializeValue typically resets view to startDate (Jan), causing the "snap back" effect.
+    //
+    // The fix is to check if we are currently viewing a month that contains either the start or end date.
+    // If so, and the calendar is open (or inline), we preserve the current view instead of jumping to startDate.
+    if ((this.isCalendarOpen || this.isInlineMode) && this.currentDate && this.mode === 'range' && this.startDate && this.endDate) {
+      const isStartVisible = this.isCurrentMonth(this.startDate);
+      const isEndVisible = this.isCurrentMonth(this.endDate);
+
+      // If either start or end date is visible in the current view, preserve the view
+      if (isStartVisible || isEndVisible) {
+        // By preventing viewCenterDate from being used below to reset currentDate, we keep the current view
+        viewCenterDate = null;
+      }
+    }
+
     if (viewCenterDate) {
       this.currentDate = new Date(viewCenterDate);
       this._currentMonth = viewCenterDate.getMonth();
