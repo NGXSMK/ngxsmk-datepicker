@@ -418,7 +418,7 @@ import { Subject } from 'rxjs';
         <ng-container *ngTemplateOutlet="portalContent"></ng-container>
       }
       @if (isKeyboardHelpOpen) {
-        <div class="ngxsmk-keyboard-help-backdrop" (click)="toggleKeyboardHelp()"></div>
+        <div class="ngxsmk-keyboard-help-backdrop" (click)="toggleKeyboardHelp()" (keydown.enter)="toggleKeyboardHelp()" (keydown.space)="toggleKeyboardHelp()" tabindex="0" role="button" [attr.aria-label]="getTranslation('closeCalendarOverlay')"></div>
         <div class="ngxsmk-keyboard-help-dialog" role="dialog" aria-modal="true" [attr.aria-label]="getTranslation('keyboardShortcuts')">
           <div class="ngxsmk-keyboard-help-header">
             <h3 class="ngxsmk-keyboard-help-title">{{ getTranslation('keyboardShortcuts') }}</h3>
