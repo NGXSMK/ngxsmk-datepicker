@@ -81,7 +81,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       border: 1.5px solid var(--datepicker-border-color, #e5e7eb); 
       color: var(--datepicker-text-color, #1f2937);
       border-radius: 8px; 
-      padding: 8px 12px; 
+      padding: 8px 16px; 
       font-size: 14px; 
       text-align: left; 
       height: 38px;
@@ -110,25 +110,14 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       cursor: not-allowed;
       opacity: 0.6;
     }
-    .ngxsmk-select-display > span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
-      text-align: inherit;
-    }
     .ngxsmk-arrow-icon { 
       width: 14px; 
       height: 14px; 
-      margin-left: 10px; 
-      padding-left: 10px;
-      border-left: 1px solid var(--datepicker-border-color, #e5e7eb);
+      margin-left: 8px; 
       transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform;
       backface-visibility: hidden;
       flex-shrink: 0;
-      box-sizing: content-box; /* Ensure padding doesn't shrink the icon content width */
     }
     .ngxsmk-select-container.is-open .ngxsmk-arrow-icon {
       transform: rotate(180deg);
@@ -181,6 +170,8 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     .ngxsmk-options-panel {
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
     
     .ngxsmk-options-panel ul { 
@@ -209,19 +200,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       font-weight: 600;
     }
     .ngxsmk-options-panel::-webkit-scrollbar {
-      width: 6px;
+      display: none;
     }
-    .ngxsmk-options-panel::-webkit-scrollbar-track {
-      background: var(--datepicker-hover-background, #f3f4f6);
-      border-radius: 4px;
-    }
-    .ngxsmk-options-panel::-webkit-scrollbar-thumb {
-      background: var(--datepicker-subtle-text-color, #9ca3af);
-      border-radius: 4px;
-    }
-    .ngxsmk-options-panel::-webkit-scrollbar-thumb:hover {
-      background: var(--datepicker-text-color, #6b7280);
-    }
+
   `],
 })
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {

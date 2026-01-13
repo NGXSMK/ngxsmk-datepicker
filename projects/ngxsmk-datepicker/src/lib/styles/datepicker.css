@@ -1001,15 +1001,6 @@ ngxsmk-datepicker {
   min-width: 0;
 }
 
-.ngxsmk-month-year-selects .month-select {
-  flex: 1 !important;
-}
-
-.ngxsmk-month-year-selects .year-select {
-  flex: 0 0 100px !important;
-  min-width: 100px !important;
-}
-
 .ngxsmk-nav-buttons {
   display: -webkit-box;
   display: -webkit-flex;
@@ -2321,6 +2312,7 @@ ngxsmk-datepicker {
 
   /* ===== Header & Navigation ===== */
   .ngxsmk-header {
+    width: 100% !important;
     padding: 16px 12px !important;
     margin-bottom: 16px !important;
     gap: 16px !important;
@@ -2862,9 +2854,7 @@ ngxsmk-datepicker {
   }
 
   .ngxsmk-header {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
