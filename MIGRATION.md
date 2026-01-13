@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.27 → v1.9.28](#v1927---v1928)
 - [v1.9.26 → v1.9.27](#v1926---v1927)
 - [v1.9.25 → v1.9.26](#v1925---v1926)
 - [v1.9.23 → v1.9.25](#v1923---v1925)
@@ -33,6 +34,29 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v1.9.27 → v1.9.28
+
+### Installation
+
+Update to the latest version:
+
+```bash
+npm install ngxsmk-datepicker@1.9.28
+```
+
+### Changes
+
+- **Input Attributes**: New `inputId`, `name`, and `autocomplete` inputs are available.
+- **Improved Validation**: The `required` attribute is now correctly reflected on the internal input element when set via form schema.
+
+### Breaking Changes
+
+None in v1.9.28.
+
+### Migration Steps
+
+No code changes required. The new features are additive.
 
 ## v1.9.26 → v1.9.27
 

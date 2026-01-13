@@ -41,6 +41,10 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
 | `field` | `any` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. | `[field]="myForm.dateField"` |
 | `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
+| `inputId` | `string` | `''` | Stable | Custom ID for the input element | `inputId="my-date-input"` |
+| `name` | `string` | `''` | Stable | Name attribute for the input element | `name="my-date-field"` |
+| `autocomplete` | `string` | `'off'` | Stable | Autocomplete attribute for the input element | `autocomplete="on"` |
+| `aria-invalid` | `boolean` | `false` | Stable | Sets aria-invalid attribute on the input | `[aria-invalid]="true"` |
 | `disabledState` | `boolean` | `false` | Stable | Disable the datepicker | `[disabledState]="isDisabled"` |
 | `minDate` | `DateInput \| null` | `null` | Stable | Minimum selectable date | `[minDate]="today"` |
 | `maxDate` | `DateInput \| null` | `null` | Stable | Maximum selectable date | `[maxDate]="maxBookingDate"` |
