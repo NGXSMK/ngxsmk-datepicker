@@ -5,6 +5,7 @@ This document provides migration instructions for upgrading between major versio
 ## Table of Contents
 
 - [v1.9.29 → v1.9.30](#v1929---v1930)
+- [v1.9.30 → v1.9.31](#v1930---v1931)
 - [v1.9.27 → v1.9.28](#v1927---v1928)
 - [v1.9.26 → v1.9.27](#v1926---v1927)
 - [v1.9.25 → v1.9.26](#v1925---v1926)
@@ -43,7 +44,7 @@ This document provides migration instructions for upgrading between major versio
 Update to the latest version:
 
 ```bash
-npm install ngxsmk-datepicker@1.9.30
+npm install ngxsmk-datepicker@1.9.31
 ```
 
 ### Changes
@@ -54,7 +55,7 @@ npm install ngxsmk-datepicker@1.9.30
 
 ### Breaking Changes
 
-None in v1.9.30.
+None in v1.9.31.
 
 ### Migration Steps
 
