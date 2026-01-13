@@ -126,7 +126,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@1.9.30
+npm install ngxsmk-datepicker@1.9.29
 ```
 
 ## **Usage**
