@@ -758,7 +758,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     this._field = field;
 
-    if (field && typeof field === 'object') {
+    if (field && (typeof field === 'object' || typeof field === 'function')) {
       this._fieldEffectRef = this.fieldSyncService.setupFieldSync(
         field,
         {

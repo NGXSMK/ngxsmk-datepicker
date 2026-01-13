@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.28] - 2026-01-13
+## [1.9.29] - 2026-01-13
+
+### Fixed
+- **Signal Forms Integration**: Critical fix for `[field]` binding where Signal fields (passed as functions) were being ignored, preventing validation metadata (like `.required`) from being read.
+- **Field Sync Service**: Updated `readRequiredState` and `readDisabledState` to correctly process function-type fields (Signals).
 
 ### Added
 - **Input Attributes Support**: Added support for standard input attributes on the datepicker input element

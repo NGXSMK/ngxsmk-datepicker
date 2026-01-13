@@ -178,7 +178,7 @@ export class FieldSyncService {
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    */
   private readDisabledState(field: SignalFormField): boolean {
-    if (!field || typeof field !== 'object') {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
 
@@ -220,7 +220,7 @@ export class FieldSyncService {
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    */
   private readRequiredState(field: SignalFormField): boolean {
-    if (!field || typeof field !== 'object') {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
 
@@ -392,7 +392,7 @@ export class FieldSyncService {
   }
 
   syncFieldValue(field: SignalFormField, callbacks: FieldSyncCallbacks): boolean {
-    if (!field || typeof field !== 'object') return false;
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) return false;
 
     const fieldValue = this.readFieldValue(field);
     const normalizedValue = callbacks.normalizeValue(fieldValue);
