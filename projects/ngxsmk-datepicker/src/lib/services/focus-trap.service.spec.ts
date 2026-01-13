@@ -36,7 +36,7 @@ describe('FocusTrapService', () => {
   });
 
   it('should return no-op cleanup if element is null', () => {
-    const elementRef = new ElementRef(null) as any;
+    const elementRef = new ElementRef(null as unknown as HTMLElement);
     const cleanup = service.trapFocus(elementRef);
     expect(typeof cleanup).toBe('function');
     cleanup();

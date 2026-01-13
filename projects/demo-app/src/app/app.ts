@@ -326,8 +326,10 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
    * Mock Signal Form Field (v1.9.30+)
    * Demonstrates a signal that has field properties attached to it.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public mockSignalField = ((): any => {
     const s = signal<Date | null>(new Date());
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const field: any = s;
     field.value = s;
     field.disabled = signal(false);
@@ -1414,7 +1416,7 @@ export class DateFormComponent {
     if (this.darkModeMediaQuery.addEventListener) {
       this.darkModeMediaQuery.addEventListener('change', this.darkModeHandler);
     } else {
-      this.darkModeMediaQuery.addListener(this.darkModeHandler as any);
+      this.darkModeMediaQuery.addListener(this.darkModeHandler as unknown as (ev: MediaQueryListEvent) => void);
     }
   }
 
@@ -1423,7 +1425,7 @@ export class DateFormComponent {
       if (this.darkModeMediaQuery.removeEventListener) {
         this.darkModeMediaQuery.removeEventListener('change', this.darkModeHandler);
       } else {
-        this.darkModeMediaQuery.removeListener(this.darkModeHandler as any);
+        this.darkModeMediaQuery.removeListener(this.darkModeHandler as unknown as (ev: MediaQueryListEvent) => void);
       }
       this.darkModeMediaQuery = null;
       this.darkModeHandler = null;
@@ -1761,7 +1763,7 @@ export class DateFormComponent {
     this.currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
   }
 
-  isDate(value: any): value is Date {
+  isDate(value: unknown): value is Date {
     return value instanceof Date;
   }
 

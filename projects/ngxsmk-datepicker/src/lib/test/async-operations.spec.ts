@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { ThemeBuilderService } from '../services/theme-builder.service';
 import { PLATFORM_ID } from '@angular/core';
@@ -28,22 +28,22 @@ describe('Async Operations Tests', () => {
       };
 
       service.applyTheme(theme, element);
-      
+
       // requestAnimationFrame is used in applyTheme
       tick(0); // Advance past requestAnimationFrame
-      
+
       expect(element.hasAttribute('data-theme-applied')).toBe(true);
-      
+
       document.body.removeChild(element);
     }));
 
     it('should handle multiple setTimeout calls', fakeAsync(() => {
       let callCount = 0;
-      
+
       setTimeout(() => callCount++, 10);
       setTimeout(() => callCount++, 20);
       setTimeout(() => callCount++, 30);
-      
+
       expect(callCount).toBe(0);
       tick(10);
       expect(callCount).toBe(1);
@@ -55,11 +55,11 @@ describe('Async Operations Tests', () => {
 
     it('should handle setTimeout with 0 delay', fakeAsync(() => {
       let called = false;
-      
+
       setTimeout(() => {
         called = true;
       }, 0);
-      
+
       expect(called).toBe(false);
       tick(0);
       expect(called).toBe(true);
@@ -67,14 +67,14 @@ describe('Async Operations Tests', () => {
 
     it('should handle setTimeout cancellation', fakeAsync(() => {
       let called = false;
-      
+
       const timeoutId = setTimeout(() => {
         called = true;
       }, 100);
-      
+
       clearTimeout(timeoutId);
       tick(100);
-      
+
       expect(called).toBe(false);
     }));
   });
@@ -82,13 +82,13 @@ describe('Async Operations Tests', () => {
   describe('requestAnimationFrame Operations', () => {
     it('should handle requestAnimationFrame in browser', (done) => {
       let frameCalled = false;
-      
+
       requestAnimationFrame(() => {
         frameCalled = true;
         expect(frameCalled).toBe(true);
         done();
       });
-      
+
       expect(frameCalled).toBe(false);
     });
 
@@ -96,7 +96,7 @@ describe('Async Operations Tests', () => {
       let callCount = 0;
       const expectedCalls = 3;
       let doneCalled = false;
-      
+
       const checkDone = () => {
         callCount++;
         if (callCount === expectedCalls && !doneCalled) {
@@ -105,24 +105,24 @@ describe('Async Operations Tests', () => {
           done();
         }
       };
-      
+
       requestAnimationFrame(checkDone);
       requestAnimationFrame(checkDone);
       requestAnimationFrame(checkDone);
-      
+
       expect(callCount).toBe(0);
     });
 
     it('should handle requestAnimationFrame cancellation', fakeAsync(() => {
       let called = false;
-      
+
       const frameId = requestAnimationFrame(() => {
         called = true;
       });
-      
+
       cancelAnimationFrame(frameId);
       tick(0);
-      
+
       expect(called).toBe(false);
     }));
   });
@@ -132,13 +132,13 @@ describe('Async Operations Tests', () => {
       const result = await Promise.resolve(42)
         .then(value => value * 2)
         .then(value => value + 1);
-      
+
       expect(result).toBe(85);
     });
 
     it('should handle Promise.reject chains', async () => {
       let errorCaught = false;
-      
+
       try {
         await Promise.reject(new Error('Test error'))
           .then(() => 42)
@@ -149,7 +149,7 @@ describe('Async Operations Tests', () => {
         errorCaught = true;
         expect((error as Error).message).toBe('Test error');
       }
-      
+
       expect(errorCaught).toBe(true);
     });
 
@@ -159,7 +159,7 @@ describe('Async Operations Tests', () => {
         Promise.resolve(2),
         Promise.resolve(3)
       ];
-      
+
       const results = await Promise.all(promises);
       expect(results).toEqual([1, 2, 3]);
     });
@@ -170,21 +170,22 @@ describe('Async Operations Tests', () => {
         Promise.reject(new Error('Error')),
         Promise.resolve(3)
       ];
-      
+
       let errorCaught = false;
       try {
         await Promise.all(promises);
       } catch (error) {
         errorCaught = true;
+        expect(error).toBeDefined();
       }
-      
+
       expect(errorCaught).toBe(true);
     });
 
     it('should handle Promise.race', async () => {
       const fast = new Promise(resolve => setTimeout(() => resolve('fast'), 10));
       const slow = new Promise(resolve => setTimeout(() => resolve('slow'), 100));
-      
+
       const result = await Promise.race([fast, slow]);
       expect(result).toBe('fast');
     });
@@ -196,7 +197,7 @@ describe('Async Operations Tests', () => {
         await new Promise(resolve => setTimeout(resolve, 10));
         return 'done';
       };
-      
+
       const result = await asyncFunction();
       expect(result).toBe('done');
     });
@@ -206,7 +207,7 @@ describe('Async Operations Tests', () => {
         await new Promise(resolve => setTimeout(resolve, 10));
         throw new Error('Async error');
       };
-      
+
       let errorCaught = false;
       try {
         await asyncFunction();
@@ -214,30 +215,30 @@ describe('Async Operations Tests', () => {
         errorCaught = true;
         expect((error as Error).message).toBe('Async error');
       }
-      
+
       expect(errorCaught).toBe(true);
     });
 
     it('should handle multiple async operations', async () => {
       const results: number[] = [];
-      
+
       const op1 = async () => {
         await new Promise(resolve => setTimeout(resolve, 10));
         results.push(1);
       };
-      
+
       const op2 = async () => {
         await new Promise(resolve => setTimeout(resolve, 20));
         results.push(2);
       };
-      
+
       const op3 = async () => {
         await new Promise(resolve => setTimeout(resolve, 5));
         results.push(3);
       };
-      
+
       await Promise.all([op1(), op2(), op3()]);
-      
+
       expect(results.length).toBe(3);
       expect(results).toContain(1);
       expect(results).toContain(2);
@@ -248,17 +249,17 @@ describe('Async Operations Tests', () => {
   describe('Timing-Dependent Code', () => {
     it('should handle debounced operations', fakeAsync(() => {
       let callCount = 0;
-      let timeoutId: any;
-      
+      let timeoutId: unknown;
+
       const debounce = (fn: () => void, delay: number) => {
-        clearTimeout(timeoutId);
+        clearTimeout(timeoutId as number);
         timeoutId = setTimeout(fn, delay);
       };
-      
+
       debounce(() => callCount++, 100);
       debounce(() => callCount++, 100);
       debounce(() => callCount++, 100);
-      
+
       expect(callCount).toBe(0);
       tick(100);
       expect(callCount).toBe(1); // Only last call should execute
@@ -267,7 +268,7 @@ describe('Async Operations Tests', () => {
     it('should handle throttled operations', fakeAsync(() => {
       let callCount = 0;
       let lastCall = 0;
-      
+
       const throttle = (fn: () => void, delay: number) => {
         const now = Date.now();
         if (now - lastCall >= delay) {
@@ -275,13 +276,13 @@ describe('Async Operations Tests', () => {
           lastCall = now;
         }
       };
-      
+
       throttle(() => callCount++, 100);
       throttle(() => callCount++, 100);
       throttle(() => callCount++, 100);
-      
+
       expect(callCount).toBe(1); // First call executes
-      
+
       tick(100);
       throttle(() => callCount++, 100);
       expect(callCount).toBe(2); // Second call after delay
@@ -289,11 +290,11 @@ describe('Async Operations Tests', () => {
 
     it('should handle delayed state updates', fakeAsync(() => {
       let state = 'initial';
-      
+
       setTimeout(() => {
         state = 'updated';
       }, 50);
-      
+
       expect(state).toBe('initial');
       tick(50);
       expect(state).toBe('updated');
@@ -303,19 +304,19 @@ describe('Async Operations Tests', () => {
   describe('Race Conditions', () => {
     it('should handle concurrent async operations', async () => {
       let counter = 0;
-      
+
       const increment = async () => {
         const current = counter;
         await new Promise(resolve => setTimeout(resolve, Math.random() * 10));
         counter = current + 1;
       };
-      
+
       await Promise.all([
         increment(),
         increment(),
         increment()
       ]);
-      
+
       // Note: This test demonstrates a race condition
       // In real code, you'd use locks or atomic operations
       expect(counter).toBeGreaterThanOrEqual(1);
@@ -324,16 +325,16 @@ describe('Async Operations Tests', () => {
 
     it('should handle sequential async operations', async () => {
       let counter = 0;
-      
+
       const increment = async () => {
         await new Promise(resolve => setTimeout(resolve, 10));
         counter++;
       };
-      
+
       await increment();
       await increment();
       await increment();
-      
+
       expect(counter).toBe(3);
     });
   });

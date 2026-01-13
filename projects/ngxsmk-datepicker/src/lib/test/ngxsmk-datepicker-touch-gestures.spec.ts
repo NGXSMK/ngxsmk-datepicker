@@ -44,7 +44,7 @@ describe('NgxsmkDatepickerComponent - Touch Gestures', () => {
           item: (index: number) => touchArray[index] || null,
           [Symbol.iterator]: function* () { for (const t of touchArray) yield t; }
         });
-        return list as any as TouchList;
+        return list as unknown as TouchList;
       };
 
       return {
@@ -52,8 +52,8 @@ describe('NgxsmkDatepickerComponent - Touch Gestures', () => {
         touches: createTouchList(touches),
         changedTouches: createTouchList(changedTouches),
         targetTouches: createTouchList([]),
-        preventDefault: () => {},
-        stopPropagation: () => {},
+        preventDefault: () => { },
+        stopPropagation: () => { },
         bubbles: true,
         cancelable: true,
         defaultPrevented: false,
@@ -65,13 +65,13 @@ describe('NgxsmkDatepickerComponent - Touch Gestures', () => {
         cancelBubble: false,
         returnValue: true,
         srcElement: null,
-        stopImmediatePropagation: () => {},
-        initEvent: () => {},
+        stopImmediatePropagation: () => { },
+        initEvent: () => { },
         AT_TARGET: 0,
         BUBBLING_PHASE: 0,
         CAPTURING_PHASE: 0,
         NONE: 0
-      } as any as TouchEvent;
+      } as unknown as TouchEvent;
     }
 
     it('should initialize swipe state', () => {

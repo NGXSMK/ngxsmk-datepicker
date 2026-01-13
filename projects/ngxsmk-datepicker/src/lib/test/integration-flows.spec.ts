@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { PLATFORM_ID } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 /**
  * Integration tests for complex user flows
@@ -104,12 +103,12 @@ describe('Integration Flows', () => {
 
   describe('Form Integration Flow', () => {
     it('should integrate with reactive forms: bind -> change -> validate', fakeAsync(() => {
-      const formControl = new FormControl<any>(null);
+      const formControl = new FormControl<unknown>(null);
       component.writeValue(null);
       component.registerOnChange((value) => {
         formControl.setValue(value);
       });
-      component.registerOnTouched(() => {});
+      component.registerOnTouched(() => { });
 
       // Open and select date
       component.toggleCalendar();
@@ -126,7 +125,7 @@ describe('Integration Flows', () => {
     }));
 
     it('should handle form validation flow', fakeAsync(() => {
-      const formControl = new FormControl<any>(null);
+      const formControl = new FormControl<unknown>(null);
       component.minDate = new Date(2024, 0, 1);
       component.maxDate = new Date(2024, 11, 31);
       component.writeValue(null);
@@ -153,7 +152,6 @@ describe('Integration Flows', () => {
       fixture.detectChanges();
 
       const initialMonth = component.currentMonth;
-      const initialYear = component.currentYear;
 
       // Navigate using buttons (test through DOM interaction)
       const nextButton = fixture.nativeElement.querySelector('.ngxsmk-nav-button:last-child');
@@ -190,7 +188,7 @@ describe('Integration Flows', () => {
 
   describe('Preset Selection Flow', () => {
     it('should support date presets', fakeAsync(() => {
-      const preset = {
+      const _preset = {
         id: 'test-preset',
         label: 'Last 7 days',
         value: {
@@ -206,6 +204,7 @@ describe('Integration Flows', () => {
       // Presets are handled through the DatePresetsService
       // This test verifies the component is configured for range mode
       expect(component.mode).toBe('range');
+      expect(_preset.id).toBe('test-preset');
     }));
   });
 
@@ -218,12 +217,12 @@ describe('Integration Flows', () => {
       // Component should support keyboard navigation
       // Escape key handling may be implemented differently
       expect(component.enableKeyboardShortcuts).toBeDefined();
-      
+
       // Close manually to verify state
       component.closeCalendarWithFocusRestore();
       tick(100);
       fixture.detectChanges();
-      
+
       expect(component.isCalendarOpen).toBe(false);
     }));
   });
@@ -282,7 +281,7 @@ describe('Integration Flows', () => {
   describe('Error Recovery Flow', () => {
     it('should recover from invalid input: invalid -> error -> valid', fakeAsync(() => {
       // Set invalid value
-      component.writeValue('invalid-date-string' as any);
+      component.writeValue('invalid-date-string' as unknown as Date);
       tick(100);
       fixture.detectChanges();
 

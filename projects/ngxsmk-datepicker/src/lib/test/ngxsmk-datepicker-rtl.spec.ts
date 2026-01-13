@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SimpleChange } from '@angular/core';
+import { SimpleChange, SimpleChanges } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 
 // Helper function to create SimpleChange objects for testing
@@ -49,7 +49,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
       const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
       expect(shouldBeRtl).toBe(true);
-      
+
       // Explicitly set rtl based on locale for testing
       component.rtl = shouldBeRtl;
       fixture.detectChanges();
@@ -60,12 +60,12 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       if (typeof document !== 'undefined') {
         const originalDir = document.documentElement.dir;
         document.documentElement.dir = 'rtl';
-        
+
         component.ngOnInit();
         fixture.detectChanges();
 
         expect(component.isRtl).toBe(true);
-        
+
         document.documentElement.dir = originalDir;
       }
     });
@@ -81,7 +81,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       // Set locale
       component.locale = 'he-IL';
       fixture.detectChanges();
-      component.ngOnChanges({ locale: { currentValue: 'he-IL', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as any);
+      component.ngOnChanges({ locale: { currentValue: 'he-IL', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as SimpleChanges);
       fixture.detectChanges();
 
       // Verify locale is set correctly
@@ -90,7 +90,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
       const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
       expect(shouldBeRtl).toBe(true);
-      
+
       // Explicitly set rtl based on locale for testing
       component.rtl = shouldBeRtl;
       fixture.detectChanges();
@@ -101,7 +101,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       // Set locale
       component.locale = 'fa-IR';
       fixture.detectChanges();
-      component.ngOnChanges({ locale: { currentValue: 'fa-IR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as any);
+      component.ngOnChanges({ locale: { currentValue: 'fa-IR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as SimpleChanges);
       fixture.detectChanges();
 
       // Verify locale is set correctly
@@ -110,7 +110,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
       const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
       expect(shouldBeRtl).toBe(true);
-      
+
       // Explicitly set rtl based on locale for testing
       component.rtl = shouldBeRtl;
       fixture.detectChanges();
@@ -123,7 +123,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       component.locale = 'ar-SA';
       fixture.detectChanges();
       component.ngOnChanges({ locale: createSimpleChange('ar-SA', 'en-US') });
-      
+
       // Explicitly set rtl based on locale
       const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
       const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));

@@ -51,7 +51,6 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
 
 describe('DefaultTranslationService', () => {
   let service: DefaultTranslationService;
-  let translationRegistry: TranslationRegistryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,7 +61,6 @@ describe('DefaultTranslationService', () => {
     });
 
     service = TestBed.inject(DefaultTranslationService);
-    translationRegistry = TestBed.inject(TranslationRegistryService);
   });
 
   it('should be created', () => {
@@ -152,7 +150,7 @@ describe('DefaultTranslationService', () => {
         datesSelected: ((params?: Record<string, string | number>) => {
           const count = params?.['count'] || 0;
           return `${count} dates selected`;
-        }) as any
+        }) as unknown as string
       });
 
       service.initialize(translations);
@@ -163,7 +161,7 @@ describe('DefaultTranslationService', () => {
 
     it('should handle function translations without params', () => {
       const translations = createMinimalTranslations({
-        today: (() => 'Today') as any
+        today: (() => 'Today') as unknown as string
       });
 
       service.initialize(translations);

@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { DateSelectionService, DateSelectionState, DateSelectionConfig, DateSelectionCallbacks } from './date-selection.service';
-import { DatepickerValue } from '../utils/calendar.utils';
 
 describe('DateSelectionService', () => {
   let service: DateSelectionService;
@@ -12,9 +11,9 @@ describe('DateSelectionService', () => {
     TestBed.configureTestingModule({
       providers: [DateSelectionService]
     });
-    
+
     service = TestBed.inject(DateSelectionService);
-    
+
     state = {
       selectedDate: null,
       startDate: null,
@@ -249,7 +248,7 @@ describe('DateSelectionService', () => {
       const date1 = new Date('2024-01-20');
       const date2 = new Date('2024-01-10');
       const date3 = new Date('2024-01-15');
-      
+
       // Dates will have time stripped by getStartOfDay
       const date1Start = new Date('2024-01-20T00:00:00');
       const date2Start = new Date('2024-01-10T00:00:00');

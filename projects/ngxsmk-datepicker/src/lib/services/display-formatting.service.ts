@@ -152,7 +152,8 @@ export class DisplayFormattingService {
    */
   private formatWithCustomFormat(value: DatepickerValue, options: FormattingOptions): string {
     if (!options.displayFormat) {
-      const { displayFormat: _, ...restOptions } = options;
+      const restOptions = { ...options };
+      delete restOptions.displayFormat;
       return this.formatValue(value, restOptions);
     }
 

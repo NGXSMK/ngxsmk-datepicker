@@ -15,17 +15,17 @@ import { getStartOfDay } from '../utils/date.utils';
   standalone: true
 })
 class CalendarHeaderStubComponent {
-  @Input() currentMonth: any;
-  @Input() currentYear: any;
-  @Input() monthOptions: any;
-  @Input() yearOptions: any;
-  @Input() disabled: any;
-  @Input() isBackArrowDisabled: any;
-  @Input() headerClass: any;
-  @Input() navPrevClass: any;
-  @Input() navNextClass: any;
-  @Input() prevMonthAriaLabel: any;
-  @Input() nextMonthAriaLabel: any;
+  @Input() currentMonth: unknown;
+  @Input() currentYear: unknown;
+  @Input() monthOptions: unknown;
+  @Input() yearOptions: unknown;
+  @Input() disabled: unknown;
+  @Input() isBackArrowDisabled: unknown;
+  @Input() headerClass: unknown;
+  @Input() navPrevClass: unknown;
+  @Input() navNextClass: unknown;
+  @Input() prevMonthAriaLabel: unknown;
+  @Input() nextMonthAriaLabel: unknown;
   @Output() nextMonth = new EventEmitter<void>();
   @Output() previousMonth = new EventEmitter<void>();
   @Output() currentMonthChange = new EventEmitter<number>();
@@ -38,41 +38,41 @@ class CalendarHeaderStubComponent {
   standalone: true
 })
 class CalendarMonthViewStubComponent {
-  @Input() days: any;
-  @Input() selectedDate: any;
-  @Input() selectedDates: any;
-  @Input() startDate: any;
-  @Input() endDate: any;
-  @Input() currentMonth: any;
-  @Input() currentYear: any;
-  @Input() weekDays: any;
-  @Input() isDateDisabled: any;
-  @Input() isSameDay: any;
-  @Input() isHoliday: any;
-  @Input() getHolidayLabel: any;
-  @Input() formatDayNumber: any;
-  @Input() getDayCellCustomClasses: any;
-  @Input() getDayCellTooltip: any;
-  @Input() dayCellRenderHook: any;
-  @Input() trackByDay: any;
-  @Input() classes: any;
-  @Input() ariaLabel: any;
-  @Input() getAriaLabel: any;
-  @Input() isInRange: any;
-  @Input() isPreviewInRange: any;
-  @Input() isMultipleSelected: any;
-  @Input() mode: any;
-  @Input() focusedDate: any;
-  @Input() today: any;
+  @Input() days: unknown;
+  @Input() selectedDate: unknown;
+  @Input() selectedDates: unknown;
+  @Input() startDate: unknown;
+  @Input() endDate: unknown;
+  @Input() currentMonth: unknown;
+  @Input() currentYear: unknown;
+  @Input() weekDays: unknown;
+  @Input() isDateDisabled: unknown;
+  @Input() isSameDay: unknown;
+  @Input() isHoliday: unknown;
+  @Input() getHolidayLabel: unknown;
+  @Input() formatDayNumber: unknown;
+  @Input() getDayCellCustomClasses: unknown;
+  @Input() getDayCellTooltip: unknown;
+  @Input() dayCellRenderHook: unknown;
+  @Input() trackByDay: unknown;
+  @Input() classes: unknown;
+  @Input() ariaLabel: unknown;
+  @Input() getAriaLabel: unknown;
+  @Input() isInRange: unknown;
+  @Input() isPreviewInRange: unknown;
+  @Input() isMultipleSelected: unknown;
+  @Input() mode: unknown;
+  @Input() focusedDate: unknown;
+  @Input() today: unknown;
   @Output() dateClick = new EventEmitter<Date>();
   @Output() dateHover = new EventEmitter<Date>();
-  @Output() dateFocus = new EventEmitter<any>();
-  @Output() swipeStart = new EventEmitter<any>();
-  @Output() swipeMove = new EventEmitter<any>();
-  @Output() swipeEnd = new EventEmitter<any>();
-  @Output() touchStart = new EventEmitter<any>();
-  @Output() touchMove = new EventEmitter<any>();
-  @Output() touchEnd = new EventEmitter<any>();
+  @Output() dateFocus = new EventEmitter<unknown>();
+  @Output() swipeStart = new EventEmitter<unknown>();
+  @Output() swipeMove = new EventEmitter<unknown>();
+  @Output() swipeEnd = new EventEmitter<unknown>();
+  @Output() touchStart = new EventEmitter<unknown>();
+  @Output() touchMove = new EventEmitter<unknown>();
+  @Output() touchEnd = new EventEmitter<unknown>();
 }
 
 @Component({
@@ -81,12 +81,12 @@ class CalendarMonthViewStubComponent {
   standalone: true
 })
 class CalendarYearViewStubComponent {
-  @Input() viewMode: any;
-  @Input() currentYear: any;
-  @Input() minYear: any;
-  @Input() maxYear: any;
-  @Input() years: any;
-  @Input() decades: any;
+  @Input() viewMode: unknown;
+  @Input() currentYear: unknown;
+  @Input() minYear: unknown;
+  @Input() maxYear: unknown;
+  @Input() years: unknown;
+  @Input() decades: unknown;
   @Output() yearSelected = new EventEmitter<number>();
   @Output() decadeSelected = new EventEmitter<number>();
 }
@@ -97,17 +97,17 @@ class CalendarYearViewStubComponent {
   standalone: true
 })
 class TimeSelectionStubComponent {
-  @Input() currentDisplayHour: any;
-  @Input() currentMinute: any;
-  @Input() currentSecond: any;
-  @Input() isPm: any;
-  @Input() hourOptions: any;
-  @Input() minuteOptions: any;
-  @Input() secondOptions: any;
-  @Input() ampmOptions: any;
-  @Input() disabled: any;
-  @Input() timeLabel: any;
-  @Input() showSeconds: any;
+  @Input() currentDisplayHour: unknown;
+  @Input() currentMinute: unknown;
+  @Input() currentSecond: unknown;
+  @Input() isPm: unknown;
+  @Input() hourOptions: unknown;
+  @Input() minuteOptions: unknown;
+  @Input() secondOptions: unknown;
+  @Input() ampmOptions: unknown;
+  @Input() disabled: unknown;
+  @Input() timeLabel: unknown;
+  @Input() showSeconds: unknown;
   @Output() timeChange = new EventEmitter<void>();
   @Output() currentDisplayHourChange = new EventEmitter<number>();
   @Output() currentMinuteChange = new EventEmitter<number>();

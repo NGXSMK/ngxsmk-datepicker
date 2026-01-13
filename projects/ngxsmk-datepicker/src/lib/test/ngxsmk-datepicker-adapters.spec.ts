@@ -41,12 +41,12 @@ describe('NgxsmkDatepickerComponent - Date Adapters', () => {
 
     it('should handle string dates', () => {
       const dateString = '2025-06-15';
-      component.value = dateString as any;
+      component.value = dateString as unknown as Date;
       fixture.detectChanges();
 
       // String dates need to be parsed, and selectedDate may be null if not in single mode or parsing fails
       // We check that the value was processed without errors
-      expect(() => component.value = dateString as any).not.toThrow();
+      expect(() => component.value = dateString as unknown as Date).not.toThrow();
     });
   });
 });

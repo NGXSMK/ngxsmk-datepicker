@@ -1,7 +1,5 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { getStartOfDay } from '../utils/date.utils';
 
 describe('NgxsmkDatepickerComponent Month Navigation Bug', () => {
     let component: NgxsmkDatepickerComponent;

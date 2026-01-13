@@ -212,7 +212,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
   describe('12/24 Hour Format', () => {
     it('should convert 24-hour to 12-hour display', () => {
       component.currentHour = 14; // 2 PM
-      (component as any).update12HourState(component.currentHour);
+      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(2);
@@ -232,7 +232,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
     it('should handle midnight correctly', () => {
       component.currentHour = 0; // Midnight
-      (component as any).update12HourState(component.currentHour);
+      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(12);
@@ -241,7 +241,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
     it('should handle noon correctly', () => {
       component.currentHour = 12; // Noon
-      (component as any).update12HourState(component.currentHour);
+      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(12);

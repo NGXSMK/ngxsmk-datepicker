@@ -12,8 +12,8 @@ export interface DateRange {
 export type DatepickerValue = Date | { start: Date, end: Date } | Date[] | null;
 
 export function generateMonthOptions(locale: string, year: number): { label: string; value: number }[] {
-  return Array.from({length: 12}).map((_, i) => ({
-    label: new Date(year, i, 1).toLocaleDateString(locale, {month: 'long'}),
+  return Array.from({ length: 12 }).map((_, i) => ({
+    label: new Date(year, i, 1).toLocaleDateString(locale, { month: 'long' }),
     value: i,
   }));
 }
@@ -22,11 +22,11 @@ export function generateYearOptions(currentYear: number, range: number = 10): { 
   const startYear = currentYear - range;
   const endYear = currentYear + range;
   const options: { label: string; value: number }[] = [];
-  
+
   for (let i = startYear; i <= endYear; i++) {
-    options.push({label: `${i}`, value: i});
+    options.push({ label: `${i}`, value: i });
   }
-  
+
   return options;
 }
 
@@ -35,7 +35,7 @@ export function generateTimeOptions(minuteInterval: number = 1, secondInterval: 
   minuteOptions: { label: string; value: number }[];
   secondOptions?: { label: string; value: number }[];
 } {
-  const hourOptions = Array.from({length: 12}).map((_, i) => ({
+  const hourOptions = Array.from({ length: 12 }).map((_, i) => ({
     label: (i + 1).toString().padStart(2, '0'),
     value: i + 1,
   }));
@@ -70,8 +70,8 @@ export function generateTimeOptions(minuteInterval: number = 1, secondInterval: 
 
 export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): string[] {
   const day = new Date(2024, 0, 7 + firstDayOfWeek);
-  return Array.from({length: 7}).map(() => {
-    const weekDay = new Date(day).toLocaleDateString(locale, {weekday: 'short'});
+  return Array.from({ length: 7 }).map(() => {
+    const weekDay = new Date(day).toLocaleDateString(locale, { weekday: 'short' });
     day.setDate(day.getDate() + 1);
     return weekDay;
   });
@@ -90,40 +90,44 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
  */
 export function getFirstDayOfWeek(locale: string): number {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof Intl !== 'undefined' && typeof (Intl as any).Locale !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const localeObj = new (Intl as any).Locale(locale);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ('weekInfo' in localeObj && (localeObj as any).weekInfo?.firstDay !== undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return ((localeObj as any).weekInfo.firstDay) % 7;
       }
     }
-    
+
     const localeLower = locale.toLowerCase();
-    if (localeLower.startsWith('en-gb') || 
-        localeLower.startsWith('en-au') ||
-        localeLower.startsWith('en-nz') ||
-        localeLower.startsWith('de') ||
-        localeLower.startsWith('fr') ||
-        localeLower.startsWith('es') ||
-        localeLower.startsWith('it') ||
-        localeLower.startsWith('pt') ||
-        localeLower.startsWith('nl') ||
-        localeLower.startsWith('pl') ||
-        localeLower.startsWith('ru') ||
-        localeLower.startsWith('sv') ||
-        localeLower.startsWith('no') ||
-        localeLower.startsWith('da') ||
-        localeLower.startsWith('fi')) {
+    if (localeLower.startsWith('en-gb') ||
+      localeLower.startsWith('en-au') ||
+      localeLower.startsWith('en-nz') ||
+      localeLower.startsWith('de') ||
+      localeLower.startsWith('fr') ||
+      localeLower.startsWith('es') ||
+      localeLower.startsWith('it') ||
+      localeLower.startsWith('pt') ||
+      localeLower.startsWith('nl') ||
+      localeLower.startsWith('pl') ||
+      localeLower.startsWith('ru') ||
+      localeLower.startsWith('sv') ||
+      localeLower.startsWith('no') ||
+      localeLower.startsWith('da') ||
+      localeLower.startsWith('fi')) {
       return 1; // Monday
     }
-    
+
     // Default to Sunday for en-US and other locales
     return 0;
   } catch {
     // If locale parsing fails, default based on locale string
     const localeLower = locale.toLowerCase();
-    if (localeLower.startsWith('en-gb') || 
-        localeLower.startsWith('en-au') ||
-        localeLower.startsWith('en-nz')) {
+    if (localeLower.startsWith('en-gb') ||
+      localeLower.startsWith('en-au') ||
+      localeLower.startsWith('en-nz')) {
       return 1; // Monday
     }
     return 0; // Sunday (default for en-US and others)
@@ -144,7 +148,7 @@ export function update12HourState(fullHour: number): { isPm: boolean; displayHou
 
 export function processDateRanges(ranges: DateRange | null): { [key: string]: [Date, Date] } | null {
   if (!ranges) return null;
-  
+
   return Object.entries(ranges).reduce((acc, [key, dates]) => {
     const start = normalizeDate(dates[0]);
     const end = normalizeDate(dates[1]);

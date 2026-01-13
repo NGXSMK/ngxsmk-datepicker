@@ -9,12 +9,12 @@ import { PLATFORM_ID } from '@angular/core';
 describe('Cross-Browser Compatibility', () => {
   let component: NgxsmkDatepickerComponent;
   let fixture: ComponentFixture<NgxsmkDatepickerComponent>;
-  let originalResizeObserver: any;
+  let originalResizeObserver: unknown;
 
   beforeEach(async () => {
     // Store original ResizeObserver before any tests modify it
-    originalResizeObserver = (window as any).ResizeObserver;
-    
+    originalResizeObserver = (window as unknown as Record<string, unknown>)['ResizeObserver'];
+
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
       providers: [
@@ -29,25 +29,25 @@ describe('Cross-Browser Compatibility', () => {
 
   afterEach(() => {
     // Always restore original ResizeObserver after each test
-    (window as any).ResizeObserver = originalResizeObserver;
+    (window as unknown as Record<string, unknown>)['ResizeObserver'] = originalResizeObserver;
   });
 
   describe('ResizeObserver Support', () => {
     it('should handle ResizeObserver availability', () => {
       // Test with ResizeObserver available
-      (window as any).ResizeObserver = class MockResizeObserver {
-        observe() {}
-        disconnect() {}
+      (window as unknown as Record<string, unknown>)['ResizeObserver'] = class MockResizeObserver {
+        observe() { }
+        disconnect() { }
       };
-      
+
       component.ngOnInit();
       fixture.detectChanges();
-      
+
       // Test without ResizeObserver
-      delete (window as any).ResizeObserver;
+      delete (window as unknown as Record<string, unknown>)['ResizeObserver'];
       component.ngOnInit();
       fixture.detectChanges();
-      
+
       // Component should handle absence gracefully
       expect(component).toBeTruthy();
     });
@@ -57,15 +57,15 @@ describe('Cross-Browser Compatibility', () => {
       // the component should handle it gracefully
       // We test this by checking that the component can be created
       // even if ResizeObserver is problematic
-      
+
       // Instead of setting a throwing mock globally, we just verify
       // the component handles ResizeObserver absence/errors
-      const originalRO = (window as any).ResizeObserver;
-      
+      const originalRO = (window as unknown as Record<string, unknown>)['ResizeObserver'];
+
       try {
         // Temporarily remove ResizeObserver to test graceful handling
-        delete (window as any).ResizeObserver;
-        
+        delete (window as unknown as Record<string, unknown>)['ResizeObserver'];
+
         // Component should handle this gracefully
         expect(() => {
           const newComponent = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -74,7 +74,7 @@ describe('Cross-Browser Compatibility', () => {
         }).not.toThrow();
       } finally {
         // Always restore
-        (window as any).ResizeObserver = originalRO;
+        (window as unknown as Record<string, unknown>)['ResizeObserver'] = originalRO;
       }
     });
   });
@@ -82,7 +82,7 @@ describe('Cross-Browser Compatibility', () => {
   describe('TouchEvent Support', () => {
     it('should handle TouchEvent availability', () => {
       const hasTouchEvent = typeof TouchEvent !== 'undefined';
-      
+
       if (hasTouchEvent) {
         const touchEvent = new TouchEvent('touchstart', {
           bubbles: true,
@@ -109,7 +109,7 @@ describe('Cross-Browser Compatibility', () => {
           cancelable: true,
           touches: []
         });
-        
+
         expect(touchEvent.type).toBe('touchstart');
         // TouchEvent.touches is a TouchList, not an array
         expect(touchEvent.touches).toBeDefined();
@@ -124,7 +124,7 @@ describe('Cross-Browser Compatibility', () => {
       expect(typeof localStorage).toBe('object');
       expect(typeof localStorage.getItem).toBe('function');
       expect(typeof localStorage.setItem).toBe('function');
-      
+
       // Test localStorage operations
       try {
         localStorage.setItem('test-key', 'test-value');
@@ -138,21 +138,21 @@ describe('Cross-Browser Compatibility', () => {
 
     it('should handle localStorage quota exceeded', () => {
       const originalSetItem = localStorage.setItem;
-      
+
       // Mock localStorage to throw quota exceeded error
       localStorage.setItem = jasmine.createSpy('setItem').and.throwError('QuotaExceededError');
-      
+
       expect(() => {
         localStorage.setItem('test', 'value');
       }).toThrow();
-      
+
       // Restore
       localStorage.setItem = originalSetItem;
     });
 
     it('should handle localStorage disabled', () => {
-      const originalLocalStorage = (window as any).localStorage;
-      
+      const originalLocalStorage = (window as unknown as Record<string, unknown>)['localStorage'];
+
       // Mock localStorage as null
       try {
         Object.defineProperty(window, 'localStorage', {
@@ -160,7 +160,7 @@ describe('Cross-Browser Compatibility', () => {
           writable: true,
           configurable: true
         });
-        
+
         // Component should handle this gracefully
         expect(() => {
           component.ngOnInit();
@@ -187,7 +187,7 @@ describe('Cross-Browser Compatibility', () => {
         'January 15, 2024',
         '2024-01-15T10:30:00Z'
       ];
-      
+
       testDates.forEach(dateString => {
         const parsed = Date.parse(dateString);
         // Some formats might return NaN in some browsers
@@ -198,7 +198,7 @@ describe('Cross-Browser Compatibility', () => {
     it('should handle timezone differences', () => {
       const utcDate = new Date('2024-01-15T10:30:00Z');
       const localDate = new Date(2024, 0, 15, 10, 30, 0);
-      
+
       // Different browsers might handle timezones differently
       expect(utcDate).toBeInstanceOf(Date);
       expect(localDate).toBeInstanceOf(Date);
@@ -211,7 +211,7 @@ describe('Cross-Browser Compatibility', () => {
         'not-a-date',
         ''
       ];
-      
+
       invalidDates.forEach(dateString => {
         const date = new Date(dateString);
         expect(isNaN(date.getTime())).toBe(true);
@@ -223,38 +223,38 @@ describe('Cross-Browser Compatibility', () => {
     it('should handle CSS custom properties (variables)', () => {
       const element = document.createElement('div');
       document.body.appendChild(element);
-      
+
       // Test CSS custom properties
       element.style.setProperty('--test-color', '#ff0000');
       const value = element.style.getPropertyValue('--test-color');
-      
+
       expect(value).toBe('#ff0000');
-      
+
       document.body.removeChild(element);
     });
 
     it('should handle CSS Grid support', () => {
       const element = document.createElement('div');
       document.body.appendChild(element);
-      
+
       element.style.display = 'grid';
       const display = window.getComputedStyle(element).display;
-      
+
       // Most modern browsers support grid
       expect(['grid', '-ms-grid']).toContain(display);
-      
+
       document.body.removeChild(element);
     });
 
     it('should handle Flexbox support', () => {
       const element = document.createElement('div');
       document.body.appendChild(element);
-      
+
       element.style.display = 'flex';
       const display = window.getComputedStyle(element).display;
-      
+
       expect(display).toBe('flex');
-      
+
       document.body.removeChild(element);
     });
   });
@@ -277,7 +277,7 @@ describe('Cross-Browser Compatibility', () => {
 
     it('should handle KeyboardEvent key differences', () => {
       const keyEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      
+
       // Modern browsers use 'key' property
       if (keyEvent.key) {
         expect(keyEvent.key).toBe('ArrowRight');
@@ -291,9 +291,9 @@ describe('Cross-Browser Compatibility', () => {
   describe('IntersectionObserver Support', () => {
     it('should handle IntersectionObserver availability', () => {
       const hasIntersectionObserver = typeof IntersectionObserver !== 'undefined';
-      
+
       if (hasIntersectionObserver) {
-        const observer = new IntersectionObserver(() => {});
+        const observer = new IntersectionObserver(() => { });
         expect(observer).toBeInstanceOf(IntersectionObserver);
         observer.disconnect();
       } else {
@@ -306,14 +306,14 @@ describe('Cross-Browser Compatibility', () => {
   describe('requestAnimationFrame Support', () => {
     it('should handle requestAnimationFrame availability', () => {
       const hasRAF = typeof requestAnimationFrame !== 'undefined';
-      
+
       if (hasRAF) {
-        const id = requestAnimationFrame(() => {});
+        const id = requestAnimationFrame(() => { });
         expect(typeof id).toBe('number');
         cancelAnimationFrame(id);
       } else {
         // Fallback to setTimeout
-        const timeoutId = setTimeout(() => {}, 16);
+        const timeoutId = setTimeout(() => { }, 16);
         expect(typeof timeoutId).toBe('number');
         clearTimeout(timeoutId);
       }
@@ -323,7 +323,7 @@ describe('Cross-Browser Compatibility', () => {
   describe('Performance API Support', () => {
     it('should handle Performance API availability', () => {
       const hasPerformance = typeof performance !== 'undefined';
-      
+
       if (hasPerformance) {
         expect(typeof performance.now).toBe('function');
         const timestamp = performance.now();
@@ -348,13 +348,13 @@ describe('Cross-Browser Compatibility', () => {
                 return false;
               }
             });
-            window.addEventListener('test', () => {}, opts);
-            window.removeEventListener('test', () => {}, opts);
-          } catch (e) {}
+            window.addEventListener('test', () => { }, opts);
+            window.removeEventListener('test', () => { }, opts);
+          } catch { }
           return supportsPassive;
         })()
       };
-      
+
       expect(typeof features.localStorage).toBe('boolean');
       expect(typeof features.sessionStorage).toBe('boolean');
       expect(typeof features.touchEvents).toBe('boolean');

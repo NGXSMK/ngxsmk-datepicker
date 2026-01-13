@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { FieldSyncService } from '../services/field-sync.service';
+import { FieldSyncService, SignalFormField } from '../services/field-sync.service';
 import { signal } from '@angular/core';
 
 describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
@@ -34,7 +34,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -57,7 +57,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -80,7 +80,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -115,7 +115,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -138,7 +138,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -162,7 +162,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -173,7 +173,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
         }));
 
         it('should handle field with both required property and errors signal', fakeAsync(() => {
-            const errorsSignal = signal<any[]>([]);
+            const errorsSignal = signal<unknown[]>([]);
             const valueSignal = signal<Date | null>(null);
 
             const mockField = {
@@ -188,7 +188,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -199,7 +199,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
         }));
 
         it('should reactively update when errors signal changes', fakeAsync(() => {
-            const errorsSignal = signal<any[]>([]);
+            const errorsSignal = signal<unknown[]>([]);
             const valueSignal = signal<Date | null>(null);
 
             const mockField = {
@@ -213,7 +213,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -254,7 +254,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 
@@ -271,7 +271,7 @@ describe('NgxsmkDatepickerComponent - Angular Signal Forms Validation', () => {
                 markAsDirty: () => { }
             };
 
-            component.field = mockField as any;
+            component.field = mockField as unknown as SignalFormField;
             tick();
             fixture.detectChanges();
 

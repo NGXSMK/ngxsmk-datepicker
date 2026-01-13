@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 
 @Component({
   selector: 'ngxsmk-calendar-month-view',
@@ -68,7 +69,7 @@ import { NgClass } from '@angular/common';
 export class CalendarMonthViewComponent {
   @Input() days: (Date | null)[] = [];
   @Input() weekDays: string[] = [];
-  @Input() classes: any;
+  @Input() classes?: DatepickerClasses | undefined;
   @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
   @Input() selectedDate: Date | null = null;
   @Input() startDate: Date | null = null;
@@ -87,7 +88,7 @@ export class CalendarMonthViewComponent {
   @Input() isInRange: (date: Date | null) => boolean = () => false;
   @Input() isPreviewInRange: (date: Date | null) => boolean = () => false;
   @Input() getAriaLabel: (date: Date | null) => string = () => '';
-  @Input() getDayCellCustomClasses: (date: Date | null) => any = () => ({});
+  @Input() getDayCellCustomClasses: (date: Date | null) => string | string[] | Set<string> | { [klass: string]: unknown; } = () => ({});
   @Input() getDayCellTooltip: (date: Date | null) => string | null = () => '';
   @Input() formatDayNumber: (date: Date | null) => string | null = (d) => d ? d.getDate().toString() : '';
 

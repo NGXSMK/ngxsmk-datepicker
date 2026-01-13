@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DateValidationService } from './date-validation.service';
 import { HolidayProvider } from '../utils/calendar.utils';
-import { getStartOfDay } from '../utils/date.utils';
 
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
@@ -60,7 +59,7 @@ describe('DateValidationService', () => {
     it('should validate minDate constraint', () => {
       const date = new Date(2025, 5, 15);
       const minDate = new Date(2025, 5, 20);
-      
+
       const result = service.isDateValid(date, { minDate });
       expect(result).toBe(false);
     });
@@ -68,7 +67,7 @@ describe('DateValidationService', () => {
     it('should validate maxDate constraint', () => {
       const date = new Date(2025, 5, 25);
       const maxDate = new Date(2025, 5, 20);
-      
+
       const result = service.isDateValid(date, { maxDate });
       expect(result).toBe(false);
     });
@@ -76,7 +75,7 @@ describe('DateValidationService', () => {
     it('should validate disabledDates', () => {
       const date = new Date(2025, 5, 15);
       const disabledDate = new Date(2025, 5, 15);
-      
+
       const result = service.isDateValid(date, {
         disabledDates: [disabledDate]
       });
@@ -85,7 +84,7 @@ describe('DateValidationService', () => {
 
     it('should validate disabledRanges', () => {
       const date = new Date(2025, 5, 15);
-      
+
       const result = service.isDateValid(date, {
         disabledRanges: [{
           start: new Date(2025, 5, 10),
@@ -97,7 +96,7 @@ describe('DateValidationService', () => {
 
     it('should validate custom isInvalidDate function', () => {
       const date = new Date(2025, 5, 15);
-      
+
       const result = service.isDateValid(date, {
         isInvalidDate: (d) => d.getDate() === 15
       });
@@ -107,7 +106,7 @@ describe('DateValidationService', () => {
     it('should validate holidays when disableHolidays is true', () => {
       const holidayProvider = new TestHolidayProvider();
       const holidayDate = new Date(2025, 11, 25); // Christmas
-      
+
       const result = service.isDateValid(holidayDate, {
         disableHolidays: true,
         holidayProvider
@@ -118,7 +117,7 @@ describe('DateValidationService', () => {
     it('should allow holidays when disableHolidays is false', () => {
       const holidayProvider = new TestHolidayProvider();
       const holidayDate = new Date(2025, 11, 25); // Christmas
-      
+
       const result = service.isDateValid(holidayDate, {
         disableHolidays: false,
         holidayProvider
@@ -136,10 +135,10 @@ describe('DateValidationService', () => {
     it('should return opposite of isDateValid', () => {
       const date = new Date(2025, 5, 15);
       const minDate = new Date(2025, 5, 20);
-      
+
       const isValid = service.isDateValid(date, { minDate });
       const isDisabled = service.isDateDisabled(date, { minDate });
-      
+
       expect(isDisabled).toBe(!isValid);
     });
   });
@@ -159,7 +158,7 @@ describe('DateValidationService', () => {
     it('should detect holidays', () => {
       const holidayProvider = new TestHolidayProvider();
       const holidayDate = new Date(2025, 11, 25);
-      
+
       const result = service.isHoliday(holidayDate, holidayProvider);
       expect(result).toBe(true);
     });
@@ -167,7 +166,7 @@ describe('DateValidationService', () => {
     it('should return false for non-holidays', () => {
       const holidayProvider = new TestHolidayProvider();
       const regularDate = new Date(2025, 5, 15);
-      
+
       const result = service.isHoliday(regularDate, holidayProvider);
       expect(result).toBe(false);
     });
@@ -188,7 +187,7 @@ describe('DateValidationService', () => {
     it('should return holiday label', () => {
       const holidayProvider = new TestHolidayProvider();
       const holidayDate = new Date(2025, 11, 25);
-      
+
       const result = service.getHolidayLabel(holidayDate, holidayProvider);
       expect(result).toBe('Christmas');
     });
@@ -196,7 +195,7 @@ describe('DateValidationService', () => {
     it('should return null for non-holidays', () => {
       const holidayProvider = new TestHolidayProvider();
       const regularDate = new Date(2025, 5, 15);
-      
+
       const result = service.getHolidayLabel(regularDate, holidayProvider);
       expect(result).toBeNull();
     });

@@ -373,7 +373,7 @@ export class FieldSyncService {
 
     // Handle functions (Signals or getters)
     if (typeof field === 'function') {
-      const fieldFn = field as any;
+      const fieldFn = field as unknown as Record<string, unknown>;
 
       // If the function itself has field properties (like value, disabled, setValue),
       // it's likely a Signal that IS the field (Angular Signal Forms pattern).
