@@ -96,7 +96,7 @@ import { Subject } from 'rxjs';
   }, FieldSyncService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./styles/variables.css', './styles/datepicker.css'],
+  styleUrls: ['./styles/variables.css', './styles/datepicker.css', './styles/keyboard-help.css'],
   template: `
     <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode" [class.ngxsmk-rtl]="isRtl" [class.ngxsmk-native-picker]="shouldUseNativePicker()" [ngClass]="classes?.wrapper">
       @if (!isInlineMode) {
@@ -106,10 +106,16 @@ import { Subject } from 'rxjs';
                    #nativeDateInput
                    [value]="formatValueForNativeInput(_internalValue)"
                    [placeholder]="placeholder"
+                   [id]="inputId || _uniqueId"
+                   [name]="name"
+                   [autocomplete]="autocomplete"
                    [disabled]="disabled"
+                   [required]="required"
                    [attr.min]="getMinDateForNativeInput()"
                    [attr.max]="getMaxDateForNativeInput()"
                    [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+                   [attr.aria-required]="required"
+                   [attr.aria-invalid]="errorState"
                    [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                    class="ngxsmk-display-input ngxsmk-native-input"
                    [ngClass]="classes?.input"
@@ -127,9 +133,15 @@ import { Subject } from 'rxjs';
                    #dateInput
                    [value]="allowTyping ? (typedInputValue || displayValue) : displayValue" 
                    [placeholder]="placeholder" 
+                   [id]="inputId || _uniqueId"
+                   [name]="name"
+                   [autocomplete]="autocomplete"
                    [readonly]="!allowTyping"
                    [disabled]="disabled"
+                   [required]="required"
                    [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+                   [attr.aria-required]="required"
+                   [attr.aria-invalid]="errorState"
                    [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
                    class="ngxsmk-display-input"
                    [ngClass]="classes?.input"
@@ -405,6 +417,67 @@ import { Subject } from 'rxjs';
       @if (isCalendarVisible && !_shouldAppendToBody) {
         <ng-container *ngTemplateOutlet="portalContent"></ng-container>
       }
+      @if (isKeyboardHelpOpen) {
+        <div class="ngxsmk-keyboard-help-backdrop" (click)="toggleKeyboardHelp()" (keydown.enter)="toggleKeyboardHelp()" (keydown.space)="toggleKeyboardHelp()" tabindex="0" role="button" [attr.aria-label]="getTranslation('closeCalendarOverlay')"></div>
+        <div class="ngxsmk-keyboard-help-dialog" role="dialog" aria-modal="true" [attr.aria-label]="getTranslation('keyboardShortcuts')">
+          <div class="ngxsmk-keyboard-help-header">
+            <h3 class="ngxsmk-keyboard-help-title">{{ getTranslation('keyboardShortcuts') }}</h3>
+            <button type="button" class="ngxsmk-keyboard-help-close" (click)="toggleKeyboardHelp()" [attr.aria-label]="getTranslation('close')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+          <ul class="ngxsmk-keyboard-help-list">
+            <li class="ngxsmk-keyboard-help-item">
+              <span>Next/Prev day</span>
+              <div><span class="ngxsmk-keyboard-key">←</span> <span class="ngxsmk-keyboard-key">→</span></div>
+            </li>
+            <li class="ngxsmk-keyboard-help-item">
+              <span>Next/Prev week</span>
+              <div><span class="ngxsmk-keyboard-key">↑</span> <span class="ngxsmk-keyboard-key">↓</span></div>
+            </li>
+            <li class="ngxsmk-keyboard-help-item">
+              <span>Select date</span>
+              <div><span class="ngxsmk-keyboard-key">Enter</span> <span class="ngxsmk-keyboard-key">Space</span></div>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Next/Prev month</span>
+              <div><span class="ngxsmk-keyboard-key">PgUp</span> <span class="ngxsmk-keyboard-key">PgDn</span></div>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Next/Prev year</span>
+              <div><span class="ngxsmk-keyboard-key">Shift</span> + <span class="ngxsmk-keyboard-key">PgUp/Dn</span></div>
+            </li>
+            <li class="ngxsmk-keyboard-help-item">
+              <span>First/Last day</span>
+              <div><span class="ngxsmk-keyboard-key">Home</span> <span class="ngxsmk-keyboard-key">End</span></div>
+            </li>
+            <li class="ngxsmk-keyboard-help-item">
+              <span>Close calendar</span>
+              <span class="ngxsmk-keyboard-key">Esc</span>
+            </li>
+            <li class="ngxsmk-keyboard-help-item">
+              <span>Today</span>
+              <span class="ngxsmk-keyboard-key">T</span>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Yesterday</span>
+              <span class="ngxsmk-keyboard-key">Y</span>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Tomorrow</span>
+              <span class="ngxsmk-keyboard-key">N</span>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Next Week</span>
+              <span class="ngxsmk-keyboard-key">W</span>
+            </li>
+             <li class="ngxsmk-keyboard-help-item">
+              <span>Show shortcuts</span>
+              <span class="ngxsmk-keyboard-key">?</span>
+            </li>
+          </ul>
+        </div>
+      }
     </div>
   `,
 })
@@ -516,6 +589,33 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this.getTranslation(this.timeOnly ? 'selectTime' : 'selectDate');
   }
   @Input() inline: boolean | 'always' | 'auto' = false;
+
+  private _inputId: string = '';
+  @Input() set inputId(value: string) {
+    this._inputId = value;
+    this.scheduleChangeDetection();
+  }
+  get inputId(): string {
+    return this._inputId;
+  }
+
+  private _name: string = '';
+  @Input() set name(value: string) {
+    this._name = value;
+    this.scheduleChangeDetection();
+  }
+  get name(): string {
+    return this._name;
+  }
+
+  private _autocomplete: string = 'off';
+  @Input() set autocomplete(value: string) {
+    this._autocomplete = value;
+    this.scheduleChangeDetection();
+  }
+  get autocomplete(): string {
+    return this._autocomplete;
+  }
 
   @Input() translations?: PartialDatepickerTranslations;
   @Input() translationService?: TranslationService;
@@ -676,6 +776,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
               this.scheduleChangeDetection();
             }
           },
+          onRequiredChanged: (required: boolean) => {
+            this.required = required;
+          },
           onSyncError: (_error: unknown) => {
           },
           normalizeValue: (value: unknown) => {
@@ -717,6 +820,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.disabled = disabled;
           this.scheduleChangeDetection();
         }
+      },
+      onRequiredChanged: (required: boolean) => {
+        this.required = required;
       },
       onSyncError: (_error: unknown) => {
       },
@@ -852,6 +958,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._required !== value) {
       this._required = value;
       this.stateChanges.next();
+      this.scheduleChangeDetection();
     }
   }
 
@@ -863,6 +970,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._errorState !== value) {
       this._errorState = value;
       this.stateChanges.next();
+      this.scheduleChangeDetection();
     }
   }
 
@@ -2321,9 +2429,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           return true;
         }
         return false;
+      case '?':
+        if (event.shiftKey) {
+          this.toggleKeyboardHelp();
+          return true;
+        }
+        return false;
       default:
         return false;
     }
+  }
+
+  public isKeyboardHelpOpen = false;
+
+  public toggleKeyboardHelp(): void {
+    this.isKeyboardHelpOpen = !this.isKeyboardHelpOpen;
+    this.scheduleChangeDetection();
   }
 
   private getShortcutKey(event: KeyboardEvent): string | null {
@@ -5741,17 +5862,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   /**
-   * Detect if running in Ionic environment
-   * Useful for disabling features that conflict with Ionic's overlay system
-   */
-  /**
-   * Positions the popover relative to the input element to avoid all datepickers opening in the same center position.
-   * This improves UX when multiple datepickers are on the same page.
-   * On desktop (≥1024px), CSS handles positioning. On mobile, this method positions relative to input when space allows.
+   * Positions the popover relative to the input element dynamically.
+   * - Prioritizes layout below the input.
+   * - Falls back to positioning above if required.
+   * - Defaults to CSS-centered positioning if space is insufficient.
    * 
    * @remarks
-   * This method calculates the input's position and positions the popover below it.
-   * Falls back to center positioning if there's not enough space below the input.
+   * This logic primarily targets mobile/tablet viewports; desktop layout (≥1024px)
+   * is handled via CSS absolute positioning.
    */
   private positionPopoverRelativeToInput(): void {
     if (!this.isBrowser || !this.popoverContainer?.nativeElement || this.isInlineMode) {
@@ -5765,8 +5883,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    // On desktop (≥1024px), CSS handles positioning with position: absolute
-    // Only apply JavaScript positioning on mobile/tablet
+    // Delegate positioning to CSS for desktop layouts (≥1024px); apply JS positioning only for mobile/tablet.
     const isDesktop = window.innerWidth >= 1024;
     if (isDesktop) {
       // CSS handles positioning on desktop, remove any inline styles
@@ -5828,18 +5945,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
+  /**
+   * Determines if the component is operating within an Ionic environment.
+   * This detection disables features that may conflict with Ionic's overlay system.
+   */
   private isIonicEnvironment(): boolean {
     if (!this.isBrowser) {
       return false;
     }
     try {
-      // Check for Ionic global object
-      return typeof (window as unknown as Record<string, unknown>)['Ionic'] !== 'undefined' ||
-        // Check for ion-app element
+      // Check for Ionic global object or key Ionic DOM elements/styles
+      return typeof (window as any)['Ionic'] !== 'undefined' ||
         (typeof document !== 'undefined' && !!document.querySelector('ion-app')) ||
-        // Check for Ionic CSS variables
         (typeof getComputedStyle !== 'undefined' &&
-          getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary') !== '');
+          Boolean(getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')));
     } catch {
       return false;
     }

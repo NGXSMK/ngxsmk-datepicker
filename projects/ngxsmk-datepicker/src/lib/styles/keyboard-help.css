@@ -1,0 +1,104 @@
+/**
+ * @file keyboard-help.css
+ * @description Styles for the keyboard shortcuts help dialog
+ * @version 1.0.0
+ * 
+ * Includes:
+ * - Dialog positioning and layout
+ * - Key styling (kbd-like appearance)
+ * - Backdrop and animations
+ */
+
+.ngxsmk-keyboard-help-dialog {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--datepicker-background);
+  border-radius: var(--datepicker-radius-lg);
+  box-shadow: var(--datepicker-shadow-lg);
+  z-index: calc(var(--datepicker-z-index-backdrop) + 10);
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--datepicker-text-color);
+  animation: fadeInScale 0.2s ease-out;
+}
+
+.ngxsmk-keyboard-help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--datepicker-border-color);
+  padding-bottom: 10px;
+}
+
+.ngxsmk-keyboard-help-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ngxsmk-keyboard-help-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--datepicker-subtle-text-color);
+  border-radius: var(--datepicker-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ngxsmk-keyboard-help-close:hover {
+  background: var(--datepicker-hover-background);
+  color: var(--datepicker-text-color);
+}
+
+.ngxsmk-keyboard-help-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.ngxsmk-keyboard-help-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--datepicker-border-color);
+}
+
+.ngxsmk-keyboard-help-item:last-child {
+  border-bottom: none;
+}
+
+.ngxsmk-keyboard-key {
+  background: var(--datepicker-hover-background);
+  border: 1px solid var(--datepicker-border-color);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 12px;
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  margin-left: 4px;
+}
+
+.ngxsmk-keyboard-help-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--datepicker-z-index-backdrop);
+  backdrop-filter: blur(2px);
+}

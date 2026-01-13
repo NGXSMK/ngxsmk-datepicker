@@ -43,7 +43,8 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
     monthChanged: 'Changed to {{month}} {{year}}',
     yearChanged: 'Changed to year {{year}}',
     calendarLoading: 'Loading calendar...',
-    calendarReady: 'Calendar ready'
+    calendarReady: 'Calendar ready',
+    keyboardShortcuts: 'Keyboard shortcuts'
   };
   return { ...defaults, ...overrides };
 }
@@ -59,7 +60,7 @@ describe('DefaultTranslationService', () => {
         TranslationRegistryService
       ]
     });
-    
+
     service = TestBed.inject(DefaultTranslationService);
     translationRegistry = TestBed.inject(TranslationRegistryService);
   });
@@ -75,7 +76,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations, 'test-locale');
-      
+
       expect(service.getCurrentLocale()).toBe('test-locale');
       expect(service.translate('selectDate')).toBe('Test Select Date');
     });
@@ -84,7 +85,7 @@ describe('DefaultTranslationService', () => {
       const translations = createMinimalTranslations();
 
       service.initialize(translations);
-      
+
       expect(service.getCurrentLocale()).toBe('en');
     });
   });
@@ -92,14 +93,14 @@ describe('DefaultTranslationService', () => {
   describe('initializeFromLocale', () => {
     it('should initialize from locale', () => {
       service.initializeFromLocale('es');
-      
+
       expect(service.getCurrentLocale()).toBe('es');
       expect(service.translate('selectDate')).toBeTruthy();
     });
 
     it('should load translations from registry', () => {
       service.initializeFromLocale('en');
-      
+
       const translation = service.translate('selectDate');
       expect(translation).toBeTruthy();
       expect(translation).not.toBe('selectDate'); // Should be translated
@@ -113,14 +114,14 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       expect(service.translate('selectDate')).toBe('Select Date');
     });
 
     it('should return key if translation not found', () => {
       const translations = createMinimalTranslations();
       service.initialize(translations);
-      
+
       expect(service.translate('nonExistentKey')).toBe('nonExistentKey');
     });
 
@@ -130,7 +131,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('calendarFor', { month: 'January', year: '2024' });
       expect(result).toBe('Calendar for January 2024');
     });
@@ -141,7 +142,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('selectDecade', { start: '2020', end: '2029' });
       expect(result).toBe('Select decade 2020 - 2029');
     });
@@ -155,7 +156,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('datesSelected', { count: 5 });
       expect(result).toBe('5 dates selected');
     });
@@ -166,7 +167,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('today');
       expect(result).toBe('Today');
     });
@@ -177,7 +178,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('datesSelected', { count: 10 });
       expect(result).toBe('10 dates selected');
     });
@@ -202,7 +203,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('selectDate', {});
       expect(result).toBe('Select Date');
     });
@@ -213,7 +214,7 @@ describe('DefaultTranslationService', () => {
       });
 
       service.initialize(translations);
-      
+
       const result = service.translate('calendarFor', { month: 'January' });
       expect(result).toBe('Calendar for January {{year}}');
     });

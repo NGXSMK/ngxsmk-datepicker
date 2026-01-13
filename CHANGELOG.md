@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.28] - 2026-01-13
+
+### Added
+- **Input Attributes Support**: Added support for standard input attributes on the datepicker input element
+  - `inputId`: Custom ID support (defaults to component unique ID)
+  - `name`: Form name attribute support
+  - `autocomplete`: Autocomplete attribute support (defaults to 'off')
+  - `aria-invalid`: Accessibility support for invalid state visibility
+- **Keyboard Shortcuts Help Dialog**: Added a built-in help dialog for keyboard shortcuts, accessible via `?` or `Shift + /`.
+- **New Shortcut**: Added `?` keyboard shortcut to toggle the help dialog.
+- **Required Attribute Fix**: Fixed issue where `required` attribute from schema was not properly reflected on the input
+
+### Changed
+- **Version Update**: Updated to version 1.9.28
+
 ## [1.9.27] - 2026-01-10
 
 ### Refactored

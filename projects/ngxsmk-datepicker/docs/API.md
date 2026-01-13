@@ -41,6 +41,10 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `value` | `DatepickerValue` | `null` | Stable | Current value (one-way binding) | `[value]="selectedDate"` |
 | `field` | `any` | `null` | Stable | Signal form field (Angular 21+). Automatically tracks dirty state when using `[field]` binding. | `[field]="myForm.dateField"` |
 | `placeholder` | `string \| null` | `'Select Date'` or `'Select Time'` | Stable | Input placeholder text | `placeholder="Choose a date"` |
+| `inputId` | `string` | `''` | Stable | Custom ID for the input element | `inputId="my-date-input"` |
+| `name` | `string` | `''` | Stable | Name attribute for the input element | `name="my-date-field"` |
+| `autocomplete` | `string` | `'off'` | Stable | Autocomplete attribute for the input element | `autocomplete="on"` |
+| `aria-invalid` | `boolean` | `false` | Stable | Sets aria-invalid attribute on the input | `[aria-invalid]="true"` |
 | `disabledState` | `boolean` | `false` | Stable | Disable the datepicker | `[disabledState]="isDisabled"` |
 | `minDate` | `DateInput \| null` | `null` | Stable | Minimum selectable date | `[minDate]="today"` |
 | `maxDate` | `DateInput \| null` | `null` | Stable | Maximum selectable date | `[maxDate]="maxBookingDate"` |
@@ -62,7 +66,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `yearRange` | `number` | `10` | Stable | Years to show in year selector | `[yearRange]="20"` |
 | `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes | `[classes]="{ inputGroup: 'custom-class' }"` |
 | `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization | `[hooks]="customHooks"` |
-| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts | `[enableKeyboardShortcuts]="false"` |
+| `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts. Press '?' for help. | `[enableKeyboardShortcuts]="false"` |
 | `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map | `[customShortcuts]="myShortcuts"` |
 | `autoApplyClose` | `boolean` | `false` | Stable | Auto-close calendar after selection | `[autoApplyClose]="true"` |
 | `clearLabel` | `string` | `'Clear'` | Stable | Custom label for clear button | `clearLabel="Reset"` |
@@ -2284,7 +2288,22 @@ export function getDaysInMonth(year: number, month: number): number;
 export function getFirstDayOfMonth(year: number, month: number): number;
 ```
 
-## Experimental APIs
+## Keyboard Support
+ 
+The datepicker comes with comprehensive keyboard support:
+ 
+ - **Navigation**: Arrow keys to navigate dates.
+ - **Selection**: Enter/Space to select.
+ - **Views**: Page Up/Down for months, Shift + Page Up/Down for years.
+ - **Shortcuts**:
+   - `T`: Today
+   - `Y`: Yesterday
+   - `N`: Tomorrow
+   - `W`: Next Week
+   - `?` or `Shift + /`: **Toggle Keyboard Help Dialog**
+   - `Esc`: Close calendar
+ 
+ ## Experimental APIs
 
 The following APIs are experimental and may change:
 
