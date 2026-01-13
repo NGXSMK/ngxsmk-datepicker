@@ -758,7 +758,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     this._field = field;
 
-    if (field && typeof field === 'object') {
+    if (field && (typeof field === 'object' || typeof field === 'function')) {
       this._fieldEffectRef = this.fieldSyncService.setupFieldSync(
         field,
         {
@@ -778,6 +778,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           },
           onRequiredChanged: (required: boolean) => {
             this.required = required;
+          },
+          onErrorStateChanged: (hasError: boolean) => {
+            this.errorState = hasError;
           },
           onSyncError: (_error: unknown) => {
           },
@@ -823,6 +826,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       },
       onRequiredChanged: (required: boolean) => {
         this.required = required;
+      },
+      onErrorStateChanged: (hasError: boolean) => {
+        this.errorState = hasError;
       },
       onSyncError: (_error: unknown) => {
       },
@@ -3645,6 +3651,28 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       viewCenterDate = new Date();
     }
 
+    // Fix for range selection jumping back to start month:
+    // When a user selects a range spanning months (e.g., Jan 31 - Feb 3), they:
+    // 1. Select Jan 31 (startDate). View is Jan.
+    // 2. Navigate to Feb. View is Feb.
+    // 3. Select Feb 3 (endDate).
+    // 4. Component updates value -> emits change -> parent updates bound value -> writeValue called.
+    // 5. writeValue calls initializeValue.
+    // 6. initializeValue typically resets view to startDate (Jan), causing the "snap back" effect.
+    //
+    // The fix is to check if we are currently viewing a month that contains either the start or end date.
+    // If so, and the calendar is open (or inline), we preserve the current view instead of jumping to startDate.
+    if ((this.isCalendarOpen || this.isInlineMode) && this.currentDate && this.mode === 'range' && this.startDate && this.endDate) {
+      const isStartVisible = this.isCurrentMonth(this.startDate);
+      const isEndVisible = this.isCurrentMonth(this.endDate);
+
+      // If either start or end date is visible in the current view, preserve the view
+      if (isStartVisible || isEndVisible) {
+        // By preventing viewCenterDate from being used below to reset currentDate, we keep the current view
+        viewCenterDate = null;
+      }
+    }
+
     if (viewCenterDate) {
       this.currentDate = new Date(viewCenterDate);
       this._currentMonth = viewCenterDate.getMonth();
@@ -5514,7 +5542,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.dateCellTouchStartDate = null;
     this.lastDateCellTouchDate = null;
 
-    const newDate = addMonths(this.currentDate, delta);
+    // Calculate from the 1st of the month to avoid skipping months when current date is 31st (e.g., Jan 31 + 1m -> Mar)
+    const currentMonthStart = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
+    const newDate = addMonths(currentMonthStart, delta);
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
     this._currentYear = newDate.getFullYear();

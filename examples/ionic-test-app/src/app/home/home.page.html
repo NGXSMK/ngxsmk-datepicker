@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      NGXSMK Datepicker Test
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">NGXSMK Datepicker Test</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="ion-padding">
+    <h2>Mobile Mode Tests</h2>
+
+    <ion-list>
+      <!-- Bottom Sheet Test -->
+      <ion-item>
+        <ion-label>
+          <h3>Bottom Sheet</h3>
+          <p>Should slide up from bottom</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ngxsmk-datepicker
+          [(ngModel)]="date1"
+          mode="single"
+          [autoDetectMobile]="true"
+          mobileModalStyle="bottom-sheet"
+          placeholder="Select Date (Bottom Sheet)">
+        </ngxsmk-datepicker>
+      </ion-item>
+
+      <!-- Center Modal Test -->
+      <ion-item>
+        <ion-label>
+          <h3>Center Modal</h3>
+          <p>Should appear in center</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ngxsmk-datepicker
+          [(ngModel)]="date2"
+          mode="single"
+          [autoDetectMobile]="true"
+          mobileModalStyle="center"
+          placeholder="Select Date (Center)">
+        </ngxsmk-datepicker>
+      </ion-item>
+
+      <!-- Fullscreen Test -->
+      <ion-item>
+        <ion-label>
+          <h3>Fullscreen</h3>
+          <p>Should cover entire screen</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ngxsmk-datepicker
+          [(ngModel)]="date3"
+          mode="range"
+          [autoDetectMobile]="true"
+          mobileModalStyle="fullscreen"
+          placeholder="Select Range (Fullscreen)">
+        </ngxsmk-datepicker>
+      </ion-item>
+
+      <!-- Inline Test -->
+      <ion-item>
+        <ion-label>
+          <h3>Inline Mode</h3>
+          <p>Embedded in page</p>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <ngxsmk-datepicker
+          [(ngModel)]="date4"
+          mode="single"
+          [inline]="true">
+        </ngxsmk-datepicker>
+      </ion-item>
+    </ion-list>
+    
+    <div style="margin-top: 20px;">
+      <p><strong>Selected Date 1:</strong> {{ date1 | date }}</p>
+      <p><strong>Selected Date 2:</strong> {{ date2 | date }}</p>
+      <p><strong>Selected Range:</strong> {{ date3 | json }}</p>
+      <p><strong>Selected Date 4:</strong> {{ date4 | date }}</p>
+    </div>
+  </div>
+</ion-content>

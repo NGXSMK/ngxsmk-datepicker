@@ -54,7 +54,15 @@ import { CustomSelectComponent } from './custom-select.component';
         </button>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .month-select {
+      flex: 1.5;
+    }
+    .year-select {
+      flex: 1;
+    }
+  `]
 })
 /**
  * The header section of the calendar, containing navigation and selection controls.

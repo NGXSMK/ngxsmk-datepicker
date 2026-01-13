@@ -81,7 +81,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       border: 1.5px solid var(--datepicker-border-color, #e5e7eb); 
       color: var(--datepicker-text-color, #1f2937);
       border-radius: 8px; 
-      padding: 8px 12px; 
+      padding: 8px 16px; 
       font-size: 14px; 
       text-align: left; 
       height: 38px;
@@ -170,6 +170,8 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     .ngxsmk-options-panel {
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
     
     .ngxsmk-options-panel ul { 
@@ -198,19 +200,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       font-weight: 600;
     }
     .ngxsmk-options-panel::-webkit-scrollbar {
-      width: 6px;
+      display: none;
     }
-    .ngxsmk-options-panel::-webkit-scrollbar-track {
-      background: var(--datepicker-hover-background, #f3f4f6);
-      border-radius: 4px;
-    }
-    .ngxsmk-options-panel::-webkit-scrollbar-thumb {
-      background: var(--datepicker-subtle-text-color, #9ca3af);
-      border-radius: 4px;
-    }
-    .ngxsmk-options-panel::-webkit-scrollbar-thumb:hover {
-      background: var(--datepicker-text-color, #6b7280);
-    }
+
   `],
 })
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {

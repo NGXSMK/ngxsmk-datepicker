@@ -66,10 +66,19 @@ function safeIsSignal(value: unknown): value is Signal<unknown> {
   return false;
 }
 
+export interface ValidationError {
+  kind: string;
+  message?: string;
+}
+
 export type SignalFormField = ({
   value?: DatepickerValue | (() => DatepickerValue) | { (): DatepickerValue } | Signal<DatepickerValue>;
   disabled?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   required?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
+  errors?: ValidationError[] | (() => ValidationError[]) | { (): ValidationError[] } | Signal<ValidationError[]>;
+  valid?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
+  invalid?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
+  touched?: boolean | (() => boolean) | { (): boolean } | Signal<boolean>;
   setValue?: (value: DatepickerValue) => void;
   updateValue?: (updater: () => DatepickerValue) => void;
   markAsDirty?: () => void;
@@ -81,6 +90,7 @@ export interface FieldSyncCallbacks {
   onValueChanged: (value: DatepickerValue) => void;
   onDisabledChanged: (disabled: boolean) => void;
   onRequiredChanged?: (required: boolean) => void;
+  onErrorStateChanged?: (hasError: boolean) => void;
   onSyncError: (error: unknown) => void;
   normalizeValue: (value: unknown) => DatepickerValue;
   isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => boolean;
@@ -178,7 +188,7 @@ export class FieldSyncService {
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
    */
   private readDisabledState(field: SignalFormField): boolean {
-    if (!field || typeof field !== 'object') {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
 
@@ -216,16 +226,68 @@ export class FieldSyncService {
   }
 
   /**
+   * Helper function to safely read validation errors from Angular Signal Forms
+   * Returns the errors array from the field's errors signal
+   */
+  private readFieldErrors(field: SignalFormField): ValidationError[] {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
+      return [];
+    }
+
+    try {
+      if ('errors' in field && field.errors !== undefined) {
+        const errorsVal = field.errors;
+
+        // Check for Angular Signal
+        if (safeIsSignal(errorsVal)) {
+          const result = errorsVal();
+          return Array.isArray(result) ? result : [];
+        }
+
+        if (typeof errorsVal === 'function') {
+          const result = (errorsVal as () => ValidationError[])();
+          return Array.isArray(result) ? result : [];
+        }
+
+        // Handle signals detected as objects
+        if (typeof errorsVal === 'object' && errorsVal !== null) {
+          try {
+            const result = (errorsVal as unknown as { (): ValidationError[] })();
+            return Array.isArray(result) ? result : [];
+          } catch {
+            return Array.isArray(errorsVal) ? errorsVal : [];
+          }
+        }
+
+        return Array.isArray(errorsVal) ? errorsVal : [];
+      }
+
+      return [];
+    } catch {
+      return [];
+    }
+  }
+
+  /**
    * Helper function to safely read required state
    * Handles both direct values, functions, and signals (Angular 21 Signal Forms)
+   * Also checks for 'required' validation errors in Angular Signal Forms
    */
   private readRequiredState(field: SignalFormField): boolean {
-    if (!field || typeof field !== 'object') {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
       return false;
     }
 
     try {
-      // Check required property first
+      // First, check for 'required' validation error in Angular Signal Forms
+      // This handles schema-based validation like required(p.dateDue)
+      const errors = this.readFieldErrors(field);
+      const hasRequiredError = errors.some(error => error.kind === 'required');
+      if (hasRequiredError) {
+        return true;
+      }
+
+      // Check required property (for direct required attribute)
       if ('required' in field && field.required !== undefined) {
         const requiredVal = field.required;
 
@@ -251,6 +313,47 @@ export class FieldSyncService {
       }
 
       return false;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Helper function to determine if the field has validation errors
+   * Used to set the error state on the datepicker component
+   */
+  private hasValidationErrors(field: SignalFormField): boolean {
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) {
+      return false;
+    }
+
+    try {
+      // Check invalid signal first (Angular Signal Forms)
+      if ('invalid' in field && field.invalid !== undefined) {
+        const invalidVal = field.invalid;
+
+        if (safeIsSignal(invalidVal)) {
+          return !!invalidVal();
+        }
+
+        if (typeof invalidVal === 'function') {
+          return !!(invalidVal as () => boolean)();
+        }
+
+        if (typeof invalidVal === 'object' && invalidVal !== null) {
+          try {
+            return !!(invalidVal as unknown as { (): boolean })();
+          } catch {
+            return !!invalidVal;
+          }
+        }
+
+        return !!invalidVal;
+      }
+
+      // Fallback: check if errors array has any errors
+      const errors = this.readFieldErrors(field);
+      return errors.length > 0;
     } catch {
       return false;
     }
@@ -374,6 +477,10 @@ export class FieldSyncService {
         // Always update required state
         const required = this.readRequiredState(field);
         callbacks.onRequiredChanged?.(required);
+
+        // Always update error state (for Angular Signal Forms validation)
+        const hasError = this.hasValidationErrors(field);
+        callbacks.onErrorStateChanged?.(hasError);
       }));
 
       this._fieldEffectRef = effectRef;
@@ -392,7 +499,7 @@ export class FieldSyncService {
   }
 
   syncFieldValue(field: SignalFormField, callbacks: FieldSyncCallbacks): boolean {
-    if (!field || typeof field !== 'object') return false;
+    if (!field || (typeof field !== 'object' && typeof field !== 'function')) return false;
 
     const fieldValue = this.readFieldValue(field);
     const normalizedValue = callbacks.normalizeValue(fieldValue);
@@ -416,6 +523,9 @@ export class FieldSyncService {
 
       const required = this.readRequiredState(field);
       callbacks.onRequiredChanged?.(required);
+
+      const hasError = this.hasValidationErrors(field);
+      callbacks.onErrorStateChanged?.(hasError);
       return true;
     }
 
@@ -429,6 +539,9 @@ export class FieldSyncService {
 
     const required = this.readRequiredState(field);
     callbacks.onRequiredChanged?.(required);
+
+    const hasError = this.hasValidationErrors(field);
+    callbacks.onErrorStateChanged?.(hasError);
     return false;
   }
 

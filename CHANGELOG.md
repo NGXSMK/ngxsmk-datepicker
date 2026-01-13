@@ -5,9 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.28] - 2026-01-13
+## [1.9.29] - 2026-01-13
 
 ### Added
+- **Angular Signal Forms Validation Support**: Full support for schema-based validation with Angular 21+ Signal Forms
+  - Automatically detects and responds to validation errors from the field's `errors()` signal
+  - Recognizes `required` validation from schema (e.g., `required(p.dateDue)`)
+  - Updates component's `errorState` based on field's `invalid()` signal
+  - Reactive updates when validation state changes
+  - Resolves [#136](https://github.com/NGXSMK/ngxsmk-datepicker/issues/136) - "datepicker doesn't recognise 'required' attribute in schema"
+- **Validation Error Types**: Added `ValidationError` interface to support Angular Signal Forms error structure
+- **Error State Callback**: Added `onErrorStateChanged` callback to `FieldSyncCallbacks` for validation state tracking
+- **Comprehensive Documentation**: Added `docs/SIGNAL_FORMS_VALIDATION.md` with usage examples, API reference, and migration guide
+- **Test Coverage**: Added comprehensive test suite in `signal-forms-validation.spec.ts` for validation scenarios
 - **Input Attributes Support**: Added support for standard input attributes on the datepicker input element
   - `inputId`: Custom ID support (defaults to component unique ID)
   - `name`: Form name attribute support
@@ -15,10 +25,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `aria-invalid`: Accessibility support for invalid state visibility
 - **Keyboard Shortcuts Help Dialog**: Added a built-in help dialog for keyboard shortcuts, accessible via `?` or `Shift + /`.
 - **New Shortcut**: Added `?` keyboard shortcut to toggle the help dialog.
-- **Required Attribute Fix**: Fixed issue where `required` attribute from schema was not properly reflected on the input
+
+### Enhanced
+- **Field Sync Service**: Enhanced with new helper methods
+  - `readFieldErrors()`: Reads validation errors from field's `errors` signal
+  - `readRequiredState()`: Checks for required validation in errors or direct property (prioritizes schema validation)
+  - `hasValidationErrors()`: Determines if field has any validation errors
+- **Backward Compatibility**: Maintains full compatibility with:
+  - Direct `required` attribute: `<ngxsmk-datepicker required>`
+  - Reactive Forms: `<ngxsmk-datepicker [formControl]="dateControl">`
+  - Template-driven forms: `<ngxsmk-datepicker [(ngModel)]="date">`
+  - Direct `required` property on field: `field.required = true`
+
+### Fixed
+- **Header Layout**: Fixed CSS issue where the datepicker header width was not spanning the full container width, ensuring consistent layout across all screen sizes.
+- **Angular Signal Forms Schema Validation**: Fixed issue where `required` attribute from schema was not properly reflected on the input and form validation
+- **Month Navigation**: Fixed a critical bug where navigating to the next month would skip a month (e.g., Jan -> Mar) if the current date was the 31st (due to JS Date overflow). Navigation now correctly calculates from the start of the month.
+- **Signal Forms Integration**: Critical fix for `[field]` binding where Signal fields (passed as functions) were being ignored, preventing validation metadata (like `.required`) from being read.
+- **Range Navigation**: Fixed usability issue where selecting an end date in a different month would unexpectedly reset the calendar view back to the start date's month, causing confusion.
+- **Field Sync Service**: Updated `readRequiredState` and `readDisabledState` to correctly process function-type fields (Signals).
 
 ### Changed
-- **Version Update**: Updated to version 1.9.28
+- **Version Update**: Updated to version 1.9.29
 
 ## [1.9.27] - 2026-01-10
 

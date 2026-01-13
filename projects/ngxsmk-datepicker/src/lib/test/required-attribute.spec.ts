@@ -73,4 +73,25 @@ describe('NgxsmkDatepickerComponent Required Attribute', () => {
             expect(input.required).toBe(true);
         }
     }));
+
+    it('should handle field as a function (Signal) with required metadata', fakeAsync(() => {
+        // Simulate a Signal (function) that also has 'required' property attached
+        const signalFn = () => null;
+        Object.assign(signalFn, {
+            required: true,
+            setValue: (val: any) => { }
+        });
+
+        component.field = signalFn as unknown as SignalFormField;
+        fixture.detectChanges();
+        tick(100);
+        fixture.detectChanges();
+
+        expect(component.required).toBe(true);
+        const inputDebug = fixture.debugElement.query(By.css('.ngxsmk-display-input'));
+        if (inputDebug) {
+            const input = inputDebug.nativeElement as HTMLInputElement;
+            expect(input.required).toBe(true);
+        }
+    }));
 });
