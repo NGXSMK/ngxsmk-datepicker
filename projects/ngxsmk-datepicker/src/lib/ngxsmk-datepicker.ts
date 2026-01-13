@@ -779,6 +779,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           onRequiredChanged: (required: boolean) => {
             this.required = required;
           },
+          onErrorStateChanged: (hasError: boolean) => {
+            this.errorState = hasError;
+          },
           onSyncError: (_error: unknown) => {
           },
           normalizeValue: (value: unknown) => {
@@ -823,6 +826,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       },
       onRequiredChanged: (required: boolean) => {
         this.required = required;
+      },
+      onErrorStateChanged: (hasError: boolean) => {
+        this.errorState = hasError;
       },
       onSyncError: (_error: unknown) => {
       },

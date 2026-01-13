@@ -5,7 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
-/examples
+# /examples - Commented out to allow test projects for issue reproduction
 
 # Node
 /node_modules
