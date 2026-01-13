@@ -673,6 +673,7 @@ The datepicker supports full keyboard navigation for accessibility:
 - **N**: Select tomorrow
 - **W**: Select next week (7 days from today)
 - **Tab**: Navigate between interactive elements
+- **?** (Shift + /): Toggle keyboard shortcuts help dialog
 
 ### Custom Keyboard Shortcuts
 
