@@ -5,7 +5,6 @@ This document provides migration instructions for upgrading between major versio
 ## Table of Contents
 
 - [v1.9.29 → v1.9.30](#v1929---v1930)
-- [v1.9.30 → v1.9.31](#v1930---v1931)
 - [v1.9.27 → v1.9.28](#v1927---v1928)
 - [v1.9.26 → v1.9.27](#v1926---v1927)
 - [v1.9.25 → v1.9.26](#v1925---v1926)
