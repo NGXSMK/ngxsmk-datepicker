@@ -1,51 +1,56 @@
-name: Deploy Demo App
+name: Deploy Demo App to GitHub Pages
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'projects/demo-app/**'
-      - 'projects/ngxsmk-datepicker/**'
-      - 'package.json'
-      - 'angular.json'
+      - master
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Build Demo App
+      - name: Build demo app
         run: npm run build:demo
 
-      - name: Create 404 and .nojekyll
-        run: |
-          cp dist/demo-app/browser/index.html dist/demo-app/browser/404.html
-          touch dist/demo-app/browser/.nojekyll
-          # Create the directory structure for GitHub Pages
-          mkdir -p deploy/ngxsmk-datepicker
-          # Copy all files to the subdirectory
-          rsync -av dist/demo-app/browser/ deploy/ngxsmk-datepicker/
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: deploy
-          branch: gh-pages
-          clean: true
+          path: './dist/demo-app/browser'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
