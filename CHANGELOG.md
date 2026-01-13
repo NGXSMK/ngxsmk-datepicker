@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Month Navigation**: Fixed a critical bug where navigating to the next month would skip a month (e.g., Jan -> Mar) if the current date was the 31st (due to JS Date overflow). Navigation now correctly calculates from the start of the month.
 - **Signal Forms Integration**: Critical fix for `[field]` binding where Signal fields (passed as functions) were being ignored, preventing validation metadata (like `.required`) from being read.
 - **Range Navigation**: Fixed usability issue where selecting an end date in a different month would unexpectedly reset the calendar view back to the start date's month, causing confusion.
+- **UI Styling**: Enhanced the appearance of month/year select dropdowns by adding a separator border to the dropdown icon and improving text truncation.
 - **Field Sync Service**: Updated `readRequiredState` and `readDisabledState` to correctly process function-type fields (Signals).
 
 ### Changed

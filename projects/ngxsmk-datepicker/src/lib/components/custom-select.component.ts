@@ -110,14 +110,25 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       cursor: not-allowed;
       opacity: 0.6;
     }
+    .ngxsmk-select-display > span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+      text-align: inherit;
+    }
     .ngxsmk-arrow-icon { 
       width: 14px; 
       height: 14px; 
-      margin-left: 8px; 
+      margin-left: 10px; 
+      padding-left: 10px;
+      border-left: 1px solid var(--datepicker-border-color, #e5e7eb);
       transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform;
       backface-visibility: hidden;
       flex-shrink: 0;
+      box-sizing: content-box; /* Ensure padding doesn't shrink the icon content width */
     }
     .ngxsmk-select-container.is-open .ngxsmk-arrow-icon {
       transform: rotate(180deg);
