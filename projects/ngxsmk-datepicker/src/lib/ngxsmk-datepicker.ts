@@ -5514,7 +5514,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.dateCellTouchStartDate = null;
     this.lastDateCellTouchDate = null;
 
-    const newDate = addMonths(this.currentDate, delta);
+    // Calculate from the 1st of the month to avoid skipping months when current date is 31st (e.g., Jan 31 + 1m -> Mar)
+    const currentMonthStart = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
+    const newDate = addMonths(currentMonthStart, delta);
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
     this._currentYear = newDate.getFullYear();

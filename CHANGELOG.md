@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.9.29] - 2026-01-13
+## [1.9.30] - 2026-01-13
+
+### Fixed
+- **Month Navigation**: Fixed a critical bug where navigating to the next month would skip a month (e.g., Jan -> Mar) if the current date was the 31st (due to JS Date overflow). Navigation now correctly calculates from the start of the month.
 
 ### Fixed
 - **Signal Forms Integration**: Critical fix for `[field]` binding where Signal fields (passed as functions) were being ignored, preventing validation metadata (like `.required`) from being read.
