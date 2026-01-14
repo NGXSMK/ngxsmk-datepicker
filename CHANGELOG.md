@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2026-01-14
+
+### Patch Changes
+
+- **Version Update**: Updated to version 2.0.3
+- **Code Cleanup**: Removed unnecessary comments from `field-sync.service.ts` to improve code readability and maintainability.
+- **Bug Fixed**: Verified fixes for issues #136, #112, #84, and #71.
+- **TypeScript Compatibility**: Fixed `SignalFormField` and `SignalFormFieldConfig` types to be fully compatible with Angular 21+ `FieldTree<string | Date | null, string>` structure. The types now accept `WritableSignal<string | Date | null>` from Angular's Signal Forms, resolving TypeScript compilation errors when using `[field]` binding.
+
 ## [2.0.2] - 2026-01-14
 
 ### Patch Changes

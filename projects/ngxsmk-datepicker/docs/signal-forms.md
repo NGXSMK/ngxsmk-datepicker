@@ -113,7 +113,7 @@ export class TwoWayComponent {
 }
 ```
 
-### Signal Field Resolution (v2.0.2+)
+### Signal Field Resolution (v2.0.3+)
 
 The datepicker includes a robust resolution mechanism for signal-based fields. It can handle:
 - **Direct Signals**: A signal that contains the field configuration.
@@ -135,6 +135,15 @@ const config: SignalFormFieldConfig = {
   required: true
 };
 ```
+
+**TypeScript Compatibility (v2.0.3+):**
+
+The datepicker is fully compatible with Angular 21+ `FieldTree<string | Date | null, string>` structure. The types accept:
+- `WritableSignal<Date | null>` for date values
+- `WritableSignal<string | null>` for string date values (automatically converted to Date)
+- Any Angular Signal Forms field configuration
+
+String values from Signal Forms are automatically normalized to Date objects internally, ensuring seamless integration with Angular 21+ forms.
 
 ## Dirty State Tracking
 
