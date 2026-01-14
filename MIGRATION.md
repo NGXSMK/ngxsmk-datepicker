@@ -46,6 +46,7 @@ This document provides migration instructions for upgrading between major versio
 
 ### Changes
 
+- **Documentation**: Added "Form Validation" section to clarify `readonly` input behavior and `allowTyping` workaround.
 - General updates and improvements.
 - No breaking changes.
 

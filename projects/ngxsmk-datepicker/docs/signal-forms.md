@@ -321,6 +321,13 @@ export class ValidatedFormComponent {
 }
 ```
 
+### Note on Native Validation
+By default, the datepicker input is `readonly`. Browsers do not validate `readonly` fields. To enable native browser validation (e.g., blocking submit on empty required fields), set `[allowTyping]="true"`.
+
+```html
+<ngxsmk-datepicker [field]="myForm.date" [allowTyping]="true" required ...></ngxsmk-datepicker>
+```
+
 ## Date Range Forms
 
 For date range selection:

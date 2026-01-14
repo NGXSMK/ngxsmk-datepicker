@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Patch Changes
 
 - **Version Update**: Updated to version 2.0.5
+- **Documentation**: Added comprehensive "Form Validation" section to README to explain `readonly` input behavior and provide solutions for native browser validation (e.g., using `allowTyping="true"`).
 
 
 ## [2.0.4] - 2026-01-14

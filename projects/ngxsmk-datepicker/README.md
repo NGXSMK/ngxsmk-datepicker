@@ -488,6 +488,26 @@ export class PlainFormComponent {
 </form>
 ```
 
+### **Form Validation**
+
+By default, the datepicker input is `readonly` to prevent invalid date strings and force selection via the calendar. However, **browsers do not validate `readonly` fields** during native form submission.
+
+**Behavior:**
+- Native browser validation (e.g., blocking submit on `required` fields) will **NOT** trigger on the datepicker by default.
+- Custom validation (e.g., Angular validators) works normally but often only shows errors after the control is "touched".
+
+**Solutions:**
+
+1. **Enable Typing (Recommended for Native Validation):**
+   Set `[allowTyping]="true"` to make the input standard editable field. This enables native browser validation tooltips and submit-blocking.
+   ```html
+   <ngxsmk-datepicker [allowTyping]="true" required ...></ngxsmk-datepicker>
+   ```
+
+2. **Custom Validation Logic:**
+   If you prefer the readonly behavior, ensure your form submission handler explicitly checks `form.invalid` before proceeding, as the browser won't stop the submit button click.
+
+
 ## **⚙️ API Reference**
 
 ### **Inputs**
