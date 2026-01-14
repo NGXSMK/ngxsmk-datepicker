@@ -323,7 +323,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public signalDate = signal<DatepickerValue>(null);
 
   /**
-   * Mock Signal Form Field (v2.0.3+)
+   * Mock Signal Form Field (v2.0.4+)
    * Demonstrates a signal that has field properties attached to it.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
