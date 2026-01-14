@@ -526,6 +526,8 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
+| allowTyping    | boolean                                            | false                 | Enable manual typing in the input field. Required for native validation. | `[allowTyping]="true"` |
+| displayFormat  | string                                             | null                  | Custom date format string (e.g., 'MM/DD/YYYY'). | `displayFormat="DD.MM.YYYY"` |
 | showCalendarButton | boolean                                        | false                 | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |
