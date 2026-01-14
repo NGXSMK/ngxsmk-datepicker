@@ -113,7 +113,7 @@ export class TwoWayComponent {
 }
 ```
 
-### Signal Field Resolution (v2.0.0+)
+### Signal Field Resolution (v2.0.1+)
 
 The datepicker includes a robust resolution mechanism for signal-based fields. It can handle:
 - **Direct Signals**: A signal that contains the field configuration.
