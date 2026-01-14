@@ -58,6 +58,7 @@ export type SignalFormFieldConfig = {
   setValue?: (value: DatepickerValue | string) => void;
   updateValue?: (updater: () => DatepickerValue | string) => void;
   markAsDirty?: () => void;
+  markAsTouched?: () => void;
 };
 
 // Angular 21+ FieldTree compatibility - accepts any structure
@@ -579,6 +580,21 @@ export class FieldSyncService {
 
   getLastKnownValue(): DatepickerValue | undefined {
     return this._lastKnownFieldValue;
+  }
+
+  markAsTouched(fieldInput: SignalFormField | Signal<SignalFormField> | (() => unknown) | unknown): void {
+    const field = this.resolveField(fieldInput);
+    if (!field || typeof field !== 'object') {
+      return;
+    }
+
+    try {
+      if (typeof field.markAsTouched === 'function') {
+        field.markAsTouched();
+      }
+    } catch {
+      // Ignore errors when marking as touched
+    }
   }
 
   cleanup(): void {

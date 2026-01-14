@@ -2707,6 +2707,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.valueChange.emit(normalizedVal);
     this.onChange(normalizedVal);
     this.onTouched();
+    if (this._field) {
+      this.fieldSyncService.markAsTouched(this._field);
+    }
 
     if (!this.isInlineMode && val !== null && !this.timeOnly) {
       if (this.mode === 'single' || (this.mode === 'range' && this.startDate && this.endDate)) {
@@ -4110,6 +4113,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._focused = false;
       this.stateChanges.next();
       this.onTouched();
+      if (this._field) {
+        this.fieldSyncService.markAsTouched(this._field);
+      }
     }
 
     if (!this.allowTyping) return;
