@@ -16,16 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced timezone handling
 - **Documentation**: Updated all documentation to reflect new version
 
-## [1.9.30] - 2026-01-13
-
-### Fixed
-- **Field Sync Logic**: Fixed critical issue where Signal fields (passed as functions) were not correctly resolved if they also contained validation metadata properties.
-- **Signal Forms Resolution**: Improved `resolveField` to handle Signals that are themselves field configurations (Angular Signal Forms pattern).
-- **Callback Synchronization**: Fixed issue where `onDisabledChanged`, `onRequiredChanged`, and `onErrorStateChanged` were not properly triggering component state changes in some edge cases.
-
-### Changed
-- **Public API**: Exported `SignalFormFieldConfig` interface to improve type safety for consumers.
-- **Version Update**: Updated to version 1.9.30 (previous stable)
 
 ## [1.9.29] - 2026-01-13
 
