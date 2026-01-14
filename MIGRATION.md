@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v1.9.30 → v2.0.0](#v1930---v200)
 - [v1.9.29 → v1.9.30](#v1929---v1930)
 - [v1.9.27 → v1.9.28](#v1927---v1928)
 - [v1.9.26 → v1.9.27](#v1926---v1927)
@@ -36,6 +37,21 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## v1.9.30 → v2.0.0
+
+### Breaking Changes
+
+This is a major version update with the following breaking changes:
+
+- Updated minimum Angular version requirement to 17.0.0
+- Improved Signal Forms integration
+- Enhanced timezone handling
+- Updated documentation and examples
+
+### Migration Steps
+
+No specific migration steps are required for this update.
+
 ## v1.9.29 → v1.9.30
 
 ### Installation
@@ -43,7 +59,7 @@ This document provides migration instructions for upgrading between major versio
 Update to the latest version:
 
 ```bash
-npm install ngxsmk-datepicker@1.9.30
+npm install ngxsmk-datepicker@2.0.0
 ```
 
 ### Changes
@@ -53,6 +69,10 @@ npm install ngxsmk-datepicker@1.9.30
 - **Public API**: Exported `SignalFormFieldConfig` for better type safety.
 
 ### Breaking Changes
+
+None in v2.0.0.
+
+### v1.9.30
 
 None in v1.9.30.
 
