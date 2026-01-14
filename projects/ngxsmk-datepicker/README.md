@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `2.0.2` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `2.0.3` is the current stable release. For production use, install the latest version from npm.
 > 
 > ⚠️ **Warning**: Version `1.9.26` contains broken styles. If you are using `1.9.26`, please upgrade to `1.9.28` or downgrade to `1.9.25` immediately.
 
@@ -127,7 +127,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker  
+    npm install ngxsmk-datepicker@2.0.3  
 
 ## **Usage**
 
