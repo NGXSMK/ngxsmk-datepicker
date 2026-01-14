@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.0.1 → v2.0.2](#v201---v202)
 - [v2.0.0 → v2.0.1](#v200---v201)
 - [v1.9.30 → v2.0.0](#v1930---v200)
 - [v1.9.29 → v1.9.30](#v1929---v1930)
@@ -37,6 +38,12 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.0.1 → v2.0.2
+
+### Changes
+
+- Documentation updates to reflect new version
 
 ## v2.0.0 → v2.0.1
 

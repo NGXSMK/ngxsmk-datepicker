@@ -2180,7 +2180,7 @@ type DateInput =
 ```
 
 
-### SignalFormField (v2.0.1+)
+### SignalFormField (v2.0.2+)
 
 **Status**: Stable
 
@@ -2190,7 +2190,7 @@ Type representing a signal-based form field.
 type SignalFormField = any; // Compatible with Angular 21 FieldTree
 ```
 
-### SignalFormFieldConfig (v2.0.1+)
+### SignalFormFieldConfig (v2.0.2+)
 
 **Status**: Stable
 
