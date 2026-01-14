@@ -43,7 +43,7 @@ This document provides migration instructions for upgrading between major versio
 Update to the latest version:
 
 ```bash
-npm install ngxsmk-datepicker@1.9.31
+npm install ngxsmk-datepicker@1.9.30
 ```
 
 ### Changes
@@ -54,7 +54,7 @@ npm install ngxsmk-datepicker@1.9.31
 
 ### Breaking Changes
 
-None in v1.9.31.
+None in v1.9.30.
 
 ### Migration Steps
 
