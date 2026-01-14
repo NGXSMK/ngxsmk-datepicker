@@ -2,7 +2,7 @@
 
 ## Overview
 
-Starting from version 1.9.30, `ngxsmk-datepicker` fully supports Angular 21's Signal Forms validation, including schema-based validation with the `required()` function and other validators.
+Starting from version 2.0.0, `ngxsmk-datepicker` fully supports Angular 21's Signal Forms validation, including schema-based validation with the `required()` function and other validators.
 
 ## Issue Reference
 
