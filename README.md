@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `2.0.4` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `2.0.5` is the current stable release. For production use, install the latest version from npm.
 > 
 > ⚠️ **Warning**: Version `1.9.26` contains broken styles. If you are using `1.9.26`, please upgrade to `1.9.28` or downgrade to `1.9.25` immediately.
 
@@ -33,6 +33,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 ## **✨ Features**
 
 * **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
+* **Smart Range Reselection**: Clicking the start date again after selecting a complete range clears only the end date, allowing quick range adjustments without clearing the entire selection.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
 * **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
@@ -126,7 +127,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.0.4
+npm install ngxsmk-datepicker@2.0.5
 ```
 
 ## **Usage**
@@ -487,6 +488,26 @@ export class PlainFormComponent {
   </div>
 </form>
 ```
+
+### **Form Validation**
+
+By default, the datepicker input is `readonly` to prevent invalid date strings and force selection via the calendar. However, **browsers do not validate `readonly` fields** during native form submission.
+
+**Behavior:**
+- Native browser validation (e.g., blocking submit on `required` fields) will **NOT** trigger on the datepicker by default.
+- Custom validation (e.g., Angular validators) works normally but often only shows errors after the control is "touched".
+
+**Solutions:**
+
+1. **Enable Typing (Recommended for Native Validation):**
+   Set `[allowTyping]="true"` to make the input standard editable field. This enables native browser validation tooltips and submit-blocking.
+   ```html
+   <ngxsmk-datepicker [allowTyping]="true" required ...></ngxsmk-datepicker>
+   ```
+
+2. **Custom Validation Logic:**
+   If you prefer the readonly behavior, ensure your form submission handler explicitly checks `form.invalid` before proceeding, as the browser won't stop the submit button click.
+
 
 ## **⚙️ API Reference**
 

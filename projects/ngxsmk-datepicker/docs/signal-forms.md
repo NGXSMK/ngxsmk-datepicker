@@ -113,7 +113,7 @@ export class TwoWayComponent {
 }
 ```
 
-### Signal Field Resolution (v2.0.3+)
+### Signal Field Resolution (v2.0.5+)
 
 The datepicker includes a robust resolution mechanism for signal-based fields. It can handle:
 - **Direct Signals**: A signal that contains the field configuration.
@@ -136,7 +136,7 @@ const config: SignalFormFieldConfig = {
 };
 ```
 
-**TypeScript Compatibility (v2.0.3+):**
+**TypeScript Compatibility (v2.0.5+):**
 
 The datepicker is fully compatible with Angular 21+ `FieldTree<string | Date | null, string>` structure. The types accept:
 - `WritableSignal<Date | null>` for date values
@@ -319,6 +319,13 @@ export class ValidatedFormComponent {
   // The datepicker will automatically reflect the disabled state
   // when the field is invalid or disabled
 }
+```
+
+### Note on Native Validation
+By default, the datepicker input is `readonly`. Browsers do not validate `readonly` fields. To enable native browser validation (e.g., blocking submit on empty required fields), set `[allowTyping]="true"`.
+
+```html
+<ngxsmk-datepicker [field]="myForm.date" [allowTyping]="true" required ...></ngxsmk-datepicker>
 ```
 
 ## Date Range Forms

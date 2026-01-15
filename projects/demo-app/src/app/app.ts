@@ -319,11 +319,13 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public multiCalendarConfigurable: DatepickerValue = null;
   public calendarCountSlider: number = 2;
   public calendarLayoutSlider: 'horizontal' | 'vertical' | 'auto' = 'auto';
+  public mobilePlaygroundValue: DatepickerValue = null;
+
 
   public signalDate = signal<DatepickerValue>(null);
 
   /**
-   * Mock Signal Form Field (v2.0.3+)
+   * Mock Signal Form Field (v2.0.5+)
    * Demonstrates a signal that has field properties attached to it.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

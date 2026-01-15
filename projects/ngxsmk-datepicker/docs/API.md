@@ -55,6 +55,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `inline` | `boolean \| 'always' \| 'auto'` | `false` | Stable | Inline display mode | `[inline]="true"` or `inline="auto"` |
 | `showTime` | `boolean` | `false` | Stable | Show time selection | `[showTime]="true"` |
 | `timeOnly` | `boolean` | `false` | Stable | Display time picker only (no calendar). Automatically enables `showTime`. | `[timeOnly]="true"` |
+| `allowTyping` | `boolean` | `false` | Stable | Enable manual typing in the input field. Required for native validation. | `[allowTyping]="true"` |
+| `displayFormat` | `string` | `null` | Stable | Custom date format string (e.g., 'MM/DD/YYYY'). | `displayFormat="DD.MM.YYYY"` |
 | `showCalendarButton` | `boolean` | `true` | Stable | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. | `[showCalendarButton]="false"` |
 | `minuteInterval` | `number` | `1` | Stable | Minute selection interval | `[minuteInterval]="15"` |
 | `showRanges` | `boolean` | `true` | Stable | Show predefined ranges (range mode) | `[showRanges]="true"` |
@@ -2180,7 +2182,7 @@ type DateInput =
 ```
 
 
-### SignalFormField (v2.0.3+)
+### SignalFormField (v2.0.5+)
 
 **Status**: Stable
 
@@ -2190,7 +2192,7 @@ Type representing a signal-based form field.
 type SignalFormField = any; // Compatible with Angular 21 FieldTree
 ```
 
-### SignalFormFieldConfig (v2.0.3+)
+### SignalFormFieldConfig (v2.0.5+)
 
 **Status**: Stable
 
