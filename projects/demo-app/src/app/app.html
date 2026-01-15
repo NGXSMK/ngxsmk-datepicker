@@ -1577,11 +1577,18 @@
               </div>
             </div>
             <div class="mobile-preview-content">
-              <ngxsmk-datepicker mode="range" [inline]="true" [theme]="currentTheme" [locale]="selectedLocale()">
-              </ngxsmk-datepicker>
+              <ngxsmk-datepicker mode="range" [inline]="true" [theme]="currentTheme" [locale]="selectedLocale()"
+                [(value)]="mobilePlaygroundValue"></ngxsmk-datepicker>
             </div>
           </div>
         </div>
+
+        @if (mobilePlaygroundValue && typeof mobilePlaygroundValue === 'object' && 'start' in mobilePlaygroundValue && 'end' in mobilePlaygroundValue) {
+        <div class="result-box" style="margin-top: 1rem;">
+          <strong>Selected Range:</strong>
+          <code>{{ mobilePlaygroundValue.start | date:'medium' }} - {{ mobilePlaygroundValue.end | date:'medium' }}</code>
+        </div>
+        }
 
         <div class="code-block">
           <div class="code-header">

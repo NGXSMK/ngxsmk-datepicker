@@ -319,6 +319,8 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public multiCalendarConfigurable: DatepickerValue = null;
   public calendarCountSlider: number = 2;
   public calendarLayoutSlider: 'horizontal' | 'vertical' | 'auto' = 'auto';
+  public mobilePlaygroundValue: DatepickerValue = null;
+
 
   public signalDate = signal<DatepickerValue>(null);
 

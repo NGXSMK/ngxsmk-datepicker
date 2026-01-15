@@ -4623,7 +4623,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const dayTime = getStartOfDay(day).getTime();
       const startTime = this.startDate ? getStartOfDay(this.startDate).getTime() : null;
 
-      if (!this.startDate || (this.startDate && this.endDate)) {
+      // Check if clicking on start date when both start and end dates exist
+      if (this.startDate && this.endDate && dayTime === startTime!) {
+        // Clear the end date, keep the start date
+        this.endDate = null;
+        this.hoveredDate = null;
+        this._invalidateMemoCache();
+        // Emit the partial range (start only, no end)
+        this.emitValue({ start: this.startDate as Date, end: null as any });
+        this.scheduleChangeDetection();
+      }
+      else if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
@@ -4639,7 +4649,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.scheduleChangeDetection();
         }
         else if (dayTime === startTime!) {
-          // No action needed when dayTime equals startTime
+          // No action needed when dayTime equals startTime (start date clicked again, no end date selected yet)
         }
         else {
           const potentialEndDate = this.applyTimeIfNeeded(day);

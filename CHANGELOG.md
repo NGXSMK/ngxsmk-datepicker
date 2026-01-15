@@ -5,7 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.5] - 2026-01-14
+## [2.0.5] - 2026-01-15
+
+### Enhanced
+
+- **Range Picker Reselection**: Improved user experience when reselecting date ranges
+  - Clicking the start date again after selecting a complete range now clears only the end date
+  - Allows users to easily redefine the end date without clearing the entire selection
+  - The start date remains selected, and users can immediately choose a new end date
+  - Example: After selecting Jan 19 (start) → Jan 21 (end), clicking Jan 19 again keeps Jan 19 selected and clears Jan 21
+  - Improves usability by reducing clicks needed to adjust date ranges
+
+### Fixed
+
+- **Range Mode Value Emission**: Fixed issue where clicking the start date again after a complete range was selected would update the visual state but not emit the value change
+  - The datepicker now properly emits a partial range value (`{ start: Date, end: null }`) when the end date is cleared
+  - Parent components and form bindings now correctly reflect the cleared end date state
+  - Resolves inconsistency between visual calendar state and bound values
 
 ### Patch Changes
 

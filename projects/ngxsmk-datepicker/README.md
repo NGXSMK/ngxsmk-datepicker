@@ -33,6 +33,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 ## **✨ Features**
 
 * **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
+* **Smart Range Reselection**: Clicking the start date again after selecting a complete range clears only the end date, allowing quick range adjustments without clearing the entire selection.
 * **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
 * **Light and Dark Themes**: Includes built-in support for light and dark modes.
 * **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
