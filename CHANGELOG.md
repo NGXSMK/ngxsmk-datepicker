@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2026-01-15
+
+### Enhanced
+
+- **Range Picker Reselection**: Improved comprehensive range reselection behavior
+  - Clicking the start date when a complete range is selected now clears only the end date
+  - Clicking the end date when a complete range is selected now clears the start date and sets the end date as the new start date
+  - **NEW**: Clicking any date within the selected range now clears the end date and sets the clicked date as the new start date
+  - Allows users to easily redefine date ranges from any point (start, end, or within the range)
+  - Example scenarios:
+    - Range: Jan 10 - Jan 20, Click Jan 10 → Result: Jan 10 (can select new end)
+    - Range: Jan 10 - Jan 20, Click Jan 20 → Result: Jan 20 (can select new end)
+    - Range: Jan 26 - Jan 30, Click Jan 27 → Result: Jan 27 (can select new end)
+  - Improves usability by providing intuitive range adjustment from any direction
+
+### Changed
+
+- **Code Cleanup**: Removed unnecessary inline comments from range selection logic for cleaner, more maintainable code
+- **Version Update**: Updated to version 2.0.6
+
 ## [2.0.5] - 2026-01-15
 
 ### Enhanced
