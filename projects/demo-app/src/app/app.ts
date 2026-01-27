@@ -140,6 +140,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
           { id: 'time-only', label: t.timeOnly, sub: true, keywords: 'time only picker time selection no calendar' },
           { id: 'allow-typing', label: t.editableInputTyping, sub: true, keywords: 'allow typing editable input type date keyboard input mask format' },
           { id: 'custom-format', label: t.customFormat, sub: true, keywords: 'custom format display format date format string MM DD YYYY hh mm' },
+          { id: 'use-24-hour', label: t.use24Hour, sub: true, keywords: '24 hour format military time' },
           { id: 'moment-js-integration', label: t.momentJsIntegration, sub: true, keywords: 'moment js integration custom format fix' },
           { id: 'rtl-support', label: t.rtlSupport, sub: true, keywords: 'rtl right to left arabic hebrew persian urdu mirror' },
           { id: 'translations-i18n', label: t.translationsI18n, sub: true, keywords: 'translations i18n internationalization locale language translation service' },
@@ -325,7 +326,7 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   public signalDate = signal<DatepickerValue>(null);
 
   /**
-   * Mock Signal Form Field (v2.0.6+)
+   * Mock Signal Form Field (v2.0.7+)
    * Demonstrates a signal that has field properties attached to it.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -343,6 +344,14 @@ export class App implements OnInit, OnDestroy, AfterViewInit {
   })();
 
   public momentDateValue = signal<DatepickerValue>(null);
+
+  public use24HourCode = `<ngxsmk-datepicker
+  mode="single"
+  [showTime]="true"
+  [use24Hour]="true"
+  placeholder="Select 24h time">
+</ngxsmk-datepicker>`;
+
   public momentIntegrationTsCode = `import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent, DatepickerValue } from 'ngxsmk-datepicker';
 
@@ -660,6 +669,7 @@ const eventTrackingPlugin: DatepickerHooks = {
     allowTypingISO: new FormControl<DatepickerValue>(null),
     rangeWithTyping: new FormControl<{ start: Date | null; end: Date | null }>({ start: null, end: null }),
     customFormat: new FormControl<DatepickerValue>(null),
+    use24Hour: new FormControl<DatepickerValue>(null),
     rtlDate: new FormControl<DatepickerValue>(null),
     multipleDates: new FormControl<Date[] | null>(null),
     minDateDemo: new FormControl(),

@@ -30,15 +30,20 @@ export function generateYearOptions(currentYear: number, range: number = 10): { 
   return options;
 }
 
-export function generateTimeOptions(minuteInterval: number = 1, secondInterval: number = 1, includeSeconds: boolean = false): {
+export function generateTimeOptions(minuteInterval: number = 1, secondInterval: number = 1, includeSeconds: boolean = false, use24Hour: boolean = false): {
   hourOptions: { label: string; value: number }[];
   minuteOptions: { label: string; value: number }[];
   secondOptions?: { label: string; value: number }[];
 } {
-  const hourOptions = Array.from({ length: 12 }).map((_, i) => ({
-    label: (i + 1).toString().padStart(2, '0'),
-    value: i + 1,
-  }));
+  const hourOptions = use24Hour
+    ? Array.from({ length: 24 }).map((_, i) => ({
+      label: i.toString().padStart(2, '0'),
+      value: i,
+    }))
+    : Array.from({ length: 12 }).map((_, i) => ({
+      label: (i + 1).toString().padStart(2, '0'),
+      value: i + 1,
+    }));
 
   const minuteOptions: { label: string; value: number }[] = [];
   for (let i = 0; i < 60; i += minuteInterval) {

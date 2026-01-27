@@ -33,13 +33,15 @@ import { CustomSelectComponent } from './custom-select.component';
           [disabled]="disabled">
         </ngxsmk-custom-select>
       }
-      <ngxsmk-custom-select
-        class="ampm-select"
-        [options]="ampmOptions"
-        [(value)]="isPm"
-        (valueChange)="isPmChange.emit($any($event)); timeChange.emit()"
-        [disabled]="disabled">
-      </ngxsmk-custom-select>
+      @if (showAmpm) {
+        <ngxsmk-custom-select
+          class="ampm-select"
+          [options]="ampmOptions"
+          [(value)]="isPm"
+          (valueChange)="isPmChange.emit($any($event)); timeChange.emit()"
+          [disabled]="disabled">
+        </ngxsmk-custom-select>
+      }
     </div>
   `
 })
@@ -66,6 +68,7 @@ export class TimeSelectionComponent {
   @Input() disabled: boolean = false;
   @Input() timeLabel: string = 'Time';
   @Input() showSeconds: boolean = false;
+  @Input() showAmpm: boolean = true;
 
   @Output() timeChange = new EventEmitter<void>();
   @Output() currentDisplayHourChange = new EventEmitter<number>();

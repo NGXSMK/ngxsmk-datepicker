@@ -25,7 +25,7 @@
           <div class="logo-content">
             <span class="logo-text">ngxsmk-datepicker</span>
             <div class="logo-meta">
-              <span class="logo-version">v2.0.6</span>
+              <span class="logo-version">v2.0.7</span>
               @if (npmDownloads() !== null) {
               <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank" class="npm-downloads"
                 title="Monthly downloads on npm" rel="noopener noreferrer">
@@ -187,7 +187,7 @@
       <div class="hero-content">
         <h1 class="hero-title">ngxsmk-datepicker</h1>
         <p class="hero-tagline">{{ t().heroTagline }}</p>
-        <p class="hero-version">(v2.0.6)</p>
+        <p class="hero-version">(v2.0.7)</p>
         <p class="hero-description">{{ t().heroDescription }}</p>
         <div class="hero-buttons">
           <a href="#installation" (click)="scrollToSection($event, 'installation')" class="hero-button primary">{{
@@ -528,7 +528,7 @@
           <p class="info-note"><strong>{{ t().note }}</strong> {{ t().thisFeatureRequiresAngular21 }}</p>
 
           <div class="example-demo">
-            <h4 class="subsection-title">Live Demo (v2.0.6+)</h4>
+            <h4 class="subsection-title">Live Demo (v2.0.7+)</h4>
             <p style="margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
               This demo uses a mock Signal Form Field that mimics Angular 21's FieldTree structure.
               The datepicker automatically resolves the value, disabled status, and required state.
@@ -1121,6 +1121,34 @@
           </div>
         </div>
 
+        <div id="use-24-hour" class="example-section">
+          <h3 class="example-title">{{ t().use24Hour }}</h3>
+          <p>Display time in 24-hour format. This automatically sets the time picker format to 24-hour mode.</p>
+
+          <div class="example-demo">
+            <ngxsmk-datepicker mode="single" [showTime]="true" [use24Hour]="true" [theme]="currentTheme"
+              [locale]="selectedLocale()" placeholder="Select 24h time" formControlName="use24Hour">
+            </ngxsmk-datepicker>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-lang">html</span>
+              <button class="code-copy" (click)="copyCode(use24HourCode)">{{ t().copy }}</button>
+            </div>
+            <pre><code [innerHTML]="use24HourCode | code"></code></pre>
+          </div>
+
+          @if (datepickerForm.controls.use24Hour.value) {
+          <div class="result-box">
+            @if (isDate(datepickerForm.controls.use24Hour.value)) {
+            <strong>{{ t().formValue }}</strong>
+            <code>{{ datepickerForm.controls.use24Hour.value | date:'medium' }}</code>
+            }
+          </div>
+          }
+        </div>
+
         <div id="moment-js-integration" class="example-section">
           <h3 class="example-title">{{ t().momentJsIntegrationTitle }}</h3>
           <p>{{ t().momentJsIntegrationDescription }}</p>
@@ -1583,7 +1611,8 @@
           </div>
         </div>
 
-        @if (mobilePlaygroundValue && typeof mobilePlaygroundValue === 'object' && 'start' in mobilePlaygroundValue && 'end' in mobilePlaygroundValue) {
+        @if (mobilePlaygroundValue && typeof mobilePlaygroundValue === 'object' && 'start' in mobilePlaygroundValue &&
+        'end' in mobilePlaygroundValue) {
         <div class="result-box" style="margin-top: 1rem;">
           <strong>Selected Range:</strong>
           <code>{{ mobilePlaygroundValue.start | date:'medium' }} - {{ mobilePlaygroundValue.end | date:'medium' }}</code>

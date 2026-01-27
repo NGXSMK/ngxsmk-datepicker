@@ -7,7 +7,7 @@
 
 **npm i ngxsmk-datepicker**
 
-> **Stable Version**: `2.0.6` is the current stable release. For production use, install the latest version from npm.
+> **Stable Version**: `2.0.7` is the current stable release. For production use, install the latest version from npm.
 > 
 > ⚠️ **Warning**: Version `1.9.26` contains broken styles. If you are using `1.9.26`, please upgrade to `1.9.28` or downgrade to `1.9.25` immediately.
 
@@ -42,7 +42,7 @@ Built with Angular Signals for optimal performance and a clean, declarative API.
 * **Date & Time Selection**: Supports optional time inputs with configurable minute and second intervals.
 * **Seconds Selection**: Optional seconds picker with `showSeconds` input and configurable `secondInterval`.
 * **Time-Only Mode**: Display only time picker without calendar using `[timeOnly]="true"`.
-* **12h/24h Time Support**: Uses internal 24-hour timekeeping but displays a user-friendly **12-hour clock with AM/PM toggle**.
+* **12h/24h Time Support**: Supports both **12-hour clock with AM/PM toggle** and **24-hour military time** (via `use24Hour` input).
 * **Mobile-Native Integration**: Automatic native date picker on mobile devices with `useNativePicker` input.
 * **Mobile Gestures**: Enhanced touch support with double-tap selection, swipe navigation, and haptic feedback.
 * **Mobile Modal Styles**: Bottom sheet, center, and fullscreen modal options for mobile devices.
@@ -127,7 +127,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.0.6
+npm install ngxsmk-datepicker@2.0.7
 ```
 
 ## **Usage**
@@ -527,6 +527,7 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | minuteInterval | number                                             | 1                     | Interval for minute dropdown options.                                                                         |
 | showTime       | boolean                                            | false                 | Enables the hour/minute/AM/PM selection section.                                                              |
 | timeOnly       | boolean                                            | false                 | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
+| use24Hour      | boolean                                            | false                 | Enable 24-hour time format (00-23) and hide AM/PM selector. |
 | showCalendarButton | boolean                                        | false                 | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. |
 | value          | DatepickerValue                                    | null                  | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).            |
 | startAt        | DateInput                                          | null                  | The date to initially center the calendar view on.                                                            |

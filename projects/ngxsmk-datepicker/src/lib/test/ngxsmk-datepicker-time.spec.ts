@@ -247,6 +247,32 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       expect(component.currentDisplayHour).toBe(12);
       expect(component.isPm).toBe(true);
     });
+    describe('24-Hour Format', () => {
+      it('should generate 0-23 hours when use24Hour is true', () => {
+        component.use24Hour = true;
+        component.ngOnChanges({ use24Hour: createSimpleChange(true, false) });
+        expect(component.hourOptions.length).toBe(24);
+        expect(component.hourOptions[0].value).toBe(0);
+        expect(component.hourOptions[23].value).toBe(23);
+      });
+
+      it('should display hour as-is when use24Hour is true', () => {
+        component.use24Hour = true;
+        component.currentHour = 14;
+        (component as any).update12HourState(component.currentHour);
+        expect(component.currentDisplayHour).toBe(14);
+        expect(component.isPm).toBe(false);
+      });
+
+      it('should set internal value correctly when use24Hour is true', () => {
+        component.use24Hour = true;
+        component.mode = 'single';
+        component.selectedDate = getStartOfDay(new Date());
+        component.currentDisplayHour = 15;
+        component.timeChange();
+        expect(component.selectedDate?.getHours()).toBe(15);
+      });
+    });
   });
 });
 
