@@ -18,6 +18,7 @@ export interface DemoTranslations {
   dateRange: string;
   timeOnly: string;
   customFormat: string;
+  use24Hour: string;
   momentJsIntegration: string;
   rtlSupport: string;
   translationsI18n: string;
@@ -41,7 +42,7 @@ export interface DemoTranslations {
   multiCalendarSupport: string;
   inputs: string;
   outputs: string;
-  
+
   // Features
   zeroDependencies: string;
   highPerformance: string;
@@ -59,7 +60,7 @@ export interface DemoTranslations {
   animationCustomization: string;
   advancedStyling: string;
   datePresets: string;
-  
+
   // UI Labels
   search: string;
   searchPlaceholder: string;
@@ -70,7 +71,7 @@ export interface DemoTranslations {
   switchToDarkMode: string;
   viewOnGitHub: string;
   documentation: string;
-  
+
   // Common
   copy: string;
   clear: string;
@@ -78,7 +79,7 @@ export interface DemoTranslations {
   select: string;
   set: string;
   clearSelection: string;
-  
+
   // Section titles and descriptions
   selectLocale: string;
   autoDetected: string;
@@ -86,12 +87,12 @@ export interface DemoTranslations {
   wasAutomaticallyDetected: string;
   andMappedTo: string;
   noResultsFound: string;
-  
+
   // Hero section
   heroTagline: string;
   heroDescription: string;
   getStarted: string;
-  
+
   // Section content
   themingDescription: string;
   builtInThemes: string;
@@ -124,7 +125,7 @@ export interface DemoTranslations {
   selectTimeRange: string;
   switchToLight: string;
   switchToDark: string;
-  
+
   // Additional section content
   forCompleteThemingDocumentation: string;
   themingSection: string;
@@ -282,11 +283,11 @@ export interface DemoTranslations {
 })
 export class DemoTranslationsService {
   private translations = new Map<string, DemoTranslations>();
-  
+
   constructor() {
     this.registerDefaultTranslations();
   }
-  
+
   private registerDefaultTranslations(): void {
     // English
     this.translations.set('en', {
@@ -306,6 +307,7 @@ export class DemoTranslationsService {
       dateRange: 'Date Range',
       timeOnly: 'Time Only',
       customFormat: 'Custom Format',
+      use24Hour: '24-Hour Format',
       momentJsIntegration: 'Moment.js Integration',
       rtlSupport: 'RTL Support',
       translationsI18n: 'Translations / i18n',
@@ -550,7 +552,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Advanced styling: CSS-in-JS, theme builder',
       datePresets: 'Date presets: user-defined presets with persistence'
     });
-    
+
     // Spanish
     this.translations.set('es', {
       gettingStarted: 'Comenzar',
@@ -569,6 +571,7 @@ export class DemoTranslationsService {
       dateRange: 'Rango de Fechas',
       timeOnly: 'Solo Hora',
       customFormat: 'Formato Personalizado',
+      use24Hour: 'Formato de 24 Horas',
       momentJsIntegration: 'Integración con Moment.js',
       rtlSupport: 'Soporte RTL',
       translationsI18n: 'Traducciones / i18n',
@@ -813,7 +816,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Estilos avanzados: CSS-in-JS, constructor de temas',
       datePresets: 'Preajustes de fecha: preajustes definidos por el usuario con persistencia'
     });
-    
+
     // French
     this.translations.set('fr', {
       gettingStarted: 'Démarrage',
@@ -832,6 +835,7 @@ export class DemoTranslationsService {
       dateRange: 'Plage de Dates',
       timeOnly: 'Heure Seulement',
       customFormat: 'Format Personnalisé',
+      use24Hour: 'Format 24 Heures',
       momentJsIntegration: 'Intégration Moment.js',
       rtlSupport: 'Support RTL',
       translationsI18n: 'Traductions / i18n',
@@ -1076,7 +1080,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Styles avancés: CSS-in-JS, générateur de thèmes',
       datePresets: 'Préréglages de date: préréglages définis par l\'utilisateur avec persistance'
     });
-    
+
     // German
     this.translations.set('de', {
       gettingStarted: 'Erste Schritte',
@@ -1095,6 +1099,7 @@ export class DemoTranslationsService {
       dateRange: 'Datumsbereich',
       timeOnly: 'Nur Zeit',
       customFormat: 'Benutzerdefiniertes Format',
+      use24Hour: '24-Stunden-Format',
       momentJsIntegration: 'Moment.js-Integration',
       rtlSupport: 'RTL-Unterstützung',
       translationsI18n: 'Übersetzungen / i18n',
@@ -1339,7 +1344,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Erweiterte Gestaltung: CSS-in-JS, Theme-Builder',
       datePresets: 'Datumsvoreinstellungen: benutzerdefinierte Voreinstellungen mit Persistenz'
     });
-    
+
     // Arabic
     this.translations.set('ar', {
       gettingStarted: 'البدء',
@@ -1358,6 +1363,7 @@ export class DemoTranslationsService {
       dateRange: 'نطاق التاريخ',
       timeOnly: 'الوقت فقط',
       customFormat: 'تنسيق مخصص',
+      use24Hour: 'نظام 24 ساعة',
       momentJsIntegration: 'تكامل Moment.js',
       rtlSupport: 'دعم RTL',
       translationsI18n: 'الترجمات / i18n',
@@ -1602,7 +1608,7 @@ export class DemoTranslationsService {
       advancedStyling: 'تصميم متقدم: CSS-in-JS، منشئ السمات',
       datePresets: 'إعدادات التاريخ المسبقة: إعدادات مسبقة يحددها المستخدم مع الاستمرارية'
     });
-    
+
     // Chinese (Simplified)
     this.translations.set('zh', {
       gettingStarted: '入门',
@@ -1621,6 +1627,7 @@ export class DemoTranslationsService {
       dateRange: '日期范围',
       timeOnly: '仅时间',
       customFormat: '自定义格式',
+      use24Hour: '24小时制',
       momentJsIntegration: 'Moment.js 集成',
       rtlSupport: 'RTL 支持',
       translationsI18n: '翻译 / i18n',
@@ -1865,7 +1872,7 @@ export class DemoTranslationsService {
       advancedStyling: '高级样式：CSS-in-JS，主题构建器',
       datePresets: '日期预设：用户定义的预设，支持持久化'
     });
-    
+
     // Japanese
     this.translations.set('ja', {
       gettingStarted: 'はじめに',
@@ -1884,6 +1891,7 @@ export class DemoTranslationsService {
       dateRange: '日付範囲',
       timeOnly: '時刻のみ',
       customFormat: 'カスタム形式',
+      use24Hour: '24時間形式',
       momentJsIntegration: 'Moment.js 統合',
       rtlSupport: 'RTL サポート',
       translationsI18n: '翻訳 / i18n',
@@ -2128,7 +2136,7 @@ export class DemoTranslationsService {
       advancedStyling: '高度なスタイリング: CSS-in-JS、テーマビルダー',
       datePresets: '日付プリセット: 永続化を備えたユーザー定義プリセット'
     });
-    
+
     // Korean
     this.translations.set('ko', {
       gettingStarted: '시작하기',
@@ -2147,6 +2155,7 @@ export class DemoTranslationsService {
       dateRange: '날짜 범위',
       timeOnly: '시간만',
       customFormat: '사용자 정의 형식',
+      use24Hour: '24시간 형식',
       momentJsIntegration: 'Moment.js 통합',
       rtlSupport: 'RTL 지원',
       translationsI18n: '번역 / i18n',
@@ -2391,7 +2400,7 @@ export class DemoTranslationsService {
       advancedStyling: '고급 스타일링: CSS-in-JS, 테마 빌더',
       datePresets: '날짜 사전 설정: 지속성을 가진 사용자 정의 사전 설정'
     });
-    
+
     // Portuguese
     this.translations.set('pt', {
       gettingStarted: 'Começando',
@@ -2410,6 +2419,7 @@ export class DemoTranslationsService {
       dateRange: 'Intervalo de Datas',
       timeOnly: 'Apenas Hora',
       customFormat: 'Formato Personalizado',
+      use24Hour: 'Formato 24 Horas',
       momentJsIntegration: 'Integração com Moment.js',
       rtlSupport: 'Suporte RTL',
       translationsI18n: 'Traduções / i18n',
@@ -2654,7 +2664,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Estilização avançada: CSS-in-JS, construtor de temas',
       datePresets: 'Predefinições de data: predefinições definidas pelo usuário com persistência'
     });
-    
+
     // Russian
     this.translations.set('ru', {
       gettingStarted: 'Начало работы',
@@ -2673,6 +2683,7 @@ export class DemoTranslationsService {
       dateRange: 'Диапазон дат',
       timeOnly: 'Только время',
       customFormat: 'Пользовательский формат',
+      use24Hour: '24-часовой формат',
       momentJsIntegration: 'Интеграция с Moment.js',
       rtlSupport: 'Поддержка RTL',
       translationsI18n: 'Переводы / i18n',
@@ -2917,7 +2928,7 @@ export class DemoTranslationsService {
       advancedStyling: 'Расширенная стилизация: CSS-in-JS, конструктор тем',
       datePresets: 'Предустановки дат: пользовательские предустановки с сохранением'
     });
-    
+
     // Swedish
     this.translations.set('sv', {
       gettingStarted: 'Komma igång',
@@ -2936,6 +2947,7 @@ export class DemoTranslationsService {
       dateRange: 'Datumintervall',
       timeOnly: 'Endast tid',
       customFormat: 'Anpassat format',
+      use24Hour: '24-timmarsformat',
       momentJsIntegration: 'Moment.js-integration',
       rtlSupport: 'RTL-stöd',
       translationsI18n: 'Översättningar / i18n',
@@ -3181,7 +3193,7 @@ export class DemoTranslationsService {
       datePresets: 'Datumförinställningar: användardefinierade förinställningar med persistens'
     });
   }
-  
+
   getTranslations(locale: string): DemoTranslations {
     const normalized = locale.toLowerCase().split('-')[0];
     return this.translations.get(normalized) || this.translations.get('en')!;

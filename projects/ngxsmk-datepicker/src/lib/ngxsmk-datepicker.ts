@@ -396,6 +396,7 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                     [showSeconds]="showSeconds"
                     [disabled]="disabled"
                     [timeLabel]="getTranslation('time')"
+                    [showAmpm]="!use24Hour"
                     (timeChange)="timeChange()">
                   </ngxsmk-time-selection>
                 }
@@ -573,6 +574,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() timeOnly: boolean = false;
   @Input() showCalendarButton: boolean = false;
   @Input() minuteInterval: number = 1;
+  @Input() use24Hour: boolean = false;
   @Input() secondInterval: number = 1;
   @Input() showSeconds: boolean = false;
   @Input() holidayProvider: HolidayProvider | null = null;
@@ -3384,8 +3386,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       } else {
         needsChangeDetection = true;
       }
-      if (changes['minuteInterval']) {
+      if (changes['minuteInterval'] || changes['use24Hour']) {
         this.generateTimeOptions();
+        if (changes['use24Hour']) {
+          this.update12HourState(this.currentHour);
+        }
       }
     }
 
@@ -3394,6 +3399,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
       this.timeChange();
       needsChangeDetection = false; // Already handled
+    }
+    if (changes['use24Hour']) {
+      this.generateTimeOptions();
+      this.update12HourState(this.currentHour);
+      needsChangeDetection = true;
     }
     if (changes['yearRange']) {
       this.generateDropdownOptions();
@@ -3584,13 +3594,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private update12HourState(fullHour: number): void {
-    const state = update12HourState(fullHour);
-    this.isPm = state.isPm;
-    this.currentDisplayHour = state.displayHour;
+    if (this.use24Hour) {
+      this.currentDisplayHour = fullHour;
+      this.isPm = false;
+    } else {
+      const state = update12HourState(fullHour);
+      this.isPm = state.isPm;
+      this.currentDisplayHour = state.displayHour;
+    }
   }
 
   private applyCurrentTime(date: Date): Date {
-    this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
+    if (this.use24Hour) {
+      this.currentHour = this.currentDisplayHour;
+    } else {
+      this.currentHour = this.get24Hour(this.currentDisplayHour, this.isPm);
+    }
     const newDate = new Date(date);
     newDate.setHours(this.currentHour, this.currentMinute, 0, 0);
     return newDate;
@@ -4201,11 +4220,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         masked += tokenDigits.padEnd(2, '0');
         digitIndex += Math.min(2, digits.length - digitIndex);
         i += 2;
-      } else if (format[i] === 'Y' || format[i] === 'M' || format[i] === 'D' ||
-        format[i] === 'H' || format[i] === 'h' || format[i] === 'm' || format[i] === 's') {
-        masked += digits[digitIndex] || '';
-        digitIndex++;
-        i++;
       } else {
         masked += format[i];
         i++;
@@ -4313,7 +4327,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private generateTimeOptions(): void {
-    const result = generateTimeOptions(this.minuteInterval, this.secondInterval, this.showSeconds);
+    const result = generateTimeOptions(this.minuteInterval, this.secondInterval, this.showSeconds, this.use24Hour);
     this.hourOptions = result.hourOptions;
     this.minuteOptions = result.minuteOptions;
     if (result.secondOptions) {

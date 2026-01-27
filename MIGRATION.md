@@ -4,6 +4,8 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.0.6 → v2.0.7](#v206---v207)
+- [v2.0.5 → v2.0.6](#v205---v206)
 - [v2.0.4 → v2.0.5](#v204---v205)
 - [v2.0.3 → v2.0.4](#v203---v204)
 - [v2.0.2 → v2.0.3](#v202---v203)
@@ -41,6 +43,42 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.0.6 → v2.0.7
+
+### Changes
+
+- **Version Update**: Updated to version 2.0.7
+- **Stable Release**: Version 2.0.7 is the current stable version
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required. This is a patch version update:
+
+```bash
+npm install ngxsmk-datepicker@2.0.7
+```
+
+## v2.0.5 → v2.0.6
+
+### Changes
+
+- **Enhanced Range Picker Reselection**: Improved comprehensive range reselection behavior
+  - Clicking the start date when a complete range is selected now clears only the end date
+  - Clicking the end date when a complete range is selected now clears the start date and sets the end date as the new start date
+  - **NEW**: Clicking any date within the selected range now clears the end date and sets the clicked date as the new start date
+  - Allows users to easily redefine date ranges from any point (start, end, or within the range)
+- **Code Cleanup**: Removed unnecessary inline comments from range selection logic for cleaner, more maintainable code
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required. This is a patch version update:
+
+```bash
+npm install ngxsmk-datepicker@2.0.6
+```
 
 ## v2.0.4 -> v2.0.5
 
