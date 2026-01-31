@@ -15,7 +15,7 @@ import { I18nService } from '../../i18n/i18n.service';
       <p>{{ i18n.t().installation.npmLead }}</p>
       
       <div class="card bg-code">
-        <pre><code class="text-main">npm install ngxsmk-datepicker</code></pre>
+        <pre><code class="text-main">npm install ngxsmk-datepicker@2.0.8</code></pre>
       </div>
 
       <div class="tip">

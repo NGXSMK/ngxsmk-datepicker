@@ -85,7 +85,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <p>Install the best-in-class datepicker today and experience the difference.</p>
           </div>
           <div class="cta-code">
-            <pre><code>npm install ngxsmk-datepicker</code></pre>
+            <pre><code>npm install ngxsmk-datepicker@2.0.8</code></pre>
           </div>
         </div>
       </section>
