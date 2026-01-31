@@ -69,7 +69,6 @@ import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepick
     </div>
   `,
   styles: [`
-    .bg-sidebar { background: var(--color-bg-sidebar); }
   `]
 })
 export class AdvancedFeaturesComponent {

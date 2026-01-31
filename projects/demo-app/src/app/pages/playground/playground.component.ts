@@ -9,12 +9,10 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
   imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent],
   template: `
     <div class="animate-fade-in">
-      <div class="flex justify-between items-center mb-xl">
-        <div>
+        <div class="playground-hero">
           <h1>Playground</h1>
           <p class="text-lg">Tweak properties and see how the datepicker behaves in real-time.</p>
         </div>
-      </div>
       
       <div class="playground-layout mt-2xl">
         <aside class="config-panel card">
@@ -154,17 +152,24 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     }
     
     .config-panel {
-      padding: 1.5rem;
+      padding: 1.25rem;
       position: sticky;
       top: 100px;
       height: fit-content;
+      @media (max-width: 900px) { padding: 1.5rem; }
+    }
+
+    .config-title {
+      font-size: 1.1rem;
+      margin: 0 0 1.5rem;
+      color: var(--color-text-main);
     }
 
     .config-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     .group-label {
@@ -186,11 +191,14 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         background: var(--color-bg-sidebar);
         border: 1px solid var(--color-border);
         color: var(--color-text-main);
-        padding: 0.5rem;
+        padding: 0.65rem 0.75rem;
         border-radius: var(--radius-sm);
         font-family: inherit;
+        font-size: 0.95rem;
         outline: none;
-        &:focus { border-color: var(--color-primary); }
+        width: 100%;
+        transition: var(--transition-base);
+        &:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2); }
       }
     }
 
@@ -241,20 +249,31 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 3rem;
+      padding: 2rem 1rem;
       position: relative;
-      @media (max-width: 768px) { padding: 1.5rem; }
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      @media (min-width: 768px) { padding: 3rem; }
       
       ngxsmk-datepicker {
          display: block;
+         max-width: 100%;
       }
     }
 
     .reset-btn { width: 100%; justify-content: center; margin-top: 1rem; }
     
     @media (max-width: 900px) {
-      .playground-layout { grid-template-columns: 1fr; }
-      .config-panel { position: static; }
+      .playground-hero { text-align: center; }
+      .playground-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+      .config-panel { position: static; order: 2; }
+      .preview-panel { order: 1; min-height: 400px; }
+    }
+
+    @media (max-width: 640px) {
+      .preview-panel { border-radius: 0; margin: 0 -1rem; border-left: none; border-right: none; }
+      .preview-header { padding: 0.75rem; }
+      .value-chip { font-size: 0.65rem; }
     }
   `]
 })

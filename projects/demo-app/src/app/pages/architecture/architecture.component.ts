@@ -173,15 +173,22 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
   styles: [`
     .arch-diagram {
       background: var(--color-bg-sidebar);
-      padding: 3rem 2rem;
+      padding: 2rem 1rem;
       overflow-x: auto;
-      margin: 2.5rem 0;
+      margin: 2rem -1rem;
+      border-radius: 0;
+      @media (min-width: 768px) {
+        padding: 3rem 2rem;
+        margin: 2.5rem 0;
+        border-radius: var(--radius-lg);
+      }
+      -webkit-overflow-scrolling: touch;
     }
     .diagram-grid {
       display: grid;
       grid-template-columns: 1fr auto 1fr auto 1fr;
       gap: 1rem;
-      min-width: 800px;
+      min-width: 700px;
     }
     .column {
       display: flex;

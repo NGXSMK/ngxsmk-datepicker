@@ -2,7 +2,7 @@
     <!-- Header -->
     <header class="header">
         <div class="header-inner flex items-center justify-between">
-            <div class="flex items-center gap-md">
+            <div class="flex items-center gap-md sm:gap-lg">
                 <button class="mobile-menu-toggle" (click)="toggleSidebar()">
                     <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="header-actions flex items-center gap-lg">
+            <div class="header-actions flex items-center gap-md sm:gap-lg">
                 <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank"
                     class="npm-badge flex items-center gap-xs no-underline">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -113,9 +113,9 @@
             </div>
 
             <!-- Footer inside content area for advanced doc look -->
-            <footer class="content-footer mt-3xl py-xl border-t">
-                <div class="flex justify-between items-center text-dim text-sm">
-                    <div class="flex gap-md opacity-60">
+            <footer class="content-footer">
+                <div class="footer-inner text-sm">
+                    <div class="footer-credits">
                         <span>&copy; 2026 NGXSMK Team</span>
                         <span>{{ i18n.t().common.releasedUnder }}</span>
                     </div>

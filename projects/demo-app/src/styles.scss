@@ -40,9 +40,14 @@
     --space-3xl: 4rem;
 
     /* Layout Dimensions */
-    --header-height: 72px;
-    --sidebar-width: 290px;
+    --header-height: 64px;
+    --sidebar-width: 280px;
     --max-content-width: 1200px;
+
+    @media (min-width: 1024px) {
+        --header-height: 72px;
+        --sidebar-width: 300px;
+    }
 
     /* Typography */
     --font-size-xs: 0.75rem;
@@ -98,6 +103,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
 }
 
 /* ============================================
@@ -108,6 +114,8 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow: clip;
+    /* Modern alternative to overflow hidden that doesn't mess with sticky */
 }
 
 .header {
@@ -131,11 +139,19 @@ body {
     top: var(--header-height);
     bottom: 0;
     left: 0;
+    background: var(--color-bg-sidebar);
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    padding: 2rem 0;
     z-index: 90;
     transition: transform var(--transition-smooth);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-elevated) transparent;
 
     @media (max-width: 1024px) {
         transform: translateX(-100%);
+        z-index: 1000;
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
 
         &.open {
             transform: translateX(0);
@@ -152,7 +168,7 @@ body {
 
     @media (max-width: 1024px) {
         margin-left: 0;
-        padding: var(--space-xl) var(--space-lg);
+        padding: 1.5rem 1rem;
     }
 }
 
@@ -166,12 +182,14 @@ body {
    ============================================ */
 
 h1 {
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(2rem, 8vw, 4rem);
     font-weight: var(--font-weight-extrabold);
     letter-spacing: -0.05em;
     margin-bottom: 1.5rem;
     color: var(--color-text-main);
-    line-height: 1;
+    line-height: 1.1;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 h2 {
@@ -210,24 +228,7 @@ code {
     color: var(--color-secondary);
 }
 
-/* ============================================
-   SIDEBAR NAVIGATION
-   ============================================ */
-
-.sidebar {
-    width: var(--sidebar-width);
-    position: fixed;
-    top: var(--header-height);
-    bottom: 0;
-    left: 0;
-    background: var(--color-bg-sidebar);
-    border-right: 1px solid var(--color-border);
-    overflow-y: auto;
-    padding: 2rem 0;
-    z-index: 90;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-bg-elevated) transparent;
-}
+/* Sidebar Navigation items continue below */
 
 .nav-section {
     margin-bottom: 2.5rem;
@@ -307,7 +308,12 @@ code {
 }
 
 .btn {
-    padding: 0.8rem 1.75rem;
+    padding: 0.7rem 1.25rem;
+
+    @media (min-width: 768px) {
+        padding: 0.8rem 1.75rem;
+    }
+
     border-radius: var(--radius-md);
     font-weight: 600;
     cursor: pointer;

@@ -46,11 +46,13 @@ export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
   styles: [`
     .bg-code {
       background: var(--color-bg-code);
-      padding: 2rem;
+      padding: 1.25rem;
+      @media (min-width: 768px) { padding: 2rem; }
       border-radius: var(--radius-md);
       overflow-x: auto;
       border: 1px solid var(--color-border);
       pre { margin: 0; }
+      code { white-space: pre; }
     }
   `]
 })

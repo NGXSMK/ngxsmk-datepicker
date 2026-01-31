@@ -115,18 +115,18 @@ import { I18nService } from '../../i18n/i18n.service';
       margin-top: 2.5rem;
       background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-secondary));
       
-      .feature-header { padding: 3rem; border-bottom: 1px solid var(--color-border); }
+      .feature-header { padding: 1.5rem; border-bottom: 1px solid var(--color-border); @media (min-width: 768px) { padding: 3rem; } }
       .badge { display: inline-block; padding: 4px 10px; background: rgba(124, 58, 237, 0.15); color: var(--color-primary-light); border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-      h2 { margin: 0 0 0.5rem; border: none; padding: 0; font-size: 2rem; }
-      p { margin: 0; opacity: 0.8; }
+      h2 { margin: 0 0 0.5rem; border: none; padding: 0; font-size: 1.75rem; @media (min-width: 768px) { font-size: 2rem; } }
+      p { margin: 0; opacity: 0.8; font-size: 0.95rem; }
       
-      .feature-body { padding: 3rem; gap: 4rem; }
-      .grid-2 { display: grid; grid-template-columns: auto 1fr; align-items: start; @media (max-width: 1024px) { grid-template-columns: 1fr; } }
+      .feature-body { padding: 1.5rem; gap: 2rem; @media (min-width: 768px) { padding: 3rem; gap: 4rem; } }
+      .grid-2 { display: grid; grid-template-columns: 1fr; align-items: start; @media (max-width: 1024px) { grid-template-columns: 1fr; } @media (min-width: 1025px) { grid-template-columns: auto 1fr; } }
       
       .specs-panel {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1.25rem;
         padding-top: 1rem;
       }
       .spec-item {

@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-integrations',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-integrations',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="animate-fade-in">
       <h1>Framework Integration</h1>
       <p class="text-lg">Learn how to seamlessly integrate <code>ngxsmk-datepicker</code> with your favorite UI frameworks.</p>
@@ -48,8 +48,17 @@ export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
       </div>
     </div>
   `,
-    styles: [`
-    .bg-code { background: var(--color-bg-code); padding: 1.5rem; }
+  styles: [`
+    .bg-code { 
+      background: var(--color-bg-code); 
+      padding: 1.25rem;
+      @media (min-width: 768px) { padding: 2rem; }
+    }
+    .card {
+      @media (max-width: 768px) { padding: 1.5rem; }
+    }
+    pre { overflow-x: auto; margin: 0; }
+    code { white-space: pre; }
   `]
 })
 export class IntegrationsComponent { }

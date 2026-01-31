@@ -91,18 +91,19 @@ import { CommonModule } from '@angular/common';
     }
     
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 1.25rem; border-bottom: 1px solid var(--color-border); }
+    th, td { padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--color-border); @media (min-width: 768px) { padding: 1.25rem; } }
     
     th {
       background: rgba(255, 255, 255, 0.03);
-      font-size: 0.75rem;
+      font-size: 0.65rem;
+      @media (min-width: 768px) { font-size: 0.75rem; }
       font-weight: 800;
       color: var(--color-text-dim);
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
     
-    td { font-size: 0.95rem; vertical-align: top; color: var(--color-text-muted); }
+    td { font-size: 0.85rem; @media (min-width: 768px) { font-size: 0.95rem; } vertical-align: top; color: var(--color-text-muted); }
     code { color: var(--color-secondary); }
     .bg-code { background: var(--color-bg-code); padding: 1.5rem; }
   `]

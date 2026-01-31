@@ -167,7 +167,8 @@ import { I18nService } from '../../i18n/i18n.service';
     }
 
     .preview-header {
-      padding: 1.25rem 2rem;
+      padding: 0.75rem 1rem;
+      @media (min-width: 768px) { padding: 1.25rem 2rem; }
       background: var(--color-bg-secondary);
       border-bottom: 1px solid var(--color-border);
       display: flex;
@@ -182,14 +183,31 @@ import { I18nService } from '../../i18n/i18n.service';
     }
 
     .preview-body { 
-        padding: 3rem; 
+        padding: 0; 
+        @media (min-width: 768px) { padding: 2.5rem; }
         background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.05), transparent);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .picker-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 0.5rem 0;
+        @media (min-width: 768px) { padding: 1rem 0; }
+        ngxsmk-datepicker {
+            width: auto;
+            max-width: 100%;
+        }
     }
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      @media (min-width: 768px) { gap: 2rem; }
     }
 
     .feature-card {
@@ -238,8 +256,10 @@ import { I18nService } from '../../i18n/i18n.service';
     }
 
     .code-cta {
-      margin-top: 12rem;
-      padding: 5rem 4rem;
+      margin-top: 6rem;
+      @media (min-width: 768px) { margin-top: 12rem; }
+      padding: 3rem 1.5rem;
+      @media (min-width: 768px) { padding: 5rem 4rem; }
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
       border: 1px solid var(--color-border-light);
       border-radius: var(--radius-xl);
@@ -288,9 +308,11 @@ import { I18nService } from '../../i18n/i18n.service';
         background: rgba(0,0,0,0.2);
         padding: 0.75rem;
         border-radius: 8px;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        @media (min-width: 768px) { font-size: 0.85rem; }
         border: 1px solid rgba(255,255,255,0.03);
-        code { color: var(--color-secondary); padding: 0; background: none; }
+        overflow-x: auto;
+        code { color: var(--color-secondary); padding: 0; background: none; white-space: pre; }
     }
 
     .btn-lg { padding: 1.15rem 2.25rem; font-size: 1.1rem; }

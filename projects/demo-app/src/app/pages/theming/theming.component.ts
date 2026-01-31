@@ -83,12 +83,15 @@ import { CommonModule } from '@angular/common';
     }
     .table-container {
       margin: 1.5rem 0;
-      table { width: 100%; border-collapse: collapse; }
-      th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.9rem; }
+      overflow-x: auto;
+      table { width: 100%; border-collapse: collapse; min-width: 400px; }
+      th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.85rem; @media (min-width: 768px) { font-size: 0.9rem; } }
       th { border-bottom: 2px solid var(--color-border); color: var(--color-text-dim); }
       td { border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); }
       tr:last-child td { border-bottom: none; }
     }
+    pre { overflow-x: auto; margin: 0; }
+    code { white-space: pre; }
     .glass-example {
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
       border: 1px solid var(--color-border-light);
