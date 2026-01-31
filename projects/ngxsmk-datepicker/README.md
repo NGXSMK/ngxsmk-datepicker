@@ -1,72 +1,69 @@
-# **ngxsmk-datepicker** - Modern Angular Date Picker Component
+<div align="center">
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker banner" width="100%" />
 
-[![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg)](https://www.npmjs.com/package/ngxsmk-datepicker)
-[![Angular](https://img.shields.io/badge/Angular-17%2B-red.svg)](https://angular.io/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
-[![Bundle Size](https://img.shields.io/badge/bundle-~127KB-green.svg)](https://bundlephobia.com/package/ngxsmk-datepicker)
+  # **ngxsmk-datepicker**
+  ### *The Gold Standard for Modern Angular Date Selection*
 
-**npm i ngxsmk-datepicker**
+  [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg?style=flat-square&color=6d28d9)](https://www.npmjs.com/package/ngxsmk-datepicker)
+  [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
+  [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-success.svg?style=flat-square)](https://bundlephobia.com/package/ngxsmk-datepicker)
+  [![Zoneless](https://img.shields.io/badge/Zoneless-Ready-blueviolet.svg?style=flat-square)](https://angular.dev/guide/zoneless)
 
-> **Stable Version**: `2.0.8` is the current stable release. For production use, install the latest version from npm.
+  **`npm i ngxsmk-datepicker`**
 
-> ⚠️ **Warning**: Version `1.9.26` contains broken styles. If you are using `1.9.26`, please upgrade to `1.9.28` or downgrade to `1.9.25` immediately.
+  [Explore Demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Report Bug](https://github.com/NGXSMK/ngxsmk-datepicker/issues)
 
-ngxsmk-datepicker – A modern, powerful, and fully customizable date and date-range picker component designed for Angular 17+ and Ionic applications. Seamlessly integrates with both frameworks, offering a flexible, mobile-friendly UI and advanced features to enhance date selection experiences in your apps.
+</div>
 
-**Keywords**: Angular datepicker, Angular date range picker, Angular calendar component, Angular 17 datepicker, Angular 18 datepicker, Angular 19 datepicker, Angular 20 datepicker, Angular 21 datepicker, TypeScript datepicker, standalone Angular component, Signal Forms datepicker, SSR compatible datepicker, zoneless Angular datepicker, lightweight datepicker, customizable datepicker, Angular datepicker Europe, Angular datepicker Deutschland, Angular datepicker France, Angular datepicker España, Angular datepicker Italia, Angular datepicker Nederland, Angular datepicker Polska, Angular datepicker Portugal, Angular datepicker Sverige, Angular datepicker Norge, Angular datepicker Suomi, Angular datepicker Danmark, Angular datepicker België, Angular datepicker Schweiz, Angular datepicker Österreich
+---
 
-* Github: [https://github.com/NGXSMK/ngxsmk-datepicker](https://github.com/NGXSMK/ngxsmk-datepicker)
-* **GitHub Pages Demo**: [https://ngxsmk.github.io/ngxsmk-datepicker/](https://ngxsmk.github.io/ngxsmk-datepicker/)
+### **Overview**
 
-Built with Angular Signals for optimal performance and a clean, declarative API. The component is standalone and has zero dependencies, making it lightweight and easy to integrate into any project.
+**ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
+
+> **Stable Release**: `v2.0.9` is live! This version brings 100% localization coverage for 8 languages and experimental Signal Forms support.
+
+---
+
+### **📌 Table of Contents**
+
+1. [📷 Screenshots](#-screenshots)
+2. [✨ Features](#-features)
+3. [📋 Compatibility](#-compatibility)
+4. [🌍 Localization (i18n)](#-localization-i18n)
+5. [📦 Installation](#-installation)
+6. [🚀 Quick Start](#-quick-start)
+7. [🔌 Framework Integration](#-framework-integration)
+8. [⚙️ API Reference](#-api-reference)
+9. [🎨 Theming](#-theming)
+10. [⌨️ Keyboard Navigation](#-keyboard-navigation)
+
+---
 
 ## 📷 Screenshots
 
-<p align="left">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Single Date Selection" width="420" />
-  &nbsp;&nbsp;
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Selection" width="420" />
-  &nbsp;&nbsp;
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Angular Date Mobile Screen Playground" width="420" />
+<p align="center">
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Single Selection" width="30%" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Range Selection" width="30%" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile View" width="30%" />
 </p>
 
 ## **✨ Features**
 
-* **Multiple Selection Modes**: Supports `single`, `range`, and `multiple` date selection.
-* **Smart Range Reselection**: Clicking the start date again after selecting a complete range clears only the end date, allowing quick range adjustments without clearing the entire selection.
-* **Inline and Popover Display**: Can be rendered inline or as a popover with automatic mode detection.
-* **Light and Dark Themes**: Includes built-in support for light and dark modes.
-* **Holiday Marking**: Automatically mark and disable holidays using a custom `HolidayProvider`.
-* **Holiday Tooltips**: Hover over holiday dates to see holiday names as tooltips.
-* **Disabled Dates**: Disable specific dates by passing an array of date strings or Date objects.
-* **Date & Time Selection**: Supports optional time inputs with configurable minute and second intervals.
-* **Seconds Selection**: Optional seconds picker with `showSeconds` input and configurable `secondInterval`.
-* **Time-Only Mode**: Display only time picker without calendar using `[timeOnly]="true"`.
-* **12h/24h Time Support**: Supports both **12-hour clock with AM/PM toggle** and **24-hour military time** (via `use24Hour` input).
-* **Mobile-Native Integration**: Automatic native date picker on mobile devices with `useNativePicker` input.
-* **Mobile Gestures**: Enhanced touch support with double-tap selection, swipe navigation, and haptic feedback.
-* **Mobile Modal Styles**: Bottom sheet, center, and fullscreen modal options for mobile devices.
-* **Predefined Date Ranges**: Offers quick selection of common ranges (e.g., "Last 7 Days").
-* **Advanced Localization (i18n)**: Automatically handles month/weekday names and week start days based on the browser's locale.
-* **Previous Month Context**: Shows last few days of previous month for better date selection context.
-* **Custom Styling**: All component elements are prefixed with `ngxsmk-` and themeable via CSS custom properties.
-* **Zero Dependencies**: The component is standalone and lightweight.
-* **Signal Forms Support**: First-class support for Angular 21+ Signal Forms with `[field]` input (experimental feature).
-* **SSR Compatible**: Fully optimized for server-side rendering with Angular Universal.
-* **Zoneless Support**: Works with or without Zone.js for optimal performance. Compatible with Angular 21's default zoneless setup.
-* **Angular 21 Ready**: Fully compatible with the officially released Angular 21, including Signal Forms, Vitest, and zoneless by default.
-* **Modern Control Flow**: Uses Angular's latest `@if` and `@for` block syntax for superior performance and reduced bundle overhead.
-* **Optimized Imports**: Leverages modern standalone architecture with individual directive imports for maximum tree-shaking efficiency.
-* **Monorepo Compatible**: Enhanced static analysis and module resolution for seamless integration in Nx or other monorepo setups.
-* **Performance Optimized**: Lazy loading calendar months, intelligent caching, and virtual scrolling infrastructure.
-* **Plugin Architecture**: Powerful plugin system with hooks for rendering, validation, keyboard shortcuts, formatting, and events. Create reusable plugins and extend functionality without modifying core code.
-* **Enhanced Keyboard Navigation**: Extended keyboard shortcuts (Y for yesterday, N for tomorrow, W for next week) with custom shortcut support.
-* **Modern UI/UX**: Polished design with improved spacing, shadows, animations, and accessibility.
-* **Reduced Motion Support**: Respects `prefers-reduced-motion` for accessibility.
-* **Comprehensive Testing**: Extensive test coverage (67.6% statements, 57.37% branches, 79.67% functions, 68.22% lines) with 1034+ tests covering keyboard navigation, time handling, SSR, RTL, touch gestures, edge cases, error handling, async operations, DOM manipulation, integration flows, cross-browser compatibility, performance, memory management, and accessibility.
-* **CI/CD Integration**: Automated testing and coverage reporting via GitHub Actions.
-* **Customizable Calendar Views**: Year-picker, decade-picker, timeline view, and time-slider view for diverse use cases.
-* **Modern Demo App**: Beautiful demo application with glassmorphism effects, gradient themes, and responsive design.
+### **Core Capabilities**
+*   💎 **Signal-Driven Engine**: Hyper-reactive state management using Angular Signals.
+*   🌓 **Native Dark Mode**: Beautifully crafted themes for light and dark environments.
+*   📱 **Mobile-First UX**: Native mobile picker integration with touch gestures and haptic feedback.
+*   🧩 **Zero Dependencies**: Lightweight standalone component with no external bloat.
+*   ⚡ **Performance++**: Lazy-loaded calendar months, memoized calculations, and tree-shakable architecture.
+
+### **Advanced Functionality**
+*   🌐 **8-Language i18n**: Full localization for `en`, `de`, `es`, `sv`, `ko`, `zh`, `ja`, and `fr`.
+*   🛠️ **Plugin Architecture**: Extend functionality via hooks for rendering, validation, and shortcuts.
+*   🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.
+*   🚀 **Zoneless Ready**: Optimized for the future of Angular—works perfectly without zone.js.
+*   ♿ **Full Accessibility**: WAI-ARIA compliant with extensive keyboard navigation support.
 
 ## **📋 Compatibility**
 
@@ -128,7 +125,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker@2.0.8  
+    npm install ngxsmk-datepicker@2.0.9  
 
 ## **Usage**
 
@@ -619,56 +616,32 @@ Control the visibility of the calendar icon button:
 </ngxsmk-datepicker>
 ```
 
-## **🌍 Localization**
+## **🌍 Localization (i18n)**
 
-The `locale` input controls all internationalization. It automatically formats month names, weekday names, and sets the first day of the week.
+The `locale` input controls all internationalization. It automatically formats month names, weekday names, and sets the first day of the week based on BCP 47 language tags.
 
-```html
-<ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
+### **Global Language Support**
+ngxsmk-datepicker v2.0.9 now features **full localization synchronization** for:
+- 🇺🇸 English (`en`)
+- 🇩🇪 German (`de`)
+- 🇫🇷 French (`fr`)
+- 🇪🇸 Spanish (`es`)
+- 🇸🇪 Swedish (`sv`)
+- 🇰🇷 Korean (`ko`)
+- 🇨🇳 Chinese (`zh`)
+- 🇯🇵 Japanese (`ja`)
 
-<ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
-```
-
-The datepicker automatically detects the browser's locale if not specified. For SSR applications, explicitly set the locale to ensure consistent rendering on both server and client.
-
-### **European Localization Support**
-
-ngxsmk-datepicker provides comprehensive support for European locales and date formats:
-
-**Supported European Locales:**
-- 🇩🇪 **Germany**: `de-DE`, `de-AT`, `de-CH` - DD.MM.YYYY format, Monday week start
-- 🇫🇷 **France**: `fr-FR`, `fr-BE`, `fr-CH` - DD/MM/YYYY format, Monday week start
-- 🇪🇸 **Spain**: `es-ES` - DD/MM/YYYY format, Monday week start
-- 🇮🇹 **Italy**: `it-IT`, `it-CH` - DD/MM/YYYY format, Monday week start
-- 🇳🇱 **Netherlands**: `nl-NL`, `nl-BE` - DD-MM-YYYY format, Monday week start
-- 🇵🇱 **Poland**: `pl-PL` - DD.MM.YYYY format, Monday week start
-- 🇵🇹 **Portugal**: `pt-PT` - DD/MM/YYYY format, Monday week start
-- 🇸🇪 **Sweden**: `sv-SE` - YYYY-MM-DD format, Monday week start
-- 🇳🇴 **Norway**: `no-NO` - DD.MM.YYYY format, Monday week start
-- 🇫🇮 **Finland**: `fi-FI` - DD.MM.YYYY format, Monday week start
-- 🇩🇰 **Denmark**: `da-DK` - DD.MM.YYYY format, Monday week start
-- 🇧🇪 **Belgium**: `nl-BE`, `fr-BE` - Regional format support
-- 🇨🇭 **Switzerland**: `de-CH`, `fr-CH`, `it-CH` - Multi-language support
-- 🇦🇹 **Austria**: `de-AT` - German format with Austrian preferences
-- 🇬🇧 **United Kingdom**: `en-GB` - DD/MM/YYYY format, Monday week start
-
-**European Date Format Examples:**
+### **Usage Example**
 
 ```html
-<!-- German format (DD.MM.YYYY) -->
+<!-- Force German Locale -->
 <ngxsmk-datepicker [locale]="'de-DE'"></ngxsmk-datepicker>
 
-<!-- French format (DD/MM/YYYY) -->
-<ngxsmk-datepicker [locale]="'fr-FR'"></ngxsmk-datepicker>
-
-<!-- Swedish format (YYYY-MM-DD) -->
+<!-- Swedish with YYYY-MM-DD format and Monday week start -->
 <ngxsmk-datepicker [locale]="'sv-SE'"></ngxsmk-datepicker>
-
-<!-- UK format (DD/MM/YYYY) -->
-<ngxsmk-datepicker [locale]="'en-GB'"></ngxsmk-datepicker>
 ```
 
-All European locales automatically use **Monday as the week start day** (ISO 8601 standard), which is the standard in most European countries.
+The component automatically uses ISO 8601 standards (Monday start) for European locales and appropriate regional date formats.
 
 ## **🖥️ Server-Side Rendering (SSR)**
 
