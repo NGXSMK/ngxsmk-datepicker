@@ -156,12 +156,13 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
       position: sticky;
       top: 100px;
       height: fit-content;
-      @media (max-width: 900px) { padding: 1.5rem; }
+      @media (max-width: 900px) { padding: 1rem; }
+      @media (max-width: 480px) { padding: var(--space-md) var(--space-sm); }
     }
 
     .config-title {
-      font-size: 1.1rem;
-      margin: 0 0 1.5rem;
+      font-size: var(--font-size-lg);
+      margin: 0 0 var(--space-md);
       color: var(--color-text-main);
     }
 
@@ -173,7 +174,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     }
 
     .group-label {
-      font-size: 0.7rem;
+      font-size: var(--font-size-xs);
       font-weight: 800;
       text-transform: uppercase;
       color: var(--color-text-dim);
@@ -185,7 +186,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
       flex-direction: column;
       gap: 0.4rem;
       
-      label { font-size: 0.85rem; color: var(--color-text-muted); }
+      label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
       
       select, input {
         background: var(--color-bg-sidebar);
@@ -194,7 +195,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         padding: 0.65rem 0.75rem;
         border-radius: var(--radius-sm);
         font-family: inherit;
-        font-size: 0.95rem;
+        font-size: var(--font-size-sm);
         outline: none;
         width: 100%;
         transition: var(--transition-base);
@@ -239,24 +240,24 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     }
 
     .value-chip {
-      font-size: 0.75rem;
+      font-size: var(--font-size-xs);
       color: var(--color-text-muted);
       code { color: var(--color-primary-light); }
     }
 
     .preview-canvas {
-      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 0.5rem;
       position: relative;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: visible;
+      @media (min-width: 480px) { padding: 1.5rem 1rem; }
       @media (min-width: 768px) { padding: 3rem; }
       
       ngxsmk-datepicker {
          display: block;
+         width: 100% !important;
          max-width: 100%;
       }
     }
@@ -265,13 +266,13 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     
     @media (max-width: 900px) {
       .playground-hero { text-align: center; }
-      .playground-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-      .config-panel { position: static; order: 2; }
-      .preview-panel { order: 1; min-height: 400px; }
+      .playground-layout { grid-template-columns: 1fr; gap: 1rem; }
+      .config-panel { position: static; order: 2; padding: 1rem; }
+      .preview-panel { order: 1; min-height: 400px; border-radius: 0; border-left: none; border-right: none; }
     }
 
     @media (max-width: 640px) {
-      .preview-panel { border-radius: 0; margin: 0 -1rem; border-left: none; border-right: none; }
+      .preview-panel { margin: 0; }
       .preview-header { padding: 0.75rem; }
       .value-chip { font-size: 0.65rem; }
     }

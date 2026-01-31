@@ -82,15 +82,25 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .table-container {
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       overflow-x: auto;
-      margin-top: 1rem;
+      margin-top: var(--space-md);
       background: var(--color-bg-sidebar);
+      -webkit-overflow-scrolling: touch;
     }
     
-    table { width: 100%; border-collapse: collapse; text-align: left; }
+    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; @media (min-width: 768px) { min-width: 0; } }
     th, td { padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--color-border); @media (min-width: 768px) { padding: 1.25rem; } }
     
     th {
@@ -104,8 +114,19 @@ import { CommonModule } from '@angular/common';
     }
     
     td { font-size: 0.85rem; @media (min-width: 768px) { font-size: 0.95rem; } vertical-align: top; color: var(--color-text-muted); }
-    code { color: var(--color-secondary); }
-    .bg-code { background: var(--color-bg-code); padding: 1.5rem; }
+    code { color: var(--color-secondary); background: none; padding: 0; }
+    .text-xs { font-size: 0.75rem; }
+
+    .bg-code { 
+      background: var(--color-bg-code); 
+      padding: var(--space-lg);
+      @media (min-width: 768px) { padding: var(--space-xl); }
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      h4 { margin: 0 0 0.5rem 0; color: var(--color-text-dim); font-size: 0.9rem; }
+    }
+    pre { overflow-x: auto; margin: 0; }
+    code { white-space: pre; font-size: var(--font-size-sm); }
   `]
 })
 export class ApiComponent {

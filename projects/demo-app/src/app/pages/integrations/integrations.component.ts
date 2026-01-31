@@ -49,16 +49,34 @@ export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    h3 { margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
+    .card {
+      padding: var(--space-lg);
+      @media (max-width: 480px) { padding: var(--space-md); }
+      margin-bottom: var(--space-md);
+    }
+
     .bg-code { 
       background: var(--color-bg-code); 
-      padding: 1.25rem;
-      @media (min-width: 768px) { padding: 2rem; }
-    }
-    .card {
-      @media (max-width: 768px) { padding: 1.5rem; }
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
     }
     pre { overflow-x: auto; margin: 0; }
-    code { white-space: pre; }
+    code { 
+        white-space: pre; 
+        font-size: var(--font-size-sm);
+        @media (min-width: 480px) { font-size: var(--font-size-base); }
+    }
+    .tip { margin-top: var(--space-2xl); }
   `]
 })
 export class IntegrationsComponent { }

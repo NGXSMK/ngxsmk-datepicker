@@ -44,16 +44,31 @@ export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .bg-code {
       background: var(--color-bg-code);
-      padding: 1.25rem;
-      @media (min-width: 768px) { padding: 2rem; }
+      padding: var(--space-md);
+      @media (min-width: 768px) { padding: var(--space-xl); }
       border-radius: var(--radius-md);
       overflow-x: auto;
       border: 1px solid var(--color-border);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
       pre { margin: 0; }
-      code { white-space: pre; }
+      code { 
+        white-space: pre; 
+        font-size: var(--font-size-sm);
+        @media (min-width: 480px) { font-size: var(--font-size-base); }
+      }
     }
+    .tip { margin-top: var(--space-lg); }
   `]
 })
 export class InstallationComponent {

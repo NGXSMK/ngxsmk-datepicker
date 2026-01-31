@@ -74,10 +74,11 @@ import { I18nService } from '../../i18n/i18n.service';
         <div class="card demo-card">
           <h3>{{ i18n.t().examples.multiMonthTitle }}</h3>
           <p class="text-sm mb-lg">{{ i18n.t().examples.multiMonthLead }}</p>
-          <div class="flex justify-center overflow-x-auto">
+          <div class="flex justify-center overflow-x-auto py-md">
             <ngxsmk-datepicker 
                 [inline]="true" 
-                [calendarCount]="2" 
+                [calendarCount]="2"
+                calendarLayout="auto" 
                 mode="range" 
                 [(ngModel)]="multiMonthValue">
             </ngxsmk-datepicker>
@@ -105,38 +106,82 @@ import { I18nService } from '../../i18n/i18n.service';
     </div>
   `,
   styles: [`
-    .examples-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; @media (max-width: 900px) { grid-template-columns: 1fr; } }
-    .demo-card { background: var(--color-bg-sidebar); border-color: var(--color-border-light); padding: 2rem; h3 { margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem; } }
-    .selection-box { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--color-border); font-size: 0.85rem; }
+    .examples-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 2rem; 
+      margin-top: 2rem; 
+      @media (max-width: 900px) { grid-template-columns: 1fr; }
+      @media (max-width: 480px) { gap: 1rem; }
+    }
+    .demo-card { 
+      background: var(--color-bg-sidebar); 
+      border-color: var(--color-border-light); 
+      padding: 0; 
+      @media (min-width: 768px) { padding: 2rem; }
+      h3 { margin-top: 0; margin-bottom: 0.5rem; font-size: var(--font-size-lg); }
+      overflow: visible;
+    }
+    .selection-box { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--color-border); font-size: var(--font-size-sm); }
     
     .featured-example {
       padding: 0;
-      overflow: hidden;
+      overflow: visible;
       margin-top: 2.5rem;
       background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-secondary));
       
-      .feature-header { padding: 1.5rem; border-bottom: 1px solid var(--color-border); @media (min-width: 768px) { padding: 3rem; } }
-      .badge { display: inline-block; padding: 4px 10px; background: rgba(124, 58, 237, 0.15); color: var(--color-primary-light); border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-      h2 { margin: 0 0 0.5rem; border: none; padding: 0; font-size: 1.75rem; @media (min-width: 768px) { font-size: 2rem; } }
-      p { margin: 0; opacity: 0.8; font-size: 0.95rem; }
-      
-      .feature-body { padding: 1.5rem; gap: 2rem; @media (min-width: 768px) { padding: 3rem; gap: 4rem; } }
-      .grid-2 { display: grid; grid-template-columns: 1fr; align-items: start; @media (max-width: 1024px) { grid-template-columns: 1fr; } @media (min-width: 1025px) { grid-template-columns: auto 1fr; } }
-      
-      .specs-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-        padding-top: 1rem;
+      .feature-header { 
+        padding: 1rem 0.5rem; 
+        border-bottom: 1px solid var(--color-border); 
+        @media (min-width: 768px) { padding: 3rem; } 
       }
-      .spec-item {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        .label { font-size: 0.7rem; font-weight: 800; color: var(--color-text-dim); text-transform: uppercase; }
-        .value { font-size: 1.1rem; font-weight: 600; color: var(--color-text-main); }
-        .val-code { background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); padding: 0.75rem 1rem; border-radius: 8px; color: var(--color-secondary); font-size: 1rem; }
+      .badge { display: inline-block; padding: 4px 10px; background: rgba(124, 58, 237, 0.15); color: var(--color-primary-light); border-radius: 6px; font-size: var(--font-size-xs); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+      h2 { margin: 0 0 0.5rem; border: none; padding: 0; font-size: var(--font-size-3xl); @media (min-width: 768px) { font-size: var(--font-size-4xl); } }
+      p { margin: 0; opacity: 0.8; font-size: var(--font-size-base); }
+      
+      .feature-body { 
+        gap: 1rem; 
+        @media (min-width: 480px) { padding: 1rem; }
+        @media (min-width: 768px) { padding: 3rem; gap: 4rem; } 
+
+        &.grid-2 { 
+          display: grid; 
+          grid-template-columns: 1fr; 
+          align-items: start; 
+          @media (max-width: 1024px) { grid-template-columns: 1fr; } 
+          @media (min-width: 1025px) { grid-template-columns: auto 1fr; } 
+        }
+        
+        .picker-panel {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          overflow: visible;
+          padding: 0.75rem 0;
+          @media (min-width: 1025px) { padding: 0; }
+        }
+        
+        .specs-panel {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          padding-top: 1rem;
+        }
+        .spec-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          .label { font-size: 0.7rem; font-weight: 800; color: var(--color-text-dim); text-transform: uppercase; }
+          .value { font-size: 1.1rem; font-weight: 600; color: var(--color-text-main); }
+          .val-code { background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); padding: 0.75rem 1rem; border-radius: 8px; color: var(--color-secondary); font-size: 1rem; overflow-x: auto; }
+        }
       }
+      .setup-panel { padding: 1rem; @media (min-width: 768px) { padding: 0; } }
+    }
+
+    ngxsmk-datepicker { 
+        width: 100% !important;
+        max-width: 100%; 
     }
   `]
 })

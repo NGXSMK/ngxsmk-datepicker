@@ -171,11 +171,20 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .arch-diagram {
       background: var(--color-bg-sidebar);
-      padding: 2rem 1rem;
+      padding: var(--space-xl) var(--space-md);
       overflow-x: auto;
-      margin: 2rem -1rem;
+      margin: var(--space-xl) -1rem;
       border-radius: 0;
       @media (min-width: 768px) {
         padding: 3rem 2rem;
@@ -247,17 +256,23 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
         .core-subtext { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
       }
     }
-    .bg-code { background: var(--color-bg-code); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0; }
+    .bg-code { 
+        background: var(--color-bg-code); 
+        padding: var(--space-lg); 
+        border-radius: var(--radius-md); 
+        margin: var(--space-md) 0; 
+        overflow-x: auto;
+    }
     .grid-2 { 
         display: grid; 
         grid-template-columns: 1fr 1fr; 
-        gap: 1.5rem; 
-        margin: 2rem 0; 
+        gap: var(--space-md); 
+        margin: var(--space-xl) 0; 
         @media (max-width: 768px) { grid-template-columns: 1fr; }
     }
     .info-card { 
       background: rgba(255,255,255,0.02); 
-      padding: 1.5rem; 
+      padding: var(--space-lg); 
       border: 1px solid var(--color-border); 
       border-radius: var(--radius-md);
       transition: transform 0.2s ease;
@@ -266,24 +281,18 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
       p { font-size: 0.85rem; margin: 0.5rem 0 0; color: var(--color-text-dim); }
     }
     .table-container {
-      margin: 1.5rem 0;
+      margin: var(--space-xl) 0;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      table { width: 100%; border-collapse: collapse; }
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      table { width: 100%; border-collapse: collapse; min-width: 500px; @media (min-width: 768px) { min-width: 0; } }
       th, td { padding: 1rem; border-bottom: 1px solid var(--color-border); text-align: left; }
       th { background: rgba(255,255,255,0.03); color: var(--color-text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
       td { font-size: 0.9rem; color: var(--color-text-muted); }
       tr:last-child td { border-bottom: none; }
     }
-    .tip {
-      padding: 1.5rem;
-      background: rgba(139, 92, 246, 0.05);
-      border-left: 4px solid var(--color-primary);
-      border-radius: var(--radius-sm);
-      margin-top: 3rem;
-      font-size: 0.95rem;
-    }
+    .tip { margin-top: var(--space-2xl); }
   `]
 })
 export class ArchitectureComponent { }
