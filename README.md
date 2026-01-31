@@ -4,7 +4,7 @@
 -->
 
 <div align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
+  <img src="projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
 
   # **ngxsmk-datepicker** – Modern Angular Date Picker & Range Picker
   ### *The Gold Standard for Premium Angular Calendar Selection*
