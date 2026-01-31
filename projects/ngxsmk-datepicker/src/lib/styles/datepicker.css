@@ -9,6 +9,11 @@ ngxsmk-datepicker {
   overflow: visible;
 }
 
+/* Layout & Stacking Context Configuration */
+ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
+  z-index: 1000 !important;
+}
+
 .ngxsmk-datepicker-wrapper {
   position: relative;
   width: 100%;
@@ -2542,6 +2547,7 @@ ngxsmk-datepicker {
   .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
     flex-direction: row !important;
     flex-wrap: wrap !important;
+    justify-content: center;
     gap: 24px !important;
   }
 
@@ -5415,17 +5421,7 @@ ngxsmk-datepicker {
     animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 4px, 0);
-    }
 
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
 
   .ngxsmk-time-separator {
     font-size: 18px !important;
@@ -5623,14 +5619,21 @@ ngxsmk-datepicker {
   }
 }
 
-/* ===== Universal Mobile/Tablet Fixes (Up to 991px) ===== */
+/* ==========================================================================
+   Responsive Layout Overrides (Mobile & Tablet)
+   Target: Devices < 992px (Landscape Phones & Portrait Tablets)
+   ========================================================================== */
 @media (max-width: 991px) {
+
+  /* Stack Context Configuration */
   .ngxsmk-time-selection {
     position: relative !important;
     z-index: 100 !important;
     overflow: visible !important;
   }
 
+  /* Dropup Positioning
+     Prevents layout clipping by rendering alternatives upwards */
   .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
     z-index: 10001 !important;
     top: auto !important;
@@ -5639,12 +5642,27 @@ ngxsmk-datepicker {
     animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
+  /* Active State Priority */
   .ngxsmk-time-selection:has(ngxsmk-custom-select[data-open="true"]) {
     z-index: 1000 !important;
   }
 
+  /* Footer Layering */
   .ngxsmk-footer {
     position: relative !important;
     z-index: 1 !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }

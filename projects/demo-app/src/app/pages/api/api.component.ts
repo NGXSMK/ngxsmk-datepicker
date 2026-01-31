@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-api',
@@ -7,20 +8,20 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>API Reference</h1>
-      <p class="text-lg">Comprehensive documentation for all component inputs, outputs, and utility functions.</p>
+      <h1>{{ i18n.t().api.title }}</h1>
+      <p class="text-lg">{{ i18n.t().api.lead }}</p>
       
       <!-- Inputs Section -->
       <section>
-        <h2>Component Inputs</h2>
+        <h2>{{ i18n.t().api.inputsTitle }}</h2>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Property</th>
-                <th>Type</th>
-                <th>Default</th>
-                <th>Description</th>
+                <th>{{ i18n.t().api.table.property }}</th>
+                <th>{{ i18n.t().api.table.type }}</th>
+                <th>{{ i18n.t().api.table.default }}</th>
+                <th>{{ i18n.t().api.table.description }}</th>
               </tr>
             </thead>
             <tbody>
@@ -39,14 +40,14 @@ import { CommonModule } from '@angular/common';
 
       <!-- Outputs Section -->
       <section>
-        <h2>Component Outputs</h2>
+        <h2>{{ i18n.t().api.outputsTitle }}</h2>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Event</th>
-                <th>Payload</th>
-                <th>Description</th>
+                <th>{{ i18n.t().api.table.event }}</th>
+                <th>{{ i18n.t().api.table.payload }}</th>
+                <th>{{ i18n.t().api.table.description }}</th>
               </tr>
             </thead>
             <tbody>
@@ -64,7 +65,7 @@ import { CommonModule } from '@angular/common';
 
       <!-- Advanced Types -->
       <section>
-        <h2>Advanced Types</h2>
+        <h2>{{ i18n.t().api.advancedTypesTitle }}</h2>
         <div class="grid gap-lg">
           <div class="card bg-code">
             <h4>DatepickerValue</h4>
@@ -130,6 +131,7 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class ApiComponent {
+  i18n = inject(I18nService);
   inputs = [
     { name: 'mode', type: "'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'", default: "'single'", description: 'Selection behavior of the datepicker.' },
     { name: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Controls whether the calendar is embedded or shown in a popover.' },

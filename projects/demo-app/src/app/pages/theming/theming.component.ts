@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-theming',
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>Custom Theming</h1>
+      <h1>{{ i18n.t().nav.customTheming }}</h1>
       <p class="text-lg">Full control over the visual identity of your datepicker using a powerful CSS variables system.</p>
 
       <div class="color-grid mt-xl">
@@ -118,4 +119,6 @@ import { CommonModule } from '@angular/common';
     }
   `]
 })
-export class ThemingComponent { }
+export class ThemingComponent {
+  i18n = inject(I18nService);
+}

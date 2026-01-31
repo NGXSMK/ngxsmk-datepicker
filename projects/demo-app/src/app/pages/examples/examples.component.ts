@@ -12,34 +12,34 @@ import { I18nService } from '../../i18n/i18n.service';
   imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent, RouterLink],
   template: `
     <div class="animate-fade-in">
-      <h1>{{ i18n.t().nav.basicExamples }}</h1>
-      <p class="text-lg">Common usage patterns for <code>ngxsmk-datepicker</code> components.</p>
+      <h1>{{ i18n.t().examples.basicTitle }}</h1>
+      <p class="text-lg">{{ i18n.t().examples.basicLead }}</p>
 
       <section class="examples-grid">
         <div class="card demo-card">
-          <h3>Single Selection</h3>
-          <ngxsmk-datepicker mode="single" [(ngModel)]="singleValue" placeholder="Choose a date"></ngxsmk-datepicker>
+          <h3>{{ i18n.t().examples.singleSelection }}</h3>
+          <ngxsmk-datepicker mode="single" [(ngModel)]="singleValue" [placeholder]="i18n.t().examples.chooseDate"></ngxsmk-datepicker>
           <div class="selection-box" *ngIf="singleValue">
             <code>{{ singleValue | date:'mediumDate' }}</code>
           </div>
         </div>
 
         <div class="card demo-card">
-          <h3>Range Selection</h3>
-          <ngxsmk-datepicker mode="range" [(ngModel)]="rangeValue" placeholder="Select range"></ngxsmk-datepicker>
+          <h3>{{ i18n.t().examples.rangeSelection }}</h3>
+          <ngxsmk-datepicker mode="range" [(ngModel)]="rangeValue" [placeholder]="i18n.t().examples.selectRange"></ngxsmk-datepicker>
           <div class="selection-box" *ngIf="rangeValue">
             <code>{{ rangeValue.start | date:'shortDate' }} - {{ rangeValue.end | date:'shortDate' }}</code>
           </div>
         </div>
       </section>
 
-      <h1 class="mt-3xl">{{ i18n.t().examples.title }}</h1>
-      <p class="text-lg">High-performance features for complex enterprise requirements.</p>
+      <h1 class="mt-3xl">{{ i18n.t().examples.advancedTitle }}</h1>
+      <p class="text-lg">{{ i18n.t().examples.advancedLead }}</p>
 
       <!-- Advanced Feature Showcase -->
       <div class="featured-example card">
         <div class="feature-header">
-           <div class="badge">Featured Selection</div>
+           <div class="badge">{{ i18n.t().examples.featuredBadge }}</div>
            <h2>{{ i18n.t().examples.dateTimeTitle }}</h2>
            <p>{{ i18n.t().examples.dateTimeLead }}</p>
         </div>
@@ -55,16 +55,16 @@ import { I18nService } from '../../i18n/i18n.service';
            </div>
            <div class="specs-panel">
              <div class="spec-item">
-                <span class="label">Accuracy</span>
-                <span class="value">Millisecond Precision</span>
+                <span class="label">{{ i18n.t().examples.accuracy }}</span>
+                <span class="value">{{ i18n.t().examples.precision }}</span>
              </div>
              <div class="spec-item">
-                <span class="label">Selected Output</span>
+                <span class="label">{{ i18n.t().examples.selectedOutput }}</span>
                 <code class="val-code">{{ dateTimeValue | date:'medium' }}</code>
              </div>
              <div class="spec-item">
-                <span class="label">Zoneless Flow</span>
-                <span class="value text-success">Active</span>
+                <span class="label">{{ i18n.t().examples.zoneless }}</span>
+                <span class="value text-success">{{ i18n.t().examples.active }}</span>
              </div>
            </div>
         </div>
@@ -92,7 +92,7 @@ import { I18nService } from '../../i18n/i18n.service';
             [minDate]="today" 
             [maxDate]="nextMonth" 
             [(ngModel)]="constrainedValue"
-            placeholder="Limits: Today to Next Month">
+            [placeholder]="i18n.t().examples.constraintsPlaceholder">
           </ngxsmk-datepicker>
           <div class="selection-box mt-md" *ngIf="constrainedValue">
             <code>{{ constrainedValue | date:'fullDate' }}</code>
@@ -101,7 +101,7 @@ import { I18nService } from '../../i18n/i18n.service';
       </section>
 
       <div class="tip">
-        <strong>{{ i18n.t().common.enterpriseReady }}:</strong> Looking for RTL support or custom providers? Check out the <a routerLink="/advanced">Advanced Features</a> section.
+        <strong>{{ i18n.t().common.enterpriseReady }}:</strong> {{ i18n.t().common.lookingForRtl }} <a routerLink="/advanced">{{ i18n.t().common.checkAdvanced }}</a>
       </div>
     </div>
   `,

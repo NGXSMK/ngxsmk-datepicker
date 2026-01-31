@@ -7,7 +7,9 @@ export const translations = {
             readyToTransform: 'Ready to transform your Angular project?',
             installToday: 'Install the best-in-class datepicker today and experience the difference.',
             releasedUnder: 'Released under MIT License',
-            poweredBy: 'Powered by'
+            poweredBy: 'Powered by',
+            lookingForRtl: 'Looking for RTL support or custom providers?',
+            checkAdvanced: 'Check out the Advanced Features section.'
         },
         nav: {
             gettingStarted: 'Getting Started',
@@ -25,14 +27,80 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'New v2.0.8 Stability',
+            heroBadge: 'New v2.0.9 Stability',
             heroTitle: 'The Best Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'The most powerful, lightweight, and accessible datepicker for modern Angular projects. Seamless Signal-based state, Zoneless architecture, and infinite customization.',
             ctaBuild: 'Start Building',
             ctaPro: 'Explore Pro Features',
             seoTitle: 'Why NGXSMK is the #1 choice for Angular?',
-            seoText: 'Engineered for performance and developer experience, NGXSMK delivers a seamless date selection interface that scales from simple forms to complex dashboards.'
+            seoText: 'Engineered for performance and developer experience, NGXSMK delivers a seamless date selection interface that scales from simple forms to complex dashboards.',
+            implementation: 'Implementation',
+            signalOptimized: 'Signal Optimized',
+            demoMode: {
+                single: 'Single',
+                range: 'Range',
+                multiple: 'Multiple'
+            },
+            features: {
+                signals: {
+                    title: 'Signals Powered',
+                    desc: 'Built with the latest Angular Signals for ultra-fast, fine-grained reactivity and minimal change detection.'
+                },
+                zoneless: {
+                    title: 'Zoneless Ready',
+                    desc: 'Engineered for the future of Angular. Operates seamlessly without zone.js for peak performance.'
+                },
+                multiCalendar: {
+                    title: 'Multi-Calendar Layouts',
+                    desc: 'Effortlessly display multiple calendars (up to 12) with horizontal or vertical orientations.'
+                },
+                a11y: {
+                    title: 'Full A11y & Keyboard',
+                    desc: 'Complete keyboard navigation and WAI-ARIA compliance for a truly inclusive user experience.'
+                },
+                mobile: {
+                    title: 'Mobile Optimized',
+                    desc: 'Responsive design with native picker support on mobile devices for smooth touch interaction.'
+                },
+                locales: {
+                    title: 'RTL & Locales',
+                    desc: 'Built-in support for right-to-left languages and international date/time formatting.'
+                }
+            }
+        },
+        playground: {
+            title: 'Playground',
+            lead: 'Tweak properties and see how the datepicker behaves in real-time.',
+            configTitle: 'Configurations',
+            selectionMode: 'Selection Mode',
+            inlineMode: 'Inline Mode',
+            functionalBehavior: 'Functional Behavior',
+            allowTyping: 'Allow Direct Typing',
+            showIcon: 'Show Icon Button',
+            nativePicker: 'Use Native Mobile Picker',
+            multiCalendar: 'Multi-Calendar Layout',
+            calendarCount: 'Calendar Count',
+            layout: 'Layout',
+            timeLocales: 'Time & Locales',
+            showTime: 'Show Time Picker',
+            showSeconds: 'Show Seconds',
+            locale: 'Locale',
+            theming: 'Theming',
+            reset: 'Reset Defaults',
+            value: 'Value',
+            noSelection: 'No selection',
+            singleDate: 'Single Date',
+            dateRange: 'Date Range',
+            multipleDates: 'Multiple Dates',
+            weekSelection: 'Week Selection',
+            monthSelection: 'Month Selection',
+            yearSelection: 'Year Selection',
+            horizontal: 'Horizontal',
+            vertical: 'Vertical',
+            auto: 'Auto',
+            lightTheme: 'Light Theme',
+            darkTheme: 'Dark Theme'
         },
         installation: {
             title: 'Installation',
@@ -47,12 +115,164 @@ export const translations = {
         },
         examples: {
             title: 'Advanced Features',
+            basicTitle: 'Basic Selection',
+            basicLead: 'Common usage patterns for ngxsmk-datepicker components.',
+            advancedTitle: 'Enterprise Features',
+            advancedLead: 'High-performance features for complex enterprise requirements.',
             dateTimeTitle: 'Date & Time Selection',
             dateTimeLead: 'Combine high-precision time selection with our calendar grid.',
             multiMonthTitle: 'Multi-Month Display',
-            multiMonthLead: 'Showcase multiple months simultaneously for better business context.',
+            multiMonthLead: 'Display multiple months simultaneously for better business context.',
             constraintsTitle: 'Interactive Constraints',
-            constraintsLead: 'Enforce business rules with localized min/max date limits.'
+            constraintsLead: 'Enforce business rules with localized min/max date limits.',
+            singleSelection: 'Single Selection',
+            rangeSelection: 'Range Selection',
+            accuracy: 'Accuracy',
+            precision: 'Millisecond Precision',
+            selectedOutput: 'Selected Output',
+            zoneless: 'Zoneless Flow',
+            active: 'Active',
+            featuredBadge: 'Featured Selection',
+            constraintsPlaceholder: 'Limits: Today to Next Month',
+            chooseDate: 'Choose a date',
+            selectRange: 'Select range'
+        },
+        api: {
+            title: 'API Reference',
+            lead: 'Comprehensive documentation for all component inputs, outputs, and utility functions.',
+            inputsTitle: 'Component Inputs',
+            outputsTitle: 'Component Outputs',
+            advancedTypesTitle: 'Advanced Types',
+            table: {
+                property: 'Property',
+                type: 'Type',
+                default: 'Default',
+                description: 'Description',
+                event: 'Event',
+                payload: 'Payload'
+            },
+            descriptions: {
+                mode: 'Selection behavior of the datepicker.',
+                inline: 'Controls whether the calendar is embedded or shown in a popover.',
+                locale: 'BCP 47 language tag for internationalization.',
+                theme: 'Visual theme of the component.',
+                showTime: 'Enables time selection inputs.',
+                showSeconds: 'Enables seconds selection in time picker.',
+                use24Hour: 'Switches to 24-hour time format.',
+                allowTyping: 'Allows users to type the date directly into the input.',
+                calendarCount: 'Number of calendars to show (max 12).',
+                calendarLayout: 'Layout orientation for multi-calendar displays.',
+                useNativePicker: 'Uses the browser/OS native date picker (recommended for mobile).',
+                field: 'Integration with Angular 21 Signal-based Forms.',
+                minDate: 'Minimum selectable date.',
+                maxDate: 'Maximum selectable date.',
+                ranges: 'Predefined range options for Range mode.',
+                holidayProvider: 'Provider for highlighting/labeling holidays.',
+                isInvalidDate: 'Custom function to disable specific dates.',
+                disabledDates: 'Static list of dates to disable.',
+                valueChange: 'Emitted when the selected date or range changes.',
+                action: 'Detailed event emission for specific UI interactions.'
+            }
+        },
+        advanced: {
+            title: 'Advanced Features',
+            lead: 'Power-user features for complex date handling scenarios.',
+            signalFormsTitle: 'Signal Forms Integration (Angular 21+)',
+            signalFormsLead: 'Seamlessly integrate with the latest Angular Signal-based forms. Minimal boilerplate, maximum reactivity.',
+            keyboardTitle: 'Keyboard Shortcuts',
+            keyboardLead: 'Full A11y support. Navigate through dates and years purely with your keyboard.',
+            shortcuts: {
+                arrows: 'Navigate Days/Weeks',
+                pgUpDn: 'Change Month',
+                today: 'Select Today',
+                close: 'Close Calendar',
+                help: 'Show Help Overlay'
+            },
+            holidaysTitle: 'Holiday Highlighting',
+            holidaysLead: 'Provide a HolidayProvider to automatically highlight specific dates with labels.',
+            holidayLabels: {
+                newYear: 'New Year',
+                independenceDay: 'Independence Day',
+                christmas: 'Christmas'
+            },
+            timePickerTitle: 'Time Picker Integration',
+            timePickerLead: 'Enable precise time selection alongside your date picker.',
+            disabledDatesTitle: 'Disabled Dates Logic',
+            disabledDatesLead: 'Restrict selection using custom logic or static arrays.',
+            weekendsDisabled: 'Weekends are disabled'
+        },
+        architecture: {
+            title: 'Plugin Architecture',
+            lead: 'Extend the datepicker with custom logic, adapters, and behavioral hooks.',
+            layers: {
+                external: 'External Layer',
+                extensibility: 'Extensibility Layer',
+                core: 'Core Engine'
+            },
+            boxes: {
+                adapters: 'Custom Adapters',
+                strategies: 'Custom Strategies',
+                locales: 'Localization Data',
+                hooks: 'Behavioral Hooks',
+                middleware: 'Validation Middleware',
+                interceptors: 'Theme Interceptors',
+                signals: 'Signals',
+                state: 'State Service',
+                bus: 'Commands Bus'
+            },
+            adaptersTitle: 'Custom Date Adapters',
+            adaptersLead: 'By default, ngxsmk-datepicker uses native JavaScript Date objects. You can plug in custom adapters for libraries like Luxon, Day.js, or date-fns.',
+            hooksTitle: 'Behavioral Hooks',
+            hooksLead: 'Intercept core interactions with the [hooks] input. This allows for deep customization of rendering and validation.',
+            registryTitle: 'Internal Registry Service',
+            registryLead: 'All localization and translation data is managed by centralized services that you can access and modify at runtime:',
+            strategiesTitle: 'Custom Selection Strategies',
+            strategiesLead: 'Take full control over how users select dates. By implementing the SelectionStrategy interface, you can enforce custom business logic.',
+            stateTitle: 'Internal Signal State',
+            stateLead: 'The datepicker is built using a unidirectional Signal-based state architecture.',
+            middlewareTitle: 'Middleware & Interceptors',
+            middlewareLead: 'Registry services support a middleware pattern.',
+            table: {
+                hook: 'Hook',
+                description: 'Description',
+                service: 'Service',
+                hookPoint: 'Hook Point',
+                moreHooks: 'More hooks available in Advanced API Reference'
+            }
+        },
+        theming: {
+            title: 'Custom Theming',
+            lead: 'Full control over the visual identity of your datepicker using a powerful CSS variables system.',
+            tokensTitle: 'Design Tokens',
+            tokensLead: 'Override these variables in your global styles.scss to change the look and feel globally.',
+            glassTitle: 'Glassmorphism UI',
+            glassLead: 'Achieve modern, translucent effects by combining background blur with transparency.',
+            tailwindTitle: 'Tailwind CSS Integration',
+            tailwindLead: 'You can easily map Tailwind colors to the datepicker variables inside your tailwind.config.js or CSS layers.',
+            primary: 'Primary',
+            secondary: 'Secondary',
+            table: {
+                variable: 'Variable',
+                description: 'Description'
+            },
+            descriptions: {
+                primary: 'Main brand color for selection and highlights.',
+                bgPopover: 'Background color of the calendar dropdown.',
+                borderColor: 'Border color for inputs and interactive elements.',
+                radiusMain: 'Corner radius for the main container and buttons.',
+                fontFamily: 'Font used across the entire component.'
+            }
+        },
+        integrations: {
+            title: 'Framework Integration',
+            lead: 'Learn how to seamlessly integrate ngxsmk-datepicker with your favorite UI frameworks.',
+            materialTitle: 'Angular Material',
+            materialLead: 'The library provides built-in support for MatFormField. You can use the datepicker inside a standard Material field with floating labels, hints, and error states.',
+            ionicTitle: 'Ionic Framework',
+            ionicLead: 'For Ionic applications, the datepicker can be used inside ion-item. We recommend using useNativePicker: true on mobile devices for the best user experience.',
+            proTip: 'Pro Tip',
+            proTipText: 'Use appendToBody: true when using the datepicker inside Modals or Overlays to avoid stacking context issues.',
+            usageMatTitle: 'Usage with MatFormField'
         }
     },
     de: {
@@ -63,7 +283,9 @@ export const translations = {
             readyToTransform: 'Bereit, Ihr Angular-Projekt zu transformieren?',
             installToday: 'Installieren Sie heute den erstklassigen Datepicker und erleben Sie den Unterschied.',
             releasedUnder: 'Veröffentlicht unter MIT-Lizenz',
-            poweredBy: 'Unterstützt von'
+            poweredBy: 'Unterstützt von',
+            lookingForRtl: 'Suchen Sie nach RTL-Unterstützung oder eigenen Providern?',
+            checkAdvanced: 'Besuchen Sie den Bereich für erweiterte Funktionen.'
         },
         nav: {
             gettingStarted: 'Erste Schritte',
@@ -81,14 +303,80 @@ export const translations = {
             playground: 'Spielplatz'
         },
         home: {
-            heroBadge: 'Neu v2.0.8 Stabilität',
+            heroBadge: 'Neu v2.0.9 Stabilität',
             heroTitle: 'Der beste Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Der leistungsstärkste, leichteste und barrierefreieste Datepicker für moderne Angular-Projekte. Nahtloser Signal-basierter Status, Zoneless-Architektur und unendliche Anpassungsmöglichkeiten.',
             ctaBuild: 'Jetzt starten',
             ctaPro: 'Pro-Funktionen erkunden',
             seoTitle: 'Warum ist NGXSMK die Nummer 1 für Angular?',
-            seoText: 'Entwickelt für Performance und Entwicklererfahrung, bietet NGXSMK eine nahtlose Datumsauswahl-Schnittstelle, die von einfachen Formularen bis hin zu komplexen Dashboards skaliert.'
+            seoText: 'Entwickelt für Performance und Entwicklererfahrung, bietet NGXSMK eine nahtlose Datumsauswahl-Schnittstelle, die von einfachen Formularen bis hin zu komplexen Dashboards skaliert.',
+            implementation: 'Implementierung',
+            signalOptimized: 'Signal Optimiert',
+            demoMode: {
+                single: 'Einzeln',
+                range: 'Bereich',
+                multiple: 'Mehrfach'
+            },
+            features: {
+                signals: {
+                    title: 'Signals-Unterstützung',
+                    desc: 'Gebaut mit den neuesten Angular Signals für ultraschnelle, feingranulare Reaktivität.'
+                },
+                zoneless: {
+                    title: 'Zoneless-Bereit',
+                    desc: 'Entwickelt für die Zukunft von Angular. Arbeitet nahtlos ohne zone.js für Spitzenleistung.'
+                },
+                multiCalendar: {
+                    title: 'Mehrfach-Kalender-Layouts',
+                    desc: 'Mühelose Anzeige mehrerer Kalender (bis zu 12) mit horizontaler oder vertikaler Ausrichtung.'
+                },
+                a11y: {
+                    title: 'Barrierefrei & Tastatur',
+                    desc: 'Vollständige Tastaturnavigation und WAI-ARIA-Konformität.'
+                },
+                mobile: {
+                    title: 'Mobil Optimiert',
+                    desc: 'Responsives Design mit nativem Picker-Support auf Mobilgeräten.'
+                },
+                locales: {
+                    title: 'RTL & Lokalisierung',
+                    desc: 'Integrierte Unterstützung für Rechts-nach-Links-Sprachen und internationale Formate.'
+                }
+            }
+        },
+        playground: {
+            title: 'Spielplatz',
+            lead: 'Passen Sie Eigenschaften an und sehen Sie, wie sich der Datepicker in Echtzeit verhält.',
+            configTitle: 'Konfigurationen',
+            selectionMode: 'Auswahlmodus',
+            inlineMode: 'Inline-Modus',
+            functionalBehavior: 'Funktionales Verhalten',
+            allowTyping: 'Direkte Eingabe erlauben',
+            showIcon: 'Icon-Button anzeigen',
+            nativePicker: 'Nativen mobilen Picker verwenden',
+            multiCalendar: 'Mehrfach-Kalender-Layout',
+            calendarCount: 'Anzahl Kalender',
+            layout: 'Layout',
+            timeLocales: 'Zeit & Regionaleinstellungen',
+            showTime: 'Zeitauswahl anzeigen',
+            showSeconds: 'Sekunden anzeigen',
+            locale: 'Sprache',
+            theming: 'Theming',
+            reset: 'Standardwerte zurücksetzen',
+            value: 'Wert',
+            noSelection: 'Keine Auswahl',
+            singleDate: 'Einzelnes Datum',
+            dateRange: 'Datumsbereich',
+            multipleDates: 'Mehrere Daten',
+            weekSelection: 'Wochenauswahl',
+            monthSelection: 'Monatsauswahl',
+            yearSelection: 'Jahresauswahl',
+            horizontal: 'Horizontal',
+            vertical: 'Vertikal',
+            auto: 'Auto',
+            lightTheme: 'Helles Thema',
+            darkTheme: 'Dunkles Thema'
         },
         installation: {
             title: 'Installation',
@@ -103,12 +391,149 @@ export const translations = {
         },
         examples: {
             title: 'Erweiterte Funktionen',
+            basicTitle: 'Basisauswahl',
+            basicLead: 'Gängige Nutzungsmuster für ngxsmk-datepicker Komponenten.',
+            advancedTitle: 'Enterprise-Funktionen',
+            advancedLead: 'Hochleistungsfunktionen für komplexe Unternehmensanforderungen.',
             dateTimeTitle: 'Datum & Zeit Auswahl',
             dateTimeLead: 'Kombinieren Sie hochpräzise Zeitwahl mit unserem Kalender-Raster.',
             multiMonthTitle: 'Mehr-Monats-Anzeige',
             multiMonthLead: 'Zeigen Sie mehrere Monate gleichzeitig für besseren Geschäftskontext an.',
             constraintsTitle: 'Interaktive Einschränkungen',
-            constraintsLead: 'Setzen Sie Geschäftsregeln mit lokalisierten Min/Max-Datumsgrenzen durch.'
+            constraintsLead: 'Setzen Sie Geschäftsregeln mit lokalisierten Min/Max-Datumsgrenzen durch.',
+            singleSelection: 'Einzelauswahl',
+            rangeSelection: 'Bereichsauswahl',
+            accuracy: 'Genauigkeit',
+            precision: 'Millisekunden-Präzision',
+            selectedOutput: 'Ausgabe',
+            zoneless: 'Zoneless',
+            active: 'Aktiv',
+            featuredBadge: 'Vorgestellte Auswahl',
+            constraintsPlaceholder: 'Grenzen: Heute bis nächster Monat',
+            chooseDate: 'Datum wählen',
+            selectRange: 'Bereich wählen'
+        },
+        api: {
+            title: 'API-Referenz',
+            lead: 'Umfassende Dokumentation für alle Komponenten-Inputs, Outputs und Hilfsfunktionen.',
+            inputsTitle: 'Komponenten-Inputs',
+            outputsTitle: 'Komponenten-Outputs',
+            advancedTypesTitle: 'Erweiterte Typen',
+            table: {
+                property: 'Eigenschaft',
+                type: 'Typ',
+                default: 'Standard',
+                description: 'Beschreibung',
+                event: 'Ereignis',
+                payload: 'Payload'
+            },
+            descriptions: {
+                mode: 'Auswahlverhalten des Datepickers.',
+                inline: 'Steuert, ob der Kalender eingebettet oder in einem Popover angezeigt wird.',
+                locale: 'BCP 47 Sprach-Tag für die Internationalisierung.',
+                theme: 'Visuelles Thema der Komponente.',
+                showTime: 'Aktiviert Zeitauswahl-Inputs.',
+                showSeconds: 'Aktiviert Sekundenauswahl im Timepicker.',
+                use24Hour: 'Wechselt zum 24-Stunden-Zeitformat.',
+                allowTyping: 'Ermöglicht Benutzern, das Datum direkt in den Input einzugeben.',
+                calendarCount: 'Anzahl der anzuzeigenden Kalender (max. 12).',
+                calendarLayout: 'Layout-Ausrichtung für Mehrfach-Kalender-Anzeigen.',
+                useNativePicker: 'Verwendet den nativen Browser/OS Datepicker (empfohlen für Mobilgeräte).',
+                field: 'Integration mit Angular 21 Signal-basierten Formularen.',
+                minDate: 'Minimal auswählbares Datum.',
+                maxDate: 'Maximal auswählbares Datum.',
+                ranges: 'Vordefinierte Bereichsoptionen für den Bereichsmodus.',
+                holidayProvider: 'Provider zum Hervorheben/Beschriften von Feiertagen.',
+                isInvalidDate: 'Benutzerdefinierte Funktion zum Deaktivieren bestimmter Daten.',
+                disabledDates: 'Statische Liste von zu deaktivierenden Daten.',
+                valueChange: 'Wird ausgelöst, wenn sich das ausgewählte Datum oder der Bereich ändert.',
+                action: 'Detaillierte Ereignisemission für spezifische UI-Interaktionen.'
+            }
+        },
+        advanced: {
+            title: 'Erweiterte Funktionen',
+            lead: 'Funktionen für Power-User für komplexe Datumshandhabungsszenarien.',
+            signalFormsTitle: 'Signal Forms Integration (Angular 21+)',
+            keyboardTitle: 'Tastaturkürzel',
+            holidayLabels: {
+                newYear: 'Neujahr',
+                independenceDay: 'Unabhängigkeitstag',
+                christmas: 'Weihnachten'
+            },
+            weekendsDisabled: 'Wochenenden sind deaktiviert'
+        },
+        architecture: {
+            title: 'Plugin-Architektur',
+            lead: 'Erweitern Sie den Datepicker mit eigener Logik, Adaptern und Hooks.',
+            layers: {
+                external: 'Externe Ebene',
+                extensibility: 'Erweiterbarkeitsebene',
+                core: 'Kern-Engine'
+            },
+            boxes: {
+                adapters: 'Benutzerdefinierte Adapter',
+                strategies: 'Benutzerdefinierte Strategien',
+                locales: 'Lokalisierungsdaten',
+                hooks: 'Verhaltens-Hooks',
+                middleware: 'Validierung-Middleware',
+                interceptors: 'Themen-Interzeptoren',
+                signals: 'Signals',
+                state: 'Status-Service',
+                bus: 'Befehlsbus'
+            },
+            adaptersTitle: 'Benutzerdefinierte Datumsadapter',
+            adaptersLead: 'Standardmäßig verwendet ngxsmk-datepicker native JavaScript-Date-Objekte. Sie können benutzerdefinierte Adapter für Bibliotheken wie Luxon, Day.js oder date-fns hinzufügen.',
+            hooksTitle: 'Verhaltens-Hooks',
+            hooksLead: 'Fangen Sie Kerninteraktionen mit dem [hooks]-Eingang ab. Dies ermöglicht eine tiefe Anpassung von Rendering und Validierung.',
+            registryTitle: 'Interner Registrierungsdienst',
+            registryLead: 'Alle Lokalisierungs- und Übersetzungsdaten werden von zentralen Diensten verwaltet, auf die Sie zur Laufzeit zugreifen und die Sie ändern können:',
+            strategiesTitle: 'Benutzerdefinierte Auswahlstrategien',
+            strategiesLead: 'Übernehmen Sie die volle Kontrolle darüber, wie Benutzer Daten auswählen. Durch Implementierung der SelectionStrategy-Schnittstelle können Sie benutzerdefinierte Geschäftslogik erzwingen.',
+            stateTitle: 'Interner Signal-Status',
+            stateLead: 'Der Datepicker wird mit einer unidirektionalen Signal-basierten Zustandsarchitektur erstellt.',
+            middlewareTitle: 'Middleware & Interzeptoren',
+            middlewareLead: 'Registrierungsdienste unterstützen ein Middleware-Muster.',
+            table: {
+                hook: 'Hook',
+                description: 'Beschreibung',
+                service: 'Dienst',
+                hookPoint: 'Hook-Punkt',
+                moreHooks: 'Weitere Hooks in der erweiterten API-Referenz verfügbar'
+            }
+        },
+        theming: {
+            title: 'Benutzerdefiniertes Theming',
+            lead: 'Volle Kontrolle über die visuelle Identität mit CSS-Variablen.',
+            tokensTitle: 'Design-Tokens',
+            tokensLead: 'Überschreiben Sie diese Variablen in Ihren globalen styles.scss, um das Erscheinungsbild global zu ändern.',
+            glassTitle: 'Glassmorphism UI',
+            glassLead: 'Erzielen Sie moderne, transluzente Effekte durch die Kombination von Hintergrundunschärfe mit Transparenz.',
+            tailwindTitle: 'Tailwind CSS Integration',
+            tailwindLead: 'Sie können Tailwind-Farben einfach auf die Datepicker-Variablen in Ihrer tailwind.config.js oder Ihren CSS-Layern abbilden.',
+            primary: 'Primär',
+            secondary: 'Sekundär',
+            table: {
+                variable: 'Variable',
+                description: 'Beschreibung'
+            },
+            descriptions: {
+                primary: 'Hauptmarkenfarbe für Auswahl und Hervorhebungen.',
+                bgPopover: 'Hintergrundfarbe des Kalender-Dropdowns.',
+                borderColor: 'Rahmenfarbe für Eingaben und interaktive Elemente.',
+                radiusMain: 'Eckenradius für den Hauptcontainer und Schaltflächen.',
+                fontFamily: 'Schriftart, die in der gesamten Komponente verwendet wird.'
+            }
+        },
+        integrations: {
+            title: 'Framework-Integration',
+            lead: 'Integrieren Sie ngxsmk-datepicker nahtlos in Ihre UI-Frameworks.',
+            materialTitle: 'Angular Material',
+            materialLead: 'Die Bibliothek bietet integrierte Unterstützung für MatFormField. Sie können den Datepicker in einem Standard-Material-Feld mit Floating Labels, Hinweisen und Fehlerzuständen verwenden.',
+            ionicTitle: 'Ionic Framework',
+            ionicLead: 'Für Ionic-Anwendungen kann der Datepicker innerhalb von ion-item verwendet werden. Wir empfehlen die Verwendung von useNativePicker: true auf Mobilgeräten für das beste Benutzererlebnis.',
+            proTip: 'Profi-Tipp',
+            proTipText: 'Verwenden Sie appendToBody: true, wenn Sie den Datepicker in Modals oder Overlays verwenden, um Probleme mit dem Stacking-Kontext zu vermeiden.',
+            usageMatTitle: 'Verwendung mit MatFormField'
         }
     },
     es: {
@@ -119,7 +544,9 @@ export const translations = {
             readyToTransform: '¿Listo para transformar tu proyecto Angular?',
             installToday: 'Instala hoy mismo el mejor selector de fechas de su clase y experimenta la diferencia.',
             releasedUnder: 'Publicado bajo licencia MIT',
-            poweredBy: 'Impulsado por'
+            poweredBy: 'Impulsado por',
+            lookingForRtl: '¿Busca soporte RTL o proveedores personalizados?',
+            checkAdvanced: 'Consulte la sección de Funciones Avanzadas.'
         },
         nav: {
             gettingStarted: 'Primeros Pasos',
@@ -137,14 +564,62 @@ export const translations = {
             playground: 'Laboratorio'
         },
         home: {
-            heroBadge: 'Nuevo v2.0.8 Estabilidad',
+            heroBadge: 'Nuevo v2.0.9 Estabilidad',
             heroTitle: 'El mejor Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'El selector de fechas más potente, ligero y accesible para proyectos modernos de Angular. Estado impecable basado en Signals, arquitectura Zoneless y personalización infinita.',
             ctaBuild: 'Empezar a Construir',
             ctaPro: 'Explorar Funciones Pro',
             seoTitle: '¿Por qué NGXSMK es la opción #1 para Angular?',
-            seoText: 'Diseñado para el rendimiento y la experiencia del desarrollador, NGXSMK ofrece una interfaz de selección de fechas impecable que escala desde formularios simples hasta paneles complejos.'
+            seoText: 'Diseñado para el rendimiento y la experiencia del desarrollador, NGXSMK ofrece una interfaz de selección de fechas impecable que escala desde formularios simples hasta paneles complejos.',
+            implementation: 'Implementación',
+            signalOptimized: 'Optimizado para Signals',
+            demoMode: {
+                single: 'Único',
+                range: 'Rango',
+                multiple: 'Múltiple'
+            },
+            features: {
+                signals: { title: 'Potenciado por Signals', desc: 'Construido con las últimas Angular Signals para una reactividad ultrarrápida.' },
+                zoneless: { title: 'Listo para Zoneless', desc: 'Diseñado para el futuro de Angular. Funciona sin problemas sin zone.js.' },
+                multiCalendar: { title: 'Diseños de varios calendarios', desc: 'Muestre sin esfuerzo varios calendarios (hasta 12) con orientación horizontal o vertical.' },
+                a11y: { title: 'Accesibilidad total y teclado', desc: 'Navegación completa por teclado y cumplimiento de WAI-ARIA.' },
+                mobile: { title: 'Optimizado para móviles', desc: 'Diseño receptivo con soporte de selector nativo en dispositivos móviles.' },
+                locales: { title: 'RTL y configuraciones regionales', desc: 'Soporte integrado para idiomas de derecha a izquierda y formatos internacionales.' }
+            }
+        },
+        playground: {
+            title: 'Laboratorio',
+            lead: 'Ajusta propiedades y observa cómo se comporta el selector de fechas en tiempo real.',
+            configTitle: 'Configuraciones',
+            selectionMode: 'Modo de Selección',
+            inlineMode: 'Modo en línea',
+            functionalBehavior: 'Comportamiento Funcional',
+            allowTyping: 'Permitir escritura directa',
+            showIcon: 'Mostrar botón de icono',
+            nativePicker: 'Usar selector móvil nativo',
+            multiCalendar: 'Diseño de múltiples calendarios',
+            calendarCount: 'Conteo de calendarios',
+            layout: 'Diseño',
+            timeLocales: 'Hora y Configuración Regional',
+            showTime: 'Mostrar selector de hora',
+            showSeconds: 'Mostrar segundos',
+            locale: 'Idioma',
+            theming: 'Tematización',
+            reset: 'Restablecer valores predeterminados',
+            value: 'Valor',
+            noSelection: 'Sin selección',
+            singleDate: 'Fecha única',
+            dateRange: 'Rango de fechas',
+            multipleDates: 'Múltiples fechas',
+            weekSelection: 'Selección de semana',
+            monthSelection: 'Selección de mes',
+            yearSelection: 'Selección de año',
+            horizontal: 'Horizontal',
+            vertical: 'Vertical',
+            auto: 'Auto',
+            lightTheme: 'Tema claro',
+            darkTheme: 'Tema oscuro'
         },
         installation: {
             title: 'Instalación',
@@ -159,12 +634,149 @@ export const translations = {
         },
         examples: {
             title: 'Funciones Avanzadas',
+            basicTitle: 'Selección Básica',
+            basicLead: 'Patrones de uso comunes para los componentes ngxsmk-datepicker.',
+            advancedTitle: 'Funciones Enterprise',
+            advancedLead: 'Funciones de alto rendimiento para requisitos empresariales complejos.',
             dateTimeTitle: 'Selección de Fecha y Hora',
             dateTimeLead: 'Combine la selección de hora de alta precisión con nuestra cuadrícula de calendario.',
             multiMonthTitle: 'Visualización Multimes',
             multiMonthLead: 'Muestre varios meses simultáneamente para un mejor contexto empresarial.',
             constraintsTitle: 'Restricciones Interactivas',
-            constraintsLead: 'Aplique reglas comerciales con límites de fecha mín/máx localizados.'
+            constraintsLead: 'Aplique reglas de negocio con límites de fecha mín/máx localizados.',
+            singleSelection: 'Selección Única',
+            rangeSelection: 'Selección de Rango',
+            accuracy: 'Precisión',
+            precision: 'Precisión de Milisegundos',
+            selectedOutput: 'Salida Seleccionada',
+            zoneless: 'Flujo sin Zone',
+            active: 'Activo',
+            featuredBadge: 'Selección Destacada',
+            constraintsPlaceholder: 'Límites: De hoy al próximo mes',
+            chooseDate: 'Elegir una fecha',
+            selectRange: 'Seleccionar rango'
+        },
+        api: {
+            title: 'Referencia de la API',
+            lead: 'Documentación completa para todas las entradas, salidas y funciones de utilidad de los componentes.',
+            inputsTitle: 'Entradas del Componente',
+            outputsTitle: 'Salidas del Componente',
+            advancedTypesTitle: 'Tipos Avanzados',
+            table: {
+                property: 'Propiedad',
+                type: 'Tipo',
+                default: 'Predeterminado',
+                description: 'Descripción',
+                event: 'Evento',
+                payload: 'Payload'
+            },
+            descriptions: {
+                mode: 'Comportamiento de selección del buscador de fechas.',
+                inline: 'Controla si el calendario está incrustado o se muestra en un popover.',
+                locale: 'Etiqueta de idioma BCP 47 para internacionalización.',
+                theme: 'Tema visual del componente.',
+                showTime: 'Habilita las entradas de selección de hora.',
+                showSeconds: 'Habilita la selección de segundos en el selector de hora.',
+                use24Hour: 'Cambia al formato de hora de 24 horas.',
+                allowTyping: 'Permite a los usuarios escribir la fecha directamente.',
+                calendarCount: 'Número de calendarios a mostrar (máx. 12).',
+                calendarLayout: 'Orientación del diseño para pantallas multicalendario.',
+                useNativePicker: 'Utiliza el selector nativo del navegador/SO.',
+                field: 'Integración con los formularios Signal de Angular 21.',
+                minDate: 'Fecha mínima seleccionable.',
+                maxDate: 'Fecha máxima seleccionable.',
+                ranges: 'Opciones de rango predefinidas.',
+                holidayProvider: 'Proveedor para resaltar días festivos.',
+                isInvalidDate: 'Función personalizada para desactivar fechas específicas.',
+                disabledDates: 'Lista estática de fechas a desactivar.',
+                valueChange: 'Se emite cuando cambia la fecha o el rango seleccionado.',
+                action: 'Emisión de eventos detallada para interacciones específicas de la interfaz de usuario.'
+            }
+        },
+        advanced: {
+            title: 'Funciones Avanzadas',
+            lead: 'Funciones para usuarios avanzados para escenarios complejos de manejo de fechas.',
+            signalFormsTitle: 'Integración de Signal Forms (Angular 21+)',
+            keyboardTitle: 'Atajos de teclado',
+            holidayLabels: {
+                newYear: 'Año Nuevo',
+                independenceDay: 'Día de la Independencia',
+                christmas: 'Navidad'
+            },
+            weekendsDisabled: 'Los fines de semana están desactivados'
+        },
+        architecture: {
+            title: 'Arquitectura de Plugins',
+            lead: 'Extienda el selector de fechas con lógica personalizada, adaptadores y ganchos de comportamiento.',
+            layers: {
+                external: 'Capa Externa',
+                extensibility: 'Capa de Extensibilidad',
+                core: 'Motor Central'
+            },
+            boxes: {
+                adapters: 'Adaptadores Pers.',
+                strategies: 'Estrategias Pers.',
+                locales: 'Datos de Localiz.',
+                hooks: 'Hooks de Comport.',
+                middleware: 'Middleware de Valid.',
+                interceptors: 'Intercep. de Temas',
+                signals: 'Signals',
+                state: 'Servicio de Estado',
+                bus: 'Bus de Comandos'
+            },
+            adaptersTitle: 'Adaptadores de Fecha Personalizados',
+            adaptersLead: 'De forma predeterminada, ngxsmk-datepicker utiliza objetos Date nativos de JavaScript. Puede conectar adaptadores personalizados para bibliotecas como Luxon, Day.js o date-fns.',
+            hooksTitle: 'Hooks de Comportamiento',
+            hooksLead: 'Intercepte las interacciones principales con la entrada [hooks]. Esto permite una personalización profunda de la representación y la validación.',
+            registryTitle: 'Servicio de Registro Interno',
+            registryLead: 'Todos los datos de localización y traducción son gestionados por servicios centralizados a los que puede acceder y modificar en tiempo de ejecución:',
+            strategiesTitle: 'Estrategias de Selección Personalizadas',
+            strategiesLead: 'Tome el control total sobre cómo los usuarios seleccionan las fechas. Al implementar la interfaz SelectionStrategy, puede aplicar lógica de negocio personalizada.',
+            stateTitle: 'Estado Interno de Signal',
+            stateLead: 'El selector de fechas está construido utilizando una arquitectura de estado unidireccional basada en Signals.',
+            middlewareTitle: 'Middleware e Interceptores',
+            middlewareLead: 'Los servicios de registro admiten un patrón de middleware.',
+            table: {
+                hook: 'Hook',
+                description: 'Descripción',
+                service: 'Servicio',
+                hookPoint: 'Punto de Hook',
+                moreHooks: 'Más hooks disponibles en la Referencia de API Avanzada'
+            }
+        },
+        theming: {
+            title: 'Tematización Personalizada',
+            lead: 'Control total sobre la identidad visual de su datepicker mediante un potente sistema de variables CSS.',
+            tokensTitle: 'Tokens de Diseño',
+            tokensLead: 'Anule estas variables en sus styles.scss globales para cambiar el aspecto globalmente.',
+            glassTitle: 'IU de Glassmorphism',
+            glassLead: 'Logre efectos modernos y traslúcidos combinando el desenfoque de fondo con la transparencia.',
+            tailwindTitle: 'Integración de Tailwind CSS',
+            tailwindLead: 'Puede mapear fácilmente los colores de Tailwind a las variables del selector de fechas dentro de su tailwind.config.js o capas CSS.',
+            primary: 'Primario',
+            secondary: 'Secundario',
+            table: {
+                variable: 'Variable',
+                description: 'Descripción'
+            },
+            descriptions: {
+                primary: 'Color de marca principal para selección y resaltados.',
+                bgPopover: 'Color de fondo de la ventana emergente del calendario.',
+                borderColor: 'Color de borde para entradas y elementos interactivos.',
+                radiusMain: 'Radio de esquina para el contenedor principal y los botones.',
+                fontFamily: 'Fuente utilizada en todo el componente.'
+            }
+        },
+        integrations: {
+            title: 'Integración de Frameworks',
+            lead: 'Aprenda a integrar sin problemas ngxsmk-datepicker con sus frameworks de interfaz de usuario favoritos.',
+            materialTitle: 'Angular Material',
+            materialLead: 'La biblioteca proporciona soporte integrado para MatFormField. Puede usar el selector de fechas dentro de un campo de Material estándar con etiquetas flotantes, sugerencias y estados de error.',
+            ionicTitle: 'Ionic Framework',
+            ionicLead: 'Para aplicaciones Ionic, el selector de fechas se puede usar dentro de ion-item. Recomendamos usar useNativePicker: true en dispositivos móviles para la mejor experiencia de usuario.',
+            proTip: 'Consejo Pro',
+            proTipText: 'Use appendToBody: true cuando use el selector de fechas dentro de Modales o Superposiciones para evitar problemas de contexto de apilamiento.',
+            usageMatTitle: 'Uso con MatFormField'
         }
     },
     sv: {
@@ -175,7 +787,9 @@ export const translations = {
             readyToTransform: 'Redo att transformera ditt Angular-projekt?',
             installToday: 'Installera marknadens bästa datumväljare idag och upplev skillnaden.',
             releasedUnder: 'Släppt under MIT-licens',
-            poweredBy: 'Drivs av'
+            poweredBy: 'Drivs av',
+            lookingForRtl: 'Letar du efter RTL-stöd eller anpassade leverantörer?',
+            checkAdvanced: 'Kolla in avsnittet Avancerade funktioner.'
         },
         nav: {
             gettingStarted: 'Kom igång',
@@ -193,14 +807,62 @@ export const translations = {
             playground: 'Lekplats'
         },
         home: {
-            heroBadge: 'Ny v2.0.8 stabilitet',
+            heroBadge: 'Ny v2.0.9 stabilitet',
             heroTitle: 'Den bästa open-source',
             heroSubtitle: 'Angular datumväljare',
             heroLead: 'Den mest kraftfulla, lätta och tillgängliga datumväljaren för moderna Angular-projekt. Sömlös signalbaserad status, zonlös arkitektur och oändlig anpassning.',
             ctaBuild: 'Börja bygga',
             ctaPro: 'Utforska Pro-funktioner',
             seoTitle: 'Varför är NGXSMK det självklara valet för Angular?',
-            seoText: 'Konstruerad för prestanda och utvecklarupplevelse, levererar NGXSMK ett sömlöst datumvalsgränssnitt som skalar från enkla formulär till komplexa instrumentpaneler.'
+            seoText: 'Konstruerad för prestanda och utvecklarupplevelse, levererar NGXSMK ett sömlöst datumvalsgränssnitt som skalar från enkla formulär till komplexa instrumentpaneler.',
+            implementation: 'Implementering',
+            signalOptimized: 'Signaloptimerad',
+            demoMode: {
+                single: 'Enkel',
+                range: 'Intervall',
+                multiple: 'Flera'
+            },
+            features: {
+                signals: { title: 'Drivs av Signaler', desc: 'Byggd med de senaste Angular Signalerna för ultrasnabb, finkornig reaktivitet.' },
+                zoneless: { title: 'Zonlös Redo', desc: 'Konstruerad för framtidens Angular. Fungerar sömlöst utan zone.js.' },
+                multiCalendar: { title: 'Flerkalenderlayouter', desc: 'Visa enkelt flera kalendrar (upp till 12) med horisontell eller vertikal orientering.' },
+                a11y: { title: 'Full tillgänglighet och tangentbord', desc: 'Komplett tangentbordsnavigering och WAI-ARIA-efterlevnad.' },
+                mobile: { title: 'Mobiloptimerad', desc: 'Responsiv design med inbyggt väljarstöd på mobila enheter.' },
+                locales: { title: 'RTL och lokaler', desc: 'Inbyggt stöd för höger-till-vänster-språk och internationell formatering.' }
+            }
+        },
+        playground: {
+            title: 'Lekplats',
+            lead: 'Justera egenskaper och se hur datumväljaren beter sig i realtid.',
+            configTitle: 'Konfigurationer',
+            selectionMode: 'Urvalsläge',
+            inlineMode: 'Inline-läge',
+            functionalBehavior: 'Funktionellt beteende',
+            allowTyping: 'Tillåt direktskrivning',
+            showIcon: 'Visa ikonknapp',
+            nativePicker: 'Använd inbyggd mobilväljare',
+            multiCalendar: 'Flerkalenderlayout',
+            calendarCount: 'Antal kalendrar',
+            layout: 'Layout',
+            timeLocales: 'Tid & Lokaler',
+            showTime: 'Visa tidsväljare',
+            showSeconds: 'Visa sekunder',
+            locale: 'Språk',
+            theming: 'Temahantering',
+            reset: 'Återställ standardvärden',
+            value: 'Värde',
+            noSelection: 'Inget val',
+            singleDate: 'Enstaka datum',
+            dateRange: 'Datumintervall',
+            multipleDates: 'Flera datum',
+            weekSelection: 'Veckourval',
+            monthSelection: 'Månadsurval',
+            yearSelection: 'Årsurval',
+            horizontal: 'Horisontell',
+            vertical: 'Vertikal',
+            auto: 'Auto',
+            lightTheme: 'Ljust tema',
+            darkTheme: 'Mörkt tema'
         },
         installation: {
             title: 'Installation',
@@ -215,12 +877,149 @@ export const translations = {
         },
         examples: {
             title: 'Avancerade funktioner',
+            basicTitle: 'Grundläggande val',
+            basicLead: 'Vanliga användningsmönster för ngxsmk-datepicker-komponenter.',
+            advancedTitle: 'Enterprise-funktioner',
+            advancedLead: 'Högpresterande funktioner för komplexa företagsbehov.',
             dateTimeTitle: 'Val av datum och tid',
-            dateTimeLead: 'Kombinera högprecisionstidsval med vårt kalenderraster.',
+            dateTimeLead: 'Kombinera tidsval med hög precision med vårt kalenderrutnät.',
             multiMonthTitle: 'Flerstegsvisning',
-            multiMonthLead: 'Visa flera månader samtidigt för bättre affärskontext.',
+            multiMonthLead: 'Visa flera månader samtidigt för bättre affärssammanhang.',
             constraintsTitle: 'Interaktiva begränsningar',
-            constraintsLead: 'Genomdriva affärsregler med lokaliserade min/max-datumgränser.'
+            constraintsLead: 'Genomdriva affärsregler med lokaliserade min/max-datumgränser.',
+            singleSelection: 'Enkelval',
+            rangeSelection: 'Intervallval',
+            accuracy: 'Noggrannhet',
+            precision: 'Millisekundprecision',
+            selectedOutput: 'Valt utdata',
+            zoneless: 'Zoneless Flow',
+            active: 'Aktiv',
+            featuredBadge: 'Utvalt val',
+            constraintsPlaceholder: 'Gränser: Idag till nästa månad',
+            chooseDate: 'Välj ett datum',
+            selectRange: 'Välj intervall'
+        },
+        api: {
+            title: 'API-referens',
+            lead: 'Fullständig dokumentation för alla komponentingångar, utgångar och verktygsfunktioner.',
+            inputsTitle: 'Komponentingångar',
+            outputsTitle: 'Komponentutgångar',
+            advancedTypesTitle: 'Avancerade typer',
+            table: {
+                property: 'Egenskap',
+                type: 'Typ',
+                default: 'Standard',
+                description: 'Beskrivning',
+                event: 'Händelse',
+                payload: 'Payload'
+            },
+            descriptions: {
+                mode: 'Urvalsbeteende för datumväljaren.',
+                inline: 'Kontrollerar om kalendern är inbäddad eller visas i en popover.',
+                locale: 'BCP 47-språktagg för internationalisering.',
+                theme: 'Visuellt tema för komponenten.',
+                showTime: 'Aktiverar tidsvalsingångar.',
+                showSeconds: 'Aktiverar sekundval i tidsväljaren.',
+                use24Hour: 'Växlar till 24-timmars tidsformat.',
+                allowTyping: 'Tillåter användare att skriva datumet direkt i inmatningen.',
+                calendarCount: 'Antal kalendrar som ska visas (max 12).',
+                calendarLayout: 'Layoutorientering för flerkalendervisningar.',
+                useNativePicker: 'Använder webbläsarens/operativsystemets inbyggda datumväljare (rekommenderas för mobil).',
+                field: 'Integration med Angular 21 Signal-baserade formulär.',
+                minDate: 'Minsta valbara datum.',
+                maxDate: 'Maximalt valbart datum.',
+                ranges: 'Fördefinierade intervallalternativ för Intervalläge.',
+                holidayProvider: 'Leverantör för markering/märkning av helgdagar.',
+                isInvalidDate: 'Anpassad funktion för att inaktivera specifika datum.',
+                disabledDates: 'Statisk lista över datum som ska inaktiveras.',
+                valueChange: 'Utlöses när det valda datumet eller intervallet ändras.',
+                action: 'Detaljerad händelseemission för specifika UI-interaktioner.'
+            }
+        },
+        advanced: {
+            title: 'Avancerade funktioner',
+            lead: 'Power-user-funktioner för komplexa datumhanteringsscenarier.',
+            signalFormsTitle: 'Signal Forms-integration (Angular 21+)',
+            keyboardTitle: 'Tangentbordsgenvägar',
+            holidayLabels: {
+                newYear: 'Nyår',
+                independenceDay: 'Självständighetsdagen',
+                christmas: 'Jul'
+            },
+            weekendsDisabled: 'Helger är inaktiverade'
+        },
+        architecture: {
+            title: 'Plugin-arkitektur',
+            lead: 'Utöka datumväljaren med anpassad logik, adaptrar och beteendehooks.',
+            layers: {
+                external: 'Externt lager',
+                extensibility: 'Utökningsbarhetslager',
+                core: 'Kärnmotor'
+            },
+            boxes: {
+                adapters: 'Anpassade adaptrar',
+                strategies: 'Anpassade strategier',
+                locales: 'Lokaliseringsdata',
+                hooks: 'Beteendehooks',
+                middleware: 'Valideringsmiddleware',
+                interceptors: 'Temainterceptorer',
+                signals: 'Signaler',
+                state: 'Statustjänst',
+                bus: 'Kommandobuss'
+            },
+            adaptersTitle: 'Anpassade datumadaptrar',
+            adaptersLead: 'Som standard använder ngxsmk-datepicker inbyggda JavaScript Date-objekt. Du kan koppla in anpassade adaptrar för bibliotek som Luxon, Day.js eller date-fns.',
+            hooksTitle: 'Beteendehooks',
+            hooksLead: 'Fånga upp kärninteraktioner med [hooks]-ingången. Detta möjliggör djupgående anpassning av rendering och validering.',
+            registryTitle: 'Intern registertjänst',
+            registryLead: 'All lokaliserings- och översättningsdata hanteras av centraliserade tjänster som du kan komma åt och ändra vid körning:',
+            strategiesTitle: 'Anpassade urvalsstrategier',
+            strategiesLead: 'Ta full kontroll över hur användare väljer datum. Genom att implementera SelectionStrategy-gränssnittet kan du genomdriva anpassad affärslogik, såsom "Endast arbetsvecka"-intervall eller "Fast varaktighet"-val.',
+            stateTitle: 'Intern signalstatus',
+            stateLead: 'Datumväljaren är byggd med en enkelriktad Signal-baserad tillståndsarkitektur. Du kan injicera DatepickerStateService för att reagera på interna ändringar innan de skickas till (ngModel).',
+            middlewareTitle: 'Middleware & interceptorer',
+            middlewareLead: 'Registertjänster stöder ett middleware-mönster. Detta gör att du kan fånga upp översättningar eller lokaldata när de begärs av UI-komponenterna.',
+            table: {
+                hook: 'Hook',
+                description: 'Beskrivning',
+                service: 'Tjänst',
+                hookPoint: 'Hook Point',
+                moreHooks: 'Fler hooks finns i avancerad API-referens'
+            }
+        },
+        theming: {
+            title: 'Anpassad temahantering',
+            lead: 'Full kontroll över den visuella identiteten för din datumväljare med ett kraftfullt CSS-variabelsystem.',
+            tokensTitle: 'Design-tokens',
+            tokensLead: 'Överskrid dessa variabler i dina globala styles.scss för att ändra utseendet globalt.',
+            glassTitle: 'Glassmorphism UI',
+            glassLead: 'Uppnå moderna, genomskinliga effekter genom att kombinera bakgrundsoskärpa med transparens.',
+            tailwindTitle: 'Tailwind CSS-integration',
+            tailwindLead: 'Du kan enkelt mappa Tailwind-färger till datumväljarens variabler i din tailwind.config.js eller CSS-lager.',
+            primary: 'Primär',
+            secondary: 'Sekundär',
+            table: {
+                variable: 'Variabel',
+                description: 'Beskrivning'
+            },
+            descriptions: {
+                primary: 'Huvudsaklig märkesfärg för val och framhävningar.',
+                bgPopover: 'Bakgrundsfärg för kalenderns rullgardinsmeny.',
+                borderColor: 'Kantlinjefärg för inmatningar och interaktiva element.',
+                radiusMain: 'Hörnhörneradius för huvudbehållaren och knappar.',
+                fontFamily: 'Typsnitt som används i hela komponenten.'
+            }
+        },
+        integrations: {
+            title: 'Ramverksintegration',
+            lead: 'Lär dig hur du sömlöst integrerar ngxsmk-datepicker med dina favorit-UI-ramverk.',
+            materialTitle: 'Angular Material',
+            materialLead: 'Biblioteket ger inbyggt stöd för MatFormField. Du kan använda datumväljaren inuti ett standard Material-fält med flytande etiketter, ledtrådar och feltillstånd.',
+            ionicTitle: 'Ionic-ramverket',
+            ionicLead: 'För Ionic-applikationer kan datumväljaren användas inuti ion-item. Vi rekommenderar att du använder useNativePicker: true på mobila enheter för bästa användarupplevelse.',
+            proTip: 'Pro-tips',
+            proTipText: 'Använd appendToBody: true när du använder datumväljaren inuti modaler eller överlägg för att undvika problem med staplingskontext.',
+            usageMatTitle: 'Användning med MatFormField'
         }
     },
     ko: {
@@ -231,7 +1030,9 @@ export const translations = {
             readyToTransform: 'Angular 프로젝트를 혁신할 준비가 되셨나요?',
             installToday: '오늘 동급 최고의 데이트피커를 설치하고 차이를 경험해 보세요.',
             releasedUnder: 'MIT 라이선스로 배포됨',
-            poweredBy: '제공:'
+            poweredBy: '제공:',
+            lookingForRtl: 'RTL 지원 또는 커스텀 프로바이더를 찾으시나요?',
+            checkAdvanced: '고급 기능 섹션을 확인해 보세요.'
         },
         nav: {
             gettingStarted: '시작하기',
@@ -249,14 +1050,62 @@ export const translations = {
             playground: '플레이그라운드'
         },
         home: {
-            heroBadge: '새로운 v2.0.8 안정성',
+            heroBadge: '새로운 v2.0.9 안정성',
             heroTitle: '최고의 오픈 소스',
             heroSubtitle: 'Angular 데이트피커',
             heroLead: '현대적인 Angular 프로젝트를 위한 가장 강력하고 가볍고 접근성이 좋은 데이트피커입니다. 원활한 Signal 기반 상태, Zoneless 아키텍처 및 무한한 커스터마이징을 제공합니다.',
             ctaBuild: '빌드 시작하기',
             ctaPro: 'Pro 기능 살펴보기',
             seoTitle: '왜 NGXSMK가 Angular를 위한 최고의 선택인가요?',
-            seoText: '성능과 개발자 경험을 위해 설계된 NGXSMK는 단순한 양식에서 복잡한 대시보드에 이르기까지 확장 가능한 원활한 날짜 선택 인터페이스를 제공합니다.'
+            seoText: '성능과 개발자 경험을 위해 설계된 NGXSMK는 단순한 양식에서 복잡한 대시보드에 이르기까지 확장 가능한 원활한 날짜 선택 인터페이스를 제공합니다.',
+            implementation: '구현',
+            signalOptimized: 'Signal 최적화',
+            demoMode: {
+                single: '단일',
+                range: '범위',
+                multiple: '다중'
+            },
+            features: {
+                signals: { title: 'Signals 구동', desc: '최신 Angular Signals로 구축되어 초고속 반응성을 제공합니다.' },
+                zoneless: { title: 'Zoneless 지원', desc: 'Angular의 미래를 위해 설계되었습니다. zone.js 없이도 원활하게 작동합니다.' },
+                multiCalendar: { title: '다중 달력 레이아웃', desc: '가로 또는 세로 방향으로 최대 12개의 달력을 손쉽게 표시합니다.' },
+                a11y: { title: '전체 접근성 및 키보드', desc: '완벽한 키보드 탐색 및 WAI-ARIA 준수.' },
+                mobile: { title: '모바일 최적화', desc: '모바일 기기에서 네이티브 선택기 지원을 포함한 반응형 디자인.' },
+                locales: { title: 'RTL 및 로케일', desc: '우측에서 좌측으로 읽는 언어 및 국제 날짜/시간 형식 지원.' }
+            }
+        },
+        playground: {
+            title: '플레이그라운드',
+            lead: '속성을 조정하고 데이트피커가 실시간으로 어떻게 작동하는지 확인하세요.',
+            configTitle: '구성',
+            selectionMode: '선택 모드',
+            inlineMode: '인라인 모드',
+            functionalBehavior: '기능적 동작',
+            allowTyping: '직접 입력 허용',
+            showIcon: '아이콘 버튼 표시',
+            nativePicker: '네이티브 모바일 선택기 사용',
+            multiCalendar: '다중 달력 레이아웃',
+            calendarCount: '달력 수',
+            layout: '레이아웃',
+            timeLocales: '시간 및 로케일',
+            showTime: '시간 선택기 표시',
+            showSeconds: '초 표시',
+            locale: '로케일',
+            theming: '테마',
+            reset: '기본값 재설정',
+            value: '값',
+            noSelection: '선택 없음',
+            singleDate: '단일 날짜',
+            dateRange: '날짜 범위',
+            multipleDates: '여러 날짜',
+            weekSelection: '주 선택',
+            monthSelection: '월 선택',
+            yearSelection: '연 선택',
+            horizontal: '가로',
+            vertical: '세로',
+            auto: '자동',
+            lightTheme: '라이트 테마',
+            darkTheme: '다크 테마'
         },
         installation: {
             title: '설치',
@@ -271,12 +1120,149 @@ export const translations = {
         },
         examples: {
             title: '고급 기능',
+            basicTitle: '기본 선택',
+            basicLead: 'ngxsmk-datepicker 구성 요소의 일반적인 사용 패턴입니다.',
+            advancedTitle: '엔터프라이즈 기능',
+            advancedLead: '복잡한 기업 요구 사항을 위한 고성능 기능입니다.',
             dateTimeTitle: '날짜 및 시간 선택',
-            dateTimeLead: '달력 그리드와 고정밀 시간 선택을 결합하세요.',
+            dateTimeLead: '정밀한 시간 선택과 캘린더 그리드를 결합합니다.',
             multiMonthTitle: '다중 월 표시',
-            multiMonthLead: '더 나은 비즈니스 맥락을 위해 여러 달을 동시에 표시합니다.',
+            multiMonthLead: '비즈니스 상황을 더 잘 파악할 수 있도록 여러 달을 동시에 표시합니다.',
             constraintsTitle: '대화형 제약 조건',
-            constraintsLead: '현지화된 최소/최대 날짜 제한으로 비즈니스 규칙을 적용합니다.'
+            constraintsLead: '현지화된 최소/최대 날짜 제한으로 비즈니스 규칙을 적용합니다.',
+            singleSelection: '단일 선택',
+            rangeSelection: '범위 선택',
+            accuracy: '정확도',
+            precision: '밀리초 정밀도',
+            selectedOutput: '선택된 출력',
+            zoneless: 'Zoneless 흐름',
+            active: '활성',
+            featuredBadge: '주요 선택',
+            constraintsPlaceholder: '제한: 오늘부터 다음 달까지',
+            chooseDate: '날짜 선택',
+            selectRange: '범위 선택'
+        },
+        api: {
+            title: 'API 참조',
+            lead: '모든 컴포넌트 입력, 출력 및 유틸리티 기능에 대한 포괄적인 문서입니다.',
+            inputsTitle: '컴포넌트 입력',
+            outputsTitle: '컴포넌트 출력',
+            advancedTypesTitle: '고급 유형',
+            table: {
+                property: '속성',
+                type: '유형',
+                default: '기본값',
+                description: '설명',
+                event: '이벤트',
+                payload: '페이로드'
+            },
+            descriptions: {
+                mode: '데이트피커의 선택 동작.',
+                inline: '캘린더가 포함될지 아니면 팝오버에 표시될지 제어합니다.',
+                locale: '국제화를 위한 BCP 47 언어 태그.',
+                theme: '컴포넌트의 시각적 테마.',
+                showTime: '시간 선택 입력을 활성화합니다.',
+                showSeconds: '시간 선택기에서 초 선택을 활성화합니다.',
+                use24Hour: '24시간 형식으로 전환합니다.',
+                allowTyping: '사용자가 입력을 통해 날짜를 직접 입력할 수 있도록 허용합니다.',
+                calendarCount: '표시할 캘린더 수 (최대 12개).',
+                calendarLayout: '다중 캘린더 표시를 위한 레이아웃 방향.',
+                useNativePicker: '브라우저/OS 네이티브 데이트피커를 사용합니다 (모바일에 권장).',
+                field: 'Angular 21 Signal 기반 폼과의 통합.',
+                minDate: '선택 가능한 최소 날짜.',
+                maxDate: '선택 가능한 최대 날짜.',
+                ranges: '범위 모드를 위한 사전 정의된 범위 옵션.',
+                holidayProvider: '공휴일 강조/라벨링을 위한 공급자.',
+                isInvalidDate: '특정 날짜를 비활성화하는 커스텀 함수.',
+                disabledDates: '비활성화할 날짜의 정적 목록.',
+                valueChange: '선택된 날짜나 범위가 변경될 때 발생합니다.',
+                action: '특정 UI 상호작용에 대한 세부 이벤트 발생.'
+            }
+        },
+        advanced: {
+            title: '고급 기능',
+            lead: '복잡한 날짜 처리 시나리오를 위한 파워 유저 기능입니다.',
+            signalFormsTitle: 'Signal Forms 통합 (Angular 21+)',
+            keyboardTitle: '키보드 단축키',
+            holidayLabels: {
+                newYear: '신정',
+                independenceDay: '광복절',
+                christmas: '크리스마스'
+            },
+            weekendsDisabled: '주말은 비활성화되었습니다'
+        },
+        architecture: {
+            title: '플러그인 아키텍처',
+            lead: '커스텀 로직, 어댑터 및 동작 후크를 사용하여 데이트피커를 확장하세요.',
+            layers: {
+                external: '외부 레이어',
+                extensibility: '확장성 레이어',
+                core: '코어 엔진'
+            },
+            boxes: {
+                adapters: '커스텀 어댑터',
+                strategies: '커스텀 전략',
+                locales: '로컬라이제이션 데이터',
+                hooks: '동작 후크',
+                middleware: '유효성 검사 미들웨어',
+                interceptors: '테마 인터셉터',
+                signals: 'Signals',
+                state: '상태 서비스',
+                bus: '명령 버스'
+            },
+            adaptersTitle: '커스텀 날짜 어댑터',
+            adaptersLead: '기본적으로 ngxsmk-datepicker는 네이티브 JavaScript Date 객체를 사용합니다. Luxon, Day.js 또는 date-fns와 같은 라이브러리를 위한 커스텀 어댑터를 연결할 수 있습니다.',
+            hooksTitle: '동작 후크',
+            hooksLead: '[hooks] 입력을 사용하여 핵심 상호작용을 차단합니다. 이를 통해 렌더링 및 유효성 검사를 깊게 커스텀할 수 있습니다.',
+            registryTitle: '내부 레지스트리 서비스',
+            registryLead: '모든 로컬라이제이션 및 번역 데이터는 런타임에 액세스하고 수정할 수 있는 중앙 집중식 서비스에 의해 관리됩니다.',
+            strategiesTitle: '커스텀 선택 전략',
+            strategiesLead: '사용자가 날짜를 선택하는 방식을 완전히 제어하십시오. SelectionStrategy 인터페이스를 구현하여 커스텀 비즈니스 로직을 적용할 수 있습니다.',
+            stateTitle: '내부 Signal 상태',
+            stateLead: '데이트피커는 단방향 Signal 기반 상태 아키텍처를 사용하여 구축되었습니다.',
+            middlewareTitle: '미들웨어 및 인터셉터',
+            middlewareLead: '레지스트리 서비스는 미들웨어 패턴을 지원합니다.',
+            table: {
+                hook: '후크',
+                description: '설명',
+                service: '서비스',
+                hookPoint: '후크 포인트',
+                moreHooks: '고급 API 참조에서 더 많은 후크를 사용할 수 있습니다'
+            }
+        },
+        theming: {
+            title: '커스텀 테마',
+            lead: '강력한 CSS 변수 시스템을 사용하여 데이트피커의 시각적 아이덴티티를 완전히 제어하세요.',
+            tokensTitle: '디자인 토큰',
+            tokensLead: '글로벌 styles.scss에서 이러한 변수를 재정의하여 전역적으로 디자인을 변경하십시오.',
+            glassTitle: '글래스모피즘 UI',
+            glassLead: '배경 블러와 투명도를 결합하여 현대적이고 반투명한 효과를 구현하십시오.',
+            tailwindTitle: 'Tailwind CSS 통합',
+            tailwindLead: 'tailwind.config.js 또는 CSS 레이어 내에서 Tailwind 색상을 데이트피커 변수에 쉽게 매핑할 수 있습니다.',
+            primary: '기본 색상',
+            secondary: '보조 색상',
+            table: {
+                variable: '변수',
+                description: '설명'
+            },
+            descriptions: {
+                primary: '선택 및 강조를 위한 기본 브랜드 색상.',
+                bgPopover: '캘린더 드롭다운의 배경색.',
+                borderColor: '입력 및 대화형 요소의 테두리 색상.',
+                radiusMain: '메인 컨테이너 및 버튼의 모서리 반지름.',
+                fontFamily: '전체 컴포넌트에서 사용되는 글꼴.'
+            }
+        },
+        integrations: {
+            title: '프레임워크 통합',
+            lead: '선호하는 UI 프레임워크와 ngxsmk-datepicker를 원활하게 통합하는 방법을 알아보세요.',
+            materialTitle: 'Angular Material',
+            materialLead: '이 라이브러리는 MatFormField를 기본적으로 지원합니다. 플로팅 라벨, 힌트 및 에러 상태가 있는 표준 Material 필드 내에서 데이트피커를 사용할 수 있습니다.',
+            ionicTitle: 'Ionic 프레임워크',
+            ionicLead: 'Ionic 애플리케이션의 경우, 데이트피커를 ion-item 내에서 사용할 수 있습니다. 최상의 사용자 경험을 위해 모바일 기기에서는 useNativePicker: true를 사용하는 것이 좋습니다.',
+            proTip: '프로 팁',
+            proTipText: '모달이나 오버레이 내에서 데이트피커를 사용할 때는 스태킹 컨텍스트 문제를 피하기 위해 appendToBody: true를 사용하십시오.',
+            usageMatTitle: 'MatFormField와 함께 사용'
         }
     },
     zh: {
@@ -287,7 +1273,9 @@ export const translations = {
             readyToTransform: '准备好改造您的 Angular 项目了吗？',
             installToday: '立即安装一流的日期选择器，体验与众不同。',
             releasedUnder: '采用 MIT 许可证发布',
-            poweredBy: '技术支持'
+            poweredBy: '技术支持',
+            lookingForRtl: '正在寻找 RTL 支持或自定义提供程序？',
+            checkAdvanced: '查看高级功能部分。'
         },
         nav: {
             gettingStarted: '入门指南',
@@ -305,14 +1293,62 @@ export const translations = {
             playground: '演练场'
         },
         home: {
-            heroBadge: '全新 v2.0.8 稳定性',
+            heroBadge: '全新 v2.0.9 稳定性',
             heroTitle: '最佳开源',
             heroSubtitle: 'Angular 日期选择器',
             heroLead: '适用于现代 Angular 项目的功能最强大、轻量且符合无障碍标准的日期选择器。无缝的基于 Signal 的状态管理、无 Zone 架构和无限的自定义选项。',
             ctaBuild: '开始构建',
             ctaPro: '探索专业功能',
             seoTitle: '为什么 NGXSMK 是 Angular 的首选？',
-            seoText: '专为性能和开发者体验而设计，NGXSMK 提供无缝的日期选择界面，可从简单的表单扩展到复杂的仪表板。'
+            seoText: '专为性能和开发者体验而设计，NGXSMK 提供无缝的日期选择界面，可从简单的表单扩展到复杂的仪表板。',
+            implementation: '实现',
+            signalOptimized: 'Signal 优化',
+            demoMode: {
+                single: '单选',
+                range: '范围',
+                multiple: '多选'
+            },
+            features: {
+                signals: { title: 'Signal 驱动', desc: '采用最新的 Angular Signal 构建，具有超快的响应速度。' },
+                zoneless: { title: '无 Zone 准备就位', desc: '为 Angular 的未来而设计。无需 zone.js 即可运行。' },
+                multiCalendar: { title: '多日历布局', desc: '轻松展示多个日历（最多 12 个），支持水平或垂直方向。' },
+                a11y: { title: '全方位无障碍与键盘支持', desc: '完整的键盘导航和 WAI-ARIA 合规性。' },
+                mobile: { title: '移动端优化', desc: '响应式设计，支持移动设备上的原生选择器。' },
+                locales: { title: 'RTL 与区域设置', desc: '内置对从右至左语言和国际日期/时间格式的支持。' }
+            }
+        },
+        playground: {
+            title: '演练场',
+            lead: '调整属性并实时观察日期选择器的行为。',
+            configTitle: '配置',
+            selectionMode: '选择模式',
+            inlineMode: '内联模式',
+            functionalBehavior: '功能行为',
+            allowTyping: '允许直接输入',
+            showIcon: '显示图标按钮',
+            nativePicker: '使用原生移动选择器',
+            multiCalendar: '多日历布局',
+            calendarCount: '日历数量',
+            layout: '布局',
+            timeLocales: '时间与区域设置',
+            showTime: '显示时间选择器',
+            showSeconds: '显示秒',
+            locale: '区域设置',
+            theming: '主题',
+            reset: '重置默认值',
+            value: '值',
+            noSelection: '无选择',
+            singleDate: '单个日期',
+            dateRange: '日期范围',
+            multipleDates: '多个日期',
+            weekSelection: '周选择',
+            monthSelection: '月选择',
+            yearSelection: '年选择',
+            horizontal: '水平',
+            vertical: '垂直',
+            auto: '自动',
+            lightTheme: '浅色主题',
+            darkTheme: '深色主题'
         },
         installation: {
             title: '安装',
@@ -327,12 +1363,149 @@ export const translations = {
         },
         examples: {
             title: '高级功能',
+            basicTitle: '基本选择',
+            basicLead: 'ngxsmk-datepicker 组件的常见使用模式。',
+            advancedTitle: '企业级功能',
+            advancedLead: '针对复杂企业需求的高性能功能。',
             dateTimeTitle: '日期和时间选择',
             dateTimeLead: '将高精度的时间选择与我们的日历网格相结合。',
             multiMonthTitle: '多月份显示',
             multiMonthLead: '同时展示多个月份，以提供更好的业务背景。',
             constraintsTitle: '交互式限制',
-            constraintsLead: '通过本地化的最小/最大日期限制来强制执行业务规则。'
+            constraintsLead: '通过本地化的最小/最大日期限制来强制执行业务规则。',
+            singleSelection: '单选',
+            rangeSelection: '范围选择',
+            accuracy: '准确度',
+            precision: '毫秒级精度',
+            selectedOutput: '选择输出',
+            zoneless: '非 Zone 流程',
+            active: '激活',
+            featuredBadge: '特色选择',
+            constraintsPlaceholder: '限制：从今天到下个月',
+            chooseDate: '选择日期',
+            selectRange: '选择范围'
+        },
+        api: {
+            title: 'API 参考',
+            lead: '关于所有组件输入、输出和实用函数的详尽文档。',
+            inputsTitle: '组件输入',
+            outputsTitle: '组件输出',
+            advancedTypesTitle: '高级类型',
+            table: {
+                property: '属性',
+                type: '类型',
+                default: '默认值',
+                description: '描述',
+                event: '事件',
+                payload: '负载'
+            },
+            descriptions: {
+                mode: '日期选择器的选择行为。',
+                inline: '控制日历是嵌入的还是显示在弹出框中。',
+                locale: '国际化的 BCP 47 语言标签。',
+                theme: '组件的视觉主题。',
+                showTime: '启用时间选择输入。',
+                showSeconds: '在时间选择器中启用秒选择。',
+                use24Hour: '切换到 24 小时时间格式。',
+                allowTyping: '允许用户直接在输入框中输入日期。',
+                calendarCount: '要显示的日历数量（最多 12 个）。',
+                calendarLayout: '多日历显示的布局方向。',
+                useNativePicker: '使用浏览器/操作系统原生日期选择器（推荐移动端）。',
+                field: '与 Angular 21 基于 Signal 的表单集成。',
+                minDate: '最小可选日期。',
+                maxDate: '最大可选日期。',
+                ranges: '范围模式的预定义范围选项。',
+                holidayProvider: '高亮/标记节假日的提供程序。',
+                isInvalidDate: '禁用特定日期的自定义函数。',
+                disabledDates: '要禁用的日期静态列表。',
+                valueChange: '当选定日期或范围更改时触发。',
+                action: '特定 UI 交互的详细事件发送。'
+            }
+        },
+        advanced: {
+            title: '高级功能',
+            lead: '针对复杂日期处理场景的高级用户功能。',
+            signalFormsTitle: 'Signal 表达集成 (Angular 21+)',
+            keyboardTitle: '键盘快捷键',
+            holidayLabels: {
+                newYear: '元旦',
+                independenceDay: '独立日',
+                christmas: '圣诞节'
+            },
+            weekendsDisabled: '周末已禁用'
+        },
+        architecture: {
+            title: '插件架构',
+            lead: '使用自定义逻辑、适配器和行为钩子扩展日期选择器。',
+            layers: {
+                external: '外部层',
+                extensibility: '可扩展层',
+                core: '核心引擎'
+            },
+            boxes: {
+                adapters: '自定义适配器',
+                strategies: '自定义策略',
+                locales: '本地化数据',
+                hooks: '行为钩子',
+                middleware: '验证中间件',
+                interceptors: '主题拦截器',
+                signals: 'Signals',
+                state: '状态服务',
+                bus: '命令总线'
+            },
+            adaptersTitle: '自定义日期适配器',
+            adaptersLead: '默认情况下，ngxsmk-datepicker 使用原生 JavaScript Date 对象。您可以插入适用于 Luxon、Day.js 或 date-fns 等库的自定义适配器。',
+            hooksTitle: '行为钩子',
+            hooksLead: '使用 [hooks] 输入拦截核心交互。这允许对渲染和验证进行深度自定义。',
+            registryTitle: '内部注册表服务',
+            registryLead: '所有本地化和翻译数据均由集中式服务管理，您可以在运行时访问和修改这些服务：',
+            strategiesTitle: '自定义选择策略',
+            strategiesLead: '完全控制用户选择日期的方式。通过实现 SelectionStrategy 接口，您可以强制执行自定义业务规则。',
+            stateTitle: '内部 Signal 状态',
+            stateLead: '日期选择器是使用单向 Signal 状态架构构建的。',
+            middlewareTitle: '中间件与拦截器',
+            middlewareLead: '注册表服务支持中间件模式。',
+            table: {
+                hook: '钩子',
+                description: '描述',
+                service: '服务',
+                hookPoint: '钩子点',
+                moreHooks: '高级 API 参考中提供更多钩子'
+            }
+        },
+        theming: {
+            title: '自定义主题',
+            lead: '使用强大的 CSS 变量系统完全控制日期选择器的视觉形象。',
+            tokensTitle: '设计令牌',
+            tokensLead: '在全局 styles.scss 中覆盖这些变量以全局更改外观。',
+            glassTitle: '玻璃拟态 UI',
+            glassLead: '通过结合背景模糊和透明度实现现代的半透明效果。',
+            tailwindTitle: 'Tailwind CSS 集成',
+            tailwindLead: '您可以在 tailwind.config.js 或 CSS 层中轻松地将 Tailwind 颜色映射到日期选择器变量。',
+            primary: '主色',
+            secondary: '辅色',
+            table: {
+                variable: '变量',
+                description: '描述'
+            },
+            descriptions: {
+                primary: '用于选择和高亮的主品牌颜色。',
+                bgPopover: '日历下拉菜单的背景颜色。',
+                borderColor: '输入框和交互元素的边框颜色。',
+                radiusMain: '主容器和按钮的圆角半径。',
+                fontFamily: '整个组件使用的字体。'
+            }
+        },
+        integrations: {
+            title: '框架集成',
+            lead: '了解如何将 ngxsmk-datepicker 与您喜爱的 UI 框架无缝集成。',
+            materialTitle: 'Angular Material',
+            materialLead: '该库提供对 MatFormField 的内置支持。您可以在具有浮动标签、提示和错误状态的标准 Material 字段中使用日期选择器。',
+            ionicTitle: 'Ionic 框架',
+            ionicLead: '对于 Ionic 应用程序，日期选择器可以在 ion-item 内部使用。我们建议在移动设备上使用 useNativePicker: true 以获得最佳用户体验。',
+            proTip: '小贴士',
+            proTipText: '在模态框或弹出层中使用日期选择器时，请使用 appendToBody: true 以避免堆叠上下文问题。',
+            usageMatTitle: '在 MatFormField 中使用'
         }
     },
     ja: {
@@ -343,7 +1516,9 @@ export const translations = {
             readyToTransform: 'Angularプロジェクトを変革する準備はできていますか？',
             installToday: 'クラス最高のデートピッカーを今すぐインストールして、違いを体験してください。',
             releasedUnder: 'MITライセンスの下でリリース',
-            poweredBy: 'Powered by'
+            poweredBy: 'Powered by',
+            lookingForRtl: 'RTLサポートやカスタムプロバイダーをお探しですか？',
+            checkAdvanced: '高度な機能セクションをチェックしてください。'
         },
         nav: {
             gettingStarted: 'はじめに',
@@ -361,14 +1536,62 @@ export const translations = {
             playground: 'プレイグラウンド'
         },
         home: {
-            heroBadge: '新しい v2.0.8 の安定性',
+            heroBadge: '新しい v2.0.9 の安定性',
             heroTitle: '最高のオープンソース',
             heroSubtitle: 'Angular デートピッカー',
-            heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、そして無限のカスタマイズを提供します。',
+            heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、 そして 無限のカスタマイズを提供します。',
             ctaBuild: 'ビルドを開始',
             ctaPro: 'Pro機能を探索',
             seoTitle: 'なぜNGXSMKがAngularの第一選択肢なのですか？',
-            seoText: 'パフォーマンスと開発者体験のために設計されたNGXSMKは、単純なフォームから複雑なダッシュボードまで拡張可能なシームレスな日付選択インターフェースを提供します。'
+            seoText: 'パフォーマンスと開発者体験のために設計されたNGXSMKは、単純なフォームから複雑なダッシュボードまで拡張可能なシームレスな日付選択インターフェースを提供します。',
+            implementation: '実装',
+            signalOptimized: 'Signal 最適化',
+            demoMode: {
+                single: 'シングル',
+                range: '範囲',
+                multiple: '複数'
+            },
+            features: {
+                signals: { title: 'Signal 搭載', desc: '最新の Angular Signal で構築されており、超高速な反応性を実現します。' },
+                zoneless: { title: 'Zoneless 対応', desc: 'Angular の未来のために設計されています。zone.js なしでシームレスに動作します。' },
+                multiCalendar: { title: '複数カレンダーレイアウト', desc: '最大 12 個のカレンダーを、水平または垂直方向で簡単に表示できます。' },
+                a11y: { title: 'フルアクセシビリティ & キーボード', desc: '完全なキーボードナビゲーションと WAI-ARIA 準拠。' },
+                mobile: { title: 'モバイル最適化', desc: 'モバイルデバイス上でのネイティブピッカー入力をサポートするレスポンシブデザイン。' },
+                locales: { title: 'RTL & ロケール', desc: '右から左へ書く言語および国際的な日付/時刻形式の組み込みサポート。' }
+            }
+        },
+        playground: {
+            title: 'プレイグラウンド',
+            lead: 'プロパティを調整し、デートピッカーがリアルタイムでどのように動作するかを確認します。',
+            configTitle: '構成',
+            selectionMode: '選択モード',
+            inlineMode: 'インラインモード',
+            functionalBehavior: '機能的動作',
+            allowTyping: '直接入力を許可',
+            showIcon: 'アイコンボタンを表示',
+            nativePicker: 'ネイティブモバイルピッカーを使用',
+            multiCalendar: '複数カレンダーレイアウト',
+            calendarCount: 'カレンダー数',
+            layout: 'レイアウト',
+            timeLocales: '時間とロケール',
+            showTime: 'タイムピッカーを表示',
+            showSeconds: '秒を表示',
+            locale: 'ロケール',
+            theming: 'テーマ',
+            reset: 'デフォルトにリセット',
+            value: '値',
+            noSelection: '選択なし',
+            singleDate: '単一の日付',
+            dateRange: '日付範囲',
+            multipleDates: '複数日付',
+            weekSelection: '週の選択',
+            monthSelection: '月の選択',
+            yearSelection: '年の選択',
+            horizontal: '水平',
+            vertical: '垂直',
+            auto: '自動',
+            lightTheme: 'ライトテーマ',
+            darkTheme: 'ダークテーマ'
         },
         installation: {
             title: 'インストール',
@@ -383,12 +1606,149 @@ export const translations = {
         },
         examples: {
             title: '高度な機能',
+            basicTitle: '基本選択',
+            basicLead: 'ngxsmk-datepicker コンポーネントの一般的な使用パターン。',
+            advancedTitle: 'エンタープライズ機能',
+            advancedLead: '複雑なエンタープライズ要件のための高パフォーマンス機能。',
             dateTimeTitle: '日付と時間の選択',
             dateTimeLead: '高精度な時間選択をカレンダーグリッドと組み合わせます。',
             multiMonthTitle: '複数月表示',
             multiMonthLead: 'ビジネスコンテキストを向上させるために、複数の月を同時に表示します。',
             constraintsTitle: 'インタラクティブな制約',
-            constraintsLead: 'ローカライズされた最小/最大日付制限により、ビジネスルールを適用します。'
+            constraintsLead: 'ローカライズされた最小/最大日付制限により、ビジネスルールを適用します。',
+            singleSelection: '単一選択',
+            rangeSelection: '範囲選択',
+            accuracy: '精度',
+            precision: 'ミリ秒精度',
+            selectedOutput: '選択された出力',
+            zoneless: 'Zoneless フロー',
+            active: '有効',
+            featuredBadge: '注目の選択',
+            constraintsPlaceholder: '制限：今日から翌月まで',
+            chooseDate: '日付を選択',
+            selectRange: '範囲を選択'
+        },
+        api: {
+            title: 'API リファレンス',
+            lead: 'すべてのコンポーネントの入力、出力、およびユーティリティ機能に関する包括的なドキュメント。',
+            inputsTitle: 'コンポーネントの入力',
+            outputsTitle: 'コンポーネントの出力',
+            advancedTypesTitle: '高度なタイプ',
+            table: {
+                property: 'プロパティ',
+                type: 'タイプ',
+                default: 'デフォルト',
+                description: '説明',
+                event: 'イベント',
+                payload: 'ペイロード'
+            },
+            descriptions: {
+                mode: 'デートピッカーの選択動作。',
+                inline: 'カレンダーを埋め込むか、ポップオーバーに表示するかを制御します。',
+                locale: '国際化のための BCP 47 言語タグ。',
+                theme: 'コンポーネントの視覚的テーマ。',
+                showTime: '時間選択入力を有効にします。',
+                showSeconds: 'タイムピッカーで秒の選択を有効にします。',
+                use24Hour: '24時間形式に切り替えます。',
+                allowTyping: 'ユーザーが入力ボックスに直接日付を入力できるようにします。',
+                calendarCount: '表示するカレンダーの数（最大12）。',
+                calendarLayout: '複数カレンダー表示のレイアウト方向。',
+                useNativePicker: 'ブラウザ/OSネイティブのデートピッカーを使用します（モバイル推奨）。',
+                field: 'Angular 21 Signalベースのフォームとの統合。',
+                minDate: '選択可能な最小日付。',
+                maxDate: '選択可能な最大日付。',
+                ranges: '範囲モードの定義済み範囲オプション。',
+                holidayProvider: '祝日のハイライト/ラベル表示用プロバイダー。',
+                isInvalidDate: '特定の日付を無効にするカスタム関数。',
+                disabledDates: '無効にする日付の静的リスト。',
+                valueChange: '選択された日付または範囲が変更されたときに発行されます。',
+                action: '特定の UI インタラクションの詳細なイベント発行。'
+            }
+        },
+        advanced: {
+            title: '高度な機能',
+            lead: '複雑な日付処理シナリオのためのパワーユーザー機能。',
+            signalFormsTitle: 'Signal フォーム統合 (Angular 21+)',
+            keyboardTitle: 'キーボードショートカット',
+            holidayLabels: {
+                newYear: '元日',
+                independenceDay: '独立記念日',
+                christmas: 'クリスマス'
+            },
+            weekendsDisabled: '週末は無効です'
+        },
+        architecture: {
+            title: 'プラグインアーキテクチャ',
+            lead: 'カスタムロジック、アダプター、および動作フックを使用してデートピッカーを拡張します。',
+            layers: {
+                external: '外部レイヤー',
+                extensibility: '拡張性レイヤー',
+                core: 'コアエンジン'
+            },
+            boxes: {
+                adapters: 'カスタムアダプター',
+                strategies: 'カスタム戦略',
+                locales: 'ロカリゼーションデータ',
+                hooks: '動作フック',
+                middleware: 'バリデーションミドルウェア',
+                interceptors: 'テーマインターセプター',
+                signals: 'Signals',
+                state: '状態サービス',
+                bus: 'コマンドバス'
+            },
+            adaptersTitle: 'カスタム日付アダプター',
+            adaptersLead: 'デフォルトでは、ngxsmk-datepicker はネイティブの JavaScript Date オブジェクトを使用します。Luxon、Day.js、date-fns などのライブラリ用にカスタムアダプターをプラグインできます。',
+            hooksTitle: '動作フック',
+            hooksLead: '[hooks] 入力を使用してコアなインタラクションをインターセプトします。これにより、レンダリングとバリデーションを深くカスタマイズできます。',
+            registryTitle: '内部レジストリサービス',
+            registryLead: 'すべてのローカリゼーションおよび翻訳データは、実行時にアクセスして変更できる一元化されたサービスによって管理されます。',
+            strategiesTitle: 'カスタム選択戦略',
+            strategiesLead: 'ユーザーが日付を選択する方法を完全に制御します。SelectionStrategy インターフェースを実装することで、カスタムのビジネスロジックを強制できます。',
+            stateTitle: '内部 Signal 状態',
+            stateLead: 'デートピッカーは、単方向の Signal ベースの状態アーキテクチャを使用して構築されています。',
+            middlewareTitle: 'ミドルウェアとインターセプター',
+            middlewareLead: 'レジストリサービスはミドルウェアパターンをサポートしています。',
+            table: {
+                hook: 'フック',
+                description: '説明',
+                service: 'サービス',
+                hookPoint: 'フックポイント',
+                moreHooks: '高度な API リファレンスで利用可能なその他のフック'
+            }
+        },
+        theming: {
+            title: 'カスタムテーマ',
+            lead: '強力な CSS 変数システムを使用して、デートピッカーの視覚的なアイデンティティを完全に制御します。',
+            tokensTitle: 'デザイン トークン',
+            tokensLead: 'グローバルな styles.scss でこれらの変数をオーバーライドして、見た目をグローバルに変更します。',
+            glassTitle: 'グラスモーフィズム UI',
+            glassLead: '背景のぼかしと透明度を組み合わせて、モダンで半透明な効果を実現します。',
+            tailwindTitle: 'Tailwind CSS 統合',
+            tailwindLead: 'tailwind.config.js または CSS レイヤー内で、Tailwind の色をデートピッカーの変数に簡単にマッピングできます。',
+            primary: 'プライマリ',
+            secondary: 'セカンダリ',
+            table: {
+                variable: '変数',
+                description: '説明'
+            },
+            descriptions: {
+                primary: '選択とハイライトのための主要なブランドカラー。',
+                bgPopover: 'カレンダー ドロップダウンの背景色。',
+                borderColor: '入力とインタラクティブな要素の境界線の色。',
+                radiusMain: 'メイン コンテナーとボタンの角の半径。',
+                fontFamily: 'コンポーネント全体で使用されるフォント。'
+            }
+        },
+        integrations: {
+            title: 'フレームワーク統合',
+            lead: 'お気に入りの UI フレームワークと ngxsmk-datepicker をシームレスに統合する方法を学びます。',
+            materialTitle: 'Angular Material',
+            materialLead: 'このライブラリは MatFormField のビルトインサポートを提供します。フローティング ラベル、ヒント、エラー状態を備えた標準的な Material フィールド内でデートピッカーを使用できます。',
+            ionicTitle: 'Ionic フレームワーク',
+            ionicLead: 'Ionic アプリケーションの場合、デートピッカーは ion-item 内で使用できます。最高のユーザー エクスペリエンスを実現するために、モバイル デバイスでは useNativePicker: true を使用することをお勧めします。',
+            proTip: 'プロのヒント',
+            proTipText: 'モーダルやオーバーレイ内でデートピッカーを使用する場合は、スタッキング コンテキストの問題を避けるために appendToBody: true を使用してください。',
+            usageMatTitle: 'MatFormField での使用'
         }
     },
     fr: {
@@ -399,7 +1759,9 @@ export const translations = {
             readyToTransform: 'Prêt à transformer votre projet Angular ?',
             installToday: 'Installez dès aujourd\'hui le meilleur sélecteur de date de sa catégorie et découvrez la différence.',
             releasedUnder: 'Publié sous licence MIT',
-            poweredBy: 'Propulsé par'
+            poweredBy: 'Propulsé par',
+            lookingForRtl: 'Vous recherchez un support RTL ou des fournisseurs personnalisés ?',
+            checkAdvanced: 'Consultez la section Fonctions avancées.'
         },
         nav: {
             gettingStarted: 'Mise en route',
@@ -417,14 +1779,62 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'Nouvelle stabilité v2.0.8',
+            heroBadge: 'Nouvelle stabilité v2.0.9',
             heroTitle: 'Le meilleur Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Le sélecteur de date le plus puissant, léger et accessible pour les projets Angular modernes. État fluide basé sur les Signals, architecture Zoneless et personnalisation infinie.',
             ctaBuild: 'Commencer à construire',
             ctaPro: 'Explorer les fonctions Pro',
             seoTitle: 'Pourquoi NGXSMK est le choix n°1 pour Angular ?',
-            seoText: 'Conçu pour la performance et l\'expérience développeur, NGXSMK offre une interface de sélection de date fluide qui s\'adapte des formulaires simples aux tableaux de bord complexes.'
+            seoText: 'Conçu pour la performance et l\'expérience développeur, NGXSMK offre une interface de sélection de date fluide qui s\'adapte des formulaires simples aux tableaux de bord complexes.',
+            implementation: 'Mise en œuvre',
+            signalOptimized: 'Optimisé pour les Signals',
+            demoMode: {
+                single: 'Unique',
+                range: 'Plage',
+                multiple: 'Multiple'
+            },
+            features: {
+                signals: { title: 'Propulsé par les Signals', desc: 'Construit avec les derniers Signals Angular pour une réactivité ultra-rapide.' },
+                zoneless: { title: 'Prêt pour le Zoneless', desc: 'Conçu pour l\'avenir d\'Angular. Fonctionne sans problème sans zone.js.' },
+                multiCalendar: { title: 'Dispositions multi-calendriers', desc: 'Affichez sans effort plusieurs calendriers (jusqu\'à 12) avec des orientations horizontales ou verticales.' },
+                a11y: { title: 'Accessibilité totale et clavier', desc: 'Navigation au clavier complète et conformité WAI-ARIA.' },
+                mobile: { title: 'Optimisé pour le mobile', desc: 'Conception réactive avec prise en charge du sélecteur natif sur les appareils mobiles.' },
+                locales: { title: 'RTL et paramètres régionaux', desc: 'Prise en charge intégrée des langues de droite à gauche et du formatage international.' }
+            }
+        },
+        playground: {
+            title: 'Playground',
+            lead: 'Ajustez les propriétés et voyez comment le sélecteur de date se comporte en temps réel.',
+            configTitle: 'Configurations',
+            selectionMode: 'Mode de sélection',
+            inlineMode: 'Mode en ligne',
+            functionalBehavior: 'Comportement fonctionnel',
+            allowTyping: 'Autoriser la saisie directe',
+            showIcon: 'Afficher le bouton icône',
+            nativePicker: 'Utiliser le sélecteur mobile natif',
+            multiCalendar: 'Disposition multi-calendrier',
+            calendarCount: 'Nombre de calendriers',
+            layout: 'Disposition',
+            timeLocales: 'Heure et paramètres régionaux',
+            showTime: 'Afficher le sélecteur d\'heure',
+            showSeconds: 'Afficher les secondes',
+            locale: 'Paramètres régionaux',
+            theming: 'Thème',
+            reset: 'Réinitialiser les valeurs par défaut',
+            value: 'Valeur',
+            noSelection: 'Aucune sélection',
+            singleDate: 'Date unique',
+            dateRange: 'Plage de dates',
+            multipleDates: 'Dates multiples',
+            weekSelection: 'Sélection de semaine',
+            monthSelection: 'Sélection de mois',
+            yearSelection: 'Sélection d\'année',
+            horizontal: 'Horizontal',
+            vertical: 'Vertical',
+            auto: 'Auto',
+            lightTheme: 'Thème clair',
+            darkTheme: 'Thème sombre'
         },
         installation: {
             title: 'Installation',
@@ -439,12 +1849,149 @@ export const translations = {
         },
         examples: {
             title: 'Fonctions avancées',
+            basicTitle: 'Sélection de base',
+            basicLead: 'Modèles d\'utilisation courants pour les composants ngxsmk-datepicker.',
+            advancedTitle: 'Fonctions entreprise',
+            advancedLead: 'Fonctionnalités haute performance pour les exigences complexes des entreprises.',
             dateTimeTitle: 'Sélection Date & Heure',
             dateTimeLead: 'Combinez la sélection de l\'heure de haute précision avec notre grille calendaire.',
             multiMonthTitle: 'Affichage Multimois',
             multiMonthLead: 'Affichez plusieurs mois simultanément pour un meilleur contexte métier.',
             constraintsTitle: 'Contraintes Interactives',
-            constraintsLead: 'Appliquez vos règles métier avec des limites de dates min/max localisées.'
+            constraintsLead: 'Appliquez vos règles métier avec des limites de dates min/max localisées.',
+            singleSelection: 'Sélection unique',
+            rangeSelection: 'Sélection de plage',
+            accuracy: 'Précision',
+            precision: 'Précision milliseconde',
+            selectedOutput: 'Sortie sélectionnée',
+            zoneless: 'Flux sans Zone',
+            active: 'Actif',
+            featuredBadge: 'Sélection vedette',
+            constraintsPlaceholder: 'Limites : d\'aujourd\'hui au mois prochain',
+            chooseDate: 'Choisir une date',
+            selectRange: 'Sélectionner une plage'
+        },
+        api: {
+            title: 'Référence API',
+            lead: 'Documentation complète pour toutes les entrées, sorties et fonctions utilitaires des composants.',
+            inputsTitle: 'Entrées du composant',
+            outputsTitle: 'Sorties du composant',
+            advancedTypesTitle: 'Types avancés',
+            table: {
+                property: 'Propriété',
+                type: 'Type',
+                default: 'Par défaut',
+                description: 'Description',
+                event: 'Événement',
+                payload: 'Payload'
+            },
+            descriptions: {
+                mode: 'Comportement de sélection du sélecteur de date.',
+                inline: 'Contrôle si le calendrier est intégré ou affiché dans un popover.',
+                locale: 'Tag de langue BCP 47 pour l\'internationalisation.',
+                theme: 'Thème visuel du composant.',
+                showTime: 'Active les entrées de sélection de l\'heure.',
+                showSeconds: 'Active la sélection des secondes dans le sélecteur d\'heure.',
+                use24Hour: 'Passe au format 24 heures.',
+                allowTyping: 'Permet aux utilisateurs de saisir la date directement dans l\'entrée.',
+                calendarCount: 'Nombre de calendriers à afficher (max 12).',
+                calendarLayout: 'Orientation de la disposition pour les affichages multi-calendriers.',
+                useNativePicker: 'Utilise le sélecteur de date natif du navigateur/OS (recommandé pour le mobile).',
+                field: 'Intégration avec les formulaires basés sur les Signals d\'Angular 21.',
+                minDate: 'Date minimale sélectionnable.',
+                maxDate: 'Date maximale sélectionnable.',
+                ranges: 'Options de plage prédéfinies pour le mode Plage.',
+                holidayProvider: 'Fournisseur pour mettre en évidence/étiqueter les jours fériés.',
+                isInvalidDate: 'Fonction personnalisée pour désactiver des dates spécifiques.',
+                disabledDates: 'Liste statique de dates à désactiver.',
+                valueChange: 'Émis lorsque la date ou la plage sélectionnée change.',
+                action: 'Émission d\'événements détaillés pour des interactions UI spécifiques.'
+            }
+        },
+        advanced: {
+            title: 'Fonctions avancées',
+            lead: 'Fonctionnalités pour les utilisateurs expérimentés pour des scénarios complexes de gestion de dates.',
+            signalFormsTitle: 'Intégration Signal Forms (Angular 21+)',
+            keyboardTitle: 'Raccourcis clavier',
+            holidayLabels: {
+                newYear: 'Nouvel An',
+                independenceDay: 'Jour de l\'Indépendance',
+                christmas: 'Noël'
+            },
+            weekendsDisabled: 'Les week-ends sont désactivés'
+        },
+        architecture: {
+            title: 'Architecture des plugins',
+            lead: 'Étendez le sélecteur de date avec une logique, des adaptateurs et des hooks de comportement personnalisés.',
+            layers: {
+                external: 'Couche externe',
+                extensibility: 'Couche d\'extensibilité',
+                core: 'Moteur central'
+            },
+            boxes: {
+                adapters: 'Adaptateurs personnalisés',
+                strategies: 'Stratégies personnalisées',
+                locales: 'Données de localisation',
+                hooks: 'Hooks de comportement',
+                middleware: 'Middleware de validation',
+                interceptors: 'Intercepteurs de thèmes',
+                signals: 'Signals',
+                state: 'Service d\'état',
+                bus: 'Bus de commandes'
+            },
+            adaptersTitle: 'Adaptateurs de date personnalisés',
+            adaptersLead: 'Par défaut, ngxsmk-datepicker utilise des objets Date JavaScript natifs. Vous pouvez connecter des adaptateurs personnalisés pour des bibliothèques comme Luxon, Day.js ou date-fns.',
+            hooksTitle: 'Hooks de comportement',
+            hooksLead: 'Interceptez les interactions de base avec l\'entrée [hooks]. Cela permet une personnalisation profonde du rendu et de la validation.',
+            registryTitle: 'Service de registre interne',
+            registryLead: 'Toutes les données de localisation et de traduction sont gérées par des services centralisés auxquels vous pouvez accéder et que vous pouvez modifier au moment de l\'exécution :',
+            strategiesTitle: 'Stratégies de sélection personnalisées',
+            strategiesLead: 'Prenez le contrôle total sur la façon dont les utilisateurs sélectionnent les dates. En implémentant l\'interface SelectionStrategy, vous pouvez appliquer une logique métier personnalisée.',
+            stateTitle: 'État interne des Signals',
+            stateLead: 'Le sélecteur de date est construit à l\'aide d\'une architecture d\'état unidirectionnelle basée sur les Signals.',
+            middlewareTitle: 'Middleware et intercepteurs',
+            middlewareLead: 'Les services de registre prennent en charge un modèle de middleware.',
+            table: {
+                hook: 'Hook',
+                description: 'Description',
+                service: 'Service',
+                hookPoint: 'Point de hook',
+                moreHooks: 'Plus de hooks disponibles dans la référence API avancée'
+            }
+        },
+        theming: {
+            title: 'Thémage personnalisé',
+            lead: 'Contrôle total sur l\'identité visuelle de votre sélecteur de date à l\'aide d\'un puissant système de variables CSS.',
+            tokensTitle: 'Design Tokens',
+            tokensLead: 'Surchargez ces variables dans vos styles.scss globaux pour changer l\'apparence globalement.',
+            glassTitle: 'IU de Glassmorphism',
+            glassLead: 'Obtenez des effets modernes et translucides en combinant le flou d\'arrière-plan avec la transparence.',
+            tailwindTitle: 'Intégration Tailwind CSS',
+            tailwindLead: 'Vous pouvez facilement mapper les couleurs Tailwind aux variables du sélecteur de date dans votre tailwind.config.js ou vos couches CSS.',
+            primary: 'Primaire',
+            secondary: 'Secondaire',
+            table: {
+                variable: 'Variable',
+                description: 'Description'
+            },
+            descriptions: {
+                primary: 'Couleur de marque principale pour la sélection et les mises en évidence.',
+                bgPopover: 'Couleur d\'arrière-plan de la liste déroulante du calendrier.',
+                borderColor: 'Couleur de bordure pour les entrées et les éléments interactifs.',
+                radiusMain: 'Rayon de coin pour le conteneur principal et les boutons.',
+                fontFamily: 'Police utilisée dans tout le composant.'
+            }
+        },
+        integrations: {
+            title: 'Intégration de framework',
+            lead: 'Découvrez comment intégrer de manière fluide ngxsmk-datepicker avec vos frameworks UI préférés.',
+            materialTitle: 'Angular Material',
+            materialLead: 'La bibliothèque offre une prise en charge intégrée de MatFormField. Vous pouvez utiliser le sélecteur de date dans un champ Material standard avec des étiquettes flottantes, des conseils et des états d\'erreur.',
+            ionicTitle: 'Framework Ionic',
+            ionicLead: 'Pour les applications Ionic, le sélecteur de date peut être utilisé à l\'intérieur de ion-item. Nous recommandons d\'utiliser useNativePicker: true sur les appareils mobiles pour une expérience utilisateur optimale.',
+            proTip: 'Conseil de pro',
+            proTipText: 'Utilisez appendToBody: true lorsque vous utilisez le sélecteur de date dans des modales ou des superpositions pour éviter les problèmes de contexte d\'empilement.',
+            usageMatTitle: 'Utilisation avec MatFormField'
         }
     }
 };

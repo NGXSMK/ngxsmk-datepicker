@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.9] - 2026-01-31
+
+### Optimized
+
+- **Stylesheet Architecture**: Comprehensive optimization of CSS assets
+  - Replaced redundant mobile stylesheets with a unified "Responsive Overrides" system
+  - Removed deprecated keyframes and duplicate selectors
+  - Enhanced commenting standards with industrial/professional documentation style
+  - Reduced CSS bundle size by eliminating unused styles
+
+### Fixed
+
+- **Sticky Header Overlap**: Resolved critical z-index stacking issue where sticky headers would overlap the datepicker popup
+  - Implemented aggressive z-index boost (`2147483647`) for the host component when active
+  - Ensures datepicker always floats above application navigation bars and modal backdrops
+- **Mobile Dropup Positioning**: Fixed footer clipping issues on mobile devices
+  - Time selection dropdowns now intelligently open upwards ("dropup") on screens < 992px
+  - Prevents dropdown options from being cut off by the bottom of the viewport or sticky footers
+  - Improved touch interactions for time selection on mobile
+
 ## [2.0.8] - 2026-01-31
 
 ### Added

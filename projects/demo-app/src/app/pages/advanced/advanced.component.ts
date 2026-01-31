@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-advanced',
@@ -9,8 +10,8 @@ import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepick
   imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent],
   template: `
     <div class="animate-fade-in">
-      <h1>Advanced Features</h1>
-      <p class="text-lg">Power-user features for complex date handling scenarios.</p>
+      <h1>{{ i18n.t().advanced.title }}</h1>
+      <p class="text-lg">{{ i18n.t().advanced.lead }}</p>
 
       <h2>Signal Forms Integration (Angular 21+)</h2>
       <p>Seamlessly integrate with the latest Angular Signal-based forms. Minimal boilerplate, maximum reactivity.</p>
@@ -126,6 +127,7 @@ import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepick
   `]
 })
 export class AdvancedFeaturesComponent {
+  i18n = inject(I18nService);
   dateField = {
     value: signal<Date | null>(new Date()),
     disabled: signal(false),

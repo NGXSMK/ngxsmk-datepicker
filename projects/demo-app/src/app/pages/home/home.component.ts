@@ -34,9 +34,9 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="preview-header">
             <div class="dots flex gap-xs"><span></span><span></span><span></span></div>
             <div class="preview-controls flex gap-sm">
-              <button class="mode-btn" [class.active]="demoMode === 'single'" (click)="setDemoMode('single')">Single</button>
-              <button class="mode-btn" [class.active]="demoMode === 'range'" (click)="setDemoMode('range')">Range</button>
-              <button class="mode-btn" [class.active]="demoMode === 'multiple'" (click)="setDemoMode('multiple')">Multiple</button>
+              <button class="mode-btn" [class.active]="demoMode === 'single'" (click)="setDemoMode('single')">{{ i18n.t().home.demoMode.single }}</button>
+              <button class="mode-btn" [class.active]="demoMode === 'range'" (click)="setDemoMode('range')">{{ i18n.t().home.demoMode.range }}</button>
+              <button class="mode-btn" [class.active]="demoMode === 'multiple'" (click)="setDemoMode('multiple')">{{ i18n.t().home.demoMode.multiple }}</button>
             </div>
           </div>
           <div class="preview-body">
@@ -51,8 +51,8 @@ import { I18nService } from '../../i18n/i18n.service';
             
             <div class="preview-footer mt-lg pt-md border-t border-dashed">
               <div class="flex justify-between items-center mb-sm">
-                <span class="text-xs font-bold uppercase text-dim">Implementation</span>
-                <span class="text-xs text-secondary">Signal Optimized</span>
+                <span class="text-xs font-bold uppercase text-dim">{{ i18n.t().home.implementation }}</span>
+                <span class="text-xs text-secondary">{{ i18n.t().home.signalOptimized }}</span>
               </div>
               <pre class="demo-code"><code>&lt;ngxsmk-datepicker mode="{{ demoMode }}"&gt;&lt;/ngxsmk-datepicker&gt;</code></pre>
             </div>
@@ -68,11 +68,11 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <section class="features-section">
         <div class="features-grid">
-          @for (f of features; track f.title) {
+          @for (f of features; track f.key) {
             <div class="feature-card">
               <div class="icon-box" [innerHTML]="f.icon"></div>
-              <h3>{{ f.title }}</h3>
-              <p>{{ f.desc }}</p>
+              <h3>{{ i18n.t().home.features[f.key].title }}</h3>
+              <p>{{ i18n.t().home.features[f.key].desc }}</p>
             </div>
           }
         </div>
@@ -81,11 +81,11 @@ import { I18nService } from '../../i18n/i18n.service';
       <section class="code-cta card mt-3xl">
         <div class="cta-inner">
           <div class="cta-text">
-            <h2>Ready to transform your Angular project?</h2>
-            <p>Install the best-in-class datepicker today and experience the difference.</p>
+            <h2>{{ i18n.t().common.readyToTransform }}</h2>
+            <p>{{ i18n.t().common.installToday }}</p>
           </div>
           <div class="cta-code">
-            <pre><code>npm install ngxsmk-datepicker@2.0.8</code></pre>
+            <pre><code>npm install ngxsmk-datepicker@2.0.9</code></pre>
           </div>
         </div>
       </section>
@@ -379,9 +379,9 @@ import { I18nService } from '../../i18n/i18n.service';
         white-space: nowrap;
       }
       @media (min-width: 768px) {
-        padding: 1.25rem 2.5rem;
+        padding: 1rem;
         width: auto;
-        code { font-size: 1.1rem; }
+        code { font-size: 0.8rem; }
       }
     }
 
@@ -465,33 +465,27 @@ export class HomeComponent {
 
   features = [
     {
-      title: 'Signals Powered',
-      desc: 'Built with the latest Angular Signals for ultra-fast, fine-grained reactivity and minimal change detection.',
+      key: 'signals' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>'
     },
     {
-      title: 'Zoneless Ready',
-      desc: 'Engineered for the future of Angular. Operates seamlessly without zone.js for peak performance.',
+      key: 'zoneless' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>'
     },
     {
-      title: 'Multi-Calendar Layouts',
-      desc: 'Effortlessly display multiple calendars (up to 12) with horizontal or vertical orientations.',
+      key: 'multiCalendar' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>'
     },
     {
-      title: 'Full A11y & Keyboard',
-      desc: 'Complete keyboard navigation and WAI-ARIA compliance for a truly inclusive user experience.',
+      key: 'a11y' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>'
     },
     {
-      title: 'Mobile Optimized',
-      desc: 'Responsive design with native picker support on mobile devices for smooth touch interaction.',
+      key: 'mobile' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>'
     },
     {
-      title: 'RTL & Locales',
-      desc: 'Built-in support for right-to-left languages and international date/time formatting.',
+      key: 'locales' as const,
       icon: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path></svg>'
     }
   ];

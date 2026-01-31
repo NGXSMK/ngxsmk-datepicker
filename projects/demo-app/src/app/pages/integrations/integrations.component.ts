@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-integrations',
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>Framework Integration</h1>
+      <h1>{{ i18n.t().nav.integrations }}</h1>
       <p class="text-lg">Learn how to seamlessly integrate <code>ngxsmk-datepicker</code> with your favorite UI frameworks.</p>
 
       <h2>Angular Material</h2>
@@ -79,4 +80,6 @@ export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
     .tip { margin-top: var(--space-2xl); }
   `]
 })
-export class IntegrationsComponent { }
+export class IntegrationsComponent {
+  i18n = inject(I18nService);
+}
