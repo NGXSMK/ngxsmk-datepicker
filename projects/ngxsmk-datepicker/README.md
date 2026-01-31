@@ -1,8 +1,13 @@
-<div align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker banner" width="100%" />
+<!-- 
+  SEO Keywords: Angular DatePicker, Angular Date Range Picker, Lightweight Calendar Component, Angular Signals DatePicker, SSR Ready DatePicker, Zoneless Angular, A11y DatePicker, Mobile-Friendly DatePicker, Ionic DatePicker
+  Meta Description: The most powerful, lightweight, and accessible date and range picker for modern Angular (17-21+). Built with Signals, Zoneless-ready, and zero dependencies.
+-->
 
-  # **ngxsmk-datepicker**
-  ### *The Gold Standard for Modern Angular Date Selection*
+<div align="center">
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
+
+  # **ngxsmk-datepicker** – Modern Angular Date Picker & Range Picker
+  ### *The Gold Standard for Premium Angular Calendar Selection*
 
   [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg?style=flat-square&color=6d28d9)](https://www.npmjs.com/package/ngxsmk-datepicker)
   [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
@@ -12,7 +17,7 @@
 
   **`npm i ngxsmk-datepicker`**
 
-  [Explore Demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Report Bug](https://github.com/NGXSMK/ngxsmk-datepicker/issues)
+  [Explore Live Demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [API Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Submit Issue](https://github.com/NGXSMK/ngxsmk-datepicker/issues)
 
 </div>
 
@@ -44,9 +49,9 @@
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Single Selection" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Range Selection" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile View" width="30%" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Standalone DatePicker Single Selection Mode" width="30%" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Picker Selection Mode" width="30%" />
+  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile Angular DatePicker Ionic Compatibility" width="30%" />
 </p>
 
 ## **✨ Features**
