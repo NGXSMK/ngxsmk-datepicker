@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-advanced',
@@ -9,8 +10,8 @@ import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepick
   imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent],
   template: `
     <div class="animate-fade-in">
-      <h1>Advanced Features</h1>
-      <p class="text-lg">Power-user features for complex date handling scenarios.</p>
+      <h1>{{ i18n.t().advanced.title }}</h1>
+      <p class="text-lg">{{ i18n.t().advanced.lead }}</p>
 
       <h2>Signal Forms Integration (Angular 21+)</h2>
       <p>Seamlessly integrate with the latest Angular Signal-based forms. Minimal boilerplate, maximum reactivity.</p>
@@ -69,9 +70,64 @@ import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepick
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
+    .card {
+      padding: var(--space-lg);
+      @media (max-width: 480px) { padding: var(--space-md); }
+    }
+
+    .shortcut-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: var(--space-sm);
+      li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: var(--font-size-sm);
+        @media (max-width: 480px) { flex-wrap: wrap; }
+      }
+    }
+
+    kbd {
+      background: var(--color-bg-code);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.8em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      box-shadow: 0 2px 0 var(--color-border);
+      color: var(--color-secondary);
+    }
+
+    ngxsmk-datepicker {
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    .tip {
+      font-size: var(--font-size-sm);
+      code {
+        background: rgba(124, 58, 237, 0.1);
+        color: var(--color-primary-light);
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+    }
   `]
 })
 export class AdvancedFeaturesComponent {
+  i18n = inject(I18nService);
   dateField = {
     value: signal<Date | null>(new Date()),
     disabled: signal(false),

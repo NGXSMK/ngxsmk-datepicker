@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-api',
@@ -7,20 +8,20 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>API Reference</h1>
-      <p class="text-lg">Comprehensive documentation for all component inputs, outputs, and utility functions.</p>
+      <h1>{{ i18n.t().api.title }}</h1>
+      <p class="text-lg">{{ i18n.t().api.lead }}</p>
       
       <!-- Inputs Section -->
       <section>
-        <h2>Component Inputs</h2>
+        <h2>{{ i18n.t().api.inputsTitle }}</h2>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Property</th>
-                <th>Type</th>
-                <th>Default</th>
-                <th>Description</th>
+                <th>{{ i18n.t().api.table.property }}</th>
+                <th>{{ i18n.t().api.table.type }}</th>
+                <th>{{ i18n.t().api.table.default }}</th>
+                <th>{{ i18n.t().api.table.description }}</th>
               </tr>
             </thead>
             <tbody>
@@ -39,14 +40,14 @@ import { CommonModule } from '@angular/common';
 
       <!-- Outputs Section -->
       <section>
-        <h2>Component Outputs</h2>
+        <h2>{{ i18n.t().api.outputsTitle }}</h2>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Event</th>
-                <th>Payload</th>
-                <th>Description</th>
+                <th>{{ i18n.t().api.table.event }}</th>
+                <th>{{ i18n.t().api.table.payload }}</th>
+                <th>{{ i18n.t().api.table.description }}</th>
               </tr>
             </thead>
             <tbody>
@@ -64,7 +65,7 @@ import { CommonModule } from '@angular/common';
 
       <!-- Advanced Types -->
       <section>
-        <h2>Advanced Types</h2>
+        <h2>{{ i18n.t().api.advancedTypesTitle }}</h2>
         <div class="grid gap-lg">
           <div class="card bg-code">
             <h4>DatepickerValue</h4>
@@ -82,15 +83,25 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .table-container {
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       overflow-x: auto;
-      margin-top: 1rem;
+      margin-top: var(--space-md);
       background: var(--color-bg-sidebar);
+      -webkit-overflow-scrolling: touch;
     }
     
-    table { width: 100%; border-collapse: collapse; text-align: left; }
+    table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; @media (min-width: 768px) { min-width: 0; } }
     th, td { padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--color-border); @media (min-width: 768px) { padding: 1.25rem; } }
     
     th {
@@ -104,11 +115,23 @@ import { CommonModule } from '@angular/common';
     }
     
     td { font-size: 0.85rem; @media (min-width: 768px) { font-size: 0.95rem; } vertical-align: top; color: var(--color-text-muted); }
-    code { color: var(--color-secondary); }
-    .bg-code { background: var(--color-bg-code); padding: 1.5rem; }
+    code { color: var(--color-secondary); background: none; padding: 0; }
+    .text-xs { font-size: 0.75rem; }
+
+    .bg-code { 
+      background: var(--color-bg-code); 
+      padding: var(--space-lg);
+      @media (min-width: 768px) { padding: var(--space-xl); }
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      h4 { margin: 0 0 0.5rem 0; color: var(--color-text-dim); font-size: 0.9rem; }
+    }
+    pre { overflow-x: auto; margin: 0; }
+    code { white-space: pre; font-size: var(--font-size-sm); }
   `]
 })
 export class ApiComponent {
+  i18n = inject(I18nService);
   inputs = [
     { name: 'mode', type: "'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'", default: "'single'", description: 'Selection behavior of the datepicker.' },
     { name: 'inline', type: "boolean | 'always' | 'auto'", default: 'false', description: 'Controls whether the calendar is embedded or shown in a popover.' },

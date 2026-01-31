@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-architecture',
@@ -7,17 +8,17 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>Plugin Architecture</h1>
-      <p class="text-lg">Extend the datepicker with custom logic, adapters, and behavioral hooks.</p>
+      <h1>{{ i18n.t().architecture.title }}</h1>
+      <p class="text-lg">{{ i18n.t().architecture.lead }}</p>
 
       <!-- Architecture Diagram -->
       <div class="arch-diagram card">
         <div class="diagram-grid">
           <div class="column">
-            <div class="layer-label">External Layer</div>
-            <div class="box plugin">Custom Adapters</div>
-            <div class="box plugin">Custom Strategies</div>
-            <div class="box plugin">Localization Data</div>
+            <div class="layer-label">{{ i18n.t().architecture.layers.external }}</div>
+            <div class="box plugin">{{ i18n.t().architecture.boxes.adapters }}</div>
+            <div class="box plugin">{{ i18n.t().architecture.boxes.strategies }}</div>
+            <div class="box plugin">{{ i18n.t().architecture.boxes.locales }}</div>
           </div>
           
           <div class="connector flex items-center justify-center">
@@ -25,10 +26,10 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="column">
-            <div class="layer-label">Extensibility Layer</div>
-            <div class="box hook">Behavioral Hooks</div>
-            <div class="box hook">Validation Middleware</div>
-            <div class="box hook">Theme Interceptors</div>
+            <div class="layer-label">{{ i18n.t().architecture.layers.extensibility }}</div>
+            <div class="box hook">{{ i18n.t().architecture.boxes.hooks }}</div>
+            <div class="box hook">{{ i18n.t().architecture.boxes.middleware }}</div>
+            <div class="box hook">{{ i18n.t().architecture.boxes.interceptors }}</div>
           </div>
 
           <div class="connector flex items-center justify-center">
@@ -36,20 +37,20 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="column core-col">
-            <div class="layer-label">Core Engine</div>
+            <div class="layer-label">{{ i18n.t().architecture.layers.core }}</div>
             <div class="core-node">
               <div class="core-inner">
-                <span class="core-text">Signals</span>
-                <span class="core-subtext">State Service</span>
+                <span class="core-text">{{ i18n.t().architecture.boxes.signals }}</span>
+                <span class="core-subtext">{{ i18n.t().architecture.boxes.state }}</span>
               </div>
             </div>
-            <div class="box internal">Commands Bus</div>
+            <div class="box internal">{{ i18n.t().architecture.boxes.bus }}</div>
           </div>
         </div>
       </div>
 
-      <h2>Custom Date Adapters</h2>
-      <p>By default, <code>ngxsmk-datepicker</code> uses native JavaScript Date objects. You can plug in custom adapters for libraries like <strong>Luxon</strong>, <strong>Day.js</strong>, or <strong>date-fns</strong>.</p>
+      <h2>{{ i18n.t().architecture.adaptersTitle }}</h2>
+      <p>{{ i18n.t().architecture.adaptersLead }}</p>
       
       <div class="card bg-code">
         <pre><code class="text-main">export class MyLuxonAdapter extends DateAdapter&lt;DateTime&gt; {{ '{' }}
@@ -65,15 +66,15 @@ providers: [
 ]</code></pre>
       </div>
 
-      <h2>Behavioral Hooks</h2>
-      <p>Intercept core interactions with the <code>[hooks]</code> input. This allows for deep customization of rendering and validation.</p>
+      <h2>{{ i18n.t().architecture.hooksTitle }}</h2>
+      <p>{{ i18n.t().architecture.hooksLead }}</p>
       
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Hook</th>
-              <th>Description</th>
+              <th>{{ i18n.t().architecture.table.hook }}</th>
+              <th>{{ i18n.t().architecture.table.description }}</th>
             </tr>
           </thead>
           <tbody>
@@ -93,15 +94,15 @@ providers: [
         </table>
       </div>
 
-      <h2>Internal Registry Service</h2>
-      <p>All localization and translation data is managed by centralized services that you can access and modify at runtime:</p>
+      <h2>{{ i18n.t().architecture.registryTitle }}</h2>
+      <p>{{ i18n.t().architecture.registryLead }}</p>
       <ul>
         <li><code>LocaleRegistryService</code>: Register new calendar systems or BCP47 data.</li>
         <li><code>TranslationRegistryService</code>: Update UI labels globally for the entire app.</li>
       </ul>
 
-      <h2>Custom Selection Strategies</h2>
-      <p>Take full control over how users select dates. By implementing the <code>SelectionStrategy</code> interface, you can enforce custom business logic, such as "Work-week only" ranges or "Fixed Duration" selections.</p>
+      <h2>{{ i18n.t().architecture.strategiesTitle }}</h2>
+      <p>{{ i18n.t().architecture.strategiesLead }}</p>
       
       <div class="card bg-code">
         <pre><code class="text-main">@Injectable()
@@ -114,8 +115,8 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
 {{ '}' }}</code></pre>
       </div>
 
-      <h2>Internal Signal State</h2>
-      <p>The datepicker is built using a unidirectional Signal-based state architecture. You can inject the <code>DatepickerStateService</code> to react to internal changes before they are emitted to the <code>(ngModel)</code>.</p>
+      <h2>{{ i18n.t().architecture.stateTitle }}</h2>
+      <p>{{ i18n.t().architecture.stateLead }}</p>
       
       <div class="grid-2">
         <div class="info-card">
@@ -128,16 +129,16 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
         </div>
       </div>
 
-      <h2>Middleware & Interceptors</h2>
-      <p>Registry services support a middleware pattern. This allows you to intercept translations or locale data as it's requested by the UI components.</p>
+      <h2>{{ i18n.t().architecture.middlewareTitle }}</h2>
+      <p>{{ i18n.t().architecture.middlewareLead }}</p>
       
       <div class="table-container">
         <table>
           <thead>
             <tr>
-              <th>Service</th>
-              <th>Hook Point</th>
-              <th>Description</th>
+              <th>{{ i18n.t().architecture.table.service }}</th>
+              <th>{{ i18n.t().architecture.table.hookPoint }}</th>
+              <th>{{ i18n.t().architecture.table.description }}</th>
             </tr>
           </thead>
           <tbody>
@@ -159,7 +160,7 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
           </tbody>
           <tfoot>
             <tr>
-               <td colspan="3" class="text-center py-md text-dim italic">More hooks available in Advanced API Reference</td>
+               <td colspan="3" class="text-center py-md text-dim italic">{{ i18n.t().architecture.table.moreHooks }}</td>
             </tr>
           </tfoot>
         </table>
@@ -171,11 +172,20 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .arch-diagram {
       background: var(--color-bg-sidebar);
-      padding: 2rem 1rem;
+      padding: var(--space-xl) var(--space-md);
       overflow-x: auto;
-      margin: 2rem -1rem;
+      margin: var(--space-xl) -1rem;
       border-radius: 0;
       @media (min-width: 768px) {
         padding: 3rem 2rem;
@@ -247,17 +257,23 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
         .core-subtext { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
       }
     }
-    .bg-code { background: var(--color-bg-code); padding: 1.5rem; border-radius: var(--radius-md); margin: 1rem 0; }
+    .bg-code { 
+        background: var(--color-bg-code); 
+        padding: var(--space-lg); 
+        border-radius: var(--radius-md); 
+        margin: var(--space-md) 0; 
+        overflow-x: auto;
+    }
     .grid-2 { 
         display: grid; 
         grid-template-columns: 1fr 1fr; 
-        gap: 1.5rem; 
-        margin: 2rem 0; 
+        gap: var(--space-md); 
+        margin: var(--space-xl) 0; 
         @media (max-width: 768px) { grid-template-columns: 1fr; }
     }
     .info-card { 
       background: rgba(255,255,255,0.02); 
-      padding: 1.5rem; 
+      padding: var(--space-lg); 
       border: 1px solid var(--color-border); 
       border-radius: var(--radius-md);
       transition: transform 0.2s ease;
@@ -266,24 +282,20 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
       p { font-size: 0.85rem; margin: 0.5rem 0 0; color: var(--color-text-dim); }
     }
     .table-container {
-      margin: 1.5rem 0;
+      margin: var(--space-xl) 0;
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      table { width: 100%; border-collapse: collapse; }
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      table { width: 100%; border-collapse: collapse; min-width: 500px; @media (min-width: 768px) { min-width: 0; } }
       th, td { padding: 1rem; border-bottom: 1px solid var(--color-border); text-align: left; }
       th { background: rgba(255,255,255,0.03); color: var(--color-text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
       td { font-size: 0.9rem; color: var(--color-text-muted); }
       tr:last-child td { border-bottom: none; }
     }
-    .tip {
-      padding: 1.5rem;
-      background: rgba(139, 92, 246, 0.05);
-      border-left: 4px solid var(--color-primary);
-      border-radius: var(--radius-sm);
-      margin-top: 3rem;
-      font-size: 0.95rem;
-    }
+    .tip { margin-top: var(--space-2xl); }
   `]
 })
-export class ArchitectureComponent { }
+export class ArchitectureComponent {
+  i18n = inject(I18nService);
+}

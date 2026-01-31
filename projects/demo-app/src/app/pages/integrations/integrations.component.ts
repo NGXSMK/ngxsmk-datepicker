@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-integrations',
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>Framework Integration</h1>
+      <h1>{{ i18n.t().nav.integrations }}</h1>
       <p class="text-lg">Learn how to seamlessly integrate <code>ngxsmk-datepicker</code> with your favorite UI frameworks.</p>
 
       <h2>Angular Material</h2>
@@ -49,16 +50,36 @@ export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    h3 { margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
+    .card {
+      padding: var(--space-lg);
+      @media (max-width: 480px) { padding: var(--space-md); }
+      margin-bottom: var(--space-md);
+    }
+
     .bg-code { 
       background: var(--color-bg-code); 
-      padding: 1.25rem;
-      @media (min-width: 768px) { padding: 2rem; }
-    }
-    .card {
-      @media (max-width: 768px) { padding: 1.5rem; }
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
     }
     pre { overflow-x: auto; margin: 0; }
-    code { white-space: pre; }
+    code { 
+        white-space: pre; 
+        font-size: var(--font-size-sm);
+        @media (min-width: 480px) { font-size: var(--font-size-base); }
+    }
+    .tip { margin-top: var(--space-2xl); }
   `]
 })
-export class IntegrationsComponent { }
+export class IntegrationsComponent {
+  i18n = inject(I18nService);
+}

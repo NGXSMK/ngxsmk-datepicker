@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-playground',
@@ -10,88 +11,88 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
   template: `
     <div class="animate-fade-in">
         <div class="playground-hero">
-          <h1>Playground</h1>
-          <p class="text-lg">Tweak properties and see how the datepicker behaves in real-time.</p>
+          <h1>{{ i18n.t().playground.title }}</h1>
+          <p class="text-lg">{{ i18n.t().playground.lead }}</p>
         </div>
       
       <div class="playground-layout mt-2xl">
         <aside class="config-panel card">
-          <h3 class="config-title">Configurations</h3>
+          <h3 class="config-title">{{ i18n.t().playground.configTitle }}</h3>
           
           <div class="config-group">
-            <span class="group-label">Selection Mode</span>
+            <span class="group-label">{{ i18n.t().playground.selectionMode }}</span>
             <div class="config-item">
               <select [(ngModel)]="mode">
-                <option value="single">Single Date</option>
-                <option value="range">Date Range</option>
-                <option value="multiple">Multiple Dates</option>
-                <option value="week">Week Selection</option>
-                <option value="month">Month Selection</option>
-                <option value="year">Year Selection</option>
+                <option value="single">{{ i18n.t().playground.singleDate }}</option>
+                <option value="range">{{ i18n.t().playground.dateRange }}</option>
+                <option value="multiple">{{ i18n.t().playground.multipleDates }}</option>
+                <option value="week">{{ i18n.t().playground.weekSelection }}</option>
+                <option value="month">{{ i18n.t().playground.monthSelection }}</option>
+                <option value="year">{{ i18n.t().playground.yearSelection }}</option>
               </select>
             </div>
             <div class="config-item">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="inline">
-                Inline Mode
+                {{ i18n.t().playground.inlineMode }}
               </label>
             </div>
           </div>
 
           <div class="config-group">
-            <span class="group-label">Functional Behavior</span>
+            <span class="group-label">{{ i18n.t().playground.functionalBehavior }}</span>
             <div class="config-item">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="allowTyping">
-                Allow Direct Typing
+                {{ i18n.t().playground.allowTyping }}
               </label>
             </div>
             <div class="config-item">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="showCalendarButton">
-                Show Icon Button
+                {{ i18n.t().playground.showIcon }}
               </label>
             </div>
             <div class="config-item">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="useNativePicker">
-                Use Native Mobile Picker
+                {{ i18n.t().playground.nativePicker }}
               </label>
             </div>
           </div>
 
           <div class="config-group">
-            <span class="group-label">Multi-Calendar Layout</span>
+            <span class="group-label">{{ i18n.t().playground.multiCalendar }}</span>
             <div class="config-item">
-              <label for="calendarCount">Calendar Count (1-3)</label>
+              <label for="calendarCount">{{ i18n.t().playground.calendarCount }} (1-3)</label>
               <input type="number" id="calendarCount" [(ngModel)]="calendarCount" min="1" max="3">
             </div>
             <div class="config-item" *ngIf="calendarCount > 1">
-              <label for="calendarLayout">Layout</label>
+              <label for="calendarLayout">{{ i18n.t().playground.layout }}</label>
               <select id="calendarLayout" [(ngModel)]="calendarLayout">
-                <option value="horizontal">Horizontal</option>
-                <option value="vertical">Vertical</option>
-                <option value="auto">Auto</option>
+                <option value="horizontal">{{ i18n.t().playground.horizontal }}</option>
+                <option value="vertical">{{ i18n.t().playground.vertical }}</option>
+                <option value="auto">{{ i18n.t().playground.auto }}</option>
               </select>
             </div>
           </div>
 
           <div class="config-group">
-            <span class="group-label">Time & Locales</span>
+            <span class="group-label">{{ i18n.t().playground.timeLocales }}</span>
             <div class="config-item">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="showTime">
-                Show Time Picker
+                {{ i18n.t().playground.showTime }}
               </label>
             </div>
             <div class="config-item" *ngIf="showTime">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="showSeconds">
-                Show Seconds
+                {{ i18n.t().playground.showSeconds }}
               </label>
             </div>
             <div class="config-item">
-              <label for="activeLocale">Locale</label>
+              <label for="activeLocale">{{ i18n.t().playground.locale }}</label>
               <select id="activeLocale" [(ngModel)]="locale">
                 <option value="en-US">English (US)</option>
                 <option value="en-GB">English (UK)</option>
@@ -104,22 +105,22 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
           </div>
 
           <div class="config-group">
-            <span class="group-label">Theming</span>
+            <span class="group-label">{{ i18n.t().playground.theming }}</span>
             <div class="config-item">
               <select [(ngModel)]="theme">
-                <option value="light">Light Theme</option>
-                <option value="dark">Dark Theme</option>
+                <option value="light">{{ i18n.t().playground.lightTheme }}</option>
+                <option value="dark">{{ i18n.t().playground.darkTheme }}</option>
               </select>
             </div>
           </div>
 
-          <button class="btn btn-outline reset-btn" (click)="reset()">Reset Defaults</button>
+          <button class="btn btn-outline reset-btn" (click)="reset()">{{ i18n.t().playground.reset }}</button>
         </aside>
 
         <main class="preview-panel card">
           <div class="preview-header">
-             <div class="value-chip" *ngIf="value">Value: <code>{{ value | json }}</code></div>
-             <div class="value-chip" *ngIf="!value">No selection</div>
+             <div class="value-chip" *ngIf="value">{{ i18n.t().playground.value }}: <code>{{ value | json }}</code></div>
+             <div class="value-chip" *ngIf="!value">{{ i18n.t().playground.noSelection }}</div>
           </div>
           <div class="preview-canvas">
             <ngxsmk-datepicker 
@@ -156,12 +157,13 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
       position: sticky;
       top: 100px;
       height: fit-content;
-      @media (max-width: 900px) { padding: 1.5rem; }
+      @media (max-width: 900px) { padding: 1rem; }
+      @media (max-width: 480px) { padding: var(--space-md) var(--space-sm); }
     }
 
     .config-title {
-      font-size: 1.1rem;
-      margin: 0 0 1.5rem;
+      font-size: var(--font-size-lg);
+      margin: 0 0 var(--space-md);
       color: var(--color-text-main);
     }
 
@@ -173,7 +175,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     }
 
     .group-label {
-      font-size: 0.7rem;
+      font-size: var(--font-size-xs);
       font-weight: 800;
       text-transform: uppercase;
       color: var(--color-text-dim);
@@ -185,7 +187,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
       flex-direction: column;
       gap: 0.4rem;
       
-      label { font-size: 0.85rem; color: var(--color-text-muted); }
+      label { font-size: var(--font-size-sm); color: var(--color-text-muted); }
       
       select, input {
         background: var(--color-bg-sidebar);
@@ -194,7 +196,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
         padding: 0.65rem 0.75rem;
         border-radius: var(--radius-sm);
         font-family: inherit;
-        font-size: 0.95rem;
+        font-size: var(--font-size-sm);
         outline: none;
         width: 100%;
         transition: var(--transition-base);
@@ -239,24 +241,24 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     }
 
     .value-chip {
-      font-size: 0.75rem;
+      font-size: var(--font-size-xs);
       color: var(--color-text-muted);
       code { color: var(--color-primary-light); }
     }
 
     .preview-canvas {
-      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
+      padding: 0.5rem;
       position: relative;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow: visible;
+      @media (min-width: 480px) { padding: 1.5rem 1rem; }
       @media (min-width: 768px) { padding: 3rem; }
       
       ngxsmk-datepicker {
          display: block;
+         width: 100% !important;
          max-width: 100%;
       }
     }
@@ -265,19 +267,20 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
     
     @media (max-width: 900px) {
       .playground-hero { text-align: center; }
-      .playground-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-      .config-panel { position: static; order: 2; }
-      .preview-panel { order: 1; min-height: 400px; }
+      .playground-layout { grid-template-columns: 1fr; gap: 1rem; }
+      .config-panel { position: static; order: 2; padding: 1rem; }
+      .preview-panel { order: 1; min-height: 400px; border-radius: 0; border-left: none; border-right: none; }
     }
 
     @media (max-width: 640px) {
-      .preview-panel { border-radius: 0; margin: 0 -1rem; border-left: none; border-right: none; }
+      .preview-panel { margin: 0; }
       .preview-header { padding: 0.75rem; }
       .value-chip { font-size: 0.65rem; }
     }
   `]
 })
 export class PlaygroundComponent {
+  i18n = inject(I18nService);
   mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
   direction: 'ltr' | 'rtl' = 'ltr';
   inline: boolean | 'always' | 'auto' = false;

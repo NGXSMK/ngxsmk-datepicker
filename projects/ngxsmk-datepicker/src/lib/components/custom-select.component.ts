@@ -19,11 +19,6 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       </button>
       @if (isOpen) {
         <div class="ngxsmk-options-panel" 
-             [class.fixed-position]="panelPosition === 'fixed'"
-             [style.position]="panelPosition === 'fixed' ? 'fixed' : null"
-             [style.top.px]="panelPosition === 'fixed' ? panelTop : null"
-             [style.left.px]="panelPosition === 'fixed' ? panelLeft : null"
-             [style.width.px]="panelPosition === 'fixed' ? panelWidth : null"
              #panel>
           <ul>
             @for (option of options; track option.value) {
@@ -84,7 +79,6 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       padding: 8px 16px; 
       font-size: 14px; 
       text-align: left; 
-      height: 38px;
       font-weight: 500;
       cursor: pointer;
       transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,7 +126,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       color: var(--datepicker-text-color, #1f2937); 
       border-radius: 8px;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
-      max-height: 240px; 
+      max-height: 200px; 
       overflow-y: auto; 
       z-index: 9999999;
       animation: fadeInDown 0.12s cubic-bezier(0.4, 0, 0.2, 1);
@@ -146,6 +140,15 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       visibility: visible !important;
       opacity: 1 !important;
       display: block !important;
+    }
+    @media (max-width: 768px) {
+      .ngxsmk-options-panel li { 
+        padding: 12px 16px !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        font-size: 14px !important;
+      }
     }
     .ngxsmk-time-selection .ngxsmk-options-panel {
       z-index: 10000001 !important;
@@ -177,7 +180,8 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     .ngxsmk-options-panel ul { 
       list-style: none; 
       padding: 4px; 
-      margin: 0; 
+      margin: 0;
+      min-height: 50px;
     }
     .ngxsmk-options-panel li { 
       padding: 10px 12px; 
@@ -190,6 +194,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     .ngxsmk-options-panel li:hover:not(.selected) { 
       background-color: var(--datepicker-hover-background, #f3f4f6); 
@@ -215,10 +222,6 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
 
   public isOpen = false;
-  public panelPosition: string = 'absolute';
-  public panelTop: number = 0;
-  public panelLeft: number = 0;
-  public panelWidth: number = 0;
 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
@@ -260,7 +263,7 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     if (this.isBrowser) {
       this.scrollListener = () => {
         if (this.isOpen) {
-          this.updatePanelPosition();
+          // Absolute positioning doesn't need updates on scroll
         }
       };
       window.addEventListener('scroll', this.scrollListener, { passive: true, capture: true });
@@ -268,22 +271,8 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   private updatePanelPosition(): void {
-    if (!this.isBrowser || !this.container?.nativeElement || !this.button?.nativeElement) {
-      return;
-    }
-
-    const isInTimeSelection = this.container.nativeElement.closest('.ngxsmk-time-selection');
-    if (isInTimeSelection) {
-      this.panelPosition = 'absolute';
-      this.panelLeft = 0;
-      this.panelTop = 0;
-      this.panelWidth = 0;
-    } else {
-      this.panelPosition = 'absolute';
-      this.panelLeft = 0;
-      this.panelTop = 0;
-      this.panelWidth = 0;
-    }
+    // No special positioning needed for standard dropdowns
+    // CSS handles top: 100% + 4px
   }
 
   @HostListener('document:click', ['$event'])

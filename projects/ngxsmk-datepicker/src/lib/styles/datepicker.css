@@ -9,6 +9,11 @@ ngxsmk-datepicker {
   overflow: visible;
 }
 
+/* Layout & Stacking Context Configuration */
+ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
+  z-index: 1000 !important;
+}
+
 .ngxsmk-datepicker-wrapper {
   position: relative;
   width: 100%;
@@ -415,9 +420,9 @@ ngxsmk-datepicker {
     transform: translate(-50%, -50%) !important;
     z-index: 2147483647 !important;
     pointer-events: none !important;
-    width: calc(100% - 32px) !important;
+    width: calc(100% - 12px) !important;
     min-width: 280px !important;
-    max-width: 400px !important;
+    max-width: 480px !important;
     height: -webkit-fit-content !important;
     height: -moz-fit-content !important;
     height: fit-content !important;
@@ -499,6 +504,7 @@ ngxsmk-datepicker {
   .ngxsmk-datepicker-container {
     width: 100% !important;
     max-width: 100% !important;
+    overflow: visible !important;
   }
 
   .ngxsmk-calendar-container {
@@ -506,6 +512,7 @@ ngxsmk-datepicker {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
   .ngxsmk-nav-button {
@@ -840,6 +847,7 @@ ngxsmk-datepicker {
 
 .ngxsmk-calendar-container.ngxsmk-time-only-mode .ngxsmk-time-selection {
   overflow: visible !important;
+  align-items: baseline;
   position: relative;
   z-index: 1;
 }
@@ -1919,53 +1927,57 @@ ngxsmk-datepicker {
   }
 
   .ngxsmk-day-cell {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    max-width: 40px;
-    min-height: 40px;
-    max-height: 40px;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    min-width: 0 !important;
+    max-width: 48px !important;
+    min-height: 0 !important;
+    max-height: 48px !important;
     -webkit-flex-shrink: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
   }
 
   .ngxsmk-day-number {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    max-width: 36px;
-    min-height: 36px;
-    max-height: 36px;
-    font-size: var(--datepicker-font-size-base);
+    width: 85% !important;
+    height: 85% !important;
+    min-width: 30px !important;
+    max-width: 38px !important;
+    min-height: 30px !important;
+    max-height: 38px !important;
+    font-size: var(--datepicker-font-size-base) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .ngxsmk-day-name {
-    font-size: 10px;
-    padding: 8px 0;
-    width: auto !important;
-    min-width: fit-content;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 8px 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    color: var(--datepicker-subtle-text-color) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .ngxsmk-calendar-container {
-    padding: var(--datepicker-spacing-sm) var(--datepicker-spacing-xs);
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    min-width: -webkit-fit-content;
-    min-width: -moz-fit-content;
-    min-width: fit-content;
-    max-width: calc(100vw - 16px);
+    padding: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    margin: 0 auto;
+    margin: 0;
   }
 
   .ngxsmk-days-grid-wrapper {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 100% !important;
+    max-width: 100% !important;
     margin: var(--datepicker-spacing-xs) auto 0;
     padding: 0;
   }
@@ -1983,9 +1995,8 @@ ngxsmk-datepicker {
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 100% !important;
+    max-width: 100% !important;
     margin: 0 auto;
   }
 
@@ -1996,114 +2007,140 @@ ngxsmk-datepicker {
   }
 
   .ngxsmk-header {
-    padding: 0;
-    margin-bottom: var(--datepicker-spacing-xs);
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 4px !important;
+    margin-bottom: var(--datepicker-spacing-sm);
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0;
+    margin-right: 0;
     -webkit-flex-wrap: nowrap;
     -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
-    gap: 8px;
+    gap: 2px;
+    box-sizing: border-box !important;
   }
 
   .ngxsmk-month-year-selects {
     width: auto;
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
     margin-bottom: 0;
-    gap: 8px;
+    gap: 4px;
+    min-width: 0;
   }
 
   .ngxsmk-nav-button {
-    padding: 8px;
-    min-width: 40px;
-    min-height: 40px;
+    padding: 6px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
   }
 
   .ngxsmk-nav-button svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .ngxsmk-select-display {
+    padding: 0 6px !important;
+    font-size: 13px !important;
+    min-width: 0 !important;
+  }
+
+  .ngxsmk-arrow-icon {
+    width: 12px !important;
+    height: 12px !important;
+    margin-left: 2px !important;
   }
 
   .ngxsmk-time-selection {
     margin-top: var(--datepicker-spacing-sm);
     padding-top: var(--datepicker-spacing-sm);
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 100% !important;
+    max-width: 100% !important;
     margin-left: auto;
     margin-right: auto;
     -webkit-flex-wrap: nowrap !important;
     -ms-flex-wrap: nowrap !important;
     flex-wrap: nowrap !important;
-    gap: 8px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    justify-content: center !important;
+    gap: 2px;
+    overflow: visible !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .ngxsmk-time-selection>* {
-    -webkit-flex-shrink: 0 !important;
-    -ms-flex-negative: 0 !important;
-    flex-shrink: 0 !important;
-    min-width: -webkit-fit-content;
-    min-width: -moz-fit-content;
-    min-width: fit-content;
+    -webkit-flex-shrink: 1 !important;
+    -ms-flex-negative: 1 !important;
+    flex-shrink: 1 !important;
+    min-width: 0;
+  }
+
+  .ngxsmk-time-selection ngxsmk-custom-select {
+    height: 44px !important;
+  }
+
+  .ngxsmk-time-separator {
+    font-size: 20px !important;
+    padding: 0 4px !important;
   }
 
   .ngxsmk-time-label {
-    font-size: 12px;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--datepicker-text-color) !important;
     white-space: nowrap;
+    margin-right: 2px !important;
   }
 
   .ngxsmk-footer {
     margin-top: var(--datepicker-spacing-sm);
     padding-top: var(--datepicker-spacing-sm);
     width: 100%;
-    -webkit-flex-wrap: nowrap;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    gap: 8px;
+    -webkit-flex-wrap: wrap !important;
+    -ms-flex-wrap: wrap !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 12px 8px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   .ngxsmk-clear-button-footer,
   .ngxsmk-close-button {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-    -ms-flex: 0 0 auto;
-    flex: 0 0 auto;
-    min-width: auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 12px 16px;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 600;
     min-height: 44px;
+    border-radius: 12px;
   }
 
   .ngxsmk-ranges-container {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    min-width: -webkit-fit-content;
-    min-width: -moz-fit-content;
-    min-width: fit-content;
-    max-width: 100%;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     overflow: visible;
   }
 
   .ngxsmk-ranges-container ul {
-    flex-wrap: nowrap !important;
-    justify-content: flex-start;
-    gap: var(--datepicker-spacing-xs);
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px 6px;
     overflow: visible;
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    min-width: auto;
-    max-width: 100%;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
   }
 
   .ngxsmk-ranges-container li {
@@ -2113,13 +2150,9 @@ ngxsmk-datepicker {
   }
 
   .ngxsmk-datepicker-container {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
-    width: fit-content;
-    min-width: -webkit-fit-content;
-    min-width: -moz-fit-content;
-    min-width: fit-content;
-    max-width: 100%;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
     height: -webkit-fit-content;
     height: -moz-fit-content;
     height: fit-content;
@@ -2514,6 +2547,7 @@ ngxsmk-datepicker {
   .ngxsmk-multi-calendar-container.ngxsmk-multi-calendar.ngxsmk-calendar-auto {
     flex-direction: row !important;
     flex-wrap: wrap !important;
+    justify-content: center;
     gap: 24px !important;
   }
 
@@ -4249,6 +4283,7 @@ ngxsmk-datepicker {
 
   /* ===== Header & Navigation ===== */
   .ngxsmk-header {
+    align-items: center;
     padding: 12px 8px !important;
     margin-bottom: 12px !important;
     gap: 12px !important;
@@ -4359,6 +4394,7 @@ ngxsmk-datepicker {
   /* ===== Time Selection ===== */
   .ngxsmk-time-selection {
     gap: 10px !important;
+    align-items: baseline;
     padding: 16px 8px !important;
     margin-top: 12px !important;
     border-top: 1px solid var(--datepicker-border-color) !important;
@@ -4843,7 +4879,6 @@ ngxsmk-datepicker {
   /* ===== Time Selection ===== */
   .ngxsmk-time-selection {
     gap: 8px !important;
-    padding: 14px 6px !important;
     margin-top: 10px !important;
     border-top: 1px solid var(--datepicker-border-color) !important;
     -webkit-flex-wrap: nowrap !important;
@@ -5131,22 +5166,21 @@ ngxsmk-datepicker {
 
   /* ===== Calendar Container & Popover ===== */
   .ngxsmk-popover-container.ngxsmk-popover-open:not(.ngxsmk-inline-container) {
-    width: -webkit-fit-content !important;
-    width: -moz-fit-content !important;
-    width: fit-content !important;
+    width: calc(100% - 20px) !important;
     min-width: 280px !important;
-    max-width: calc(100vw - 16px) !important;
-    max-height: calc(100dvh - 32px) !important;
+    max-width: 100% !important;
+    max-height: calc(100dvh - 20px) !important;
     position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: auto !important;
-    -webkit-transform: translate(-50%, -50%) !important;
-    -moz-transform: translate(-50%, -50%) !important;
-    -ms-transform: translate(-50%, -50%) !important;
-    -o-transform: translate(-50%, -50%) !important;
-    transform: translate(-50%, -50%) !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: auto !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -o-transform: none !important;
+    transform: none !important;
     border-radius: 12px !important;
     padding: 0 !important;
     overflow-y: auto !important;
@@ -5167,13 +5201,14 @@ ngxsmk-datepicker {
     -webkit-flex-direction: column !important;
     -ms-flex-direction: column !important;
     flex-direction: column !important;
+    overflow: visible !important;
   }
 
   .ngxsmk-calendar-container {
-    padding: 8px !important;
+    padding: 6px 4px !important;
     max-width: 100% !important;
     width: 100% !important;
-    border-radius: 12px !important;
+    border-radius: 0 !important;
     display: -webkit-box !important;
     display: -webkit-flex !important;
     display: -ms-flexbox !important;
@@ -5183,7 +5218,8 @@ ngxsmk-datepicker {
     -webkit-flex-direction: column !important;
     -ms-flex-direction: column !important;
     flex-direction: column !important;
-    gap: 8px !important;
+    gap: 2px !important;
+    overflow: visible !important;
   }
 
   /* ===== Date Ranges Container ===== */
@@ -5225,18 +5261,19 @@ ngxsmk-datepicker {
 
   /* ===== Header & Navigation ===== */
   .ngxsmk-header {
-    padding: 8px 4px !important;
-    margin-bottom: 8px !important;
-    gap: 6px !important;
+    padding: 4px 6px !important;
+    margin-bottom: 6px !important;
+    gap: 4px !important;
     -webkit-flex-wrap: nowrap !important;
     -ms-flex-wrap: nowrap !important;
     flex-wrap: nowrap !important;
     border-bottom: 1px solid var(--datepicker-border-color) !important;
-    padding-bottom: 8px !important;
+    padding-bottom: 10px !important;
     -webkit-box-pack: justify !important;
     -webkit-justify-content: space-between !important;
     -ms-flex-pack: justify !important;
     justify-content: space-between !important;
+    align-items: center !important;
   }
 
   .ngxsmk-month-year-selects {
@@ -5332,62 +5369,82 @@ ngxsmk-datepicker {
     border-radius: 8px !important;
   }
 
-  /* ===== Time Selection ===== */
+  /* ===== Time Selection (Mobile Rewrite) ===== */
   .ngxsmk-time-selection {
-    gap: 6px !important;
+    display: flex !important;
+    gap: 8px !important;
     padding: 12px 4px !important;
     margin-top: 8px !important;
     border-top: 1px solid var(--datepicker-border-color) !important;
-    -webkit-flex-wrap: nowrap !important;
-    -ms-flex-wrap: nowrap !important;
     flex-wrap: nowrap !important;
-    -webkit-box-pack: center !important;
-    -webkit-justify-content: center !important;
-    -ms-flex-pack: center !important;
     justify-content: center !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
+    align-items: center !important;
+
+    /* Crucial for dropdown visibility */
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 100 !important;
+    /* Higher than footer */
   }
 
   .ngxsmk-time-label {
-    font-size: 12px !important;
-    font-weight: 500 !important;
-    -webkit-flex-shrink: 0 !important;
-    -ms-flex-negative: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
     flex-shrink: 0 !important;
+    margin: 0 !important;
   }
 
   .ngxsmk-time-selection ngxsmk-custom-select {
-    --custom-select-width: 65px !important;
-    min-width: 65px !important;
-    -webkit-flex-shrink: 0 !important;
-    -ms-flex-negative: 0 !important;
+    --custom-select-width: 70px !important;
+    min-width: 70px !important;
     flex-shrink: 0 !important;
+    position: relative !important;
+    z-index: auto !important;
+    /* Let parent handle stacking context */
   }
 
+  /* When a dropdown is open, bring IT and its container to the very top */
+  .ngxsmk-time-selection:has(ngxsmk-custom-select[data-open="true"]) {
+    z-index: 1000 !important;
+  }
+
+  .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] {
+    z-index: 10000 !important;
+  }
+
+  .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
+    z-index: 10001 !important;
+    /* Open Upwards */
+    top: auto !important;
+    bottom: calc(100% + 4px) !important;
+    transform-origin: bottom center !important;
+    animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+
+
   .ngxsmk-time-separator {
-    font-size: 16px !important;
-    font-weight: 600 !important;
-    -webkit-flex-shrink: 0 !important;
-    -ms-flex-negative: 0 !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
     flex-shrink: 0 !important;
-    padding: 0 2px !important;
+    padding: 0 4px !important;
+    line-height: 1 !important;
   }
 
   /* ===== Footer Buttons ===== */
+  /* ===== Footer Buttons (Mobile Rewrite) ===== */
   .ngxsmk-footer {
     gap: 8px !important;
     padding: 12px 4px 8px !important;
-    margin-top: 8px !important;
+    margin-top: 0 !important;
+    /* Removed margin to pull closer */
     border-top: 1px solid var(--datepicker-border-color) !important;
-    -webkit-flex-wrap: wrap !important;
-    -ms-flex-wrap: wrap !important;
-    flex-wrap: wrap !important;
-    -webkit-box-pack: stretch !important;
-    -webkit-justify-content: stretch !important;
-    -ms-flex-pack: stretch !important;
+    flex-wrap: nowrap !important;
     justify-content: stretch !important;
+
+    /* Lower z-index to allow dropdowns to overlap */
+    position: relative !important;
+    z-index: 1 !important;
   }
 
   .ngxsmk-clear-button-footer,
@@ -5549,7 +5606,6 @@ ngxsmk-datepicker {
   }
 
   .ngxsmk-time-slider-value {
-    /* font-size: 14px !important; */
     font-weight: 600 !important;
   }
 
@@ -5560,5 +5616,53 @@ ngxsmk-datepicker {
   .ngxsmk-time-slider {
     width: 100% !important;
     height: 44px !important;
+  }
+}
+
+/* ==========================================================================
+   Responsive Layout Overrides (Mobile & Tablet)
+   Target: Devices < 992px (Landscape Phones & Portrait Tablets)
+   ========================================================================== */
+@media (max-width: 991px) {
+
+  /* Stack Context Configuration */
+  .ngxsmk-time-selection {
+    position: relative !important;
+    z-index: 100 !important;
+    overflow: visible !important;
+  }
+
+  /* Dropup Positioning
+     Prevents layout clipping by rendering alternatives upwards */
+  .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
+    z-index: 10001 !important;
+    top: auto !important;
+    bottom: calc(100% + 4px) !important;
+    transform-origin: bottom center !important;
+    animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* Active State Priority */
+  .ngxsmk-time-selection:has(ngxsmk-custom-select[data-open="true"]) {
+    z-index: 1000 !important;
+  }
+
+  /* Footer Layering */
+  .ngxsmk-footer {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }

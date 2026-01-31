@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-theming',
@@ -7,7 +8,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="animate-fade-in">
-      <h1>Custom Theming</h1>
+      <h1>{{ i18n.t().nav.customTheming }}</h1>
       <p class="text-lg">Full control over the visual identity of your datepicker using a powerful CSS variables system.</p>
 
       <div class="color-grid mt-xl">
@@ -64,11 +65,20 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   styles: [`
+    :host { display: block; }
+    h1 { margin-bottom: var(--space-xs); }
+    .text-lg { 
+      font-size: var(--font-size-lg); 
+      margin-bottom: var(--space-2xl);
+    }
+    h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
+    p { margin-bottom: var(--space-md); }
+
     .color-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-xl);
     }
     .color-item {
       height: 80px;
@@ -79,23 +89,36 @@ import { CommonModule } from '@angular/common';
       padding: 0.75rem;
       font-size: 0.75rem;
       span { font-weight: 700; color: white; margin-bottom: 2px; }
-      code { background: rgba(0,0,0,0.2); border-radius: 4px; padding: 1px 4px; color: rgba(255,255,255,0.8); }
+      code { background: rgba(0,0,0,0.2); border-radius: 4px; padding: 1px 4px; color: rgba(255,255,255,0.8); border: none; }
     }
     .table-container {
-      margin: 1.5rem 0;
+      margin: var(--space-md) 0;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       table { width: 100%; border-collapse: collapse; min-width: 400px; }
       th, td { padding: 0.8rem 1rem; text-align: left; font-size: 0.85rem; @media (min-width: 768px) { font-size: 0.9rem; } }
       th { border-bottom: 2px solid var(--color-border); color: var(--color-text-dim); }
       td { border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); }
       tr:last-child td { border-bottom: none; }
+      code { color: var(--color-secondary); background: none; padding: 0; }
+    }
+    .card {
+      padding: var(--space-lg);
+      @media (max-width: 480px) { padding: var(--space-md); }
+      margin-bottom: var(--space-md);
     }
     pre { overflow-x: auto; margin: 0; }
-    code { white-space: pre; }
+    code { 
+        white-space: pre; 
+        font-size: var(--font-size-sm);
+        @media (min-width: 480px) { font-size: var(--font-size-base); }
+    }
     .glass-example {
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
       border: 1px solid var(--color-border-light);
     }
   `]
 })
-export class ThemingComponent { }
+export class ThemingComponent {
+  i18n = inject(I18nService);
+}
