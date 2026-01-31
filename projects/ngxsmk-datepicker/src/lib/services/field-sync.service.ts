@@ -62,7 +62,7 @@ export type SignalFormFieldConfig = {
 };
 
 // Angular 21+ FieldTree compatibility - accepts any structure
-export type SignalFormField = any;
+export type SignalFormField = unknown;
 
 export interface FieldSyncCallbacks {
   onValueChanged: (value: DatepickerValue) => void;

@@ -259,7 +259,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       it('should display hour as-is when use24Hour is true', () => {
         component.use24Hour = true;
         component.currentHour = 14;
-        (component as any).update12HourState(component.currentHour);
+        (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
         expect(component.currentDisplayHour).toBe(14);
         expect(component.isPm).toBe(false);
       });

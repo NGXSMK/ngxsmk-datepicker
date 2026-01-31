@@ -5,13 +5,13 @@
 
 ngxsmk-datepicker {
   /* Color Palette */
-  --datepicker-primary-color: #6d28d9;
-  --datepicker-primary-contrast: #ffffff;
-  --datepicker-range-background: #f5f3ff;
-  --datepicker-background: #ffffff;
-  --datepicker-text-color: #1f2937;
-  --datepicker-subtle-text-color: #6b7280;
-  --datepicker-border-color: #e5e7eb;
+  --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
+  --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
+  --datepicker-range-background: var(--ion-color-primary-tint, #f5f3ff);
+  --datepicker-background: var(--ion-background-color, #ffffff);
+  --datepicker-text-color: var(--ion-text-color, #1f2937);
+  --datepicker-subtle-text-color: var(--ion-text-color-step-400, #6b7280);
+  --datepicker-border-color: var(--ion-item-border-color, var(--ion-border-color, #e5e7eb));
   --datepicker-hover-background: #f3f4f6;
 
   /* Shadows */

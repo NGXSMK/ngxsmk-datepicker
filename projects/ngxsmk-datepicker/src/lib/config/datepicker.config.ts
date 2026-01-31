@@ -13,6 +13,8 @@ export interface DatepickerConfig {
   maxDate?: Date | string | null;
   dateAdapter?: DateAdapter;
   animations?: AnimationConfig;
+  autoDetectMobile?: boolean;
+  mobileModalStyle?: 'bottom-sheet' | 'center' | 'fullscreen';
 }
 
 export interface AnimationConfig {

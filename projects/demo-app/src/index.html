@@ -1,409 +1,67 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8">
-  <title>ngxsmk-datepicker - Modern Angular Date Picker Component | Demo & Documentation</title>
-  <base href="/">
-  <!-- Primary Meta Tags -->
-  <meta name="title" content="ngxsmk-datepicker - Modern Angular Date Picker Component | Demo & Documentation">
-  <meta name="description"
-    content="A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ and Ionic Framework. Features Signal Forms support, SSR compatibility, zero dependencies, comprehensive theming, and full mobile/Ionic integration. Lightweight bundle (~127KB). Free and open-source.">
-  <meta name="keywords"
-    content="angular datepicker, angular date range picker, angular calendar, angular 17, angular 18, angular 19, angular 20, angular 21, ionic datepicker, ionic angular datepicker, ionic framework, ionic date picker, capacitor datepicker, ionic calendar, date picker component, date selection, angular forms, signal forms, standalone component, typescript, i18n, localization, SSR compatible, zoneless angular, lightweight datepicker, customizable datepicker, open source datepicker, mobile datepicker, hybrid mobile app datepicker, angular datepicker europe, angular datepicker deutschland, angular datepicker france, angular datepicker españa, angular datepicker italia, angular datepicker nederland, angular datepicker polska, angular datepicker portugal, angular datepicker sverige, angular datepicker norge, angular datepicker suomi, angular datepicker danmark, angular datepicker belgië, angular datepicker schweiz, angular datepicker österreich, datepicker angular europe, datepicker angular allemand, datepicker angular français, datepicker angular español, datepicker angular italiano, datepicker angular nederlands, datepicker angular polski, datepicker angular português, datepicker angular svenska, datepicker angular norsk, datepicker angular suomi, datepicker angular dansk, datepicker angular belgique, datepicker angular schweiz, datepicker angular österreich">
-  <meta name="author" content="Sachin Dilshan">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <meta name="language" content="English">
-  <meta name="revisit-after" content="7 days">
-  <meta name="rating" content="general">
-  <meta name="distribution" content="global">
-  <meta name="coverage" content="worldwide">
-  <meta name="target" content="all">
-  <link rel="canonical" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
+    <meta charset="utf-8">
+    <title>NGXSMK DatePicker | Elite Signal-Based Angular Date Selection</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- European SEO Meta Tags -->
-  <meta name="geo.region" content="EU">
-  <meta name="geo.placename" content="Europe">
-  <meta name="geo.position" content="50.1109;8.6821">
-  <meta name="ICBM" content="50.1109, 8.6821">
+    <!-- Secondary SEO -->
+    <meta name="description"
+        content="The elite open-source DatePicker for modern Angular. Built with Signals, fully Zoneless, and ultra-lightweight. Achieve 100% lighthouse scores with enterprise-grade accessibility and infinite customization.">
+    <meta name="keywords"
+        content="angular signals datepicker, zoneless angular datepicker, angular 19 datepicker, ngxsmk, performance datepicker, accessible calendar angular, open source angular ui, best angular range picker 2026">
+    <meta name="author" content="NGXSMK Open Source">
+    <meta name="theme-color" content="#7c3aed">
+    <link rel="canonical" href="https://ngxsmk.com/" />
 
-  <!-- European Language Hreflang Tags -->
-  <link rel="alternate" hreflang="en" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="en-GB" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="de" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="de-DE" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="de-AT" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="de-CH" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fr" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fr-FR" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fr-BE" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fr-CH" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="es" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="es-ES" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="it" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="it-IT" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="it-CH" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="nl" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="nl-NL" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="nl-BE" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="pl" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="pl-PL" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="pt" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="pt-PT" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="sv" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="sv-SE" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="no" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="no-NO" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fi" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="fi-FI" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="da" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="da-DK" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <link rel="alternate" hreflang="x-default" href="https://ngxsmk.github.io/ngxsmk-datepicker/">
+    <!-- Open Graph / Social Media (Viral Optimization) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ngxsmk.com/">
+    <meta property="og:title" content="NGXSMK: The Only DatePicker You'll Ever Need for Angular">
+    <meta property="og:description"
+        content="Stop fighting heavy UI libraries. Switch to NGXSMK—the ultra-fast, Signal-powered, and 100% Zoneless datepicker built for the next generation of Angular apps.">
+    <meta property="og:image" content="https://ngxsmk.com/assets/og-preview.png">
+    <meta property="og:site_name" content="NGXSMK DatePicker">
 
-  <!-- Apple Meta Tags -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="ngxsmk-datepicker">
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@ngxsmk">
+    <meta name="twitter:title" content="NGXSMK DatePicker | Signals + Zoneless = Perfection">
+    <meta name="twitter:description"
+        content="Finally, a datepicker that doesn't bloat your Angular app. 100% Signal-based. 0% Zone.js. ∞% Awesome.">
+    <meta name="twitter:image" content="https://ngxsmk.com/assets/og-preview.png">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <meta property="og:title" content="ngxsmk-datepicker - Modern Angular Date Picker Component">
-  <meta property="og:description"
-    content="A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ and Ionic Framework. Features Signal Forms support, SSR compatibility, zero dependencies, comprehensive theming, and full mobile/Ionic integration. Free and open-source.">
-  <meta property="og:image"
-    content="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png">
-  <meta property="og:image:secure_url"
-    content="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="ngxsmk-datepicker Angular component screenshot">
-  <meta property="og:site_name" content="ngxsmk-datepicker">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:locale:alternate" content="en_GB">
-  <meta property="og:locale:alternate" content="de_DE">
-  <meta property="og:locale:alternate" content="de_AT">
-  <meta property="og:locale:alternate" content="de_CH">
-  <meta property="og:locale:alternate" content="fr_FR">
-  <meta property="og:locale:alternate" content="fr_BE">
-  <meta property="og:locale:alternate" content="fr_CH">
-  <meta property="og:locale:alternate" content="es_ES">
-  <meta property="og:locale:alternate" content="it_IT">
-  <meta property="og:locale:alternate" content="it_CH">
-  <meta property="og:locale:alternate" content="nl_NL">
-  <meta property="og:locale:alternate" content="nl_BE">
-  <meta property="og:locale:alternate" content="pl_PL">
-  <meta property="og:locale:alternate" content="pt_PT">
-  <meta property="og:locale:alternate" content="sv_SE">
-  <meta property="og:locale:alternate" content="no_NO">
-  <meta property="og:locale:alternate" content="fi_FI">
-  <meta property="og:locale:alternate" content="da_DK">
-  <meta property="article:author" content="Sachin Dilshan">
-  <meta property="article:publisher" content="https://github.com/NGXSMK">
-  <meta property="article:section" content="Technology">
-  <meta property="article:tag" content="Angular">
-  <meta property="article:tag" content="Datepicker">
-  <meta property="article:tag" content="Europe">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@toozuuu">
-  <meta name="twitter:creator" content="@toozuuu">
-  <meta name="twitter:url" content="https://ngxsmk.github.io/ngxsmk-datepicker/">
-  <meta name="twitter:title" content="ngxsmk-datepicker - Modern Angular Date Picker Component">
-  <meta name="twitter:description"
-    content="A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ and Ionic Framework. Features Signal Forms support, SSR compatibility, zero dependencies, and full mobile/Ionic integration. Free and open-source.">
-  <meta name="twitter:image"
-    content="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png">
-  <meta name="twitter:image:alt" content="ngxsmk-datepicker Angular component screenshot">
-  <meta name="twitter:label1" content="License">
-  <meta name="twitter:data1" content="MIT">
-  <meta name="twitter:label2" content="Frameworks">
-  <meta name="twitter:data2" content="Angular 17+, Ionic 7+">
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="favicon.ico">
-
-  <!-- Structured Data (JSON-LD) - SoftwareApplication -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "ngxsmk-datepicker",
-    "applicationCategory": "WebApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR",
-      "availability": "https://schema.org/InStock",
-      "priceValidUntil": "2026-12-31",
-      "eligibleRegion": {
-        "@type": "GeoCircle",
-        "geoMidpoint": {
-          "@type": "GeoCoordinates",
-          "latitude": "50.1109",
-          "longitude": "8.6821"
-        },
-        "geoRadius": {
-          "@type": "Distance",
-          "name": "Europe"
-        }
-      }
-    },
-    "areaServed": [
-      {
-        "@type": "Country",
-        "name": "Germany"
-      },
-      {
-        "@type": "Country",
-        "name": "France"
-      },
-      {
-        "@type": "Country",
-        "name": "Spain"
-      },
-      {
-        "@type": "Country",
-        "name": "Italy"
-      },
-      {
-        "@type": "Country",
-        "name": "Netherlands"
-      },
-      {
-        "@type": "Country",
-        "name": "Poland"
-      },
-      {
-        "@type": "Country",
-        "name": "Portugal"
-      },
-      {
-        "@type": "Country",
-        "name": "Sweden"
-      },
-      {
-        "@type": "Country",
-        "name": "Norway"
-      },
-      {
-        "@type": "Country",
-        "name": "Finland"
-      },
-      {
-        "@type": "Country",
-        "name": "Denmark"
-      },
-      {
-        "@type": "Country",
-        "name": "Belgium"
-      },
-      {
-        "@type": "Country",
-        "name": "Switzerland"
-      },
-      {
-        "@type": "Country",
-        "name": "Austria"
-      },
-      {
-        "@type": "Country",
-        "name": "United Kingdom"
-      }
-    ],
-    "description": "A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ and Ionic Framework applications. Features Signal Forms support, SSR compatibility, zero dependencies, comprehensive theming, and full mobile/Ionic integration.",
-    "url": "https://ngxsmk.github.io/ngxsmk-datepicker/",
-    "author": {
-      "@type": "Person",
-      "name": "Sachin Dilshan",
-      "url": "https://www.linkedin.com/in/sachindilshan/",
-      "sameAs": [
-        "https://www.linkedin.com/in/sachindilshan/",
-        "https://github.com/NGXSMK"
-      ]
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "NGXSMK",
-      "url": "https://github.com/NGXSMK"
-    },
-    "codeRepository": "https://github.com/NGXSMK/ngxsmk-datepicker",
-    "programmingLanguage": ["TypeScript", "JavaScript"],
-    "runtimePlatform": ["Angular", "Ionic Framework", "Capacitor"],
-    "applicationSubCategory": "Mobile Application Component",
-    "browserRequirements": "Requires JavaScript. Requires HTML5.",
-    "softwareRequirements": "Angular 17+ or Ionic Framework 7+",
-    "softwareVersion": "2.0.7",
-    "keywords": "angular, datepicker, date range picker, calendar, angular 17, angular 18, angular 19, angular 20, angular 21, ionic, ionic framework, ionic datepicker, ionic angular, capacitor, mobile datepicker, hybrid mobile app, typescript, standalone component, signal forms, SSR compatible, europe, deutschland, france, españa, italia, nederland, polska, portugal, sverige, norge, suomi, danmark, belgië, schweiz, österreich, united kingdom, uk, eu, european union",
-    "inLanguage": ["en", "de", "fr", "es", "it", "nl", "pl", "pt", "sv", "no", "fi", "da"],
-    "license": "https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE",
-    "screenshot": "https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "ratingCount": "1"
-    },
-    "downloadUrl": "https://www.npmjs.com/package/ngxsmk-datepicker",
-    "softwareHelp": "https://github.com/NGXSMK/ngxsmk-datepicker#readme"
-  }
-  </script>
-
-  <!-- Structured Data (JSON-LD) - WebPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "ngxsmk-datepicker - Modern Angular Date Picker Component",
-    "description": "A modern, powerful, and fully customizable date and date-range picker component for Angular 17+ and Ionic Framework. Features Signal Forms support, SSR compatibility, zero dependencies, comprehensive theming, and full mobile/Ionic integration.",
-    "url": "https://ngxsmk.github.io/ngxsmk-datepicker/",
-    "inLanguage": ["en-US", "en-GB", "de-DE", "fr-FR", "es-ES", "it-IT", "nl-NL", "pl-PL", "pt-PT", "sv-SE", "no-NO", "fi-FI", "da-DK"],
-    "audience": {
-      "@type": "Audience",
-      "audienceType": "Developers",
-      "geographicArea": {
-        "@type": "Place",
-        "name": "Europe"
-      }
-    },
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "ngxsmk-datepicker",
-      "url": "https://ngxsmk.github.io/ngxsmk-datepicker/"
-    },
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://ngxsmk.github.io/ngxsmk-datepicker/"
-        }
-      ]
-    },
-    "mainEntity": {
+    <!-- Structured Data (JSON-LD) for Elite Rich Results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "ngxsmk-datepicker"
+      "name": "NGXSMK DatePicker",
+      "operatingSystem": "Web",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "High-performance, Signal-based, and Zoneless datepicker library for Angular 17+ projects.",
+      "softwareVersion": "2.0.8",
+      "license": "MIT"
     }
-  }
-  </script>
+    </script>
 
-  <!-- Structured Data (JSON-LD) - HowTo (Installation Guide) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "How to Install and Use ngxsmk-datepicker",
-    "description": "Step-by-step guide to install and use the ngxsmk-datepicker Angular component",
-    "step": [
-      {
-        "@type": "HowToStep",
-        "name": "Install the package",
-        "text": "Run npm install ngxsmk-datepicker in your Angular project",
-        "url": "https://ngxsmk.github.io/ngxsmk-datepicker/#installation"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Import the component",
-        "text": "Import NgxsmkDatepickerComponent in your Angular component",
-        "url": "https://ngxsmk.github.io/ngxsmk-datepicker/#usage"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Use in template",
-        "text": "Add the ngxsmk-datepicker component to your template with desired configuration",
-        "url": "https://ngxsmk.github.io/ngxsmk-datepicker/#usage"
-      },
-      {
-        "@type": "HowToStep",
-        "name": "Ionic Framework Integration",
-        "text": "Works seamlessly with Ionic Framework. Import the component in your Ionic Angular app and use it in your pages/components",
-        "url": "https://ngxsmk.github.io/ngxsmk-datepicker/#ionic-integration"
-      }
-    ]
-  }
-  </script>
-
-  <!-- Ionic Framework Meta Tags -->
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-
-  <!-- Capacitor/Ionic PWA Support -->
-  <meta name="apple-touch-fullscreen" content="yes">
-  <meta name="apple-mobile-web-app-title" content="ngxsmk-datepicker">
-
-  <!-- Additional SEO -->
-  <meta name="theme-color" content="#d9267d">
-  <meta name="msapplication-TileColor" content="#d9267d">
-
-  <!-- Structured Data (JSON-LD) - Ionic Framework Integration -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "headline": "ngxsmk-datepicker Ionic Framework Integration Guide",
-    "description": "Complete guide to integrating ngxsmk-datepicker with Ionic Framework for mobile and hybrid applications",
-    "author": {
-      "@type": "Person",
-      "name": "Sachin Dilshan"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "NGXSMK",
-      "url": "https://github.com/NGXSMK"
-    },
-    "datePublished": "2024-12-10",
-    "dateModified": "2024-12-10",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://ngxsmk.github.io/ngxsmk-datepicker/#ionic-integration"
-    },
-    "about": {
-      "@type": "Thing",
-      "name": "Ionic Framework",
-      "sameAs": "https://ionicframework.com"
-    },
-    "mentions": [
-      {
-        "@type": "SoftwareApplication",
-        "name": "Ionic Framework",
-        "applicationCategory": "MobileApplicationFramework",
-        "operatingSystem": ["iOS", "Android", "Web"]
-      },
-      {
-        "@type": "SoftwareApplication",
-        "name": "Capacitor",
-        "applicationCategory": "MobileApplicationFramework"
-      }
-    ]
-  }
-  </script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H13PBKMB4Q"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-H13PBKMB4Q');
-  </script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-  <app-root></app-root>
+    <app-root></app-root>
 </body>
 
 </html>

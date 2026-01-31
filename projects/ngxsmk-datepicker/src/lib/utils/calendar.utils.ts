@@ -9,7 +9,7 @@ export interface DateRange {
   [key: string]: [DateInput, DateInput];
 }
 
-export type DatepickerValue = Date | { start: Date, end: Date } | Date[] | null;
+export type DatepickerValue = Date | { start: Date | null, end: Date | null } | Date[] | null;
 
 export function generateMonthOptions(locale: string, year: number): { label: string; value: number }[] {
   return Array.from({ length: 12 }).map((_, i) => ({
@@ -93,16 +93,23 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
  * @param locale - Locale string (e.g., 'en-US', 'en-GB', 'de-DE')
  * @returns Day of week (0-6) where 0 is Sunday, 1 is Monday, etc.
  */
+interface IntlExtended {
+  Locale: {
+    new(locale: string): {
+      weekInfo?: {
+        firstDay: number;
+      };
+    };
+  };
+}
+
 export function getFirstDayOfWeek(locale: string): number {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (typeof Intl !== 'undefined' && typeof (Intl as any).Locale !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const localeObj = new (Intl as any).Locale(locale);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if ('weekInfo' in localeObj && (localeObj as any).weekInfo?.firstDay !== undefined) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return ((localeObj as any).weekInfo.firstDay) % 7;
+    const intlExt = Intl as unknown as IntlExtended;
+    if (typeof intlExt !== 'undefined' && typeof intlExt.Locale !== 'undefined') {
+      const localeObj = new intlExt.Locale(locale);
+      if ('weekInfo' in localeObj && localeObj.weekInfo?.firstDay !== undefined) {
+        return (localeObj.weekInfo.firstDay) % 7;
       }
     }
 

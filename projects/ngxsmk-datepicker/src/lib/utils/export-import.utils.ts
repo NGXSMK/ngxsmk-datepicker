@@ -42,7 +42,7 @@ export function exportToCsv(value: DatepickerValue, options: ExportOptions = {})
       }
     });
   } else if (typeof value === 'object' && 'start' in value && 'end' in value) {
-    const range = value as { start: Date; end: Date };
+    const range = value as { start: Date | null; end: Date | null };
     if (range.start instanceof Date) {
       const startDateStr = formatDateForExport(range.start, options);
       const startTimeStr = options.includeTime ? formatTimeForExport(range.start) : '';
@@ -139,7 +139,7 @@ export function exportToIcs(value: DatepickerValue, options: ExportOptions & {
       }
     });
   } else if (typeof value === 'object' && 'start' in value && 'end' in value) {
-    const range = value as { start: Date; end: Date };
+    const range = value as { start: Date | null; end: Date | null };
     if (range.start instanceof Date && range.end instanceof Date) {
       lines.push(...createIcsEvent(range.start, range.end, summary, description, location));
     }
@@ -220,7 +220,7 @@ function serializeDateValue(value: DatepickerValue, options: ExportOptions): unk
   }
 
   if (typeof value === 'object' && 'start' in value && 'end' in value) {
-    const range = value as { start: Date; end: Date };
+    const range = value as { start: Date | null; end: Date | null };
     if (range.start instanceof Date && range.end instanceof Date) {
       return {
         type: 'range',

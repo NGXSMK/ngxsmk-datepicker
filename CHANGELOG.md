@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.8] - 2026-01-31
+
+### Added
+
+- **Ionic Integration**: Added automatic support for Ionic CSS variables
+  - Datepicker now automatically inherits Ionic app theme colors (primary, background, text)
+  - No additional configuration required for native look and feel in Ionic apps
+  - Documented integration steps in README
+
+### Optimized
+
+- **Change Detection**: Optimized internal change detection strategy
+  - Removed redundant `ChangeDetectorRef` calls in favor of Signal-based updates
+  - Improved compatibility with Zoneless Angular applications
+  - Cleaner and more efficient state management
+
+### Fixed
+
+- **Mobile Page Jump**: Fixed issue where selecting a date would cause the page to jump to the top on some mobile browsers (Firefox Android)
+  - Added `{ preventScroll: true }` to focus restoration logic
+- **Dropdown Scrolling**: Fixed UX issue in month/year dropdowns
+  - Dropdowns now automatically scroll to the currently selected option when opened
+  - Improved mobile scrolling behavior within dropdowns by removing conflicting close logic
+
+### Changed
+
+- **Version Update**: Updated to version 2.0.8
+
 ## [2.0.7] - 2026-01-26
 
 - **Version Update**: Updated to version 2.0.7
