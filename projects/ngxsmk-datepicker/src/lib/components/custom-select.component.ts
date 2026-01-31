@@ -294,18 +294,8 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
         this.isOpen = false;
       }
 
-      // On mobile, also close when calendar modal opens
-      // Check if calendar backdrop or popover container is present (indicates calendar is open on mobile)
-      if (this.isBrowser) {
-        const calendarBackdrop = this.document.querySelector('.ngxsmk-backdrop');
-        const popoverOpen = this.document.querySelector('.ngxsmk-popover-container.ngxsmk-popover-open');
-        if (calendarBackdrop || popoverOpen) {
-          // Small delay to ensure calendar is fully opened before closing dropdowns
-          setTimeout(() => {
-            this.isOpen = false;
-          }, 50);
-        }
-      }
+      // Logic removed: forcing closure when calendar is open prevented dropdown from opening
+
     }
   }
 
@@ -335,7 +325,17 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     if (this.isOpen) {
       setTimeout(() => {
         this.updatePanelPosition();
+        this.scrollToSelected();
       }, 0);
+    }
+  }
+
+  private scrollToSelected(): void {
+    if (!this.isBrowser || !this.panel?.nativeElement) return;
+
+    const selectedEl = this.panel.nativeElement.querySelector('.selected') as HTMLElement;
+    if (selectedEl) {
+      selectedEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
   }
 

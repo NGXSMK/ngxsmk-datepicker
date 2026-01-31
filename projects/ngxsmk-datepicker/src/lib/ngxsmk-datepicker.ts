@@ -720,7 +720,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   public set isCalendarOpen(value: boolean) {
     this._isCalendarOpen.set(value);
-    this.scheduleChangeDetection();
+    // Signal update handles change detection
   }
 
   private isOpeningCalendar: boolean = false;
@@ -2775,6 +2775,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this._currentMonth = nextMonth.getMonth();
           this._currentYear = nextMonth.getFullYear();
           this._invalidateMemoCache();
+        } else if (this.mode === 'range' && this.startDate) {
+          this.currentDate = new Date(this.startDate);
+          this._currentMonth = this.startDate.getMonth();
+          this._currentYear = this.startDate.getFullYear();
+          this._invalidateMemoCache();
         }
         this.generateCalendar();
       }
@@ -2877,6 +2882,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.currentDate = nextMonth;
         this._currentMonth = nextMonth.getMonth();
         this._currentYear = nextMonth.getFullYear();
+        this._invalidateMemoCache();
+      } else if (this.mode === 'range' && this.startDate) {
+        this.currentDate = new Date(this.startDate);
+        this._currentMonth = this.startDate.getMonth();
+        this._currentYear = this.startDate.getFullYear();
         this._invalidateMemoCache();
       }
 
@@ -4350,8 +4360,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public selectRange(range: [Date, Date]): void {
     if (this.disabled) return;
-    this.startDate = this.applyCurrentTime(range[0]);
-    this.endDate = this.applyCurrentTime(range[1]);
+    this.startDate = new Date(range[0]);
+    this.endDate = new Date(range[1]);
 
     if (this.startDate && this.endDate) {
       this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });
@@ -4642,7 +4652,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
-        this.emitValue({ start: this.startDate as Date, end: null as any });
+        this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
       }
       else if (this.startDate && this.endDate && dayTime === endTime!) {
@@ -4650,7 +4660,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
-        this.emitValue({ start: this.startDate as Date, end: null as any });
+        this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
       }
       else if (this.startDate && this.endDate && dayTime > startTime! && dayTime < endTime!) {
@@ -4658,7 +4668,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
-        this.emitValue({ start: this.startDate as Date, end: null as any });
+        this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
       }
       else if (!this.startDate || (this.startDate && this.endDate)) {
@@ -5602,8 +5612,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._currentYearSignal.set(this._currentYear);
     this._invalidateMemoCache();
     this.generateCalendar();
-    this.cdr.markForCheck();
-    this.scheduleChangeDetection();
 
     if (this.isBrowser && this.isCalendarOpen) {
       requestAnimationFrame(() => {
@@ -5678,6 +5686,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (!this._maxDate && this.globalConfig.maxDate !== undefined) {
       this._maxDate = this._normalizeDate(this.globalConfig.maxDate);
+    }
+
+    if (this.autoDetectMobile === true && this.globalConfig.autoDetectMobile !== undefined) {
+      this.autoDetectMobile = this.globalConfig.autoDetectMobile;
+    }
+
+    if (this.mobileModalStyle === 'center' && this.globalConfig.mobileModalStyle !== undefined) {
+      this.mobileModalStyle = this.globalConfig.mobileModalStyle;
     }
   }
 
@@ -5824,7 +5840,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.trackedSetTimeout(() => {
         try {
           if (this.previousFocusElement && document.contains(this.previousFocusElement)) {
-            this.previousFocusElement.focus();
+            this.previousFocusElement.focus({ preventScroll: true });
           }
         } catch (error) {
           // Element may no longer be in the DOM, ignore error

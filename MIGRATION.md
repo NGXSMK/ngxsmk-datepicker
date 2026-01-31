@@ -44,6 +44,24 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## v2.0.7 → v2.0.8
+
+### Changes
+
+- **Version Update**: Updated to version 2.0.8
+- **Ionic Integration**: Added automatic CSS variable support for seamless theming in Ionic apps
+- **Optimized Change Detection**: Switched to Signal-based updates for better performance
+- **Mobile UX Fixes**: Fixed page jumping on date selection and improved dropdown scrolling
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required. This is a patch version update:
+
+```bash
+npm install ngxsmk-datepicker@2.0.8
+```
+
 ## v2.0.6 → v2.0.7
 
 ### Changes

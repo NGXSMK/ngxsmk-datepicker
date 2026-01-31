@@ -14,7 +14,7 @@ describe('ExportImportUtils', () => {
     it('should export single date to JSON', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const result = exportToJson(date);
-      
+
       const parsed = JSON.parse(result);
       expect(parsed.type).toBe('single');
       expect(parsed.iso).toBe(date.toISOString());
@@ -26,7 +26,7 @@ describe('ExportImportUtils', () => {
         new Date('2024-02-20T14:45:00Z')
       ];
       const result = exportToJson(dates);
-      
+
       const parsed = JSON.parse(result);
       expect(parsed.type).toBe('multiple');
       expect(parsed.dates.length).toBe(2);
@@ -38,18 +38,18 @@ describe('ExportImportUtils', () => {
         end: new Date('2024-01-20T14:45:00Z')
       };
       const result = exportToJson(range);
-      
+
       const parsed = JSON.parse(result);
       expect(parsed.type).toBe('range');
-      expect(parsed.start.iso).toBe(range.start.toISOString());
-      expect(parsed.end.iso).toBe(range.end.toISOString());
+      expect(parsed.start.iso).toBe(range.start!.toISOString());
+      expect(parsed.end.iso).toBe(range.end!.toISOString());
     });
 
     it('should include time when includeTime is true', () => {
       const date = new Date('2024-01-15T10:30:45Z');
       const options: ExportOptions = { includeTime: true };
       const result = exportToJson(date, options);
-      
+
       const parsed = JSON.parse(result);
       expect(parsed.time).toBeTruthy();
       // Time will be in local timezone, so check format instead of exact value
@@ -60,7 +60,7 @@ describe('ExportImportUtils', () => {
       const date = new Date('2024-01-15T10:30:45Z');
       const options: ExportOptions = { includeTime: false };
       const result = exportToJson(date, options);
-      
+
       const parsed = JSON.parse(result);
       expect(parsed.time).toBeUndefined();
     });
@@ -77,7 +77,7 @@ describe('ExportImportUtils', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const json = exportToJson(date);
       const imported = importFromJson(json);
-      
+
       expect(imported).toBeInstanceOf(Date);
       expect((imported as Date).getTime()).toBe(date.getTime());
     });
@@ -89,7 +89,7 @@ describe('ExportImportUtils', () => {
       ];
       const json = exportToJson(dates);
       const imported = importFromJson(json);
-      
+
       expect(Array.isArray(imported)).toBe(true);
       expect((imported as Date[]).length).toBe(2);
     });
@@ -101,11 +101,11 @@ describe('ExportImportUtils', () => {
       };
       const json = exportToJson(range);
       const imported = importFromJson(json);
-      
+
       expect(typeof imported).toBe('object');
       if (typeof imported === 'object' && imported !== null && 'start' in imported && 'end' in imported) {
-        expect((imported as { start: Date; end: Date }).start.getTime()).toBe(range.start.getTime());
-        expect((imported as { start: Date; end: Date }).end.getTime()).toBe(range.end.getTime());
+        expect((imported as { start: Date; end: Date }).start.getTime()).toBe(range.start!.getTime());
+        expect((imported as { start: Date; end: Date }).end.getTime()).toBe(range.end!.getTime());
       }
     });
 
@@ -125,7 +125,7 @@ describe('ExportImportUtils', () => {
     it('should export single date to CSV', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const result = exportToCsv(date);
-      
+
       expect(result).toContain('Type');
       expect(result).toContain('Date');
       expect(result).toContain('Single Date');
@@ -137,7 +137,7 @@ describe('ExportImportUtils', () => {
         new Date('2024-02-20T14:45:00Z')
       ];
       const result = exportToCsv(dates);
-      
+
       expect(result).toContain('Multiple Date');
       const lines = result.split('\n');
       expect(lines.length).toBeGreaterThan(2); // Header + 2 dates
@@ -149,7 +149,7 @@ describe('ExportImportUtils', () => {
         end: new Date('2024-01-20T14:45:00Z')
       };
       const result = exportToCsv(range);
-      
+
       expect(result).toContain('Range Start');
       expect(result).toContain('Range End');
     });
@@ -158,7 +158,7 @@ describe('ExportImportUtils', () => {
       const date = new Date('2024-01-15T10:30:45Z');
       const options: ExportOptions = { includeTime: true };
       const result = exportToCsv(date, options);
-      
+
       // Time will be in local timezone, so check format instead of exact value
       expect(result).toMatch(/\d{2}:\d{2}:\d{2}/);
     });
@@ -169,7 +169,7 @@ describe('ExportImportUtils', () => {
         csvHeaders: ['Custom1', 'Custom2', 'Custom3']
       };
       const result = exportToCsv(date, options);
-      
+
       expect(result).toContain('Custom1');
       expect(result).toContain('Custom2');
       expect(result).toContain('Custom3');
@@ -184,7 +184,7 @@ describe('ExportImportUtils', () => {
     it('should quote CSV cells', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const result = exportToCsv(date);
-      
+
       expect(result).toContain('"');
     });
   });
@@ -194,7 +194,7 @@ describe('ExportImportUtils', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const csv = exportToCsv(date);
       const imported = importFromCsv(csv);
-      
+
       expect(imported).toBeInstanceOf(Date);
     });
 
@@ -205,7 +205,7 @@ describe('ExportImportUtils', () => {
       ];
       const csv = exportToCsv(dates);
       const imported = importFromCsv(csv);
-      
+
       expect(Array.isArray(imported)).toBe(true);
       expect((imported as Date[]).length).toBe(2);
     });
@@ -217,7 +217,7 @@ describe('ExportImportUtils', () => {
       };
       const csv = exportToCsv(range);
       const imported = importFromCsv(csv);
-      
+
       expect(typeof imported).toBe('object');
       if (typeof imported === 'object' && imported !== null && 'start' in imported && 'end' in imported) {
         expect((imported as { start: Date; end: Date }).start).toBeInstanceOf(Date);
@@ -253,7 +253,7 @@ describe('ExportImportUtils', () => {
     it('should export single date to ICS', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const result = exportToIcs(date);
-      
+
       expect(result).toContain('BEGIN:VCALENDAR');
       expect(result).toContain('BEGIN:VEVENT');
       expect(result).toContain('END:VEVENT');
@@ -266,7 +266,7 @@ describe('ExportImportUtils', () => {
         new Date('2024-02-20T14:45:00Z')
       ];
       const result = exportToIcs(dates);
-      
+
       const eventCount = (result.match(/BEGIN:VEVENT/g) || []).length;
       expect(eventCount).toBe(2);
     });
@@ -277,7 +277,7 @@ describe('ExportImportUtils', () => {
         end: new Date('2024-01-20T14:45:00Z')
       };
       const result = exportToIcs(range);
-      
+
       expect(result).toContain('BEGIN:VEVENT');
       expect(result).toContain('DTSTART');
       expect(result).toContain('DTEND');
@@ -291,7 +291,7 @@ describe('ExportImportUtils', () => {
         location: 'Test Location'
       };
       const result = exportToIcs(date, options);
-      
+
       expect(result).toContain('SUMMARY:Test Event');
       expect(result).toContain('DESCRIPTION:Test Description');
       expect(result).toContain('LOCATION:Test Location');
@@ -300,7 +300,7 @@ describe('ExportImportUtils', () => {
     it('should use default summary if not provided', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const result = exportToIcs(date);
-      
+
       expect(result).toContain('SUMMARY:Date Selection');
     });
 
@@ -317,7 +317,7 @@ describe('ExportImportUtils', () => {
         summary: 'Test;Event,With\\Special\nChars'
       };
       const result = exportToIcs(date, options);
-      
+
       expect(result).toContain('SUMMARY:');
       // Should escape special characters
       expect(result).toContain('\\;');
@@ -329,7 +329,7 @@ describe('ExportImportUtils', () => {
       const date = new Date('2024-01-15T10:30:00Z');
       const ics = exportToIcs(date);
       const imported = importFromIcs(ics);
-      
+
       expect(imported).toBeInstanceOf(Date);
     });
 
@@ -340,7 +340,7 @@ describe('ExportImportUtils', () => {
       };
       const ics = exportToIcs(range);
       const imported = importFromIcs(ics);
-      
+
       expect(typeof imported).toBe('object');
       if (typeof imported === 'object' && imported !== null && 'start' in imported && 'end' in imported) {
         expect((imported as { start: Date; end: Date }).start).toBeInstanceOf(Date);
@@ -355,7 +355,7 @@ describe('ExportImportUtils', () => {
       ];
       const ics = exportToIcs(dates);
       const imported = importFromIcs(ics);
-      
+
       expect(Array.isArray(imported)).toBe(true);
       expect((imported as Date[]).length).toBe(2);
     });
@@ -399,7 +399,7 @@ END:VCALENDAR`;
       const date = new Date('2024-01-15T10:30:00Z');
       const ics = exportToIcs(date);
       const imported = importFromIcs(ics);
-      
+
       // Single day event should be imported as Date, not range
       expect(imported).toBeInstanceOf(Date);
     });
@@ -413,7 +413,7 @@ END:VCALENDAR`;
       };
       const result = exportToJson(date, options);
       const parsed = JSON.parse(result);
-      
+
       expect(parsed.date).toContain('2024');
       expect(parsed.date).toContain('01');
       expect(parsed.date).toContain('15');

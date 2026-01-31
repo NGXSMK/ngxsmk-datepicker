@@ -264,10 +264,11 @@ export class DatePresetsService {
       return value.map(date => new Date(date.getTime()));
     }
 
-    if (typeof value === 'object' && 'start' in value && 'end' in value) {
+    if (typeof value === 'object' && value !== null && 'start' in value && 'end' in value) {
+      const range = value as { start: Date | null, end: Date | null };
       return {
-        start: new Date(value.start.getTime()),
-        end: new Date(value.end.getTime()),
+        start: range.start ? new Date(range.start.getTime()) : null,
+        end: range.end ? new Date(range.end.getTime()) : null,
       };
     }
 

@@ -38,9 +38,12 @@ export {
   processDateRanges,
   generateYearGrid,
   generateDecadeGrid,
-  type HolidayProvider,
-  type DateRange,
-  type DatepickerValue,
+} from './lib/utils/calendar.utils';
+
+export type {
+  HolidayProvider,
+  DateRange,
+  DatepickerValue,
 } from './lib/utils/calendar.utils';
 
 export {

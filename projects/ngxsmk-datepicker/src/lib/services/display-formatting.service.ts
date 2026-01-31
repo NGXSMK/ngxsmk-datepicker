@@ -73,8 +73,8 @@ export class DisplayFormattingService {
   /**
    * Format a date range
    */
-  private formatDateRange(start: Date, end: Date, options: FormattingOptions): string {
-    const startFormatted = formatDateWithTimezone(
+  private formatDateRange(start: Date | null, end: Date | null, options: FormattingOptions): string {
+    const startFormatted = start ? formatDateWithTimezone(
       start,
       options.locale,
       {
@@ -83,9 +83,9 @@ export class DisplayFormattingService {
         day: 'numeric'
       },
       options.timezone
-    );
+    ) : '--';
 
-    const endFormatted = formatDateWithTimezone(
+    const endFormatted = end ? formatDateWithTimezone(
       end,
       options.locale,
       {
@@ -94,7 +94,7 @@ export class DisplayFormattingService {
         day: 'numeric'
       },
       options.timezone
-    );
+    ) : '--';
 
     return `${startFormatted} - ${endFormatted}`;
   }

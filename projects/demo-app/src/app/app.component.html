@@ -1,0 +1,138 @@
+<div class="doc-layout">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner flex items-center justify-between">
+            <div class="flex items-center gap-md">
+                <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="logo flex items-center gap-sm" routerLink="/">
+                    <div class="logo-icon-wrapper">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <span class="logo-text">NGXSMK <span class="highlight">DatePicker</span></span>
+                </div>
+            </div>
+
+            <div class="header-actions flex items-center gap-lg">
+                <a href="https://www.npmjs.com/package/ngxsmk-datepicker" target="_blank"
+                    class="npm-badge flex items-center gap-xs no-underline">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path
+                            d="M0 7.334v8h6.666v1.332H12V15.334h12V7.334H0zm6.666 6.666H5.334v-4H4v4H1.334v-5.332h5.332v5.332zm6.666 0h-1.332v-4h-1.334v4H9.334v-5.332h4v5.332zm6.668 0h-1.334v-4h-1.334v4H16V7.334h5.334v6.666z" />
+                    </svg>
+                    <span class="count">{{ npmDownloads() }} {{ i18n.t().common.npmDownloads }}</span>
+                </a>
+
+                <button (click)="themeService.nextTheme()" class="icon-btn theme-toggle"
+                    [title]="'Switch to ' + (themeService.theme() === 'dark' ? 'light' : 'dark') + ' theme'">
+                    @if (themeService.theme() === 'dark') {
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    } @else {
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    }
+                </button>
+
+                <div class="lang-selector">
+                    <button class="lang-btn icon-btn" (click)="toggleLangMenu($event)" [title]="'Change Language'">
+                        <span class="text-xs font-bold">{{ i18n.lang().toUpperCase() }}</span>
+                    </button>
+                    @if (isLangMenuOpen) {
+                    <div class="lang-menu card animate-fade-in">
+                        <button (click)="changeLang('en')" [class.active]="i18n.lang() === 'en'">🇺🇸 EN -
+                            English</button>
+                        <button (click)="changeLang('de')" [class.active]="i18n.lang() === 'de'">🇩🇪 DE -
+                            Deutsch</button>
+                        <button (click)="changeLang('es')" [class.active]="i18n.lang() === 'es'">🇪🇸 ES -
+                            Español</button>
+                        <button (click)="changeLang('sv')" [class.active]="i18n.lang() === 'sv'">🇸🇪 SV -
+                            Svenska</button>
+                        <button (click)="changeLang('fr')" [class.active]="i18n.lang() === 'fr'">🇫🇷 FR -
+                            Français</button>
+                        <button (click)="changeLang('zh')" [class.active]="i18n.lang() === 'zh'">🇨🇳 ZH - 中文</button>
+                        <button (click)="changeLang('ja')" [class.active]="i18n.lang() === 'ja'">🇯🇵 JA - 日本語</button>
+                        <button (click)="changeLang('ko')" [class.active]="i18n.lang() === 'ko'">🇰🇷 KO - 한국어</button>
+                    </div>
+                    }
+                </div>
+
+                <a href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" class="icon-btn github-btn"
+                    title="View on GitHub">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.11.81 2.235 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" [class.open]="isSidebarOpen">
+            @for (section of navSections; track section.label) {
+            <div class="nav-section">
+                <div class="nav-label">{{ section.label }}</div>
+                @for (link of section.links; track link.path) {
+                <a [routerLink]="link.path" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: link.path === '/'}" class="nav-link" (click)="closeSidebar()">
+                    {{ link.label }}
+                </a>
+                }
+            </div>
+            }
+        </aside>
+
+        <!-- Main Content AREA -->
+        <main class="content-area">
+            <div class="content-container">
+                <router-outlet></router-outlet>
+            </div>
+
+            <!-- Footer inside content area for advanced doc look -->
+            <footer class="content-footer mt-3xl py-xl border-t">
+                <div class="flex justify-between items-center text-dim text-sm">
+                    <div class="flex gap-md opacity-60">
+                        <span>&copy; 2026 NGXSMK Team</span>
+                        <span>{{ i18n.t().common.releasedUnder }}</span>
+                    </div>
+                    <a href="https://github.com/TokiForge/tokiforge" target="_blank"
+                        class="text-dim hover:text-primary transition-base flex items-center gap-xs no-underline">
+                        <span class="text-xs uppercase tracking-widest font-bold opacity-50">{{
+                            i18n.t().common.poweredBy }}</span>
+                        <span class="font-extrabold text-sm tracking-tighter">TokiForge</span>
+                    </a>
+                </div>
+            </footer>
+        </main>
+
+        <!-- Overlay for mobile -->
+        @if (isSidebarOpen) {
+        <div class="sidebar-overlay" (click)="closeSidebar()" (keydown.enter)="closeSidebar()"
+            (keydown.space)="closeSidebar()" tabindex="0" role="button" aria-label="Close sidebar"></div>
+        }
+    </div>
+</div>
