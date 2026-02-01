@@ -31,6 +31,14 @@ import { I18nService } from '../../i18n/i18n.service';
             <code>{{ rangeValue.start | date:'shortDate' }} - {{ rangeValue.end | date:'shortDate' }}</code>
           </div>
         </div>
+
+        <div class="card demo-card">
+          <h3>{{ i18n.t().examples.timeOnlySelection }}</h3>
+          <ngxsmk-datepicker [timeOnly]="true" [(ngModel)]="timeOnlyValue" [placeholder]="i18n.t().examples.selectTime"></ngxsmk-datepicker>
+          <div class="selection-box" *ngIf="timeOnlyValue">
+             <code>{{ timeOnlyValue | date:'shortTime' }}</code>
+          </div>
+        </div>
       </section>
 
       <h1 class="mt-3xl">{{ i18n.t().examples.advancedTitle }}</h1>
@@ -191,6 +199,7 @@ export class ExamplesComponent {
 
   singleValue: Date | null = null;
   rangeValue: { start: Date; end: Date } | null = null;
+  timeOnlyValue: Date | null = null;
   dateTimeValue: Date = new Date();
   multiMonthValue: { start: Date; end: Date } | null = null;
   constrainedValue: Date | null = null;
