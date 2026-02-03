@@ -106,6 +106,21 @@ import { I18nService } from '../../i18n/i18n.service';
             <code>{{ constrainedValue | date:'fullDate' }}</code>
           </div>
         </div>
+
+        <div class="card demo-card">
+          <h3>{{ i18n.t().examples.rangeTimeTitle }}</h3>
+          <p class="text-sm mb-lg">{{ i18n.t().examples.rangeTimeLead }}</p>
+          <ngxsmk-datepicker 
+            mode="range" 
+            [showTime]="true" 
+            [ranges]="customRanges"
+            [(ngModel)]="rangeTimeValue"
+            [placeholder]="i18n.t().examples.selectRangeWithTime">
+          </ngxsmk-datepicker>
+          <div class="selection-box mt-md" *ngIf="rangeTimeValue">
+            <code>{{ rangeTimeValue.start | date:'medium' }} - {{ rangeTimeValue.end | date:'medium' }}</code>
+          </div>
+        </div>
       </section>
 
       <div class="tip">
@@ -203,6 +218,14 @@ export class ExamplesComponent {
   dateTimeValue: Date = new Date();
   multiMonthValue: { start: Date; end: Date } | null = null;
   constrainedValue: Date | null = null;
+  rangeTimeValue: { start: Date; end: Date } | null = null;
+
+  customRanges = {
+    'Today': [new Date(), new Date()] as [Date, Date],
+    'Yesterday': [new Date(new Date().setDate(new Date().getDate() - 1)), new Date(new Date().setDate(new Date().getDate() - 1))] as [Date, Date],
+    'Last 7 Days': [new Date(new Date().setDate(new Date().getDate() - 6)), new Date()] as [Date, Date],
+    'This Month': [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date()] as [Date, Date]
+  };
 
   today = new Date();
   nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));

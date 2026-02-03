@@ -137,7 +137,10 @@ export const translations = {
             featuredBadge: 'Featured Selection',
             constraintsPlaceholder: 'Limits: Today to Next Month',
             chooseDate: 'Choose a date',
-            selectRange: 'Select range'
+            selectRange: 'Select range',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'API Reference',
@@ -415,7 +418,10 @@ export const translations = {
             featuredBadge: 'Vorgestellte Auswahl',
             constraintsPlaceholder: 'Grenzen: Heute bis nächster Monat',
             chooseDate: 'Datum wählen',
-            selectRange: 'Bereich wählen'
+            selectRange: 'Bereich wählen',
+            rangeTimeTitle: 'Bereichs- & Zeitauswahl',
+            rangeTimeLead: 'Wählen Sie Datumsbereiche mit präziser Zeit und vordefinierten Schnellauswahloptionen aus.',
+            selectRangeWithTime: 'Bereich mit Zeit auswählen'
         },
         api: {
             title: 'API-Referenz',
@@ -660,7 +666,10 @@ export const translations = {
             featuredBadge: 'Selección Destacada',
             constraintsPlaceholder: 'Límites: De hoy al próximo mes',
             chooseDate: 'Elegir una fecha',
-            selectRange: 'Seleccionar rango'
+            selectRange: 'Seleccionar rango',
+            rangeTimeTitle: 'Selección de Rango y Hora',
+            rangeTimeLead: 'Seleccione rangos de fechas con hora precisa y opciones de selección rápida predefinidas.',
+            selectRangeWithTime: 'Seleccionar rango con hora'
         },
         api: {
             title: 'Referencia de la API',
@@ -905,7 +914,10 @@ export const translations = {
             featuredBadge: 'Utvalt val',
             constraintsPlaceholder: 'Gränser: Idag till nästa månad',
             chooseDate: 'Välj ett datum',
-            selectRange: 'Välj intervall'
+            selectRange: 'Välj intervall',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'API-referens',
@@ -1150,7 +1162,10 @@ export const translations = {
             featuredBadge: '주요 선택',
             constraintsPlaceholder: '제한: 오늘부터 다음 달까지',
             chooseDate: '날짜 선택',
-            selectRange: '범위 선택'
+            selectRange: '기간 선택',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'API 참조',
@@ -1395,7 +1410,10 @@ export const translations = {
             featuredBadge: '特色选择',
             constraintsPlaceholder: '限制：从今天到下个月',
             chooseDate: '选择日期',
-            selectRange: '选择范围'
+            selectRange: '选择范围',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'API 参考',
@@ -1640,7 +1658,10 @@ export const translations = {
             featuredBadge: '注目の選択',
             constraintsPlaceholder: '制限：今日から翌月まで',
             chooseDate: '日付を選択',
-            selectRange: '範囲を選択'
+            selectRange: '範囲を選択',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'API リファレンス',
@@ -1885,7 +1906,10 @@ export const translations = {
             featuredBadge: 'Sélection vedette',
             constraintsPlaceholder: 'Limites : d\'aujourd\'hui au mois prochain',
             chooseDate: 'Choisir une date',
-            selectRange: 'Sélectionner une plage'
+            selectRange: 'Sélectionner une plage',
+            rangeTimeTitle: 'Range & Time Selection',
+            rangeTimeLead: 'Select date ranges with precise time and predefined quick-select options.',
+            selectRangeWithTime: 'Select range with time'
         },
         api: {
             title: 'Référence API',

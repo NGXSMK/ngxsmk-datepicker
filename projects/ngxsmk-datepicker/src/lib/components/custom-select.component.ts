@@ -19,6 +19,11 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       </button>
       @if (isOpen) {
         <div class="ngxsmk-options-panel" 
+             [class.fixed-position]="isMobile"
+             [style.top]="panelTop"
+             [style.left]="panelLeft"
+             [style.width]="panelWidth"
+             [style.bottom]="panelBottom"
              #panel>
           <ul>
             @for (option of options; track option.value) {
@@ -128,7 +133,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
       max-height: 200px; 
       overflow-y: auto; 
-      z-index: 9999999;
+      z-index: 2147483647;
       animation: fadeInDown 0.12s cubic-bezier(0.4, 0, 0.2, 1);
       will-change: transform, opacity;
       backface-visibility: hidden;
@@ -151,8 +156,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       }
     }
     .ngxsmk-time-selection .ngxsmk-options-panel {
-      z-index: 10000001 !important;
-      position: absolute !important;
+      z-index: 2147483647 !important;
       visibility: visible !important;
       opacity: 1 !important;
       display: block !important;
@@ -222,6 +226,11 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
 
   public isOpen = false;
+  public isMobile = false;
+  public panelTop: string | null = null;
+  public panelLeft: string | null = null;
+  public panelWidth: string | null = null;
+  public panelBottom: string | null = null;
 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
@@ -271,8 +280,34 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   private updatePanelPosition(): void {
-    // No special positioning needed for standard dropdowns
-    // CSS handles top: 100% + 4px
+    if (!this.isBrowser || !this.button?.nativeElement) return;
+
+    this.isMobile = window.innerWidth <= 768;
+
+    if (this.isMobile) {
+      const rect = this.button.nativeElement.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const panelHeight = Math.min(this.options.length * 44 + 8, 200); // Approximate height, 44px per item + padding
+
+      this.panelLeft = `${rect.left}px`;
+      this.panelWidth = `${rect.width}px`;
+
+      // Check if there is enough space below
+      if (rect.bottom + panelHeight > viewportHeight && rect.top > panelHeight) {
+        // Position above
+        this.panelTop = 'auto';
+        this.panelBottom = `${viewportHeight - rect.top + 4}px`;
+      } else {
+        // Position below
+        this.panelTop = `${rect.bottom + 4}px`;
+        this.panelBottom = 'auto';
+      }
+    } else {
+      this.panelTop = null;
+      this.panelLeft = null;
+      this.panelWidth = null;
+      this.panelBottom = null;
+    }
   }
 
   @HostListener('document:click', ['$event'])

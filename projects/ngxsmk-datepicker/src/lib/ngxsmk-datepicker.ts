@@ -4360,8 +4360,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public selectRange(range: [Date, Date]): void {
     if (this.disabled) return;
-    this.startDate = new Date(range[0]);
-    this.endDate = new Date(range[1]);
+    this.startDate = this.applyTimeIfNeeded(new Date(range[0]));
+    this.endDate = this.applyTimeIfNeeded(new Date(range[1]));
 
     if (this.startDate && this.endDate) {
       this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });

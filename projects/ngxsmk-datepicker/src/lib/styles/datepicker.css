@@ -139,9 +139,15 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
 .ngxsmk-input-group:focus-within {
   border-color: var(--datepicker-primary-color);
-  -webkit-box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
-  -moz-box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1), var(--datepicker-shadow-md);
+  -webkit-box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-md);
+  -moz-box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-md);
+  box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.1),
+    var(--datepicker-shadow-md);
   outline: none;
 }
 
@@ -151,7 +157,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   -moz-box-shadow: var(--datepicker-shadow-md);
   box-shadow: var(--datepicker-shadow-md);
 }
-
 
 .ngxsmk-input-group.disabled {
   cursor: not-allowed;
@@ -1303,10 +1308,30 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   position: relative;
   z-index: 2;
   font-weight: 500;
-  -webkit-transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), -webkit-box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  -moz-transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), -moz-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), -moz-box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  -o-transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), -o-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-transition:
+    background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    -webkit-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    -webkit-box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  -moz-transition:
+    background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    -moz-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    -moz-box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  -o-transition:
+    background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    -o-transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
@@ -1510,14 +1535,13 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   box-sizing: border-box;
 }
 
-
 .ngxsmk-day-cell.holiday .ngxsmk-day-number {
   color: var(--datepicker-primary-color);
   position: relative;
 }
 
 .ngxsmk-day-cell.holiday .ngxsmk-day-number::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 2px;
   left: 50%;
@@ -1770,10 +1794,18 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     visibility: visible !important;
     opacity: 1 !important;
     will-change: transform, opacity !important;
-    -webkit-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    -moz-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    -o-transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -webkit-transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -moz-transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    -o-transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
   .ngxsmk-popover-container.ngxsmk-popover-open.ngxsmk-fullscreen:not(.ngxsmk-inline-container) {
@@ -2166,7 +2198,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     height: fit-content !important;
   }
 }
-
 
 /* ============================================
    LARGE MOBILE / SMALL TABLET (600px - 767px)
@@ -2914,7 +2945,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   }
 }
 
-
 @media (min-width: 1024px) {
   .ngxsmk-popover-container:not(.ngxsmk-inline-container) {
     width: auto;
@@ -3067,7 +3097,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   }
 }
 
-
 @media (hover: none) and (pointer: coarse) {
   .ngxsmk-nav-button:hover:not(:disabled) {
     background-color: transparent;
@@ -3098,7 +3127,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     box-shadow: none;
   }
 }
-
 
 @media print {
   .ngxsmk-datepicker-wrapper {
@@ -3866,7 +3894,7 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     -ms-flex-pack: center !important;
     justify-content: center !important;
     overflow-x: visible !important;
-    overflow-y: hidden !important;
+    overflow-y: visible !important;
   }
 
   .ngxsmk-time-label {
@@ -4406,7 +4434,7 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     -ms-flex-pack: center !important;
     justify-content: center !important;
     overflow-x: visible !important;
-    overflow-y: hidden !important;
+    overflow-y: visible !important;
   }
 
   .ngxsmk-time-label {
@@ -4889,7 +4917,7 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     -ms-flex-pack: center !important;
     justify-content: center !important;
     overflow-x: auto !important;
-    overflow-y: hidden !important;
+    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
@@ -5412,17 +5440,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     z-index: 10000 !important;
   }
 
-  .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
-    z-index: 10001 !important;
-    /* Open Upwards */
-    top: auto !important;
-    bottom: calc(100% + 4px) !important;
-    transform-origin: bottom center !important;
-    animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  }
-
-
-
   .ngxsmk-time-separator {
     font-size: 18px !important;
     font-weight: 700 !important;
@@ -5625,26 +5642,15 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
    ========================================================================== */
 @media (max-width: 991px) {
 
-  /* Stack Context Configuration */
-  .ngxsmk-time-selection {
-    position: relative !important;
-    z-index: 100 !important;
+  /* Stack Context Configuration for Redesigned Time Selection */
+  .ngxsmk-time-selection.is-mobile {
+    padding: 0 !important;
+    margin: 16px 0 !important;
+    background: transparent !important;
+    border: none !important;
+    width: 100% !important;
+    display: block !important;
     overflow: visible !important;
-  }
-
-  /* Dropup Positioning
-     Prevents layout clipping by rendering alternatives upwards */
-  .ngxsmk-time-selection ngxsmk-custom-select[data-open="true"] .ngxsmk-options-panel {
-    z-index: 10001 !important;
-    top: auto !important;
-    bottom: calc(100% + 4px) !important;
-    transform-origin: bottom center !important;
-    animation: fadeInUp 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  }
-
-  /* Active State Priority */
-  .ngxsmk-time-selection:has(ngxsmk-custom-select[data-open="true"]) {
-    z-index: 1000 !important;
   }
 
   /* Footer Layering */
@@ -5655,6 +5661,98 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 }
 
 /* Animations */
+
+/* ============================================
+   PREMIUM MOBILE WHEEL PICKER STYLES
+   ============================================ */
+.ngxsmk-mobile-time-picker {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  position: relative;
+  background: var(--datepicker-background, #fff);
+  border-radius: var(--datepicker-radius-lg, 12px);
+  padding: 8px;
+}
+
+.ngxsmk-wheel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 132px;
+  /* 44px * 3 */
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+}
+
+.ngxsmk-wheel {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  position: relative;
+  z-index: 2;
+}
+
+.ngxsmk-wheel::-webkit-scrollbar {
+  display: none;
+}
+
+.ngxsmk-wheel-spacer {
+  height: 44px;
+  /* Empty space top/bottom to allow scrolling first/last items to center */
+}
+
+.ngxsmk-wheel-item {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  scroll-snap-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ngxsmk-wheel-item.is-selected {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--datepicker-primary-color, #6d28d9);
+  transform: scale(1.1);
+}
+
+.ngxsmk-wheel-separator {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--datepicker-text-color, #1f2937);
+  padding: 0 4px;
+  margin-top: -2px;
+}
+
+.ngxsmk-wheel-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 16px);
+  height: 48px;
+  background: var(--datepicker-primary-color);
+  opacity: 0.08;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ampm-wheel {
+  flex: 0 0 60px;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
