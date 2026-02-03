@@ -112,7 +112,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
     ngxsmk-datepicker {
       width: 100% !important;
-      max-width: 100%;
+      max-width: 320px;
     }
 
     .tip {

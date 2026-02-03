@@ -3,7 +3,9 @@
  * These variables can be overridden for custom theming
  */
 
-ngxsmk-datepicker {
+ngxsmk-datepicker,
+.ngxsmk-popover-container,
+.ngxsmk-backdrop {
   /* Color Palette */
   --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
   --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
@@ -42,7 +44,7 @@ ngxsmk-datepicker {
   --datepicker-radius-md: 8px;
   --datepicker-radius-lg: 12px;
   --datepicker-radius-xl: 16px;
-  --datepicker-border-radius: var(--datepicker-radius-md);
+  --datepicker-border-radius: var(--datepicker-radius-lg);
 
   /* Transitions - Can be customized via AnimationConfig */
   --datepicker-transition-duration: 150ms;
@@ -56,7 +58,9 @@ ngxsmk-datepicker {
 }
 
 /* Dark Theme Override */
-ngxsmk-datepicker.dark-theme {
+ngxsmk-datepicker.dark-theme,
+.ngxsmk-popover-container.dark-theme,
+.ngxsmk-backdrop.dark-theme {
   --datepicker-range-background: rgba(139, 92, 246, 0.15);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;

@@ -16,7 +16,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: var(--datepicker-background);
-  border-radius: var(--datepicker-radius-lg);
+  border-radius: var(--datepicker-border-radius);
   box-shadow: var(--datepicker-shadow-lg);
   z-index: calc(var(--datepicker-z-index-backdrop) + 10);
   padding: 20px;

@@ -1,195 +1,398 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { RouterLink } from '@angular/router';
+import { NgxsmkDatepickerComponent, HolidayProvider } from 'ngxsmk-datepicker';
 import { ThemeService } from '@tokiforge/angular';
 import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-examples',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent, RouterLink],
+  imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent],
   template: `
-    <div class="animate-fade-in">
-      <h1>{{ i18n.t().examples.basicTitle }}</h1>
-      <p class="text-lg">{{ i18n.t().examples.basicLead }}</p>
+    <div class="animate-fade-in examples-container">
+      <div class="page-header">
+        <h1>{{ i18n.t().examples.basicTitle }}</h1>
+        <p class="text-lg">{{ i18n.t().examples.basicLead }}</p>
+      </div>
 
-      <section class="examples-grid">
-        <div class="card demo-card">
-          <h3>{{ i18n.t().examples.singleSelection }}</h3>
-          <ngxsmk-datepicker mode="single" [(ngModel)]="singleValue" [placeholder]="i18n.t().examples.chooseDate"></ngxsmk-datepicker>
-          <div class="selection-box" *ngIf="singleValue">
-            <code>{{ singleValue | date:'mediumDate' }}</code>
+      <div class="example-category">
+        <h2 class="category-title">Selection Modes</h2>
+        <div class="examples-grid">
+          <div class="card demo-card">
+            <div class="card-header">
+              <h3>Single Date</h3>
+              <span class="badge">Default</span>
+            </div>
+            <p class="card-desc">Standard single date selection.</p>
+            <ngxsmk-datepicker mode="single" [(ngModel)]="singleValue" placeholder="Select a date"></ngxsmk-datepicker>
+            <div class="selection-box" *ngIf="singleValue">
+              <code>{{ singleValue | date:'mediumDate' }}</code>
+            </div>
           </div>
-        </div>
 
-        <div class="card demo-card">
-          <h3>{{ i18n.t().examples.rangeSelection }}</h3>
-          <ngxsmk-datepicker mode="range" [(ngModel)]="rangeValue" [placeholder]="i18n.t().examples.selectRange"></ngxsmk-datepicker>
-          <div class="selection-box" *ngIf="rangeValue">
-            <code>{{ rangeValue.start | date:'shortDate' }} - {{ rangeValue.end | date:'shortDate' }}</code>
+          <div class="card demo-card">
+            <div class="card-header">
+              <h3>Date Range</h3>
+              <span class="badge">Range</span>
+            </div>
+            <p class="card-desc">Select a start and end date.</p>
+            <ngxsmk-datepicker mode="range" [(ngModel)]="rangeValue" placeholder="Select range"></ngxsmk-datepicker>
+            <div class="selection-box" *ngIf="rangeValue">
+              <code>{{ rangeValue.start | date:'shortDate' }} - {{ rangeValue.end | date:'shortDate' }}</code>
+            </div>
           </div>
-        </div>
 
-        <div class="card demo-card">
-          <h3>{{ i18n.t().examples.timeOnlySelection }}</h3>
-          <ngxsmk-datepicker [timeOnly]="true" [(ngModel)]="timeOnlyValue" [placeholder]="i18n.t().examples.selectTime"></ngxsmk-datepicker>
-          <div class="selection-box" *ngIf="timeOnlyValue">
-             <code>{{ timeOnlyValue | date:'shortTime' }}</code>
+          <div class="card demo-card">
+            <div class="card-header">
+              <h3>Multiple Dates</h3>
+              <span class="badge">Multiple</span>
+            </div>
+            <p class="card-desc">Pick multiple non-contiguous dates.</p>
+            <ngxsmk-datepicker mode="multiple" [(ngModel)]="multipleValue" placeholder="Pick multiple dates"></ngxsmk-datepicker>
+            <div class="selection-box" *ngIf="multipleValue.length">
+              <code>{{ multipleValue.length }} dates selected</code>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <h1 class="mt-3xl">{{ i18n.t().examples.advancedTitle }}</h1>
-      <p class="text-lg">{{ i18n.t().examples.advancedLead }}</p>
+          <div class="card demo-card">
+             <div class="card-header">
+              <h3>Month Selection</h3>
+              <span class="badge">Month</span>
+            </div>
+            <p class="card-desc">Select an entire month.</p>
+            <ngxsmk-datepicker mode="month" [(ngModel)]="monthValue" placeholder="Select month"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="monthValue">
+              <code>{{ monthValue.start | date:'MMMM yyyy' }}</code>
+            </div>
+          </div>
+          
+           <div class="card demo-card">
+             <div class="card-header">
+              <h3>Week Selection</h3>
+              <span class="badge">Week</span>
+            </div>
+            <p class="card-desc">Select a specific week.</p>
+            <ngxsmk-datepicker mode="week" [(ngModel)]="weekValue" placeholder="Select week"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="weekValue">
+              <code>Week of {{ weekValue.start | date:'shortDate' }}</code>
+            </div>
+          </div>
 
-      <!-- Advanced Feature Showcase -->
-      <div class="featured-example card">
-        <div class="feature-header">
-           <div class="badge">{{ i18n.t().examples.featuredBadge }}</div>
-           <h2>{{ i18n.t().examples.dateTimeTitle }}</h2>
-           <p>{{ i18n.t().examples.dateTimeLead }}</p>
-        </div>
-        
-        <div class="feature-body grid-2">
-           <div class="picker-panel">
-             <ngxsmk-datepicker 
-                [inline]="true" 
-                [showTime]="true" 
-                [(ngModel)]="dateTimeValue"
-                [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'">
-             </ngxsmk-datepicker>
-           </div>
-           <div class="specs-panel">
-             <div class="spec-item">
-                <span class="label">{{ i18n.t().examples.accuracy }}</span>
-                <span class="value">{{ i18n.t().examples.precision }}</span>
-             </div>
-             <div class="spec-item">
-                <span class="label">{{ i18n.t().examples.selectedOutput }}</span>
-                <code class="val-code">{{ dateTimeValue | date:'medium' }}</code>
-             </div>
-             <div class="spec-item">
-                <span class="label">{{ i18n.t().examples.zoneless }}</span>
-                <span class="value text-success">{{ i18n.t().examples.active }}</span>
-             </div>
-           </div>
+           <div class="card demo-card">
+             <div class="card-header">
+              <h3>Year Selection</h3>
+              <span class="badge">Year</span>
+            </div>
+            <p class="card-desc">Select an entire year.</p>
+            <ngxsmk-datepicker mode="year" [(ngModel)]="yearValue" placeholder="Select year"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="yearValue">
+              <code>{{ yearValue.start | date:'yyyy' }}</code>
+            </div>
+          </div>
         </div>
       </div>
 
-      <section class="examples-grid mt-2xl">
-        <div class="card demo-card">
-          <h3>{{ i18n.t().examples.multiMonthTitle }}</h3>
-          <p class="text-sm mb-lg">{{ i18n.t().examples.multiMonthLead }}</p>
-          <div class="flex justify-center overflow-x-auto py-md">
-            <ngxsmk-datepicker 
-                [inline]="true" 
-                [calendarCount]="2"
-                calendarLayout="auto" 
-                mode="range" 
-                [(ngModel)]="multiMonthValue">
-            </ngxsmk-datepicker>
+      <div class="example-category">
+        <h2 class="category-title">Date & Time</h2>
+        <div class="examples-grid">
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Date + Time</h3>
+              <span class="badge">Time</span>
+            </div>
+            <p class="card-desc">Select date with time (12h format).</p>
+            <ngxsmk-datepicker [showTime]="true" [(ngModel)]="dateTimeValue" placeholder="Select date & time"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="dateTimeValue">
+              <code>{{ dateTimeValue | date:'short' }}</code>
+            </div>
+          </div>
+
+          <div class="card demo-card">
+            <div class="card-header">
+              <h3>24 Hour Format</h3>
+              <span class="badge">24h</span>
+            </div>
+            <p class="card-desc">Using 24-hour clock cycle.</p>
+            <ngxsmk-datepicker [showTime]="true" [use24Hour]="true" [(ngModel)]="dateTime24Value" placeholder="Select 24h time"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="dateTime24Value">
+              <code>{{ dateTime24Value | date:'medium' }}</code>
+            </div>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Time Only</h3>
+              <span class="badge">Time Only</span>
+            </div>
+            <p class="card-desc">Time picker without calendar.</p>
+            <ngxsmk-datepicker [timeOnly]="true" [(ngModel)]="timeOnlyValue" placeholder="Select time"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="timeOnlyValue">
+              <code>{{ timeOnlyValue | date:'shortTime' }}</code>
+            </div>
+          </div>
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>With Seconds</h3>
+              <span class="badge">Seconds</span>
+            </div>
+            <p class="card-desc">High precision time selection.</p>
+            <ngxsmk-datepicker [timeOnly]="true" [showSeconds]="true" [(ngModel)]="timeSecondsValue" placeholder="Select time w/ seconds"></ngxsmk-datepicker>
+             <div class="selection-box" *ngIf="timeSecondsValue">
+              <code>{{ timeSecondsValue | date:'mediumTime' }}</code>
+            </div>
           </div>
         </div>
-
-        <div class="card demo-card">
-          <h3>{{ i18n.t().examples.constraintsTitle }}</h3>
-          <p class="text-sm mb-lg">{{ i18n.t().examples.constraintsLead }}</p>
-          <ngxsmk-datepicker 
-            [minDate]="today" 
-            [maxDate]="nextMonth" 
-            [(ngModel)]="constrainedValue"
-            [placeholder]="i18n.t().examples.constraintsPlaceholder">
-          </ngxsmk-datepicker>
-          <div class="selection-box mt-md" *ngIf="constrainedValue">
-            <code>{{ constrainedValue | date:'fullDate' }}</code>
-          </div>
-        </div>
-      </section>
-
-      <div class="tip">
-        <strong>{{ i18n.t().common.enterpriseReady }}:</strong> {{ i18n.t().common.lookingForRtl }} <a routerLink="/advanced">{{ i18n.t().common.checkAdvanced }}</a>
       </div>
+
+      <div class="example-category">
+        <h2 class="category-title">Visual Configuration</h2>
+        <div class="examples-grid">
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Multiple Months</h3>
+              <span class="badge">Multi-View</span>
+            </div>
+            <p class="card-desc">Show 2 months side-by-side.</p>
+            <div class="inline-wrapper">
+                <ngxsmk-datepicker [inline]="true" mode="range" [calendarCount]="2" [(ngModel)]="multiMonthValue"></ngxsmk-datepicker>
+            </div>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Vertical Layout</h3>
+              <span class="badge">Layout</span>
+            </div>
+            <p class="card-desc">Stacked calendars for vertical space.</p>
+            <div class="inline-wrapper vertical-wrapper">
+                 <ngxsmk-datepicker [inline]="true" [calendarCount]="2" calendarLayout="vertical" [(ngModel)]="verticalValue"></ngxsmk-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <div class="example-category">
+        <h2 class="category-title">Validation & Constraints</h2>
+        <div class="examples-grid">
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Min/Max Date</h3>
+              <span class="badge">Bounds</span>
+            </div>
+            <p class="card-desc">Only allow selection within next 7 days.</p>
+            <ngxsmk-datepicker [minDate]="today" [maxDate]="nextWeek" [(ngModel)]="constrainedValue" placeholder="Next 7 days only"></ngxsmk-datepicker>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Disabled Dates</h3>
+              <span class="badge">Specific</span>
+            </div>
+            <p class="card-desc">Specific dates are disabled.</p>
+            <ngxsmk-datepicker [disabledDates]="disabledDates" [(ngModel)]="disabledSpecificValue" placeholder="Try picking the 15th"></ngxsmk-datepicker>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Custom Logic</h3>
+              <span class="badge">Function</span>
+            </div>
+            <p class="card-desc">Weekends are disabled.</p>
+            <ngxsmk-datepicker [isInvalidDate]="isWeekend" [(ngModel)]="weekendValue" placeholder="No weekends allowed"></ngxsmk-datepicker>
+          </div>
+          
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Holidays</h3>
+              <span class="badge">Provider</span>
+            </div>
+            <p class="card-desc">Highlighting holidays.</p>
+            <ngxsmk-datepicker [holidayProvider]="holidayProvider" [(ngModel)]="holidayValue" placeholder="See Jan 1 or Dec 25"></ngxsmk-datepicker>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-category">
+        <h2 class="category-title">Localization</h2>
+        <div class="examples-grid">
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>German (de-DE)</h3>
+              <span class="badge">Locale</span>
+            </div>
+            <p class="card-desc">Monday start, German labels.</p>
+            <ngxsmk-datepicker locale="de-DE" [(ngModel)]="localeDeValue" placeholder="Wählen Sie ein Datum"></ngxsmk-datepicker>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Japanese (ja-JP)</h3>
+              <span class="badge">Locale</span>
+            </div>
+            <p class="card-desc">Year-Month-Day format.</p>
+            <ngxsmk-datepicker locale="ja-JP" [(ngModel)]="localeJaValue" placeholder="日付を選択"></ngxsmk-datepicker>
+          </div>
+
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Arabic (ar-SA)</h3>
+              <span class="badge">RTL</span>
+            </div>
+            <p class="card-desc">RTL layout support.</p>
+            <div dir="rtl">
+                <ngxsmk-datepicker locale="ar-SA" dir="rtl" [(ngModel)]="localeArValue" placeholder="اختر التاريخ"></ngxsmk-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+       <div class="example-category">
+        <h2 class="category-title">Custom Templates</h2>
+         <div class="examples-grid">
+           <div class="card demo-card">
+            <div class="card-header">
+              <h3>Custom Day Cell</h3>
+              <span class="badge">Template</span>
+            </div>
+            <p class="card-desc">Custom markers on specific days.</p>
+             <ngxsmk-datepicker [(ngModel)]="templateValue" [dateTemplate]="customDateCell" placeholder="Check the 1st and 15th"></ngxsmk-datepicker>
+             
+             <ng-template #customDateCell let-day let-selected="selected">
+               <div class="custom-cell" [class.selected]="selected">
+                 <span class="day-num">{{ day.getDate() }}</span>
+                 <div class="dots" *ngIf="day.getDate() === 15"></div>
+                 <div class="tag" *ngIf="day.getDate() === 1">1st</div>
+               </div>
+             </ng-template>
+          </div>
+         </div>
+       </div>
+
     </div>
   `,
   styles: [`
+    .examples-container {
+        padding-bottom: 4rem;
+    }
+    .page-header { margin-bottom: 3rem; }
+    
+    .example-category {
+        margin-bottom: 4rem;
+    }
+    
+    .category-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--color-border);
+        color: var(--color-text-main);
+    }
+
     .examples-grid { 
       display: grid; 
-      grid-template-columns: 1fr 1fr; 
-      gap: 2rem; 
-      margin-top: 2rem; 
-      @media (max-width: 900px) { grid-template-columns: 1fr; }
-      @media (max-width: 480px) { gap: 1rem; }
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 1rem; 
     }
+    
     .demo-card { 
       background: var(--color-bg-sidebar); 
       border-color: var(--color-border-light); 
-      padding: 0; 
-      @media (min-width: 768px) { padding: 2rem; }
-      h3 { margin-top: 0; margin-bottom: 0.5rem; font-size: var(--font-size-lg); }
-      overflow: visible;
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      position: relative;
+      
+      &:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--color-border);
+        z-index: 5;
+      }
+      
+      &:focus-within {
+        z-index: 100;
+        border-color: var(--color-primary);
+        box-shadow: var(--shadow-lg);
+      }
     }
-    .selection-box { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed var(--color-border); font-size: var(--font-size-sm); }
     
-    .featured-example {
-      padding: 0;
-      overflow: visible;
-      margin-top: 2.5rem;
-      background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-secondary));
-      
-      .feature-header { 
-        padding: 1rem 0.5rem; 
-        border-bottom: 1px solid var(--color-border); 
-        @media (min-width: 768px) { padding: 3rem; } 
-      }
-      .badge { display: inline-block; padding: 4px 10px; background: rgba(124, 58, 237, 0.15); color: var(--color-primary-light); border-radius: 6px; font-size: var(--font-size-xs); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
-      h2 { margin: 0 0 0.5rem; border: none; padding: 0; font-size: var(--font-size-3xl); @media (min-width: 768px) { font-size: var(--font-size-4xl); } }
-      p { margin: 0; opacity: 0.8; font-size: var(--font-size-base); }
-      
-      .feature-body { 
-        gap: 1rem; 
-        @media (min-width: 480px) { padding: 1rem; }
-        @media (min-width: 768px) { padding: 3rem; gap: 4rem; } 
-
-        &.grid-2 { 
-          display: grid; 
-          grid-template-columns: 1fr; 
-          align-items: start; 
-          @media (max-width: 1024px) { grid-template-columns: 1fr; } 
-          @media (min-width: 1025px) { grid-template-columns: auto 1fr; } 
-        }
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
         
-        .picker-panel {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          overflow: visible;
-          padding: 0.75rem 0;
-          @media (min-width: 1025px) { padding: 0; }
-        }
+        h3 { margin: 0; font-size: var(--font-size-lg); color: var(--color-text-main); }
+    }
+    
+    .badge {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.05);
+        color: var(--color-text-dim);
+        border: 1px solid var(--color-border);
+    }
+    
+    .card-desc {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin-bottom: 1.25rem;
+        min-height: 2.5em; /* Align cards roughly */
+    }
+    
+    .selection-box { 
+        margin-top: 1rem; 
+        padding: 0.75rem; 
+        background: rgba(0,0,0,0.2);
+        border-radius: 6px;
+        font-size: var(--font-size-sm); 
+        text-align: center;
+        border: 1px dashed var(--color-border);
         
-        .specs-panel {
-          display: flex;
-          flex-direction: column;
-          gap: 1.25rem;
-          padding-top: 1rem;
-        }
-        .spec-item {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-          .label { font-size: 0.7rem; font-weight: 800; color: var(--color-text-dim); text-transform: uppercase; }
-          .value { font-size: 1.1rem; font-weight: 600; color: var(--color-text-main); }
-          .val-code { background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); padding: 0.75rem 1rem; border-radius: 8px; color: var(--color-secondary); font-size: 1rem; overflow-x: auto; }
-        }
-      }
-      .setup-panel { padding: 1rem; @media (min-width: 768px) { padding: 0; } }
+        code { color: var(--color-secondary); background: none; border: none; }
+    }
+    
+    ngxsmk-datepicker {
+        display: block;
+        width: 100% !important;
+        max-width: 100%;
+        position: relative;
     }
 
-    ngxsmk-datepicker { 
-        width: 100% !important;
-        max-width: 100%; 
+    .inline-wrapper {
+        display: flex;
+        justify-content: center;
+        background: var(--color-bg-card);
+        padding: 1rem;
+        border-radius: 12px;
+        overflow-x: auto;
+    }
+    
+    .vertical-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    /* Custom Template Styles */
+    .custom-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        position: relative;
+        width: 100%;
+    }
+    .dots {
+        width: 4px; height: 4px; background: #ef4444; border-radius: 50%;
+        position: absolute; bottom: 2px;
+    }
+    .tag {
+        font-size: 8px; background: #3b82f6; color: white; padding: 1px 3px; border-radius: 2px;
+        position: absolute; top: 0; right: 0; line-height: 1;
     }
   `]
 })
@@ -197,13 +400,58 @@ export class ExamplesComponent {
   i18n = inject(I18nService);
   themeService = inject(ThemeService);
 
+  // Models
   singleValue: Date | null = null;
   rangeValue: { start: Date; end: Date } | null = null;
-  timeOnlyValue: Date | null = null;
-  dateTimeValue: Date = new Date();
-  multiMonthValue: { start: Date; end: Date } | null = null;
-  constrainedValue: Date | null = null;
+  multipleValue: Date[] = [];
+  monthValue: { start: Date; end: Date } | null = null;
+  weekValue: { start: Date; end: Date } | null = null;
+  yearValue: { start: Date; end: Date } | null = null;
 
+  dateTimeValue: Date | null = null;
+  dateTime24Value: Date | null = null;
+  timeOnlyValue: Date | null = null;
+  timeSecondsValue: Date | null = null;
+
+  multiMonthValue: { start: Date; end: Date } | null = null;
+  verticalValue: Date | null = null;
+
+  constrainedValue: Date | null = null;
+  disabledSpecificValue: Date | null = null;
+  weekendValue: Date | null = null;
+  holidayValue: Date | null = null;
+
+  localeDeValue: Date | null = null;
+  localeJaValue: Date | null = null;
+  localeArValue: Date | null = null;
+
+  templateValue: Date | null = null;
+
+  // Helpers
   today = new Date();
-  nextMonth = new Date(new Date().setMonth(new Date().getMonth() + 1));
+  nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  disabledDates = [
+    new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 days from now
+    new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]  // 5 days from now
+  ];
+
+  isWeekend = (date: Date) => {
+    const d = date.getDay();
+    return d === 0 || d === 6;
+  }
+
+  holidayProvider: HolidayProvider = {
+    isHoliday: (date: Date) => {
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+      return (m === 1 && d === 1) || (m === 12 && d === 25);
+    },
+    getHolidayLabel: (date: Date) => {
+      const m = date.getMonth() + 1;
+      const d = date.getDate();
+      if (m === 1 && d === 1) return 'New Year';
+      if (m === 12 && d === 25) return 'Christmas';
+      return null;
+    }
+  };
 }

@@ -174,6 +174,7 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
           @if (!isInlineMode && isCalendarOpen) {
             <div
               class="ngxsmk-backdrop"
+              [class.dark-theme]="theme === 'dark'"
               role="button"
               tabindex="0"
               [attr.aria-label]="getTranslation('closeCalendarOverlay')"
@@ -183,12 +184,16 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
             ></div>
           }
           <div #popoverContainer class="ngxsmk-popover-container" 
+               [class.dark-theme]="theme === 'dark'"
                [class.ngxsmk-inline-container]="isInlineMode" 
                [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" 
                [class.ngxsmk-time-only-popover]="timeOnly" 
                [class.ngxsmk-has-time-selection]="showTime || timeOnly"
                [class.ngxsmk-bottom-sheet]="isMobileDevice() && mobileModalStyle === 'bottom-sheet' && !isInlineMode"
                [class.ngxsmk-fullscreen]="isMobileDevice() && mobileModalStyle === 'fullscreen' && !isInlineMode"
+               [class.ngxsmk-align-left]="align === 'left'"
+               [class.ngxsmk-align-right]="align === 'right'"
+               [class.ngxsmk-align-center]="align === 'center'"
                [ngClass]="classes?.popover" 
                role="dialog" 
                [attr.aria-label]="getCalendarAriaLabel()" 
@@ -256,6 +261,7 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                           [currentMonth]="calendarMonth.month"
                           [currentYear]="calendarMonth.year"
                           [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
+                          [dateTemplate]="dateTemplate"
                           
                           [isDateDisabled]="boundIsDateDisabled"
                           [isSameDay]="boundIsSameDay"
@@ -356,13 +362,13 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                         <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(startTimeSlider) }}</div>
                       </div>
                       <div class="ngxsmk-time-slider-container">
-                        <input type="range" 
+                        <input #startTimeInput type="range" 
                                class="ngxsmk-time-slider"
                                [min]="0"
                                [max]="1440"
                                [step]="minuteInterval"
                                [value]="startTimeSlider"
-                               (input)="onStartTimeSliderChange(+($any($event.target).value))"
+                               (input)="onStartTimeSliderChange(+startTimeInput.value)"
                                [disabled]="disabled">
                       </div>
                       <div class="ngxsmk-time-slider-header">
@@ -370,13 +376,13 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                         <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(endTimeSlider) }}</div>
                       </div>
                       <div class="ngxsmk-time-slider-container">
-                        <input type="range" 
+                        <input #endTimeInput type="range" 
                                class="ngxsmk-time-slider"
                                [min]="0"
                                [max]="1440"
                                [step]="minuteInterval"
                                [value]="endTimeSlider"
-                               (input)="onEndTimeSliderChange(+($any($event.target).value))"
+                               (input)="onEndTimeSliderChange(+endTimeInput.value)"
                                [disabled]="disabled">
                       </div>
                     </div>
@@ -582,6 +588,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() disabledDates: (string | Date)[] = [];
   @Input() disabledRanges: Array<{ start: Date | string; end: Date | string }> = [];
   @Input() recurringPattern?: { pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends'; startDate: Date; endDate?: Date; dayOfWeek?: number; dayOfMonth?: number; interval?: number } | null;
+  @Input() dateTemplate: TemplateRef<unknown> | null = null;
   private _placeholder: string | null = null;
   @Input() set placeholder(value: string | null) {
     this._placeholder = value;
@@ -690,6 +697,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
   @Input() defaultMonthOffset: number = 0;
+  @Input() align: 'left' | 'right' | 'center' = 'left';
 
   @Input() useNativePicker: boolean = false;
   @Input() enableHapticFeedback: boolean = false;
@@ -709,9 +717,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private portalViewRef: EmbeddedViewRef<unknown> | null = null;
 
   get _shouldAppendToBody(): boolean {
+    if (this.isInlineMode) return false;
     return this.appendToBody ||
-      (this.autoDetectMobile && this.isMobileDevice() &&
-        (this.mobileModalStyle === 'bottom-sheet' || this.mobileModalStyle === 'fullscreen'));
+      (this.autoDetectMobile && this.isMobileDevice());
   }
 
   private _isCalendarOpen = signal<boolean>(false);
@@ -2781,6 +2789,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this._currentYear = this.startDate.getFullYear();
           this._invalidateMemoCache();
         }
+
+        // Smart view mode defaults
+        if (this.mode === 'year') {
+          this.calendarViewMode = 'decade';
+        } else if (this.mode === 'month') {
+          this.calendarViewMode = 'year';
+        }
+
         this.generateCalendar();
       }
       this.updateOpeningState(willOpen && this.isCalendarOpen);
@@ -2853,7 +2869,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return;
       }
 
-      this.lastToggleTime = now;
     }
 
     event.stopPropagation();
@@ -2894,6 +2909,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     this.isCalendarOpen = !wasOpen;
+    this.lastToggleTime = Date.now();
     this.updateOpeningState(willOpen && this.isCalendarOpen);
 
     if (willOpen && this.isCalendarOpen) {
@@ -3362,6 +3378,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       needsChangeDetection = true;
     }
 
+    if (changes['mode']) {
+      this.initializeValue(this._internalValue);
+      this.generateCalendar();
+      needsChangeDetection = true;
+    }
+
     if (changes['locale'] || changes['rtl']) {
       this.updateRtlState();
       if (changes['locale']) {
@@ -3504,6 +3526,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       } else {
         this.generateCalendar();
       }
+      this.cdr.markForCheck();
+    }
+
+    if (changes['showTime'] || changes['showSeconds']) {
+      if (this.showTime) {
+        this.generateTimeOptions();
+        this.update12HourState(this.currentHour);
+      }
+      this.cdr.markForCheck();
+    }
+
+    if (changes['inline']) {
+      if (this.isInlineMode) {
+        this.generateCalendar();
+      }
+      this.cdr.markForCheck();
+    }
+
+    if (changes['calendarLayout'] || changes['calendarCount'] || changes['showCalendarButton'] || changes['allowTyping'] || changes['align'] || changes['useNativePicker'] || changes['theme']) {
+      this.generateCalendar();
       this.cdr.markForCheck();
     }
   }
@@ -4583,7 +4625,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.isDateDisabled(day)) return;
 
-    const dateToToggle = getStartOfDay(day);
 
     if (this.hooks?.beforeDateSelect) {
       if (!this.hooks.beforeDateSelect(day, this._internalValue)) {
@@ -4843,12 +4884,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.selectedDates = Array.from(uniqueDates.values()).sort((a, b) => a.getTime() - b.getTime());
         this.emitValue([...this.selectedDates]);
       } else {
-        const existingIndex = this.selectedDates.findIndex(d => this.isSameDay(d, dateToToggle));
+        const existingIndex = this.selectedDates.findIndex(d => this.isSameDay(d, day));
 
         if (existingIndex > -1) {
           this.selectedDates.splice(existingIndex, 1);
         } else {
-          const dateWithTime = this.applyTimeIfNeeded(dateToToggle);
+          const dateWithTime = this.applyTimeIfNeeded(day);
           this.selectedDates.push(dateWithTime);
           this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
         }
@@ -5979,9 +6020,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    // Delegate positioning to CSS for desktop layouts (≥1024px); apply JS positioning only for mobile/tablet.
+    // Delegate positioning to CSS for desktop layouts (≥1024px) UNLESS appendToBody is requested.
     const isDesktop = window.innerWidth >= 1024;
-    if (isDesktop) {
+    if (isDesktop && !this._shouldAppendToBody) {
       // CSS handles positioning on desktop, remove any inline styles
       popover.style.top = '';
       popover.style.left = '';
@@ -6005,24 +6046,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const minWidth = popoverRect.width || 280;
 
       // If there's enough space below, position below input
-      if (spaceBelow >= minHeight && spaceRight >= minWidth) {
+      if (spaceBelow >= minHeight && (spaceRight >= minWidth || window.innerWidth < 500)) {
         const top = inputRect.bottom + window.scrollY + 8; // 8px gap
         const left = inputRect.left + window.scrollX;
 
-        popover.style.position = 'fixed';
+        popover.style.position = 'absolute';
         popover.style.top = `${top}px`;
         popover.style.left = `${left}px`;
         popover.style.transform = 'none';
         popover.style.right = 'auto';
         popover.style.bottom = 'auto';
-      } else if (spaceAbove >= minHeight && spaceRight >= minWidth) {
+      } else if (spaceAbove >= minHeight && (spaceRight >= minWidth || window.innerWidth < 500)) {
         // If not enough space below but enough above, position above input
-        const bottom = viewportHeight - inputRect.top + window.scrollY + 8;
+        const top = inputRect.top + window.scrollY - popoverRect.height - 8;
         const left = inputRect.left + window.scrollX;
 
-        popover.style.position = 'fixed';
-        popover.style.bottom = `${bottom}px`;
-        popover.style.top = 'auto';
+        popover.style.position = 'absolute';
+        popover.style.top = `${top}px`;
+        popover.style.bottom = 'auto';
         popover.style.left = `${left}px`;
         popover.style.transform = 'none';
         popover.style.right = 'auto';

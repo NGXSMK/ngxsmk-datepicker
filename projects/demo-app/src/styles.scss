@@ -119,8 +119,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow: clip;
-    /* Modern alternative to overflow hidden that doesn't mess with sticky */
 }
 
 .header {

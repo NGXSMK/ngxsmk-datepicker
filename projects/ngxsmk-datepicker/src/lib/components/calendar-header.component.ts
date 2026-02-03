@@ -15,14 +15,14 @@ import { CustomSelectComponent } from './custom-select.component';
           [options]="monthOptions"
           [(value)]="currentMonth" 
           [disabled]="disabled"
-          (valueChange)="currentMonthChange.emit($any($event))">
+          (valueChange)="onMonthSelect($event)">
         </ngxsmk-custom-select>
         <ngxsmk-custom-select 
           class="year-select" 
           [options]="yearOptions" 
           [(value)]="currentYear" 
           [disabled]="disabled" 
-          (valueChange)="currentYearChange.emit($any($event))">
+          (valueChange)="onYearSelect($event)">
         </ngxsmk-custom-select>
       </div>
       <div class="ngxsmk-nav-buttons">
@@ -89,5 +89,13 @@ export class CalendarHeaderComponent {
   @Output() currentMonthChange = new EventEmitter<number>();
   @Output() previousMonth = new EventEmitter<void>();
   @Output() nextMonth = new EventEmitter<void>();
+
+  onMonthSelect(value: unknown): void {
+    this.currentMonthChange.emit(value as number);
+  }
+
+  onYearSelect(value: unknown): void {
+    this.currentYearChange.emit(value as number);
+  }
 }
 

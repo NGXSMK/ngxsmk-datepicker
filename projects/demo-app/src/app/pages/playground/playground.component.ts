@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
 import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
@@ -105,6 +105,18 @@ import { I18nService } from '../../i18n/i18n.service';
           </div>
 
           <div class="config-group">
+            <span class="group-label">Positioning</span>
+            <div class="config-item">
+              <label for="align">Alignment</label>
+              <select id="align" [(ngModel)]="align">
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+                <option value="center">Center</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="config-group">
             <span class="group-label">{{ i18n.t().playground.theming }}</span>
             <div class="config-item">
               <select [(ngModel)]="theme">
@@ -112,8 +124,20 @@ import { I18nService } from '../../i18n/i18n.service';
                 <option value="dark">{{ i18n.t().playground.darkTheme }}</option>
               </select>
             </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="useCustomTemplate">
+                Custom Template
+              </label>
+            </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="useHolidayProvider">
+                Enable Holidays
+              </label>
+            </div>
           </div>
-
+          
           <button class="btn btn-outline reset-btn" (click)="reset()">{{ i18n.t().playground.reset }}</button>
         </aside>
 
@@ -138,8 +162,19 @@ import { I18nService } from '../../i18n/i18n.service';
               [calendarCount]="calendarCount"
               [calendarLayout]="calendarLayout"
               [useNativePicker]="useNativePicker"
+              [dateTemplate]="useCustomTemplate ? customDateCell : null"
+              [align]="align"
+              [holidayProvider]="useHolidayProvider ? holidayProvider : null"
               [(ngModel)]="value">
             </ngxsmk-datepicker>
+            
+            <ng-template #customDateCell let-day let-selected="selected">
+              <div class="custom-cell-content" [class.selected]="selected">
+                <span class="day-number">{{ day.getDate() }}</span>
+                <span *ngIf="day.getDate() === 15" class="event-dot"></span>
+                <span *ngIf="day.getDate() === 1" class="event-badge">Start</span>
+              </div>
+            </ng-template>
           </div>
         </main>
       </div>
@@ -259,7 +294,7 @@ import { I18nService } from '../../i18n/i18n.service';
       ngxsmk-datepicker {
          display: block;
          width: 100% !important;
-         max-width: 100%;
+         max-width: 320px;
       }
     }
 
@@ -276,6 +311,44 @@ import { I18nService } from '../../i18n/i18n.service';
       .preview-panel { margin: 0; }
       .preview-header { padding: 0.75rem; }
       .value-chip { font-size: 0.65rem; }
+    }
+
+    /* Custom Template Styles */
+    .custom-cell-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      position: relative;
+      border-radius: 50%; /* Make it circular like default */
+      width: 100%;
+    }
+    .custom-cell-content.selected {
+      background-color: var(--color-primary);
+      color: white;
+    }
+    .day-number {
+      z-index: 1;
+    }
+    .event-dot {
+      width: 4px;
+      height: 4px;
+      background-color: #ef4444;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 4px;
+    }
+    .event-badge {
+      font-size: 8px;
+      background-color: #10b981;
+      color: white;
+      padding: 1px 3px;
+      border-radius: 4px;
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      line-height: 1;
     }
   `]
 })
@@ -295,8 +368,23 @@ export class PlaygroundComponent {
   calendarCount = 1;
   calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'horizontal';
   useNativePicker = false;
+  useCustomTemplate = false;
+  align: 'left' | 'right' | 'center' = 'left';
   weekStart: number | null = null;
   value: Date | { start: Date; end: Date } | Date[] | null = null;
+  useHolidayProvider = false;
+
+  holidayProvider: HolidayProvider = {
+    isHoliday(date: Date): boolean {
+      return (date.getMonth() === 11 && date.getDate() === 25) || // Dec 25
+        (date.getMonth() === 0 && date.getDate() === 1);     // Jan 1
+    },
+    getHolidayLabel(date: Date): string | null {
+      if (date.getMonth() === 11 && date.getDate() === 25) return 'Christmas';
+      if (date.getMonth() === 0 && date.getDate() === 1) return 'New Year';
+      return null;
+    }
+  };
 
   reset() {
     this.mode = 'single';
@@ -315,5 +403,8 @@ export class PlaygroundComponent {
     this.useNativePicker = false;
     this.weekStart = null;
     this.value = null;
+    this.useCustomTemplate = false;
+    this.useHolidayProvider = false;
+    this.align = 'left';
   }
 }

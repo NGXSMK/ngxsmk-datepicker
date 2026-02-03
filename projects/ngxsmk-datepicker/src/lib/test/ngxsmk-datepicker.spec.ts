@@ -64,6 +64,7 @@ class CalendarMonthViewStubComponent {
   @Input() mode: unknown;
   @Input() focusedDate: unknown;
   @Input() today: unknown;
+  @Input() dateTemplate: unknown;
   @Output() dateClick = new EventEmitter<Date>();
   @Output() dateHover = new EventEmitter<Date>();
   @Output() dateFocus = new EventEmitter<unknown>();

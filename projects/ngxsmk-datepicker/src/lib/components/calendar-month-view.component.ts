@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 
 @Component({
   selector: 'ngxsmk-calendar-month-view',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ngxsmk-days-grid-wrapper" 
@@ -13,7 +13,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
          (touchmove)="swipeMove.emit($event)"
          (touchend)="swipeEnd.emit($event)">
       <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="ariaLabel">
-        @for (day of weekDays; track day) {
+        @for (day of weekDays; track $index) {
           <div class="ngxsmk-day-name">{{ day }}</div>
         }
         @for (day of days; track trackByDay($index, day)) {
@@ -45,7 +45,21 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                (mouseenter)="onDateHover(day)"
                (focus)="onDateFocus(day)">
             @if (day) {
-              <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
+              @if (dateTemplate) {
+                <ng-container *ngTemplateOutlet="dateTemplate; context: { 
+                  $implicit: day, 
+                  date: day, 
+                  selected: (mode === 'single' && isSameDay(day, selectedDate)) || (mode === 'multiple' && isMultipleSelected(day)),
+                  disabled: isDateDisabled(day),
+                  today: isSameDay(day, today),
+                  holiday: isHoliday(day),
+                  inRange: (mode === 'range' && isInRange(day)),
+                  startDate: (mode === 'range' && isSameDay(day, startDate)),
+                  endDate: (mode === 'range' && isSameDay(day, endDate))
+                }"></ng-container>
+              } @else {
+                <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
+              }
             }
           </div>
         }
@@ -70,6 +84,7 @@ export class CalendarMonthViewComponent {
   @Input() days: (Date | null)[] = [];
   @Input() weekDays: string[] = [];
   @Input() classes?: DatepickerClasses | undefined;
+  @Input() dateTemplate: TemplateRef<unknown> | null = null;
   @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
   @Input() selectedDate: Date | null = null;
   @Input() startDate: Date | null = null;

@@ -25,7 +25,7 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     }
 
     service = TestBed.inject(AriaLiveService);
-
+    component.autoDetectMobile = false;
     fixture.detectChanges();
   });
 
