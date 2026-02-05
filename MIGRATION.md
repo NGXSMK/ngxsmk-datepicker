@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.0.11 → v2.1.0](#v2011---v210)
 - [v2.0.6 → v2.0.7](#v206---v207)
 - [v2.0.5 → v2.0.6](#v205---v206)
 - [v2.0.4 → v2.0.5](#v204---v205)
@@ -44,6 +45,44 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## v2.0.11 → v2.1.0
+
+### ⚠️ CRITICAL NOTICE
+
+**Versions 2.0.10 and 2.0.11 are broken and should NOT be used.**
+
+These versions have critical package configuration issues that prevent proper TypeScript module resolution. If you have installed either of these versions, please upgrade to v2.1.0 immediately.
+
+### Changes
+
+- **Package Fixes**: Corrected TypeScript declaration paths and package configuration
+  - Fixed `types` and `typings` fields to point to the correct location: `types/ngxsmk-datepicker.d.ts`
+  - Simplified exports configuration to match stable v2.0.9 format
+  - Removed disallowed `esm2022` property from package.json
+- **No Breaking Changes**: This is a minor version update with package configuration improvements
+- **Recommended Update**: All v2.0.x users should update to v2.1.0 for proper TypeScript support
+- **Skip 2.0.10 & 2.0.11**: These versions have been unpublished from npm due to broken package configuration
+
+### Migration Steps
+
+Update your package.json to use the new version:
+
+```bash
+npm install ngxsmk-datepicker@2.1.0
+```
+
+**No code changes required.** This update only fixes package configuration issues that were preventing proper TypeScript declaration file resolution.
+
+### What's Fixed
+
+If you were experiencing the following error:
+
+```
+Could not find a declaration file for module 'ngxsmk-datepicker'
+```
+
+This is now resolved in v2.1.0. The package now correctly points to its TypeScript declaration files.
+
 ## v2.0.7 → v2.0.8
 
 ### Changes
@@ -66,8 +105,8 @@ npm install ngxsmk-datepicker@2.0.8
 
 ### Changes
 
-- **Version Update**: Updated to version 2.0.11
-- **Stable Release**: Version 2.0.11 is the current stable version
+- **Version Update**: Updated to version 2.0.7
+- **Stable Release**: Version 2.1.0 is the current stable version
 - No breaking changes.
 
 ### Migration Steps
