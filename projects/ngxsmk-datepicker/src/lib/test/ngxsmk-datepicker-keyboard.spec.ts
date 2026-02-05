@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
   let component: NgxsmkDatepickerComponent;
@@ -9,6 +10,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -127,7 +129,10 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       fixture.detectChanges();
 
       const initialYear = component.currentYear;
-      const event = new KeyboardEvent('keydown', { key: 'PageUp', shiftKey: true });
+      const event = new KeyboardEvent('keydown', {
+        key: 'PageUp',
+        shiftKey: true,
+      });
       component.onKeyDown(event);
 
       expect(component.currentYear).toBe(initialYear - 1);
@@ -140,7 +145,10 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       fixture.detectChanges();
 
       const initialYear = component.currentYear;
-      const event = new KeyboardEvent('keydown', { key: 'PageDown', shiftKey: true });
+      const event = new KeyboardEvent('keydown', {
+        key: 'PageDown',
+        shiftKey: true,
+      });
       component.onKeyDown(event);
 
       expect(component.currentYear).toBe(initialYear + 1);
@@ -178,7 +186,11 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
 
       expect(component.focusedDate).toBeTruthy();
       if (component.focusedDate) {
-        const lastDay = new Date(component.currentYear, component.currentMonth + 1, 0).getDate();
+        const lastDay = new Date(
+          component.currentYear,
+          component.currentMonth + 1,
+          0,
+        ).getDate();
         expect(component.focusedDate.getDate()).toBe(lastDay);
       }
     });
@@ -215,7 +227,9 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        expect(component.isSameDay(component.selectedDate, getStartOfDay(yesterday))).toBe(true);
+        expect(
+          component.isSameDay(component.selectedDate, getStartOfDay(yesterday)),
+        ).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
@@ -233,7 +247,9 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        expect(component.isSameDay(component.selectedDate, getStartOfDay(tomorrow))).toBe(true);
+        expect(
+          component.isSameDay(component.selectedDate, getStartOfDay(tomorrow)),
+        ).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
@@ -251,7 +267,9 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       if (component.selectedDate) {
         const nextWeek = new Date();
         nextWeek.setDate(nextWeek.getDate() + 7);
-        expect(component.isSameDay(component.selectedDate, getStartOfDay(nextWeek))).toBe(true);
+        expect(
+          component.isSameDay(component.selectedDate, getStartOfDay(nextWeek)),
+        ).toBe(true);
       }
       expect(component.valueChange.emit).toHaveBeenCalled();
     });
@@ -348,4 +366,3 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
     });
   });
 });
-

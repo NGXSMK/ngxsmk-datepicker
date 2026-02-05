@@ -1,8 +1,16 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, flush, flushMicrotasks } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+  flush,
+  flushMicrotasks,
+} from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { AriaLiveService } from '../services/aria-live.service';
 import { By } from '@angular/platform-browser';
 import { PLATFORM_ID } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - Accessibility', () => {
   let component: NgxsmkDatepickerComponent;
@@ -12,9 +20,7 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [DatePipe, { provide: PLATFORM_ID, useValue: 'browser' }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -30,8 +36,10 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
   });
 
   afterEach(() => {
-    const liveRegions = document.body.querySelectorAll('.ngxsmk-aria-live-region');
-    liveRegions.forEach(region => {
+    const liveRegions = document.body.querySelectorAll(
+      '.ngxsmk-aria-live-region',
+    );
+    liveRegions.forEach((region) => {
       if (region.parentNode) {
         region.parentNode.removeChild(region);
       }
@@ -44,7 +52,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
 
     tick(200);
 
-    const popover = fixture.debugElement.query(By.css('.ngxsmk-popover-container'));
+    const popover = fixture.debugElement.query(
+      By.css('.ngxsmk-popover-container'),
+    );
     expect(popover).toBeTruthy();
     expect(popover.nativeElement.getAttribute('role')).toBe('dialog');
     expect(popover.nativeElement.getAttribute('aria-modal')).toBe('true');
@@ -76,8 +86,10 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
       component.currentDate = new Date();
     }
 
-    const existingRegions = document.body.querySelectorAll('.ngxsmk-aria-live-region');
-    existingRegions.forEach(region => {
+    const existingRegions = document.body.querySelectorAll(
+      '.ngxsmk-aria-live-region',
+    );
+    existingRegions.forEach((region) => {
       if (region.parentNode) {
         region.parentNode.removeChild(region);
       }
@@ -97,14 +109,22 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     const announcedMessage = announceSpy.calls.mostRecent()?.args[0] || '';
 
     if (announcedMessage === '') {
-      const monthName = component.currentDate.toLocaleDateString(component.locale, { month: 'long' });
+      const monthName = component.currentDate.toLocaleDateString(
+        component.locale,
+        { month: 'long' },
+      );
       const year = String(component.currentDate.getFullYear());
       // calendarOpened is a valid key in DatepickerTranslations
-      component.getTranslation('calendarOpened', undefined, { month: monthName, year });
+      component.getTranslation('calendarOpened', undefined, {
+        month: monthName,
+        year,
+      });
     }
 
-    expect(announcedMessage.length).toBeGreaterThan(0,
-      `Announce was called with empty message. This suggests getTranslation returned empty or the fallback failed.`);
+    expect(announcedMessage.length).toBeGreaterThan(
+      0,
+      `Announce was called with empty message. This suggests getTranslation returned empty or the fallback failed.`,
+    );
 
     // Wait for debounce delay
     tick(100);
@@ -113,7 +133,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     // The live region creation is async due to requestAnimationFrame
     // So we verify that announce was called with the correct message
     // The actual DOM element may not exist immediately
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    const liveRegion = document.body.querySelector(
+      '.ngxsmk-aria-live-region',
+    ) as HTMLElement;
 
     if (liveRegion) {
       // If region exists, check its content
@@ -125,8 +147,10 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
         // Text might not be set yet, but announce was called
         expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
       } else if (textContent) {
-        expect(textContent).toBe(announcedMessage,
-          `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`);
+        expect(textContent).toBe(
+          announcedMessage,
+          `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`,
+        );
       }
     } else {
       // If region doesn't exist yet, at least verify announce was called
@@ -151,7 +175,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     component.toggleCalendar();
     fixture.detectChanges();
 
-    const dateCell = fixture.debugElement.query(By.css('.ngxsmk-day-cell[role="gridcell"]'));
+    const dateCell = fixture.debugElement.query(
+      By.css('.ngxsmk-day-cell[role="gridcell"]'),
+    );
     if (dateCell) {
       expect(dateCell.nativeElement.getAttribute('aria-label')).toBeTruthy();
     }
@@ -166,7 +192,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     tick(200);
     flushMicrotasks();
 
-    const liveRegionBefore = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    const liveRegionBefore = document.body.querySelector(
+      '.ngxsmk-aria-live-region',
+    ) as HTMLElement;
     if (liveRegionBefore) {
       liveRegionBefore.textContent = '';
     }
@@ -182,12 +210,18 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     expect(announceSpy).toHaveBeenCalled();
 
     const announcedMessage = announceSpy.calls.mostRecent()?.args[0] || '';
-    expect(announcedMessage.length).toBeGreaterThan(0,
-      `Announce was called with empty message.`);
-    expect(announcedMessage).toContain('selected',
-      `Date selection announcement should mention selection. Got: "${announcedMessage}"`);
+    expect(announcedMessage.length).toBeGreaterThan(
+      0,
+      `Announce was called with empty message.`,
+    );
+    expect(announcedMessage).toContain(
+      'selected',
+      `Date selection announcement should mention selection. Got: "${announcedMessage}"`,
+    );
 
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    const liveRegion = document.body.querySelector(
+      '.ngxsmk-aria-live-region',
+    ) as HTMLElement;
     expect(liveRegion).toBeTruthy('Live region should exist');
 
     const textContent = liveRegion?.textContent || '';
@@ -195,8 +229,10 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
 
     if (textContent && textContent !== '') {
-      expect(textContent).toBe(announcedMessage,
-        `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`);
+      expect(textContent).toBe(
+        announcedMessage,
+        `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`,
+      );
     }
   }));
 
@@ -209,7 +245,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     tick(200);
     flushMicrotasks();
 
-    const liveRegionBefore = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    const liveRegionBefore = document.body.querySelector(
+      '.ngxsmk-aria-live-region',
+    ) as HTMLElement;
     if (liveRegionBefore) {
       liveRegionBefore.textContent = '';
     }
@@ -218,8 +256,20 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
 
     // Get the current month before changing
     const currentMonthIndex = component.currentMonth;
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'];
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     const nextMonthIndex = (currentMonthIndex + 1) % 12;
     const expectedMonthName = monthNames[nextMonthIndex];
 
@@ -231,12 +281,18 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     expect(announceSpy).toHaveBeenCalled();
 
     const announcedMessage = announceSpy.calls.mostRecent()?.args[0] || '';
-    expect(announcedMessage.length).toBeGreaterThan(0,
-      `Announce was called with empty message for month change.`);
-    expect(announcedMessage).toContain(expectedMonthName,
-      `Month change announcement should mention the new month. Got: "${announcedMessage}", Expected to contain: "${expectedMonthName}"`);
+    expect(announcedMessage.length).toBeGreaterThan(
+      0,
+      `Announce was called with empty message for month change.`,
+    );
+    expect(announcedMessage).toContain(
+      expectedMonthName,
+      `Month change announcement should mention the new month. Got: "${announcedMessage}", Expected to contain: "${expectedMonthName}"`,
+    );
 
-    const liveRegion = document.body.querySelector('.ngxsmk-aria-live-region') as HTMLElement;
+    const liveRegion = document.body.querySelector(
+      '.ngxsmk-aria-live-region',
+    ) as HTMLElement;
     expect(liveRegion).toBeTruthy('Live region should exist');
 
     const textContent = liveRegion?.textContent || '';
@@ -244,8 +300,10 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     expect(announceSpy).toHaveBeenCalledWith(announcedMessage, 'polite');
 
     if (textContent && textContent !== '') {
-      expect(textContent).toBe(announcedMessage,
-        `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`);
+      expect(textContent).toBe(
+        announcedMessage,
+        `Live region text should match announced message. Got: "${textContent}", Expected: "${announcedMessage}"`,
+      );
     }
   }));
 
@@ -253,7 +311,9 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     component.toggleCalendar();
     fixture.detectChanges();
 
-    const popover = fixture.debugElement.query(By.css('.ngxsmk-popover-container'));
+    const popover = fixture.debugElement.query(
+      By.css('.ngxsmk-popover-container'),
+    );
     expect(popover.nativeElement.getAttribute('role')).toBe('dialog');
     expect(popover.nativeElement.getAttribute('aria-modal')).toBe('true');
   });
@@ -272,4 +332,3 @@ describe('NgxsmkDatepickerComponent - Accessibility', () => {
     flush();
   }));
 });
-

@@ -35,7 +35,11 @@ export class TranslationRegistryService {
     }
 
     if (normalized.startsWith('zh-')) {
-      if (normalized === 'zh-tw' || normalized === 'zh-hk' || normalized === 'zh-mo') {
+      if (
+        normalized === 'zh-tw' ||
+        normalized === 'zh-hk' ||
+        normalized === 'zh-mo'
+      ) {
         if (this.translations.has('zh-tw')) {
           return this.translations.get('zh-tw')!;
         }
@@ -50,7 +54,11 @@ export class TranslationRegistryService {
     // Try language code only (for all other languages)
     const parts = normalized.split('-');
     const languageCode = parts.length > 0 ? parts[0] : normalized;
-    if (languageCode && languageCode !== normalized && this.translations.has(languageCode)) {
+    if (
+      languageCode &&
+      languageCode !== normalized &&
+      this.translations.has(languageCode)
+    ) {
       return this.translations.get(languageCode)!;
     }
 
@@ -75,6 +83,9 @@ export class TranslationRegistryService {
       clear: 'Limpiar',
       close: 'Cerrar',
       today: 'Hoy',
+      selectEndDate: 'Seleccionar fecha de fin',
+      day: 'Día',
+      days: 'Días',
       previousMonth: 'Mes anterior',
       nextMonth: 'Mes siguiente',
       previousYear: 'Año anterior',
@@ -94,6 +105,8 @@ export class TranslationRegistryService {
       time: 'Hora:',
       startTime: 'Hora de inicio',
       endTime: 'Hora de fin',
+      from: 'Desde',
+      to: 'Hasta',
       holiday: 'Festivo',
       month: 'Mes',
       year: 'Año',
@@ -108,7 +121,7 @@ export class TranslationRegistryService {
       yearChanged: 'Cambiado al año {{year}}',
       calendarLoading: 'Cargando calendario...',
       calendarReady: 'Calendario listo',
-      keyboardShortcuts: 'Atajos de teclado'
+      keyboardShortcuts: 'Atajos de teclado',
     };
     this.register('es', spanishTranslations);
     this.register('es-ES', spanishTranslations);
@@ -123,6 +136,9 @@ export class TranslationRegistryService {
       clear: 'Effacer',
       close: 'Fermer',
       today: "Aujourd'hui",
+      selectEndDate: 'Sélectionner la date de fin',
+      day: 'Jour',
+      days: 'Jours',
       previousMonth: 'Mois précédent',
       nextMonth: 'Mois suivant',
       previousYear: 'Année précédente',
@@ -135,13 +151,15 @@ export class TranslationRegistryService {
       closeCalendar: 'Fermer le calendrier',
       closeCalendarOverlay: 'Fermer la superposition du calendrier',
       calendarFor: 'Calendrier pour {{month}} {{year}}',
-      selectYear: 'Sélectionner l\'année {{year}}',
+      selectYear: "Sélectionner l'année {{year}}",
       selectDecade: 'Sélectionner la décennie {{start}} - {{end}}',
       datesSelected: '{{count}} dates sélectionnées',
       timesSelected: '{{count}} fois sélectionnées',
       time: 'Heure:',
       startTime: 'Heure de début',
       endTime: 'Heure de fin',
+      from: 'De',
+      to: 'À',
       holiday: 'Jour férié',
       month: 'Mois',
       year: 'Année',
@@ -153,10 +171,10 @@ export class TranslationRegistryService {
       dateSelected: 'Date sélectionnée : {{date}}',
       rangeSelected: 'Plage sélectionnée : {{start}} à {{end}}',
       monthChanged: 'Changé pour {{month}} {{year}}',
-      yearChanged: 'Changé pour l\'année {{year}}',
+      yearChanged: "Changé pour l'année {{year}}",
       calendarLoading: 'Chargement du calendrier...',
       calendarReady: 'Calendrier prêt',
-      keyboardShortcuts: 'Raccourcis clavier'
+      keyboardShortcuts: 'Raccourcis clavier',
     };
     this.register('fr', frenchTranslations);
     this.register('fr-FR', frenchTranslations);
@@ -171,6 +189,9 @@ export class TranslationRegistryService {
       clear: 'Löschen',
       close: 'Schließen',
       today: 'Heute',
+      selectEndDate: 'Enddatum auswählen',
+      day: 'Tag',
+      days: 'Tage',
       previousMonth: 'Vorheriger Monat',
       nextMonth: 'Nächster Monat',
       previousYear: 'Vorheriges Jahr',
@@ -190,6 +211,8 @@ export class TranslationRegistryService {
       time: 'Uhrzeit:',
       startTime: 'Startzeit',
       endTime: 'Endzeit',
+      from: 'Von',
+      to: 'Bis',
       holiday: 'Feiertag',
       month: 'Monat',
       year: 'Jahr',
@@ -204,7 +227,7 @@ export class TranslationRegistryService {
       yearChanged: 'Geändert zu Jahr {{year}}',
       calendarLoading: 'Kalender wird geladen...',
       calendarReady: 'Kalender bereit',
-      keyboardShortcuts: 'Tastaturkürzel'
+      keyboardShortcuts: 'Tastaturkürzel',
     };
     this.register('de', germanTranslations);
     this.register('de-DE', germanTranslations);
@@ -219,6 +242,9 @@ export class TranslationRegistryService {
       clear: 'مسح',
       close: 'إغلاق',
       today: 'اليوم',
+      selectEndDate: 'اختر تاريخ الانتهاء',
+      day: 'يوم',
+      days: 'أيام',
       previousMonth: 'الشهر السابق',
       nextMonth: 'الشهر التالي',
       previousYear: 'السنة السابقة',
@@ -238,6 +264,8 @@ export class TranslationRegistryService {
       time: 'الوقت:',
       startTime: 'وقت البدء',
       endTime: 'وقت الانتهاء',
+      from: 'من',
+      to: 'إلى',
       holiday: 'عطلة',
       month: 'شهر',
       year: 'سنة',
@@ -252,7 +280,7 @@ export class TranslationRegistryService {
       yearChanged: 'تم التغيير إلى السنة {{year}}',
       calendarLoading: 'جارٍ تحميل التقويم...',
       calendarReady: 'التقويم جاهز',
-      keyboardShortcuts: 'اختصارات لوحة المفاتيح'
+      keyboardShortcuts: 'اختصارات لوحة المفاتيح',
     };
     this.register('ar', arabicTranslations);
     this.register('ar-SA', arabicTranslations);
@@ -267,6 +295,9 @@ export class TranslationRegistryService {
       clear: '清除',
       close: '关闭',
       today: '今天',
+      selectEndDate: '选择结束日期',
+      day: '天',
+      days: '天',
       previousMonth: '上个月',
       nextMonth: '下个月',
       previousYear: '上一年',
@@ -286,6 +317,8 @@ export class TranslationRegistryService {
       time: '时间:',
       startTime: '开始时间',
       endTime: '结束时间',
+      from: '从',
+      to: '到',
       holiday: '节假日',
       month: '月',
       year: '年',
@@ -300,7 +333,7 @@ export class TranslationRegistryService {
       yearChanged: '已更改为 {{year}} 年',
       calendarLoading: '正在加载日历...',
       calendarReady: '日历已就绪',
-      keyboardShortcuts: '键盘快捷键'
+      keyboardShortcuts: '键盘快捷键',
     };
     this.register('zh', chineseSimplifiedTranslations);
     this.register('zh-CN', chineseSimplifiedTranslations);
@@ -315,6 +348,9 @@ export class TranslationRegistryService {
       clear: 'クリア',
       close: '閉じる',
       today: '今日',
+      selectEndDate: '終了日を選択',
+      day: '日',
+      days: '日間',
       previousMonth: '前の月',
       nextMonth: '次の月',
       previousYear: '前の年',
@@ -334,6 +370,8 @@ export class TranslationRegistryService {
       time: '時刻:',
       startTime: '開始時刻',
       endTime: '終了時刻',
+      from: 'から',
+      to: 'まで',
       holiday: '祝日',
       month: '月',
       year: '年',
@@ -348,7 +386,7 @@ export class TranslationRegistryService {
       yearChanged: '{{year}}年に変更しました',
       calendarLoading: 'カレンダーを読み込み中...',
       calendarReady: 'カレンダーの準備ができました',
-      keyboardShortcuts: 'キーボードショートカット'
+      keyboardShortcuts: 'キーボードショートカット',
     };
     this.register('ja', japaneseTranslations);
     this.register('ja-JP', japaneseTranslations);
@@ -363,6 +401,9 @@ export class TranslationRegistryService {
       clear: 'Limpar',
       close: 'Fechar',
       today: 'Hoje',
+      selectEndDate: 'Selecionar data de término',
+      day: 'Dia',
+      days: 'Dias',
       previousMonth: 'Mês anterior',
       nextMonth: 'Próximo mês',
       previousYear: 'Ano anterior',
@@ -382,6 +423,8 @@ export class TranslationRegistryService {
       time: 'Hora:',
       startTime: 'Hora de início',
       endTime: 'Hora de término',
+      from: 'De',
+      to: 'Para',
       holiday: 'Feriado',
       month: 'Mês',
       year: 'Ano',
@@ -396,7 +439,7 @@ export class TranslationRegistryService {
       yearChanged: 'Alterado para o ano {{year}}',
       calendarLoading: 'Carregando calendário...',
       calendarReady: 'Calendário pronto',
-      keyboardShortcuts: 'Atalhos de teclado'
+      keyboardShortcuts: 'Atalhos de teclado',
     };
     this.register('pt', portugueseTranslations);
     this.register('pt-BR', portugueseTranslations);
@@ -411,6 +454,9 @@ export class TranslationRegistryService {
       clear: 'Очистить',
       close: 'Закрыть',
       today: 'Сегодня',
+      selectEndDate: 'Выбрать дату окончания',
+      day: 'День',
+      days: 'Дней',
       previousMonth: 'Предыдущий месяц',
       nextMonth: 'Следующий месяц',
       previousYear: 'Предыдущий год',
@@ -430,6 +476,8 @@ export class TranslationRegistryService {
       time: 'Время:',
       startTime: 'Время начала',
       endTime: 'Время окончания',
+      from: 'С',
+      to: 'По',
       holiday: 'Праздник',
       month: 'Месяц',
       year: 'Год',
@@ -444,7 +492,7 @@ export class TranslationRegistryService {
       yearChanged: 'Изменено на год {{year}}',
       calendarLoading: 'Загрузка календаря...',
       calendarReady: 'Календарь готов',
-      keyboardShortcuts: 'Сочетания клавиш'
+      keyboardShortcuts: 'Сочетания клавиш',
     };
     this.register('ru', russianTranslations);
     this.register('ru-RU', russianTranslations);
@@ -459,6 +507,9 @@ export class TranslationRegistryService {
       clear: 'Rensa',
       close: 'Stäng',
       today: 'Idag',
+      selectEndDate: 'Välj slutdatum',
+      day: 'Dag',
+      days: 'Dagar',
       previousMonth: 'Föregående månad',
       nextMonth: 'Nästa månad',
       previousYear: 'Föregående år',
@@ -478,6 +529,8 @@ export class TranslationRegistryService {
       time: 'Tid:',
       startTime: 'Starttid',
       endTime: 'Sluttid',
+      from: 'Från',
+      to: 'Till',
       holiday: 'Helgdag',
       month: 'Månad',
       year: 'År',
@@ -492,7 +545,7 @@ export class TranslationRegistryService {
       yearChanged: 'Ändrat till år {{year}}',
       calendarLoading: 'Laddar kalender...',
       calendarReady: 'Kalender redo',
-      keyboardShortcuts: 'Kortkommandon'
+      keyboardShortcuts: 'Kortkommandon',
     };
     this.register('sv', swedishTranslations);
     this.register('sv-SE', swedishTranslations);
@@ -507,6 +560,9 @@ export class TranslationRegistryService {
       clear: '지우기',
       close: '닫기',
       today: '오늘',
+      selectEndDate: '종료일 선택',
+      day: '일',
+      days: '일',
       previousMonth: '이전 달',
       nextMonth: '다음 달',
       previousYear: '이전 해',
@@ -526,6 +582,8 @@ export class TranslationRegistryService {
       time: '시간:',
       startTime: '시작 시간',
       endTime: '종료 시간',
+      from: '부터',
+      to: '까지',
       holiday: '공휴일',
       month: '월',
       year: '년',
@@ -540,7 +598,7 @@ export class TranslationRegistryService {
       yearChanged: '{{year}}년으로 변경됨',
       calendarLoading: '달력 로딩 중...',
       calendarReady: '달력 준비됨',
-      keyboardShortcuts: '키보드 단축키'
+      keyboardShortcuts: '키보드 단축키',
     };
     this.register('ko', koreanTranslations);
     this.register('ko-KR', koreanTranslations);
@@ -555,6 +613,9 @@ export class TranslationRegistryService {
       clear: '清除',
       close: '關閉',
       today: '今天',
+      selectEndDate: '選擇結束日期',
+      day: '天',
+      days: '天',
       previousMonth: '上個月',
       nextMonth: '下個月',
       previousYear: '上一年',
@@ -574,6 +635,8 @@ export class TranslationRegistryService {
       time: '時間:',
       startTime: '開始時間',
       endTime: '結束時間',
+      from: '從',
+      to: '到',
       holiday: '節假日',
       month: '月',
       year: '年',
@@ -588,7 +651,7 @@ export class TranslationRegistryService {
       yearChanged: '已更改為 {{year}} 年',
       calendarLoading: '正在載入日曆...',
       calendarReady: '日曆已就緒',
-      keyboardShortcuts: '鍵盤快捷鍵'
+      keyboardShortcuts: '鍵盤快捷鍵',
     });
   }
 
@@ -602,6 +665,9 @@ export class TranslationRegistryService {
       clear: 'Clear',
       close: 'Close',
       today: 'Today',
+      selectEndDate: 'Select end date',
+      day: 'Day',
+      days: 'Days',
       previousMonth: 'Previous month',
       nextMonth: 'Next month',
       previousYear: 'Previous year',
@@ -621,6 +687,8 @@ export class TranslationRegistryService {
       time: 'Time:',
       startTime: 'Start Time',
       endTime: 'End Time',
+      from: 'From',
+      to: 'To',
       holiday: 'Holiday',
       month: 'Month',
       year: 'Year',
@@ -635,8 +703,7 @@ export class TranslationRegistryService {
       yearChanged: 'Changed to year {{year}}',
       calendarLoading: 'Loading calendar...',
       calendarReady: 'Calendar ready',
-      keyboardShortcuts: 'Keyboard shortcuts'
+      keyboardShortcuts: 'Keyboard shortcuts',
     };
   }
 }
-

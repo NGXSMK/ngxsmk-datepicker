@@ -4,13 +4,18 @@ import { TranslationRegistryService } from './translation-registry.service';
 import { DatepickerTranslations } from '../interfaces/datepicker-translations.interface';
 
 // Helper to create minimal translation object
-function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = {}): DatepickerTranslations {
+function createMinimalTranslations(
+  overrides: Partial<DatepickerTranslations> = {},
+): DatepickerTranslations {
   const defaults: DatepickerTranslations = {
     selectDate: 'Select Date',
     selectTime: 'Select Time',
     clear: 'Clear',
     close: 'Close',
     today: 'Today',
+    selectEndDate: 'Select End Date',
+    day: 'Day',
+    days: 'Days',
     previousMonth: 'Previous Month',
     nextMonth: 'Next Month',
     previousYear: 'Previous Year',
@@ -44,7 +49,9 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
     yearChanged: 'Changed to year {{year}}',
     calendarLoading: 'Loading calendar...',
     calendarReady: 'Calendar ready',
-    keyboardShortcuts: 'Keyboard shortcuts'
+    keyboardShortcuts: 'Keyboard shortcuts',
+    from: 'From',
+    to: 'To',
   };
   return { ...defaults, ...overrides };
 }
@@ -54,10 +61,7 @@ describe('DefaultTranslationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        DefaultTranslationService,
-        TranslationRegistryService
-      ]
+      providers: [DefaultTranslationService, TranslationRegistryService],
     });
 
     service = TestBed.inject(DefaultTranslationService);
@@ -70,7 +74,7 @@ describe('DefaultTranslationService', () => {
   describe('initialize', () => {
     it('should initialize with provided translations', () => {
       const translations = createMinimalTranslations({
-        selectDate: 'Test Select Date'
+        selectDate: 'Test Select Date',
       });
 
       service.initialize(translations, 'test-locale');
@@ -108,7 +112,7 @@ describe('DefaultTranslationService', () => {
   describe('translate', () => {
     it('should translate simple key', () => {
       const translations = createMinimalTranslations({
-        selectDate: 'Select Date'
+        selectDate: 'Select Date',
       });
 
       service.initialize(translations);
@@ -125,23 +129,29 @@ describe('DefaultTranslationService', () => {
 
     it('should replace parameters in translation', () => {
       const translations = createMinimalTranslations({
-        calendarFor: 'Calendar for {{month}} {{year}}'
+        calendarFor: 'Calendar for {{month}} {{year}}',
       });
 
       service.initialize(translations);
 
-      const result = service.translate('calendarFor', { month: 'January', year: '2024' });
+      const result = service.translate('calendarFor', {
+        month: 'January',
+        year: '2024',
+      });
       expect(result).toBe('Calendar for January 2024');
     });
 
     it('should handle multiple parameter replacements', () => {
       const translations = createMinimalTranslations({
-        selectDecade: 'Select decade {{start}} - {{end}}'
+        selectDecade: 'Select decade {{start}} - {{end}}',
       });
 
       service.initialize(translations);
 
-      const result = service.translate('selectDecade', { start: '2020', end: '2029' });
+      const result = service.translate('selectDecade', {
+        start: '2020',
+        end: '2029',
+      });
       expect(result).toBe('Select decade 2020 - 2029');
     });
 
@@ -150,7 +160,7 @@ describe('DefaultTranslationService', () => {
         datesSelected: ((params?: Record<string, string | number>) => {
           const count = params?.['count'] || 0;
           return `${count} dates selected`;
-        }) as unknown as string
+        }) as unknown as string,
       });
 
       service.initialize(translations);
@@ -161,7 +171,7 @@ describe('DefaultTranslationService', () => {
 
     it('should handle function translations without params', () => {
       const translations = createMinimalTranslations({
-        today: (() => 'Today') as unknown as string
+        today: (() => 'Today') as unknown as string,
       });
 
       service.initialize(translations);
@@ -172,7 +182,7 @@ describe('DefaultTranslationService', () => {
 
     it('should handle numeric parameters', () => {
       const translations = createMinimalTranslations({
-        datesSelected: '{{count}} dates selected'
+        datesSelected: '{{count}} dates selected',
       });
 
       service.initialize(translations);
@@ -197,7 +207,7 @@ describe('DefaultTranslationService', () => {
   describe('edge cases', () => {
     it('should handle translation with no parameters needed', () => {
       const translations = createMinimalTranslations({
-        selectDate: 'Select Date'
+        selectDate: 'Select Date',
       });
 
       service.initialize(translations);
@@ -208,7 +218,7 @@ describe('DefaultTranslationService', () => {
 
     it('should handle missing parameters in translation', () => {
       const translations = createMinimalTranslations({
-        calendarFor: 'Calendar for {{month}} {{year}}'
+        calendarFor: 'Calendar for {{month}} {{year}}',
       });
 
       service.initialize(translations);
@@ -218,4 +228,3 @@ describe('DefaultTranslationService', () => {
     });
   });
 });
-

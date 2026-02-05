@@ -1,7 +1,13 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { PLATFORM_ID } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
 /**
  * Integration tests for complex user flows
@@ -14,9 +20,7 @@ describe('Integration Flows', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      providers: [DatePipe, { provide: PLATFORM_ID, useValue: 'browser' }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -85,11 +89,11 @@ describe('Integration Flows', () => {
       const dates = [
         new Date(2024, 5, 10),
         new Date(2024, 5, 15),
-        new Date(2024, 5, 20)
+        new Date(2024, 5, 20),
       ];
 
       // Select multiple dates
-      dates.forEach(date => {
+      dates.forEach((date) => {
         component.onDateClick(date);
         tick(50);
         fixture.detectChanges();
@@ -108,7 +112,7 @@ describe('Integration Flows', () => {
       component.registerOnChange((value) => {
         formControl.setValue(value);
       });
-      component.registerOnTouched(() => { });
+      component.registerOnTouched(() => {});
 
       // Open and select date
       component.toggleCalendar();
@@ -154,7 +158,9 @@ describe('Integration Flows', () => {
       const initialMonth = component.currentMonth;
 
       // Navigate using buttons (test through DOM interaction)
-      const nextButton = fixture.nativeElement.querySelector('.ngxsmk-nav-button:last-child');
+      const nextButton = fixture.nativeElement.querySelector(
+        '.ngxsmk-nav-button:last-child',
+      );
       if (nextButton) {
         nextButton.click();
         tick(100);
@@ -193,8 +199,8 @@ describe('Integration Flows', () => {
         label: 'Last 7 days',
         value: {
           start: new Date(2024, 5, 1),
-          end: new Date(2024, 5, 7)
-        }
+          end: new Date(2024, 5, 7),
+        },
       };
 
       component.mode = 'range';
@@ -301,4 +307,3 @@ describe('Integration Flows', () => {
     }));
   });
 });
-

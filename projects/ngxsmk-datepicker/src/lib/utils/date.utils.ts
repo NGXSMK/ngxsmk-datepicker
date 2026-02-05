@@ -8,7 +8,14 @@ export function getEndOfDay(d: Date): Date {
 
 export function addMonths(d: Date, months: number): Date {
   const newDate = new Date(d);
+  const originalDay = d.getDate();
   newDate.setMonth(d.getMonth() + months);
+  // Check for overflow (e.g., Jan 31 + 1 month -> March 3).
+  // If the date changed, it means the target month didn't have enough days.
+  if (newDate.getDate() !== originalDay) {
+    // Set to the last day of the previous month (which is the target month)
+    newDate.setDate(0);
+  }
   return newDate;
 }
 
@@ -23,7 +30,8 @@ export function getStartOfMonth(d: Date): Date {
 }
 
 export function getEndOfMonth(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth() + 1, 0);
+  const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+  return getEndOfDay(lastDay);
 }
 
 export function getStartOfWeek(d: Date, firstDayOfWeek: number = 0): Date {
@@ -69,17 +77,20 @@ export function isSameDay(d1: Date | null, d2: Date | null): boolean {
 }
 
 export function normalizeDate(date: DateInput | null): Date | null {
-  if (!date) return null;
-  const d = (date instanceof Date) 
-    ? new Date(date.getTime()) 
-    : new Date(
-        (date as { toDate?: () => Date }).toDate 
-          ? (date as { toDate: () => Date }).toDate() 
-          : date as Date | string | number
-      );
+  if (date === null || date === undefined || date === '') return null;
+  const d =
+    date instanceof Date
+      ? new Date(date.getTime())
+      : new Date(
+          (date as { toDate?: () => Date }).toDate
+            ? (date as { toDate: () => Date }).toDate()
+            : (date as Date | string | number),
+        );
   if (isNaN(d.getTime())) return null;
   return d;
 }
 
-export type DateInput = Date | string | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };
-
+export type DateInput =
+  | Date
+  | string
+  | { toDate: () => Date; _isAMomentObject?: boolean; $d?: Date };

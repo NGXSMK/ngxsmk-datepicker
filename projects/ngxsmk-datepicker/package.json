@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.linkedin.com/in/sachindilshan/"
@@ -41,19 +41,18 @@
   },
   "sideEffects": false,
   "files": [
-    "fesm2022/",
+    "fesm2022/**/*.mjs",
     "**/*.d.ts",
     "**/*.metadata.json",
     "README.md",
     "LICENSE",
     "CHANGELOG.md",
     "MIGRATION.md",
-    "CONTRIBUTING.md",
-    "CODE_OF_CONDUCT.md",
-    "ROADMAP.md",
-    "SECURITY.md",
-    "docs",
-    "styles"
+    "docs/*.md",
+    "!docs/**/*.png",
+    "!docs/**/*.jpg",
+    "!docs/**/*.gif",
+    "styles/**/*.css"
   ],
   "keywords": [
     "angular",

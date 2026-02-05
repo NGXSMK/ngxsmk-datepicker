@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - Date Adapters', () => {
   let component: NgxsmkDatepickerComponent;
@@ -8,6 +9,7 @@ describe('NgxsmkDatepickerComponent - Date Adapters', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -46,8 +48,9 @@ describe('NgxsmkDatepickerComponent - Date Adapters', () => {
 
       // String dates need to be parsed, and selectedDate may be null if not in single mode or parsing fails
       // We check that the value was processed without errors
-      expect(() => component.value = dateString as unknown as Date).not.toThrow();
+      expect(
+        () => (component.value = dateString as unknown as Date),
+      ).not.toThrow();
     });
   });
 });
-

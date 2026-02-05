@@ -3,14 +3,19 @@ import { By } from '@angular/platform-browser';
 import { SimpleChange } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
+import { DatePipe } from '@angular/common';
 
 // Helper function to create SimpleChange objects for testing
-function createSimpleChange<T>(currentValue: T, previousValue: T, firstChange: boolean = false): SimpleChange {
+function createSimpleChange<T>(
+  currentValue: T,
+  previousValue: T,
+  firstChange: boolean = false,
+): SimpleChange {
   return {
     currentValue,
     previousValue,
     firstChange,
-    isFirstChange: () => firstChange
+    isFirstChange: () => firstChange,
   };
 }
 
@@ -21,6 +26,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -119,7 +125,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       fixture.detectChanges();
 
       // The header should be hidden in time-only mode (it's inside @if (!timeOnly))
-      const calendarHeader = fixture.debugElement.query(By.css('.ngxsmk-header'));
+      const calendarHeader = fixture.debugElement.query(
+        By.css('.ngxsmk-header'),
+      );
       expect(calendarHeader).toBeFalsy();
     });
 
@@ -127,7 +135,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.timeOnly = true;
       fixture.detectChanges();
 
-      const timeSelection = fixture.debugElement.query(By.css('.ngxsmk-time-selection'));
+      const timeSelection = fixture.debugElement.query(
+        By.css('.ngxsmk-time-selection'),
+      );
       expect(timeSelection).toBeTruthy();
     });
   });
@@ -165,7 +175,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       const today = new Date();
       component.selectedDates = [
         getStartOfDay(today),
-        getStartOfDay(new Date(today.getTime() + 86400000))
+        getStartOfDay(new Date(today.getTime() + 86400000)),
       ];
       fixture.detectChanges();
 
@@ -175,7 +185,7 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       component.timeChange();
 
       expect(component.selectedDates.length).toBe(2);
-      component.selectedDates.forEach(date => {
+      component.selectedDates.forEach((date) => {
         expect(date.getHours()).toBe(12);
         expect(date.getMinutes()).toBe(0);
       });
@@ -212,7 +222,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
   describe('12/24 Hour Format', () => {
     it('should convert 24-hour to 12-hour display', () => {
       component.currentHour = 14; // 2 PM
-      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
+      (
+        component as unknown as { update12HourState: (h: number) => void }
+      ).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(2);
@@ -232,7 +244,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
     it('should handle midnight correctly', () => {
       component.currentHour = 0; // Midnight
-      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
+      (
+        component as unknown as { update12HourState: (h: number) => void }
+      ).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(12);
@@ -241,7 +255,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
 
     it('should handle noon correctly', () => {
       component.currentHour = 12; // Noon
-      (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
+      (
+        component as unknown as { update12HourState: (h: number) => void }
+      ).update12HourState(component.currentHour);
       fixture.detectChanges();
 
       expect(component.currentDisplayHour).toBe(12);
@@ -259,7 +275,9 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
       it('should display hour as-is when use24Hour is true', () => {
         component.use24Hour = true;
         component.currentHour = 14;
-        (component as unknown as { update12HourState: (h: number) => void }).update12HourState(component.currentHour);
+        (
+          component as unknown as { update12HourState: (h: number) => void }
+        ).update12HourState(component.currentHour);
         expect(component.currentDisplayHour).toBe(14);
         expect(component.isPm).toBe(false);
       });
@@ -275,4 +293,3 @@ describe('NgxsmkDatepickerComponent - Time Handling', () => {
     });
   });
 });
-

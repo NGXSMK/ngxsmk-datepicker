@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PLATFORM_ID } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
   let component: NgxsmkDatepickerComponent;
@@ -11,9 +12,7 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [NgxsmkDatepickerComponent],
-        providers: [
-          { provide: PLATFORM_ID, useValue: 'server' }
-        ]
+        providers: [DatePipe, { provide: PLATFORM_ID, useValue: 'server' }],
       }).compileComponents();
 
       fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -130,9 +129,7 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [NgxsmkDatepickerComponent],
-        providers: [
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+        providers: [DatePipe, { provide: PLATFORM_ID, useValue: 'browser' }],
       }).compileComponents();
 
       fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -171,6 +168,13 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
   });
 
   describe('Platform Checks', () => {
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [NgxsmkDatepickerComponent],
+        providers: [DatePipe],
+      }).compileComponents();
+    });
+
     it('should use platform checks for browser-only code', () => {
       // This test verifies that the component uses isPlatformBrowser checks
       // The actual implementation should guard all browser API access
@@ -186,6 +190,7 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [NgxsmkDatepickerComponent],
+        providers: [DatePipe],
       }).compileComponents();
 
       fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -226,7 +231,11 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
 
     it('should handle multiple dates after hydration', () => {
       component.mode = 'multiple';
-      const dates = [new Date('2025-01-10'), new Date('2025-01-15'), new Date('2025-01-20')];
+      const dates = [
+        new Date('2025-01-10'),
+        new Date('2025-01-15'),
+        new Date('2025-01-20'),
+      ];
       component.value = dates;
       fixture.detectChanges();
 
@@ -242,4 +251,3 @@ describe('NgxsmkDatepickerComponent - SSR Behavior', () => {
     });
   });
 });
-

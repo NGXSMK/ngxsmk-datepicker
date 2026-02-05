@@ -1,14 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SimpleChange, SimpleChanges } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { DatePipe } from '@angular/common';
 
 // Helper function to create SimpleChange objects for testing
-function createSimpleChange<T>(currentValue: T, previousValue: T, firstChange: boolean = false): SimpleChange {
+function createSimpleChange<T>(
+  currentValue: T,
+  previousValue: T,
+  firstChange: boolean = false,
+): SimpleChange {
   return {
     currentValue,
     previousValue,
     firstChange,
-    isFirstChange: () => firstChange
+    isFirstChange: () => firstChange,
   };
 }
 
@@ -19,6 +24,7 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -46,8 +52,21 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       // 2. Ensure document.dir='rtl', OR
       // 3. The component should detect from locale when document direction is not set
       // For now, we verify locale is set and can be used to determine RTL
-      const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
-      const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
+      const rtlLocales = [
+        'ar',
+        'he',
+        'fa',
+        'ur',
+        'yi',
+        'ji',
+        'iw',
+        'ku',
+        'ps',
+        'sd',
+      ];
+      const shouldBeRtl = rtlLocales.some((locale) =>
+        component.locale.toLowerCase().startsWith(locale),
+      );
       expect(shouldBeRtl).toBe(true);
 
       // Explicitly set rtl based on locale for testing
@@ -81,14 +100,34 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       // Set locale
       component.locale = 'he-IL';
       fixture.detectChanges();
-      component.ngOnChanges({ locale: { currentValue: 'he-IL', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as SimpleChanges);
+      component.ngOnChanges({
+        locale: {
+          currentValue: 'he-IL',
+          previousValue: 'en-US',
+          firstChange: false,
+          isFirstChange: () => false,
+        },
+      } as SimpleChanges);
       fixture.detectChanges();
 
       // Verify locale is set correctly
       expect(component.locale).toBe('he-IL');
       // Check if locale should be RTL
-      const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
-      const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
+      const rtlLocales = [
+        'ar',
+        'he',
+        'fa',
+        'ur',
+        'yi',
+        'ji',
+        'iw',
+        'ku',
+        'ps',
+        'sd',
+      ];
+      const shouldBeRtl = rtlLocales.some((locale) =>
+        component.locale.toLowerCase().startsWith(locale),
+      );
       expect(shouldBeRtl).toBe(true);
 
       // Explicitly set rtl based on locale for testing
@@ -101,14 +140,34 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       // Set locale
       component.locale = 'fa-IR';
       fixture.detectChanges();
-      component.ngOnChanges({ locale: { currentValue: 'fa-IR', previousValue: 'en-US', firstChange: false, isFirstChange: () => false } } as SimpleChanges);
+      component.ngOnChanges({
+        locale: {
+          currentValue: 'fa-IR',
+          previousValue: 'en-US',
+          firstChange: false,
+          isFirstChange: () => false,
+        },
+      } as SimpleChanges);
       fixture.detectChanges();
 
       // Verify locale is set correctly
       expect(component.locale).toBe('fa-IR');
       // Check if locale should be RTL
-      const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
-      const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
+      const rtlLocales = [
+        'ar',
+        'he',
+        'fa',
+        'ur',
+        'yi',
+        'ji',
+        'iw',
+        'ku',
+        'ps',
+        'sd',
+      ];
+      const shouldBeRtl = rtlLocales.some((locale) =>
+        component.locale.toLowerCase().startsWith(locale),
+      );
       expect(shouldBeRtl).toBe(true);
 
       // Explicitly set rtl based on locale for testing
@@ -125,15 +184,30 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       component.ngOnChanges({ locale: createSimpleChange('ar-SA', 'en-US') });
 
       // Explicitly set rtl based on locale
-      const rtlLocales = ['ar', 'he', 'fa', 'ur', 'yi', 'ji', 'iw', 'ku', 'ps', 'sd'];
-      const shouldBeRtl = rtlLocales.some(locale => component.locale.toLowerCase().startsWith(locale));
+      const rtlLocales = [
+        'ar',
+        'he',
+        'fa',
+        'ur',
+        'yi',
+        'ji',
+        'iw',
+        'ku',
+        'ps',
+        'sd',
+      ];
+      const shouldBeRtl = rtlLocales.some((locale) =>
+        component.locale.toLowerCase().startsWith(locale),
+      );
       component.rtl = shouldBeRtl;
       fixture.detectChanges();
 
       // The RTL class is applied via HostBinding('class.ngxsmk-rtl')
       expect(component.isRtl).toBe(true);
       // Check the native element has the class
-      const wrapperElement = fixture.nativeElement.querySelector('.ngxsmk-datepicker-wrapper');
+      const wrapperElement = fixture.nativeElement.querySelector(
+        '.ngxsmk-datepicker-wrapper',
+      );
       expect(wrapperElement).toBeTruthy();
       expect(wrapperElement.classList.contains('ngxsmk-rtl')).toBe(true);
     });
@@ -142,9 +216,10 @@ describe('NgxsmkDatepickerComponent - RTL Support', () => {
       component.locale = 'en-US';
       fixture.detectChanges();
 
-      const wrapper = fixture.debugElement.query(c => c.nativeElement.classList.contains('ngxsmk-rtl'));
+      const wrapper = fixture.debugElement.query((c) =>
+        c.nativeElement.classList.contains('ngxsmk-rtl'),
+      );
       expect(wrapper).toBeFalsy();
     });
   });
 });
-

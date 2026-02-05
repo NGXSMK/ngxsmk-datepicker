@@ -6,13 +6,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
+import { DatePipe } from '@angular/common';
 
-const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (...args: unknown[]) => ({ (): { dirty: () => boolean }, dateField: unknown });
-const objectSchema = (AngularCore as unknown as Record<string, unknown>)['objectSchema'] as (...args: unknown[]) => unknown;
+const form = (AngularCore as unknown as Record<string, unknown>)['form'] as (
+  ...args: unknown[]
+) => { (): { dirty: () => boolean }; dateField: unknown };
+const objectSchema = (AngularCore as unknown as Record<string, unknown>)[
+  'objectSchema'
+] as (...args: unknown[]) => unknown;
 
 class TestHolidayProvider implements HolidayProvider {
   private holidays: { [key: string]: string } = {
-    '2025-01-01': 'New Year\'s Day',
+    '2025-01-01': "New Year's Day",
     '2025-12-25': 'Christmas Day',
   };
 
@@ -41,6 +46,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -175,7 +181,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.mode = 'range';
       const range = {
         start: getStartOfDay(new Date(2025, 5, 10)),
-        end: getEndOfDay(new Date(2025, 5, 20))
+        end: getEndOfDay(new Date(2025, 5, 20)),
       };
       component.writeValue(range);
       fixture.detectChanges();
@@ -189,7 +195,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       const dates = [
         getStartOfDay(new Date(2025, 5, 10)),
         getStartOfDay(new Date(2025, 5, 15)),
-        getStartOfDay(new Date(2025, 5, 20))
+        getStartOfDay(new Date(2025, 5, 20)),
       ];
       component.writeValue(dates);
       fixture.detectChanges();
@@ -223,7 +229,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.yearOptions.length).toBe(21);
+      expect(component.yearOptions().length).toBe(21);
     });
 
     it('should use custom year range', () => {
@@ -231,7 +237,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      expect(component.yearOptions.length).toBe(11);
+      expect(component.yearOptions().length).toBe(11);
     });
   });
 
@@ -270,7 +276,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
         inputGroup: 'custom-input-group',
         input: 'custom-input',
         popover: 'custom-popover',
-        dayCell: 'custom-day-cell'
+        dayCell: 'custom-day-cell',
       };
       component.classes = customClasses;
       fixture.detectChanges();
@@ -280,7 +286,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
     it('should handle partial classes object', () => {
       const partialClasses = {
-        inputGroup: 'custom-input-group'
+        inputGroup: 'custom-input-group',
       };
       component.classes = partialClasses;
       fixture.detectChanges();
@@ -359,7 +365,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       const newYear = new Date(2025, 0, 1);
       const label = component.getHolidayLabel(newYear);
-      expect(label).toBe('New Year\'s Day');
+      expect(label).toBe("New Year's Day");
     });
 
     it('should disable holidays when disableHolidays is true', () => {
@@ -504,15 +510,19 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
           <ngxsmk-datepicker
             [field]="myForm.dateField"
             mode="single"
-            [inline]="true">
+            [inline]="true"
+          >
           </ngxsmk-datepicker>
-        `
+        `,
       })
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
-        myForm = form(this.localObject, objectSchema({
-          dateField: (objectSchema as (...args: unknown[]) => unknown)()
-        }));
+        myForm = form(
+          this.localObject,
+          objectSchema({
+            dateField: (objectSchema as (...args: unknown[]) => unknown)(),
+          }),
+        );
       }
 
       const testFixture = TestBed.createComponent(TestSignalFormComponent);
@@ -520,7 +530,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       const testComponent = testFixture.componentInstance;
       const datepickerComponent = testFixture.debugElement.query(
-        By.directive(NgxsmkDatepickerComponent)
+        By.directive(NgxsmkDatepickerComponent),
       ).componentInstance as NgxsmkDatepickerComponent;
 
       expect(testComponent.myForm().dirty()).toBe(false);
@@ -545,15 +555,19 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
           <ngxsmk-datepicker
             [field]="myForm.dateField"
             mode="single"
-            [inline]="true">
+            [inline]="true"
+          >
           </ngxsmk-datepicker>
-        `
+        `,
       })
       class TestSignalFormComponent {
         localObject = signal({ dateField: new Date(2025, 0, 1) });
-        myForm = form(this.localObject, objectSchema({
-          dateField: (objectSchema as (...args: unknown[]) => unknown)()
-        }));
+        myForm = form(
+          this.localObject,
+          objectSchema({
+            dateField: (objectSchema as (...args: unknown[]) => unknown)(),
+          }),
+        );
       }
 
       const testFixture = TestBed.createComponent(TestSignalFormComponent);
@@ -561,12 +575,16 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       const testComponent = testFixture.componentInstance;
       const datepickerComponent = testFixture.debugElement.query(
-        By.directive(NgxsmkDatepickerComponent)
+        By.directive(NgxsmkDatepickerComponent),
       ).componentInstance as NgxsmkDatepickerComponent;
 
       const field = testComponent.myForm.dateField;
-      const hasSetValue = typeof (field as unknown as { setValue: unknown }).setValue === 'function';
-      const hasUpdateValue = typeof (field as unknown as { updateValue: unknown }).updateValue === 'function';
+      const hasSetValue =
+        typeof (field as unknown as { setValue: unknown }).setValue ===
+        'function';
+      const hasUpdateValue =
+        typeof (field as unknown as { updateValue: unknown }).updateValue ===
+        'function';
 
       expect(hasSetValue || hasUpdateValue).toBe(true);
 
@@ -608,7 +626,7 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.mode = 'multiple';
       component.selectedDates = [
         getStartOfDay(new Date(2025, 5, 10)),
-        getStartOfDay(new Date(2025, 5, 15))
+        getStartOfDay(new Date(2025, 5, 15)),
       ];
       fixture.detectChanges();
 
@@ -640,7 +658,11 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
     it('should disable back arrow when minDate prevents navigation', () => {
       const today = new Date();
-      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const firstDayOfMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1,
+      );
       component.minDate = firstDayOfMonth;
       fixture.detectChanges();
 
@@ -703,7 +725,9 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.inline = true;
       fixture.detectChanges();
 
-      const navButtons = fixture.debugElement.queryAll(By.css('.ngxsmk-nav-button'));
+      const navButtons = fixture.debugElement.queryAll(
+        By.css('.ngxsmk-nav-button'),
+      );
       expect(navButtons.length).toBeGreaterThan(0);
     });
 
@@ -712,11 +736,17 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.ngOnInit();
       fixture.detectChanges();
 
-      const inputGroup = fixture.debugElement.query(By.css('.ngxsmk-input-group'));
-      expect(inputGroup).withContext('Input group should be rendered when not in inline mode').toBeTruthy();
+      const inputGroup = fixture.debugElement.query(
+        By.css('.ngxsmk-input-group'),
+      );
+      expect(inputGroup)
+        .withContext('Input group should be rendered when not in inline mode')
+        .toBeTruthy();
       if (inputGroup) {
         expect(inputGroup.nativeElement.getAttribute('role')).toBe('button');
-        expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe('dialog');
+        expect(inputGroup.nativeElement.getAttribute('aria-haspopup')).toBe(
+          'dialog',
+        );
       } else {
         expect(component.isInlineMode).toBe(false);
       }
@@ -769,9 +799,10 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       component.clearValue();
       fixture.detectChanges();
 
-      expect(component.action.emit).toHaveBeenCalledWith({ type: 'clear', payload: null });
+      expect(component.action.emit).toHaveBeenCalledWith({
+        type: 'clear',
+        payload: null,
+      });
     });
   });
-
 });
-

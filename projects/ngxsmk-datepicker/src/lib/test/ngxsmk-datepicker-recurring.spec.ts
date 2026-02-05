@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
 import { generateRecurringDates } from '../utils/recurring-dates.utils';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
   let component: NgxsmkDatepickerComponent;
@@ -10,6 +11,7 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -24,7 +26,7 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         pattern: 'weekly',
         startDate: new Date(),
         dayOfWeek: 1, // Monday
-        interval: 1
+        interval: 1,
       };
       fixture.detectChanges();
 
@@ -38,9 +40,9 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         pattern: 'daily',
         startDate: startDate,
         interval: 2,
-        occurrences: 5
+        occurrences: 5,
       });
-      
+
       expect(dates.length).toBe(5);
       expect(dates[0].getTime()).toBe(startDate.getTime());
     });
@@ -52,11 +54,11 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         startDate: startDate,
         dayOfWeek: 3, // Wednesday
         interval: 1,
-        occurrences: 4
+        occurrences: 4,
       });
-      
+
       expect(dates.length).toBe(4);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getDay()).toBe(3); // All should be Wednesdays
       });
     });
@@ -68,11 +70,11 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         startDate: startDate,
         dayOfMonth: 15,
         interval: 1,
-        occurrences: 6
+        occurrences: 6,
       });
-      
+
       expect(dates.length).toBe(6);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getDate()).toBe(15);
       });
     });
@@ -84,11 +86,11 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         startDate: startDate,
         monthAndDay: { month: 5, day: 15 },
         interval: 1,
-        occurrences: 3
+        occurrences: 3,
       });
-      
+
       expect(dates.length).toBe(3);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getMonth()).toBe(5);
         expect(date.getDate()).toBe(15);
       });
@@ -101,11 +103,11 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         pattern: 'daily',
         startDate: startDate,
         endDate: endDate,
-        interval: 1
+        interval: 1,
       });
-      
+
       expect(dates.length).toBeLessThanOrEqual(10);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         expect(date.getTime()).toBeLessThanOrEqual(endDate.getTime());
       });
     });
@@ -116,11 +118,11 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         pattern: 'weekdays',
         startDate: startDate,
         interval: 1,
-        occurrences: 10
+        occurrences: 10,
       });
-      
+
       expect(dates.length).toBeGreaterThan(0);
-      dates.forEach(date => {
+      dates.forEach((date) => {
         const dayOfWeek = date.getDay();
         expect(dayOfWeek).toBeGreaterThanOrEqual(1);
         expect(dayOfWeek).toBeLessThanOrEqual(5);
@@ -133,7 +135,7 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
         pattern: 'weekly',
         startDate: getStartOfDay(new Date(2025, 0, 1)),
         dayOfWeek: 1, // Monday
-        interval: 1
+        interval: 1,
       };
       fixture.detectChanges();
 
@@ -141,4 +143,3 @@ describe('NgxsmkDatepickerComponent - Recurring Dates', () => {
     });
   });
 });
-

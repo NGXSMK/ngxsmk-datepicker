@@ -15,34 +15,33 @@ export class HapticFeedbackService {
   light(): void {
     if (!this.isSupported) return;
     try {
-      navigator.vibrate(10);
-    } catch {
-      // Silently fail if vibration is not supported
-    }
+      // Very short single pulse for subtle interaction
+      navigator.vibrate(5);
+    } catch { }
   }
 
-  /**
-   * Trigger medium haptic feedback (medium vibration)
-   */
+  selection(): void {
+    if (!this.isSupported) return;
+    try {
+      // Tiny double pulse for selecting list items/scrolling "ticks"
+      navigator.vibrate([1, 5, 1]);
+    } catch { }
+  }
+
   medium(): void {
     if (!this.isSupported) return;
     try {
-      navigator.vibrate(20);
-    } catch {
-      // Silently fail if vibration is not supported
-    }
+      // Success-like double pulse
+      navigator.vibrate([10, 5, 10]);
+    } catch { }
   }
 
-  /**
-   * Trigger heavy haptic feedback (longer vibration)
-   */
   heavy(): void {
     if (!this.isSupported) return;
     try {
-      navigator.vibrate([30, 10, 30]);
-    } catch {
-      // Silently fail if vibration is not supported
-    }
+      // Error-like or confirmation-like pattern
+      navigator.vibrate([15, 30, 15]);
+    } catch { }
   }
 
   /**

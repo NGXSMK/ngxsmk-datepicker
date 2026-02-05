@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent Month Navigation Bug', () => {
     let component: NgxsmkDatepickerComponent;
@@ -9,7 +10,8 @@ describe('NgxsmkDatepickerComponent Month Navigation Bug', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [NgxsmkDatepickerComponent]
+            imports: [NgxsmkDatepickerComponent],
+            providers: [DatePipe]
         }).compileComponents();
 
         fixture = TestBed.createComponent(NgxsmkDatepickerComponent);

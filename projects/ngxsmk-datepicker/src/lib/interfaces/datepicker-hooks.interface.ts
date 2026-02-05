@@ -1,19 +1,40 @@
 import { DatepickerValue } from '../utils/calendar.utils';
 
 export interface DayCellRenderHook {
-  getDayCellClasses?(date: Date, isSelected: boolean, isDisabled: boolean, isToday: boolean, isHoliday: boolean): string[];
+  getDayCellClasses?(
+    date: Date,
+    isSelected: boolean,
+    isDisabled: boolean,
+    isToday: boolean,
+    isHoliday: boolean,
+  ): string[];
   getDayCellTooltip?(date: Date, holidayLabel: string | null): string | null;
   formatDayNumber?(date: Date): string;
 }
 
 export interface ValidationHook {
-  validateDate?(date: Date, currentValue: DatepickerValue, mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'): boolean;
+  validateDate?(
+    date: Date,
+    currentValue: DatepickerValue,
+    mode:
+      | 'single'
+      | 'range'
+      | 'multiple'
+      | 'week'
+      | 'month'
+      | 'quarter'
+      | 'year'
+      | 'timeRange',
+  ): boolean;
   validateRange?(startDate: Date, endDate: Date): boolean;
   getValidationError?(date: Date): string | null;
 }
 
 export interface KeyboardShortcutHook {
-  handleShortcut?(event: KeyboardEvent, context: KeyboardShortcutContext): boolean;
+  handleShortcut?(
+    event: KeyboardEvent,
+    context: KeyboardShortcutContext,
+  ): boolean;
   getShortcutHelp?(): KeyboardShortcutHelp[];
 }
 
@@ -23,7 +44,15 @@ export interface KeyboardShortcutContext {
   startDate: Date | null;
   endDate: Date | null;
   selectedDates: Date[];
-  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year';
+  mode:
+    | 'single'
+    | 'range'
+    | 'multiple'
+    | 'week'
+    | 'month'
+    | 'quarter'
+    | 'year'
+    | 'timeRange';
   focusedDate: Date | null;
   isCalendarOpen: boolean;
 }
@@ -35,7 +64,18 @@ export interface KeyboardShortcutHelp {
 }
 
 export interface DateFormatHook {
-  formatDisplayValue?(value: DatepickerValue, mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year'): string;
+  formatDisplayValue?(
+    value: DatepickerValue,
+    mode:
+      | 'single'
+      | 'range'
+      | 'multiple'
+      | 'week'
+      | 'month'
+      | 'quarter'
+      | 'year'
+      | 'timeRange',
+  ): string;
   formatAriaLabel?(date: Date): string;
 }
 
@@ -46,5 +86,10 @@ export interface EventHook {
   onCalendarClose?(): void;
 }
 
-export interface DatepickerHooks extends DayCellRenderHook, ValidationHook, KeyboardShortcutHook, DateFormatHook, EventHook {}
-
+export interface DatepickerHooks
+  extends
+    DayCellRenderHook,
+    ValidationHook,
+    KeyboardShortcutHook,
+    DateFormatHook,
+    EventHook {}
