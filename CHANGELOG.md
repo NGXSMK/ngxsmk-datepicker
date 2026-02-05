@@ -5,16 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.11] - 2026-02-05
+## [2.1.0] - 2026-02-05
 
 ### Fixed
 
-- **TypeScript Type Declarations**: Fixed "Could not find a declaration file for module 'ngxsmk-datepicker'" error
+- **Package Configuration**: Corrected TypeScript declaration paths in package.json
+  - Updated `types` and `typings` fields to point to `types/ngxsmk-datepicker.d.ts` instead of non-existent `index.d.ts`
+  - Simplified `exports` field to match v2.0.9 format, removing unnecessary module export configurations
+  - Removed disallowed `esm2022` property from package.json
+  - Ensures proper TypeScript module resolution in consuming applications
+
+### Changed
+
+- **Package Distribution**: Streamlined package exports configuration for better compatibility
+  - Aligned exports structure with stable v2.0.9 format
+  - Removed redundant module resolution entries for cleaner package.json
+
+### Important Notice
+
+⚠️ **Versions 2.0.10 and 2.0.11 have been unpublished from npm** due to critical package configuration issues that prevented proper TypeScript module resolution. All users should upgrade to v2.1.0 or later.
+
+## [2.0.11] - 2026-02-05 [BROKEN - UNPUBLISHED]
+
+**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.0 instead.**
+
+### Fixed
+
+- **TypeScript Type Declarations**: Attempted to fix "Could not find a declaration file for module 'ngxsmk-datepicker'" error
   - Added proper `exports` field in package.json with correct type declaration path
   - Configured exports to point to `index.d.ts` for TypeScript module resolution
-  - Ensures compatibility with modern Node.js and TypeScript module resolution strategies
+  - **Note**: This fix was incomplete and the version has been replaced by v2.1.0
 
-## [2.0.10] - 2026-02-05
+## [2.0.10] - 2026-02-05 [BROKEN - UNPUBLISHED]
+
+**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.0 instead.**
 
 ### Fixed
 
