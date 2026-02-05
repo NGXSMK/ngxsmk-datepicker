@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CustomSelectComponent } from './custom-select.component';
 
 @Component({
@@ -13,24 +19,27 @@ import { CustomSelectComponent } from './custom-select.component';
         class="hour-select"
         [options]="hourOptions"
         [(value)]="currentDisplayHour"
-        (valueChange)="currentDisplayHourChange.emit($any($event)); timeChange.emit()"
-        [disabled]="disabled">
+        (valueChange)="onHourChange($event)"
+        [disabled]="disabled"
+      >
       </ngxsmk-custom-select>
       <span class="ngxsmk-time-separator">:</span>
       <ngxsmk-custom-select
         class="minute-select"
         [options]="minuteOptions"
         [(value)]="currentMinute"
-        (valueChange)="currentMinuteChange.emit($any($event)); timeChange.emit()"
-        [disabled]="disabled">
+        (valueChange)="onMinuteChange($event)"
+        [disabled]="disabled"
+      >
       </ngxsmk-custom-select>
       @if (showSeconds) {
         <ngxsmk-custom-select
           class="second-select"
           [options]="secondOptions"
           [(value)]="currentSecond"
-          (valueChange)="currentSecondChange.emit($any($event)); timeChange.emit()"
-          [disabled]="disabled">
+          (valueChange)="onSecondChange($event)"
+          [disabled]="disabled"
+        >
         </ngxsmk-custom-select>
       }
       @if (showAmpm) {
@@ -38,16 +47,17 @@ import { CustomSelectComponent } from './custom-select.component';
           class="ampm-select"
           [options]="ampmOptions"
           [(value)]="isPm"
-          (valueChange)="isPmChange.emit($any($event)); timeChange.emit()"
-          [disabled]="disabled">
+          (valueChange)="onAmPmChange($event)"
+          [disabled]="disabled"
+        >
         </ngxsmk-custom-select>
       }
     </div>
-  `
+  `,
 })
 /**
  * Component for selecting time (Hours, Minutes, Seconds, AM/PM).
- * 
+ *
  * @remarks
  * Renders a row of custom select dropdowns for each time component.
  * It handles the display logic and emits individual changes which are aggregated
@@ -59,7 +69,7 @@ export class TimeSelectionComponent {
   @Input() secondOptions: { label: string; value: number }[] = [];
   @Input() ampmOptions: { label: string; value: boolean }[] = [
     { label: 'AM', value: false },
-    { label: 'PM', value: true }
+    { label: 'PM', value: true },
   ];
   @Input() currentDisplayHour: number = 12;
   @Input() currentMinute: number = 0;
@@ -75,5 +85,24 @@ export class TimeSelectionComponent {
   @Output() currentMinuteChange = new EventEmitter<number>();
   @Output() currentSecondChange = new EventEmitter<number>();
   @Output() isPmChange = new EventEmitter<boolean>();
-}
 
+  onHourChange(value: unknown): void {
+    this.currentDisplayHourChange.emit(Number(value));
+    this.timeChange.emit();
+  }
+
+  onMinuteChange(value: unknown): void {
+    this.currentMinuteChange.emit(Number(value));
+    this.timeChange.emit();
+  }
+
+  onSecondChange(value: unknown): void {
+    this.currentSecondChange.emit(Number(value));
+    this.timeChange.emit();
+  }
+
+  onAmPmChange(value: unknown): void {
+    this.isPmChange.emit(Boolean(value));
+    this.timeChange.emit();
+  }
+}

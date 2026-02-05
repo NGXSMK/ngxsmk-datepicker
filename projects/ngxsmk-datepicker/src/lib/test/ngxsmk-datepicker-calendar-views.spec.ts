@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
+import { DatePipe } from '@angular/common';
 
 describe('NgxsmkDatepickerComponent - Calendar Views', () => {
   let component: NgxsmkDatepickerComponent;
@@ -9,6 +10,7 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -145,7 +147,9 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
       component.timelineZoomIn();
       fixture.detectChanges();
 
-      expect(component.timelineMonths.length).toBeGreaterThan(initialMonthsCount);
+      expect(component.timelineMonths.length).toBeGreaterThan(
+        initialMonthsCount,
+      );
     });
 
     it('should zoom out timeline', () => {
@@ -175,7 +179,7 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
     it('should format time slider value correctly', () => {
       const minutes = 720; // 12:00 PM
       const formatted = component.formatTimeSliderValue(minutes);
-      
+
       expect(formatted).toContain('12');
       expect(formatted).toContain('00');
     });
@@ -238,4 +242,3 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
     });
   });
 });
-

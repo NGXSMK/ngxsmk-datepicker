@@ -135,18 +135,290 @@ npm install ngxsmk-datepicker@2.0.6
 
 ## v1.9.30 → v2.0.0
 
+### Overview
+
+v2.0.0 is a major version update representing significant architectural improvements, enhanced features, and modernization of the codebase. While maintaining backward compatibility for most features, some breaking changes are necessary for improved performance, type safety, and Angular alignment.
+
 ### Breaking Changes
 
-This is a major version update with the following breaking changes:
+#### 1. Angular Version Requirement
 
-- Updated minimum Angular version requirement to 17.0.0
-- Improved Signal Forms integration
-- Enhanced timezone handling
-- Updated documentation and examples
+**Change**: Minimum Angular version updated to 17.0.0+
+
+**Reason**: To leverage modern Angular features (signals, standalone components, built-in control flow)
+
+**Migration**:
+
+```bash
+# Update Angular to v17+
+ng update @angular/core@17 @angular/cli@17
+
+# Then update ngxsmk-datepicker
+npm install ngxsmk-datepicker@2.0.0
+```
+
+#### 2. Signal Forms Integration
+
+**Change**: Enhanced Signal Forms API with stricter typing
+
+**Before** (v1.x):
+
+```typescript
+// Signal form field with loose typing
+[field] = "mySignalFormField";
+```
+
+**After** (v2.0):
+
+```typescript
+// Import SignalFormFieldConfig for type safety
+import { SignalFormFieldConfig } from "ngxsmk-datepicker";
+
+// Signal form field with strict typing
+[field] = "mySignalFormField"; // Now with proper type inference
+```
+
+**Migration**: No code changes required, but TypeScript will now catch type errors earlier.
+
+#### 3. Timezone Utilities API
+
+**Change**: Improved timezone utility function signatures for type safety
+
+**Before** (v1.x):
+
+```typescript
+// Loose parameter types
+formatDateWithTimezone(date, locale, options, timezone);
+```
+
+**After** (v2.0):
+
+```typescript
+// Strict parameter types with proper interfaces
+formatDateWithTimezone(
+  date: Date,
+  locale: string,
+  options: Intl.DateTimeFormatOptions,
+  timezone?: string
+): string;
+```
+
+**Migration**: Ensure you're passing correctly typed parameters to timezone utilities.
+
+#### 4. Deprecated Properties Removed
+
+**Change**: Removed properties deprecated in v1.9.x
+
+**Removed**:
+
+- `numberOfMonths` (use `calendarCount` instead - deprecated since v1.9.12)
+
+**Migration**:
+
+```typescript
+// Before (v1.x)
+<ngxsmk-datepicker [numberOfMonths]="2"></ngxsmk-datepicker>
+
+// After (v2.0)
+<ngxsmk-datepicker [calendarCount]="2"></ngxsmk-datepicker>
+```
+
+#### 5. Service Extraction
+
+**Change**: Internal architecture refactored - services extracted from main component
+
+**Impact**: If you were extending or monkey-patching internal component methods, this may break.
+
+**Affected Internal Services**:
+
+- `CalendarGenerationService` - Calendar generation logic
+- `DatepickerParsingService` - Date parsing and formatting
+- `TouchGestureHandlerService` - Touch gesture handling
+- `PopoverPositioningService` - Popover positioning
+
+**Migration**: Use public APIs instead of internal methods. If you need access to these services, inject them:
+
+```typescript
+import { CalendarGenerationService } from 'ngxsmk-datepicker';
+
+constructor(private calendarService: CalendarGenerationService) {}
+```
+
+### New Features
+
+#### 1. Enhanced Time Selection
+
+```typescript
+// Time range mode
+<ngxsmk-datepicker
+  [timeRangeMode]="true"
+  [showTime]="true"
+></ngxsmk-datepicker>
+
+// Seconds support (already available, now documented)
+<ngxsmk-datepicker
+  [showSeconds]="true"
+  [secondInterval]="5"
+></ngxsmk-datepicker>
+
+// Step configuration
+<ngxsmk-datepicker
+  [minuteInterval]="15"
+  [secondInterval]="30"
+></ngxsmk-datepicker>
+```
+
+#### 2. Internationalization Improvements
+
+```typescript
+// Custom date format patterns
+import { CustomDateFormatService } from "ngxsmk-datepicker";
+
+customFormat.format(date, "YYYY-MM-DD HH:mm:ss", "en-US");
+
+// Locale-aware number formatting
+import { formatLocaleNumber } from "ngxsmk-datepicker/utils";
+
+formatLocaleNumber(42, "de-DE"); // "42"
+```
+
+#### 3. Animation API
+
+```typescript
+// Configure animations
+<ngxsmk-datepicker
+  [animationConfig]="{
+    duration: 200,
+    easing: 'ease-in-out',
+    enabled: true
+  }"
+></ngxsmk-datepicker>
+
+// Respects prefers-reduced-motion automatically
+```
+
+#### 4. Multi-Calendar Sync Scrolling
+
+```typescript
+// Synchronized scrolling for multi-calendar layouts
+<ngxsmk-datepicker
+  [calendarCount]="2"
+  [syncScroll]="true"
+  [monthGap]="1"
+></ngxsmk-datepicker>
+```
+
+### Performance Improvements
+
+#### 1. Virtual Scrolling
+
+Year and decade views now use virtual scrolling for better performance with large date ranges:
+
+```typescript
+// Automatically enabled for year/decade views
+// Handles 100+ years efficiently
+<ngxsmk-datepicker [currentView]="'year'"></ngxsmk-datepicker>
+```
+
+#### 2. Signal-Based Reactivity
+
+Change detection is now automatic and more efficient:
+
+```typescript
+// Automatically optimized - no manual change detection needed
+component.selectedDate.set(new Date());
+```
+
+#### 3. Lazy Loading
+
+Multi-month calendars are now lazily rendered:
+
+```typescript
+// Only visible calendars + buffer are rendered
+<ngxsmk-datepicker [calendarCount]="12"></ngxsmk-datepicker>
+```
+
+### Testing Infrastructure
+
+New testing utilities are available:
+
+```typescript
+// Accessibility testing
+import { runAccessibilityScan } from "ngxsmk-datepicker/testing";
+
+// Performance benchmarking
+import { measureSync, benchmark } from "ngxsmk-datepicker/testing";
+
+// Visual regression testing
+import { captureElementScreenshot, compareImageData } from "ngxsmk-datepicker/testing";
+```
+
+### Documentation Updates
+
+- ✅ Complete API reference with JSDoc
+- ✅ Enhanced accessibility guide
+- ✅ Performance testing guide
+- ✅ Visual regression testing guide
+- ✅ Improvement report
 
 ### Migration Steps
 
-No specific migration steps are required for this update.
+1. **Update Angular** (if needed):
+
+   ```bash
+   ng update @angular/core@17 @angular/cli@17
+   ```
+
+2. **Update ngxsmk-datepicker**:
+
+   ```bash
+   npm install ngxsmk-datepicker@2.0.0
+   ```
+
+3. **Replace deprecated properties**:
+
+   ```typescript
+   // Replace numberOfMonths with calendarCount
+   [numberOfMonths]="2" → [calendarCount]="2"
+   ```
+
+4. **Update imports** (if using internal services):
+
+   ```typescript
+   // Use public APIs instead of internal methods
+   import { CalendarGenerationService } from "ngxsmk-datepicker";
+   ```
+
+5. **Test thoroughly**:
+   - Test all date selection modes
+   - Test time selection
+   - Test keyboard navigation
+   - Test mobile interactions
+   - Run accessibility tests
+
+6. **Verify bundle size**:
+   ```bash
+   ng build --prod
+   # Check bundle analyzer if needed
+   ```
+
+### Rollback Instructions
+
+If you encounter issues, you can rollback to v1.9.30:
+
+```bash
+npm install ngxsmk-datepicker@1.9.30
+```
+
+### Support
+
+For migration issues or questions:
+
+- Check the [README](README.md) for updated examples
+- Review [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md) for architectural changes
+- Open an issue on GitHub with migration questions
+
+---
 
 ## v1.9.29 → v1.9.30
 
@@ -281,7 +553,6 @@ npm install ngxsmk-datepicker@1.9.23
 
 None in v1.9.23.
 
-
 ## v1.9.21 → v1.9.22
 
 ### Installation
@@ -346,6 +617,7 @@ Version 1.9.21 introduces comprehensive mobile optimization:
 ```
 
 **New Inputs:**
+
 - `useNativePicker`: Enable native date picker on mobile devices
 - `autoDetectMobile`: Automatically detect mobile devices (default: `true`)
 - `mobileModalStyle`: Choose modal style (`'bottom-sheet'`, `'center'`, `'fullscreen'`)
@@ -382,6 +654,7 @@ Seconds selection is now available:
 ```
 
 **New Inputs:**
+
 - `showSeconds`: Show seconds selector in time picker
 - `secondInterval`: Interval for seconds selection (default: `1`)
 
@@ -442,6 +715,7 @@ None in v1.9.16.
 ## v1.9.20 → v1.9.21
 
 ### Changed
+
 - **Version Update**: Updated to version 1.9.21
 - **Stable Release**: Version 1.9.21 is the current stable version
 
@@ -452,18 +726,22 @@ npm install ngxsmk-datepicker@1.9.21
 ```
 
 ### Breaking Changes
+
 None in v1.9.21.
 
 ### Deprecations
+
 None in v1.9.21.
 
 ### Migration Steps
+
 - This version maintains full backward compatibility with v1.9.20. All existing code will continue to work without modifications.
 - No code changes required.
 
 ## v1.9.19 → v1.9.20
 
 ### Fixed
+
 - **Test Environment Compatibility (Issue #71)**: Fixed `TypeError: window.matchMedia is not a function` error in test environments (jsdom/Vitest)
   - Added error handling for `window.matchMedia` in `applyAnimationConfig()` method
   - Component now gracefully handles missing `matchMedia` API in test environments
@@ -471,6 +749,7 @@ None in v1.9.21.
   - Added comprehensive test coverage for `matchMedia` compatibility scenarios
 
 ### Changed
+
 - **Version Update**: Updated to version 1.9.20
 - **Stable Release**: Version 1.9.20 is the current stable version
 
@@ -481,12 +760,15 @@ npm install ngxsmk-datepicker@1.9.20
 ```
 
 ### Breaking Changes
+
 None in v1.9.20.
 
 ### Deprecations
+
 None in v1.9.20.
 
 ### Migration Steps
+
 - This version maintains full backward compatibility with v1.9.19. All existing code will continue to work without modifications.
 - No code changes required.
 - Fixes test compatibility issues with Vitest and jsdom environments.
@@ -494,6 +776,7 @@ None in v1.9.20.
 ## v1.9.18 → v1.9.19
 
 ### Added
+
 - **Comprehensive Responsive Layout Redesign**: Complete redesign of demo project layout for all screen sizes
   - Redesigned navbar for all breakpoints (320px-374px, 375px-479px, 480px-599px, 600px-767px, 768px-1023px, 1024px+)
   - Enhanced sidebar navigation with mobile drawer, tablet collapsible, and desktop fixed layouts
@@ -502,6 +785,7 @@ None in v1.9.20.
   - Optimized content sections with responsive padding, typography, and spacing
 
 ### Changed
+
 - **Version Update**: Updated to version 1.9.19
 - **Stable Release**: Version 1.9.19 is the current stable version
 - **Meta Tag Update**: Replaced deprecated `apple-mobile-web-app-capable` with `mobile-web-app-capable`
@@ -514,12 +798,15 @@ npm install ngxsmk-datepicker@1.9.19
 ```
 
 ### Breaking Changes
+
 None in v1.9.19.
 
 ### Deprecations
+
 None in v1.9.19.
 
 ### Migration Steps
+
 - This version maintains full backward compatibility with v1.9.18. All existing code will continue to work without modifications.
 - No code changes required.
 - Demo project layout improvements are automatic and require no code changes.
@@ -527,12 +814,14 @@ None in v1.9.19.
 ## v1.9.17 → v1.9.18
 
 ### Fixed
+
 - **Mobile Touch Event Handling**: Improved touch listener attachment when calendar opens on mobile devices
   - Touch listeners now properly attach when calendar first opens, eliminating the need to navigate months first
   - Added retry mechanism with multiple attempts to ensure listeners are attached even on slower mobile devices
   - Improved timing with double `requestAnimationFrame` calls and multiple retry strategies
 
 ### Changed
+
 - **Version Update**: Updated to version 1.9.18
 - **Stable Release**: Version 1.9.18 is the current stable version
 
@@ -543,12 +832,15 @@ npm install ngxsmk-datepicker@1.9.18
 ```
 
 ### Breaking Changes
+
 None in v1.9.18.
 
 ### Deprecations
+
 None in v1.9.18.
 
 ### Migration Steps
+
 - This version maintains full backward compatibility with v1.9.17. All existing code will continue to work without modifications.
 - No code changes required.
 
@@ -670,11 +962,13 @@ All fixes are backward compatible and require no code changes.
 No code changes required. This is a minor version update with backward compatibility:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.12
    ```
 
 2. Rebuild your application:
+
    ```bash
    npm run build
    ```
@@ -700,6 +994,7 @@ No code changes required. This is a minor version update with backward compatibi
 No code changes required. This is a bug fix release:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.11
    ```
@@ -721,6 +1016,7 @@ No code changes required. This is a bug fix release:
 No code changes required. This is a bug fix release:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.10
    ```
@@ -809,6 +1105,7 @@ No code changes required. This is a bug fix release:
 No code changes required. This is a bug fix release:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.5
    ```
@@ -833,16 +1130,14 @@ No code changes required. This is a bug fix release:
 ### Migration Steps
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.4
    ```
 
 2. **Optional**: Use the new `[displayFormat]` input for custom date formatting:
    ```html
-   <ngxsmk-datepicker
-     [displayFormat]="'MM/DD/YYYY hh:mm A'"
-     mode="single">
-   </ngxsmk-datepicker>
+   <ngxsmk-datepicker [displayFormat]="'MM/DD/YYYY hh:mm A'" mode="single"> </ngxsmk-datepicker>
    ```
 
 ## v1.9.2 → v1.9.3
@@ -862,16 +1157,14 @@ No code changes required. This is a bug fix release:
 ### Migration Steps
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.3
    ```
 
 2. **Optional**: Use the new `[timeOnly]` input for time-only selection:
    ```html
-   <ngxsmk-datepicker
-     [timeOnly]="true"
-     placeholder="Select Time">
-   </ngxsmk-datepicker>
+   <ngxsmk-datepicker [timeOnly]="true" placeholder="Select Time"> </ngxsmk-datepicker>
    ```
 
 ## v1.9.1 → v1.9.2
@@ -894,6 +1187,7 @@ No code changes required. This is a bug fix release:
 No code changes required. This is a transparent update with optimizations:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.2
    ```
@@ -907,7 +1201,7 @@ No code changes required. This is a transparent update with optimizations:
 
 ### New Features
 
-*No new features in v1.9.1.*
+_No new features in v1.9.1._
 
 ### Changes
 
@@ -923,6 +1217,7 @@ The library bundle has been further optimized for production:
 - **Package Configuration**: Fixed exports to eliminate build warnings
 
 **For Developers:**
+
 - Use `npm run build:optimized` for production builds
 - Use `npm run build:analyze` to check bundle size
 - Source maps are automatically excluded from the published package
@@ -958,11 +1253,13 @@ None in v1.9.1.
 No code changes required. This is a transparent update with optimizations and bug fixes:
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^1.9.1
    ```
 
 2. Rebuild your application:
+
    ```bash
    npm run build
    ```
@@ -977,6 +1274,7 @@ No code changes required. This is a transparent update with optimizations and bu
    ```
 
 **Note**: If you're a library developer using ngxsmk-datepicker as a dependency, you may notice:
+
 - Smaller bundle sizes in your application
 - Fewer build warnings related to package exports
 - Improved test reliability if you're running tests with Zone.js
@@ -990,19 +1288,21 @@ No code changes required. This is a transparent update with optimizations and bu
 Added comprehensive hook system for customization.
 
 **New Input:**
+
 ```typescript
 hooks: DatepickerHooks | null = null;
 ```
 
 **Usage:**
+
 ```typescript
 const myHooks: DatepickerHooks = {
   getDayCellClasses: (date, isSelected, isDisabled, isToday, isHoliday) => {
-    return isHoliday ? ['custom-holiday'] : [];
+    return isHoliday ? ["custom-holiday"] : [];
   },
   validateDate: (date, currentValue, mode) => {
     return date.getDay() !== 0; // Disable Sundays
-  }
+  },
 };
 ```
 
@@ -1013,6 +1313,7 @@ const myHooks: DatepickerHooks = {
 #### Enhanced Keyboard Shortcuts
 
 New keyboard shortcuts:
+
 - `Y`: Select yesterday
 - `N`: Select tomorrow
 - `W`: Select next week
@@ -1024,12 +1325,14 @@ All animations now use GPU acceleration for better performance. No code changes 
 #### Bundle Optimization
 
 The library bundle has been optimized for production:
+
 - **Bundle Size**: Main bundle is now ~127KB (source maps excluded from published package)
 - **Tree-Shaking**: Enhanced with optimized TypeScript compiler settings
 - **Source Maps**: Automatically removed from production builds (saves ~127KB)
 - **No Breaking Changes**: All optimizations are transparent to end users
 
 **For Developers:**
+
 - Use `npm run build:optimized` for production builds
 - Use `npm run build:analyze` to check bundle size
 - Source maps are automatically excluded from the published package
@@ -1051,6 +1354,7 @@ None in v1.9.0.
 Added `[field]` input for Angular 21+ Signal Forms integration.
 
 **Before:**
+
 ```typescript
 // Using Reactive Forms
 dateControl = new FormControl<DatepickerValue>(null);
@@ -1061,12 +1365,16 @@ dateControl = new FormControl<DatepickerValue>(null);
 ```
 
 **After (Optional - Reactive Forms still work):**
+
 ```typescript
 // Using Signal Forms
 localObject = signal({ date: null as DatepickerValue });
-myForm = form(this.localObject, objectSchema({
-  date: objectSchema<DatepickerValue>()
-}));
+myForm = form(
+  this.localObject,
+  objectSchema({
+    date: objectSchema<DatepickerValue>(),
+  }),
+);
 ```
 
 ```html
@@ -1082,12 +1390,14 @@ The datepicker is now fully SSR-compatible. No code changes required, but ensure
 The `[value]` input now initializes immediately when set programmatically.
 
 **Before:**
+
 ```typescript
 // Value might not initialize immediately
 component.value = new Date();
 ```
 
 **After:**
+
 ```typescript
 // Value initializes immediately
 component.value = new Date();
@@ -1105,11 +1415,12 @@ None in v1.8.0.
 
 ### Planned Breaking Changes
 
-*This section will be updated when v2.0.0 is released.*
+_This section will be updated when v2.0.0 is released._
 
 ### Migration Steps
 
 1. Update package version:
+
    ```bash
    npm install ngxsmk-datepicker@^2.0.0
    ```
@@ -1128,6 +1439,7 @@ Always check `CHANGELOG.md` for detailed changes in each version.
 ### 2. Test Thoroughly
 
 After upgrading:
+
 - Test all datepicker instances in your app
 - Verify form integration still works
 - Check SSR compatibility if applicable
@@ -1137,12 +1449,14 @@ After upgrading:
 ### 3. Update Dependencies
 
 Ensure your Angular version is compatible:
+
 - Check the compatibility table in README.md
 - Update Angular if needed
 
 ### 4. Check TypeScript Errors
 
 New versions may have stricter types:
+
 ```bash
 npm run build
 # Fix any TypeScript errors
@@ -1151,6 +1465,7 @@ npm run build
 ### 5. Review CSS Changes
 
 If you've customized styles:
+
 - Check if CSS class names changed
 - Review CSS custom properties
 - Update selectors if needed
@@ -1170,25 +1485,25 @@ If you encounter issues during migration:
 ## Version Compatibility
 
 | ngxsmk-datepicker | Angular | Node.js |
-|-------------------|---------|---------|
-| 1.9.17+ | 17-22 | 18+ |
-| 1.9.16 | 17-22 | 18+ |
-| 1.9.15 | 17-22 | 18+ |
-| 1.9.14 | 17-22 | 18+ |
-| 1.9.11 | 17-22 | 18+ |
-| 1.9.10 | 17-22 | 18+ |
-| 1.9.9 | 17-22 | 18+ |
-| 1.9.8 | 17-22 | 18+ |
-| 1.9.7 | 17-22 | 18+ |
-| 1.9.6 | 17-22 | 18+ |
-| 1.9.5 | 17-22 | 18+ |
-| 1.9.4 | 17-22 | 18+ |
-| 1.9.3 | 17-22 | 18+ |
-| 1.9.2 | 17-22 | 18+ |
-| 1.9.1 | 17-22 | 18+ |
-| 1.9.0 | 17-22 | 18+ |
-| 1.8.0 | 17-22 | 18+ |
-| 1.7.0 | 17-20 | 18+ |
+| ----------------- | ------- | ------- |
+| 1.9.17+           | 17-22   | 18+     |
+| 1.9.16            | 17-22   | 18+     |
+| 1.9.15            | 17-22   | 18+     |
+| 1.9.14            | 17-22   | 18+     |
+| 1.9.11            | 17-22   | 18+     |
+| 1.9.10            | 17-22   | 18+     |
+| 1.9.9             | 17-22   | 18+     |
+| 1.9.8             | 17-22   | 18+     |
+| 1.9.7             | 17-22   | 18+     |
+| 1.9.6             | 17-22   | 18+     |
+| 1.9.5             | 17-22   | 18+     |
+| 1.9.4             | 17-22   | 18+     |
+| 1.9.3             | 17-22   | 18+     |
+| 1.9.2             | 17-22   | 18+     |
+| 1.9.1             | 17-22   | 18+     |
+| 1.9.0             | 17-22   | 18+     |
+| 1.8.0             | 17-22   | 18+     |
+| 1.7.0             | 17-20   | 18+     |
 
 ## Deprecation Timeline
 
@@ -1199,8 +1514,8 @@ When APIs are deprecated:
 3. **Removal**: Deprecated API removed in next major version
 
 Example:
+
 - v1.8.0: API deprecated
 - v1.9.0: Still works with deprecation warning
 - v1.9.1: Still works with deprecation warning
 - v2.0.0: Removed
-

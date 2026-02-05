@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay } from '../utils/date.utils';
 import { SignalFormField } from '../services/field-sync.service';
+import { DatePipe } from '@angular/common';
 
 /**
  * Mock Moment.js object for testing
@@ -32,7 +33,7 @@ function createMockMomentObject(date: Date, utcOffset?: number): any {
     },
     toDate: () => date,
     isMoment: () => true,
-    utcOffset: utcOffset !== undefined ? () => utcOffset : undefined
+    utcOffset: utcOffset !== undefined ? () => utcOffset : undefined,
   };
   return momentObj;
 }
@@ -44,6 +45,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent, FormsModule],
+      providers: [DatePipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
@@ -113,7 +115,10 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
       const momentObj = createMockMomentObject(testDate);
 
       // Spy on _normalizeValue to ensure it's called
-      const normalizeValueSpy = spyOn(component as unknown as { _normalizeValue: (v: unknown) => unknown }, '_normalizeValue').and.callThrough();
+      const normalizeValueSpy = spyOn(
+        component as unknown as { _normalizeValue: (v: unknown) => unknown },
+        '_normalizeValue',
+      ).and.callThrough();
 
       component.writeValue(momentObj);
       fixture.detectChanges();
@@ -537,7 +542,7 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
         value: new Date(2025, 0, 15),
         disabled: false,
         setValue: jasmine.createSpy('setValue'),
-        updateValue: jasmine.createSpy('updateValue')
+        updateValue: jasmine.createSpy('updateValue'),
       };
 
       component.field = mockField as unknown as SignalFormField;
@@ -555,4 +560,3 @@ describe('NgxsmkDatepickerComponent - v1.9.15 Fixes', () => {
     });
   });
 });
-

@@ -40,7 +40,7 @@ describe('HapticFeedbackService', () => {
 
       service.light();
 
-      expect(vibrateSpy).toHaveBeenCalledWith(10);
+      expect(vibrateSpy).toHaveBeenCalledWith(5);
     });
 
     it('should not throw when vibration is not supported', () => {
@@ -64,7 +64,7 @@ describe('HapticFeedbackService', () => {
 
       service.medium();
 
-      expect(vibrateSpy).toHaveBeenCalledWith(20);
+      expect(vibrateSpy).toHaveBeenCalledWith([10, 5, 10]);
     });
 
     it('should not throw when vibration is not supported', () => {
@@ -88,7 +88,7 @@ describe('HapticFeedbackService', () => {
 
       service.heavy();
 
-      expect(vibrateSpy).toHaveBeenCalledWith([30, 10, 30]);
+      expect(vibrateSpy).toHaveBeenCalledWith([15, 30, 15]);
     });
 
     it('should not throw when vibration is not supported', () => {

@@ -8,6 +8,9 @@ export interface DatepickerTranslations {
   clear: string;
   close: string;
   today: string;
+  selectEndDate: string;
+  day: string;
+  days: string;
 
   // Navigation
   previousMonth: string;
@@ -35,6 +38,8 @@ export interface DatepickerTranslations {
   time: string;
   startTime: string;
   endTime: string;
+  from: string; // For time range selection
+  to: string; // For time range selection
 
   // Holiday
   holiday: string;
@@ -62,4 +67,3 @@ export interface DatepickerTranslations {
  * Partial translations - allows overriding only specific keys
  */
 export type PartialDatepickerTranslations = Partial<DatepickerTranslations>;
-

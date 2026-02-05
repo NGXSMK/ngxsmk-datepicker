@@ -16,20 +16,25 @@ import {
   ChangeDetectorRef,
   PLATFORM_ID,
   EffectRef,
+  effect,
   AfterViewInit,
   signal,
+  computed,
   ViewChild,
   isDevMode,
   ApplicationRef,
   EmbeddedViewRef,
   TemplateRef,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser, NgClass, NgTemplateOutlet, DatePipe, DOCUMENT } from '@angular/common';
 import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+  isPlatformBrowser,
+  NgClass,
+  NgTemplateOutlet,
+  DatePipe,
+  DOCUMENT,
+} from '@angular/common';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   getStartOfDay,
   getEndOfDay,
@@ -64,18 +69,34 @@ import { CustomSelectComponent } from './components/custom-select.component';
 import { createDateComparator } from './utils/performance.utils';
 import {
   DatepickerHooks,
-  KeyboardShortcutContext
+  KeyboardShortcutContext,
 } from './interfaces/datepicker-hooks.interface';
-import { DATEPICKER_CONFIG, DatepickerConfig, DEFAULT_ANIMATION_CONFIG, AnimationConfig } from './config/datepicker.config';
+import {
+  DATEPICKER_CONFIG,
+  DatepickerConfig,
+  DEFAULT_ANIMATION_CONFIG,
+  AnimationConfig,
+} from './config/datepicker.config';
 import { FieldSyncService } from './services/field-sync.service';
 import { SignalFormField } from './services/field-sync.service';
 import { LocaleRegistryService } from './services/locale-registry.service';
 import { TranslationRegistryService } from './services/translation-registry.service';
 import { TranslationService } from './services/translation.service';
-import { DatepickerTranslations, PartialDatepickerTranslations } from './interfaces/datepicker-translations.interface';
+import {
+  DatepickerTranslations,
+  PartialDatepickerTranslations,
+} from './interfaces/datepicker-translations.interface';
 import { FocusTrapService } from './services/focus-trap.service';
 import { AriaLiveService } from './services/aria-live.service';
 import { HapticFeedbackService } from './services/haptic-feedback.service';
+import { CalendarGenerationService } from './services/calendar-generation.service';
+import { DatepickerParsingService } from './services/datepicker-parsing.service';
+import {
+  TouchGestureHandlerService,
+  TouchGestureState,
+} from './services/touch-gesture-handler.service';
+import { PopoverPositioningService } from './services/popover-positioning.service';
+import { CustomDateFormatService } from './services/custom-date-format.service';
 import { Subject } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 
@@ -89,91 +110,206 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
     CalendarHeaderComponent,
     CalendarMonthViewComponent,
     CalendarYearViewComponent,
-    TimeSelectionComponent
+    TimeSelectionComponent,
   ],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => NgxsmkDatepickerComponent),
-    multi: true
-  }, FieldSyncService],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NgxsmkDatepickerComponent),
+      multi: true,
+    },
+    FieldSyncService,
+    CalendarGenerationService,
+    DatepickerParsingService,
+    TouchGestureHandlerService,
+    PopoverPositioningService,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./styles/variables.css', './styles/datepicker.css', './styles/keyboard-help.css'],
+  styleUrls: [
+    './styles/variables.css',
+    './styles/datepicker.css',
+    './styles/keyboard-help.css',
+  ],
   template: `
-    <div class="ngxsmk-datepicker-wrapper" [class.ngxsmk-inline-mode]="isInlineMode" [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode" [class.ngxsmk-rtl]="isRtl" [class.ngxsmk-native-picker]="shouldUseNativePicker()" [ngClass]="classes?.wrapper">
+    <div
+      class="ngxsmk-datepicker-wrapper"
+      [class.ngxsmk-inline-mode]="isInlineMode"
+      [class.ngxsmk-calendar-open]="isCalendarOpen && !isInlineMode"
+      [class.ngxsmk-rtl]="isRtl"
+      [class.ngxsmk-native-picker]="shouldUseNativePicker()"
+      [ngClass]="classes?.wrapper"
+    >
       @if (!isInlineMode) {
         @if (shouldUseNativePicker()) {
-          <div class="ngxsmk-input-group ngxsmk-native-input-group" [class.disabled]="disabled" [ngClass]="classes?.inputGroup">
-            <input [type]="getNativeInputType()"
-                   #nativeDateInput
-                   [value]="formatValueForNativeInput(_internalValue)"
-                   [placeholder]="placeholder"
-                   [id]="inputId || _uniqueId"
-                   [name]="name"
-                   [autocomplete]="autocomplete"
-                   [disabled]="disabled"
-                   [required]="required"
-                   [attr.min]="getMinDateForNativeInput()"
-                   [attr.max]="getMaxDateForNativeInput()"
-                   [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
-                   [attr.aria-required]="required"
-                   [attr.aria-invalid]="errorState"
-                   [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
-                   class="ngxsmk-display-input ngxsmk-native-input"
-                   [ngClass]="classes?.input"
-                   (change)="onNativeInputChange($event)"
-                   (blur)="onInputBlur($event)">
+          <div
+            class="ngxsmk-input-group ngxsmk-native-input-group"
+            [class.disabled]="disabled"
+            [ngClass]="classes?.inputGroup"
+          >
+            <input
+              [type]="getNativeInputType()"
+              #nativeDateInput
+              [value]="formatValueForNativeInput(_internalValue)"
+              [placeholder]="placeholder"
+              [id]="inputId || _uniqueId"
+              [name]="name"
+              [autocomplete]="autocomplete"
+              [disabled]="disabled"
+              [required]="required"
+              [attr.min]="getMinDateForNativeInput()"
+              [attr.max]="getMaxDateForNativeInput()"
+              [attr.aria-label]="
+                placeholder ||
+                getTranslation(timeOnly ? 'selectTime' : 'selectDate')
+              "
+              [attr.aria-required]="required"
+              [attr.aria-invalid]="errorState"
+              [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
+              class="ngxsmk-display-input ngxsmk-native-input"
+              [ngClass]="classes?.input"
+              (change)="onNativeInputChange($event)"
+              (blur)="onInputBlur($event)"
+            />
             @if (formatValueForNativeInput(_internalValue)) {
-              <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+              <button
+                type="button"
+                class="ngxsmk-clear-button"
+                (click)="clearValue($event); $event.stopPropagation()"
+                [disabled]="disabled"
+                [attr.aria-label]="_clearAriaLabel"
+                [title]="_clearLabel"
+                [ngClass]="classes?.clearBtn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                    d="M368 368L144 144M368 144L144 368"
+                  />
+                </svg>
               </button>
             }
           </div>
         } @else {
-          <div class="ngxsmk-input-group" (click)="toggleCalendar($event)" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (focus)="onInputGroupFocus()" (keydown.enter)="toggleCalendar($event)" (keydown.space)="toggleCalendar($event); $event.preventDefault()" [class.disabled]="disabled" role="button" [attr.aria-disabled]="disabled" aria-haspopup="dialog" [attr.aria-expanded]="isCalendarOpen" tabindex="0" [ngClass]="classes?.inputGroup">
-            <input type="text" 
-                   #dateInput
-                   [value]="allowTyping ? (typedInputValue || displayValue) : displayValue" 
-                   [placeholder]="placeholder" 
-                   [id]="inputId || _uniqueId"
-                   [name]="name"
-                   [autocomplete]="autocomplete"
-                   [readonly]="!allowTyping"
-                   [disabled]="disabled"
-                   [required]="required"
-                   [attr.aria-label]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
-                   [attr.aria-required]="required"
-                   [attr.aria-invalid]="errorState"
-                   [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
-                   class="ngxsmk-display-input"
-                   [ngClass]="classes?.input"
-                   (keydown.enter)="onInputKeyDown($event)"
-                   (keydown.space)="onInputKeyDown($event)"
-                   (keydown.escape)="onInputKeyDown($event)"
-                   (input)="onInputChange($event)"
-                   (blur)="onInputBlur($event)"
-                   (focus)="onInputFocus($event)">
+          <div
+            class="ngxsmk-input-group"
+            (click)="toggleCalendar($event)"
+            (pointerdown)="onPointerDown($event)"
+            (pointerup)="onPointerUp($event)"
+            (focus)="onInputGroupFocus()"
+            (keydown.enter)="toggleCalendar($event)"
+            (keydown.space)="toggleCalendar($event); $event.preventDefault()"
+            [class.disabled]="disabled"
+            role="button"
+            [attr.aria-disabled]="disabled"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="isCalendarOpen"
+            tabindex="0"
+            [ngClass]="classes?.inputGroup"
+          >
+            <input
+              type="text"
+              #dateInput
+              [value]="
+                allowTyping ? typedInputValue || displayValue : displayValue
+              "
+              [placeholder]="placeholder"
+              [id]="inputId || _uniqueId"
+              [name]="name"
+              [autocomplete]="autocomplete"
+              [readonly]="!allowTyping"
+              [disabled]="disabled"
+              [required]="required"
+              [attr.aria-label]="
+                placeholder ||
+                getTranslation(timeOnly ? 'selectTime' : 'selectDate')
+              "
+              [attr.aria-required]="required"
+              [attr.aria-invalid]="errorState"
+              [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
+              class="ngxsmk-display-input"
+              [ngClass]="classes?.input"
+              (keydown.enter)="onInputKeyDown($event)"
+              (keydown.space)="onInputKeyDown($event)"
+              (keydown.escape)="onInputKeyDown($event)"
+              (input)="onInputChange($event)"
+              (blur)="onInputBlur($event)"
+              (focus)="onInputFocus($event)"
+            />
             @if (displayValue) {
-              <button type="button" class="ngxsmk-clear-button" (click)="clearValue($event); $event.stopPropagation()" (touchstart)="$event.stopPropagation()" (touchend)="$event.stopPropagation()" (pointerdown)="$event.stopPropagation()" (pointerup)="$event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [title]="_clearLabel" [ngClass]="classes?.clearBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M368 368L144 144M368 144L144 368"/></svg>
+              <button
+                type="button"
+                class="ngxsmk-clear-button"
+                (click)="clearValue($event); $event.stopPropagation()"
+                (touchstart)="$event.stopPropagation()"
+                (touchend)="$event.stopPropagation()"
+                (pointerdown)="$event.stopPropagation()"
+                (pointerup)="$event.stopPropagation()"
+                [disabled]="disabled"
+                [attr.aria-label]="_clearAriaLabel"
+                [title]="_clearLabel"
+                [ngClass]="classes?.clearBtn"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                    d="M368 368L144 144M368 144L144 368"
+                  />
+                </svg>
               </button>
             }
             @if (showCalendarButton) {
-              <button type="button" class="ngxsmk-calendar-button" (click)="toggleCalendar($event); $event.stopPropagation()" [disabled]="disabled" [attr.aria-label]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')" [ngClass]="classes?.calendarBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"/></svg>
+              <button
+                type="button"
+                class="ngxsmk-calendar-button"
+                (click)="toggleCalendar($event); $event.stopPropagation()"
+                [disabled]="disabled"
+                [attr.aria-label]="
+                  getTranslation(timeOnly ? 'selectTime' : 'selectDate')
+                "
+                [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+                [ngClass]="classes?.calendarBtn"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                    d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"
+                  />
+                </svg>
               </button>
             }
           </div>
         }
       }
 
-
-      
       <ng-template #portalContent>
         @if (isCalendarVisible) {
           @if (!isInlineMode && isCalendarOpen) {
             <div
               class="ngxsmk-backdrop"
+              [class.dark-theme]="theme === 'dark'"
               role="button"
               tabindex="0"
               [attr.aria-label]="getTranslation('closeCalendarOverlay')"
@@ -182,46 +318,101 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
               (keydown.space)="onBackdropInteract($event)"
             ></div>
           }
-          <div #popoverContainer class="ngxsmk-popover-container" 
-               [class.ngxsmk-inline-container]="isInlineMode" 
-               [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode" 
-               [class.ngxsmk-time-only-popover]="timeOnly" 
-               [class.ngxsmk-has-time-selection]="showTime || timeOnly"
-               [class.ngxsmk-bottom-sheet]="isMobileDevice() && mobileModalStyle === 'bottom-sheet' && !isInlineMode"
-               [class.ngxsmk-fullscreen]="isMobileDevice() && mobileModalStyle === 'fullscreen' && !isInlineMode"
-               [ngClass]="classes?.popover" 
-               role="dialog" 
-               [attr.aria-label]="getCalendarAriaLabel()" 
-               [attr.aria-modal]="!isInlineMode"
-               (touchstart)="onBottomSheetTouchStart($event)"
-               (touchmove)="onBottomSheetTouchMove($event)"
-               (touchend)="onBottomSheetTouchEnd($event)">
-            <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
-              @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
+          <div
+            #popoverContainer
+            class="ngxsmk-popover-container"
+            [class.dark-theme]="theme === 'dark'"
+            [class.ngxsmk-inline-container]="isInlineMode"
+            [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode"
+            [class.ngxsmk-time-only-popover]="timeOnly"
+            [class.ngxsmk-has-time-selection]="showTime || timeOnly"
+            [class.ngxsmk-bottom-sheet]="
+              isMobileDevice() &&
+              mobileModalStyle === 'bottom-sheet' &&
+              !isInlineMode
+            "
+            [class.ngxsmk-fullscreen]="
+              isMobileDevice() &&
+              mobileModalStyle === 'fullscreen' &&
+              !isInlineMode
+            "
+            [class.ngxsmk-align-left]="align === 'left'"
+            [class.ngxsmk-align-right]="align === 'right'"
+            [class.ngxsmk-align-center]="align === 'center'"
+            [ngClass]="classes?.popover"
+            role="dialog"
+            [attr.aria-label]="getCalendarAriaLabel()"
+            [attr.aria-modal]="!isInlineMode"
+            (touchstart)="onBottomSheetTouchStart($event)"
+            (touchmove)="onBottomSheetTouchMove($event)"
+            (touchend)="onBottomSheetTouchEnd($event)"
+          >
+            <div
+              class="ngxsmk-datepicker-container"
+              [ngClass]="classes?.container"
+            >
+              @if (
+                mode === 'range' && (startDate || hoveredDate) && !timeOnly
+              ) {
+                <div class="ngxsmk-range-duration-header">
+                  <span class="ngxsmk-duration-text">{{
+                    calculateRangeDuration()
+                  }}</span>
+                </div>
+              }
+              @if (
+                showRanges &&
+                rangesArray.length > 0 &&
+                mode === 'range' &&
+                !timeOnly
+              ) {
                 <div class="ngxsmk-ranges-container">
                   <ul>
-                    @for (range of rangesArray; track trackByRange($index, range)) {
-                      <li (click)="selectRange(range.value)" (keydown.enter)="selectRange(range.value)" (keydown.space)="selectRange(range.value); $event.preventDefault()" [class.disabled]="disabled" [attr.tabindex]="disabled ? -1 : 0" role="button" [attr.aria-disabled]="disabled">{{ range.key }}</li>
+                    @for (
+                      range of rangesArray;
+                      track trackByRange($index, range)
+                    ) {
+                      <li
+                        (click)="selectRange(range.value)"
+                        (keydown.enter)="selectRange(range.value)"
+                        (keydown.space)="
+                          selectRange(range.value); $event.preventDefault()
+                        "
+                        [class.disabled]="disabled"
+                        [attr.tabindex]="disabled ? -1 : 0"
+                        role="button"
+                        [attr.aria-disabled]="disabled"
+                      >
+                        {{ range.key }}
+                      </li>
                     }
                   </ul>
                 </div>
               }
-              <div class="ngxsmk-calendar-container" 
-                   [class.ngxsmk-time-only-mode]="timeOnly"
-                   [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
-                   [class.ngxsmk-calendar-layout-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
-                   [class.ngxsmk-calendar-layout-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
-                   [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
-                   [ngClass]="classes?.calendar">
+              <div
+                class="ngxsmk-calendar-container"
+                [class.ngxsmk-time-only-mode]="timeOnly"
+                [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
+                [class.ngxsmk-calendar-layout-horizontal]="
+                  calendarCount > 1 && calendarLayout === 'horizontal'
+                "
+                [class.ngxsmk-calendar-layout-vertical]="
+                  calendarCount > 1 && calendarLayout === 'vertical'
+                "
+                [class.ngxsmk-calendar-layout-auto]="
+                  calendarCount > 1 && calendarLayout === 'auto'
+                "
+                [ngClass]="classes?.calendar"
+              >
                 @if (!timeOnly) {
                   @if (calendarViewMode === 'month') {
                     <ngxsmk-calendar-header
                       [headerClass]="classes?.header ?? ''"
                       [navPrevClass]="classes?.navPrev ?? ''"
                       [navNextClass]="classes?.navNext ?? ''"
-                      [monthOptions]="monthOptions"
+                      [monthOptions]="monthOptions()"
                       [(currentMonth)]="currentMonth"
-                      [yearOptions]="yearOptions"
+                      [yearOptions]="yearOptions()"
                       [(currentYear)]="currentYear"
                       [disabled]="disabled"
                       [isBackArrowDisabled]="isBackArrowDisabled"
@@ -229,62 +420,99 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                       [nextMonthAriaLabel]="_nextMonthAriaLabel"
                       (previousMonth)="changeMonth(-1)"
                       (nextMonth)="changeMonth(1)"
-                      (currentYearChange)="onYearSelectChange($event)">
+                      (currentYearChange)="onYearSelectChange($event)"
+                    >
                     </ngxsmk-calendar-header>
-                  <div class="ngxsmk-multi-calendar-container" 
-                       [class.ngxsmk-multi-calendar]="calendarCount > 1"
-                       [class.ngxsmk-calendar-horizontal]="calendarCount > 1 && calendarLayout === 'horizontal'"
-                       [class.ngxsmk-calendar-vertical]="calendarCount > 1 && calendarLayout === 'vertical'"
-                       [class.ngxsmk-calendar-auto]="calendarCount > 1 && calendarLayout === 'auto'">
-                    @for (calendarMonth of multiCalendarMonths; track trackByCalendarMonth($index, calendarMonth)) {
-                      <div class="ngxsmk-calendar-month" [class.ngxsmk-calendar-month-multi]="calendarCount > 1">
-                        @if (calendarCount > 1) {
-                          <div class="ngxsmk-calendar-month-header">
-                            <span class="ngxsmk-calendar-month-title">{{ getMonthYearLabel(calendarMonth.month, calendarMonth.year) }}</span>
-                          </div>
-                        }
-                        <ngxsmk-calendar-month-view
-                          [days]="calendarMonth.days"
-                          [weekDays]="weekDays"
-                          [classes]="classes"
-                          [mode]="mode"
-                          [selectedDate]="selectedDate"
-                          [startDate]="startDate"
-                          [endDate]="endDate"
-                          [focusedDate]="focusedDate"
-                          [today]="today"
-                          [currentMonth]="calendarMonth.month"
-                          [currentYear]="calendarMonth.year"
-                          [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
-                          
-                          [isDateDisabled]="boundIsDateDisabled"
-                          [isSameDay]="boundIsSameDay"
-                          [isHoliday]="boundIsHoliday"
-                          [isMultipleSelected]="boundIsMultipleSelected"
-                          [isInRange]="boundIsInRange"
-                          [isPreviewInRange]="boundIsPreviewInRange"
-                          [getAriaLabel]="boundGetAriaLabel"
-                          [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
-                          [getDayCellTooltip]="boundGetDayCellTooltip"
-                          [formatDayNumber]="boundFormatDayNumber"
-                          
-                          (dateClick)="onDateClick($event)"
-                          (dateHover)="onDateHover($event)"
-                          (dateFocus)="onDateFocus($event)"
-                          
-                          (swipeStart)="onCalendarSwipeStart($event)"
-                          (swipeMove)="onCalendarSwipeMove($event)"
-                          (swipeEnd)="onCalendarSwipeEnd($event)"
-                          
-                          (touchStart)="onDateCellTouchStart($event.event, $event.day)"
-                          (touchMove)="onDateCellTouchMove($event)"
-                          (touchEnd)="onDateCellTouchEnd($event.event, $event.day)">
-                        </ngxsmk-calendar-month-view>
-                      </div>
-                    }
-                  </div>
+                    <div
+                      class="ngxsmk-multi-calendar-container"
+                      [class.ngxsmk-multi-calendar]="calendarCount > 1"
+                      [class.ngxsmk-calendar-horizontal]="
+                        calendarCount > 1 && calendarLayout === 'horizontal'
+                      "
+                      [class.ngxsmk-calendar-vertical]="
+                        calendarCount > 1 && calendarLayout === 'vertical'
+                      "
+                      [class.ngxsmk-calendar-auto]="
+                        calendarCount > 1 && calendarLayout === 'auto'
+                      "
+                      [class.ngxsmk-sync-scroll-enabled]="
+                        syncScroll.enabled && calendarCount > 1
+                      "
+                    >
+                      @for (
+                        calendarMonth of renderedCalendars();
+                        track trackByCalendarMonth($index, calendarMonth)
+                      ) {
+                        <div
+                          class="ngxsmk-calendar-month"
+                          [attr.data-calendar-index]="
+                            multiCalendarMonths.indexOf(calendarMonth)
+                          "
+                          [class.ngxsmk-calendar-month-multi]="
+                            calendarCount > 1
+                          "
+                        >
+                          @if (calendarCount > 1) {
+                            <div class="ngxsmk-calendar-month-header">
+                              <span class="ngxsmk-calendar-month-title">{{
+                                getMonthYearLabel(
+                                  calendarMonth.month,
+                                  calendarMonth.year
+                                )
+                              }}</span>
+                            </div>
+                          }
+                          <ngxsmk-calendar-month-view
+                            [days]="calendarMonth.days"
+                            [weekDays]="weekDays"
+                            [classes]="classes"
+                            [mode]="mode"
+                            [selectedDate]="selectedDate"
+                            [startDate]="startDate"
+                            [endDate]="endDate"
+                            [focusedDate]="focusedDate"
+                            [today]="today"
+                            [currentMonth]="calendarMonth.month"
+                            [currentYear]="calendarMonth.year"
+                            [ariaLabel]="
+                              getCalendarAriaLabelForMonth(
+                                calendarMonth.month,
+                                calendarMonth.year
+                              )
+                            "
+                            [dateTemplate]="dateTemplate"
+                            [isDateDisabled]="boundIsDateDisabled"
+                            [isSameDay]="boundIsSameDay"
+                            [isHoliday]="boundIsHoliday"
+                            [isMultipleSelected]="boundIsMultipleSelected"
+                            [isInRange]="boundIsInRange"
+                            [isPreviewInRange]="boundIsPreviewInRange"
+                            [getAriaLabel]="boundGetAriaLabel"
+                            [getDayCellCustomClasses]="
+                              boundGetDayCellCustomClasses
+                            "
+                            [getDayCellTooltip]="boundGetDayCellTooltip"
+                            [formatDayNumber]="boundFormatDayNumber"
+                            (dateClick)="onDateClick($event)"
+                            (dateHover)="onDateHover($event)"
+                            (dateFocus)="onDateFocus($event)"
+                            (swipeStart)="onCalendarSwipeStart($event)"
+                            (swipeMove)="onCalendarSwipeMove($event)"
+                            (swipeEnd)="onCalendarSwipeEnd($event)"
+                            (touchStart)="
+                              onDateCellTouchStart($event.event, $event.day)
+                            "
+                            (touchMove)="onDateCellTouchMove($event)"
+                            (touchEnd)="
+                              onDateCellTouchEnd($event.event, $event.day)
+                            "
+                          >
+                          </ngxsmk-calendar-month-view>
+                        </div>
+                      }
+                    </div>
                   }
-                  
+
                   @if (calendarViewMode === 'year') {
                     <ngxsmk-calendar-year-view
                       viewMode="year"
@@ -300,10 +528,11 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                       [nextYearsLabel]="getTranslation('nextYears')"
                       (viewModeChange)="calendarViewMode = $event"
                       (changeYear)="changeYear($event)"
-                      (yearClick)="onYearClick($event)">
+                      (yearClick)="onYearClick($event)"
+                    >
                     </ngxsmk-calendar-year-view>
                   }
-                  
+
                   @if (calendarViewMode === 'decade') {
                     <ngxsmk-calendar-year-view
                       viewMode="decade"
@@ -316,97 +545,212 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
                       [previousDecadeLabel]="getTranslation('previousDecade')"
                       [nextDecadeLabel]="getTranslation('nextDecade')"
                       (changeDecade)="changeDecade($event)"
-                      (decadeClick)="onDecadeClick($event)">
+                      (decadeClick)="onDecadeClick($event)"
+                    >
                     </ngxsmk-calendar-year-view>
                   }
-                  
+
                   @if (calendarViewMode === 'timeline' && mode === 'range') {
                     <div class="ngxsmk-timeline-view">
                       <div class="ngxsmk-timeline-header">
                         <div class="ngxsmk-timeline-controls">
-                          <button type="button" class="ngxsmk-timeline-zoom-out" (click)="timelineZoomOut()" [disabled]="disabled">-</button>
-                          <span class="ngxsmk-timeline-range">{{ timelineStartDate | date:'shortDate' }} - {{ timelineEndDate | date:'shortDate' }}</span>
-                          <button type="button" class="ngxsmk-timeline-zoom-in" (click)="timelineZoomIn()" [disabled]="disabled">+</button>
+                          <button
+                            type="button"
+                            class="ngxsmk-timeline-zoom-out"
+                            (click)="timelineZoomOut()"
+                            [disabled]="disabled"
+                          >
+                            -
+                          </button>
+                          <span class="ngxsmk-timeline-range"
+                            >{{ timelineStartDate | date: 'shortDate' }} -
+                            {{ timelineEndDate | date: 'shortDate' }}</span
+                          >
+                          <button
+                            type="button"
+                            class="ngxsmk-timeline-zoom-in"
+                            (click)="timelineZoomIn()"
+                            [disabled]="disabled"
+                          >
+                            +
+                          </button>
                         </div>
                       </div>
                       <div class="ngxsmk-timeline-container" #timelineContainer>
                         <div class="ngxsmk-timeline-track">
-                          @for (month of timelineMonths; track month.getTime()) {
-                            <div class="ngxsmk-timeline-month" 
-                                 [class.selected]="isTimelineMonthSelected(month)"
-                                 (click)="onTimelineMonthClick(month); $event.stopPropagation()"
-                                 (keydown.enter)="onTimelineMonthClick(month)"
-                                 (keydown.space)="onTimelineMonthClick(month); $event.preventDefault()"
-                                 role="button"
-                                 tabindex="0"
-                                 [attr.aria-label]="month | date:'MMMM yyyy'">
-                              <div class="ngxsmk-timeline-month-label">{{ month | date:'MMM' }}</div>
-                              <div class="ngxsmk-timeline-month-year">{{ month | date:'yyyy' }}</div>
+                          @for (
+                            month of timelineMonths;
+                            track month.getTime()
+                          ) {
+                            <div
+                              class="ngxsmk-timeline-month"
+                              [class.selected]="isTimelineMonthSelected(month)"
+                              (click)="
+                                onTimelineMonthClick(month);
+                                $event.stopPropagation()
+                              "
+                              (keydown.enter)="onTimelineMonthClick(month)"
+                              (keydown.space)="
+                                onTimelineMonthClick(month);
+                                $event.preventDefault()
+                              "
+                              role="button"
+                              tabindex="0"
+                              [attr.aria-label]="month | date: 'MMMM yyyy'"
+                            >
+                              <div class="ngxsmk-timeline-month-label">
+                                {{ month | date: 'MMM' }}
+                              </div>
+                              <div class="ngxsmk-timeline-month-year">
+                                {{ month | date: 'yyyy' }}
+                              </div>
                             </div>
                           }
                         </div>
                       </div>
                     </div>
                   }
-                  
-                  @if (calendarViewMode === 'time-slider' && mode === 'range' && showTime) {
+
+                  @if (
+                    calendarViewMode === 'time-slider' &&
+                    mode === 'range' &&
+                    showTime
+                  ) {
                     <div class="ngxsmk-time-slider-view">
                       <div class="ngxsmk-time-slider-header">
-                        <div class="ngxsmk-time-slider-label">{{ getTranslation('startTime') }}</div>
-                        <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(startTimeSlider) }}</div>
+                        <div class="ngxsmk-time-slider-label">
+                          {{ getTranslation('startTime') }}
+                        </div>
+                        <div class="ngxsmk-time-slider-value">
+                          {{ formatTimeSliderValue(startTimeSlider) }}
+                        </div>
                       </div>
                       <div class="ngxsmk-time-slider-container">
-                        <input type="range" 
-                               class="ngxsmk-time-slider"
-                               [min]="0"
-                               [max]="1440"
-                               [step]="minuteInterval"
-                               [value]="startTimeSlider"
-                               (input)="onStartTimeSliderChange(+($any($event.target).value))"
-                               [disabled]="disabled">
+                        <input
+                          #startTimeInput
+                          type="range"
+                          class="ngxsmk-time-slider"
+                          [min]="0"
+                          [max]="1440"
+                          [step]="minuteInterval"
+                          [value]="startTimeSlider"
+                          (input)="
+                            onStartTimeSliderChange(+startTimeInput.value)
+                          "
+                          [disabled]="disabled"
+                        />
                       </div>
                       <div class="ngxsmk-time-slider-header">
-                        <div class="ngxsmk-time-slider-label">{{ getTranslation('endTime') }}</div>
-                        <div class="ngxsmk-time-slider-value">{{ formatTimeSliderValue(endTimeSlider) }}</div>
+                        <div class="ngxsmk-time-slider-label">
+                          {{ getTranslation('endTime') }}
+                        </div>
+                        <div class="ngxsmk-time-slider-value">
+                          {{ formatTimeSliderValue(endTimeSlider) }}
+                        </div>
                       </div>
                       <div class="ngxsmk-time-slider-container">
-                        <input type="range" 
-                               class="ngxsmk-time-slider"
-                               [min]="0"
-                               [max]="1440"
-                               [step]="minuteInterval"
-                               [value]="endTimeSlider"
-                               (input)="onEndTimeSliderChange(+($any($event.target).value))"
-                               [disabled]="disabled">
+                        <input
+                          #endTimeInput
+                          type="range"
+                          class="ngxsmk-time-slider"
+                          [min]="0"
+                          [max]="1440"
+                          [step]="minuteInterval"
+                          [value]="endTimeSlider"
+                          (input)="onEndTimeSliderChange(+endTimeInput.value)"
+                          [disabled]="disabled"
+                        />
                       </div>
                     </div>
                   }
                 }
 
                 @if (showTime || timeOnly) {
-                  <ngxsmk-time-selection
-                    [hourOptions]="hourOptions"
-                    [minuteOptions]="minuteOptions"
-                    [secondOptions]="secondOptions"
-                    [ampmOptions]="ampmOptions"
-                    [(currentDisplayHour)]="currentDisplayHour"
-                    [(currentMinute)]="currentMinute"
-                    [(currentSecond)]="currentSecond"
-                    [(isPm)]="isPm"
-                    [showSeconds]="showSeconds"
-                    [disabled]="disabled"
-                    [timeLabel]="getTranslation('time')"
-                    [showAmpm]="!use24Hour"
-                    (timeChange)="timeChange()">
-                  </ngxsmk-time-selection>
+                  @if (!timeRangeMode) {
+                    <ngxsmk-time-selection
+                      [hourOptions]="hourOptions"
+                      [minuteOptions]="minuteOptions"
+                      [secondOptions]="secondOptions"
+                      [ampmOptions]="ampmOptions"
+                      [(currentDisplayHour)]="currentDisplayHour"
+                      [(currentMinute)]="currentMinute"
+                      [(currentSecond)]="currentSecond"
+                      [(isPm)]="isPm"
+                      [showSeconds]="showSeconds"
+                      [disabled]="disabled"
+                      [timeLabel]="getTranslation('time')"
+                      [showAmpm]="!use24Hour"
+                      (timeChange)="timeChange()"
+                    >
+                    </ngxsmk-time-selection>
+                  } @else {
+                    <div class="ngxsmk-time-range-container">
+                      <div class="ngxsmk-time-range-start">
+                        <span class="ngxsmk-time-range-label">{{
+                          getTranslation('from')
+                        }}</span>
+                        <ngxsmk-time-selection
+                          [hourOptions]="hourOptions"
+                          [minuteOptions]="minuteOptions"
+                          [secondOptions]="secondOptions"
+                          [ampmOptions]="ampmOptions"
+                          [(currentDisplayHour)]="startDisplayHour"
+                          [(currentMinute)]="startMinute"
+                          [(currentSecond)]="startSecond"
+                          [(isPm)]="startIsPm"
+                          [showSeconds]="showSeconds"
+                          [disabled]="disabled"
+                          timeLabel=""
+                          [showAmpm]="!use24Hour"
+                          (timeChange)="timeRangeChange()"
+                        >
+                        </ngxsmk-time-selection>
+                      </div>
+                      <div class="ngxsmk-time-range-end">
+                        <span class="ngxsmk-time-range-label">{{
+                          getTranslation('to')
+                        }}</span>
+                        <ngxsmk-time-selection
+                          [hourOptions]="hourOptions"
+                          [minuteOptions]="minuteOptions"
+                          [secondOptions]="secondOptions"
+                          [ampmOptions]="ampmOptions"
+                          [(currentDisplayHour)]="endDisplayHour"
+                          [(currentMinute)]="endMinute"
+                          [(currentSecond)]="endSecond"
+                          [(isPm)]="endIsPm"
+                          [showSeconds]="showSeconds"
+                          [disabled]="disabled"
+                          timeLabel=""
+                          [showAmpm]="!use24Hour"
+                          (timeChange)="timeRangeChange()"
+                        >
+                        </ngxsmk-time-selection>
+                      </div>
+                    </div>
+                  }
                 }
-                
+
                 @if (!isInlineMode) {
                   <div class="ngxsmk-footer" [ngClass]="classes?.footer">
-                    <button type="button" class="ngxsmk-clear-button-footer" (click)="clearValue($event)" [disabled]="disabled" [attr.aria-label]="_clearAriaLabel" [ngClass]="classes?.clearBtn">
+                    <button
+                      type="button"
+                      class="ngxsmk-clear-button-footer"
+                      (click)="clearValue($event)"
+                      [disabled]="disabled"
+                      [attr.aria-label]="_clearAriaLabel"
+                      [ngClass]="classes?.clearBtn"
+                    >
                       {{ _clearLabel }}
                     </button>
-                    <button type="button" class="ngxsmk-close-button" (click)="closeCalendarWithFocusRestore()" [disabled]="disabled" [attr.aria-label]="_closeAriaLabel" [ngClass]="classes?.closeBtn">
+                    <button
+                      type="button"
+                      class="ngxsmk-close-button"
+                      (click)="closeCalendarWithFocusRestore()"
+                      [disabled]="disabled"
+                      [attr.aria-label]="_closeAriaLabel"
+                      [ngClass]="classes?.closeBtn"
+                    >
                       {{ _closeLabel }}
                     </button>
                   </div>
@@ -421,38 +765,89 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
         <ng-container *ngTemplateOutlet="portalContent"></ng-container>
       }
       @if (isKeyboardHelpOpen) {
-        <div class="ngxsmk-keyboard-help-backdrop" (click)="toggleKeyboardHelp()" (keydown.enter)="toggleKeyboardHelp()" (keydown.space)="toggleKeyboardHelp()" tabindex="0" role="button" [attr.aria-label]="getTranslation('closeCalendarOverlay')"></div>
-        <div class="ngxsmk-keyboard-help-dialog" role="dialog" aria-modal="true" [attr.aria-label]="getTranslation('keyboardShortcuts')">
+        <div
+          class="ngxsmk-keyboard-help-backdrop"
+          (click)="toggleKeyboardHelp()"
+          (keydown.enter)="toggleKeyboardHelp()"
+          (keydown.space)="toggleKeyboardHelp()"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="getTranslation('closeCalendarOverlay')"
+        ></div>
+        <div
+          class="ngxsmk-keyboard-help-dialog"
+          role="dialog"
+          aria-modal="true"
+          [attr.aria-label]="getTranslation('keyboardShortcuts')"
+        >
           <div class="ngxsmk-keyboard-help-header">
-            <h3 class="ngxsmk-keyboard-help-title">{{ getTranslation('keyboardShortcuts') }}</h3>
-            <button type="button" class="ngxsmk-keyboard-help-close" (click)="toggleKeyboardHelp()" [attr.aria-label]="getTranslation('close')">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <h3 class="ngxsmk-keyboard-help-title">
+              {{ getTranslation('keyboardShortcuts') }}
+            </h3>
+            <button
+              type="button"
+              class="ngxsmk-keyboard-help-close"
+              (click)="toggleKeyboardHelp()"
+              [attr.aria-label]="getTranslation('close')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           </div>
           <ul class="ngxsmk-keyboard-help-list">
             <li class="ngxsmk-keyboard-help-item">
               <span>Next/Prev day</span>
-              <div><span class="ngxsmk-keyboard-key">←</span> <span class="ngxsmk-keyboard-key">→</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">←</span>
+                <span class="ngxsmk-keyboard-key">→</span>
+              </div>
             </li>
             <li class="ngxsmk-keyboard-help-item">
               <span>Next/Prev week</span>
-              <div><span class="ngxsmk-keyboard-key">↑</span> <span class="ngxsmk-keyboard-key">↓</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">↑</span>
+                <span class="ngxsmk-keyboard-key">↓</span>
+              </div>
             </li>
             <li class="ngxsmk-keyboard-help-item">
               <span>Select date</span>
-              <div><span class="ngxsmk-keyboard-key">Enter</span> <span class="ngxsmk-keyboard-key">Space</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">Enter</span>
+                <span class="ngxsmk-keyboard-key">Space</span>
+              </div>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Next/Prev month</span>
-              <div><span class="ngxsmk-keyboard-key">PgUp</span> <span class="ngxsmk-keyboard-key">PgDn</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">PgUp</span>
+                <span class="ngxsmk-keyboard-key">PgDn</span>
+              </div>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Next/Prev year</span>
-              <div><span class="ngxsmk-keyboard-key">Shift</span> + <span class="ngxsmk-keyboard-key">PgUp/Dn</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">Shift</span> +
+                <span class="ngxsmk-keyboard-key">PgUp/Dn</span>
+              </div>
             </li>
             <li class="ngxsmk-keyboard-help-item">
               <span>First/Last day</span>
-              <div><span class="ngxsmk-keyboard-key">Home</span> <span class="ngxsmk-keyboard-key">End</span></div>
+              <div>
+                <span class="ngxsmk-keyboard-key">Home</span>
+                <span class="ngxsmk-keyboard-key">End</span>
+              </div>
             </li>
             <li class="ngxsmk-keyboard-help-item">
               <span>Close calendar</span>
@@ -462,19 +857,19 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
               <span>Today</span>
               <span class="ngxsmk-keyboard-key">T</span>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Yesterday</span>
               <span class="ngxsmk-keyboard-key">Y</span>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Tomorrow</span>
               <span class="ngxsmk-keyboard-key">N</span>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Next Week</span>
               <span class="ngxsmk-keyboard-key">W</span>
             </li>
-             <li class="ngxsmk-keyboard-help-item">
+            <li class="ngxsmk-keyboard-help-item">
               <span>Show shortcuts</span>
               <span class="ngxsmk-keyboard-key">?</span>
             </li>
@@ -486,18 +881,18 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 })
 /**
  * A comprehensive, production-ready Angular datepicker component with extensive features.
- * 
+ *
  * @remarks
  * ## Performance Characteristics
- * 
+ *
  * - **Calendar Generation**: O(1) per month when cached, O(n) for first generation where n = days in month
  * - **Date Validation**: O(n) where n = disabledDates.length + disabledRanges.length
  * - **Range Selection**: O(1) for single date, O(n) for multiple selection where n = selectedDates.length
  * - **Change Detection**: Optimized with OnPush strategy and manual scheduling for zoneless compatibility
  * - **Memory Management**: LRU cache for calendar months (max 24 entries), comprehensive cleanup in ngOnDestroy
- * 
+ *
  * ## Key Features
- * 
+ *
  * - Multiple selection modes: single, range, multiple, week, month, quarter, year
  * - Full keyboard navigation and accessibility (WCAG 2.1 AA compliant)
  * - SSR and zoneless Angular compatible
@@ -508,9 +903,9 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
  * - Holiday provider system
  * - Custom hooks for extensibility
  * - Mobile-optimized with touch gestures
- * 
+ *
  * ## Usage Example
- * 
+ *
  * ```typescript
  * // Basic usage
  * <ngxsmk-datepicker
@@ -518,60 +913,76 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
  *   [mode]="'single'"
  *   [locale]="'en-US'">
  * </ngxsmk-datepicker>
- * 
+ *
  * // With Reactive Forms
  * <ngxsmk-datepicker
  *   [formControl]="dateControl"
  *   [minDate]="minDate"
  *   [maxDate]="maxDate">
  * </ngxsmk-datepicker>
- * 
+ *
  * // With Signal Forms (Angular 21+)
  * <ngxsmk-datepicker
  *   [field]="form.field('date')"
  *   [mode]="'range'">
  * </ngxsmk-datepicker>
  * ```
- * 
+ *
  * ## Performance Optimization Tips
- * 
+ *
  * 1. **Large Disabled Date Lists**: For lists >1000 dates, consider using a Set or DateRange tree
  * 2. **Multiple Instances**: The component uses a static registry for efficient instance management
  * 3. **Calendar Caching**: Months are automatically cached (LRU, max 24 entries)
  * 4. **Change Detection**: Uses OnPush strategy - call `markForCheck()` only when needed
  * 5. **Memoization**: Internal memoization optimizes date comparisons and validation
- * 
+ *
  * ## Memory Management
- * 
+ *
  * The component implements comprehensive cleanup:
  * - All timeouts and animation frames are tracked and cleared
  * - Event listeners are properly removed
  * - RxJS subscriptions are completed
  * - Effects are destroyed
  * - Cache is invalidated on relevant changes
- * 
+ *
  * ## Browser Compatibility
- * 
+ *
  * - Modern browsers (Chrome, Firefox, Safari, Edge)
  * - Mobile browsers (iOS Safari, Chrome Mobile)
  * - SSR compatible (Angular Universal)
  * - Works with and without Zone.js
- * 
+ *
  * @see {@link DatepickerConfig} for global configuration options
  * @see {@link DatepickerHooks} for extension hooks
  * @see {@link HolidayProvider} for custom holiday support
  */
-export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor {
+export class NgxsmkDatepickerComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor
+{
   private static _idCounter = 0;
   private static _allInstances = new Set<NgxsmkDatepickerComponent>();
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
 
-  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
-  @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
+  @Input() mode:
+    | 'single'
+    | 'range'
+    | 'multiple'
+    | 'week'
+    | 'month'
+    | 'quarter'
+    | 'year'
+    | 'timeRange' = 'single';
+  @Input() calendarViewMode:
+    | 'month'
+    | 'year'
+    | 'decade'
+    | 'timeline'
+    | 'time-slider' = 'month';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   @Input() showRanges: boolean = true;
   @Input() showTime: boolean = false;
   @Input() timeOnly: boolean = false;
+  @Input() timeRangeMode: boolean = false;
   @Input() showCalendarButton: boolean = false;
   @Input() minuteInterval: number = 1;
   @Input() use24Hour: boolean = false;
@@ -580,8 +991,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
   @Input() disabledDates: (string | Date)[] = [];
-  @Input() disabledRanges: Array<{ start: Date | string; end: Date | string }> = [];
-  @Input() recurringPattern?: { pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends'; startDate: Date; endDate?: Date; dayOfWeek?: number; dayOfMonth?: number; interval?: number } | null;
+  @Input() disabledRanges: Array<{ start: Date | string; end: Date | string }> =
+    [];
+  @Input() recurringPattern?: {
+    pattern:
+      | 'daily'
+      | 'weekly'
+      | 'monthly'
+      | 'yearly'
+      | 'weekdays'
+      | 'weekends';
+    startDate: Date;
+    endDate?: Date;
+    dayOfWeek?: number;
+    dayOfMonth?: number;
+    interval?: number;
+  } | null;
+  @Input() dateTemplate: TemplateRef<unknown> | null = null;
   private _placeholder: string | null = null;
   @Input() set placeholder(value: string | null) {
     this._placeholder = value;
@@ -654,11 +1080,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return this.closeAriaLabel || this.getTranslation('closeCalendar');
   }
   @Input() weekStart: number | null = null;
-  @Input() yearRange: number = 10;
+
+  private _yearRange = signal<number>(10);
+  @Input() set yearRange(value: number) {
+    this._yearRange.set(value);
+  }
+  get yearRange(): number {
+    return this._yearRange();
+  }
   @Input() timezone?: string;
   @Input() hooks: DatepickerHooks | null = null;
   @Input() enableKeyboardShortcuts: boolean = true;
-  @Input() customShortcuts: { [key: string]: (context: KeyboardShortcutContext) => boolean } | null = null;
+  @Input() customShortcuts: {
+    [key: string]: (context: KeyboardShortcutContext) => boolean;
+  } | null = null;
   @Input() autoApplyClose: boolean = false;
   @Input() displayFormat?: string;
   @Input() allowTyping: boolean = false;
@@ -669,7 +1104,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount must be at least 1. ` +
-          `Received: ${value}. Setting to 1.`
+            `Received: ${value}. Setting to 1.`,
         );
       }
       this._calendarCount = 1;
@@ -677,7 +1112,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
-          `Received: ${value}. Setting to 12.`
+            `Received: ${value}. Setting to 12.`,
         );
       }
       this._calendarCount = 12;
@@ -690,10 +1125,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
   @Input() defaultMonthOffset: number = 0;
+  /**
+   * Configuration for synchronous scrolling in multi-calendar mode.
+   * Keeps calendars in sync by enforcing consistent month offsets across visible calendars.
+   *
+   * @example
+   * ```typescript
+   * // Keep calendars exactly 1 month apart
+   * <ngxsmk-datepicker
+   *   [calendarCount]="2"
+   *   [syncScroll]="{ enabled: true, monthGap: 1 }">
+   * </ngxsmk-datepicker>
+   *
+   * // Disable sync scroll (independent navigation)
+   * <ngxsmk-datepicker
+   *   [calendarCount]="3"
+   *   [syncScroll]="{ enabled: false }">
+   * </ngxsmk-datepicker>
+   * ```
+   */
+  @Input() syncScroll: {
+    enabled?: boolean;
+    monthGap?: number;
+  } = { enabled: false, monthGap: 1 };
+  @Input() align: 'left' | 'right' | 'center' = 'left';
 
   @Input() useNativePicker: boolean = false;
   @Input() enableHapticFeedback: boolean = false;
-  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
+  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' =
+    'center';
   @Input() mobileTimePickerStyle: 'wheel' | 'slider' | 'native' = 'slider';
   @Input() enablePullToRefresh: boolean = false;
   @Input() mobileTheme: 'compact' | 'comfortable' | 'spacious' = 'comfortable';
@@ -705,13 +1165,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private appRef = inject(ApplicationRef);
   private document = inject(DOCUMENT);
 
-  @ViewChild('portalContent', { static: true }) portalTemplate!: TemplateRef<unknown>;
+  @ViewChild('portalContent', { static: true })
+  portalTemplate!: TemplateRef<unknown>;
   private portalViewRef: EmbeddedViewRef<unknown> | null = null;
 
   get _shouldAppendToBody(): boolean {
-    return this.appendToBody ||
-      (this.autoDetectMobile && this.isMobileDevice() &&
-        (this.mobileModalStyle === 'bottom-sheet' || this.mobileModalStyle === 'fullscreen'));
+    if (this.isInlineMode) return false;
+    return (
+      this.appendToBody || (this.autoDetectMobile && this.isMobileDevice())
+    );
   }
 
   private _isCalendarOpen = signal<boolean>(false);
@@ -763,47 +1225,41 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._field = field;
 
     if (field && (typeof field === 'object' || typeof field === 'function')) {
-      this._fieldEffectRef = this.fieldSyncService.setupFieldSync(
-        field,
-        {
-          onValueChanged: (value: DatepickerValue) => {
-            this._internalValue = value;
-            this.initializeValue(value);
-            this.generateCalendar();
-            if (this._field === field) {
-              this.scheduleChangeDetection();
-            }
-          },
-          onDisabledChanged: (disabled: boolean) => {
-            if (this.disabled !== disabled) {
-              this.disabled = disabled;
-              this.scheduleChangeDetection();
-            }
-          },
-          onRequiredChanged: (required: boolean) => {
-            this.required = required;
-          },
-          onErrorStateChanged: (hasError: boolean) => {
-            this.errorState = hasError;
-          },
-          onSyncError: (_error: unknown) => {
-          },
-          normalizeValue: (value: unknown) => {
-            return this._normalizeValue(value);
-          },
-          isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => {
-            return this.isValueEqual(val1, val2);
-          },
-          onCalendarGenerated: () => {
-          },
-          onStateChanged: () => {
+      this._fieldEffectRef = this.fieldSyncService.setupFieldSync(field, {
+        onValueChanged: (value: DatepickerValue) => {
+          this._internalValue = value;
+          this.initializeValue(value);
+          this.generateCalendar();
+          if (this._field === field) {
             this.scheduleChangeDetection();
           }
-        }
-      );
+        },
+        onDisabledChanged: (disabled: boolean) => {
+          if (this.disabled !== disabled) {
+            this.disabled = disabled;
+            this.scheduleChangeDetection();
+          }
+        },
+        onRequiredChanged: (required: boolean) => {
+          this.required = required;
+        },
+        onErrorStateChanged: (hasError: boolean) => {
+          this.errorState = hasError;
+        },
+        onSyncError: (_error: unknown) => {},
+        normalizeValue: (value: unknown) => {
+          return this._normalizeValue(value);
+        },
+        isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => {
+          return this.isValueEqual(val1, val2);
+        },
+        onCalendarGenerated: () => {},
+        onStateChanged: () => {
+          this.scheduleChangeDetection();
+        },
+      });
 
       this.syncFieldValue(field);
-
     } else {
       this._internalValue = null;
       this.initializeValue(null);
@@ -837,8 +1293,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._errorState = hasError;
         this.stateChanges.next();
       },
-      onSyncError: (_error: unknown) => {
-      },
+      onSyncError: (_error: unknown) => {},
       normalizeValue: (value: unknown) => {
         return this._normalizeValue(value);
       },
@@ -851,19 +1306,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       onStateChanged: () => {
         this.stateChanges.next();
         this.scheduleChangeDetection();
-      }
+      },
     });
 
     return result;
   }
 
   private _startAtDate: Date | null = null;
-  @Input() set startAt(value: DateInput | null) { this._startAtDate = this._normalizeDate(value); }
+  @Input() set startAt(value: DateInput | null) {
+    this._startAtDate = this._normalizeDate(value);
+  }
 
   private _locale: string = 'en-US';
   @Input() set locale(value: string) {
     if (value && value !== this._locale) {
       this._locale = value;
+      this._localeSignal.set(value);
       if (this.translationRegistry) {
         this.updateRtlState();
         this.initializeTranslations();
@@ -873,12 +1331,66 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     } else if (value) {
       this._locale = value;
+      this._localeSignal.set(value);
     }
   }
-  get locale(): string { return this._locale; }
+  get locale(): string {
+    return this._locale;
+  }
 
   @Input() theme: 'light' | 'dark' = 'light';
-  @HostBinding('class.dark-theme') get isDarkMode() { return this.theme === 'dark'; }
+  @HostBinding('class.dark-theme') get isDarkMode() {
+    return this.theme === 'dark';
+  }
+
+  private _dateFormatPattern: string | null = null;
+  private customDateFormatService: CustomDateFormatService | null = null;
+  @Input() set dateFormatPattern(value: string | null) {
+    this._dateFormatPattern = value;
+    if (value) {
+      // Initialize or update the custom format service with current locale
+      if (!this.customDateFormatService) {
+        this.customDateFormatService = new CustomDateFormatService(
+          this._locale,
+        );
+      } else {
+        this.customDateFormatService.setLocale(this._locale);
+      }
+    }
+  }
+  get dateFormatPattern(): string | null {
+    return this._dateFormatPattern;
+  }
+
+  private _animationConfig: AnimationConfig | null = null;
+  /**
+   * Animation configuration allowing customization of animation duration, easing, and reduction.
+   * Supports prefers-reduced-motion accessibility preference automatically.
+   *
+   * @example
+   * ```typescript
+   * // Disable all animations
+   * <ngxsmk-datepicker [animationConfig]="{ enabled: false }"></ngxsmk-datepicker>
+   *
+   * // Custom animation duration and easing
+   * <ngxsmk-datepicker [animationConfig]="{ duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }"></ngxsmk-datepicker>
+   *
+   * // Disable specific animation properties
+   * <ngxsmk-datepicker [animationConfig]="{ property: 'opacity' }"></ngxsmk-datepicker>
+   * ```
+   */
+  @Input() set animationConfig(value: AnimationConfig | null) {
+    this._animationConfig = value;
+    // Merge with global config: component input takes precedence
+    const mergedConfig: AnimationConfig = {
+      ...this.globalConfig?.animations,
+      ...this._animationConfig,
+    };
+    this.applyAnimationConfig(mergedConfig);
+  }
+  get animationConfig(): AnimationConfig | null {
+    return this._animationConfig;
+  }
 
   private _rtl: boolean | null = null;
   @Input() set rtl(value: boolean | null) {
@@ -900,12 +1412,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     return this.localeRegistry.isRtlLocale(this._locale);
   }
-  @HostBinding('class.ngxsmk-rtl') get rtlClass() { return this.isRtl; }
+  @HostBinding('class.ngxsmk-rtl') get rtlClass() {
+    return this.isRtl;
+  }
 
   @Input() classes?: DatepickerClasses | undefined;
 
-  private onChange = (_: DatepickerValue) => { };
-  private onTouched = () => { };
+  private onChange = (_: DatepickerValue) => {};
+  private onTouched = () => {};
   public disabled = false;
   @Input() set disabledState(isDisabled: boolean) {
     if (this.disabled !== isDisabled) {
@@ -917,12 +1431,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Subject used for Material Form Field integration.
    * Emits when the component's state changes (disabled, required, error state, etc.)
-   * 
+   *
    * @remarks
    * This Subject is required for Angular Material's form field control interface.
    * It allows Material form fields to track state changes and update their appearance
    * accordingly (e.g., showing error states, floating labels, etc.).
-   * 
+   *
    * The Subject is properly cleaned up in ngOnDestroy() to prevent memory leaks.
    * It's marked as readonly to prevent external code from reassigning it.
    */
@@ -990,8 +1504,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     return `datepicker-help-${this._uniqueId}`;
   }
 
-  setDescribedByIds(_ids: string[]): void {
-  }
+  setDescribedByIds(_ids: string[]): void {}
 
   onContainerClick(_event: MouseEvent): void {
     if (!this.disabled && !this.isCalendarOpen) {
@@ -1028,31 +1541,30 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public currentDate: Date = new Date();
   public daysInMonth: (Date | null)[] = [];
-  public multiCalendarMonths: Array<{ month: number; year: number; days: (Date | null)[] }> = [];
+  public multiCalendarMonths: Array<{
+    month: number;
+    year: number;
+    days: (Date | null)[];
+  }> = [];
 
   /**
    * LRU (Least Recently Used) cache for calendar month generation.
    * Caches generated month arrays to avoid recalculating the same months.
-   * 
+   *
    * @remarks
    * Performance characteristics:
    * - Calendar generation: O(1) per month when cached
    * - Cache lookup: O(1) average case
    * - Cache eviction: O(n) where n = cache size (only when cache is full)
-   * 
+   *
    * The cache automatically evicts the least recently used entry when it reaches
    * MAX_CACHE_SIZE to prevent unbounded memory growth. This is especially important
    * for applications with many datepicker instances or long-running sessions.
    */
-  private monthCache = new Map<string, (Date | null)[]>();
-  private monthCacheAccessOrder = new Map<string, number>();
-  private monthCacheAccessCounter = 0;
   /**
    * Maximum number of months to cache before evicting LRU entries.
-   * Set to 24 to cache approximately 2 years of months (12 months × 2 years).
-   * This provides good performance while preventing excessive memory usage.
+   * Now managed by CalendarGenerationService.
    */
-  private readonly MAX_CACHE_SIZE = 24;
   public weekDays: string[] = [];
   public readonly today: Date = getStartOfDay(new Date());
   public selectedDate: Date | null = null;
@@ -1062,13 +1574,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public hoveredDate: Date | null = null;
   public rangesArray: { key: string; value: [Date, Date] }[] = [];
 
-  private dateCellTouchStartTime: number = 0;
-  private dateCellTouchStartDate: Date | null = null;
-  private dateCellTouchStartX: number = 0;
-  private dateCellTouchStartY: number = 0;
-  private isDateCellTouching: boolean = false;
-  private lastDateCellTouchDate: Date | null = null;
-  private dateCellTouchHandled: boolean = false;
+  protected touchState: TouchGestureState = {
+    touchStartTime: 0,
+    touchStartElement: null,
+    dateCellTouchStartTime: 0,
+    dateCellTouchStartDate: null,
+    dateCellTouchStartX: 0,
+    dateCellTouchStartY: 0,
+    isDateCellTouching: false,
+    lastDateCellTouchDate: null,
+    dateCellTouchHandled: false,
+    calendarSwipeStartX: 0,
+    calendarSwipeStartY: 0,
+    calendarSwipeStartTime: 0,
+    isCalendarSwiping: false,
+    hoveredDate: null,
+  };
+
   private dateCellTouchHandledTime: number = 0;
   private touchHandledTimeout: ReturnType<typeof setTimeout> | null = null;
   private activeTimeouts: Set<ReturnType<typeof setTimeout>> = new Set();
@@ -1077,24 +1599,30 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private touchListenersSetup = new WeakMap<HTMLElement, boolean>();
   private touchListenersAttached = new WeakMap<HTMLElement, boolean>();
 
-  private calendarSwipeStartX: number = 0;
-  private calendarSwipeStartY: number = 0;
-  private calendarSwipeStartTime: number = 0;
-
   private bottomSheetSwipeStartY: number = 0;
   private bottomSheetSwipeCurrentY: number = 0;
   private isBottomSheetSwiping: boolean = false;
   private bottomSheetSwipeThreshold: number = 100;
-  private isCalendarSwiping: boolean = false;
+
+  // Note: isCalendarSwiping is now in touchState
   private readonly SWIPE_THRESHOLD = 50;
   private readonly SWIPE_TIME_THRESHOLD = 300;
 
   private _currentMonth: number = this.currentDate.getMonth();
   public _currentYear: number = this.currentDate.getFullYear();
-  public _currentDecade: number = Math.floor(this.currentDate.getFullYear() / 10) * 10;
+  public _currentDecade: number =
+    Math.floor(this.currentDate.getFullYear() / 10) * 10;
 
-  public monthOptions: { label: string; value: number }[] = [];
-  public yearOptions: { label: string; value: number }[] = [];
+  public monthOptions = computed(() =>
+    generateMonthOptions(this._localeSignal(), this._currentYearSignal()),
+  );
+  public yearOptions = computed(() =>
+    generateYearOptions(
+      this._currentYearSignal(),
+      this.yearRange,
+      this._localeSignal(),
+    ),
+  );
   public decadeOptions: { label: string; value: number }[] = [];
   public yearGrid: number[] = [];
   public hourOptions: { label: string; value: number }[] = [];
@@ -1109,9 +1637,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public currentDisplayHour: number = 12;
   public isPm: boolean = false;
 
+  // Time range properties (for timeRangeMode)
+  public startHour: number = 0;
+  public startMinute: number = 0;
+  public startSecond: number = 0;
+  public startDisplayHour: number = 12;
+  public startIsPm: boolean = false;
+
+  public endHour: number = 0;
+  public endMinute: number = 0;
+  public endSecond: number = 0;
+  public endDisplayHour: number = 12;
+  public endIsPm: boolean = false;
+
   public ampmOptions: { label: string; value: boolean }[] = [
     { label: 'AM', value: false },
-    { label: 'PM', value: true }
+    { label: 'PM', value: true },
   ];
 
   public timelineMonths: Date[] = [];
@@ -1124,23 +1665,48 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly globalConfig: DatepickerConfig | null = inject(DATEPICKER_CONFIG, { optional: true });
-  private readonly fieldSyncService: FieldSyncService = inject(FieldSyncService);
-  private readonly localeRegistry: LocaleRegistryService = inject(LocaleRegistryService);
-  private readonly translationRegistry: TranslationRegistryService = inject(TranslationRegistryService);
-  private readonly focusTrapService: FocusTrapService = inject(FocusTrapService);
+  private readonly globalConfig: DatepickerConfig | null = inject(
+    DATEPICKER_CONFIG,
+    { optional: true },
+  );
+  private readonly fieldSyncService: FieldSyncService =
+    inject(FieldSyncService);
+  private readonly localeRegistry: LocaleRegistryService = inject(
+    LocaleRegistryService,
+  );
+  private readonly translationRegistry: TranslationRegistryService = inject(
+    TranslationRegistryService,
+  );
+  private readonly focusTrapService: FocusTrapService =
+    inject(FocusTrapService);
   private readonly ariaLiveService: AriaLiveService = inject(AriaLiveService);
-  private readonly hapticFeedbackService: HapticFeedbackService = inject(HapticFeedbackService);
+  private readonly hapticFeedbackService: HapticFeedbackService = inject(
+    HapticFeedbackService,
+  );
+  private readonly calendarGenerationService: CalendarGenerationService =
+    inject(CalendarGenerationService);
+  private readonly parsingService: DatepickerParsingService = inject(
+    DatepickerParsingService,
+  );
+  private readonly touchService: TouchGestureHandlerService = inject(
+    TouchGestureHandlerService,
+  );
+  private readonly popoverPositioningService: PopoverPositioningService =
+    inject(PopoverPositioningService);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
 
   public typedInputValue: string = '';
   private isTyping: boolean = false;
 
-  @ViewChild('popoverContainer', { static: false }) popoverContainer?: ElementRef<HTMLElement>;
-  @ViewChild('dateInput', { static: false }) dateInput?: ElementRef<HTMLInputElement>;
-  @ViewChild('monthSelect', { static: false }) monthSelect?: CustomSelectComponent;
-  @ViewChild('yearSelect', { static: false }) yearSelect?: CustomSelectComponent;
+  @ViewChild('popoverContainer', { static: false })
+  popoverContainer?: ElementRef<HTMLElement>;
+  @ViewChild('dateInput', { static: false })
+  dateInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('monthSelect', { static: false })
+  monthSelect?: CustomSelectComponent;
+  @ViewChild('yearSelect', { static: false })
+  yearSelect?: CustomSelectComponent;
   private focusTrapCleanup: (() => void) | null = null;
 
   private _translations: DatepickerTranslations | null = null;
@@ -1151,16 +1717,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Schedules change detection to run in the next microtask.
    * Prevents multiple change detection cycles from being scheduled simultaneously.
-   * 
+   *
    * @remarks
    * This method is essential for zoneless compatibility. When Zone.js is not present,
    * Angular's automatic change detection doesn't run, so components using OnPush
    * strategy must manually trigger change detection when state changes.
-   * 
+   *
    * The debouncing mechanism prevents excessive change detection cycles when multiple
    * state changes occur in rapid succession (e.g., during user interactions or async
    * operations). Only one change detection cycle is scheduled per microtask queue.
-   * 
+   *
    * This pattern is compatible with both Zone.js and zoneless Angular applications.
    */
   private scheduleChangeDetection(): void {
@@ -1177,12 +1743,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Creates a tracked setTimeout that is automatically cleaned up on component destroy.
    * All timeouts created through this method are stored in activeTimeouts for proper cleanup.
-   * 
+   *
    * @param callback - Function to execute after delay
    * @param delay - Delay in milliseconds
    * @returns Timeout ID that can be used with clearTimeout
    */
-  private trackedSetTimeout(callback: () => void, delay: number): ReturnType<typeof setTimeout> {
+  private trackedSetTimeout(
+    callback: () => void,
+    delay: number,
+  ): ReturnType<typeof setTimeout> {
     const timeoutId = setTimeout(() => {
       this.activeTimeouts.delete(timeoutId);
       callback();
@@ -1194,7 +1763,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Creates a tracked requestAnimationFrame that is automatically cancelled on component destroy.
    * All animation frames created through this method are stored in activeAnimationFrames for proper cleanup.
-   * 
+   *
    * @param callback - Function to execute on next animation frame
    * @returns Animation frame ID that can be used with cancelAnimationFrame
    */
@@ -1210,7 +1779,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Executes a callback after two animation frames, ensuring DOM updates are complete.
    * Useful for operations that need to run after Angular's change detection and browser rendering.
-   * 
+   *
    * @param callback - Function to execute after double animation frame
    */
   private trackedDoubleRequestAnimationFrame(callback: () => void): void {
@@ -1220,64 +1789,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   /**
-   * Updates the access timestamp for a cache entry to implement LRU eviction.
-   * 
-   * @param cacheKey - Cache key to update access time for
-   */
-  private updateCacheAccess(cacheKey: string): void {
-    this.monthCacheAccessCounter++;
-    this.monthCacheAccessOrder.set(cacheKey, this.monthCacheAccessCounter);
-  }
-
-  /**
-   * Evicts the least recently used (LRU) entry from the month cache.
-   * Called when cache reaches MAX_CACHE_SIZE to prevent unbounded memory growth.
-   * 
-   * @remarks
-   * This implements a true LRU eviction policy by tracking access order.
-   * The entry with the lowest access timestamp is removed when the cache is full.
-   * This ensures frequently accessed months remain cached while rarely used ones
-   * are evicted first.
-   * 
-   * Time complexity: O(n) where n is the number of cached entries.
-   * This is acceptable since MAX_CACHE_SIZE is small (24 entries).
-   */
-  private evictLRUCacheEntry(): void {
-    if (this.monthCache.size === 0) return;
-
-    let lruKey: string | null = null;
-    let lruAccessTime = Infinity;
-
-    for (const [key, accessTime] of this.monthCacheAccessOrder.entries()) {
-      if (accessTime < lruAccessTime) {
-        lruAccessTime = accessTime;
-        lruKey = key;
-      }
-    }
-
-    if (lruKey) {
-      this.monthCache.delete(lruKey);
-      this.monthCacheAccessOrder.delete(lruKey);
-    }
-  }
-
-  /**
-   * Invalidates the entire month cache and resets access tracking.
-   * Called when locale or weekStart changes to ensure cache consistency.
-   */
-  private invalidateMonthCache(): void {
-    this.monthCache.clear();
-    this.monthCacheAccessOrder.clear();
-    this.monthCacheAccessCounter = 0;
-  }
-
-  /**
    * Clears all active timeouts. Used when locale or weekStart changes
    * to cancel any pending operations that might be invalidated by the change.
    */
   private clearActiveTimeouts(): void {
     if (this.activeTimeouts && this.activeTimeouts.size > 0) {
-      this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) => clearTimeout(timeoutId));
+      this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) =>
+        clearTimeout(timeoutId),
+      );
       this.activeTimeouts.clear();
     }
   }
@@ -1285,7 +1804,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Debounces field synchronization to prevent race conditions from rapid updates.
    * Cancels any pending sync operation before scheduling a new one.
-   * 
+   *
    * @param delay - Debounce delay in milliseconds (default: 100ms)
    */
   private debouncedFieldSync(delay: number = 100): void {
@@ -1304,20 +1823,82 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private _currentMonthSignal = signal<number>(this.currentDate.getMonth());
   private _currentYearSignal = signal<number>(this.currentDate.getFullYear());
+  private _localeSignal = signal<string>('en-US');
   private _holidayProviderSignal = signal<HolidayProvider | null>(null);
-  private _disabledStateSignal = signal<{ minDate: Date | null; maxDate: Date | null; disabledDates: (string | Date)[] | null; disabledRanges: Array<{ start: Date | string; end: Date | string }> | null }>({
+  private _disabledStateSignal = signal<{
+    minDate: Date | null;
+    maxDate: Date | null;
+    disabledDates: (string | Date)[] | null;
+    disabledRanges: Array<{ start: Date | string; end: Date | string }> | null;
+  }>({
     minDate: null,
     maxDate: null,
     disabledDates: null,
-    disabledRanges: null
+    disabledRanges: null,
   });
 
-  private _cachedIsCurrentMonthMemo: ((day: Date | null) => boolean) | null = null;
-  private _cachedIsDateDisabledMemo: ((day: Date | null) => boolean) | null = null;
-  private _cachedIsSameDayMemo: ((d1: Date | null, d2: Date | null) => boolean) | null = null;
-  private _cachedIsHolidayMemo: ((day: Date | null) => boolean) | null = null;
-  private _cachedGetHolidayLabelMemo: ((day: Date | null) => string | null) | null = null;
+  /**
+   * Effect that automatically triggers change detection when key signals change.
+   * This reduces the need for manual markForCheck() calls throughout the codebase.
+   */
+  private _changeDetectionEffect = effect(() => {
+    // Track signal dependencies to trigger change detection
+    this._isCalendarOpen();
+    this._currentMonthSignal();
+    this._currentYearSignal();
+    this._localeSignal();
+    this.monthOptions();
+    this.yearOptions();
 
+    // Schedule change detection once for all signal changes
+    this.scheduleChangeDetection();
+  });
+
+  /**
+   * Signal tracking which calendar month indices are currently visible in the viewport.
+   * Used for lazy rendering of multi-calendar layouts to improve performance.
+   */
+  private _visibleCalendarIndicesSignal = signal<Set<number>>(
+    new Set([0, 1, 2, 3, 4]), // Default: render first 5 months
+  );
+
+  /**
+   * Computed signal for rendered calendars - only includes visible calendars + buffer.
+   * This dramatically reduces DOM nodes for multi-calendar layouts.
+   */
+  renderedCalendars = computed(() => {
+    const visibleIndices = this._visibleCalendarIndicesSignal();
+    const allMonths = this.multiCalendarMonths;
+    const lazyBuffer = 2; // Render 2 calendars outside viewport
+
+    if (allMonths.length <= 1) {
+      // No lazy loading for single calendar
+      return allMonths;
+    }
+
+    // Find min/max visible indices
+    const minVisible = Math.min(...visibleIndices);
+    const maxVisible = Math.max(...visibleIndices);
+
+    // Expand range with buffer
+    const renderStart = Math.max(0, minVisible - lazyBuffer);
+    const renderEnd = Math.min(allMonths.length - 1, maxVisible + lazyBuffer);
+
+    // Return calendars in the render range
+    return allMonths.slice(renderStart, renderEnd + 1);
+  });
+
+  private _cachedIsCurrentMonthMemo: ((day: Date | null) => boolean) | null =
+    null;
+  private _cachedIsDateDisabledMemo: ((day: Date | null) => boolean) | null =
+    null;
+  private _cachedIsSameDayMemo:
+    | ((d1: Date | null, d2: Date | null) => boolean)
+    | null = null;
+  private _cachedIsHolidayMemo: ((day: Date | null) => boolean) | null = null;
+  private _cachedGetHolidayLabelMemo:
+    | ((day: Date | null) => string | null)
+    | null = null;
 
   // Memoized dependencies for calendar generation with equality function for better performance
   // Helper to get dependencies for memoization
@@ -1326,7 +1907,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       month: this._currentMonthSignal(),
       year: this._currentYearSignal(),
       holidayProvider: this._holidayProviderSignal(),
-      disabledState: this._disabledStateSignal()
+      disabledState: this._disabledStateSignal(),
     };
   }
 
@@ -1338,7 +1919,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       minDate: this._minDate,
       maxDate: this._maxDate,
       disabledDates: this.disabledDates.length > 0 ? this.disabledDates : null,
-      disabledRanges: this.disabledRanges.length > 0 ? this.disabledRanges : null
+      disabledRanges:
+        this.disabledRanges.length > 0 ? this.disabledRanges : null,
     });
   }
 
@@ -1360,9 +1942,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private clearTouchHandledFlag(): void {
-    this.dateCellTouchHandled = false;
+    this.touchState.dateCellTouchHandled = false;
     this.dateCellTouchHandledTime = 0;
-    this.isDateCellTouching = false;
+    this.touchState.isDateCellTouching = false;
     if (this.touchHandledTimeout) {
       clearTimeout(this.touchHandledTimeout);
       this.touchHandledTimeout = null;
@@ -1379,7 +1961,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private setTouchHandledFlag(duration: number = 300): void {
-    this.dateCellTouchHandled = true;
+    this.touchState.dateCellTouchHandled = true;
     this.dateCellTouchHandledTime = Date.now();
 
     if (this.touchHandledTimeout) {
@@ -1399,22 +1981,41 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       try {
         const mediaQuery = window.matchMedia('(max-width: 1024px)');
         const isMobileWidth = mediaQuery !== null && mediaQuery.matches;
-        const hasTouchSupport = 'ontouchstart' in window ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0);
+        const hasTouchSupport =
+          'ontouchstart' in window ||
+          ('maxTouchPoints' in navigator &&
+            (navigator as Navigator & { maxTouchPoints?: number })
+              .maxTouchPoints > 0);
         const hasPointerEvents = 'onpointerdown' in window;
-        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isMobileUserAgent =
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent,
+          );
 
-        return isMobileWidth || (hasTouchSupport && isMobileWidth) || (hasPointerEvents && isMobileWidth) || isMobileUserAgent;
+        return (
+          isMobileWidth ||
+          (hasTouchSupport && isMobileWidth) ||
+          (hasPointerEvents && isMobileWidth) ||
+          isMobileUserAgent
+        );
       } catch {
-        return 'ontouchstart' in window ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0);
+        return (
+          'ontouchstart' in window ||
+          ('maxTouchPoints' in navigator &&
+            (navigator as Navigator & { maxTouchPoints?: number })
+              .maxTouchPoints > 0)
+        );
       }
     }
     return false;
   }
 
   public shouldUseNativePicker(): boolean {
-    if (!this.useNativePicker || this.isInlineMode || this.mode === 'multiple') {
+    if (
+      !this.useNativePicker ||
+      this.isInlineMode ||
+      this.mode === 'multiple'
+    ) {
       return false;
     }
     if (!this.isBrowser) {
@@ -1431,7 +2032,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       } else {
         testInput.type = 'date';
       }
-      return testInput.type === (this.showTime || this.timeOnly ? 'datetime-local' : 'date');
+      return (
+        testInput.type ===
+        (this.showTime || this.timeOnly ? 'datetime-local' : 'date')
+      );
     } catch {
       return false;
     }
@@ -1445,35 +2049,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public formatValueForNativeInput(value: DatepickerValue): string {
-    if (!value) {
-      return '';
-    }
-    if (this.mode === 'range') {
-      if (Array.isArray(value) && value.length === 2 && value[0]) {
-        return this.formatDateForNativeInput(value[0]);
-      }
-      return '';
-    }
-    if (value instanceof Date) {
-      return this.formatDateForNativeInput(value);
-    }
-    return '';
+    return this.parsingService.formatValueForNativeInput(
+      value,
+      this.mode,
+      this.showTime,
+      this.timeOnly,
+    );
   }
 
   public formatDateForNativeInput(date: Date): string {
-    if (!date || isNaN(date.getTime())) {
-      return '';
-    }
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    let result = `${year}-${month}-${day}`;
-    if (this.showTime || this.timeOnly) {
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      result += `T${hours}:${minutes}`;
-    }
-    return result;
+    return this.parsingService.formatDateForNativeInput(
+      date,
+      this.showTime,
+      this.timeOnly,
+    );
   }
 
   public getMinDateForNativeInput(): string | null {
@@ -1491,21 +2080,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public parseNativeInputValue(value: string): DatepickerValue {
-    if (!value) {
-      return null;
-    }
-    try {
-      const date = new Date(value);
-      if (isNaN(date.getTime())) {
-        return null;
-      }
-      if (this.mode === 'range') {
-        return [date, null] as DatepickerValue;
-      }
-      return date;
-    } catch {
-      return null;
-    }
+    return this.parsingService.parseNativeInputValue(value, this.mode);
   }
 
   public onNativeInputChange(event: Event): void {
@@ -1519,7 +2094,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onBottomSheetTouchStart(event: TouchEvent): void {
-    if (!this.isMobileDevice() || this.mobileModalStyle !== 'bottom-sheet' || this.isInlineMode) {
+    if (
+      !this.isMobileDevice() ||
+      this.mobileModalStyle !== 'bottom-sheet' ||
+      this.isInlineMode
+    ) {
       return;
     }
     const touch = event.touches[0];
@@ -1531,23 +2110,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onBottomSheetTouchMove(event: TouchEvent): void {
-    if (!this.isMobileDevice() || this.mobileModalStyle !== 'bottom-sheet' || this.isInlineMode || !this.isCalendarOpen) {
+    if (
+      !this.isMobileDevice() ||
+      this.mobileModalStyle !== 'bottom-sheet' ||
+      this.isInlineMode ||
+      !this.isCalendarOpen
+    ) {
       return;
     }
     const touch = event.touches[0];
     if (touch && this.bottomSheetSwipeStartY > 0) {
       this.bottomSheetSwipeCurrentY = touch.clientY;
-      const deltaY = this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
+      const deltaY =
+        this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
 
       if (deltaY > 10 && !this.isBottomSheetSwiping) {
         this.isBottomSheetSwiping = true;
       }
 
       if (this.isBottomSheetSwiping && deltaY > 0) {
-        const popoverContainer = this.elementRef.nativeElement?.querySelector('.ngxsmk-popover-container') as HTMLElement;
+        const popoverContainer = this.elementRef.nativeElement?.querySelector(
+          '.ngxsmk-popover-container',
+        ) as HTMLElement;
         if (popoverContainer) {
           popoverContainer.style.transform = `translateY(${deltaY}px)`;
-          const opacity = Math.max(0, 1 - (deltaY / 300));
+          const opacity = Math.max(0, 1 - deltaY / 300);
           popoverContainer.style.opacity = String(opacity);
         }
       }
@@ -1555,23 +2142,30 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onBottomSheetTouchEnd(event: TouchEvent): void {
-    if (!this.isMobileDevice() || this.mobileModalStyle !== 'bottom-sheet' || this.isInlineMode || !this.isCalendarOpen) {
+    if (
+      !this.isMobileDevice() ||
+      this.mobileModalStyle !== 'bottom-sheet' ||
+      this.isInlineMode ||
+      !this.isCalendarOpen
+    ) {
       return;
     }
     const touch = event.changedTouches[0];
     if (touch && this.isBottomSheetSwiping) {
-      const deltaY = this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
+      const deltaY =
+        this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
 
       if (deltaY > this.bottomSheetSwipeThreshold) {
-        this.isCalendarOpen = false;
+        this.closeCalendarWithFocusRestore();
       }
 
-      const popoverContainer = this.elementRef.nativeElement?.querySelector('.ngxsmk-popover-container') as HTMLElement;
+      const popoverContainer = this.elementRef.nativeElement?.querySelector(
+        '.ngxsmk-popover-container',
+      ) as HTMLElement;
       if (popoverContainer) {
         popoverContainer.style.transform = '';
         popoverContainer.style.opacity = '';
       }
-
 
       this.bottomSheetSwipeStartY = 0;
       this.bottomSheetSwipeCurrentY = 0;
@@ -1579,19 +2173,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-
-
   // Bind methods for child components to preserve 'this' context
-  public readonly boundIsDateDisabled = (d: Date | null) => this.isDateDisabledMemo(d);
-  public readonly boundIsSameDay = (d1: Date | null, d2: Date | null) => this.isSameDayMemo(d1, d2);
+  public readonly boundIsDateDisabled = (d: Date | null) =>
+    this.isDateDisabledMemo(d);
+  public readonly boundIsSameDay = (d1: Date | null, d2: Date | null) =>
+    this.isSameDayMemo(d1, d2);
   public readonly boundIsHoliday = (d: Date | null) => this.isHolidayMemo(d);
-  public readonly boundIsMultipleSelected = (d: Date | null) => this.isMultipleSelected(d);
+  public readonly boundIsMultipleSelected = (d: Date | null) =>
+    this.isMultipleSelected(d);
   public readonly boundIsInRange = (d: Date | null) => this.isInRange(d);
-  public readonly boundIsPreviewInRange = (d: Date | null) => this.isPreviewInRange(d);
+  public readonly boundIsPreviewInRange = (d: Date | null) =>
+    this.isPreviewInRange(d);
   public readonly boundGetAriaLabel = (d: Date | null) => this.getAriaLabel(d);
-  public readonly boundGetDayCellCustomClasses = (d: Date | null) => this.getDayCellCustomClasses(d);
-  public readonly boundGetDayCellTooltip = (d: Date | null) => this.getDayCellTooltip(d);
-  public readonly boundFormatDayNumber = (d: Date | null) => this.formatDayNumber(d);
+  public readonly boundGetDayCellCustomClasses = (d: Date | null) =>
+    this.getDayCellCustomClasses(d);
+  public readonly boundGetDayCellTooltip = (d: Date | null) =>
+    this.getDayCellTooltip(d);
+  public readonly boundFormatDayNumber = (d: Date | null) =>
+    this.formatDayNumber(d);
 
   get isCalendarVisible(): boolean {
     return this.isInlineMode || this.isCalendarOpen;
@@ -1599,7 +2198,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   get displayValue(): string {
     if (this.hooks?.formatDisplayValue) {
-      const value = this.hooks.formatDisplayValue(this._internalValue, this.mode);
+      const value = this.hooks.formatDisplayValue(
+        this._internalValue,
+        this.mode,
+      );
+      if (!this.isTyping && this.allowTyping) {
+        this.typedInputValue = value || '';
+      }
+      return value;
+    }
+
+    // Use custom date format pattern if provided
+    if (this._dateFormatPattern && this.customDateFormatService) {
+      const value = this.formatWithCustomPattern();
       if (!this.isTyping && this.allowTyping) {
         this.typedInputValue = value || '';
       }
@@ -1619,23 +2230,54 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (this.mode === 'single' && this.selectedDate) {
         const options: Intl.DateTimeFormatOptions = {
           hour: '2-digit',
-          minute: '2-digit'
+          minute: '2-digit',
         };
-        timeResult = formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
+        timeResult = formatDateWithTimezone(
+          this.selectedDate,
+          this.locale,
+          options,
+          this.timezone,
+        );
       } else if (this.mode === 'range' && this.startDate) {
         if (this.endDate) {
-          const startOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
-          const endOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
-          const start = formatDateWithTimezone(this.startDate, this.locale, startOptions, this.timezone);
-          const end = formatDateWithTimezone(this.endDate, this.locale, endOptions, this.timezone);
+          const startOptions: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+          };
+          const endOptions: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+          };
+          const start = formatDateWithTimezone(
+            this.startDate,
+            this.locale,
+            startOptions,
+            this.timezone,
+          );
+          const end = formatDateWithTimezone(
+            this.endDate,
+            this.locale,
+            endOptions,
+            this.timezone,
+          );
           timeResult = `${start} - ${end}`;
         } else {
-          const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
-          const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
+          const options: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+          };
+          const start = formatDateWithTimezone(
+            this.startDate,
+            this.locale,
+            options,
+            this.timezone,
+          );
           timeResult = `${start}...`;
         }
       } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-        timeResult = this.getTranslation('timesSelected', undefined, { count: this.selectedDates.length });
+        timeResult = this.getTranslation('timesSelected', undefined, {
+          count: this.selectedDates.length,
+        });
       }
 
       if (!this.isTyping && this.allowTyping) {
@@ -1650,7 +2292,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'short',
-        day: '2-digit'
+        day: '2-digit',
       };
 
       if (this.showTime) {
@@ -1658,23 +2300,45 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         options.minute = '2-digit';
       }
 
-      result = formatDateWithTimezone(this.selectedDate, this.locale, options, this.timezone);
+      result = formatDateWithTimezone(
+        this.selectedDate,
+        this.locale,
+        options,
+        this.timezone,
+      );
     } else if (this.mode === 'range' && this.startDate) {
       const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'short',
-        day: '2-digit'
+        day: '2-digit',
       };
       if (this.endDate) {
-        const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
-        const end = formatDateWithTimezone(this.endDate, this.locale, options, this.timezone);
+        const start = formatDateWithTimezone(
+          this.startDate,
+          this.locale,
+          options,
+          this.timezone,
+        );
+        const end = formatDateWithTimezone(
+          this.endDate,
+          this.locale,
+          options,
+          this.timezone,
+        );
         result = `${start} - ${end}`;
       } else {
-        const start = formatDateWithTimezone(this.startDate, this.locale, options, this.timezone);
+        const start = formatDateWithTimezone(
+          this.startDate,
+          this.locale,
+          options,
+          this.timezone,
+        );
         result = `${start}...`;
       }
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-      result = this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
+      result = this.getTranslation('datesSelected', undefined, {
+        count: this.selectedDates.length,
+      });
     }
 
     if (!this.isTyping && this.allowTyping) {
@@ -1691,17 +2355,34 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (adapter && typeof adapter.format === 'function') {
       if (this.mode === 'single' && this.selectedDate) {
-        return adapter.format(this.selectedDate, this.displayFormat, this.locale);
+        return adapter.format(
+          this.selectedDate,
+          this.displayFormat,
+          this.locale,
+        );
       } else if (this.mode === 'range' && this.startDate) {
         if (this.endDate) {
-          const start = adapter.format(this.startDate, this.displayFormat, this.locale);
-          const end = adapter.format(this.endDate, this.displayFormat, this.locale);
+          const start = adapter.format(
+            this.startDate,
+            this.displayFormat,
+            this.locale,
+          );
+          const end = adapter.format(
+            this.endDate,
+            this.displayFormat,
+            this.locale,
+          );
           return `${start} - ${end}`;
         } else {
-          return adapter.format(this.startDate, this.displayFormat, this.locale) + '...';
+          return (
+            adapter.format(this.startDate, this.displayFormat, this.locale) +
+            '...'
+          );
         }
       } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-        return this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
+        return this.getTranslation('datesSelected', undefined, {
+          count: this.selectedDates.length,
+        });
       }
     }
 
@@ -1713,10 +2394,87 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         const end = this.formatDateSimple(this.endDate, this.displayFormat);
         return `${start} - ${end}`;
       } else {
-        return this.formatDateSimple(this.startDate, this.displayFormat) + '...';
+        return (
+          this.formatDateSimple(this.startDate, this.displayFormat) + '...'
+        );
       }
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
-      return this.getTranslation('datesSelected', undefined, { count: this.selectedDates.length });
+      return this.getTranslation('datesSelected', undefined, {
+        count: this.selectedDates.length,
+      });
+    }
+
+    return '';
+  }
+
+  /**
+   * Format dates using a custom date format pattern
+   * Supports YYYY, MM, DD, HH, mm, ss, etc.
+   */
+  private formatWithCustomPattern(): string {
+    if (!this._dateFormatPattern || !this.customDateFormatService) return '';
+
+    try {
+      if (this.mode === 'single' && this.selectedDate) {
+        return this.customDateFormatService.format(
+          this.selectedDate,
+          this._dateFormatPattern,
+        );
+      } else if (this.mode === 'range' && this.startDate) {
+        if (this.endDate) {
+          const start = this.customDateFormatService.format(
+            this.startDate,
+            this._dateFormatPattern,
+          );
+          const end = this.customDateFormatService.format(
+            this.endDate,
+            this._dateFormatPattern,
+          );
+          return `${start} - ${end}`;
+        } else {
+          return (
+            this.customDateFormatService.format(
+              this.startDate,
+              this._dateFormatPattern,
+            ) + '...'
+          );
+        }
+      } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
+        return this.getTranslation('datesSelected', undefined, {
+          count: this.selectedDates.length,
+        });
+      } else if (this.mode === 'timeRange') {
+        // For time range mode, show formatted start and end times
+        const today = new Date();
+        const startDate = new Date(today);
+        startDate.setHours(
+          this.get24Hour(this.startDisplayHour, this.startIsPm),
+          this.startMinute,
+          this.startSecond,
+          0,
+        );
+
+        const endDate = new Date(today);
+        endDate.setHours(
+          this.get24Hour(this.endDisplayHour, this.endIsPm),
+          this.endMinute,
+          this.endSecond,
+          0,
+        );
+
+        const start = this.customDateFormatService.format(
+          startDate,
+          this._dateFormatPattern,
+        );
+        const end = this.customDateFormatService.format(
+          endDate,
+          this._dateFormatPattern,
+        );
+        return `${start} - ${end}`;
+      }
+    } catch {
+      // Fallback to empty string if formatting fails
+      return '';
     }
 
     return '';
@@ -1757,7 +2515,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   get isBackArrowDisabled(): boolean {
     if (!this._minDate) return false;
-    const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
+    const firstDayOfCurrentMonth = new Date(
+      this.currentYear,
+      this.currentMonth,
+      1,
+    );
     return firstDayOfCurrentMonth <= this._minDate;
   }
   private _invalidateMemoCache(): void {
@@ -1769,7 +2531,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this._cachedIsHolidayMemo = null;
     this._cachedGetHolidayLabelMemo = null;
   }
-
 
   get isCurrentMonthMemo(): (day: Date | null) => boolean {
     const deps = this._memoDependencies();
@@ -1794,15 +2555,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Memoized function for checking if a date is disabled.
    * Returns a cached function that checks date constraints efficiently.
-   * 
+   *
    * @returns A function that checks if a date is disabled
-   * 
+   *
    * @remarks
    * This getter implements memoization to avoid recreating the validation function
    * on every calendar render. The function is regenerated only when:
    * - Disabled state constraints change (minDate, maxDate, disabledDates, disabledRanges)
    * - Current month/year changes
-   * 
+   *
    * Performance: O(1) to get the memoized function, O(n) to execute where n = constraints
    * The memoization significantly improves performance when rendering calendar grids
    * with many date cells (e.g., multiple calendar months).
@@ -1815,7 +2576,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       minDate: this._minDate,
       maxDate: this._maxDate,
       disabledDates: this.disabledDates.length > 0 ? this.disabledDates : null,
-      disabledRanges: this.disabledRanges.length > 0 ? this.disabledRanges : null
+      disabledRanges:
+        this.disabledRanges.length > 0 ? this.disabledRanges : null,
     };
 
     const currentMonth = this._currentMonthSignal();
@@ -1849,34 +2611,35 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Memoized function for comparing if two dates are the same day.
    * Uses an optimized date comparator for efficient day-level comparisons.
-   * 
+   *
    * @returns A function that compares two dates for same-day equality
-   * 
+   *
    * @remarks
    * The date comparator normalizes times to start of day before comparison,
    * ensuring accurate day-level equality checks regardless of time components.
-   * 
+   *
    * Performance: O(1) - Simple date field comparisons after normalization
    */
   get isSameDayMemo(): (d1: Date | null, d2: Date | null) => boolean {
     if (this._cachedIsSameDayMemo) {
       return this._cachedIsSameDayMemo;
     }
-    this._cachedIsSameDayMemo = (d1: Date | null, d2: Date | null) => this.dateComparator(d1, d2);
+    this._cachedIsSameDayMemo = (d1: Date | null, d2: Date | null) =>
+      this.dateComparator(d1, d2);
     return this._cachedIsSameDayMemo;
   }
 
   /**
    * Memoized function for checking if a date is a holiday.
    * Returns a cached function that uses the current holiday provider.
-   * 
+   *
    * @returns A function that checks if a date is a holiday
-   * 
+   *
    * @remarks
    * The function is regenerated when the holidayProvider changes.
    * This ensures the memoized function always uses the current provider
    * while avoiding recreation on every calendar render.
-   * 
+   *
    * Performance: O(1) to get memoized function, O(1) to execute (depends on provider implementation)
    */
   get isHolidayMemo(): (day: Date | null) => boolean {
@@ -1906,7 +2669,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const holidayProvider = deps.holidayProvider;
 
     const currentProvider = this.holidayProvider || null;
-    if (this._cachedGetHolidayLabelMemo && holidayProvider === currentProvider) {
+    if (
+      this._cachedGetHolidayLabelMemo &&
+      holidayProvider === currentProvider
+    ) {
       return this._cachedGetHolidayLabelMemo;
     }
 
@@ -1918,7 +2684,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const isHolidayFn = this.isHolidayMemo;
     this._cachedGetHolidayLabelMemo = (day: Date | null) => {
       if (!day || !provider || !isHolidayFn(day)) return null;
-      return provider.getHolidayLabel ? provider.getHolidayLabel(getStartOfDay(day)) : 'Holiday';
+      return provider.getHolidayLabel
+        ? provider.getHolidayLabel(getStartOfDay(day))
+        : 'Holiday';
     };
     return this._cachedGetHolidayLabelMemo;
   }
@@ -1926,11 +2694,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * TrackBy function for calendar day cells in *ngFor loops.
    * Provides stable identity for Angular's change detection optimization.
-   * 
+   *
    * @param index - Array index of the day
    * @param day - The date object (or null for empty cells)
    * @returns Unique identifier for the day cell
-   * 
+   *
    * @remarks
    * Using timestamp ensures stable identity even when Date objects are recreated.
    * This significantly improves *ngFor performance by allowing Angular to track
@@ -1943,16 +2711,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * TrackBy function for calendar month containers in multi-calendar views.
    * Provides stable identity for efficient change detection.
-   * 
+   *
    * @param _index - Array index (unused, using year-month for identity)
    * @param calendarMonth - The calendar month object
    * @returns Unique identifier combining year and month
    */
-  trackByCalendarMonth(_index: number, calendarMonth: { month: number; year: number; days: (Date | null)[] }): string {
+  trackByCalendarMonth(
+    _index: number,
+    calendarMonth: { month: number; year: number; days: (Date | null)[] },
+  ): string {
     return `${calendarMonth.year}-${calendarMonth.month}`;
   }
 
-  trackByRange(_index: number, range: { key: string; value: [Date, Date] }): string {
+  trackByRange(
+    _index: number,
+    range: { key: string; value: [Date, Date] },
+  ): string {
     return range.key;
   }
 
@@ -1963,7 +2737,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const target = event.target as Node;
-    const nativeElement = this.elementRef.nativeElement;
+    const nativeElement = this.elementRef?.nativeElement;
 
     if (!target || !nativeElement) {
       return;
@@ -1973,8 +2747,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     let isInsidePopover = false;
     if (this.isBrowser && nativeElement) {
-      const popoverContainer = (nativeElement as HTMLElement).querySelector('.ngxsmk-popover-container');
-      if (popoverContainer && (popoverContainer === target || popoverContainer.contains(target))) {
+      const popoverContainer = nativeElement.querySelector(
+        '.ngxsmk-popover-container',
+      );
+      if (
+        popoverContainer &&
+        (popoverContainer === target || popoverContainer.contains(target))
+      ) {
         isInsidePopover = true;
       }
     }
@@ -1983,14 +2762,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    const isInsideOtherDatepicker = Array.from(NgxsmkDatepickerComponent._allInstances).some((instance: NgxsmkDatepickerComponent) => {
+    const isInsideOtherDatepicker = Array.from(
+      NgxsmkDatepickerComponent._allInstances,
+    ).some((instance: NgxsmkDatepickerComponent) => {
       if (instance === this || instance.isInlineMode) {
         return false;
       }
-      const otherElement = instance.elementRef.nativeElement;
-      if (otherElement && (otherElement === target || otherElement.contains(target))) {
-        const otherPopover = (otherElement as HTMLElement).querySelector('.ngxsmk-popover-container');
-        if (otherPopover && (otherPopover === target || otherPopover.contains(target))) {
+      const otherElement = instance.elementRef?.nativeElement;
+      if (
+        otherElement &&
+        (otherElement === target || otherElement.contains(target))
+      ) {
+        const otherPopover = otherElement.querySelector(
+          '.ngxsmk-popover-container',
+        );
+        if (
+          otherPopover &&
+          (otherPopover === target || otherPopover.contains(target))
+        ) {
           return true;
         }
       }
@@ -2006,7 +2795,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const now = Date.now();
-    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    const timeSinceToggle =
+      this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
 
     const protectionTime = this.isMobileDevice() ? 1000 : 300;
 
@@ -2024,7 +2814,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const target = event.target as Node;
-    const nativeElement = this.elementRef.nativeElement;
+    const nativeElement = this.elementRef?.nativeElement;
 
     if (!target || !nativeElement) {
       return;
@@ -2034,8 +2824,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     let isInsidePopover = false;
     if (this.isBrowser && nativeElement) {
-      const popoverContainer = (nativeElement as HTMLElement).querySelector('.ngxsmk-popover-container');
-      if (popoverContainer && (popoverContainer === target || popoverContainer.contains(target))) {
+      const popoverContainer = nativeElement.querySelector(
+        '.ngxsmk-popover-container',
+      );
+      if (
+        popoverContainer &&
+        (popoverContainer === target || popoverContainer.contains(target))
+      ) {
         isInsidePopover = true;
       }
     }
@@ -2044,14 +2839,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    const isInsideOtherDatepicker = Array.from(NgxsmkDatepickerComponent._allInstances).some((instance: NgxsmkDatepickerComponent) => {
+    const isInsideOtherDatepicker = Array.from(
+      NgxsmkDatepickerComponent._allInstances,
+    ).some((instance: NgxsmkDatepickerComponent) => {
       if (instance === this || instance.isInlineMode) {
         return false;
       }
-      const otherElement = instance.elementRef.nativeElement;
-      if (otherElement && (otherElement === target || otherElement.contains(target))) {
-        const otherPopover = (otherElement as HTMLElement).querySelector('.ngxsmk-popover-container');
-        if (otherPopover && (otherPopover === target || otherPopover.contains(target))) {
+      const otherElement = instance.elementRef?.nativeElement;
+      if (
+        otherElement &&
+        (otherElement === target || otherElement.contains(target))
+      ) {
+        const otherPopover = otherElement.querySelector(
+          '.ngxsmk-popover-container',
+        );
+        if (
+          otherPopover &&
+          (otherPopover === target || otherPopover.contains(target))
+        ) {
           return true;
         }
       }
@@ -2067,7 +2872,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const now = Date.now();
-    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    const timeSinceToggle =
+      this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     const protectionTime = this.isMobileDevice() ? 1000 : 300;
 
     if (this.isOpeningCalendar || timeSinceToggle < protectionTime) {
@@ -2099,8 +2905,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private focusInput(): void {
     if (this.dateInput?.nativeElement) {
       this.dateInput.nativeElement.focus();
-    } else if (this.elementRef.nativeElement) {
-      const inputGroup = this.elementRef.nativeElement.querySelector('.ngxsmk-input-group');
+    } else if (this.elementRef?.nativeElement) {
+      const inputGroup = this.elementRef?.nativeElement?.querySelector(
+        '.ngxsmk-input-group',
+      );
       if (inputGroup) {
         inputGroup.focus();
       }
@@ -2115,13 +2923,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const now = Date.now();
-    const timeSinceTouch = this.touchStartTime > 0 ? now - this.touchStartTime : 0;
+    const timeSinceTouch =
+      this.touchStartTime > 0 ? now - this.touchStartTime : 0;
 
     const touch = event.changedTouches[0];
-    const isSameElement = touch && this.touchStartElement &&
+    const isSameElement =
+      touch &&
+      this.touchStartElement &&
       (touch.target === this.touchStartElement ||
-        (this.touchStartElement as Node).contains &&
-        (this.touchStartElement as Node).contains(touch.target as Node));
+        ((this.touchStartElement as Node).contains &&
+          (this.touchStartElement as Node).contains(touch.target as Node)));
 
     if (this.touchStartTime === 0 || timeSinceTouch > 800 || !isSameElement) {
       this.touchStartTime = 0;
@@ -2129,7 +2940,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    const timeSinceToggle =
+      this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     if (timeSinceToggle < 300) {
       this.touchStartTime = 0;
       this.touchStartElement = null;
@@ -2146,14 +2958,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const wasOpen = this.isCalendarOpen;
 
     if (!wasOpen) {
-      NgxsmkDatepickerComponent._allInstances.forEach((instance: NgxsmkDatepickerComponent) => {
-        if (instance !== this && instance.isCalendarOpen && !instance.isInlineMode) {
-          instance.isCalendarOpen = false;
-          instance.isOpeningCalendar = false;
-          instance.updateOpeningState(false);
-          instance.cdr.markForCheck();
-        }
-      });
+      NgxsmkDatepickerComponent._allInstances.forEach(
+        (instance: NgxsmkDatepickerComponent) => {
+          if (
+            instance !== this &&
+            instance.isCalendarOpen &&
+            !instance.isInlineMode
+          ) {
+            instance.isCalendarOpen = false;
+            instance.isOpeningCalendar = false;
+            instance.updateOpeningState(false);
+            instance.cdr.markForCheck();
+          }
+        },
+      );
 
       this.isOpeningCalendar = true;
       this.isCalendarOpen = true;
@@ -2166,7 +2984,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this.touchStartElement = null;
       }, 500);
 
-      if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+      if (
+        this.defaultMonthOffset !== 0 &&
+        !this._internalValue &&
+        !this._startAtDate
+      ) {
         const nextMonth = new Date();
         nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
         nextMonth.setDate(1);
@@ -2231,7 +3053,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onPointerUp(event: PointerEvent): void {
-    if (this.disabled || this.isInlineMode || !this.isPointerEvent || event.pointerType === 'mouse') {
+    if (
+      this.disabled ||
+      this.isInlineMode ||
+      !this.isPointerEvent ||
+      event.pointerType === 'mouse'
+    ) {
       this.isPointerEvent = false;
       return;
     }
@@ -2246,7 +3073,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const now = Date.now();
-    const timeSincePointerDown = this.pointerDownTime > 0 ? now - this.pointerDownTime : 0;
+    const timeSincePointerDown =
+      this.pointerDownTime > 0 ? now - this.pointerDownTime : 0;
 
     if (this.pointerDownTime === 0 || timeSincePointerDown > 600) {
       this.isPointerEvent = false;
@@ -2334,7 +3162,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       selectedDates: this.selectedDates,
       mode: this.mode,
       focusedDate: this.focusedDate,
-      isCalendarOpen: this.isCalendarOpen
+      isCalendarOpen: this.isCalendarOpen,
     };
 
     if (this.customShortcuts) {
@@ -2462,7 +3290,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private navigateDate(days: number, weeks: number): void {
     const baseDate = this.focusedDate || this.currentDate || new Date();
     const newDate = new Date(baseDate);
-    newDate.setDate(newDate.getDate() + days + (weeks * 7));
+    newDate.setDate(newDate.getDate() + days + weeks * 7);
 
     if (this.isDateValid(newDate)) {
       this.focusedDate = newDate;
@@ -2558,14 +3386,25 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   getDayCellCustomClasses(day: Date | null): string[] {
     if (!day || !this.hooks?.getDayCellClasses) return [];
 
-    const isSelected = this.mode === 'single' && this.isSameDayMemo(day, this.selectedDate) ||
-      this.mode === 'multiple' && this.isMultipleSelected(day) ||
-      this.mode === 'range' && (this.isSameDayMemo(day, this.startDate) || this.isSameDayMemo(day, this.endDate));
+    const isSelected =
+      (this.mode === 'single' && this.isSameDayMemo(day, this.selectedDate)) ||
+      (this.mode === 'multiple' && this.isMultipleSelected(day)) ||
+      (this.mode === 'range' &&
+        (this.isSameDayMemo(day, this.startDate) ||
+          this.isSameDayMemo(day, this.endDate)));
     const isDisabled = this.isDateDisabledMemo(day);
     const isToday = this.isSameDayMemo(day, this.today);
     const isHoliday = this.isHolidayMemo(day);
 
-    return this.hooks.getDayCellClasses(day, isSelected, isDisabled, isToday, isHoliday) || [];
+    return (
+      this.hooks.getDayCellClasses(
+        day,
+        isSelected,
+        isDisabled,
+        isToday,
+        isHoliday,
+      ) || []
+    );
   }
 
   getDayCellTooltip(day: Date | null): string | null {
@@ -2594,10 +3433,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Generates an accessible label for a date cell.
    * Provides screen readers with a descriptive label for each selectable date.
-   * 
+   *
    * @param day - The date to generate a label for
    * @returns Localized date label (e.g., "Monday, January 15, 2024")
-   * 
+   *
    * @remarks
    * The label includes weekday, month, day, and year for full context.
    * Custom formatting can be provided via the formatAriaLabel hook.
@@ -2610,16 +3449,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return this.hooks.formatAriaLabel(day);
     }
 
-    return day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return day.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
   }
-
 
   /**
    * ControlValueAccessor implementation: Writes a new value to the form control.
    * Called by Angular Forms when the form control value changes programmatically.
-   * 
+   *
    * @param val - The new value from the form control
-   * 
+   *
    * @remarks
    * This method:
    * - Normalizes the incoming value to ensure consistent format
@@ -2628,14 +3471,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Regenerates calendar to reflect the new value
    * - Notifies Material Form Field of state changes
    * - Syncs with Signal Form field if field input is used
-   * 
+   *
    * This is part of the ControlValueAccessor interface, enabling two-way binding
    * with both Reactive Forms and Template-driven Forms.
    */
   writeValue(val: DatepickerValue): void {
-    const normalizedVal = val !== null && val !== undefined
-      ? this._normalizeValue(val) as DatepickerValue
-      : null;
+    const normalizedVal =
+      val !== null && val !== undefined
+        ? (this._normalizeValue(val) as DatepickerValue)
+        : null;
     this._internalValue = normalizedVal;
     this.initializeValue(normalizedVal);
     this._updateMemoSignals();
@@ -2651,7 +3495,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * ControlValueAccessor implementation: Registers a callback for value changes.
    * Called by Angular Forms to receive notifications when the user changes the value.
-   * 
+   *
    * @param fn - Callback function to call when value changes
    */
   registerOnChange(fn: (value: DatepickerValue) => void): void {
@@ -2661,7 +3505,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * ControlValueAccessor implementation: Registers a callback for touched state.
    * Called by Angular Forms to receive notifications when the user interacts with the control.
-   * 
+   *
    * @param fn - Callback function to call when control is touched
    */
   registerOnTouched(fn: () => void): void {
@@ -2678,9 +3522,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Emits a value change event and updates the internal state.
    * Handles normalization, form field synchronization, and calendar auto-close behavior.
-   * 
+   *
    * @param val - The new datepicker value (Date, Date range, or array of dates)
-   * 
+   *
    * @remarks
    * This method is the central point for value updates and ensures:
    * - Value normalization for consistent internal representation
@@ -2688,7 +3532,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Event emission for two-way binding
    * - Touch state tracking for form validation
    * - Automatic calendar closing for single date and complete range selections
-   * 
+   *
    * The calendar auto-closes when:
    * - Single date mode: After any date selection
    * - Range mode: After both start and end dates are selected
@@ -2696,9 +3540,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Not in time-only mode
    */
   private emitValue(val: DatepickerValue) {
-    const normalizedVal = val !== null && val !== undefined
-      ? (this._normalizeValue(val) as DatepickerValue)
-      : null;
+    const normalizedVal =
+      val !== null && val !== undefined
+        ? (this._normalizeValue(val) as DatepickerValue)
+        : null;
 
     this._internalValue = normalizedVal;
 
@@ -2714,7 +3559,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (!this.isInlineMode && val !== null && !this.timeOnly) {
-      if (this.mode === 'single' || (this.mode === 'range' && this.startDate && this.endDate)) {
+      if (
+        this.mode === 'single' ||
+        (this.mode === 'range' && this.startDate && this.endDate)
+      ) {
         this.isCalendarOpen = false;
       }
     }
@@ -2723,21 +3571,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Toggles the calendar popover open/closed state.
    * Handles focus management, accessibility announcements, and prevents rapid toggling.
-   * 
+   *
    * @param event - Optional event that triggered the toggle (used to prevent toggle on clear button clicks)
-   * 
+   *
    * @remarks
    * This method implements several important behaviors:
    * - Debouncing: Prevents rapid toggling within 300ms
    * - Focus management: Stores previous focus element for restoration
    * - Accessibility: Announces calendar state changes to screen readers
    * - Touch optimization: Sets up passive touch listeners for mobile devices
-   * 
+   *
    * When opening:
    * - Stores the currently focused element for restoration
    * - Sets up focus trap for keyboard navigation
    * - Announces calendar opening with current month/year
-   * 
+   *
    * When closing:
    * - Removes focus trap
    * - Restores focus to previous element
@@ -2755,7 +3603,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     const now = Date.now();
-    const timeSinceToggle = this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
+    const timeSinceToggle =
+      this.lastToggleTime > 0 ? now - this.lastToggleTime : Infinity;
     if (timeSinceToggle < 300) {
       return;
     }
@@ -2767,7 +3616,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.lastToggleTime = now;
       if (willOpen) {
         this.closeMonthYearDropdowns();
-        if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+        if (
+          this.defaultMonthOffset !== 0 &&
+          !this._internalValue &&
+          !this._startAtDate
+        ) {
           const nextMonth = new Date();
           nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
           nextMonth.setDate(1);
@@ -2781,6 +3634,14 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this._currentYear = this.startDate.getFullYear();
           this._invalidateMemoCache();
         }
+
+        // Smart view mode defaults
+        if (this.mode === 'year') {
+          this.calendarViewMode = 'decade';
+        } else if (this.mode === 'month') {
+          this.calendarViewMode = 'year';
+        }
+
         this.generateCalendar();
       }
       this.updateOpeningState(willOpen && this.isCalendarOpen);
@@ -2805,17 +3666,27 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
             this.setupPassiveTouchListeners();
           }
           this.closeMonthYearDropdowns();
-          const monthName = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
+          const monthName = this.currentDate.toLocaleDateString(this.locale, {
+            month: 'long',
+          });
           const year = String(this.currentDate.getFullYear());
-          const calendarOpenedMsg = this.getTranslation('calendarOpened' as keyof DatepickerTranslations, undefined, {
-            month: monthName,
-            year: year
-          }) || `Calendar opened for ${monthName} ${year}`;
+          const calendarOpenedMsg =
+            this.getTranslation(
+              'calendarOpened' as keyof DatepickerTranslations,
+              undefined,
+              {
+                month: monthName,
+                year: year,
+              },
+            ) || `Calendar opened for ${monthName} ${year}`;
           this.ariaLiveService.announce(calendarOpenedMsg, 'polite');
         }, 100);
       } else if (!willOpen) {
         this.removeFocusTrap();
-        const calendarClosedMsg = this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
+        const calendarClosedMsg =
+          this.getTranslation(
+            'calendarClosed' as keyof DatepickerTranslations,
+          ) || 'Calendar closed';
         this.ariaLiveService.announce(calendarClosedMsg, 'polite');
       }
 
@@ -2828,7 +3699,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (event.type === 'click') {
       const target = event.target as HTMLElement;
-      if (this.allowTyping && target && target.tagName === 'INPUT' && target.classList.contains('ngxsmk-display-input')) {
+      if (
+        this.allowTyping &&
+        target &&
+        target.tagName === 'INPUT' &&
+        target.classList.contains('ngxsmk-display-input')
+      ) {
         return;
       }
       if (target && target.closest('.ngxsmk-clear-button')) {
@@ -2840,11 +3716,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const touchDetectionWindow = this.isMobileDevice() ? 600 : 300;
       if (this.touchStartElement && this.touchStartTime > 0) {
         const timeSinceTouch = now - this.touchStartTime;
-        if (timeSinceTouch < touchDetectionWindow && (this.touchStartElement === event.target ||
-          (event.target as Node) && this.touchStartElement &&
-          (this.touchStartElement as Node).contains &&
-          (this.touchStartElement as Node).contains(event.target as Node))) {
-          if (this.isOpeningCalendar || (timeSinceTouch < 500 && this.isCalendarOpen)) {
+        if (
+          timeSinceTouch < touchDetectionWindow &&
+          (this.touchStartElement === event.target ||
+            ((event.target as Node) &&
+              this.touchStartElement &&
+              (this.touchStartElement as Node).contains &&
+              (this.touchStartElement as Node).contains(event.target as Node)))
+        ) {
+          if (
+            this.isOpeningCalendar ||
+            (timeSinceTouch < 500 && this.isCalendarOpen)
+          ) {
             return;
           }
         }
@@ -2852,8 +3735,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (now - this.lastToggleTime < 300) {
         return;
       }
-
-      this.lastToggleTime = now;
     }
 
     event.stopPropagation();
@@ -2862,20 +3743,30 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const willOpen = !wasOpen;
 
     if (willOpen) {
-      NgxsmkDatepickerComponent._allInstances.forEach((instance: NgxsmkDatepickerComponent) => {
-        if (instance !== this && instance.isCalendarOpen && !instance.isInlineMode) {
-          instance.isCalendarOpen = false;
-          instance.isOpeningCalendar = false;
-          instance.updateOpeningState(false);
-          instance.cdr.markForCheck();
-        }
-      });
+      NgxsmkDatepickerComponent._allInstances.forEach(
+        (instance: NgxsmkDatepickerComponent) => {
+          if (
+            instance !== this &&
+            instance.isCalendarOpen &&
+            !instance.isInlineMode
+          ) {
+            instance.isCalendarOpen = false;
+            instance.isOpeningCalendar = false;
+            instance.updateOpeningState(false);
+            instance.cdr.markForCheck();
+          }
+        },
+      );
 
       if (this._field) {
         this.syncFieldValue(this._field);
       }
 
-      if (this.defaultMonthOffset !== 0 && !this._internalValue && !this._startAtDate) {
+      if (
+        this.defaultMonthOffset !== 0 &&
+        !this._internalValue &&
+        !this._startAtDate
+      ) {
         const nextMonth = new Date();
         nextMonth.setMonth(nextMonth.getMonth() + this.defaultMonthOffset);
         nextMonth.setDate(1);
@@ -2894,6 +3785,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     this.isCalendarOpen = !wasOpen;
+    this.lastToggleTime = Date.now();
     this.updateOpeningState(willOpen && this.isCalendarOpen);
 
     if (willOpen && this.isCalendarOpen) {
@@ -2903,17 +3795,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.setupPassiveTouchListeners();
           this.positionPopoverRelativeToInput();
         }
-        const monthName = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
+        const monthName = this.currentDate.toLocaleDateString(this.locale, {
+          month: 'long',
+        });
         const year = String(this.currentDate.getFullYear());
-        const calendarOpenedMsg = this.getTranslation('calendarOpened' as keyof DatepickerTranslations, undefined, {
-          month: monthName,
-          year: year
-        }) || `Calendar opened for ${monthName} ${year}`;
+        const calendarOpenedMsg =
+          this.getTranslation(
+            'calendarOpened' as keyof DatepickerTranslations,
+            undefined,
+            {
+              month: monthName,
+              year: year,
+            },
+          ) || `Calendar opened for ${monthName} ${year}`;
         this.ariaLiveService.announce(calendarOpenedMsg, 'polite');
       }, 100);
     } else if (!willOpen) {
       this.removeFocusTrap();
-      const calendarClosedMsg = this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
+      const calendarClosedMsg =
+        this.getTranslation('calendarClosed' as keyof DatepickerTranslations) ||
+        'Calendar closed';
       this.ariaLiveService.announce(calendarClosedMsg, 'polite');
     }
   }
@@ -2983,7 +3884,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private destroyBodyView(): void {
     if (this.portalViewRef) {
       this.appRef.detachView(this.portalViewRef);
-      // Remove nodes (destroy does this usually if attached to VCR, but here we appended manually so we might need to remove unless detach handles it via cleanup? 
+      // Remove nodes (destroy does this usually if attached to VCR, but here we appended manually so we might need to remove unless detach handles it via cleanup?
       // createEmbeddedView returns a view that is not attached to VCR unless we call insert.
       // appRef.attachView enables CD.
       // destroy() removes it from DOM if it knew where it was? No, EmbeddedViewRef.destroy() removes from DOM if it was inserted via VCR.
@@ -3003,14 +3904,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (!this.isInlineMode) {
       this.removeFocusTrap();
       this.closeCalendarWithFocusRestore();
-      const calendarClosedMsg = this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
+      const calendarClosedMsg =
+        this.getTranslation('calendarClosed' as keyof DatepickerTranslations) ||
+        'Calendar closed';
       this.ariaLiveService.announce(calendarClosedMsg, 'polite');
       this.cdr.markForCheck();
     }
   }
 
   private shouldAutoClose(): boolean {
-    if (!this.autoApplyClose || this.showTime || this.timeOnly || this.isInlineMode) {
+    if (
+      !this.autoApplyClose ||
+      this.showTime ||
+      this.timeOnly ||
+      this.isInlineMode
+    ) {
       return false;
     }
 
@@ -3026,9 +3934,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Clears the selected date value(s) and resets the component state.
    * Emits null value and closes calendar if open.
-   * 
+   *
    * @param event - Optional event that triggered the clear action
-   * 
+   *
    * @remarks
    * This method:
    * - Clears all selected dates (single, range, multiple modes)
@@ -3037,7 +3945,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Provides haptic feedback on mobile if enabled
    * - Resets touch gesture state
    * - Announces clearing to screen readers
-   * 
+   *
    * Used by the clear button and can be called programmatically.
    */
   public clearValue(event?: MouseEvent | TouchEvent): void {
@@ -3069,7 +3977,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.generateCalendar();
   }
 
-  get currentMonth(): number { return this._currentMonth; }
+  get currentMonth(): number {
+    return this._currentMonth;
+  }
 
   set currentMonth(month: number) {
     if (this.disabled) return;
@@ -3082,7 +3992,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 
-  get currentYear(): number { return this._currentYear; }
+  get currentYear(): number {
+    return this._currentYear;
+  }
 
   set currentYear(year: number) {
     if (this.disabled) return;
@@ -3103,7 +4015,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     this._updateMemoSignals();
 
-    if (this._locale === 'en-US' && this.isBrowser && typeof navigator !== 'undefined' && navigator.language) {
+    if (
+      this._locale === 'en-US' &&
+      this.isBrowser &&
+      typeof navigator !== 'undefined' &&
+      navigator.language
+    ) {
       this._locale = navigator.language;
     }
 
@@ -3122,14 +4039,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this.calendarViewMode === 'timeline') {
       this.generateTimeline();
     }
-    if (this.calendarViewMode === 'time-slider' && this.mode === 'range' && this.showTime) {
+    if (
+      this.calendarViewMode === 'time-slider' &&
+      this.mode === 'range' &&
+      this.showTime
+    ) {
       this.initializeTimeSliders();
     }
 
     if ((this.showTime || this.timeOnly) && !this._internalValue) {
       const now = new Date();
       this.currentHour = now.getHours();
-      this.currentMinute = Math.floor(now.getMinutes() / this.minuteInterval) * this.minuteInterval;
+      this.currentMinute =
+        Math.floor(now.getMinutes() / this.minuteInterval) *
+        this.minuteInterval;
 
       if (this.currentMinute === 60) {
         this.currentMinute = 0;
@@ -3155,16 +4078,23 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         let resolvedField: unknown = this._field;
 
         // Simple resolution logic similar to service but inline for legacy
-        if (typeof resolvedField === 'function' && !('set' in resolvedField) && !('update' in resolvedField)) {
+        if (
+          typeof resolvedField === 'function' &&
+          !('set' in resolvedField) &&
+          !('update' in resolvedField)
+        ) {
           try {
             const res = (resolvedField as () => unknown)();
             if (res && typeof res === 'object') resolvedField = res;
-          } catch { }
+          } catch {}
         }
 
         if (resolvedField && typeof resolvedField === 'object') {
           const rf = resolvedField as Record<string, unknown>;
-          const fieldValue = typeof rf['value'] === 'function' ? (rf['value'] as () => unknown)() : rf['value'];
+          const fieldValue =
+            typeof rf['value'] === 'function'
+              ? (rf['value'] as () => unknown)()
+              : rf['value'];
           initialValue = this._normalizeValue(fieldValue);
         }
       } catch {
@@ -3198,6 +4128,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.trackedDoubleRequestAnimationFrame(() => {
         this.setupPassiveTouchListeners();
         this.setupInputGroupPassiveListeners();
+        this.setupLazyLoadingObserver();
 
         this.trackedSetTimeout(() => {
           this.setupInputGroupPassiveListeners();
@@ -3215,13 +4146,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private setupInputGroupPassiveListeners(): void {
-    const nativeElement = this.elementRef.nativeElement;
+    const nativeElement = this.elementRef?.nativeElement;
     if (!nativeElement) {
       this.trackedSetTimeout(() => this.setupInputGroupPassiveListeners(), 50);
       return;
     }
 
-    const inputGroup = nativeElement.querySelector('.ngxsmk-input-group') as HTMLElement;
+    const inputGroup = nativeElement.querySelector(
+      '.ngxsmk-input-group',
+    ) as HTMLElement;
     if (!inputGroup) {
       this.trackedSetTimeout(() => this.setupInputGroupPassiveListeners(), 50);
       return;
@@ -3235,7 +4168,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const touchStartHandler = (event: TouchEvent) => {
       this.onTouchStart(event);
     };
-    inputGroup.addEventListener('touchstart', touchStartHandler, { passive: true });
+    inputGroup.addEventListener('touchstart', touchStartHandler, {
+      passive: true,
+    });
 
     const touchEndHandler = (event: TouchEvent) => {
       this.onTouchEnd(event);
@@ -3248,7 +4183,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     });
   }
 
-  private _touchListenersSetupTimeout: ReturnType<typeof setTimeout> | null = null;
+  private _touchListenersSetupTimeout: ReturnType<typeof setTimeout> | null =
+    null;
 
   /**
    * Sets up passive touch event listeners on calendar day cells for improved mobile performance.
@@ -3258,10 +4194,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private setupPassiveTouchListeners(): void {
     if (!this.isBrowser) return;
 
-    this.passiveTouchListeners.forEach(cleanup => cleanup());
+    this.passiveTouchListeners.forEach((cleanup) => cleanup());
     this.passiveTouchListeners = [];
 
-    const nativeElement = this.elementRef.nativeElement;
+    const nativeElement = this.elementRef?.nativeElement;
     if (!nativeElement) return;
 
     if (this._touchListenersSetupTimeout) {
@@ -3272,7 +4208,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._touchListenersSetupTimeout = null;
       if (!this.isBrowser || !nativeElement) return;
 
-      const dateCells = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
+      const dateCells = nativeElement.querySelectorAll(
+        '.ngxsmk-day-cell[data-date]',
+      );
 
       if (dateCells.length > 0) {
         this.attachTouchListenersToCells(dateCells);
@@ -3291,7 +4229,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           }
 
           retryCount++;
-          const dateCellsRetry = nativeElement.querySelectorAll('.ngxsmk-day-cell[data-date]');
+          const dateCellsRetry = nativeElement.querySelectorAll(
+            '.ngxsmk-day-cell[data-date]',
+          );
           if (dateCellsRetry.length > 0) {
             this.attachTouchListenersToCells(dateCellsRetry);
             retryTimeoutId = null;
@@ -3362,12 +4302,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       needsChangeDetection = true;
     }
 
+    if (changes['mode']) {
+      this.initializeValue(this._internalValue);
+      this.generateCalendar();
+      needsChangeDetection = true;
+    }
+
     if (changes['locale'] || changes['rtl']) {
       this.updateRtlState();
       if (changes['locale']) {
         // Clear timeouts before invalidating cache to cancel pending operations
         this.clearActiveTimeouts();
-        this.invalidateMonthCache();
+        this.calendarGenerationService.clearCache();
         this.initializeTranslations();
         this.generateLocaleData();
         // Don't regenerate calendar immediately after locale change
@@ -3378,13 +4324,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    if (changes['weekStart'] || changes['minuteInterval'] || changes['holidayProvider'] || changes['yearRange'] || changes['timezone']) {
+    if (
+      changes['weekStart'] ||
+      changes['minuteInterval'] ||
+      changes['holidayProvider'] ||
+      changes['yearRange'] ||
+      changes['timezone']
+    ) {
       this.applyGlobalConfig();
       if (changes['weekStart'] || changes['yearRange']) {
         if (changes['weekStart']) {
           // Clear timeouts before invalidating cache to cancel pending operations
           this.clearActiveTimeouts();
-          this.invalidateMonthCache();
+          this.calendarGenerationService.clearCache();
         }
         this.generateLocaleData();
         // Don't regenerate calendar immediately after weekStart change
@@ -3406,7 +4358,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (changes['minuteInterval']) {
       this.generateTimeOptions();
-      this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
+      this.currentMinute =
+        Math.floor(this.currentMinute / this.minuteInterval) *
+        this.minuteInterval;
       this.timeChange();
       needsChangeDetection = false; // Already handled
     }
@@ -3447,7 +4401,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    if (changes['holidayProvider'] || changes['disableHolidays'] || changes['disabledDates'] || changes['disabledRanges']) {
+    if (
+      changes['holidayProvider'] ||
+      changes['disableHolidays'] ||
+      changes['disabledDates'] ||
+      changes['disabledRanges']
+    ) {
       this._updateMemoSignals();
       this.generateCalendar();
       this.cdr.markForCheck();
@@ -3506,12 +4465,40 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
       this.cdr.markForCheck();
     }
+
+    if (changes['showTime'] || changes['showSeconds']) {
+      if (this.showTime) {
+        this.generateTimeOptions();
+        this.update12HourState(this.currentHour);
+      }
+      this.cdr.markForCheck();
+    }
+
+    if (changes['inline']) {
+      if (this.isInlineMode) {
+        this.generateCalendar();
+      }
+      this.cdr.markForCheck();
+    }
+
+    if (
+      changes['calendarLayout'] ||
+      changes['calendarCount'] ||
+      changes['showCalendarButton'] ||
+      changes['allowTyping'] ||
+      changes['align'] ||
+      changes['useNativePicker'] ||
+      changes['theme']
+    ) {
+      this.generateCalendar();
+      this.cdr.markForCheck();
+    }
   }
 
   /**
    * Validates component inputs for conflicts and invalid combinations.
    * Logs warnings in development mode when invalid configurations are detected.
-   * 
+   *
    * @param changes - The SimpleChanges object from ngOnChanges
    */
   private validateInputs(changes: SimpleChanges): void {
@@ -3524,8 +4511,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           if (isDevMode()) {
             console.warn(
               '[ngxsmk-datepicker] minDate is greater than maxDate. ' +
-              `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
-              'Adjusting maxDate to be at least 1 day after minDate.'
+                `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
+                'Adjusting maxDate to be at least 1 day after minDate.',
             );
           }
           // Prevent invalid state by adjusting maxDate to be at least 1 day after minDate
@@ -3544,7 +4531,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           '[ngxsmk-datepicker] timeOnly is only supported with mode="single". ' +
-          `Current mode: "${this.mode}". timeOnly will be disabled.`
+            `Current mode: "${this.mode}". timeOnly will be disabled.`,
         );
       }
       this.timeOnly = false;
@@ -3557,7 +4544,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] minuteInterval must be at least 1. ` +
-          `Received: ${this.minuteInterval}. Setting to 1.`
+            `Received: ${this.minuteInterval}. Setting to 1.`,
         );
       }
       this.minuteInterval = 1;
@@ -3568,7 +4555,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] secondInterval must be at least 1. ` +
-          `Received: ${this.secondInterval}. Setting to 1.`
+            `Received: ${this.secondInterval}. Setting to 1.`,
         );
       }
       this.secondInterval = 1;
@@ -3579,7 +4566,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] yearRange must be at least 1. ` +
-          `Received: ${this.yearRange}. Setting to 1.`
+            `Received: ${this.yearRange}. Setting to 1.`,
         );
       }
       this.yearRange = 1;
@@ -3589,10 +4576,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   private initializeTimeSliders(): void {
     if (this.mode === 'range' && this.showTime) {
       if (this.startDate) {
-        this.startTimeSlider = this.startDate.getHours() * 60 + this.startDate.getMinutes();
+        this.startTimeSlider =
+          this.startDate.getHours() * 60 + this.startDate.getMinutes();
       }
       if (this.endDate) {
-        this.endTimeSlider = this.endDate.getHours() * 60 + this.endDate.getMinutes();
+        this.endTimeSlider =
+          this.endDate.getHours() * 60 + this.endDate.getMinutes();
       } else {
         this.endTimeSlider = 1440;
       }
@@ -3635,20 +4624,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Initializes the component's internal state from a DatepickerValue.
    * Sets up selected dates, calendar view position, and time values based on the provided value.
-   * 
+   *
    * @param value - The datepicker value to initialize from (Date, range, array, or null)
-   * 
+   *
    * @remarks
    * This method handles initialization for all selection modes:
    * - Single mode: Sets selectedDate
    * - Range mode: Sets startDate and endDate
    * - Multiple mode: Sets selectedDates array
-   * 
+   *
    * The method also:
    * - Determines the calendar view center date (uses value, startAt, or minDate as fallback)
    * - Extracts and sets time values if the date includes time information
    * - Normalizes all dates to ensure consistent internal representation
-   * 
+   *
    * Performance: O(1) for single/range, O(n) for multiple mode where n = array length
    */
   private initializeValue(value: DatepickerValue): void {
@@ -3663,13 +4652,27 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (this.mode === 'single' && value instanceof Date) {
         this.selectedDate = this._normalizeDate(value);
         initialDate = this.selectedDate;
-      } else if (this.mode === 'range' && typeof value === 'object' && 'start' in value && 'end' in value) {
-        this.startDate = this._normalizeDate((value as { start: Date, end: Date }).start);
-        this.endDate = this._normalizeDate((value as { start: Date, end: Date }).end);
+      } else if (
+        this.mode === 'range' &&
+        typeof value === 'object' &&
+        'start' in value &&
+        'end' in value
+      ) {
+        this.startDate = this._normalizeDate(
+          (value as { start: Date; end: Date }).start,
+        );
+        this.endDate = this._normalizeDate(
+          (value as { start: Date; end: Date }).end,
+        );
         initialDate = this.startDate;
       } else if (this.mode === 'multiple' && Array.isArray(value)) {
-        this.selectedDates = (value as Date[]).map(d => this._normalizeDate(d)).filter((d): d is Date => d !== null);
-        initialDate = this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1]! : null;
+        this.selectedDates = (value as Date[])
+          .map((d) => this._normalizeDate(d))
+          .filter((d): d is Date => d !== null);
+        initialDate =
+          this.selectedDates.length > 0
+            ? this.selectedDates[this.selectedDates.length - 1]!
+            : null;
       }
     }
 
@@ -3700,7 +4703,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     //
     // The fix is to check if we are currently viewing a month that contains either the start or end date.
     // If so, and the calendar is open (or inline), we preserve the current view instead of jumping to startDate.
-    if ((this.isCalendarOpen || this.isInlineMode) && this.currentDate && this.mode === 'range' && this.startDate && this.endDate) {
+    if (
+      (this.isCalendarOpen || this.isInlineMode) &&
+      this.currentDate &&
+      this.mode === 'range' &&
+      this.startDate &&
+      this.endDate
+    ) {
       const isStartVisible = this.isCurrentMonth(this.startDate);
       const isEndVisible = this.isCurrentMonth(this.endDate);
 
@@ -3718,7 +4727,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.currentHour = viewCenterDate.getHours();
       this.currentMinute = viewCenterDate.getMinutes();
       this.update12HourState(this.currentHour);
-      this.currentMinute = Math.floor(this.currentMinute / this.minuteInterval) * this.minuteInterval;
+      this.currentMinute =
+        Math.floor(this.currentMinute / this.minuteInterval) *
+        this.minuteInterval;
     }
   }
 
@@ -3729,10 +4740,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Normalizes various date input formats into a consistent DatepickerValue type.
    * Handles Date objects, Moment.js objects, date ranges, arrays, and strings.
-   * 
+   *
    * @param val - The value to normalize (can be Date, Moment, range object, array, or string)
    * @returns Normalized DatepickerValue (Date, range object, array, or null)
-   * 
+   *
    * @remarks
    * This method provides flexible input handling to support:
    * - Native JavaScript Date objects
@@ -3740,7 +4751,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Date range objects: { start: Date, end: Date }
    * - Arrays of dates for multiple selection mode
    * - String dates with custom format parsing
-   * 
+   *
    * Invalid or unparseable values are normalized to null.
    * This ensures type safety and consistent internal state representation.
    */
@@ -3752,22 +4763,41 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (val instanceof Date) {
       return this._normalizeDate(val) as DatepickerValue;
     } else if (this.isMomentObject(val)) {
-      const momentObj = val as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
-      return this._normalizeDate(this.momentToDate(momentObj)) as DatepickerValue;
-    } else if (typeof val === 'object' && val !== null && 'start' in val && 'end' in val) {
+      const momentObj = val as {
+        toDate: () => Date;
+        utcOffset?: () => number;
+        format?: (format: string) => string;
+      };
+      return this._normalizeDate(
+        this.momentToDate(momentObj),
+      ) as DatepickerValue;
+    } else if (
+      typeof val === 'object' &&
+      val !== null &&
+      'start' in val &&
+      'end' in val
+    ) {
       const rangeVal = val as { start: unknown; end: unknown };
       let start: Date | null;
       let end: Date | null;
 
       if (this.isMomentObject(rangeVal.start)) {
-        const momentStart = rangeVal.start as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+        const momentStart = rangeVal.start as {
+          toDate: () => Date;
+          utcOffset?: () => number;
+          format?: (format: string) => string;
+        };
         start = this._normalizeDate(this.momentToDate(momentStart));
       } else {
         start = this._normalizeDate(rangeVal.start as DateInput);
       }
 
       if (this.isMomentObject(rangeVal.end)) {
-        const momentEnd = rangeVal.end as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
+        const momentEnd = rangeVal.end as {
+          toDate: () => Date;
+          utcOffset?: () => number;
+          format?: (format: string) => string;
+        };
         end = this._normalizeDate(this.momentToDate(momentEnd));
       } else {
         end = this._normalizeDate(rangeVal.end as DateInput);
@@ -3778,17 +4808,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
       return null;
     } else if (Array.isArray(val)) {
-      return val.map(d => {
-        if (this.isMomentObject(d)) {
-          const momentObj = d as { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string };
-          return this._normalizeDate(this.momentToDate(momentObj));
-        }
-        return this._normalizeDate(d as DateInput);
-      }).filter((d): d is Date => d !== null) as DatepickerValue;
+      return val
+        .map((d) => {
+          if (this.isMomentObject(d)) {
+            const momentObj = d as {
+              toDate: () => Date;
+              utcOffset?: () => number;
+              format?: (format: string) => string;
+            };
+            return this._normalizeDate(this.momentToDate(momentObj));
+          }
+          return this._normalizeDate(d as DateInput);
+        })
+        .filter((d): d is Date => d !== null) as DatepickerValue;
     } else if (typeof val === 'string' && this.displayFormat) {
-      const parsedDate = this.parseCustomDateString(val, this.displayFormat);
+      const parsedDate = this.parsingService.parseCustomDateString(
+        val,
+        this.displayFormat,
+      );
       return parsedDate as DatepickerValue;
-    } else if (typeof val === 'string' || (typeof val === 'object' && val !== null && 'getTime' in val)) {
+    } else if (
+      typeof val === 'string' ||
+      (typeof val === 'object' && val !== null && 'getTime' in val)
+    ) {
       const normalized = this._normalizeDate(val as DateInput);
       return normalized as DatepickerValue;
     } else {
@@ -3804,18 +4846,27 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return false;
     }
     const obj = val as Record<string, unknown>;
-    return typeof obj['format'] === 'function' &&
+    return (
+      typeof obj['format'] === 'function' &&
       typeof obj['toDate'] === 'function' &&
       typeof obj['isMoment'] === 'function' &&
       typeof (obj['isMoment'] as () => boolean)() === 'boolean' &&
-      (obj['isMoment'] as () => boolean)() === true;
+      (obj['isMoment'] as () => boolean)() === true
+    );
   }
 
   /**
    * Convert a Moment.js object to a Date, preserving timezone offset
    */
-  private momentToDate(momentObj: { toDate: () => Date; utcOffset?: () => number; format?: (format: string) => string }): Date {
-    if (typeof momentObj.utcOffset === 'function' && typeof momentObj.format === 'function') {
+  private momentToDate(momentObj: {
+    toDate: () => Date;
+    utcOffset?: () => number;
+    format?: (format: string) => string;
+  }): Date {
+    if (
+      typeof momentObj.utcOffset === 'function' &&
+      typeof momentObj.format === 'function'
+    ) {
       const offset = momentObj.utcOffset();
       if (offset !== undefined && offset !== null) {
         try {
@@ -3824,8 +4875,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           if (!isNaN(date.getTime())) {
             return date;
           }
-        } catch {
-        }
+        } catch {}
       }
     }
     return momentObj.toDate();
@@ -3834,18 +4884,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Compares two DatepickerValue objects for equality.
    * Handles Date objects, range objects, and arrays with proper date comparison.
-   * 
+   *
    * @param val1 - First value to compare
    * @param val2 - Second value to compare
    * @returns true if values represent the same date(s), false otherwise
-   * 
+   *
    * @remarks
    * This method performs deep equality checks:
    * - For Date objects: Compares using date comparator (handles time normalization)
    * - For range objects: Compares both start and end dates
    * - For arrays: Compares lengths and all elements
    * - Handles null/undefined values correctly
-   * 
+   *
    * Uses the dateComparator utility for efficient date comparisons that
    * normalize times to start of day for accurate day-level equality.
    */
@@ -3857,12 +4907,20 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return val1.getTime() === val2.getTime();
     }
 
-    if (typeof val1 === 'object' && typeof val2 === 'object' &&
-      'start' in val1 && 'end' in val1 && 'start' in val2 && 'end' in val2) {
-      const r1 = val1 as { start: Date, end: Date };
-      const r2 = val2 as { start: Date, end: Date };
-      return r1.start.getTime() === r2.start.getTime() &&
-        r1.end.getTime() === r2.end.getTime();
+    if (
+      typeof val1 === 'object' &&
+      typeof val2 === 'object' &&
+      'start' in val1 &&
+      'end' in val1 &&
+      'start' in val2 &&
+      'end' in val2
+    ) {
+      const r1 = val1 as { start: Date; end: Date };
+      const r2 = val2 as { start: Date; end: Date };
+      return (
+        r1.start.getTime() === r2.start.getTime() &&
+        r1.end.getTime() === r2.end.getTime()
+      );
     }
 
     if (Array.isArray(val1) && Array.isArray(val2)) {
@@ -3879,180 +4937,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Parses a date string, optionally using the configured date adapter with error callback.
    * Falls back to native Date parsing if no adapter is configured.
-   * 
+   *
    * @param dateString - The date string to parse
    * @returns Parsed Date object or null if parsing fails
-   * 
+   *
    * @remarks
    * If a date adapter is configured via globalConfig, it will be used for parsing
    * with error callbacks. Otherwise, native Date parsing is used.
    * Error callbacks allow consumers to handle parsing failures gracefully.
    */
-  private parseDateString(dateString: string): Date | null {
-    const adapter = this.globalConfig?.dateAdapter;
-
-    if (adapter && typeof adapter.parse === 'function') {
-      // Use adapter with error callback for better error handling
-      const onError = (error: Error) => {
-        if (isDevMode()) {
-          console.warn(`[ngxsmk-datepicker] Date parsing failed: ${error.message}`, dateString);
-        }
-      };
-
-      const parsed = adapter.parse(dateString, onError);
-      if (parsed) {
-        return getStartOfDay(parsed);
-      }
-      // If parsing failed, error was logged via callback
-      return null;
-    }
-
-    // Fallback to native Date parsing
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        if (isDevMode()) {
-          console.warn(`[ngxsmk-datepicker] Invalid date string: "${dateString}"`);
-        }
-        return null;
-      }
-      return getStartOfDay(date);
-    } catch (error) {
-      if (isDevMode()) {
-        console.warn(`[ngxsmk-datepicker] Date parsing error:`, error);
-      }
-      return null;
-    }
-  }
-
-  /**
-   * Parse a date string using the custom display format
-   * Supports common format tokens: YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A
-   */
-  private parseCustomDateString(dateString: string, format: string): Date | null {
-    if (!dateString || !format) return null;
-
-    try {
-      const formatTokens: { [key: string]: { regex: RegExp; extractor: (match: RegExpMatchArray) => number } } = {
-        'YYYY': {
-          regex: /(\d{4})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'YY': {
-          regex: /(\d{2})/,
-          extractor: (match) => 2000 + parseInt(match[1] || '0', 10)
-        },
-        'MM': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10) - 1
-        },
-        'M': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10) - 1
-        },
-        'DD': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'D': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'hh': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'h': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'HH': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'H': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'mm': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'm': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'ss': {
-          regex: /(\d{2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        's': {
-          regex: /(\d{1,2})/,
-          extractor: (match) => parseInt(match[1] || '0', 10)
-        },
-        'a': {
-          regex: /(am|pm)/i,
-          extractor: (match) => (match[1] || '').toLowerCase() === 'pm' ? 1 : 0
-        },
-        'A': {
-          regex: /(AM|PM)/,
-          extractor: (match) => (match[1] || '') === 'PM' ? 1 : 0
-        }
-      };
-
-      const dateParts: { [key: string]: number } = {};
-      let remainingFormat = format;
-      let remainingString = dateString;
-
-      const sortedTokens = Object.keys(formatTokens).sort((a, b) => b.length - a.length);
-
-      for (const token of sortedTokens) {
-        if (remainingFormat.includes(token)) {
-          const tokenInfo = formatTokens[token];
-          if (!tokenInfo) continue;
-
-          const match = remainingString.match(tokenInfo.regex);
-
-          if (match) {
-            dateParts[token] = tokenInfo.extractor(match);
-            const matchIndex = remainingString.indexOf(match[0]);
-            remainingString = remainingString.substring(0, matchIndex) + remainingString.substring(matchIndex + match[0].length);
-            remainingFormat = remainingFormat.replace(token, '');
-          }
-        }
-      }
-
-      const now = new Date();
-      const year = dateParts['YYYY'] !== undefined ? dateParts['YYYY'] : now.getFullYear();
-      const month = dateParts['MM'] !== undefined ? dateParts['MM'] : (dateParts['M'] !== undefined ? dateParts['M'] : now.getMonth());
-      const day = dateParts['DD'] !== undefined ? dateParts['DD'] : (dateParts['D'] !== undefined ? dateParts['D'] : now.getDate());
-
-      let hours = 0;
-      let minutes = 0;
-      let seconds = 0;
-
-      if (dateParts['hh'] !== undefined || dateParts['h'] !== undefined) {
-        const hour12 = dateParts['hh'] !== undefined ? dateParts['hh'] : (dateParts['h'] !== undefined ? dateParts['h'] : 0);
-        const isPm = dateParts['a'] !== undefined ? dateParts['a'] : (dateParts['A'] !== undefined ? dateParts['A'] : 0);
-        hours = (hour12 % 12) + (isPm ? 12 : 0);
-      } else if (dateParts['HH'] !== undefined || dateParts['H'] !== undefined) {
-        hours = dateParts['HH'] !== undefined ? dateParts['HH'] : (dateParts['H'] !== undefined ? dateParts['H'] : 0);
-      }
-
-      minutes = dateParts['mm'] !== undefined ? dateParts['mm'] : (dateParts['m'] !== undefined ? dateParts['m'] : 0);
-      seconds = dateParts['ss'] !== undefined ? dateParts['ss'] : (dateParts['s'] !== undefined ? dateParts['s'] : 0);
-
-      const date = new Date(year, month, day, hours, minutes, seconds);
-
-      if (isNaN(date.getTime())) {
-        return null;
-      }
-
-      return date;
-    } catch {
-      return null;
-    }
-  }
 
   onInputFocus(event: FocusEvent): void {
     // Prevent keyboard on mobile when calendar should open instead
@@ -4075,17 +4968,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Sanitizes user input to prevent XSS attacks.
    * Removes potentially dangerous characters while preserving valid date/time input.
-   * 
+   *
    * @param input - Raw user input string
    * @returns Sanitized string safe for template interpolation
-   * 
+   *
    * @remarks
    * This method provides basic XSS protection by removing:
    * - HTML tag delimiters (< and >)
    * - Script event handlers (onerror, onclick, etc.)
    * - JavaScript protocol (javascript:)
    * - Data URIs that could contain scripts
-   * 
+   *
    * Note: Angular's template interpolation provides additional protection,
    * but this sanitization adds an extra layer of defense for user-provided strings.
    * For comprehensive sanitization, Angular's DomSanitizer should be used for
@@ -4102,11 +4995,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     // Remove script event handlers (onerror, onclick, onload, etc.)
     sanitized = sanitized.replace(/on\w+\s*=/gi, '');
 
-    // Remove javascript: protocol
-    sanitized = sanitized.replace(/javascript:/gi, '');
+    // Remove dangerous protocols (javascript:, vbscript:, data:)
+    sanitized = sanitized.replace(/\b(?:javascript|vbscript|data)\s*:/gi, '');
 
-    // Remove data URIs that could contain scripts
-    sanitized = sanitized.replace(/data:\s*text\/html/gi, '');
+    // Remove control characters
+    // eslint-disable-next-line no-control-regex
+    sanitized = sanitized.replace(/[\u0000-\u001F\u007F]/g, '');
+
+    // Remove quotes/backticks/equals to prevent attribute injection
+    sanitized = sanitized.replace(/[`"'=]/g, '');
 
     // Trim whitespace
     return sanitized.trim();
@@ -4136,7 +5033,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   onInputBlur(event: FocusEvent): void {
     const relatedTarget = event.relatedTarget as HTMLElement;
-    const isMovingWithinComponent = relatedTarget && this.elementRef.nativeElement.contains(relatedTarget);
+    const isMovingWithinComponent =
+      relatedTarget && this.elementRef?.nativeElement?.contains(relatedTarget);
 
     if (!isMovingWithinComponent && this._focused) {
       this._focused = false;
@@ -4159,7 +5057,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       return;
     }
 
-    const parsedDate = this.parseTypedInput(value);
+    const parsedDate = this.parsingService.parseTypedInput(
+      value,
+      this.displayFormat,
+    );
 
     if (parsedDate && this.isValidDate(parsedDate)) {
       this.applyTypedDate(parsedDate);
@@ -4193,7 +5094,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         return;
       }
 
-      const parsedDate = this.parseTypedInput(value);
+      const parsedDate = this.parsingService.parseTypedInput(
+        value,
+        this.displayFormat,
+      );
       if (parsedDate !== null && this.isValidDate(parsedDate)) {
         this.applyTypedDate(parsedDate);
         this.typedInputValue = this.displayValue;
@@ -4222,10 +5126,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         masked += yearDigits.padEnd(4, '0');
         digitIndex += Math.min(4, digits.length - digitIndex);
         i += 4;
-      } else if (format.substring(i, i + 2) === 'YY' || format.substring(i, i + 2) === 'MM' ||
-        format.substring(i, i + 2) === 'DD' || format.substring(i, i + 2) === 'HH' ||
-        format.substring(i, i + 2) === 'hh' || format.substring(i, i + 2) === 'mm' ||
-        format.substring(i, i + 2) === 'ss') {
+      } else if (
+        format.substring(i, i + 2) === 'YY' ||
+        format.substring(i, i + 2) === 'MM' ||
+        format.substring(i, i + 2) === 'DD' ||
+        format.substring(i, i + 2) === 'HH' ||
+        format.substring(i, i + 2) === 'hh' ||
+        format.substring(i, i + 2) === 'mm' ||
+        format.substring(i, i + 2) === 'ss'
+      ) {
         const tokenDigits = digits.substring(digitIndex, digitIndex + 2);
         masked += tokenDigits.padEnd(2, '0');
         digitIndex += Math.min(2, digits.length - digitIndex);
@@ -4237,43 +5146,6 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     return masked;
-  }
-
-  private parseTypedInput(value: string): Date | null {
-    if (!value || !value.trim()) return null;
-
-    if (this.displayFormat) {
-      return this.parseCustomDateString(value, this.displayFormat);
-    }
-
-    const isoDate = new Date(value);
-    if (!isNaN(isoDate.getTime())) {
-      return isoDate;
-    }
-
-    const formats = [
-      /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
-      /^(\d{4})-(\d{1,2})-(\d{1,2})$/,
-      /^(\d{1,2})-(\d{1,2})-(\d{4})$/,
-      /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/,
-    ];
-
-    for (const format of formats) {
-      const match = value.match(format);
-      if (match && match[1] && match[2] && match[3]) {
-        const date1 = new Date(parseInt(match[3]), parseInt(match[1]) - 1, parseInt(match[2]));
-        const date2 = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
-
-        if (!isNaN(date1.getTime()) && date1.getMonth() === parseInt(match[1]) - 1) {
-          return date1;
-        }
-        if (!isNaN(date2.getTime()) && date2.getMonth() === parseInt(match[2]) - 1) {
-          return date2;
-        }
-      }
-    }
-
-    return null;
   }
 
   private isValidDate(date: Date): boolean {
@@ -4294,7 +5166,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     if (this.showTime || this.timeOnly) {
       const now = new Date();
-      date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+      date.setHours(
+        now.getHours(),
+        now.getMinutes(),
+        now.getSeconds(),
+        now.getMilliseconds(),
+      );
     } else {
       date.setHours(0, 0, 0, 0);
     }
@@ -4319,14 +5196,19 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.generateCalendar();
       this.action.emit({ type: 'rangeStartSelected', payload: date });
     } else if (this.mode === 'multiple') {
-      const index = this.selectedDates.findIndex(d => this.isSameDayMemo(d, date));
+      const index = this.selectedDates.findIndex((d) =>
+        this.isSameDayMemo(d, date),
+      );
       if (index >= 0) {
         this.selectedDates.splice(index, 1);
       } else {
         this.selectedDates.push(date);
       }
       this.generateCalendar();
-      this.action.emit({ type: 'datesSelected', payload: [...this.selectedDates] });
+      this.action.emit({
+        type: 'datesSelected',
+        payload: [...this.selectedDates],
+      });
     }
 
     this.scheduleChangeDetection();
@@ -4337,7 +5219,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private generateTimeOptions(): void {
-    const result = generateTimeOptions(this.minuteInterval, this.secondInterval, this.showSeconds, this.use24Hour);
+    const result = generateTimeOptions(
+      this.minuteInterval,
+      this.secondInterval,
+      this.showSeconds,
+      this.use24Hour,
+    );
     this.hourOptions = result.hourOptions;
     this.minuteOptions = result.minuteOptions;
     if (result.secondOptions) {
@@ -4346,16 +5233,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   private generateLocaleData(): void {
-    const year = new Date().getFullYear();
-    this.monthOptions = generateMonthOptions(this.locale, year);
-    this.firstDayOfWeek = this.weekStart !== null && this.weekStart !== undefined
-      ? this.weekStart
-      : getFirstDayOfWeek(this.locale);
+    // monthOptions is now a computed signal - no need to regenerate
+    this.firstDayOfWeek =
+      this.weekStart !== null && this.weekStart !== undefined
+        ? this.weekStart
+        : getFirstDayOfWeek(this.locale);
     this.weekDays = generateWeekDays(this.locale, this.firstDayOfWeek);
   }
 
   private updateRangesArray(): void {
-    this.rangesArray = this._ranges ? Object.entries(this._ranges).map(([key, value]) => ({ key, value })) : [];
+    this.rangesArray = this._ranges
+      ? Object.entries(this._ranges).map(([key, value]) => ({ key, value }))
+      : [];
   }
 
   public selectRange(range: [Date, Date]): void {
@@ -4363,14 +5252,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.startDate = new Date(range[0]);
     this.endDate = new Date(range[1]);
 
+    if (this.showTime) {
+      this.startDate = this.applyCurrentTime(this.startDate);
+      this.endDate = this.applyCurrentTime(this.endDate);
+    }
+
     if (this.startDate && this.endDate) {
-      this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });
+      this.emitValue({
+        start: this.startDate as Date,
+        end: this.endDate as Date,
+      });
     }
 
     this.currentDate = new Date(this.startDate);
     this.initializeValue({ start: this.startDate, end: this.endDate });
     this.generateCalendar();
-    this.action.emit({ type: 'rangeSelected', payload: { start: this.startDate, end: this.endDate, key: this.rangesArray.find(r => r.value === range)?.key } });
+    this.action.emit({
+      type: 'rangeSelected',
+      payload: {
+        start: this.startDate,
+        end: this.endDate,
+        key: this.rangesArray.find((r) => r.value === range)?.key,
+      },
+    });
 
     if (this.shouldAutoClose()) {
       this.closeCalendar();
@@ -4387,15 +5291,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public getHolidayLabel(date: Date | null): string | null {
     if (!date || !this.holidayProvider || !this.isHoliday(date)) return null;
-    return this.holidayProvider.getHolidayLabel ? this.holidayProvider.getHolidayLabel(getStartOfDay(date)) : this.getTranslation('holiday');
+    return this.holidayProvider.getHolidayLabel
+      ? this.holidayProvider.getHolidayLabel(getStartOfDay(date))
+      : this.getTranslation('holiday');
   }
 
   /**
    * Checks if a date is disabled based on all configured constraints.
-   * 
+   *
    * @param date - The date to check
    * @returns true if the date is disabled, false if it can be selected
-   * 
+   *
    * @remarks
    * A date is considered disabled if it matches any of these conditions:
    * - Falls before minDate
@@ -4404,7 +5310,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Falls within a disabledRanges entry
    * - Fails the isInvalidDate custom validation function
    * - Is a holiday and disableHolidays is true
-   * 
+   *
    * Performance: O(n) where n = disabledDates.length + disabledRanges.length
    * For large constraint lists (>1000), consider optimizing with Set or DateRange tree.
    */
@@ -4418,7 +5324,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         let parsedDate: Date | null;
 
         if (typeof disabledDate === 'string') {
-          parsedDate = this.parseDateString(disabledDate);
+          parsedDate = this.parsingService.parseDateString(disabledDate);
         } else {
           parsedDate = getStartOfDay(disabledDate);
         }
@@ -4435,13 +5341,13 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         let endDate: Date | null;
 
         if (typeof range.start === 'string') {
-          startDate = this.parseDateString(range.start);
+          startDate = this.parsingService.parseDateString(range.start);
         } else {
           startDate = getStartOfDay(range.start);
         }
 
         if (typeof range.end === 'string') {
-          endDate = this.parseDateString(range.end);
+          endDate = this.parsingService.parseDateString(range.end);
         } else {
           endDate = getStartOfDay(range.end);
         }
@@ -4458,12 +5364,24 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    if (this.holidayProvider && this.disableHolidays && this.holidayProvider.isHoliday(dateOnly)) {
+    if (
+      this.holidayProvider &&
+      this.disableHolidays &&
+      this.holidayProvider.isHoliday(dateOnly)
+    ) {
       return true;
     }
 
-    const effectiveMinDate = this._minDate || (this.globalConfig?.minDate ? this._normalizeDate(this.globalConfig.minDate) : null);
-    const effectiveMaxDate = this._maxDate || (this.globalConfig?.maxDate ? this._normalizeDate(this.globalConfig.maxDate) : null);
+    const effectiveMinDate =
+      this._minDate ||
+      (this.globalConfig?.minDate
+        ? this._normalizeDate(this.globalConfig.minDate)
+        : null);
+    const effectiveMaxDate =
+      this._maxDate ||
+      (this.globalConfig?.maxDate
+        ? this._normalizeDate(this.globalConfig.maxDate)
+        : null);
 
     if (effectiveMinDate) {
       const minDateOnly = getStartOfDay(effectiveMinDate);
@@ -4479,10 +5397,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   /**
    * Checks if a date is selected in multiple selection mode.
-   * 
+   *
    * @param d - The date to check
    * @returns true if the date is in the selectedDates array
-   * 
+   *
    * @remarks
    * Performance: O(n) where n = selectedDates.length
    * Uses day-level comparison (ignores time) for accurate matching.
@@ -4490,13 +5408,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   public isMultipleSelected(d: Date | null): boolean {
     if (!d || this.mode !== 'multiple') return false;
     const dTime = getStartOfDay(d).getTime();
-    return this.selectedDates.some(selected => getStartOfDay(selected).getTime() === dTime);
+    return this.selectedDates.some(
+      (selected) => getStartOfDay(selected).getTime() === dTime,
+    );
   }
 
   /**
    * Handles time value changes from time selection controls.
    * Updates the selected date(s) with the new time values.
-   * 
+   *
    * @remarks
    * This method:
    * - Applies time changes to selected dates based on current mode
@@ -4513,7 +5433,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       const dateWithTime = this.applyCurrentTime(today);
       this.selectedDate = dateWithTime;
       this.emitValue(dateWithTime);
-      this.action.emit({ type: 'timeChanged', payload: { hour: this.currentHour, minute: this.currentMinute } });
+      this.action.emit({
+        type: 'timeChanged',
+        payload: { hour: this.currentHour, minute: this.currentMinute },
+      });
       this.scheduleChangeDetection();
       return;
     }
@@ -4524,18 +5447,70 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     } else if (this.mode === 'range' && this.startDate && this.endDate) {
       this.startDate = this.applyCurrentTime(this.startDate);
       this.endDate = this.applyCurrentTime(this.endDate);
-      this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });
+      this.emitValue({
+        start: this.startDate as Date,
+        end: this.endDate as Date,
+      });
     } else if (this.mode === 'range' && this.startDate && !this.endDate) {
       this.startDate = this.applyCurrentTime(this.startDate);
     } else if (this.mode === 'multiple') {
-      this.selectedDates = this.selectedDates.map(date => {
+      this.selectedDates = this.selectedDates.map((date) => {
         const newDate = getStartOfDay(date);
         return this.applyCurrentTime(newDate);
       });
       this.emitValue([...this.selectedDates]);
     }
 
-    this.action.emit({ type: 'timeChanged', payload: { hour: this.currentHour, minute: this.currentMinute } });
+    this.action.emit({
+      type: 'timeChanged',
+      payload: { hour: this.currentHour, minute: this.currentMinute },
+    });
+    this.scheduleChangeDetection();
+  }
+
+  /**
+   * Handles time range changes in timeRangeMode.
+   * Updates the internal time range state and emits the time range to listeners.
+   * Only creates/updates time-only dates (no calendar dates).
+   */
+  public timeRangeChange(): void {
+    if (this.disabled || !this.timeRangeMode) return;
+
+    const today = new Date();
+    const startDate = new Date(today);
+    const endDate = new Date(today);
+
+    // Set start time
+    startDate.setHours(
+      this.get24Hour(this.startDisplayHour, this.startIsPm),
+      this.startMinute,
+      this.startSecond,
+      0,
+    );
+
+    // Set end time
+    endDate.setHours(
+      this.get24Hour(this.endDisplayHour, this.endIsPm),
+      this.endMinute,
+      this.endSecond,
+      0,
+    );
+
+    // Emit the time range as a range object
+    this.emitValue({
+      start: startDate,
+      end: endDate,
+    });
+
+    this.action.emit({
+      type: 'timeRangeChanged',
+      payload: {
+        startHour: this.get24Hour(this.startDisplayHour, this.startIsPm),
+        startMinute: this.startMinute,
+        endHour: this.get24Hour(this.endDisplayHour, this.endIsPm),
+        endMinute: this.endMinute,
+      },
+    });
     this.scheduleChangeDetection();
   }
 
@@ -4543,9 +5518,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * Handles date cell click/tap events.
    * Processes date selection based on the current mode (single, range, multiple, etc.)
    * and handles touch gesture debouncing to prevent accidental double selections.
-   * 
+   *
    * @param day - The date that was clicked (null for empty cells)
-   * 
+   *
    * @remarks
    * This method implements several important behaviors:
    * - Touch gesture handling: Debounces rapid touch events to prevent double-clicks
@@ -4555,7 +5530,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Calendar navigation: Automatically navigates to different month if date is outside current view
    * - Accessibility: Announces date selection to screen readers
    * - Auto-close: Closes calendar after selection in single mode or complete range
-   * 
+   *
    * Performance considerations:
    * - Touch debouncing prevents excessive event processing
    * - Date normalization happens once per selection
@@ -4565,25 +5540,33 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (!day || this.disabled) return;
 
     const now = Date.now();
-    const timeSinceTouchHandled = this.dateCellTouchHandledTime > 0 ? now - this.dateCellTouchHandledTime : Infinity;
+    const timeSinceTouchHandled =
+      this.dateCellTouchHandledTime > 0
+        ? now - this.dateCellTouchHandledTime
+        : Infinity;
 
-    if (this.dateCellTouchHandled && timeSinceTouchHandled < 250 && this.isDateCellTouching) {
+    if (
+      this.touchState.dateCellTouchHandled &&
+      timeSinceTouchHandled < 250 &&
+      this.touchState.isDateCellTouching
+    ) {
       this.clearTouchHandledFlag();
       return;
     }
 
-    if (this.dateCellTouchHandled && (timeSinceTouchHandled >= 250 || !this.isDateCellTouching)) {
+    if (
+      this.touchState.dateCellTouchHandled &&
+      (timeSinceTouchHandled >= 250 || !this.touchState.isDateCellTouching)
+    ) {
       this.clearTouchHandledFlag();
     }
 
-    this.isDateCellTouching = false;
-    this.dateCellTouchStartTime = 0;
-    this.dateCellTouchStartDate = null;
-    this.lastDateCellTouchDate = null;
+    this.touchState.isDateCellTouching = false;
+    this.touchState.dateCellTouchStartTime = 0;
+    this.touchState.dateCellTouchStartDate = null;
+    this.touchState.lastDateCellTouchDate = null;
 
     if (this.isDateDisabled(day)) return;
-
-    const dateToToggle = getStartOfDay(day);
 
     if (this.hooks?.beforeDateSelect) {
       if (!this.hooks.beforeDateSelect(day, this._internalValue)) {
@@ -4616,12 +5599,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.selectedDate = dateWithTime;
       this.emitValue(dateWithTime);
 
-      const formattedDate = formatDateWithTimezone(dateWithTime, this.locale, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }, this.timezone);
-      const dateSelectedMsg = this.getTranslation('dateSelected' as keyof DatepickerTranslations, undefined, { date: formattedDate }) || formattedDate;
+      const formattedDate = formatDateWithTimezone(
+        dateWithTime,
+        this.locale,
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+        this.timezone,
+      );
+      const dateSelectedMsg =
+        this.getTranslation(
+          'dateSelected' as keyof DatepickerTranslations,
+          undefined,
+          { date: formattedDate },
+        ) || formattedDate;
       this.ariaLiveService.announce(dateSelectedMsg, 'polite');
     } else if (this.mode === 'range') {
       if (!this.isCurrentMonth(day)) {
@@ -4645,8 +5638,12 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
 
       const dayTime = getStartOfDay(day).getTime();
-      const startTime = this.startDate ? getStartOfDay(this.startDate).getTime() : null;
-      const endTime = this.endDate ? getStartOfDay(this.endDate).getTime() : null;
+      const startTime = this.startDate
+        ? getStartOfDay(this.startDate).getTime()
+        : null;
+      const endTime = this.endDate
+        ? getStartOfDay(this.endDate).getTime()
+        : null;
 
       if (this.startDate && this.endDate && dayTime === startTime!) {
         this.endDate = null;
@@ -4654,42 +5651,41 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         this._invalidateMemoCache();
         this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
-      }
-      else if (this.startDate && this.endDate && dayTime === endTime!) {
+      } else if (this.startDate && this.endDate && dayTime === endTime!) {
         this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
         this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
-      }
-      else if (this.startDate && this.endDate && dayTime > startTime! && dayTime < endTime!) {
+      } else if (
+        this.startDate &&
+        this.endDate &&
+        dayTime > startTime! &&
+        dayTime < endTime!
+      ) {
         this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
         this.emitValue({ start: this.startDate as Date, end: null });
         this.scheduleChangeDetection();
-      }
-      else if (!this.startDate || (this.startDate && this.endDate)) {
+      } else if (!this.startDate || (this.startDate && this.endDate)) {
         this.startDate = this.applyTimeIfNeeded(day);
         this.endDate = null;
         this.hoveredDate = null;
         this._invalidateMemoCache();
         this.scheduleChangeDetection();
-      }
-      else if (this.startDate && !this.endDate) {
+      } else if (this.startDate && !this.endDate) {
         if (dayTime < startTime!) {
           this.startDate = this.applyTimeIfNeeded(day);
           this.endDate = null;
           this.hoveredDate = null;
           this._invalidateMemoCache();
           this.scheduleChangeDetection();
-        }
-        else if (dayTime === startTime!) {
+        } else if (dayTime === startTime!) {
           // No action needed when dayTime equals startTime (start date clicked again, no end date selected yet)
-        }
-        else {
+        } else {
           const potentialEndDate = this.applyTimeIfNeeded(day);
 
           if (this.hooks?.validateRange) {
@@ -4706,19 +5702,37 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
           this.endDate = potentialEndDate;
           this.hoveredDate = null;
           this._invalidateMemoCache();
-          this.emitValue({ start: this.startDate as Date, end: this.endDate as Date });
+          this.emitValue({
+            start: this.startDate as Date,
+            end: this.endDate as Date,
+          });
 
-          const startFormatted = formatDateWithTimezone(this.startDate, this.locale, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }, this.timezone);
-          const endFormatted = formatDateWithTimezone(this.endDate, this.locale, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          }, this.timezone);
-          const rangeSelectedMsg = this.getTranslation('rangeSelected' as keyof DatepickerTranslations, undefined, { start: startFormatted, end: endFormatted }) || `${startFormatted} to ${endFormatted}`;
+          const startFormatted = formatDateWithTimezone(
+            this.startDate,
+            this.locale,
+            {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            },
+            this.timezone,
+          );
+          const endFormatted = formatDateWithTimezone(
+            this.endDate,
+            this.locale,
+            {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            },
+            this.timezone,
+          );
+          const rangeSelectedMsg =
+            this.getTranslation(
+              'rangeSelected' as keyof DatepickerTranslations,
+              undefined,
+              { start: startFormatted, end: endFormatted },
+            ) || `${startFormatted} to ${endFormatted}`;
           this.ariaLiveService.announce(rangeSelectedMsg, 'polite');
         }
       }
@@ -4732,16 +5746,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._invalidateMemoCache();
       this.emitValue({ start: weekStart, end: weekEnd });
 
-      const startFormatted = formatDateWithTimezone(weekStart, this.locale, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }, this.timezone);
-      const endFormatted = formatDateWithTimezone(weekEnd, this.locale, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }, this.timezone);
+      const startFormatted = formatDateWithTimezone(
+        weekStart,
+        this.locale,
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+        this.timezone,
+      );
+      const endFormatted = formatDateWithTimezone(
+        weekEnd,
+        this.locale,
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+        this.timezone,
+      );
       const weekSelectedMsg = `Week selected: ${startFormatted} to ${endFormatted}`;
       this.ariaLiveService.announce(weekSelectedMsg, 'polite');
     } else if (this.mode === 'month') {
@@ -4753,10 +5777,15 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._invalidateMemoCache();
       this.emitValue({ start: monthStart, end: monthEnd });
 
-      const monthFormatted = formatDateWithTimezone(monthStart, this.locale, {
-        year: 'numeric',
-        month: 'long'
-      }, this.timezone);
+      const monthFormatted = formatDateWithTimezone(
+        monthStart,
+        this.locale,
+        {
+          year: 'numeric',
+          month: 'long',
+        },
+        this.timezone,
+      );
       const monthSelectedMsg = `Month selected: ${monthFormatted}`;
       this.ariaLiveService.announce(monthSelectedMsg, 'polite');
     } else if (this.mode === 'quarter') {
@@ -4806,17 +5835,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
       if (this.recurringPattern) {
         const configBase: {
-          pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends';
+          pattern:
+            | 'daily'
+            | 'weekly'
+            | 'monthly'
+            | 'yearly'
+            | 'weekdays'
+            | 'weekends';
           startDate: Date;
           interval: number;
         } = {
           pattern: this.recurringPattern.pattern,
           startDate: this.recurringPattern.startDate,
-          interval: this.recurringPattern.interval || 1
+          interval: this.recurringPattern.interval || 1,
         };
 
         const config: {
-          pattern: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'weekdays' | 'weekends';
+          pattern:
+            | 'daily'
+            | 'weekly'
+            | 'monthly'
+            | 'yearly'
+            | 'weekdays'
+            | 'weekends';
           startDate: Date;
           interval: number;
           endDate?: Date;
@@ -4835,20 +5876,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
         }
         const recurringDates = generateRecurringDates(config);
 
-        const datesWithTime = recurringDates.map(d => this.applyTimeIfNeeded(d));
+        const datesWithTime = recurringDates.map((d) =>
+          this.applyTimeIfNeeded(d),
+        );
         const uniqueDates = new Map<number, Date>();
-        datesWithTime.forEach(d => {
+        datesWithTime.forEach((d) => {
           uniqueDates.set(getStartOfDay(d).getTime(), d);
         });
-        this.selectedDates = Array.from(uniqueDates.values()).sort((a, b) => a.getTime() - b.getTime());
+        this.selectedDates = Array.from(uniqueDates.values()).sort(
+          (a, b) => a.getTime() - b.getTime(),
+        );
         this.emitValue([...this.selectedDates]);
       } else {
-        const existingIndex = this.selectedDates.findIndex(d => this.isSameDay(d, dateToToggle));
+        const existingIndex = this.selectedDates.findIndex((d) =>
+          this.isSameDay(d, day),
+        );
 
         if (existingIndex > -1) {
           this.selectedDates.splice(existingIndex, 1);
         } else {
-          const dateWithTime = this.applyTimeIfNeeded(dateToToggle);
+          const dateWithTime = this.applyTimeIfNeeded(day);
           this.selectedDates.push(dateWithTime);
           this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
         }
@@ -4856,9 +5903,18 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       }
     }
 
-    const dateToSync = this.mode === 'single' ? this.selectedDate :
-      (this.mode === 'range' || this.mode === 'week' || this.mode === 'month' || this.mode === 'quarter' || this.mode === 'year') ? this.startDate :
-        this.mode === 'multiple' && this.selectedDates.length > 0 ? this.selectedDates[this.selectedDates.length - 1] : null;
+    const dateToSync =
+      this.mode === 'single'
+        ? this.selectedDate
+        : this.mode === 'range' ||
+            this.mode === 'week' ||
+            this.mode === 'month' ||
+            this.mode === 'quarter' ||
+            this.mode === 'year'
+          ? this.startDate
+          : this.mode === 'multiple' && this.selectedDates.length > 0
+            ? this.selectedDates[this.selectedDates.length - 1]
+            : null;
 
     if (dateToSync) {
       this.update12HourState(dateToSync.getHours());
@@ -4874,8 +5930,8 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       payload: {
         mode: this.mode,
         value: this._internalValue,
-        date: day
-      }
+        date: day,
+      },
     });
 
     if (this.shouldAutoClose()) {
@@ -4893,204 +5949,104 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onDateCellTouchStart(event: TouchEvent, day: Date | null): void {
-    if (this.disabled || !day || this.isDateDisabled(day)) {
-      return;
-    }
-
-    const hasValidTouch = event.touches && event.touches.length > 0;
-
-    event.stopPropagation();
-
     this.clearTouchHandledFlag();
-    this.isDateCellTouching = true;
-
-    const touch = event.touches[0];
-    if (touch && hasValidTouch) {
-      this.dateCellTouchStartTime = Date.now();
-      this.dateCellTouchStartDate = day;
-      this.dateCellTouchStartX = touch.clientX;
-      this.dateCellTouchStartY = touch.clientY;
-      this.lastDateCellTouchDate = day;
-
-      if (this.mode === 'range' && this.startDate && !this.endDate) {
+    this.touchService.handleDateCellTouchStart(
+      event,
+      day,
+      this.touchState,
+      {
+        disabled: this.disabled,
+        mode: this.mode,
+        swipeThreshold: this.SWIPE_THRESHOLD,
+        swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
+      },
+      {
+        isDateDisabled: (d) => this.isDateDisabled(d),
+        onDateClick: (_) => {},
+        changeMonth: (_) => {},
+        onStateChanged: () => this.cdr.markForCheck(),
+        onHoverChanged: (d) => {
+          this.hoveredDate = d;
+          this.cdr.markForCheck();
+        },
+      },
+    );
+    // Manual range hover update for start
+    if (this.touchState.isDateCellTouching && this.mode === 'range' && day) {
+      if (this.startDate && !this.endDate) {
         const dayTime = getStartOfDay(day).getTime();
         const startTime = getStartOfDay(this.startDate).getTime();
         if (dayTime >= startTime) {
           this.hoveredDate = day;
           this.cdr.markForCheck();
-        } else {
-          this.hoveredDate = null;
-          this.cdr.markForCheck();
         }
-      } else if (this.mode === 'range' && !this.startDate) {
+      } else if (!this.startDate) {
         this.hoveredDate = null;
       }
-    } else {
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartDate = null;
-      this.dateCellTouchStartTime = 0;
     }
   }
 
   public onDateCellTouchMove(event: TouchEvent): void {
-    if (this.disabled || !this.isDateCellTouching || !this.dateCellTouchStartDate) {
-      return;
-    }
-
-    if (this.mode === 'range' && this.startDate && !this.endDate) {
-      const touch = event.touches[0];
-      if (touch) {
-        const deltaX = Math.abs(touch.clientX - this.dateCellTouchStartX);
-        const deltaY = Math.abs(touch.clientY - this.dateCellTouchStartY);
-        const isSignificantMove = deltaX > 5 || deltaY > 5;
-
-        if (isSignificantMove) {
-          event.preventDefault();
-        }
-
-        try {
-          const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-          if (elementFromPoint) {
-            const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
-            if (dateCell && !dateCell.classList.contains('empty') && !dateCell.classList.contains('disabled')) {
-              const dateTimestamp = dateCell.getAttribute('data-date');
-              if (dateTimestamp) {
-                const dateValue = parseInt(dateTimestamp, 10);
-                if (!isNaN(dateValue)) {
-                  const day = new Date(dateValue);
-                  if (day && !isNaN(day.getTime()) && !this.isDateDisabled(day)) {
-                    const dayTime = getStartOfDay(day).getTime();
-                    const startTime = getStartOfDay(this.startDate).getTime();
-
-                    if (dayTime >= startTime) {
-                      this.hoveredDate = day;
-                      this.lastDateCellTouchDate = day;
-                      this.cdr.detectChanges();
-                    } else {
-                      this.hoveredDate = null;
-                      this.cdr.detectChanges();
-                    }
-                  }
-                }
-              }
-            }
-          }
-        } catch {
-        }
-      }
-    }
+    this.touchService.handleDateCellTouchMove(
+      event,
+      this.touchState,
+      {
+        disabled: this.disabled,
+        mode: this.mode,
+        swipeThreshold: this.SWIPE_THRESHOLD,
+        swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
+      },
+      {
+        isDateDisabled: (d) => this.isDateDisabled(d),
+        onDateClick: (_) => {},
+        changeMonth: (_) => {},
+        onStateChanged: () => this.cdr.detectChanges(),
+        onHoverChanged: (d) => {
+          this.hoveredDate = d;
+          this.cdr.detectChanges();
+        },
+      },
+      this.startDate,
+    );
   }
 
   public onDateCellTouchEnd(event: TouchEvent, day: Date | null): void {
-    if (this.disabled) {
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-      return;
-    }
-
-    const hasValidTouch = event.changedTouches && event.changedTouches.length > 0;
-
-    if (!this.isDateCellTouching || !this.dateCellTouchStartDate || !hasValidTouch) {
-      this.setTouchHandledFlag(200);
-      if (day && !this.isDateDisabled(day)) {
-        this.onDateClick(day);
-      }
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-      return;
-    }
-
-    const finalDay = this.isDateCellTouching && this.dateCellTouchStartDate
-      ? (this.lastDateCellTouchDate || this.dateCellTouchStartDate)
-      : day;
-
-    if (!finalDay || this.isDateDisabled(finalDay)) {
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-      return;
-    }
-
-    const now = Date.now();
-    const touchDuration = this.dateCellTouchStartTime > 0 ? now - this.dateCellTouchStartTime : 0;
-    const touch = event.changedTouches[0];
-
-    let endDay: Date | null = day || this.dateCellTouchStartDate;
-    if (touch) {
-      try {
-        const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (elementFromPoint) {
-          const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
-          if (dateCell) {
-            const dateTimestamp = dateCell.getAttribute('data-date');
-            if (dateTimestamp) {
-              const dateValue = parseInt(dateTimestamp, 10);
-              if (!isNaN(dateValue)) {
-                const parsedDay = new Date(dateValue);
-                if (parsedDay && !isNaN(parsedDay.getTime())) {
-                  endDay = parsedDay;
-                }
-              }
-            }
-          }
-        }
-      } catch {
-        endDay = day || this.dateCellTouchStartDate;
-      }
-    }
-
-    const finalDayFromTouch = this.lastDateCellTouchDate || endDay || this.dateCellTouchStartDate;
-
-    if (!finalDayFromTouch || this.isDateDisabled(finalDayFromTouch)) {
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-      return;
-    }
-
-    if (touch) {
-      const deltaX = Math.abs(touch.clientX - this.dateCellTouchStartX);
-      const deltaY = Math.abs(touch.clientY - this.dateCellTouchStartY);
-      const isTap = touchDuration < 500 && deltaX < 20 && deltaY < 20;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      this.setTouchHandledFlag(500);
-
-      const dateToSelect = isTap ? (this.dateCellTouchStartDate || finalDayFromTouch) : finalDayFromTouch;
-
-      this.onDateClick(dateToSelect);
-
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-    } else {
-      this.setTouchHandledFlag(300);
-      this.onDateClick(day || this.dateCellTouchStartDate);
-      this.isDateCellTouching = false;
-      this.dateCellTouchStartTime = 0;
-      this.dateCellTouchStartDate = null;
-      this.lastDateCellTouchDate = null;
-    }
-
-    if (this.mode === 'range') {
-      this.trackedSetTimeout(() => {
-        this.hoveredDate = null;
-        this.cdr.markForCheck();
-      }, 300);
-    }
+    this.touchService.handleDateCellTouchEnd(
+      event,
+      day,
+      this.touchState,
+      {
+        disabled: this.disabled,
+        mode: this.mode,
+        swipeThreshold: this.SWIPE_THRESHOLD,
+        swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
+      },
+      {
+        isDateDisabled: (d) => this.isDateDisabled(d),
+        onDateClick: (d) => {
+          // We need to set handled flag for debounce
+          this.setTouchHandledFlag();
+          this.onDateClick(d);
+        },
+        changeMonth: (_) => {},
+        onStateChanged: () => this.cdr.markForCheck(),
+        onHoverChanged: (d) => {
+          this.hoveredDate = d;
+          this.cdr.markForCheck();
+        },
+      },
+    );
   }
 
   public isPreviewInRange(day: Date | null): boolean {
-    if (this.mode !== 'range' || !this.startDate || this.endDate || !this.hoveredDate || !day) return false;
+    if (
+      this.mode !== 'range' ||
+      !this.startDate ||
+      this.endDate ||
+      !this.hoveredDate ||
+      !day
+    )
+      return false;
     const start = getStartOfDay(this.startDate).getTime();
     const end = getStartOfDay(this.hoveredDate).getTime();
     const time = getStartOfDay(day).getTime();
@@ -5100,27 +6056,36 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Generates the calendar view for the current month(s).
    * Uses LRU caching to optimize performance for frequently accessed months.
-   * 
+   *
    * @remarks
    * Performance characteristics:
    * - First generation: O(n) where n = number of days in month(s)
    * - Cached generation: O(1) lookup + O(1) cache access update
    * - Cache eviction: O(m) where m = cache size (only when cache is full)
-   * 
+   *
    * This method:
    * 1. Generates dropdown options for month/year selection
    * 2. Generates calendar days for each month in calendarCount
    * 3. Uses LRU cache to avoid regenerating recently accessed months
    * 4. Handles month/year rollover when displaying multiple calendars
    * 5. Updates memoized dependencies for change detection optimization
-   * 
+   * 6. Supports synchronous scrolling to keep calendars in sync (when enabled)
+   *
    * The cache key format is `${year}-${month}` to ensure unique identification
    * of calendar months across different years.
+   *
+   * When syncScroll is enabled, calendars are kept synchronized:
+   * - Calendar 0: currentDate month + (0 * monthGap)
+   * - Calendar 1: currentDate month + (1 * monthGap)
+   * - Calendar 2: currentDate month + (2 * monthGap)
    */
   public generateCalendar(): void {
     // Announce loading state for screen readers
     if (this.isCalendarOpen || this.isInlineMode) {
-      const loadingMsg = this.getTranslation('calendarLoading' as keyof DatepickerTranslations) || 'Loading calendar...';
+      const loadingMsg =
+        this.getTranslation(
+          'calendarLoading' as keyof DatepickerTranslations,
+        ) || 'Loading calendar...';
       this.ariaLiveService.announce(loadingMsg, 'polite');
     }
 
@@ -5128,65 +6093,92 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.multiCalendarMonths = [];
 
     const count = Math.max(1, Math.min(this.calendarCount || 1, 12));
-    const year = this.currentDate.getFullYear();
-    const month = this.currentDate.getMonth();
-    this._currentMonth = month;
-    this._currentYear = year;
+    const baseYear = this.currentDate.getFullYear();
+    const baseMonth = this.currentDate.getMonth();
+    this._currentMonth = baseMonth;
+    this._currentYear = baseYear;
     this.generateDropdownOptions();
 
-    for (let calIndex = 0; calIndex < count; calIndex++) {
-      const calMonth = (month + calIndex) % 12;
-      const calYear = year + Math.floor((month + calIndex) / 12);
+    // Generate months with sync scroll support
+    let months: Array<{
+      month: number;
+      year: number;
+      days: (Date | null)[];
+    }>;
 
-      const cacheKey = `${calYear}-${calMonth}`;
-      let days = this.monthCache.get(cacheKey);
+    // If sync scroll is enabled, enforce consistent offsets
+    if (this.syncScroll?.enabled && count > 1) {
+      const monthGap = this.syncScroll.monthGap || 1;
+      months = [];
+      for (let i = 0; i < count; i++) {
+        const offset = i * monthGap;
+        // Calculate year and month with proper wrapping
+        let targetMonth = baseMonth + offset;
+        let targetYear = baseYear;
 
-      if (!days) {
-        days = this.generateMonthDays(calYear, calMonth);
-
-        if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
-          this.evictLRUCacheEntry();
+        // Handle month overflow/underflow
+        while (targetMonth >= 12) {
+          targetMonth -= 12;
+          targetYear += 1;
         }
-        this.monthCache.set(cacheKey, days);
-        this.updateCacheAccess(cacheKey);
-      } else {
-        this.updateCacheAccess(cacheKey);
-      }
+        while (targetMonth < 0) {
+          targetMonth += 12;
+          targetYear -= 1;
+        }
 
-      this.multiCalendarMonths.push({
-        month: calMonth,
-        year: calYear,
-        days: days
-      });
-
-      if (calIndex === 0) {
-        this.daysInMonth = days;
+        const days = this.calendarGenerationService.generateMonthDays(
+          targetYear,
+          targetMonth,
+          this.firstDayOfWeek,
+          this._normalizeDate.bind(this),
+        );
+        months.push({
+          month: targetMonth,
+          year: targetYear,
+          days: days,
+        });
       }
+    } else {
+      // Original behavior: sequential months starting from current date
+      months = this.calendarGenerationService.generateMultipleMonths(
+        baseYear,
+        baseMonth,
+        count,
+        this.firstDayOfWeek,
+        this._normalizeDate.bind(this),
+      );
     }
 
+    this.multiCalendarMonths = months;
 
-    this.preloadAdjacentMonths(year, month);
+    if (months.length > 0 && months[0]) {
+      this.daysInMonth = months[0].days;
+    }
+
+    this.preloadAdjacentMonths(baseYear, baseMonth);
 
     this.cdr.markForCheck();
 
     // Announce calendar ready state for screen readers
     if (this.isCalendarOpen || this.isInlineMode) {
-      const readyMsg = this.getTranslation('calendarReady' as keyof DatepickerTranslations) || 'Calendar ready';
+      const readyMsg =
+        this.getTranslation('calendarReady' as keyof DatepickerTranslations) ||
+        'Calendar ready';
       this.ariaLiveService.announce(readyMsg, 'polite');
     }
 
     this.action.emit({
       type: 'calendarGenerated',
       payload: {
-        month: month,
-        year: year,
-        days: this.daysInMonth.filter(d => d !== null),
-        multiCalendar: this.multiCalendarMonths.map(m => ({
+        month: baseMonth,
+        year: baseYear,
+        days: this.daysInMonth.filter((d) => d !== null),
+        multiCalendar: this.multiCalendarMonths.map((m) => ({
           month: m.month,
           year: m.year,
-          days: m.days.filter(d => d !== null)
-        }))
-      }
+          days: m.days.filter((d) => d !== null),
+        })),
+      },
     });
 
     if (this.isBrowser) {
@@ -5197,107 +6189,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   /**
-   * Generates an array of dates for a specific month, including padding days from adjacent months.
-   * Used for calendar grid rendering and month cache population.
-   * 
-   * @param year - Year (e.g., 2025)
-   * @param month - Month (0-11, where 0 is January)
-   * @returns Array of Date objects and null values for empty grid cells
-   */
-  /**
-   * Generates an array of dates representing all days in a calendar month view.
-   * Includes days from previous/next months to fill the calendar grid.
-   * 
-   * @param year - The year of the month to generate
-   * @param month - The month index (0-11) to generate
-   * @returns Array of Date objects for the month, with null for empty cells
-   * 
-   * @remarks
-   * This method generates a complete calendar grid including:
-   * - All days in the specified month
-   * - Trailing days from the previous month (to fill the first week)
-   * - Leading days from the next month (to fill the last week)
-   * 
-   * The grid is organized to match the weekStart configuration, ensuring
-   * proper alignment with the weekday headers. Empty cells are represented
-   * as null to maintain array indexing consistency.
-   * 
-   * The generated array is cached by generateCalendar() to avoid regeneration
-   * of the same month multiple times.
-   */
-  /**
-   * Generates an array of dates representing all days in a calendar month view.
-   * Includes days from previous/next months to fill the calendar grid.
-   * 
-   * @param year - The year of the month to generate
-   * @param month - The month index (0-11) to generate
-   * @returns Array of Date objects for the month, with null for empty cells
-   * 
-   * @remarks
-   * This method generates a complete calendar grid including:
-   * - All days in the specified month
-   * - Trailing days from the previous month (to fill the first week)
-   * - Leading days from the next month (to fill the last week)
-   * 
-   * The grid is organized to match the weekStart configuration, ensuring
-   * proper alignment with the weekday headers. Empty cells are represented
-   * as null to maintain array indexing consistency.
-   * 
-   * The generated array is cached by generateCalendar() to avoid regeneration
-   * of the same month multiple times.
-   */
-  private generateMonthDays(year: number, month: number): (Date | null)[] {
-    const days: (Date | null)[] = [];
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0);
-    const startDayOfWeek = firstDayOfMonth.getDay();
-    const emptyCellCount = (startDayOfWeek - this.firstDayOfWeek + 7) % 7;
-
-    const previousMonth = month === 0 ? 11 : month - 1;
-    const previousYear = month === 0 ? year - 1 : year;
-    const lastDayOfPreviousMonth = new Date(previousYear, previousMonth + 1, 0);
-
-    for (let i = 0; i < emptyCellCount; i++) {
-      const dayNumber = lastDayOfPreviousMonth.getDate() - emptyCellCount + i + 1;
-      days.push(this._normalizeDate(new Date(previousYear, previousMonth, dayNumber)));
-    }
-    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
-      days.push(this._normalizeDate(new Date(year, month, i)));
-    }
-
-    return days;
-  }
-
-  /**
    * Preloads adjacent months (previous and next) into the cache for smoother navigation.
    * Implements lazy loading optimization to improve performance when users navigate between months.
-   * 
+   *
    * @param currentYear - Current calendar year
    * @param currentMonth - Current calendar month (0-11)
    */
-  private preloadAdjacentMonths(currentYear: number, currentMonth: number): void {
-    const monthsToPreload = [
-      { year: currentMonth === 0 ? currentYear - 1 : currentYear, month: currentMonth === 0 ? 11 : currentMonth - 1 },
-      { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: currentMonth === 11 ? 0 : currentMonth + 1 }
-    ];
-
-    for (const { year, month } of monthsToPreload) {
-      const cacheKey = `${year}-${month}`;
-      if (!this.monthCache.has(cacheKey)) {
-        const days = this.generateMonthDays(year, month);
-        if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
-          this.evictLRUCacheEntry();
-        }
-        this.monthCache.set(cacheKey, days);
-        this.updateCacheAccess(cacheKey);
-      } else {
-        this.updateCacheAccess(cacheKey);
-      }
-    }
+  private preloadAdjacentMonths(
+    currentYear: number,
+    currentMonth: number,
+  ): void {
+    this.calendarGenerationService.preloadAdjacentMonths(
+      currentYear,
+      currentMonth,
+      this.firstDayOfWeek,
+      this._normalizeDate.bind(this),
+    );
   }
 
   private generateDropdownOptions(): void {
-    this.yearOptions = generateYearOptions(this._currentYear, this.yearRange);
+    // yearOptions is now a computed signal - no need to regenerate
   }
 
   private generateYearGrid(): void {
@@ -5345,9 +6256,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Changes the displayed decade by the specified delta.
    * Used in decade view mode for navigating between decades.
-   * 
+   *
    * @param delta - Number of decades to change (positive for future, negative for past)
-   * 
+   *
    * @remarks
    * Each delta unit represents 10 years. The method updates the decade grid
    * to show the new range of decades available for selection.
@@ -5362,16 +6273,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Changes the displayed calendar year by the specified delta.
    * Updates year grid and calendar view, and announces the change to screen readers.
-   * 
+   *
    * @param delta - Number of years to change (positive for future, negative for past)
-   * 
+   *
    * @remarks
    * This method:
    * - Updates currentYear and currentDate
    * - Regenerates year grid and calendar view
    * - Announces year change to screen readers for accessibility
    * - Handles touch listener setup for mobile devices
-   * 
+   *
    * Performance: O(1) for year change, O(n) for grid/calendar generation
    */
   public changeYear(delta: number): void {
@@ -5383,13 +6294,22 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.generateCalendar();
     this.scheduleChangeDetection();
 
-    if (this.isBrowser && this.isCalendarOpen && this.calendarViewMode === 'month') {
+    if (
+      this.isBrowser &&
+      this.isCalendarOpen &&
+      this.calendarViewMode === 'month'
+    ) {
       this.trackedSetTimeout(() => {
         this.setupPassiveTouchListeners();
       }, 50);
     }
 
-    const yearChangedMsg = this.getTranslation('yearChanged' as keyof DatepickerTranslations, undefined, { year: String(this._currentYear) }) || `Year ${this._currentYear}`;
+    const yearChangedMsg =
+      this.getTranslation(
+        'yearChanged' as keyof DatepickerTranslations,
+        undefined,
+        { year: String(this._currentYear) },
+      ) || `Year ${this._currentYear}`;
     this.ariaLiveService.announce(yearChangedMsg, 'polite');
   }
 
@@ -5446,9 +6366,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     const monthEnd = new Date(month.getFullYear(), month.getMonth() + 1, 0);
     const rangeStart = getStartOfDay(this.startDate);
     const rangeEnd = getStartOfDay(this.endDate);
-    return (monthStart >= rangeStart && monthStart <= rangeEnd) ||
+    return (
+      (monthStart >= rangeStart && monthStart <= rangeEnd) ||
       (monthEnd >= rangeStart && monthEnd <= rangeEnd) ||
-      (monthStart <= rangeStart && monthEnd >= rangeEnd);
+      (monthStart <= rangeStart && monthEnd >= rangeEnd)
+    );
   }
 
   public onTimelineMonthClick(month: Date): void {
@@ -5515,80 +6437,40 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   }
 
   public onCalendarSwipeStart(event: TouchEvent): void {
-    if (this.disabled || !event.touches[0]) return;
-    const touch = event.touches[0];
-    this.calendarSwipeStartX = touch.clientX;
-    this.calendarSwipeStartY = touch.clientY;
-    this.calendarSwipeStartTime = Date.now();
-    this.isCalendarSwiping = false;
+    this.touchService.handleCalendarSwipeStart(event, this.touchState);
   }
 
   public onCalendarSwipeMove(event: TouchEvent): void {
-    if (this.disabled || !this.calendarSwipeStartTime || !event.touches[0]) return;
-    const touch = event.touches[0];
-    const deltaX = Math.abs(touch.clientX - this.calendarSwipeStartX);
-    const deltaY = Math.abs(touch.clientY - this.calendarSwipeStartY);
-
-    if (deltaX > deltaY && deltaX > 10) {
-      this.isCalendarSwiping = true;
-      event.preventDefault();
-    }
+    this.touchService.handleCalendarSwipeMove(event, this.touchState);
   }
 
   public onCalendarSwipeEnd(event: TouchEvent): void {
-    if (this.disabled || !this.calendarSwipeStartTime) {
-      this.resetSwipeState();
-      return;
-    }
-
-    const touch = event.changedTouches[0];
-    if (!touch) {
-      this.resetSwipeState();
-      return;
-    }
-
-    const deltaX = touch.clientX - this.calendarSwipeStartX;
-    const deltaY = touch.clientY - this.calendarSwipeStartY;
-    const absDeltaY = Math.abs(deltaY);
-    const deltaTime = Date.now() - this.calendarSwipeStartTime;
-    const absDeltaX = Math.abs(deltaX);
-
-    if (absDeltaY > this.SWIPE_THRESHOLD && absDeltaY > absDeltaX && deltaTime < this.SWIPE_TIME_THRESHOLD) {
-      if (deltaY < 0) {
-        this._currentYear = this._currentYear + 1;
-        this._currentYearSignal.set(this._currentYear);
-        this.generateCalendar();
-      } else {
-        this._currentYear = this._currentYear - 1;
-        this._currentYearSignal.set(this._currentYear);
-        this.generateCalendar();
-      }
-      this.resetSwipeState();
-      return;
-    }
-
-    if (this.isCalendarSwiping &&
-      absDeltaX > this.SWIPE_THRESHOLD &&
-      absDeltaX > absDeltaY &&
-      deltaTime < this.SWIPE_TIME_THRESHOLD) {
-
-      if (deltaX < 0) {
-        if (!this.isBackArrowDisabled) {
-          this.changeMonth(1);
-        }
-      } else {
-        this.changeMonth(-1);
-      }
-    }
-
-    this.resetSwipeState();
-  }
-
-  private resetSwipeState(): void {
-    this.calendarSwipeStartX = 0;
-    this.calendarSwipeStartY = 0;
-    this.calendarSwipeStartTime = 0;
-    this.isCalendarSwiping = false;
+    this.touchService.handleCalendarSwipeEnd(
+      event,
+      this.touchState,
+      {
+        disabled: this.disabled,
+        mode: this.mode,
+        swipeThreshold: this.SWIPE_THRESHOLD,
+        swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
+      },
+      {
+        isDateDisabled: (d) => this.isDateDisabled(d),
+        onDateClick: (_) => {},
+        changeMonth: (delta) => {
+          if (!this.isBackArrowDisabled || delta > 0) {
+            this.changeMonth(delta);
+          }
+        },
+        changeYear: (delta) => {
+          this._currentYear += delta;
+          this._currentYearSignal.set(this._currentYear);
+          this.generateCalendar();
+        },
+        onStateChanged: () => this.cdr.markForCheck(),
+        onHoverChanged: (_) => {},
+      },
+    );
   }
 
   public changeMonth(delta: number): void {
@@ -5597,13 +6479,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (delta < 0 && this.isBackArrowDisabled) return;
 
     this.clearTouchHandledFlag();
-    this.isDateCellTouching = false;
-    this.dateCellTouchStartTime = 0;
-    this.dateCellTouchStartDate = null;
-    this.lastDateCellTouchDate = null;
+    this.touchState.isDateCellTouching = false;
+    this.touchState.dateCellTouchStartTime = 0;
+    this.touchState.dateCellTouchStartDate = null;
+    this.touchState.lastDateCellTouchDate = null;
 
     // Calculate from the 1st of the month to avoid skipping months when current date is 31st (e.g., Jan 31 + 1m -> Mar)
-    const currentMonthStart = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1);
+    const currentMonthStart = new Date(
+      this.currentDate.getFullYear(),
+      this.currentDate.getMonth(),
+      1,
+    );
     const newDate = addMonths(currentMonthStart, delta);
     this.currentDate = newDate;
     this._currentMonth = newDate.getMonth();
@@ -5623,9 +6509,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       });
     }
 
-    const monthName = newDate.toLocaleDateString(this.locale, { month: 'long' });
+    const monthName = newDate.toLocaleDateString(this.locale, {
+      month: 'long',
+    });
     const year = newDate.getFullYear();
-    const monthChangedMsg = this.getTranslation('monthChanged' as keyof DatepickerTranslations, undefined, { month: monthName, year: String(year) }) || `${monthName} ${year}`;
+    const monthChangedMsg =
+      this.getTranslation(
+        'monthChanged' as keyof DatepickerTranslations,
+        undefined,
+        { month: monthName, year: String(year) },
+      ) || `${monthName} ${year}`;
     this.ariaLiveService.announce(monthChangedMsg, 'polite');
 
     this.action.emit({ type: 'monthChanged', payload: { delta: delta } });
@@ -5637,7 +6530,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   public isCurrentMonth(day: Date | null): boolean {
     if (!day) return false;
-    return day.getMonth() === this._currentMonth && day.getFullYear() === this._currentYear;
+    return (
+      day.getMonth() === this._currentMonth &&
+      day.getFullYear() === this._currentYear
+    );
   }
 
   public isInRange(d: Date | null): boolean {
@@ -5660,11 +6556,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this.weekStart = this.globalConfig.weekStart;
     }
 
-    if (this.minuteInterval === 1 && this.globalConfig.minuteInterval !== undefined) {
+    if (
+      this.minuteInterval === 1 &&
+      this.globalConfig.minuteInterval !== undefined
+    ) {
       this.minuteInterval = this.globalConfig.minuteInterval;
     }
 
-    if (this.holidayProvider === null && this.globalConfig.holidayProvider !== undefined) {
+    if (
+      this.holidayProvider === null &&
+      this.globalConfig.holidayProvider !== undefined
+    ) {
       this.holidayProvider = this.globalConfig.holidayProvider;
     }
 
@@ -5688,11 +6590,17 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       this._maxDate = this._normalizeDate(this.globalConfig.maxDate);
     }
 
-    if (this.autoDetectMobile === true && this.globalConfig.autoDetectMobile !== undefined) {
+    if (
+      this.autoDetectMobile === true &&
+      this.globalConfig.autoDetectMobile !== undefined
+    ) {
       this.autoDetectMobile = this.globalConfig.autoDetectMobile;
     }
 
-    if (this.mobileModalStyle === 'center' && this.globalConfig.mobileModalStyle !== undefined) {
+    if (
+      this.mobileModalStyle === 'center' &&
+      this.globalConfig.mobileModalStyle !== undefined
+    ) {
       this.mobileModalStyle = this.globalConfig.mobileModalStyle;
     }
   }
@@ -5700,15 +6608,21 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Apply animation configuration from global config
    */
-  private applyAnimationConfig(): void {
-    if (!this.isBrowser) return;
+  private applyAnimationConfig(config?: AnimationConfig): void {
+    if (!this.isBrowser || !this.elementRef?.nativeElement) return;
 
-    const animationConfig: AnimationConfig = this.globalConfig?.animations || DEFAULT_ANIMATION_CONFIG;
+    const nativeElement = this.elementRef?.nativeElement;
+    if (!nativeElement) return;
+
+    const animationConfig: AnimationConfig =
+      config || this.globalConfig?.animations || DEFAULT_ANIMATION_CONFIG;
 
     let prefersReducedMotion = false;
     if (animationConfig.respectReducedMotion) {
       try {
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const mediaQuery = window.matchMedia(
+          '(prefers-reduced-motion: reduce)',
+        );
         prefersReducedMotion = mediaQuery !== null && mediaQuery.matches;
       } catch {
         prefersReducedMotion = false;
@@ -5716,21 +6630,31 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (!animationConfig.enabled || prefersReducedMotion) {
-      this.elementRef.nativeElement.style.setProperty('--datepicker-transition-duration', '0ms');
-      this.elementRef.nativeElement.style.setProperty('--datepicker-transition', 'none');
+      nativeElement.style.setProperty(
+        '--datepicker-transition-duration',
+        '0ms',
+      );
+      nativeElement.style.setProperty('--datepicker-transition', 'none');
       return;
     }
 
     const duration = `${animationConfig.duration || DEFAULT_ANIMATION_CONFIG.duration}ms`;
     const easing = animationConfig.easing || DEFAULT_ANIMATION_CONFIG.easing;
-    const property = animationConfig.property || DEFAULT_ANIMATION_CONFIG.property;
+    const property =
+      animationConfig.property || DEFAULT_ANIMATION_CONFIG.property;
 
-    this.elementRef.nativeElement.style.setProperty('--datepicker-transition-duration', duration);
-    this.elementRef.nativeElement.style.setProperty('--datepicker-transition-easing', easing);
-    this.elementRef.nativeElement.style.setProperty('--datepicker-transition-property', property);
-    this.elementRef.nativeElement.style.setProperty(
+    nativeElement.style.setProperty(
+      '--datepicker-transition-duration',
+      duration,
+    );
+    nativeElement.style.setProperty('--datepicker-transition-easing', easing);
+    nativeElement.style.setProperty(
+      '--datepicker-transition-property',
+      property,
+    );
+    nativeElement.style.setProperty(
       '--datepicker-transition',
-      `${property} ${duration} ${easing}`
+      `${property} ${duration} ${easing}`,
     );
   }
 
@@ -5744,7 +6668,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (this.translationRegistry && this._locale) {
-      const defaultTranslations = this.translationRegistry.getTranslations(this._locale);
+      const defaultTranslations = this.translationRegistry.getTranslations(
+        this._locale,
+      );
       if (this.translations) {
         this._translations = { ...defaultTranslations, ...this.translations };
       } else {
@@ -5756,48 +6682,148 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
   /**
    * Generates an accessible label for the calendar dialog.
    * Provides screen readers with context about which month/year is being displayed.
-   * 
+   *
    * @returns Localized calendar label (e.g., "Calendar for January 2024")
    */
   public getCalendarAriaLabel(): string {
     if (!this.currentDate || !this.locale) return '';
-    const month = this.currentDate.toLocaleDateString(this.locale, { month: 'long' });
+    const month = this.currentDate.toLocaleDateString(this.locale, {
+      month: 'long',
+    });
     const year = this.currentDate.getFullYear();
-    return this.getTranslation('calendarFor', undefined, { month, year: String(year) });
+    return this.getTranslation('calendarFor', undefined, {
+      month,
+      year: String(year),
+    });
   }
 
   /**
    * Generates an accessible label for a specific calendar month in multi-calendar views.
-   * 
+   *
    * @param month - Month index (0-11)
    * @param year - Year number
    * @returns Localized calendar label for the specified month/year
    */
   public getCalendarAriaLabelForMonth(month: number, year: number): string {
     if (!this.locale) return '';
-    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
-    return this.getTranslation('calendarFor', undefined, { month: monthName, year: String(year) });
+    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, {
+      month: 'long',
+    });
+    return this.getTranslation('calendarFor', undefined, {
+      month: monthName,
+      year: String(year),
+    });
+  }
+
+  /**
+   * Sets up IntersectionObserver for lazy loading multi-calendar months.
+   * Only initializes if multi-calendar is enabled (calendarCount > 1).
+   *
+   * @remarks
+   * Uses IntersectionObserver to track which calendar month elements are visible
+   * in the viewport. Updates the visible indices signal to enable/disable rendering.
+   */
+  private setupLazyLoadingObserver(): void {
+    if (!this.isBrowser || this.calendarCount <= 1) {
+      return;
+    }
+
+    try {
+      // Only setup observer if not already done
+      if (!('IntersectionObserver' in window)) {
+        return; // IntersectionObserver not supported
+      }
+
+      const multiCalendarContainer =
+        this.elementRef?.nativeElement?.querySelector(
+          '.ngxsmk-multi-calendar-container',
+        );
+
+      if (!multiCalendarContainer) {
+        // Will retry in ngAfterViewInit
+        return;
+      }
+
+      // Create observer to track calendar month visibility
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visibleIndices = new Set<number>();
+
+          entries.forEach((entry) => {
+            const calendarMonth = entry.target as HTMLElement;
+            const indexAttr = calendarMonth.getAttribute('data-calendar-index');
+
+            if (indexAttr !== null && entry.isIntersecting) {
+              const index = parseInt(indexAttr, 10);
+              if (!isNaN(index)) {
+                visibleIndices.add(index);
+              }
+            }
+          });
+
+          // Update signal if there are visible calendars
+          if (visibleIndices.size > 0) {
+            this._visibleCalendarIndicesSignal.set(visibleIndices);
+          }
+        },
+        {
+          root: multiCalendarContainer,
+          threshold: 0.01, // Consider visible if even 1% is shown
+        },
+      );
+
+      // Observe all calendar month elements
+      const calendarMonths = multiCalendarContainer.querySelectorAll(
+        '.ngxsmk-calendar-month-multi',
+      );
+
+      calendarMonths.forEach((month: Element) => {
+        observer.observe(month);
+      });
+
+      // Store observer for cleanup in ngOnDestroy
+      this.activeTimeouts.add(
+        observer as unknown as ReturnType<typeof setTimeout>,
+      );
+    } catch (error) {
+      if (isDevMode()) {
+        console.warn(
+          '[ngxsmk-datepicker] Could not setup lazy loading observer:',
+          error,
+        );
+      }
+    }
   }
 
   /**
    * Formats a month and year into a display label.
-   * 
+   *
    * @param month - Month index (0-11)
    * @param year - Year number
    * @returns Formatted string like "January 2024"
    */
   public getMonthYearLabel(month: number, year: number): string {
     if (!this.locale) return '';
-    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, { month: 'long' });
+    const monthName = new Date(year, month, 1).toLocaleDateString(this.locale, {
+      month: 'long',
+    });
     return `${monthName} ${year}`;
   }
 
-  public isCurrentMonthForCalendar(day: Date | null, targetMonth: number, targetYear: number): boolean {
+  public isCurrentMonthForCalendar(
+    day: Date | null,
+    targetMonth: number,
+    targetYear: number,
+  ): boolean {
     if (!day) return false;
     return day.getMonth() === targetMonth && day.getFullYear() === targetYear;
   }
 
-  public getTranslation(key: keyof DatepickerTranslations, fallbackKey?: keyof DatepickerTranslations, params?: Record<string, string | number>): string {
+  public getTranslation(
+    key: keyof DatepickerTranslations,
+    fallbackKey?: keyof DatepickerTranslations,
+    params?: Record<string, string | number>,
+  ): string {
     if (this._translationService) {
       return this._translationService.translate(key, params);
     }
@@ -5811,7 +6837,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       if (translation && params) {
         let result = translation;
         for (const [paramKey, paramValue] of Object.entries(params)) {
-          result = result.replace(new RegExp(`{{${paramKey}}}`, 'g'), String(paramValue));
+          result = result.replace(
+            new RegExp(`{{${paramKey}}}`, 'g'),
+            String(paramValue),
+          );
         }
         return result;
       }
@@ -5819,7 +6848,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
 
     if (this.translationRegistry && this._locale) {
-      const registryTranslations = this.translationRegistry.getTranslations(this._locale);
+      const registryTranslations = this.translationRegistry.getTranslations(
+        this._locale,
+      );
       return registryTranslations?.[key] ?? key;
     }
     return key;
@@ -5830,6 +6861,7 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * This improves accessibility by returning focus to the trigger element.
    */
   public closeCalendarWithFocusRestore(): void {
+    this.removeFocusTrap();
     this.isCalendarOpen = false;
     this.isOpeningCalendar = false;
     this.updateOpeningState(false);
@@ -5839,7 +6871,10 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
       // Use setTimeout to ensure the calendar is fully closed before restoring focus
       this.trackedSetTimeout(() => {
         try {
-          if (this.previousFocusElement && document.contains(this.previousFocusElement)) {
+          if (
+            this.previousFocusElement &&
+            document.contains(this.previousFocusElement)
+          ) {
             this.previousFocusElement.focus({ preventScroll: true });
           }
         } catch (error) {
@@ -5855,7 +6890,9 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
   private updateRtlState(): void {
     if (this.isBrowser && this.elementRef?.nativeElement) {
-      const wrapper = this.elementRef.nativeElement.querySelector('.ngxsmk-datepicker-wrapper');
+      const wrapper = this.elementRef?.nativeElement?.querySelector(
+        '.ngxsmk-datepicker-wrapper',
+      );
       if (wrapper) {
         if (this.isRtl) {
           wrapper.setAttribute('dir', 'rtl');
@@ -5909,12 +6946,16 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
 
     // Clear all tracked timeouts and animation frames (single cleanup block)
     if (this.activeTimeouts) {
-      this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) => clearTimeout(timeoutId));
+      this.activeTimeouts.forEach((timeoutId: ReturnType<typeof setTimeout>) =>
+        clearTimeout(timeoutId),
+      );
       this.activeTimeouts.clear();
     }
 
     if (this.activeAnimationFrames) {
-      this.activeAnimationFrames.forEach((frameId: number) => cancelAnimationFrame(frameId));
+      this.activeAnimationFrames.forEach((frameId: number) =>
+        cancelAnimationFrame(frameId),
+      );
       this.activeAnimationFrames.clear();
     }
 
@@ -5927,6 +6968,11 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     if (this._fieldEffectRef) {
       this._fieldEffectRef.destroy();
       this._fieldEffectRef = null;
+    }
+
+    // Clean up change detection effect
+    if (this._changeDetectionEffect) {
+      this._changeDetectionEffect.destroy();
     }
 
     if (this.passiveTouchListeners) {
@@ -5942,18 +6988,26 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     this.hoveredDate ??= null;
     this._internalValue ??= null;
 
-    this.invalidateMonthCache();
+    this.calendarGenerationService.clearCache();
   }
 
   private setupFocusTrap(): void {
-    if (this.isInlineMode || !this.isBrowser || !this.focusTrapService || this.disableFocusTrap || this.isIonicEnvironment()) {
+    if (
+      this.isInlineMode ||
+      !this.isBrowser ||
+      !this.focusTrapService ||
+      this.disableFocusTrap ||
+      this.isIonicEnvironment()
+    ) {
       return;
     }
 
     this.removeFocusTrap();
 
     if (this.popoverContainer?.nativeElement) {
-      this.focusTrapCleanup = this.focusTrapService.trapFocus(this.popoverContainer);
+      this.focusTrapCleanup = this.focusTrapService.trapFocus(
+        this.popoverContainer,
+      );
     }
   }
 
@@ -5962,83 +7016,29 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
    * - Prioritizes layout below the input.
    * - Falls back to positioning above if required.
    * - Defaults to CSS-centered positioning if space is insufficient.
-   * 
+   *
    * @remarks
    * This logic primarily targets mobile/tablet viewports; desktop layout (≥1024px)
    * is handled via CSS absolute positioning.
    */
   private positionPopoverRelativeToInput(): void {
-    if (!this.isBrowser || !this.popoverContainer?.nativeElement || this.isInlineMode) {
+    if (!this.isBrowser || !this.popoverContainer?.nativeElement) {
       return;
     }
 
     const popover = this.popoverContainer.nativeElement;
-    const inputGroup = this.elementRef.nativeElement?.querySelector('.ngxsmk-input-group') as HTMLElement;
+    const inputGroup = this.elementRef?.nativeElement?.querySelector(
+      '.ngxsmk-input-group',
+    ) as HTMLElement | null;
 
-    if (!inputGroup) {
-      return;
-    }
-
-    // Delegate positioning to CSS for desktop layouts (≥1024px); apply JS positioning only for mobile/tablet.
-    const isDesktop = window.innerWidth >= 1024;
-    if (isDesktop) {
-      // CSS handles positioning on desktop, remove any inline styles
-      popover.style.top = '';
-      popover.style.left = '';
-      popover.style.transform = '';
-      return;
-    }
-
-    try {
-      const inputRect = inputGroup.getBoundingClientRect();
-      const popoverRect = popover.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-
-      // Calculate space below input
-      const spaceBelow = viewportHeight - inputRect.bottom;
-      const spaceAbove = inputRect.top;
-      const spaceRight = viewportWidth - inputRect.left;
-
-      // Use actual popover dimensions or fallback to minimums
-      const minHeight = popoverRect.height || 400;
-      const minWidth = popoverRect.width || 280;
-
-      // If there's enough space below, position below input
-      if (spaceBelow >= minHeight && spaceRight >= minWidth) {
-        const top = inputRect.bottom + window.scrollY + 8; // 8px gap
-        const left = inputRect.left + window.scrollX;
-
-        popover.style.position = 'fixed';
-        popover.style.top = `${top}px`;
-        popover.style.left = `${left}px`;
-        popover.style.transform = 'none';
-        popover.style.right = 'auto';
-        popover.style.bottom = 'auto';
-      } else if (spaceAbove >= minHeight && spaceRight >= minWidth) {
-        // If not enough space below but enough above, position above input
-        const bottom = viewportHeight - inputRect.top + window.scrollY + 8;
-        const left = inputRect.left + window.scrollX;
-
-        popover.style.position = 'fixed';
-        popover.style.bottom = `${bottom}px`;
-        popover.style.top = 'auto';
-        popover.style.left = `${left}px`;
-        popover.style.transform = 'none';
-        popover.style.right = 'auto';
-      } else {
-        // Not enough space, fall back to center (CSS default)
-        popover.style.top = '';
-        popover.style.left = '';
-        popover.style.bottom = '';
-        popover.style.transform = '';
-      }
-    } catch (error) {
-      // Fall back to CSS default (centered) on any error
-      if (isDevMode()) {
-        console.warn('[ngxsmk-datepicker] Error positioning popover:', error);
-      }
-    }
+    this.popoverPositioningService.positionRelativeToInput(
+      popover,
+      inputGroup,
+      {
+        isInlineMode: this.isInlineMode,
+        shouldAppendToBody: this._shouldAppendToBody,
+      },
+    );
   }
 
   /**
@@ -6051,13 +7051,40 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
     try {
       // Check for Ionic global object or key Ionic DOM elements/styles
-      return typeof (window as unknown as Record<string, unknown>)['Ionic'] !== 'undefined' ||
-        (typeof document !== 'undefined' && !!document.querySelector('ion-app')) ||
+      return (
+        typeof (window as unknown as Record<string, unknown>)['Ionic'] !==
+          'undefined' ||
+        (typeof document !== 'undefined' &&
+          !!document.querySelector('ion-app')) ||
         (typeof getComputedStyle !== 'undefined' &&
-          Boolean(getComputedStyle(document.documentElement).getPropertyValue('--ion-color-primary')));
+          Boolean(
+            getComputedStyle(document.documentElement).getPropertyValue(
+              '--ion-color-primary',
+            ),
+          ))
+      );
     } catch {
       return false;
     }
+  }
+
+  public calculateRangeDuration(): string {
+    const start = this.startDate;
+    const end = this.endDate || this.hoveredDate;
+
+    if (!start || !end) return '';
+
+    const startDay = getStartOfDay(start);
+    const endDay = getStartOfDay(end);
+
+    const diffTime = Math.abs(endDay.getTime() - startDay.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    // Fallback translations if not present
+    const dayLabel = this.getTranslation('day') || 'day';
+    const daysLabel = this.getTranslation('days') || 'days';
+
+    return `${diffDays} ${diffDays === 1 ? dayLabel : daysLabel}`;
   }
 
   private removeFocusTrap(): void {
@@ -6067,3 +7094,5 @@ export class NgxsmkDatepickerComponent implements OnInit, OnChanges, OnDestroy, 
     }
   }
 }
+
+

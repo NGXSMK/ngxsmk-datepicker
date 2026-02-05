@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { CalendarHeaderComponent } from '../components/calendar-header.component';
 import { CalendarMonthViewComponent } from '../components/calendar-month-view.component';
@@ -12,7 +13,7 @@ import { getStartOfDay } from '../utils/date.utils';
 @Component({
   selector: 'ngxsmk-calendar-header',
   template: '',
-  standalone: true
+  standalone: true,
 })
 class CalendarHeaderStubComponent {
   @Input() currentMonth: unknown;
@@ -35,7 +36,7 @@ class CalendarHeaderStubComponent {
 @Component({
   selector: 'ngxsmk-calendar-month-view',
   template: '',
-  standalone: true
+  standalone: true,
 })
 class CalendarMonthViewStubComponent {
   @Input() days: unknown;
@@ -64,6 +65,7 @@ class CalendarMonthViewStubComponent {
   @Input() mode: unknown;
   @Input() focusedDate: unknown;
   @Input() today: unknown;
+  @Input() dateTemplate: unknown;
   @Output() dateClick = new EventEmitter<Date>();
   @Output() dateHover = new EventEmitter<Date>();
   @Output() dateFocus = new EventEmitter<unknown>();
@@ -78,7 +80,7 @@ class CalendarMonthViewStubComponent {
 @Component({
   selector: 'ngxsmk-calendar-year-view',
   template: '',
-  standalone: true
+  standalone: true,
 })
 class CalendarYearViewStubComponent {
   @Input() viewMode: unknown;
@@ -94,7 +96,7 @@ class CalendarYearViewStubComponent {
 @Component({
   selector: 'ngxsmk-time-selection',
   template: '',
-  standalone: true
+  standalone: true,
 })
 class TimeSelectionStubComponent {
   @Input() currentDisplayHour: unknown;
@@ -121,11 +123,26 @@ describe('NgxsmkDatepickerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgxsmkDatepickerComponent]
+      imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
     })
       .overrideComponent(NgxsmkDatepickerComponent, {
-        remove: { imports: [CalendarHeaderComponent, CalendarMonthViewComponent, CalendarYearViewComponent, TimeSelectionComponent] },
-        add: { imports: [CalendarHeaderStubComponent, CalendarMonthViewStubComponent, CalendarYearViewStubComponent, TimeSelectionStubComponent] }
+        remove: {
+          imports: [
+            CalendarHeaderComponent,
+            CalendarMonthViewComponent,
+            CalendarYearViewComponent,
+            TimeSelectionComponent,
+          ],
+        },
+        add: {
+          imports: [
+            CalendarHeaderStubComponent,
+            CalendarMonthViewStubComponent,
+            CalendarYearViewStubComponent,
+            TimeSelectionStubComponent,
+          ],
+        },
       })
       .compileComponents();
 
@@ -143,8 +160,12 @@ describe('NgxsmkDatepickerComponent', () => {
     component.currentMonth = 0; // January
     fixture.detectChanges();
 
-    const headerDebugEl = fixture.debugElement.query(By.directive(CalendarHeaderStubComponent));
-    expect(headerDebugEl).withContext('CalendarHeaderStubComponent not found').toBeTruthy();
+    const headerDebugEl = fixture.debugElement.query(
+      By.directive(CalendarHeaderStubComponent),
+    );
+    expect(headerDebugEl)
+      .withContext('CalendarHeaderStubComponent not found')
+      .toBeTruthy();
 
     // Simulate next month event
     headerDebugEl.componentInstance.nextMonth.emit();
@@ -158,10 +179,18 @@ describe('NgxsmkDatepickerComponent', () => {
     component.mode = 'single';
     fixture.detectChanges();
 
-    const monthViewDebugEl = fixture.debugElement.query(By.directive(CalendarMonthViewStubComponent));
-    expect(monthViewDebugEl).withContext('CalendarMonthViewStubComponent not found').toBeTruthy();
+    const monthViewDebugEl = fixture.debugElement.query(
+      By.directive(CalendarMonthViewStubComponent),
+    );
+    expect(monthViewDebugEl)
+      .withContext('CalendarMonthViewStubComponent not found')
+      .toBeTruthy();
 
-    const testDate = new Date(component.currentYear, component.currentMonth, 15);
+    const testDate = new Date(
+      component.currentYear,
+      component.currentMonth,
+      15,
+    );
 
     // Simulate date click event
     monthViewDebugEl.componentInstance.dateClick.emit(testDate);
@@ -173,7 +202,9 @@ describe('NgxsmkDatepickerComponent', () => {
 
   it('should identify disabled dates via isDateDisabled method', () => {
     const today = new Date();
-    const minDate = getStartOfDay(new Date(today.getFullYear(), today.getMonth(), 15));
+    const minDate = getStartOfDay(
+      new Date(today.getFullYear(), today.getMonth(), 15),
+    );
     component.minDate = minDate;
 
     const disabledDate = new Date(today.getFullYear(), today.getMonth(), 10);

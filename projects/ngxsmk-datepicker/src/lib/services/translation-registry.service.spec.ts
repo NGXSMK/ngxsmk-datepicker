@@ -3,13 +3,18 @@ import { TranslationRegistryService } from './translation-registry.service';
 import { DatepickerTranslations } from '../interfaces/datepicker-translations.interface';
 
 // Helper to create minimal translation object
-function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = {}): DatepickerTranslations {
+function createMinimalTranslations(
+  overrides: Partial<DatepickerTranslations> = {},
+): DatepickerTranslations {
   const defaults: DatepickerTranslations = {
     selectDate: 'Select Date',
     selectTime: 'Select Time',
     clear: 'Clear',
     close: 'Close',
     today: 'Today',
+    selectEndDate: 'Select End Date',
+    day: 'Day',
+    days: 'Days',
     previousMonth: 'Previous Month',
     nextMonth: 'Next Month',
     previousYear: 'Previous Year',
@@ -43,7 +48,9 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
     yearChanged: 'Changed to year {{year}}',
     calendarLoading: 'Loading calendar...',
     calendarReady: 'Calendar ready',
-    keyboardShortcuts: 'Keyboard shortcuts'
+    keyboardShortcuts: 'Keyboard shortcuts',
+    from: 'From',
+    to: 'To',
   };
   return { ...defaults, ...overrides };
 }
@@ -53,7 +60,7 @@ describe('TranslationRegistryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TranslationRegistryService]
+      providers: [TranslationRegistryService],
     });
 
     service = TestBed.inject(TranslationRegistryService);
@@ -66,7 +73,7 @@ describe('TranslationRegistryService', () => {
   describe('register', () => {
     it('should register translations for a locale', () => {
       const translations = createMinimalTranslations({
-        selectDate: 'Test Select Date'
+        selectDate: 'Test Select Date',
       });
 
       service.register('test-locale', translations);
@@ -77,7 +84,7 @@ describe('TranslationRegistryService', () => {
 
     it('should normalize locale to lowercase', () => {
       const translations = createMinimalTranslations({
-        selectDate: 'Test'
+        selectDate: 'Test',
       });
 
       service.register('TEST-LOCALE', translations);
@@ -169,4 +176,3 @@ describe('TranslationRegistryService', () => {
     });
   });
 });
-

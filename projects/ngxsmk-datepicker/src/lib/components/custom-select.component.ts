@@ -75,7 +75,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       background: var(--datepicker-background, #fff);
       border: 1.5px solid var(--datepicker-border-color, #e5e7eb); 
       color: var(--datepicker-text-color, #1f2937);
-      border-radius: 8px; 
+      border-radius: var(--datepicker-border-radius, 8px); 
       padding: 8px 16px; 
       font-size: 14px; 
       text-align: left; 
@@ -124,7 +124,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       background: var(--datepicker-background, #fff); 
       border: 1.5px solid var(--datepicker-border-color, #e5e7eb);
       color: var(--datepicker-text-color, #1f2937); 
-      border-radius: 8px;
+      border-radius: var(--datepicker-border-radius, 8px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
       max-height: 200px; 
       overflow-y: auto; 
@@ -185,7 +185,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     }
     .ngxsmk-options-panel li { 
       padding: 10px 12px; 
-      border-radius: 6px; 
+      border-radius: var(--datepicker-radius-sm, 6px); 
       cursor: pointer; 
       transition: background-color 0.12s cubic-bezier(0.4, 0, 0.2, 1), color 0.12s cubic-bezier(0.4, 0, 0.2, 1);
       font-weight: 400;

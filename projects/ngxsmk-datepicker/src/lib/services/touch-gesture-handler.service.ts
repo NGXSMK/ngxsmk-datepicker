@@ -20,7 +20,15 @@ export interface TouchGestureState {
 
 export interface TouchGestureConfig {
   disabled: boolean;
-  mode: 'single' | 'range' | 'multiple';
+  mode:
+    | 'single'
+    | 'range'
+    | 'multiple'
+    | 'week'
+    | 'month'
+    | 'quarter'
+    | 'year'
+    | 'timeRange';
   swipeThreshold: number;
   swipeTimeThreshold: number;
 }
@@ -31,6 +39,7 @@ export interface TouchGestureCallbacks {
   changeMonth: (delta: number) => void;
   onStateChanged: () => void;
   onHoverChanged: (date: Date | null) => void;
+  changeYear?: (delta: number) => void;
 }
 
 /**
@@ -46,7 +55,7 @@ export class TouchGestureHandlerService {
     day: Date | null,
     state: TouchGestureState,
     config: TouchGestureConfig,
-    callbacks: TouchGestureCallbacks
+    callbacks: TouchGestureCallbacks,
   ): void {
     if (config.disabled || !day || callbacks.isDateDisabled(day)) {
       return;
@@ -77,9 +86,13 @@ export class TouchGestureHandlerService {
     state: TouchGestureState,
     config: TouchGestureConfig,
     callbacks: TouchGestureCallbacks,
-    startDate?: Date | null
+    startDate?: Date | null,
   ): void {
-    if (config.disabled || !state.isDateCellTouching || !state.dateCellTouchStartDate) {
+    if (
+      config.disabled ||
+      !state.isDateCellTouching ||
+      !state.dateCellTouchStartDate
+    ) {
       return;
     }
 
@@ -95,16 +108,29 @@ export class TouchGestureHandlerService {
         }
 
         try {
-          const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+          const elementFromPoint = document.elementFromPoint(
+            touch.clientX,
+            touch.clientY,
+          );
           if (elementFromPoint) {
-            const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
-            if (dateCell && !dateCell.classList.contains('empty') && !dateCell.classList.contains('disabled')) {
+            const dateCell = elementFromPoint.closest(
+              '.ngxsmk-day-cell',
+            ) as HTMLElement;
+            if (
+              dateCell &&
+              !dateCell.classList.contains('empty') &&
+              !dateCell.classList.contains('disabled')
+            ) {
               const dateTimestamp = dateCell.getAttribute('data-date');
               if (dateTimestamp) {
                 const dateValue = parseInt(dateTimestamp, 10);
                 if (!isNaN(dateValue)) {
                   const day = new Date(dateValue);
-                  if (day && !isNaN(day.getTime()) && !callbacks.isDateDisabled(day)) {
+                  if (
+                    day &&
+                    !isNaN(day.getTime()) &&
+                    !callbacks.isDateDisabled(day)
+                  ) {
                     const dayTime = getStartOfDay(day).getTime();
                     const startTime = getStartOfDay(startDate).getTime();
 
@@ -138,7 +164,7 @@ export class TouchGestureHandlerService {
     day: Date | null,
     state: TouchGestureState,
     config: TouchGestureConfig,
-    callbacks: TouchGestureCallbacks
+    callbacks: TouchGestureCallbacks,
   ): void {
     if (config.disabled) {
       this.resetDateCellTouchState(state);
@@ -151,15 +177,21 @@ export class TouchGestureHandlerService {
     }
 
     const now = Date.now();
-    const touchDuration = state.dateCellTouchStartTime > 0 ? now - state.dateCellTouchStartTime : 0;
+    const touchDuration =
+      state.dateCellTouchStartTime > 0 ? now - state.dateCellTouchStartTime : 0;
     const touch = event.changedTouches[0];
 
     let endDay: Date | null = day || state.dateCellTouchStartDate;
     if (touch) {
       try {
-        const elementFromPoint = document.elementFromPoint(touch.clientX, touch.clientY);
+        const elementFromPoint = document.elementFromPoint(
+          touch.clientX,
+          touch.clientY,
+        );
         if (elementFromPoint) {
-          const dateCell = elementFromPoint.closest('.ngxsmk-day-cell') as HTMLElement;
+          const dateCell = elementFromPoint.closest(
+            '.ngxsmk-day-cell',
+          ) as HTMLElement;
           if (dateCell) {
             const dateTimestamp = dateCell.getAttribute('data-date');
             if (dateTimestamp) {
@@ -180,7 +212,8 @@ export class TouchGestureHandlerService {
       }
     }
 
-    const finalDay = state.lastDateCellTouchDate || endDay || state.dateCellTouchStartDate;
+    const finalDay =
+      state.lastDateCellTouchDate || endDay || state.dateCellTouchStartDate;
 
     if (!finalDay || callbacks.isDateDisabled(finalDay)) {
       this.resetDateCellTouchState(state);
@@ -192,7 +225,11 @@ export class TouchGestureHandlerService {
       // Quick tap - treat as click
       state.dateCellTouchHandled = true;
       callbacks.onDateClick(finalDay);
-    } else if (config.mode === 'range' && state.lastDateCellTouchDate && state.lastDateCellTouchDate !== state.dateCellTouchStartDate) {
+    } else if (
+      config.mode === 'range' &&
+      state.lastDateCellTouchDate &&
+      state.lastDateCellTouchDate !== state.dateCellTouchStartDate
+    ) {
       // Drag gesture - select range
       callbacks.onDateClick(state.lastDateCellTouchDate);
     }
@@ -204,10 +241,7 @@ export class TouchGestureHandlerService {
   /**
    * Handle calendar swipe start
    */
-  handleCalendarSwipeStart(
-    event: TouchEvent,
-    state: TouchGestureState
-  ): void {
+  handleCalendarSwipeStart(event: TouchEvent, state: TouchGestureState): void {
     const touch = event.touches[0];
     if (touch) {
       state.calendarSwipeStartX = touch.clientX;
@@ -220,10 +254,7 @@ export class TouchGestureHandlerService {
   /**
    * Handle calendar swipe move
    */
-  handleCalendarSwipeMove(
-    event: TouchEvent,
-    state: TouchGestureState
-  ): void {
+  handleCalendarSwipeMove(event: TouchEvent, state: TouchGestureState): void {
     if (!state.isCalendarSwiping) return;
 
     const touch = event.touches[0];
@@ -245,7 +276,7 @@ export class TouchGestureHandlerService {
     event: TouchEvent,
     state: TouchGestureState,
     config: TouchGestureConfig,
-    callbacks: TouchGestureCallbacks
+    callbacks: TouchGestureCallbacks,
   ): void {
     if (!state.isCalendarSwiping) return;
 
@@ -262,13 +293,23 @@ export class TouchGestureHandlerService {
     const absDeltaY = Math.abs(deltaY);
 
     // Check if it's a valid swipe
-    if (absDeltaX > config.swipeThreshold && absDeltaY < absDeltaX && deltaTime < config.swipeTimeThreshold) {
-      if (deltaX > 0) {
-        // Swipe right - previous month
-        callbacks.changeMonth(-1);
-      } else {
-        // Swipe left - next month
-        callbacks.changeMonth(1);
+    if (deltaTime < config.swipeTimeThreshold) {
+      if (absDeltaX > config.swipeThreshold && absDeltaY < absDeltaX) {
+        // Horizontal swipe - Month change
+        if (deltaX > 0) {
+          callbacks.changeMonth(-1);
+        } else {
+          callbacks.changeMonth(1);
+        }
+      } else if (absDeltaY > config.swipeThreshold && absDeltaX < absDeltaY) {
+        // Vertical swipe - Year change (if callback provided)
+        if (callbacks.changeYear) {
+          if (deltaY < 0) {
+            callbacks.changeYear(1); // Swipe Up -> Next Year
+          } else {
+            callbacks.changeYear(-1); // Swipe Down -> Prev Year
+          }
+        }
       }
     }
 
@@ -296,4 +337,3 @@ export class TouchGestureHandlerService {
     state.isCalendarSwiping = false;
   }
 }
-

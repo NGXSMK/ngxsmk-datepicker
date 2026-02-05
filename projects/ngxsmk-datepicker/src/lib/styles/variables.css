@@ -3,7 +3,9 @@
  * These variables can be overridden for custom theming
  */
 
-ngxsmk-datepicker {
+ngxsmk-datepicker,
+.ngxsmk-popover-container,
+.ngxsmk-backdrop {
   /* Color Palette */
   --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
   --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
@@ -42,7 +44,7 @@ ngxsmk-datepicker {
   --datepicker-radius-md: 8px;
   --datepicker-radius-lg: 12px;
   --datepicker-radius-xl: 16px;
-  --datepicker-border-radius: var(--datepicker-radius-md);
+  --datepicker-border-radius: var(--datepicker-radius-lg);
 
   /* Transitions - Can be customized via AnimationConfig */
   --datepicker-transition-duration: 150ms;
@@ -56,7 +58,9 @@ ngxsmk-datepicker {
 }
 
 /* Dark Theme Override */
-ngxsmk-datepicker.dark-theme {
+ngxsmk-datepicker.dark-theme,
+.ngxsmk-popover-container.dark-theme,
+.ngxsmk-backdrop.dark-theme {
   --datepicker-range-background: rgba(139, 92, 246, 0.15);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
@@ -67,6 +71,32 @@ ngxsmk-datepicker.dark-theme {
   --datepicker-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
   --datepicker-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
+
+/* Glassmorphism UI */
+ngxsmk-datepicker.glass-theme,
+.ngxsmk-popover-container.glass-theme {
+  --datepicker-background: rgba(255, 255, 255, 0.7);
+  --datepicker-border-color: rgba(255, 255, 255, 0.3);
+  --datepicker-shadow-lg: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--datepicker-border-color);
+}
+
+ngxsmk-datepicker.glass-theme.dark-theme,
+.ngxsmk-popover-container.glass-theme.dark-theme {
+  --datepicker-background: rgba(31, 41, 55, 0.7);
+  --datepicker-border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Material Design 3 Preset */
+ngxsmk-datepicker.md3-theme {
+  --datepicker-primary-color: #6750a4; /* MD3 Baseline Primary */
+  --datepicker-radius-lg: 28px; /* MD3 Extra Large Corner */
+  --datepicker-font-family: 'Roboto', sans-serif;
+  --datepicker-shadow-md: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
 
 /* Ensure dark theme variables cascade properly to child components */
 ngxsmk-datepicker.dark-theme * {

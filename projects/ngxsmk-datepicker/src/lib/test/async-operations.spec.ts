@@ -3,6 +3,7 @@ import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { ThemeBuilderService } from '../services/theme-builder.service';
 import { PLATFORM_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 /**
  * Async operation tests
@@ -15,8 +16,9 @@ describe('Async Operations Tests', () => {
         imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
         providers: [
           ThemeBuilderService,
-          { provide: PLATFORM_ID, useValue: 'browser' }
-        ]
+          DatePipe,
+          { provide: PLATFORM_ID, useValue: 'browser' },
+        ],
       });
 
       const service = TestBed.inject(ThemeBuilderService);
@@ -24,7 +26,7 @@ describe('Async Operations Tests', () => {
       document.body.appendChild(element);
 
       const theme = {
-        colors: { primary: '#6d28d9' }
+        colors: { primary: '#6d28d9' },
       };
 
       service.applyTheme(theme, element);
@@ -130,8 +132,8 @@ describe('Async Operations Tests', () => {
   describe('Promise Chains', () => {
     it('should handle Promise.resolve chains', async () => {
       const result = await Promise.resolve(42)
-        .then(value => value * 2)
-        .then(value => value + 1);
+        .then((value) => value * 2)
+        .then((value) => value + 1);
 
       expect(result).toBe(85);
     });
@@ -142,7 +144,7 @@ describe('Async Operations Tests', () => {
       try {
         await Promise.reject(new Error('Test error'))
           .then(() => 42)
-          .catch(err => {
+          .catch((err) => {
             throw err;
           });
       } catch (error) {
@@ -157,7 +159,7 @@ describe('Async Operations Tests', () => {
       const promises = [
         Promise.resolve(1),
         Promise.resolve(2),
-        Promise.resolve(3)
+        Promise.resolve(3),
       ];
 
       const results = await Promise.all(promises);
@@ -168,7 +170,7 @@ describe('Async Operations Tests', () => {
       const promises = [
         Promise.resolve(1),
         Promise.reject(new Error('Error')),
-        Promise.resolve(3)
+        Promise.resolve(3),
       ];
 
       let errorCaught = false;
@@ -183,8 +185,12 @@ describe('Async Operations Tests', () => {
     });
 
     it('should handle Promise.race', async () => {
-      const fast = new Promise(resolve => setTimeout(() => resolve('fast'), 10));
-      const slow = new Promise(resolve => setTimeout(() => resolve('slow'), 100));
+      const fast = new Promise((resolve) =>
+        setTimeout(() => resolve('fast'), 10),
+      );
+      const slow = new Promise((resolve) =>
+        setTimeout(() => resolve('slow'), 100),
+      );
 
       const result = await Promise.race([fast, slow]);
       expect(result).toBe('fast');
@@ -194,7 +200,7 @@ describe('Async Operations Tests', () => {
   describe('Async/Await Patterns', () => {
     it('should handle async function with await', async () => {
       const asyncFunction = async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         return 'done';
       };
 
@@ -204,7 +210,7 @@ describe('Async Operations Tests', () => {
 
     it('should handle async function with error', async () => {
       const asyncFunction = async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         throw new Error('Async error');
       };
 
@@ -223,17 +229,17 @@ describe('Async Operations Tests', () => {
       const results: number[] = [];
 
       const op1 = async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         results.push(1);
       };
 
       const op2 = async () => {
-        await new Promise(resolve => setTimeout(resolve, 20));
+        await new Promise((resolve) => setTimeout(resolve, 20));
         results.push(2);
       };
 
       const op3 = async () => {
-        await new Promise(resolve => setTimeout(resolve, 5));
+        await new Promise((resolve) => setTimeout(resolve, 5));
         results.push(3);
       };
 
@@ -307,15 +313,11 @@ describe('Async Operations Tests', () => {
 
       const increment = async () => {
         const current = counter;
-        await new Promise(resolve => setTimeout(resolve, Math.random() * 10));
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 10));
         counter = current + 1;
       };
 
-      await Promise.all([
-        increment(),
-        increment(),
-        increment()
-      ]);
+      await Promise.all([increment(), increment(), increment()]);
 
       // Note: This test demonstrates a race condition
       // In real code, you'd use locks or atomic operations
@@ -327,7 +329,7 @@ describe('Async Operations Tests', () => {
       let counter = 0;
 
       const increment = async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         counter++;
       };
 
@@ -339,4 +341,3 @@ describe('Async Operations Tests', () => {
     });
   });
 });
-

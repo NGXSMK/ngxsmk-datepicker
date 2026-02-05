@@ -137,7 +137,10 @@ export const translations = {
             featuredBadge: 'Featured Selection',
             constraintsPlaceholder: 'Limits: Today to Next Month',
             chooseDate: 'Choose a date',
-            selectRange: 'Select range'
+            selectRange: 'Select range',
+            selectEndDate: 'Select end date',
+            day: 'Day',
+            days: 'Days'
         },
         api: {
             title: 'API Reference',
