@@ -414,7 +414,7 @@ Track bundle size across versions:
 
 ### Final Recommendations
 
-**Immediate (v2.0.10)**:
+**Immediate (v2.0.11)**:
 
 1. Remove documentation assets from npm package (66% package size reduction)
 2. Update package.json files whitelist

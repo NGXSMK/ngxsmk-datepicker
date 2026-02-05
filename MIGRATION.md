@@ -66,8 +66,8 @@ npm install ngxsmk-datepicker@2.0.8
 
 ### Changes
 
-- **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.0.7 is the current stable version
+- **Version Update**: Updated to version 2.0.11
+- **Stable Release**: Version 2.0.11 is the current stable version
 - No breaking changes.
 
 ### Migration Steps

@@ -28,7 +28,7 @@
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.0.10` is live! This version includes critical bug fixes for infinite recursion, timezone handling, and build optimizations.
+> **Stable Release**: `v2.0.11` is live! This version includes critical bug fixes for TypeScript declarations and type resolution.
 
 ---
 
@@ -135,7 +135,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker@2.0.10
+    npm install ngxsmk-datepicker@2.0.11
 
 ## **Usage**
 
@@ -559,7 +559,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.0.10 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.0.11 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
