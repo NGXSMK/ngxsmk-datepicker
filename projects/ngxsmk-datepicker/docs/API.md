@@ -78,6 +78,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `clearAriaLabel` | `string` | `'Clear selection'` | Stable | ARIA label for clear button | `clearAriaLabel="Clear selected date"` |
 | `closeAriaLabel` | `string` | `'Close calendar'` | Stable | ARIA label for close button | `closeAriaLabel="Close date picker"` |
 | `rtl` | `boolean \| null` | `null` | Stable | Right-to-left layout (auto-detects from locale or document.dir) | `[rtl]="true"` |
+| `userAriaDescribedBy` | `string` | `''` | Stable | Aria describedby ID provided by the user or the parent form field. Required for seamless Angular Material integration. | `[userAriaDescribedBy]="'my-help-id'"` |
 
 ##### Outputs
 

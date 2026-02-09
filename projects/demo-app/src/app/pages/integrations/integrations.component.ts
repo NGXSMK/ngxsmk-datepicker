@@ -15,12 +15,13 @@ import { I18nService } from '../../i18n/i18n.service';
       <p>The library provides built-in support for <code>MatFormField</code>. You can use the datepicker inside a standard Material field with floating labels, hints, and error states.</p>
       
       <div class="card bg-code">
-        <pre><code class="text-main">import {{ '{' }} provideMaterialFormFieldControl {{ '}' }} from 'ngxsmk-datepicker';
+        <pre><code class="text-main">import {{ '{' }} MAT_FORM_FIELD_CONTROL {{ '}' }} from '&#64;angular/material/form-field';
+import {{ '{' }} NgxsmkDatepickerComponent, provideMaterialFormFieldControl {{ '}' }} from 'ngxsmk-datepicker';
 
-@Component({{ '{' }}
+&#64;Component({{ '{' }}
   // ...
   providers: [
-    provideMaterialFormFieldControl() // Enables MatFormField compatibility
+    provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL) // Enables MatFormField compatibility
   ]
 {{ '}' }})
 export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
