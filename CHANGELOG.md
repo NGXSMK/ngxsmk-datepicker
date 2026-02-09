@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2026-02-09
+
+### Fixed
+
+- **Material Form Field Integration**: Improved `NgxsmkDatepickerComponent` to correctly notify `mat-form-field` of state changes.
+  - Injected `NgControl` into the component to properly integrate with Angular's form system.
+  - Added `stateChanges.next()` call in `emitValue` to ensure the form field reflects internal state changes (e.g., when selecting a date).
+- **Helper Function Enhancements**: Updated `provideMaterialFormFieldControl` with runtime warnings for missing or incorrect Material tokens.
+
 ## [2.1.0] - 2026-02-05
+
 
 ### Fixed
 
@@ -23,22 +33,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Important Notice
 
-⚠️ **Versions 2.0.10 and 2.0.11 have been unpublished from npm** due to critical package configuration issues that prevented proper TypeScript module resolution. All users should upgrade to v2.1.0 or later.
+⚠️ **Versions 2.0.10 and 2.0.11 have been unpublished from npm** due to critical package configuration issues that prevented proper TypeScript module resolution. All users should upgrade to v2.1.1 or later.
 
 ## [2.0.11] - 2026-02-05 [BROKEN - UNPUBLISHED]
 
-**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.0 instead.**
+**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.1 instead.**
 
 ### Fixed
 
 - **TypeScript Type Declarations**: Attempted to fix "Could not find a declaration file for module 'ngxsmk-datepicker'" error
   - Added proper `exports` field in package.json with correct type declaration path
   - Configured exports to point to `index.d.ts` for TypeScript module resolution
-  - **Note**: This fix was incomplete and the version has been replaced by v2.1.0
+  - **Note**: This fix was incomplete and the version has been replaced by v2.1.1
 
 ## [2.0.10] - 2026-02-05 [BROKEN - UNPUBLISHED]
 
-**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.0 instead.**
+**⚠️ This version has been unpublished from npm due to incorrect package configuration. Use v2.1.1 instead.**
 
 ### Fixed
 

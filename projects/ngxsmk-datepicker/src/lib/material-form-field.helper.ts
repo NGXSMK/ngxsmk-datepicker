@@ -34,10 +34,28 @@ import { NgxsmkDatepickerComponent } from './ngxsmk-datepicker';
  * })
  * export class MyComponent { }
  * ```
+ * 
+ * ### Troubleshooting
+ * If you see the error `mat-form-field must contain a MatFormFieldControl`:
+ * 1. Ensure you are passing `MAT_FORM_FIELD_CONTROL` (not `MAT_FORM_FIELD`) to this function.
+ * 2. Ensure you have added the provider to the `providers` array of your component or module.
+ * 3. In standalone components, make sure `NgxsmkDatepickerComponent` is in the `imports` array.
  */
 export function provideMaterialFormFieldControl(matFormFieldControlToken: unknown): Provider {
+  if (!matFormFieldControlToken) {
+    console.warn(
+      'NgxsmkDatepicker: provideMaterialFormFieldControl was called without a token. ' +
+      'Please pass MAT_FORM_FIELD_CONTROL from @angular/material/form-field.'
+    );
+  } else if (matFormFieldControlToken.toString().includes('MatFormField') && !matFormFieldControlToken.toString().includes('Control')) {
+    console.warn(
+      'NgxsmkDatepicker: provideMaterialFormFieldControl was passed MAT_FORM_FIELD instead of MAT_FORM_FIELD_CONTROL. ' +
+      'Please ensure you are using the correct token for the form field control.'
+    );
+  }
+
   return {
-    provide: matFormFieldControlToken,
+    provide: matFormFieldControlToken || 'MAT_FORM_FIELD_CONTROL_MISSING',
     useExisting: forwardRef(() => NgxsmkDatepickerComponent),
     multi: false
   };

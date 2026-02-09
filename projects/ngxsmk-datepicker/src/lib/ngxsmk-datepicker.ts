@@ -34,7 +34,7 @@ import {
   DatePipe,
   DOCUMENT,
 } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 import {
   getStartOfDay,
   getEndOfDay,
@@ -99,6 +99,29 @@ import { PopoverPositioningService } from './services/popover-positioning.servic
 import { CustomDateFormatService } from './services/custom-date-format.service';
 import { Subject } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
+
+/**
+ * Interface for Angular Material Form Field Control compatibility.
+ * We define it here to avoid a direct dependency on @angular/material.
+ */
+interface MatFormFieldControlMock<T> {
+  value: T | null;
+  stateChanges: Subject<void>;
+  id: string;
+  placeholder: string;
+  ngControl: NgControl | null;
+  focused: boolean;
+  empty: boolean;
+  shouldLabelFloat: boolean;
+  required: boolean;
+  disabled: boolean;
+  errorState: boolean;
+  controlType?: string;
+  autofilled?: boolean;
+  userAriaDescribedBy?: string;
+  setDescribedByIds(ids: string[]): void;
+  onContainerClick(event: MouseEvent): void;
+}
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -957,8 +980,7 @@ import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
  * @see {@link HolidayProvider} for custom holiday support
  */
 export class NgxsmkDatepickerComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor
-{
+  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor, MatFormFieldControlMock<DatepickerValue> {
   private static _idCounter = 0;
   private static _allInstances = new Set<NgxsmkDatepickerComponent>();
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
@@ -995,12 +1017,12 @@ export class NgxsmkDatepickerComponent
     [];
   @Input() recurringPattern?: {
     pattern:
-      | 'daily'
-      | 'weekly'
-      | 'monthly'
-      | 'yearly'
-      | 'weekdays'
-      | 'weekends';
+    | 'daily'
+    | 'weekly'
+    | 'monthly'
+    | 'yearly'
+    | 'weekdays'
+    | 'weekends';
     startDate: Date;
     endDate?: Date;
     dayOfWeek?: number;
@@ -1104,7 +1126,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount must be at least 1. ` +
-            `Received: ${value}. Setting to 1.`,
+          `Received: ${value}. Setting to 1.`,
         );
       }
       this._calendarCount = 1;
@@ -1112,7 +1134,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
-            `Received: ${value}. Setting to 12.`,
+          `Received: ${value}. Setting to 12.`,
         );
       }
       this._calendarCount = 12;
@@ -1181,7 +1203,10 @@ export class NgxsmkDatepickerComponent
     return this._isCalendarOpen();
   }
   public set isCalendarOpen(value: boolean) {
-    this._isCalendarOpen.set(value);
+    if (this._isCalendarOpen() !== value) {
+      this._isCalendarOpen.set(value);
+      this.stateChanges.next();
+    }
     // Signal update handles change detection
   }
 
@@ -1246,14 +1271,14 @@ export class NgxsmkDatepickerComponent
         onErrorStateChanged: (hasError: boolean) => {
           this.errorState = hasError;
         },
-        onSyncError: (_error: unknown) => {},
+        onSyncError: (_error: unknown) => { },
         normalizeValue: (value: unknown) => {
           return this._normalizeValue(value);
         },
         isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => {
           return this.isValueEqual(val1, val2);
         },
-        onCalendarGenerated: () => {},
+        onCalendarGenerated: () => { },
         onStateChanged: () => {
           this.scheduleChangeDetection();
         },
@@ -1293,7 +1318,7 @@ export class NgxsmkDatepickerComponent
         this._errorState = hasError;
         this.stateChanges.next();
       },
-      onSyncError: (_error: unknown) => {},
+      onSyncError: (_error: unknown) => { },
       normalizeValue: (value: unknown) => {
         return this._normalizeValue(value);
       },
@@ -1418,8 +1443,8 @@ export class NgxsmkDatepickerComponent
 
   @Input() classes?: DatepickerClasses | undefined;
 
-  private onChange = (_: DatepickerValue) => {};
-  private onTouched = () => {};
+  private onChange = (_: DatepickerValue) => { };
+  private onTouched = () => { };
   public disabled = false;
   @Input() set disabledState(isDisabled: boolean) {
     if (this.disabled !== isDisabled) {
@@ -1501,10 +1526,23 @@ export class NgxsmkDatepickerComponent
   }
 
   get describedBy(): string {
-    return `datepicker-help-${this._uniqueId}`;
+    return this.userAriaDescribedBy || `datepicker-help-${this._uniqueId}`;
   }
 
-  setDescribedByIds(_ids: string[]): void {}
+  /**
+   * Aria describedby ID provided by the user or the parent form field.
+   * Required for Angular Material form field control interface.
+   */
+  @Input() userAriaDescribedBy: string = '';
+
+  setDescribedByIds(ids: string[]): void {
+    if (ids && ids.length > 0) {
+      this.userAriaDescribedBy = ids.join(' ');
+    } else {
+      this.userAriaDescribedBy = '';
+    }
+    this.stateChanges.next();
+  }
 
   onContainerClick(_event: MouseEvent): void {
     if (!this.disabled && !this.isCalendarOpen) {
@@ -1693,6 +1731,10 @@ export class NgxsmkDatepickerComponent
   );
   private readonly popoverPositioningService: PopoverPositioningService =
     inject(PopoverPositioningService);
+  public readonly ngControl: NgControl | null = inject(NgControl, {
+    optional: true,
+    self: true,
+  });
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
 
@@ -3566,6 +3608,7 @@ export class NgxsmkDatepickerComponent
         this.isCalendarOpen = false;
       }
     }
+    this.stateChanges.next();
   }
 
   /**
@@ -4086,7 +4129,7 @@ export class NgxsmkDatepickerComponent
           try {
             const res = (resolvedField as () => unknown)();
             if (res && typeof res === 'object') resolvedField = res;
-          } catch {}
+          } catch { }
         }
 
         if (resolvedField && typeof resolvedField === 'object') {
@@ -4511,8 +4554,8 @@ export class NgxsmkDatepickerComponent
           if (isDevMode()) {
             console.warn(
               '[ngxsmk-datepicker] minDate is greater than maxDate. ' +
-                `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
-                'Adjusting maxDate to be at least 1 day after minDate.',
+              `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
+              'Adjusting maxDate to be at least 1 day after minDate.',
             );
           }
           // Prevent invalid state by adjusting maxDate to be at least 1 day after minDate
@@ -4531,7 +4574,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           '[ngxsmk-datepicker] timeOnly is only supported with mode="single". ' +
-            `Current mode: "${this.mode}". timeOnly will be disabled.`,
+          `Current mode: "${this.mode}". timeOnly will be disabled.`,
         );
       }
       this.timeOnly = false;
@@ -4544,7 +4587,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] minuteInterval must be at least 1. ` +
-            `Received: ${this.minuteInterval}. Setting to 1.`,
+          `Received: ${this.minuteInterval}. Setting to 1.`,
         );
       }
       this.minuteInterval = 1;
@@ -4555,7 +4598,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] secondInterval must be at least 1. ` +
-            `Received: ${this.secondInterval}. Setting to 1.`,
+          `Received: ${this.secondInterval}. Setting to 1.`,
         );
       }
       this.secondInterval = 1;
@@ -4566,7 +4609,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] yearRange must be at least 1. ` +
-            `Received: ${this.yearRange}. Setting to 1.`,
+          `Received: ${this.yearRange}. Setting to 1.`,
         );
       }
       this.yearRange = 1;
@@ -4875,7 +4918,7 @@ export class NgxsmkDatepickerComponent
           if (!isNaN(date.getTime())) {
             return date;
           }
-        } catch {}
+        } catch { }
       }
     }
     return momentObj.toDate();
@@ -5836,12 +5879,12 @@ export class NgxsmkDatepickerComponent
       if (this.recurringPattern) {
         const configBase: {
           pattern:
-            | 'daily'
-            | 'weekly'
-            | 'monthly'
-            | 'yearly'
-            | 'weekdays'
-            | 'weekends';
+          | 'daily'
+          | 'weekly'
+          | 'monthly'
+          | 'yearly'
+          | 'weekdays'
+          | 'weekends';
           startDate: Date;
           interval: number;
         } = {
@@ -5852,12 +5895,12 @@ export class NgxsmkDatepickerComponent
 
         const config: {
           pattern:
-            | 'daily'
-            | 'weekly'
-            | 'monthly'
-            | 'yearly'
-            | 'weekdays'
-            | 'weekends';
+          | 'daily'
+          | 'weekly'
+          | 'monthly'
+          | 'yearly'
+          | 'weekdays'
+          | 'weekends';
           startDate: Date;
           interval: number;
           endDate?: Date;
@@ -5907,10 +5950,10 @@ export class NgxsmkDatepickerComponent
       this.mode === 'single'
         ? this.selectedDate
         : this.mode === 'range' ||
-            this.mode === 'week' ||
-            this.mode === 'month' ||
-            this.mode === 'quarter' ||
-            this.mode === 'year'
+          this.mode === 'week' ||
+          this.mode === 'month' ||
+          this.mode === 'quarter' ||
+          this.mode === 'year'
           ? this.startDate
           : this.mode === 'multiple' && this.selectedDates.length > 0
             ? this.selectedDates[this.selectedDates.length - 1]
@@ -5962,8 +6005,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
-        changeMonth: (_) => {},
+        onDateClick: (_) => { },
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -5998,8 +6041,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
-        changeMonth: (_) => {},
+        onDateClick: (_) => { },
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.detectChanges(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -6028,7 +6071,7 @@ export class NgxsmkDatepickerComponent
           this.setTouchHandledFlag();
           this.onDateClick(d);
         },
-        changeMonth: (_) => {},
+        changeMonth: (_) => { },
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -6456,7 +6499,7 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => {},
+        onDateClick: (_) => { },
         changeMonth: (delta) => {
           if (!this.isBackArrowDisabled || delta > 0) {
             this.changeMonth(delta);
@@ -6468,7 +6511,7 @@ export class NgxsmkDatepickerComponent
           this.generateCalendar();
         },
         onStateChanged: () => this.cdr.markForCheck(),
-        onHoverChanged: (_) => {},
+        onHoverChanged: (_) => { },
       },
     );
   }
@@ -7053,7 +7096,7 @@ export class NgxsmkDatepickerComponent
       // Check for Ionic global object or key Ionic DOM elements/styles
       return (
         typeof (window as unknown as Record<string, unknown>)['Ionic'] !==
-          'undefined' ||
+        'undefined' ||
         (typeof document !== 'undefined' &&
           !!document.querySelector('ion-app')) ||
         (typeof getComputedStyle !== 'undefined' &&
