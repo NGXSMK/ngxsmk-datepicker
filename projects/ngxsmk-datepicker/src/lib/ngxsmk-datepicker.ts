@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
   HostBinding,
   HostListener,
   inject,
@@ -34,7 +33,7 @@ import {
   DatePipe,
   DOCUMENT,
 } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 import {
   getStartOfDay,
   getEndOfDay,
@@ -136,11 +135,6 @@ interface MatFormFieldControlMock<T> {
     TimeSelectionComponent,
   ],
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NgxsmkDatepickerComponent),
-      multi: true,
-    },
     FieldSyncService,
     CalendarGenerationService,
     DatepickerParsingService,
@@ -1737,6 +1731,12 @@ export class NgxsmkDatepickerComponent
   });
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
+
+  constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
 
   public typedInputValue: string = '';
   private isTyping: boolean = false;

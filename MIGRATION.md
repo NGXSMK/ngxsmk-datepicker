@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.1.1 → v2.1.2](#v211---v212)
 - [v2.0.11 → v2.1.1](#v2011---v211)
 - [v2.0.6 → v2.0.7](#v206---v207)
 - [v2.0.5 → v2.0.6](#v205---v206)
@@ -44,6 +45,23 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.1.1 → v2.1.2
+
+### Changes
+
+- **Version Update**: Updated to version 2.1.2
+- **Stable Release**: Version 2.1.2 is the current stable version
+- **Circular Dependency Fix**: Resolved a critical issue where using `NgModel` or Reactive Forms could cause a circular dependency.
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required. This is a patch version update:
+
+```bash
+npm install ngxsmk-datepicker@2.1.2
+```
 
 ## v2.0.11 → v2.1.1
 
@@ -106,7 +124,7 @@ npm install ngxsmk-datepicker@2.0.8
 ### Changes
 
 - **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.1.1 is the current stable version
+- **Stable Release**: Version 2.1.2 is the current stable version
 - No breaking changes.
 
 ### Migration Steps

@@ -126,7 +126,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <p>{{ i18n.t().common.installToday }}</p>
           </div>
           <div class="cta-code">
-            <pre><code>npm install ngxsmk-datepicker@2.1.1</code></pre>
+            <pre><code>npm install ngxsmk-datepicker@2.1.2</code></pre>
           </div>
         </div>
       </section>
