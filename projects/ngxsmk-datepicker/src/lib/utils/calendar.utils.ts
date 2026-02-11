@@ -55,7 +55,6 @@ export function formatLocaleNumber(
 export function generateYearOptions(
   currentYear: number,
   range: number = 10,
-  locale?: string,
 ): { label: string; value: number }[] {
   const startYear = currentYear - range;
   const endYear = currentYear + range;
