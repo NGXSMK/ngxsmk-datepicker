@@ -69,11 +69,8 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     }
     .ngxsmk-select-display {
       display: flex; 
-      align-items: center; 
-      justify-content: space-between;
-      width: 100%; 
-      background: var(--datepicker-background, #fff);
-      border: 1.5px solid var(--datepicker-border-color, #e5e7eb); 
+      border: 1px solid rgba(0, 0, 0, 0.06); 
+      background: rgba(0, 0, 0, 0.02);
       color: var(--datepicker-text-color, #1f2937);
       border-radius: var(--datepicker-border-radius, 8px); 
       padding: 8px 16px; 
@@ -82,7 +79,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       font-weight: 500;
       cursor: pointer;
       transition: background-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: none;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -96,8 +93,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     .ngxsmk-select-container:focus-within .ngxsmk-select-display {
+      background: var(--datepicker-background, #fff);
+      box-shadow: 0 0 0 2px rgba(var(--datepicker-primary-rgb, 109, 40, 217), 0.1);
       border-color: var(--datepicker-primary-color, #6d28d9);
-      box-shadow: 0 0 0 3px rgba(var(--datepicker-primary-rgb, 109, 40, 217), 0.15);
     }
     .ngxsmk-select-display:disabled {
       background-color: var(--datepicker-hover-background, #f3f4f6);
@@ -122,7 +120,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       left: 0; 
       width: 100%;
       background: var(--datepicker-background, #fff); 
-      border: 1.5px solid var(--datepicker-border-color, #e5e7eb);
+      border: 1px solid var(--datepicker-border-color, #e5e7eb);
       color: var(--datepicker-text-color, #1f2937); 
       border-radius: var(--datepicker-border-radius, 8px);
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 

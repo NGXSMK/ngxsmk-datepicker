@@ -28,7 +28,7 @@
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.2` is live! This version includes critical fixes for circular dependencies when using Angular forms.
+> **Stable Release**: `v2.1.2` is live! This version includes a significant **UI Refresh (Border Detox)**, critical fixes for circular dependencies, and drastically improved stability for mobile browsers.
 >
 > ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.2 or later.
 

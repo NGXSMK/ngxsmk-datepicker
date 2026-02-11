@@ -53,7 +53,9 @@ This document provides migration instructions for upgrading between major versio
 - **Version Update**: Updated to version 2.1.2
 - **Stable Release**: Version 2.1.2 is the current stable version
 - **Circular Dependency Fix**: Resolved a critical issue where using `NgModel` or Reactive Forms could cause a circular dependency.
-- No breaking changes.
+- **UI Refresh**: Implemented a "border detox" and refined aesthetics.
+- **Removed Feature**: The range duration header (which displayed "X Days" during range selection) has been removed to simplify the user interface.
+- No breaking API changes.
 
 ### Migration Steps
 

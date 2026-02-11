@@ -84,7 +84,7 @@ import { I18nService } from '../../i18n/i18n.service';
               </ngxsmk-datepicker>
             </div>
 
-            <div class="preview-footer mt-lg pt-md border-t border-dashed">
+            <div class="preview-footer mt-lg pt-md">
               <div class="flex justify-between items-center mb-sm">
                 <span class="text-xs font-bold uppercase text-dim">{{
                   i18n.t().home.implementation
@@ -243,10 +243,12 @@ import { I18nService } from '../../i18n/i18n.service';
       .hero-preview {
         padding: 0;
         overflow: hidden;
-        box-shadow: var(--shadow-lg);
-        border: 1px solid var(--color-border);
-        background: var(--color-bg-sidebar);
-        border-radius: var(--radius-xl);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: #0f172a;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 24px;
+        position: relative;
         @media (max-width: 480px) {
           border-radius: 0;
           margin-left: calc(-1 * var(--space-sm));
@@ -254,82 +256,77 @@ import { I18nService } from '../../i18n/i18n.service';
           border-left: none;
           border-right: none;
         }
-        @media (max-width: 320px) {
-          margin-left: calc(-1 * var(--space-xs));
-          margin-right: calc(-1 * var(--space-xs));
-        }
       }
 
       .preview-header {
-        padding: 0.65rem 0.75rem;
-        @media (max-width: 480px) {
-          padding-inline: 2rem;
-        }
-        @media (min-width: 480px) {
-          padding: 0.75rem 1rem;
-        }
-        @media (min-width: 768px) {
-          padding: 1.25rem 2rem;
-        }
-        background: var(--color-bg-secondary);
-        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 1.5rem;
+        background: rgba(30, 41, 59, 0.5);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        @media (max-width: 400px) {
-          justify-content: center;
-        }
       }
 
       .dots {
-        display: none;
-        @media (min-width: 401px) {
-          display: flex;
-          gap: 8px;
-        }
+        display: flex;
+        gap: 8px;
         span {
-          width: 10px;
-          height: 10px;
+          width: 12px;
+          height: 12px;
           border-radius: 50%;
-          background: var(--color-border);
+          &:nth-child(1) { background: #ff5f56; }
+          &:nth-child(2) { background: #ffbd2e; }
+          &:nth-child(3) { background: #27c93f; }
         }
       }
 
       .preview-controls {
-        gap: 0.25rem;
-        @media (min-width: 480px) {
-          gap: 0.75rem;
-        }
+        display: flex;
+        gap: 0.5rem;
       }
 
       .preview-body {
-        padding: 0;
-        @media (min-width: 768px) {
-          padding: 2.5rem;
+        padding: 2rem;
+        @media (max-width: 768px) {
+          padding: 1rem;
         }
-        background: radial-gradient(
-          circle at top right,
-          rgba(124, 58, 237, 0.05),
-          transparent
-        );
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 2rem;
       }
 
       .picker-container {
         width: 100%;
         display: flex;
         justify-content: center;
-        padding: 0.5rem 0;
-        @media (min-width: 768px) {
-          padding: 1rem 0;
-        }
-        ngxsmk-datepicker {
+        ::ng-deep ngxsmk-datepicker {
           width: 100% !important;
-          max-width: 100%;
+          max-width: 400px;
+          --datepicker-background: transparent;
+          --datepicker-border-color: transparent;
+          --datepicker-shadow-md: none;
+          --datepicker-shadow-lg: none;
+
+          .ngxsmk-popover-container.ngxsmk-inline-container,
+          .ngxsmk-calendar-container {
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+          }
+          
+          .ngxsmk-header {
+            margin-bottom: 1.5rem !important;
+          }
+
+          .ngxsmk-nav-button, .ngxsmk-select-display {
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            background: rgba(255, 255, 255, 0.03) !important;
+          }
         }
       }
+
 
       .features-grid {
         display: grid;
@@ -525,19 +522,20 @@ import { I18nService } from '../../i18n/i18n.service';
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: transparent;
+        border: 1px solid transparent;
         color: var(--color-text-dim);
         cursor: pointer;
         transition: all 0.2s;
         &:hover {
-          background: rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.1);
         }
         &.active {
-          background: var(--color-primary);
-          border-color: var(--color-primary);
+          background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+          border-color: rgba(255, 255, 255, 0.2);
           color: #fff;
-          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+          box-shadow: 0 8px 16px rgba(124, 58, 237, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
       }
 

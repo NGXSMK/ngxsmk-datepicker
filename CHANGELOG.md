@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed `NG_VALUE_ACCESSOR` from component providers to break the circular link with `NgControl`.
   - Implemented manual `valueAccessor` assignment in the constructor for safe interaction with Angular's form system.
 - **Dependency Cleanup**: Removed unused `forwardRef` and `NG_VALUE_ACCESSOR` imports to improve bundle size and build performance.
+- **UI Refinement (Premium Aesthetic)**: Improved the overall visual appearance with a "border detox."
+  - Reduced border thickness from 1.5px to 1px library-wide.
+  - Softened border colors and added subtle ghost backgrounds for interactive elements.
+  - Enhanced navigation buttons with a borderless-by-default look.
+- **Mobile Experience**: Improved stability on mobile devices (specifically Samsung/Android/Edge).
+  - Fixed an issue where the calendar would close prematurely during interactions due to portaling logic.
+  - Added "ghost click" protection to the backdrop to prevent accidental closure right after opening.
+  - Standardized containment checks to handle popovers appended to the document body.
+
+### Removed
+
+- **Range Duration Header**: Removed the "X Days" duration header from range selection mode to reduce visual clutter and simplify the UI.
 
 
 ## [2.1.1] - 2026-02-09
