@@ -62,8 +62,8 @@ export function generateYearOptions(
   const options: { label: string; value: number }[] = [];
 
   for (let i = startYear; i <= endYear; i++) {
-    // Use locale-aware formatting if locale is provided
-    const label = locale ? formatLocaleNumber(i, locale) : `${i}`;
+    // Years should not use thousand separators (e.g., "2026" not "2,026")
+    const label = `${i}`;
     options.push({ label, value: i });
   }
 
@@ -82,13 +82,13 @@ export function generateTimeOptions(
 } {
   const hourOptions = use24Hour
     ? Array.from({ length: 24 }).map((_, i) => ({
-        label: i.toString().padStart(2, '0'),
-        value: i,
-      }))
+      label: i.toString().padStart(2, '0'),
+      value: i,
+    }))
     : Array.from({ length: 12 }).map((_, i) => ({
-        label: (i + 1).toString().padStart(2, '0'),
-        value: i + 1,
-      }));
+      label: (i + 1).toString().padStart(2, '0'),
+      value: i + 1,
+    }));
 
   const minuteOptions: { label: string; value: number }[] = [];
   for (let i = 0; i < 60; i += minuteInterval) {
@@ -145,7 +145,7 @@ export function generateWeekDays(
  */
 interface IntlExtended {
   Locale: {
-    new (locale: string): {
+    new(locale: string): {
       weekInfo?: {
         firstDay: number;
       };

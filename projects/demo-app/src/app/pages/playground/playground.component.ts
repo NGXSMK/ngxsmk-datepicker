@@ -293,8 +293,13 @@ import { I18nService } from '../../i18n/i18n.service';
       
       ngxsmk-datepicker {
          display: block;
-         width: 100% !important;
+         width: 100%;
          max-width: 320px;
+
+         &.ngxsmk-inline {
+            width: fit-content;
+            max-width: 100%;
+         }
       }
     }
 
