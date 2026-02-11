@@ -4,7 +4,7 @@
 -->
 
 <div align="center">
-  <img src="docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
+  <img src="projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
 
 # **ngxsmk-datepicker** – Modern Angular Date Picker & Range Picker
 
@@ -28,9 +28,9 @@
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.1` is live! This version includes critical bug fixes for TypeScript declarations and type resolution.
+> **Stable Release**: `v2.1.2` is live! This major update introduces a significant **UI Refresh (Border Detox)**, **Mobile Stability** improvements, and fixes for circular dependencies.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.1 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.2 or later.
 
 ---
 
@@ -137,7 +137,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker@2.1.1
+    npm install ngxsmk-datepicker@latest
 
 ## **Usage**
 
@@ -561,7 +561,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.1 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.2 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -654,16 +654,14 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Bug Fixes in v1.4.15:**
+### **Critical Updates in v2.1.2:**
 
-- ✅ **Change Detection**: Fixed OnPush change detection issues with proper `markForCheck()` triggers
-- ✅ **Date Comparison**: Fixed null safety issues in date range comparisons
-- ✅ **Memory Leaks**: Added cache size limits to prevent memory leaks
-- ✅ **Type Safety**: Improved TypeScript types and null safety checks
-- ✅ **Mobile UX**: Enhanced mobile interactions and touch feedback
-- ✅ **Performance**: Optimized template bindings with memoized functions
-- ✅ **Accessibility**: Better focus states and keyboard navigation
-- ✅ **Build System**: Improved build configuration and optimization
+- ✅ **UI Refresh**: "Border Detox" for cleaner, modern aesthetics
+- ✅ **Mobile Stability**: Ghost click protection and better portaling logic
+- ✅ **Circular Dependency**: Fixed NG0200 errors with Reactive Forms
+- ✅ **Performance**: Optimized change detection strategies
+- ✅ **Accessibility**: Enhanced ARIA attributes and keyboard navigation
+- ✅ **Type Safety**: Strictly typed inputs and outputs
 
 ### **Performance Enhancements:**
 

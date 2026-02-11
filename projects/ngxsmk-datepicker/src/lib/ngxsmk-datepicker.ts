@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  forwardRef,
   HostBinding,
   HostListener,
   inject,
@@ -34,7 +33,7 @@ import {
   DatePipe,
   DOCUMENT,
 } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 import {
   getStartOfDay,
   getEndOfDay,
@@ -136,11 +135,6 @@ interface MatFormFieldControlMock<T> {
     TimeSelectionComponent,
   ],
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => NgxsmkDatepickerComponent),
-      multi: true,
-    },
     FieldSyncService,
     CalendarGenerationService,
     DatepickerParsingService,
@@ -374,15 +368,6 @@ interface MatFormFieldControlMock<T> {
               class="ngxsmk-datepicker-container"
               [ngClass]="classes?.container"
             >
-              @if (
-                mode === 'range' && (startDate || hoveredDate) && !timeOnly
-              ) {
-                <div class="ngxsmk-range-duration-header">
-                  <span class="ngxsmk-duration-text">{{
-                    calculateRangeDuration()
-                  }}</span>
-                </div>
-              }
               @if (
                 showRanges &&
                 rangesArray.length > 0 &&
@@ -1738,6 +1723,12 @@ export class NgxsmkDatepickerComponent
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly dateComparator = createDateComparator();
 
+  constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
   public typedInputValue: string = '';
   private isTyping: boolean = false;
 
@@ -2772,6 +2763,41 @@ export class NgxsmkDatepickerComponent
     return range.key;
   }
 
+  /**
+   * Checks if a DOM node is contained within this datepicker instance,
+   * including its input group and any portaled popover content.
+   *
+   * @param target - The node to check
+   * @returns True if the node is inside this datepicker's DOM tree
+   */
+  public containsNode(target: Node | null): boolean {
+    if (!this.isBrowser || !target) {
+      return false;
+    }
+
+    const nativeElement = this.elementRef?.nativeElement;
+    if (nativeElement && (nativeElement === target || nativeElement.contains(target))) {
+      return true;
+    }
+
+    // Check portaled popover content if it exists
+    if (this._shouldAppendToBody && this.portalViewRef) {
+      return this.portalViewRef.rootNodes.some((node: Node) =>
+        node === target || (node instanceof HTMLElement && node.contains(target))
+      );
+    }
+
+    // Check inline popover Container (secondary fallback)
+    if (this.popoverContainer?.nativeElement) {
+      const popover = this.popoverContainer.nativeElement;
+      if (popover === target || popover.contains(target)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent | TouchEvent): void {
     if (!this.isBrowser || this.isInlineMode) {
@@ -2779,28 +2805,11 @@ export class NgxsmkDatepickerComponent
     }
 
     const target = event.target as Node;
-    const nativeElement = this.elementRef?.nativeElement;
-
-    if (!target || !nativeElement) {
+    if (!target) {
       return;
     }
 
-    const isInsideInputGroup = nativeElement.contains(target);
-
-    let isInsidePopover = false;
-    if (this.isBrowser && nativeElement) {
-      const popoverContainer = nativeElement.querySelector(
-        '.ngxsmk-popover-container',
-      );
-      if (
-        popoverContainer &&
-        (popoverContainer === target || popoverContainer.contains(target))
-      ) {
-        isInsidePopover = true;
-      }
-    }
-
-    if (isInsideInputGroup || isInsidePopover) {
+    if (this.containsNode(target)) {
       return;
     }
 
@@ -2810,22 +2819,7 @@ export class NgxsmkDatepickerComponent
       if (instance === this || instance.isInlineMode) {
         return false;
       }
-      const otherElement = instance.elementRef?.nativeElement;
-      if (
-        otherElement &&
-        (otherElement === target || otherElement.contains(target))
-      ) {
-        const otherPopover = otherElement.querySelector(
-          '.ngxsmk-popover-container',
-        );
-        if (
-          otherPopover &&
-          (otherPopover === target || otherPopover.contains(target))
-        ) {
-          return true;
-        }
-      }
-      return false;
+      return instance.containsNode(target);
     });
 
     if (isInsideOtherDatepicker) {
@@ -2856,28 +2850,11 @@ export class NgxsmkDatepickerComponent
     }
 
     const target = event.target as Node;
-    const nativeElement = this.elementRef?.nativeElement;
-
-    if (!target || !nativeElement) {
+    if (!target) {
       return;
     }
 
-    const isInsideInputGroup = nativeElement.contains(target);
-
-    let isInsidePopover = false;
-    if (this.isBrowser && nativeElement) {
-      const popoverContainer = nativeElement.querySelector(
-        '.ngxsmk-popover-container',
-      );
-      if (
-        popoverContainer &&
-        (popoverContainer === target || popoverContainer.contains(target))
-      ) {
-        isInsidePopover = true;
-      }
-    }
-
-    if (isInsideInputGroup || isInsidePopover) {
+    if (this.containsNode(target)) {
       return;
     }
 
@@ -2887,22 +2864,7 @@ export class NgxsmkDatepickerComponent
       if (instance === this || instance.isInlineMode) {
         return false;
       }
-      const otherElement = instance.elementRef?.nativeElement;
-      if (
-        otherElement &&
-        (otherElement === target || otherElement.contains(target))
-      ) {
-        const otherPopover = otherElement.querySelector(
-          '.ngxsmk-popover-container',
-        );
-        if (
-          otherPopover &&
-          (otherPopover === target || otherPopover.contains(target))
-        ) {
-          return true;
-        }
-      }
-      return false;
+      return instance.containsNode(target);
     });
 
     if (isInsideOtherDatepicker) {
@@ -3864,12 +3826,22 @@ export class NgxsmkDatepickerComponent
 
   public onBackdropInteract(event: Event): void {
     event.stopPropagation();
+
+    // Protection against ghost clicks immediately after opening
+    const now = Date.now();
+    const timeSinceToggle = now - this.lastToggleTime;
+    const protectionTime = this.isMobileDevice() ? 600 : 300;
+
+    if (timeSinceToggle < protectionTime) {
+      return;
+    }
+
     if (event instanceof KeyboardEvent) {
       event.preventDefault();
     }
 
     this.closeCalendarWithFocusRestore();
-    this.lastToggleTime = Date.now();
+    this.lastToggleTime = now;
   }
 
   private updateOpeningState(isOpening: boolean): void {
@@ -7111,24 +7083,6 @@ export class NgxsmkDatepickerComponent
     }
   }
 
-  public calculateRangeDuration(): string {
-    const start = this.startDate;
-    const end = this.endDate || this.hoveredDate;
-
-    if (!start || !end) return '';
-
-    const startDay = getStartOfDay(start);
-    const endDay = getStartOfDay(end);
-
-    const diffTime = Math.abs(endDay.getTime() - startDay.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-    // Fallback translations if not present
-    const dayLabel = this.getTranslation('day') || 'day';
-    const daysLabel = this.getTranslation('days') || 'days';
-
-    return `${diffDays} ${diffDays === 1 ? dayLabel : daysLabel}`;
-  }
 
   private removeFocusTrap(): void {
     if (this.focusTrapCleanup) {

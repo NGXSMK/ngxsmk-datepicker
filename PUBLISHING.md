@@ -29,8 +29,8 @@ If you need to publish manually:
 # Build the library
 npm run build:optimized
 
-# Copy LICENSE to dist
-npm run prepublish:copy-license
+# Copy assets to dist
+npm run prepublish:copy-assets
 
 # Navigate to dist and publish
 cd dist/ngxsmk-datepicker
