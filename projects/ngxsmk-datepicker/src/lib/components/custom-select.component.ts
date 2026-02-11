@@ -69,6 +69,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     }
     .ngxsmk-select-display {
       display: flex; 
+      align-items: center;
       border: 1px solid rgba(0, 0, 0, 0.06); 
       background: rgba(0, 0, 0, 0.02);
       color: var(--datepicker-text-color, #1f2937);

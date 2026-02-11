@@ -148,6 +148,9 @@ interface MatFormFieldControlMock<T> {
     './styles/datepicker.css',
     './styles/keyboard-help.css',
   ],
+  host: {
+    '[class.ngxsmk-inline]': 'isInlineMode',
+  },
   template: `
     <div
       class="ngxsmk-datepicker-wrapper"
@@ -1643,7 +1646,6 @@ export class NgxsmkDatepickerComponent
     generateYearOptions(
       this._currentYearSignal(),
       this.yearRange,
-      this._localeSignal(),
     ),
   );
   public decadeOptions: { label: string; value: number }[] = [];

@@ -759,14 +759,22 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 }
 
 .ngxsmk-popover-container.ngxsmk-inline-container {
-  position: static;
+  position: static !important;
   margin-top: 0;
-  animation: none;
-  width: 100%;
-  min-width: 100%;
+  animation: none !important;
+  width: auto;
+  min-width: 0;
   max-width: 100%;
   left: 0;
-  transform: none;
+  transform: none !important;
+  box-shadow: none !important;
+  display: inline-block;
+}
+
+ngxsmk-datepicker.ngxsmk-inline {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode {
@@ -776,11 +784,26 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
 .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode .ngxsmk-popover-container.ngxsmk-inline-container {
   overflow: visible;
+  position: static !important;
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode .ngxsmk-datepicker-container {
-  box-shadow: none;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
   overflow: visible;
+  margin-top: 0 !important;
+  position: static !important;
+  z-index: 0;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-inline-mode .ngxsmk-calendar-container {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
 }
 
 .ngxsmk-datepicker-wrapper.ngxsmk-inline-mode .ngxsmk-ranges-container {

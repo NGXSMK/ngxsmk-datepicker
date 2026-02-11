@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.1.2 → v2.1.3](#v212---v213)
 - [v2.1.1 → v2.1.2](#v211---v212)
 - [v2.0.11 → v2.1.1](#v2011---v211)
 - [v2.0.6 → v2.0.7](#v206---v207)
@@ -45,6 +46,23 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.1.2 → v2.1.3
+
+### Changes
+
+- **Version Update**: Updated to version 2.1.3.
+- **Bug Fix**: Fixed inline datepicker width issue where it was constrained by container styles in some contexts. The inline mode now correctly fit its content.
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required.
+
+```bash
+npm install ngxsmk-datepicker@2.1.3
+```
+
 
 ## v2.1.1 → v2.1.2
 
