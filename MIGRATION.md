@@ -50,20 +50,18 @@ This document provides migration instructions for upgrading between major versio
 
 ### Changes
 
-- **Version Update**: Updated to version 2.1.2
-- **Stable Release**: Version 2.1.2 is the current stable version
-- **Circular Dependency Fix**: Resolved a critical issue where using `NgModel` or Reactive Forms could cause a circular dependency.
+- **Version Update**: Updated to version 2.1.2.
+- **Circular Dependency Fix**: Resolved `RuntimeError: NG0200` when using forms by removing `NG_VALUE_ACCESSOR` from providers. This might require verifying your form integration if you were relying on side-effects of the previous implementation.
 - **UI Refresh**: Implemented a "border detox" and refined aesthetics.
-- **Removed Feature**: The range duration header (which displayed "X Days" during range selection) has been removed to simplify the user interface.
-- No breaking API changes.
+- **Removed Feature**: The range duration header (which displayed "X Days" during range selection) has been removed.
+- **Mobile Stabilization**: Critical fixes for mobile browsers.
 
-### Migration Steps
-
-No migration steps required. This is a patch version update:
+No migration steps required.
 
 ```bash
-npm install ngxsmk-datepicker@2.1.2
+npm install ngxsmk-datepicker@latest
 ```
+
 
 ## v2.0.11 → v2.1.1
 

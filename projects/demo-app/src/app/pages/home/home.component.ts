@@ -297,7 +297,6 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .picker-container {
-        width: 100%;
         display: flex;
         justify-content: center;
         ::ng-deep ngxsmk-datepicker {

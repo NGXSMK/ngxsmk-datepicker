@@ -370,8 +370,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   top: 0;
   left: 0;
   transform: none !important;
-  border: 1px solid var(--datepicker-border-color);
-  border-radius: var(--datepicker-border-radius);
   box-shadow: none;
   margin: 0;
   width: -webkit-fit-content;
@@ -829,26 +827,27 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   pointer-events: auto;
 }
 
-.ngxsmk-datepicker-container:has(.ngxsmk-calendar-container.ngxsmk-has-multi-calendar) {
+.ngxsmk-datepicker-container {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   max-width: 100%;
   min-width: 0;
-}
-
-.ngxsmk-calendar-container {
-  font-size: var(--datepicker-font-size-base);
-  line-height: var(--datepicker-line-height);
-  -webkit-border-radius: var(--datepicker-border-radius);
-  -moz-border-radius: var(--datepicker-border-radius);
-  border-radius: var(--datepicker-border-radius);
-  padding: var(--datepicker-spacing-xl);
   background: var(--datepicker-background);
   -webkit-box-shadow: var(--datepicker-shadow-lg);
   -moz-box-shadow: var(--datepicker-shadow-lg);
   box-shadow: var(--datepicker-shadow-lg);
   border: 1px solid var(--datepicker-border-color);
+  -webkit-border-radius: var(--datepicker-border-radius);
+  -moz-border-radius: var(--datepicker-border-radius);
+  border-radius: var(--datepicker-border-radius);
+  overflow: hidden;
+}
+
+.ngxsmk-calendar-container {
+  font-size: var(--datepicker-font-size-base);
+  line-height: var(--datepicker-line-height);
+  padding: var(--datepicker-spacing-xl);
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -858,7 +857,6 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   min-width: -webkit-fit-content;
   min-width: -moz-fit-content;
   min-width: fit-content;
-  overflow: visible;
 }
 
 .ngxsmk-calendar-container.ngxsmk-has-multi-calendar,
@@ -2392,7 +2390,9 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
   .ngxsmk-datepicker-container {
     padding: 0 !important;
-    width: 100% !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
     max-width: 100% !important;
     display: -webkit-box !important;
     display: -webkit-flex !important;
@@ -4374,7 +4374,9 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
   .ngxsmk-datepicker-container {
     padding: 0 !important;
-    width: 100% !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
     max-width: 100% !important;
     display: -webkit-box !important;
     display: -webkit-flex !important;
@@ -4861,7 +4863,9 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 
   .ngxsmk-datepicker-container {
     padding: 0 !important;
-    width: 100% !important;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
     max-width: 100% !important;
     display: -webkit-box !important;
     display: -webkit-flex !important;
@@ -5865,8 +5869,10 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
       "ranges calendar"
       "time time"
       "footer footer";
-    grid-template-columns: auto 1fr;
-    width: 100%;
+    grid-template-columns: auto auto;
+    width: -webkit-fit-content !important;
+    width: -moz-fit-content !important;
+    width: fit-content !important;
   }
 
   .ngxsmk-range-duration-header {
