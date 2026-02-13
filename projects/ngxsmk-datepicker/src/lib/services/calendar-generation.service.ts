@@ -21,7 +21,7 @@ export class CalendarGenerationService {
     firstDayOfWeek: number,
     normalizeDateFn: (date: DateInput | null) => Date | null
   ): (Date | null)[] {
-    const cacheKey = `${year}-${month}`;
+    const cacheKey = `${year}-${month}-${firstDayOfWeek}`;
     let days = this.monthCache.get(cacheKey);
 
     if (!days) {
@@ -83,7 +83,7 @@ export class CalendarGenerationService {
     ];
 
     for (const { year, month } of monthsToPreload) {
-      const cacheKey = `${year}-${month}`;
+      const cacheKey = `${year}-${month}-${firstDayOfWeek}`;
       if (!this.monthCache.has(cacheKey)) {
         const days = this._generateMonthDays(year, month, firstDayOfWeek, normalizeDateFn);
         if (this.monthCache.size >= this.MAX_CACHE_SIZE) {
@@ -132,6 +132,16 @@ export class CalendarGenerationService {
     // Add days from current month
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
       days.push(normalizeDateFn(new Date(year, month, i)));
+    }
+
+    // Add days from next month to reach exactly 42 days (6 weeks)
+    // This ensures a consistent calendar grid height and prevents layout shifts
+    const nextMonth = month === 11 ? 0 : month + 1;
+    const nextYear = month === 11 ? year + 1 : year;
+    const remainingCells = 42 - days.length;
+
+    for (let i = 1; i <= remainingCells; i++) {
+      days.push(normalizeDateFn(new Date(nextYear, nextMonth, i)));
     }
 
     return days;

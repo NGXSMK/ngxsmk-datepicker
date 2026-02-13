@@ -105,13 +105,34 @@ import { I18nService } from '../../i18n/i18n.service';
           </div>
 
           <div class="config-group">
-            <span class="group-label">Positioning</span>
+            <span class="group-label">{{ i18n.t().playground.positioningLimits }}</span>
             <div class="config-item">
               <label for="align">Alignment</label>
               <select id="align" [(ngModel)]="align">
                 <option value="left">Left</option>
                 <option value="right">Right</option>
                 <option value="center">Center</option>
+              </select>
+            </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="enableMinDate">
+                {{ i18n.t().playground.enableMinDate }}
+              </label>
+            </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="enableMaxDate">
+                {{ i18n.t().playground.enableMaxDate }}
+              </label>
+            </div>
+            <div class="config-item">
+              <label for="weekStart">{{ i18n.t().playground.weekStart }}</label>
+              <select id="weekStart" [(ngModel)]="weekStart">
+                <option [ngValue]="null">{{ i18n.t().playground.autoLocale }}</option>
+                <option [ngValue]="0">{{ i18n.t().playground.sunday }} (0)</option>
+                <option [ngValue]="1">{{ i18n.t().playground.monday }} (1)</option>
+                <option [ngValue]="6">{{ i18n.t().playground.saturday }} (6)</option>
               </select>
             </div>
           </div>
@@ -164,6 +185,9 @@ import { I18nService } from '../../i18n/i18n.service';
               [useNativePicker]="useNativePicker"
               [dateTemplate]="useCustomTemplate ? customDateCell : null"
               [align]="align"
+              [weekStart]="weekStart"
+              [minDate]="effectiveMinDate"
+              [maxDate]="effectiveMaxDate"
               [holidayProvider]="useHolidayProvider ? holidayProvider : null"
               [(ngModel)]="value">
             </ngxsmk-datepicker>
@@ -378,6 +402,22 @@ export class PlaygroundComponent {
   weekStart: number | null = null;
   value: Date | { start: Date; end: Date } | Date[] | null = null;
   useHolidayProvider = false;
+  enableMinDate = false;
+  enableMaxDate = false;
+
+  get effectiveMinDate(): Date | null {
+    if (!this.enableMinDate) return null;
+    const d = new Date();
+    d.setDate(d.getDate() - 7);
+    return d;
+  }
+
+  get effectiveMaxDate(): Date | null {
+    if (!this.enableMaxDate) return null;
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d;
+  }
 
   holidayProvider: HolidayProvider = {
     isHoliday(date: Date): boolean {
@@ -410,6 +450,8 @@ export class PlaygroundComponent {
     this.value = null;
     this.useCustomTemplate = false;
     this.useHolidayProvider = false;
+    this.enableMinDate = false;
+    this.enableMaxDate = false;
     this.align = 'left';
   }
 }

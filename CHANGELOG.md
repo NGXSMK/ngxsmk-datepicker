@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] - 2026-02-13
+
+### Added
+
+- **Playground Enhancements**: Added new configuration options for `minDate`, `maxDate`, and `weekStart` to the interactive playground, allowing users to test boundary constraints and locale overrides.
+- **Improved Internationalization**: Added full translation support for new playground features across all 8 supported languages (English, German, Spanish, Swedish, Korean, Chinese, Japanese, and French).
+
+### Fixed
+
+- **Calendar Grid Consistency**: Ensured the calendar always generates a full 42-day (6-week) grid. This prevents layout shifts and provides a more stable UI when navigating between months with different numbers of days.
+- **Locale-Specific Week Starts**: Fixed issues with manual `weekStart` overrides and locale-dependent first day of week calculations, ensuring accurate calendar generation across diverse cultural settings.
+
 ## [2.1.3] - 2026-02-11
 
 ### Fixed

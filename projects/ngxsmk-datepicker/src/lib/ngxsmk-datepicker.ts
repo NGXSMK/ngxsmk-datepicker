@@ -1545,6 +1545,8 @@ export class NgxsmkDatepickerComponent
   @Input() set minDate(value: DateInput | null) {
     this._minDate = this._normalizeDate(value);
     this._updateMemoSignals();
+    this._invalidateMemoCache();
+    this.cdr.markForCheck();
   }
   get minDate(): DateInput | null {
     return this._minDate;
@@ -1554,6 +1556,8 @@ export class NgxsmkDatepickerComponent
   @Input() set maxDate(value: DateInput | null) {
     this._maxDate = this._normalizeDate(value);
     this._updateMemoSignals();
+    this._invalidateMemoCache();
+    this.cdr.markForCheck();
   }
   get maxDate(): DateInput | null {
     return this._maxDate;
@@ -1941,6 +1945,7 @@ export class NgxsmkDatepickerComponent
     return {
       month: this._currentMonthSignal(),
       year: this._currentYearSignal(),
+      firstDayOfWeek: this.firstDayOfWeek,
       holidayProvider: this._holidayProviderSignal(),
       disabledState: this._disabledStateSignal(),
     };
@@ -4333,9 +4338,10 @@ export class NgxsmkDatepickerComponent
         this.calendarGenerationService.clearCache();
         this.initializeTranslations();
         this.generateLocaleData();
-        // Don't regenerate calendar immediately after locale change
-        // Let the component handle this lazily when needed
-        needsChangeDetection = false;
+        this._invalidateMemoCache();
+        // Regenerate calendar immediately after locale change to prevent day-of-week shift
+        this.generateCalendar();
+        needsChangeDetection = true;
       } else {
         needsChangeDetection = true;
       }
@@ -4356,12 +4362,13 @@ export class NgxsmkDatepickerComponent
           this.calendarGenerationService.clearCache();
         }
         this.generateLocaleData();
-        // Don't regenerate calendar immediately after weekStart change
-        // Let the component handle this lazily when needed
+        this._invalidateMemoCache();
+        // Regenerate calendar immediately after weekStart change to prevent day-of-week shift
+        this.generateCalendar();
         if (changes['weekStart']) {
           this.clearActiveTimeouts();
         }
-        needsChangeDetection = false;
+        needsChangeDetection = true;
       } else {
         needsChangeDetection = true;
       }
