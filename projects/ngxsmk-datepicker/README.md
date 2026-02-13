@@ -137,7 +137,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker@latest
+    npm install ngxsmk-datepicker@2.1.4
 
 ## **Usage**
 
