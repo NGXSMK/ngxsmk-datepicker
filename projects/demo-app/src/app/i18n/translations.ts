@@ -27,7 +27,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'New v2.1.3 Stability',
+            heroBadge: 'New v2.1.4 Stability',
             heroTitle: 'The Best Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'The most powerful, lightweight, and accessible datepicker for modern Angular projects. Seamless Signal-based state, Zoneless architecture, and infinite customization.',
@@ -100,7 +100,15 @@ export const translations = {
             vertical: 'Vertical',
             auto: 'Auto',
             lightTheme: 'Light Theme',
-            darkTheme: 'Dark Theme'
+            darkTheme: 'Dark Theme',
+            positioningLimits: 'Positioning & Limits',
+            enableMinDate: 'Enable Min Date (7 days ago)',
+            enableMaxDate: 'Enable Max Date (7 days ahead)',
+            weekStart: 'Week Start',
+            autoLocale: 'Auto (Locale)',
+            sunday: 'Sunday',
+            monday: 'Monday',
+            saturday: 'Saturday'
         },
         installation: {
             title: 'Installation',
@@ -308,7 +316,7 @@ export const translations = {
             playground: 'Spielplatz'
         },
         home: {
-            heroBadge: 'Neu v2.1.3 Stabilität',
+            heroBadge: 'Neu v2.1.4 Stabilität',
             heroTitle: 'Der beste Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Der leistungsstärkste, leichteste und barrierefreieste Datepicker für moderne Angular-Projekte. Nahtloser Signal-basierter Status, Zoneless-Architektur und unendliche Anpassungsmöglichkeiten.',
@@ -381,7 +389,15 @@ export const translations = {
             vertical: 'Vertikal',
             auto: 'Auto',
             lightTheme: 'Helles Thema',
-            darkTheme: 'Dunkles Thema'
+            darkTheme: 'Dunkles Thema',
+            positioningLimits: 'Positionierung & Limits',
+            enableMinDate: 'Min. Datum aktivieren (-7 Tage)',
+            enableMaxDate: 'Max. Datum aktivieren (+7 Tage)',
+            weekStart: 'Wochenstart',
+            autoLocale: 'Auto (Gebietsschema)',
+            sunday: 'Sonntag',
+            monday: 'Montag',
+            saturday: 'Samstag'
         },
         installation: {
             title: 'Installation',
@@ -571,7 +587,7 @@ export const translations = {
             playground: 'Laboratorio'
         },
         home: {
-            heroBadge: 'Nuevo v2.1.3 Estabilidad',
+            heroBadge: 'Nuevo v2.1.4 Estabilidad',
             heroTitle: 'El mejor Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'El selector de fechas más potente, ligero y accesible para proyectos modernos de Angular. Estado impecable basado en Signals, arquitectura Zoneless y personalización infinita.',
@@ -626,7 +642,15 @@ export const translations = {
             vertical: 'Vertical',
             auto: 'Auto',
             lightTheme: 'Tema claro',
-            darkTheme: 'Tema oscuro'
+            darkTheme: 'Tema oscuro',
+            positioningLimits: 'Posicionamiento y Límites',
+            enableMinDate: 'Activar fecha mínima (-7 días)',
+            enableMaxDate: 'Activar fecha máxima (+7 días)',
+            weekStart: 'Inicio de semana',
+            autoLocale: 'Auto (Localización)',
+            sunday: 'Domingo',
+            monday: 'Lunes',
+            saturday: 'Sábado'
         },
         installation: {
             title: 'Instalación',
@@ -816,7 +840,7 @@ export const translations = {
             playground: 'Lekplats'
         },
         home: {
-            heroBadge: 'Ny v2.1.3 stabilitet',
+            heroBadge: 'Ny v2.1.4 stabilitet',
             heroTitle: 'Den bästa open-source',
             heroSubtitle: 'Angular datumväljare',
             heroLead: 'Den mest kraftfulla, lätta och tillgängliga datumväljaren för moderna Angular-projekt. Sömlös signalbaserad status, zonlös arkitektur och oändlig anpassning.',
@@ -871,7 +895,15 @@ export const translations = {
             vertical: 'Vertikal',
             auto: 'Auto',
             lightTheme: 'Ljust tema',
-            darkTheme: 'Mörkt tema'
+            darkTheme: 'Mörkt tema',
+            positioningLimits: 'Positionering & gränser',
+            enableMinDate: 'Aktivera minsta datum (-7 dagar)',
+            enableMaxDate: 'Aktivera högsta datum (+7 dagar)',
+            weekStart: 'Veckostart',
+            autoLocale: 'Auto (språk)',
+            sunday: 'Söndag',
+            monday: 'Måndag',
+            saturday: 'Lördag'
         },
         installation: {
             title: 'Installation',
@@ -1061,7 +1093,7 @@ export const translations = {
             playground: '플레이그라운드'
         },
         home: {
-            heroBadge: '새로운 v2.1.3 안정성',
+            heroBadge: '새로운 v2.1.4 안정성',
             heroTitle: '최고의 오픈 소스',
             heroSubtitle: 'Angular 데이트피커',
             heroLead: '현대적인 Angular 프로젝트를 위한 가장 강력하고 가볍고 접근성이 좋은 데이트피커입니다. 원활한 Signal 기반 상태, Zoneless 아키텍처 및 무한한 커스터마이징을 제공합니다.',
@@ -1116,7 +1148,15 @@ export const translations = {
             vertical: '세로',
             auto: '자동',
             lightTheme: '라이트 테마',
-            darkTheme: '다크 테마'
+            darkTheme: '다크 테마',
+            positioningLimits: '위치 및 제한',
+            enableMinDate: '최소 날짜 활성화 (-7일)',
+            enableMaxDate: '최대 날짜 활성화 (+7일)',
+            weekStart: '주 시작일',
+            autoLocale: '자동 (로케일)',
+            sunday: '일요일',
+            monday: '월요일',
+            saturday: '토요일'
         },
         installation: {
             title: '설치',
@@ -1306,7 +1346,7 @@ export const translations = {
             playground: '演练场'
         },
         home: {
-            heroBadge: '全新 v2.1.3 稳定性',
+            heroBadge: '全新 v2.1.4 稳定性',
             heroTitle: '最佳开源',
             heroSubtitle: 'Angular 日期选择器',
             heroLead: '适用于现代 Angular 项目的功能最强大、轻量且符合无障碍标准的日期选择器。无缝的基于 Signal 的状态管理、无 Zone 架构和无限的自定义选项。',
@@ -1361,7 +1401,15 @@ export const translations = {
             vertical: '垂直',
             auto: '自动',
             lightTheme: '浅色主题',
-            darkTheme: '深色主题'
+            darkTheme: '深色主题',
+            positioningLimits: '位置与限制',
+            enableMinDate: '启用最小日期 (-7天)',
+            enableMaxDate: '启用最大日期 (+7天)',
+            weekStart: '起始星期',
+            autoLocale: '自动 (区域设置)',
+            sunday: '星期日',
+            monday: '星期一',
+            saturday: '星期六'
         },
         installation: {
             title: '安装',
@@ -1551,7 +1599,7 @@ export const translations = {
             playground: 'プレイグラウンド'
         },
         home: {
-            heroBadge: '新しい v2.1.3 の安定性',
+            heroBadge: '新しい v2.1.4 の安定性',
             heroTitle: '最高のオープンソース',
             heroSubtitle: 'Angular デートピッカー',
             heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、 そして 無限のカスタマイズを提供します。',
@@ -1606,7 +1654,15 @@ export const translations = {
             vertical: '垂直',
             auto: '自動',
             lightTheme: 'ライトテーマ',
-            darkTheme: 'ダークテーマ'
+            darkTheme: 'ダークテーマ',
+            positioningLimits: '配置と制限',
+            enableMinDate: '最小日付を有効にする (-7日)',
+            enableMaxDate: '最大日付を有効にする (+7日)',
+            weekStart: '週の開始日',
+            autoLocale: '自動 (ロケール)',
+            sunday: '日曜日',
+            monday: '月曜日',
+            saturday: '土曜日'
         },
         installation: {
             title: 'インストール',
@@ -1796,7 +1852,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'Nouvelle stabilité v2.1.3',
+            heroBadge: 'Nouvelle stabilité v2.1.4',
             heroTitle: 'Le meilleur Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Le sélecteur de date le plus puissant, léger et accessible pour les projets Angular modernes. État fluide basé sur les Signals, architecture Zoneless et personnalisation infinie.',
@@ -1851,7 +1907,15 @@ export const translations = {
             vertical: 'Vertical',
             auto: 'Auto',
             lightTheme: 'Thème clair',
-            darkTheme: 'Thème sombre'
+            darkTheme: 'Thème sombre',
+            positioningLimits: 'Positionnement & Limites',
+            enableMinDate: 'Activer la date minimale (-7 jours)',
+            enableMaxDate: 'Activer la date maximale (+7 jours)',
+            weekStart: 'Début de semaine',
+            autoLocale: 'Auto (Paramètres régionaux)',
+            sunday: 'Dimanche',
+            monday: 'Lundi',
+            saturday: 'Samedi'
         },
         installation: {
             title: 'Installation',

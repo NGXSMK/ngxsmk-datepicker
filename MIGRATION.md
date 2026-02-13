@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.1.3 → v2.1.4](#v213---v214)
 - [v2.1.2 → v2.1.3](#v212---v213)
 - [v2.1.1 → v2.1.2](#v211---v212)
 - [v2.0.11 → v2.1.1](#v2011---v211)
@@ -46,6 +47,23 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.1.3 → v2.1.4
+
+### Changes
+
+- **Version Update**: Updated to version 2.1.4.
+- **Improved Calendar Grid**: Calendar now always generates exactly 42 days (6 full weeks), providing layout stability during month navigation.
+- **Enhanced Playground**: New options for `minDate`, `maxDate`, and `weekStart` constraints.
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required.
+
+```bash
+npm install ngxsmk-datepicker@2.1.4
+```
 
 ## v2.1.2 → v2.1.3
 
