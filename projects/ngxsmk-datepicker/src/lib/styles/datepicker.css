@@ -485,7 +485,27 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
     pointer-events: auto !important;
   }
 
-  .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-datepicker-container,
+  .ngxsmk-input-and-error {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+
+.ngxsmk-validation-error {
+  font-size: var(--datepicker-font-size-sm, 12px);
+  color: var(--datepicker-error-color, #b00020);
+  margin-top: 2px;
+}
+
+.ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-datepicker-container,
   .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-calendar-container {
     pointer-events: auto !important;
   }
@@ -865,6 +885,73 @@ ngxsmk-datepicker.ngxsmk-inline {
   -moz-border-radius: var(--datepicker-border-radius);
   border-radius: var(--datepicker-border-radius);
   overflow: hidden;
+}
+
+/* Loading indicator when calendar is opening/generating */
+.ngxsmk-calendar-loading {
+  position: absolute;
+  inset: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  gap: var(--datepicker-spacing-md, 12px);
+  background: var(--datepicker-background);
+  opacity: 0.95;
+  z-index: 100;
+}
+
+.ngxsmk-calendar-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--datepicker-border-color);
+  border-top-color: var(--datepicker-accent-color, #1976d2);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  -webkit-animation: ngxsmk-spin 0.7s linear infinite;
+  -moz-animation: ngxsmk-spin 0.7s linear infinite;
+  animation: ngxsmk-spin 0.7s linear infinite;
+}
+
+.ngxsmk-calendar-loading-text {
+  font-size: var(--datepicker-font-size-sm, 14px);
+  color: var(--datepicker-text-secondary, #666);
+}
+
+@-webkit-keyframes ngxsmk-spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes ngxsmk-spin {
+  to {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ngxsmk-spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
 .ngxsmk-calendar-container {

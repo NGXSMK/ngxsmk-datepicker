@@ -29,7 +29,7 @@ import {
  * - Different component states
  * - Calendar views and interactions
  */
-xdescribe('NgxsmkDatepicker - Visual Regression Tests', () => {
+describe('NgxsmkDatepicker - Visual Regression Tests', () => {
   let component: NgxsmkDatepickerComponent;
   let fixture: ComponentFixture<NgxsmkDatepickerComponent>;
   let nativeElement: HTMLElement;

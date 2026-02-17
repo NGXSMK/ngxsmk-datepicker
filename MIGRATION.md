@@ -4,6 +4,7 @@ This document provides migration instructions for upgrading between major versio
 
 ## Table of Contents
 
+- [v2.1.4 → v2.1.5](#v214---v215)
 - [v2.1.3 → v2.1.4](#v213---v214)
 - [v2.1.2 → v2.1.3](#v212---v213)
 - [v2.1.1 → v2.1.2](#v211---v212)
@@ -47,6 +48,22 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.9.0 → v2.0.0](#v190---v200) (Future)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v2.1.4 → v2.1.5
+
+### Changes
+
+- **Version Update**: Updated to version 2.1.5.
+- **New**: User-facing validation messages (i18n) for invalid date, date before min, date after max; calendar loading state (visual + a11y); installation options doc and demo page updates; demo light/dark theme fix; optional issue-reproduction app. Service refactors (calendar generation, parsing) are internal.
+- No breaking changes.
+
+### Migration Steps
+
+No migration steps required.
+
+```bash
+npm install ngxsmk-datepicker@2.1.5
+```
 
 ## v2.1.3 → v2.1.4
 
@@ -160,7 +177,7 @@ npm install ngxsmk-datepicker@2.0.8
 ### Changes
 
 - **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.1.2 is the current stable version
+- **Stable Release**: Version 2.1.5 is the current stable version
 - No breaking changes.
 
 ### Migration Steps

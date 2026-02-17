@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.5] - 2026-02-17
+
+### Added
+
+- **Validation messages (i18n)**: New user-facing validation strings in `DatepickerTranslations`—`invalidDateFormat`, `dateBeforeMin`, `dateAfterMax`, `invalidDate`—with full translation support across all 8 languages. The component shows a translated error message when input is invalid, before min, or after max, and emits `validationError` with `code` and `message`.
+- **Calendar loading state**: Visual loading state (spinner + text) while the calendar is opening or generating. Loading state is announced to screen readers via `AriaLiveService`. A public getter is available for templates to reflect "calendar is loading."
+- **Installation options**: New `docs/INSTALLATION.md` documenting all install methods (npm, Yarn, pnpm, Bun, Git, local path, CDN, tarball). Demo Installation page updated with alternative install commands and a link to the full guide.
+- **Issue-reproduction app**: New minimal Angular app `angular-issue-test` (routes: Home, month-navigation, range-reselection) for manually verifying reported issues. Served via `npx ng serve angular-issue-test`.
+
+### Changed
+
+- **Version**: Bump to 2.1.5 (stable release).
+- **Demo app – light/dark theme**: Theme toggle now correctly switches the UI. `data-theme` is synced on the document when theme changes; `html[data-theme='light']` CSS overrides added for the light palette. Nav-link hover uses `var(--color-text-main)` for both themes. Responsive spacing variables use `clamp()`.
+- **Library refactors**: Calendar grid generation and input parsing/formatting logic extracted into `CalendarGenerationService` and `DatepickerParsingService` respectively.
+- **Demo styles**: New utility classes (e.g. `.link`, `.no-underline`, `.text-dim`, `.gap-xs`) and tip label layout tweak.
+- **Docs**: README and library README reference `docs/INSTALLATION.md`. CHANGELOG, MIGRATION, ROADMAP, SECURITY, API_REFERENCE, BUNDLE_SIZE_REPORT, and API.md updated for 2.1.5.
+
+### Fixed
+
+- **Demo theme**: Fixed light/dark theme toggle not applying—demo now correctly reflects the active theme (header toggle and system preference).
+
 ## [2.1.4] - 2026-02-13
 
 ### Added

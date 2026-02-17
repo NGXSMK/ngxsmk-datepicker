@@ -52,6 +52,10 @@ function createMinimalTranslations(
     keyboardShortcuts: 'Keyboard shortcuts',
     from: 'From',
     to: 'To',
+    invalidDateFormat: 'Please enter a valid date.',
+    dateBeforeMin: 'Date must be on or after {{minDate}}.',
+    dateAfterMax: 'Date must be on or before {{maxDate}}.',
+    invalidDate: 'Invalid date.',
   };
   return { ...defaults, ...overrides };
 }

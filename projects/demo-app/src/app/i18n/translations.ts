@@ -27,7 +27,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'New v2.1.4 Stability',
+            heroBadge: 'New v2.1.5 Stability',
             heroTitle: 'The Best Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'The most powerful, lightweight, and accessible datepicker for modern Angular projects. Seamless Signal-based state, Zoneless architecture, and infinite customization.',
@@ -115,6 +115,9 @@ export const translations = {
             lead: 'Set up ngxsmk-datepicker in your Angular project in just a few steps.',
             npmTitle: 'npm Install',
             npmLead: 'The library is available on npm. You can install it using your preferred package manager:',
+            altTitle: 'Other ways to install',
+            altLead: 'Yarn, pnpm, Bun, install from Git, local path, or CDN (ESM). Peer dependencies must still be installed in your app.',
+            moreLink: 'See all installation options',
             note: 'Note: Ensure you are using Angular 17 or higher. For Signal Forms support, Angular 21 is required.',
             importTitle: 'Import Component',
             importLead: 'Since the component is standalone, you can import it directly into your component\'s imports array:',
@@ -316,7 +319,7 @@ export const translations = {
             playground: 'Spielplatz'
         },
         home: {
-            heroBadge: 'Neu v2.1.4 Stabilität',
+            heroBadge: 'Neu v2.1.5 Stabilität',
             heroTitle: 'Der beste Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Der leistungsstärkste, leichteste und barrierefreieste Datepicker für moderne Angular-Projekte. Nahtloser Signal-basierter Status, Zoneless-Architektur und unendliche Anpassungsmöglichkeiten.',
@@ -404,6 +407,9 @@ export const translations = {
             lead: 'Richten Sie ngxsmk-datepicker in wenigen Schritten in Ihrem Angular-Projekt ein.',
             npmTitle: 'npm Installation',
             npmLead: 'Die Bibliothek ist auf npm verfügbar. Sie können sie mit Ihrem bevorzugten Paketmanager installieren:',
+            altTitle: 'Andere Installationsmöglichkeiten',
+            altLead: 'Yarn, pnpm, Bun, Installation von Git, lokaler Pfad oder CDN (ESM). Peer-Abhängigkeiten müssen weiterhin in Ihrer App installiert sein.',
+            moreLink: 'Alle Installationsoptionen anzeigen',
             note: 'Hinweis: Stellen Sie sicher, dass Sie Angular 17 oder höher verwenden. Für die Signal Forms Unterstützung ist Angular 21 erforderlich.',
             importTitle: 'Komponente importieren',
             importLead: 'Da die Komponente standalone ist, können Sie sie direkt in das imports-Array Ihrer Komponente importieren:',
@@ -587,7 +593,7 @@ export const translations = {
             playground: 'Laboratorio'
         },
         home: {
-            heroBadge: 'Nuevo v2.1.4 Estabilidad',
+            heroBadge: 'Nuevo v2.1.5 Estabilidad',
             heroTitle: 'El mejor Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'El selector de fechas más potente, ligero y accesible para proyectos modernos de Angular. Estado impecable basado en Signals, arquitectura Zoneless y personalización infinita.',
@@ -657,6 +663,9 @@ export const translations = {
             lead: 'Configura ngxsmk-datepicker en tu proyecto Angular en solo unos pasos.',
             npmTitle: 'Instalación por npm',
             npmLead: 'La biblioteca está disponible en npm. Puedes instalarla usando tu gestor de paquetes preferido:',
+            altTitle: 'Otras formas de instalar',
+            altLead: 'Yarn, pnpm, Bun, instalar desde Git, ruta local o CDN (ESM). Las dependencias peer deben seguir instaladas en tu app.',
+            moreLink: 'Ver todas las opciones de instalación',
             note: 'Nota: Asegúrate de usar Angular 17 o superior. Para el soporte de Signal Forms, se requiere Angular 21.',
             importTitle: 'Importar Componente',
             importLead: 'Dado que el componente es standalone, puedes importarlo directamente en el array de imports de tu componente:',
@@ -840,7 +849,7 @@ export const translations = {
             playground: 'Lekplats'
         },
         home: {
-            heroBadge: 'Ny v2.1.4 stabilitet',
+            heroBadge: 'Ny v2.1.5 stabilitet',
             heroTitle: 'Den bästa open-source',
             heroSubtitle: 'Angular datumväljare',
             heroLead: 'Den mest kraftfulla, lätta och tillgängliga datumväljaren för moderna Angular-projekt. Sömlös signalbaserad status, zonlös arkitektur och oändlig anpassning.',
@@ -910,6 +919,9 @@ export const translations = {
             lead: 'Ställ in ngxsmk-datepicker i ditt Angular-projekt med bara några få steg.',
             npmTitle: 'Installera med npm',
             npmLead: 'Biblioteket finns på npm. Du kan installera det med din föredragna pakethanterare:',
+            altTitle: 'Andra installationssätt',
+            altLead: 'Yarn, pnpm, Bun, installera från Git, lokal sökväg eller CDN (ESM). Peer-beroenden måste fortfarande installeras i din app.',
+            moreLink: 'Se alla installationsalternativ',
             note: 'Obs: Se till att du använder Angular 17 eller högre. För Signal Forms-stöd krävs Angular 21.',
             importTitle: 'Importera komponent',
             importLead: 'Eftersom komponenten är standalone kan du importera den direkt i din komponents imports-array:',
@@ -1093,7 +1105,7 @@ export const translations = {
             playground: '플레이그라운드'
         },
         home: {
-            heroBadge: '새로운 v2.1.4 안정성',
+            heroBadge: '새로운 v2.1.5 안정성',
             heroTitle: '최고의 오픈 소스',
             heroSubtitle: 'Angular 데이트피커',
             heroLead: '현대적인 Angular 프로젝트를 위한 가장 강력하고 가볍고 접근성이 좋은 데이트피커입니다. 원활한 Signal 기반 상태, Zoneless 아키텍처 및 무한한 커스터마이징을 제공합니다.',
@@ -1163,6 +1175,9 @@ export const translations = {
             lead: '몇 단계만으로 Angular 프로젝트에 ngxsmk-datepicker를 설정하세요.',
             npmTitle: 'npm 설치',
             npmLead: '라이브러리는 npm에서 사용할 수 있습니다. 선호하는 패키지 관리자를 사용하여 설치할 수 있습니다:',
+            altTitle: '다른 설치 방법',
+            altLead: 'Yarn, pnpm, Bun, Git에서 설치, 로컬 경로 또는 CDN(ESM). peer 종속성은 앱에 설치되어 있어야 합니다.',
+            moreLink: '모든 설치 옵션 보기',
             note: '참고: Angular 17 이상을 사용 중인지 확인하세요. Signal Forms 지원을 위해서는 Angular 21이 필요합니다.',
             importTitle: '컴포넌트 가져오기',
             importLead: '컴포넌트는 standalone이므로 컴포넌트의 imports 배열에 직접 가져올 수 있습니다:',
@@ -1346,7 +1361,7 @@ export const translations = {
             playground: '演练场'
         },
         home: {
-            heroBadge: '全新 v2.1.4 稳定性',
+            heroBadge: '全新 v2.1.5 稳定性',
             heroTitle: '最佳开源',
             heroSubtitle: 'Angular 日期选择器',
             heroLead: '适用于现代 Angular 项目的功能最强大、轻量且符合无障碍标准的日期选择器。无缝的基于 Signal 的状态管理、无 Zone 架构和无限的自定义选项。',
@@ -1416,6 +1431,9 @@ export const translations = {
             lead: '只需几个步骤即可在您的 Angular 项目中设置 ngxsmk-datepicker。',
             npmTitle: 'npm 安装',
             npmLead: '该库可在 npm 上获得。您可以使用您喜欢的包管理器进行安装：',
+            altTitle: '其他安装方式',
+            altLead: 'Yarn、pnpm、Bun、从 Git 安装、本地路径或 CDN (ESM)。应用内仍须安装 peer 依赖。',
+            moreLink: '查看所有安装选项',
             note: '注意：请确保您使用的是 Angular 17 或更高版本。如需 Signal Forms 支持，则需要 Angular 21。',
             importTitle: '导入组件',
             importLead: '由于该组件是独立组件 (standalone)，您可以将其直接导入到组件的 imports 数组中：',
@@ -1599,7 +1617,7 @@ export const translations = {
             playground: 'プレイグラウンド'
         },
         home: {
-            heroBadge: '新しい v2.1.4 の安定性',
+            heroBadge: '新しい v2.1.5 の安定性',
             heroTitle: '最高のオープンソース',
             heroSubtitle: 'Angular デートピッカー',
             heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、 そして 無限のカスタマイズを提供します。',
@@ -1669,6 +1687,9 @@ export const translations = {
             lead: 'わずか数ステップでAngularプロジェクトにngxsmk-datepickerをセットアップします。',
             npmTitle: 'npm インストール',
             npmLead: 'ライブラリはnpmで入手可能です。お好みのパッケージマネージャーを使用してインストールできます。',
+            altTitle: 'その他のインストール方法',
+            altLead: 'Yarn、pnpm、Bun、Git からのインストール、ローカルパス、または CDN (ESM)。peer 依存関係はアプリにインストールする必要があります。',
+            moreLink: 'すべてのインストールオプションを見る',
             note: '注意: Angular 17以上を使用していることを確認してください。Signal FormsのサポートにはAngular 21が必要です。',
             importTitle: 'コンポーネントのインポート',
             importLead: 'コンポーネントはstandaloneであるため、コンポーネントのimports配列に直接インポートできます。',
@@ -1852,7 +1873,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'Nouvelle stabilité v2.1.4',
+            heroBadge: 'Nouvelle stabilité v2.1.5',
             heroTitle: 'Le meilleur Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Le sélecteur de date le plus puissant, léger et accessible pour les projets Angular modernes. État fluide basé sur les Signals, architecture Zoneless et personnalisation infinie.',
@@ -1922,6 +1943,9 @@ export const translations = {
             lead: 'Configurez ngxsmk-datepicker dans votre projet Angular en quelques étapes seulement.',
             npmTitle: 'Installation npm',
             npmLead: 'La bibliothèque est disponible sur npm. Vous pouvez l\'installer en utilisant votre gestionnaire de paquets préféré :',
+            altTitle: 'Autres méthodes d\'installation',
+            altLead: 'Yarn, pnpm, Bun, installation depuis Git, chemin local ou CDN (ESM). Les dépendances peer doivent toujours être installées dans votre application.',
+            moreLink: 'Voir toutes les options d\'installation',
             note: 'Note : Assurez-vous d\'utiliser Angular 17 ou supérieur. Pour le support des Signal Forms, Angular 21 est requis.',
             importTitle: 'Importer le composant',
             importLead: 'Comme le composant est standalone, vous pouvez l\'importer directement dans le tableau imports de votre composant :',

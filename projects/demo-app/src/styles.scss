@@ -31,11 +31,6 @@
     --color-border-light: hsla(0, 0%, 100%, 0.15);
 
     /* Spacing System */
-    --space-xs: 0.25rem;
-    --space-sm: 0.5rem;
-    --space-md: 1rem;
-    --space-lg: 1.5rem;
-    --space-xl: 2rem;
     --space-xs: clamp(0.2rem, 1vw, 0.25rem);
     --space-sm: clamp(0.4rem, 2vw, 0.5rem);
     --space-md: clamp(0.75rem, 4vw, 1rem);
@@ -83,6 +78,33 @@
     --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition: var(--transition-base);
+}
+
+/* Light theme overrides (synced with theme.config.ts) */
+html[data-theme='light'] {
+    /* Backgrounds */
+    --color-bg-page: hsl(240, 10%, 98%);
+    --color-bg-sidebar: hsl(240, 10%, 94%);
+    --color-bg-secondary: hsl(240, 8%, 92%);
+    --color-bg-card: hsl(0, 0%, 100%);
+    --color-bg-elevated: hsl(240, 6%, 88%);
+    --color-bg-code: hsl(240, 8%, 96%);
+    --color-bg-header: hsla(240, 10%, 98%, 0.85);
+
+    /* Text */
+    --color-text-main: hsl(240, 10%, 4%);
+    --color-text-muted: hsl(240, 10%, 25%);
+    --color-text-dim: hsl(240, 10%, 45%);
+    --color-text-tertiary: hsl(240, 10%, 60%);
+
+    /* Borders */
+    --color-border: hsla(0, 0%, 0%, 0.08);
+    --color-border-light: hsla(0, 0%, 0%, 0.15);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================
@@ -302,7 +324,7 @@ code {
     }
 
     &:hover {
-        color: #fff;
+        color: var(--color-text-main);
         background: linear-gradient(to right, rgba(255, 255, 255, 0.04), transparent);
     }
 
@@ -363,8 +385,7 @@ code {
         text-transform: uppercase;
         font-size: 0.8rem;
         letter-spacing: 0.05em;
-        display: block;
-        margin-bottom: 0.25rem;
+        display: inline;
     }
 }
 
@@ -458,6 +479,29 @@ kbd {
     font-size: 0.8rem;
     box-shadow: 0 2px 0 var(--color-border);
     color: var(--color-secondary);
+}
+
+/* Content links (e.g. Installation page "See all options") */
+a.link {
+    color: var(--color-primary-light);
+    text-decoration: none;
+    font-weight: var(--font-weight-semibold);
+    transition: var(--transition-base);
+    border-bottom: 1px solid transparent;
+}
+a.link:hover {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.no-underline {
+    text-decoration: none;
+}
+.hover\:text-primary:hover {
+    color: var(--color-primary);
+}
+.transition-base {
+    transition: var(--transition-base);
 }
 
 .shortcut-list {
@@ -671,6 +715,14 @@ kbd {
 
 .text-primary {
     color: var(--color-primary);
+}
+
+.text-dim {
+    color: var(--color-text-dim);
+}
+
+.gap-xs {
+    gap: var(--space-xs);
 }
 
 .text-secondary {

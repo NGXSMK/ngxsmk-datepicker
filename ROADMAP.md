@@ -560,7 +560,7 @@ A comprehensive analysis of the codebase (v2.0.0) has identified **47 concrete i
 
 ---
 
-**Last Updated**: February 11, 2026
+**Last Updated**: February 17, 2026
 
 *This roadmap is a living document and will be updated regularly based on community feedback and project needs.*
 

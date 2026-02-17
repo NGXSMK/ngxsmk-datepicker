@@ -381,6 +381,44 @@ export class DatepickerParsingService {
     }
   }
 
+  /**
+   * Format a date using a custom pattern (e.g. MM/DD/YYYY, DD.MM.YYYY).
+   * Supports YYYY, YY, MM, M, DD, D, hh, h, HH, H, mm, m, ss, s, a, A.
+   */
+  formatDateWithPattern(date: Date, format: string): string {
+    if (!date || isNaN(date.getTime())) return '';
+
+    const pad = (n: number, len: number = 2) =>
+      n.toString().padStart(len, '0');
+
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+
+    return format
+      .replace(/YYYY/g, year.toString())
+      .replace(/YY/g, year.toString().slice(-2))
+      .replace(/MM/g, pad(month))
+      .replace(/M/g, month.toString())
+      .replace(/DD/g, pad(day))
+      .replace(/D/g, day.toString())
+      .replace(/hh/g, pad(hours12))
+      .replace(/h/g, hours12.toString())
+      .replace(/HH/g, pad(hours))
+      .replace(/H/g, hours.toString())
+      .replace(/mm/g, pad(minutes))
+      .replace(/m/g, minutes.toString())
+      .replace(/ss/g, pad(seconds))
+      .replace(/s/g, seconds.toString())
+      .replace(/a/g, ampm.toLowerCase())
+      .replace(/A/g, ampm);
+  }
+
   private formatDate(date: Date, format?: string, locale?: string): string {
     try {
       return (

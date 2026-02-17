@@ -163,6 +163,59 @@
           }
         }
       }
+    },
+    "angular-issue-test": {
+      "projectType": "application",
+      "root": "examples/angular-issue-test",
+      "sourceRoot": "examples/angular-issue-test/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/angular-issue-test",
+            "browser": "examples/angular-issue-test/src/main.ts",
+            "tsConfig": "examples/angular-issue-test/tsconfig.app.json",
+            "preserveSymlinks": true,
+            "polyfills": ["zone.js"],
+            "assets": [],
+            "styles": ["examples/angular-issue-test/src/styles.scss"]
+          },
+          "configurations": {
+            "production": {
+              "outputPath": "dist/angular-issue-test",
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "angular-issue-test:build:production"
+            },
+            "development": {
+              "buildTarget": "angular-issue-test:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "examples/angular-issue-test/**/*.ts",
+              "examples/angular-issue-test/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

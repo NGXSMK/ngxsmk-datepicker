@@ -28,10 +28,11 @@ module.exports = function (config) {
       ],
       check: {
         global: {
-          statements: 22,
-          branches: 10,
-          functions: 28,
-          lines: 22
+          // Enforce minimum coverage; goal is 100% (see coverage plan)
+          statements: 63,
+          branches: 53,
+          functions: 68,
+          lines: 63
         }
       }
     },

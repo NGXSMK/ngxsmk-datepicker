@@ -61,6 +61,12 @@ export interface DatepickerTranslations {
   calendarLoading: string; // "Loading calendar..."
   calendarReady: string; // "Calendar ready"
   keyboardShortcuts: string;
+
+  // Validation / error messages (user-facing)
+  invalidDateFormat: string; // "Please enter a valid date."
+  dateBeforeMin: string; // "Date must be on or after {minDate}."
+  dateAfterMax: string; // "Date must be on or before {maxDate}."
+  invalidDate: string; // "Invalid date."
 }
 
 /**

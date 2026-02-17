@@ -134,6 +134,12 @@ describe('Date Utils', () => {
       
       expect(result.getDay()).toBe(1); // Monday
     });
+
+    it('should use default firstDayOfWeek 0 when not provided', () => {
+      const date = new Date(2025, 5, 18); // Wednesday
+      const result = getStartOfWeek(date);
+      expect(result.getDay()).toBe(0);
+    });
   });
 
   describe('getEndOfWeek', () => {
@@ -261,6 +267,22 @@ describe('Date Utils', () => {
 
     it('should return null for null input', () => {
       expect(normalizeDate(null)).toBeNull();
+    });
+
+    it('should return null for undefined input', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(normalizeDate(undefined as any)).toBeNull();
+    });
+
+    it('should return null for empty string input', () => {
+      expect(normalizeDate('')).toBeNull();
+    });
+
+    it('should handle object with toDate method (moment-like)', () => {
+      const d = new Date(2025, 5, 15);
+      const result = normalizeDate({ toDate: () => d });
+      expect(result).toBeInstanceOf(Date);
+      expect(result!.getTime()).toBe(d.getTime());
     });
 
     it('should handle invalid date strings', () => {
