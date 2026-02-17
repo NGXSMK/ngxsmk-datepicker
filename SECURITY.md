@@ -1,5 +1,7 @@
 # Security Policy
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ## Supported Versions
 
 We actively support the following versions with security updates:

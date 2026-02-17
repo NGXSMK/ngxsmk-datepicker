@@ -2,6 +2,8 @@
 
 This document outlines the process for publishing new versions of `ngxsmk-datepicker` to npm.
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ## Prerequisites
 
 1. **npm Account**: You must have publish access to the `ngxsmk-datepicker` package on npm
@@ -81,6 +83,43 @@ BREAKING CHANGE: The datepicker API has been redesigned. See MIGRATION.md for de
 - **Major (x.0.0)**: Breaking changes
 - **Minor (x.y.0)**: New features, backward compatible
 - **Patch (x.y.z)**: Bug fixes, backward compatible
+
+## Beta release before production
+
+Release a **beta** first so testers can install `ngxsmk-datepicker@beta`; when ready, publish the same version as **latest** (production).
+
+### 1. Publish a beta
+
+```bash
+# Bump to next beta (e.g. 2.1.6 → 2.1.7-beta.0; run again for 2.1.7-beta.1)
+npm run version:beta
+
+# Build and publish under the "beta" tag (does not affect "latest")
+npm run publish:beta
+```
+
+- Users install with: `npm install ngxsmk-datepicker@beta`
+- Optional: add a `[X.Y.Z-beta.N]` section to `CHANGELOG.md` and commit the version bump + changelog
+
+### 2. Publish production (after beta is validated)
+
+```bash
+# Set the stable version (must match the release, e.g. 2.1.7 from 2.1.7-beta.0)
+npm run version:stable -- 2.1.7
+
+# Update CHANGELOG.md: rename [X.Y.Z-beta.N] to [X.Y.Z] or add a [X.Y.Z] section, then commit
+
+# Build and publish as latest
+npm run publish:patch
+```
+
+- Users on `ngxsmk-datepicker@latest` (or `ngxsmk-datepicker`) will get 2.1.7
+- Users on `ngxsmk-datepicker@beta` will continue to get the latest beta until you publish a new one
+
+### Manual version (optional)
+
+- Set a specific beta: `node scripts/set-beta-version.js 2.2.0-beta.0`
+- Set stable: `node scripts/set-stable-version.js 2.2.0`
 
 ## Pre-Release Checklist
 

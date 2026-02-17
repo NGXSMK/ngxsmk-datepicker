@@ -1,5 +1,7 @@
 # Timezone Support
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ## Overview
 
 The `ngxsmk-datepicker` library provides timezone-aware date formatting and parsing. This document explains how timezones work in the context of JavaScript Date objects and how to use the library's timezone features.

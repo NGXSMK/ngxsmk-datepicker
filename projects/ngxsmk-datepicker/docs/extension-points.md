@@ -1,5 +1,7 @@
 # Extension Points and Hooks
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ngxsmk-datepicker provides comprehensive extension points through the `hooks` input, allowing you to customize rendering, validation, keyboard shortcuts, formatting, and event handling.
 
 > **📚 For a complete understanding of the plugin architecture, see the [Plugin Architecture Guide](./PLUGIN-ARCHITECTURE.md)** which covers architecture principles, plugin patterns, lifecycle, and advanced use cases.

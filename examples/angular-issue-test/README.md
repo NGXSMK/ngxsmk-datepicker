@@ -1,5 +1,7 @@
 # ngxsmk-datepicker – Issue reproduction app
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 Minimal Angular app used to manually verify fixes for filed issues in `ngxsmk-datepicker`. The app consumes the library from the workspace (same as the main demo-app).
 
 ## Prerequisites

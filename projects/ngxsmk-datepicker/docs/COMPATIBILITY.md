@@ -1,5 +1,7 @@
 # Version Compatibility Matrix
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
 ## 📋 Angular Version Compatibility

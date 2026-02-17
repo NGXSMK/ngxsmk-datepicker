@@ -4,18 +4,23 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Read package.json to get version
-const packageJsonPath = path.join(__dirname, '..', 'package.json');
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-const packageName = packageJson.name;
-const version = packageJson.version;
+// Published package is the library (ngxsmk-datepicker), not the workspace root
+const libPackageJsonPath = path.join(__dirname, '..', 'projects', 'ngxsmk-datepicker', 'package.json');
+const libPackageJson = JSON.parse(fs.readFileSync(libPackageJsonPath, 'utf8'));
+const packageName = libPackageJson.name;
 
-// Get OTP from command line arguments
-const otpIndex = process.argv.indexOf('--otp');
-const otp = otpIndex !== -1 && process.argv[otpIndex + 1] ? process.argv[otpIndex + 1] : null;
+// Version: optional first arg (e.g. 2.1.5), else from library package.json
+const versionArg = process.argv.find((a) => a.match(/^\d+\.\d+\.\d+$/));
+const version = versionArg || libPackageJson.version;
+
+// OTP: --otp=CODE or --otp CODE
+const otpMatch = process.argv.find((a) => a.startsWith('--otp='));
+const otp = otpMatch ? otpMatch.split('=')[1] : (process.argv[process.argv.indexOf('--otp') + 1] || null);
 
 if (!otp) {
-  console.error('Error: OTP code is required. Usage: npm run unpublish:version -- --otp=<code>');
+  console.error('Error: OTP code is required (from npm 2FA).');
+  console.error('Usage: npm run unpublish:version -- 2.1.5 --otp=YOUR_OTP');
+  console.error('   or: npm run unpublish:version -- --otp=YOUR_OTP   (unpublishes version from projects/ngxsmk-datepicker/package.json)');
   process.exit(1);
 }
 

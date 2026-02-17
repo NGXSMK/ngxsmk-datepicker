@@ -419,18 +419,11 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
     });
 
     it('should warn in dev mode when parsing fails', () => {
-      // Logic for warning moved to service, we can verify if needed or skip
-      // Service uses console.warn if isDevMode()
-      if (isDevMode()) {
-        // Mocking console.warn would be needed if we want to checking it.
-        // But here we just call it.
-        // spyOn(console, 'warn'); // Already spied in beforeEach
-        parsingService.parseDateString(
-          'invalid-date-string',
-          new NativeDateAdapter(),
-        );
-        // expect(console.warn).toHaveBeenCalled(); // Logic depends on helper inside service
-      }
+      const result = parsingService.parseDateString(
+        'invalid-date-string',
+        new NativeDateAdapter(),
+      );
+      expect(result).toBeNull();
     });
   });
 
