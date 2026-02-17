@@ -24,13 +24,15 @@
 
 ---
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.5` is live! This release adds **validation messages (i18n)**, **calendar loading state**, **demo light/dark theme fix**, **installation options** doc, and an **issue-reproduction app**. No breaking changes.
+> **Stable Release**: `v2.1.6` is live! This release adds **validation messages (i18n)**, **calendar loading state**, **demo light/dark theme fix**, **installation options** doc, and an **issue-reproduction app**. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.5 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.6 or later.
 
 ---
 
@@ -136,7 +138,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.1.5
+npm install ngxsmk-datepicker@2.1.6
 ```
 
 ### Alternative installation
@@ -145,12 +147,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.1.5` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.5` |
-| **Bun** | `bun add ngxsmk-datepicker@2.1.5` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.5` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.1.6` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.6` |
+| **Bun** | `bun add ngxsmk-datepicker@2.1.6` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.6` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.5/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.5/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.6/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.6/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -226,7 +228,7 @@ For detailed Signal Forms integration including dirty state tracking, see the [S
 
 #### **1. Import the Component**
 
-In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponent.
+In your component file (e.g., app.component.ts), import the component (or the module—see troubleshooting below).
 
     import { Component } from '@angular/core';
     import { NgxsmkDatepickerComponent, DateRange, HolidayProvider } from 'ngxsmk-datepicker';
@@ -255,6 +257,8 @@ In your component file (e.g., app.component.ts), import NgxsmkDatepickerComponen
         console.log('Date changed:', value);
       }
     }
+
+**If you see NG1010** (`'imports' must be an array... Value could not be determined statically`) when using the Angular compiler plugin or in strict AOT builds, use the wrapper module instead: `import { NgxsmkDatepickerModule } from 'ngxsmk-datepicker'` and set `imports: [NgxsmkDatepickerModule]`. The template stays the same (`<ngxsmk-datepicker>`).
 
 #### **2. Add it to Your Template**
 
@@ -577,7 +581,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.5 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.6 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)

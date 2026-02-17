@@ -2,6 +2,8 @@
 
 Thank you for your interest in contributing to ngxsmk-datepicker! This document provides guidelines and instructions for contributing.
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ## Code of Conduct
 
 By participating in this project, you agree to maintain a respectful and inclusive environment for all contributors.
@@ -10,8 +12,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Prerequisites
 
-- Node.js 18.x or higher
-- npm 8.x or higher
+- Node.js 20.19+ or 22.12+ (see `engines` in package.json)
+- npm 10.x or higher
 - Angular 17+ knowledge
 
 ### Development Setup

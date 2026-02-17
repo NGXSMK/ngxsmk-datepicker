@@ -24,13 +24,15 @@
 
 ---
 
+**Last updated:** February 2026 · **Current stable:** v2.1.6
+
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.5` is live! This release adds **validation messages (i18n)**, **calendar loading state**, **demo light/dark theme fix**, **installation options** doc, and an **issue-reproduction app**. No breaking changes.
+> **Stable Release**: `v2.1.6` is live! This release adds **validation messages (i18n)**, **calendar loading state**, **demo light/dark theme fix**, **installation options** doc, and an **issue-reproduction app**. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.5 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.6 or later.
 
 ---
 
@@ -147,7 +149,7 @@ You can install without npm using Yarn, pnpm, Bun, from Git, a local path, or vi
 
 ## **Usage**
 
-ngxsmk-datepicker is a standalone component, so you can import it directly into your component or module.
+ngxsmk-datepicker is a standalone component, so you can import it directly into your component or module. If you see **NG1010** (`'imports' must be an array... Value could not be determined statically`) when using the Angular compiler plugin or in strict AOT builds, use `NgxsmkDatepickerModule` in your `imports` array instead of `NgxsmkDatepickerComponent` (same template: `<ngxsmk-datepicker>`).
 
 ### Signal Forms (Angular 21)
 
@@ -567,7 +569,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.5 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.6 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -660,7 +662,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.1.5:**
+### **Critical Updates in v2.1.6:**
 
 - ✅ **Validation messages**: User-facing i18n strings for invalid date, min/max; `validationError` output and on-screen error display
 - ✅ **Calendar loading state**: Visual spinner + text and screen-reader announcement while calendar opens/generates
