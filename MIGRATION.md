@@ -54,6 +54,7 @@ This document provides migration instructions for upgrading between major versio
 ### Changes
 
 - **Version Update**: Updated to version 2.1.5.
+- **New**: User-facing validation messages (i18n) for invalid date, date before min, date after max; calendar loading state (visual + a11y); installation options doc and demo page updates; demo light/dark theme fix; optional issue-reproduction app. Service refactors (calendar generation, parsing) are internal.
 - No breaking changes.
 
 ### Migration Steps
