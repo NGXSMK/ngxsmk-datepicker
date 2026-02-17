@@ -1,4 +1,4 @@
-import { Component, signal, HostListener, inject } from '@angular/core';
+import { Component, signal, HostListener, inject, effect } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { ThemeService } from '@tokiforge/angular';
@@ -56,6 +56,13 @@ export class AppComponent {
             defaultTheme: 'dark',
             persist: true,
             watchSystemTheme: true
+        });
+        // Sync data-theme attribute so CSS [data-theme="light"] overrides apply
+        effect(() => {
+            const theme = this.themeService.theme();
+            if (typeof document !== 'undefined' && document.documentElement) {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
         });
         this.fetchNpmDownloads();
         this.initSeo();

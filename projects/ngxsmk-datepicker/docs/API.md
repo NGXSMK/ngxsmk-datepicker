@@ -2,6 +2,8 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
+**Version**: 2.1.5+ | **Last updated**: February 17, 2026
+
 ## Versioning Policy
 
 ngxsmk-datepicker follows [Semantic Versioning](https://semver.org/):
@@ -59,6 +61,9 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `displayFormat` | `string` | `null` | Stable | Custom date format string (e.g., 'MM/DD/YYYY'). | `displayFormat="DD.MM.YYYY"` |
 | `showCalendarButton` | `boolean` | `true` | Stable | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field. | `[showCalendarButton]="false"` |
 | `minuteInterval` | `number` | `1` | Stable | Minute selection interval | `[minuteInterval]="15"` |
+| `showSeconds` | `boolean` | `false` | Stable | Show seconds in time selection | `[showSeconds]="true"` |
+| `secondInterval` | `number` | `1` | Stable | Second selection interval (e.g. 1, 5, 15) | `[secondInterval]="5"` |
+| `use24Hour` | `boolean` | `false` | Stable | Use 24-hour time format (no AM/PM) | `[use24Hour]="true"` |
 | `showRanges` | `boolean` | `true` | Stable | Show predefined ranges (range mode) | `[showRanges]="true"` |
 | `ranges` | `DateRange` | `null` | Stable | Predefined date ranges | `[ranges]="quickRanges"` |
 | `holidayProvider` | `HolidayProvider \| null` | `null` | Stable | Custom holiday provider | `[holidayProvider]="myHolidayProvider"` |
@@ -79,6 +84,17 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `closeAriaLabel` | `string` | `'Close calendar'` | Stable | ARIA label for close button | `closeAriaLabel="Close date picker"` |
 | `rtl` | `boolean \| null` | `null` | Stable | Right-to-left layout (auto-detects from locale or document.dir) | `[rtl]="true"` |
 | `userAriaDescribedBy` | `string` | `''` | Stable | Aria describedby ID provided by the user or the parent form field. Required for seamless Angular Material integration. | `[userAriaDescribedBy]="'my-help-id'"` |
+| `timeRangeMode` | `boolean` | `false` | Stable | In range mode with `showTime`, show separate start/end time pickers (from/to). | `[timeRangeMode]="true"` |
+| `timezone` | `string` | `undefined` | Stable | IANA timezone name for display and value handling (e.g. `America/New_York`, `UTC`). | `timezone="Europe/London"` |
+| `useNativePicker` | `boolean` | `false` | Stable | Use the browser native date/time input when supported (e.g. on mobile). | `[useNativePicker]="true"` |
+| `autoDetectMobile` | `boolean` | `true` | Stable | When true, append popover to body and use mobile styles on small/touch devices. | `[autoDetectMobile]="false"` |
+| `appendToBody` | `boolean` | `false` | Stable | Append calendar popover to `document.body` (e.g. to avoid overflow clipping). | `[appendToBody]="true"` |
+| `mobileModalStyle` | `'bottom-sheet' \| 'center' \| 'fullscreen'` | `'bottom-sheet'` | Stable | How the calendar is shown on mobile (when detected). | `mobileModalStyle="fullscreen"` |
+| `mobileTimePickerStyle` | `'wheel' \| 'slider' \| 'native'` | `'slider'` | Stable | Time picker style on mobile. | `mobileTimePickerStyle="wheel"` |
+| `mobileTheme` | `'compact' \| 'comfortable' \| 'spacious'` | `'comfortable'` | Stable | Density of the calendar on mobile. | `mobileTheme="compact"` |
+| `enableHapticFeedback` | `boolean` | `false` | Stable | Trigger haptic feedback on supported devices when selecting/clearing. | `[enableHapticFeedback]="true"` |
+| `enablePullToRefresh` | `boolean` | `false` | Experimental | Reserve for future pull-to-refresh on mobile. | — |
+| `enableVoiceInput` | `boolean` | `false` | Experimental | Reserve for future voice input. | — |
 
 ##### Outputs
 
@@ -86,6 +102,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 |--------|------|--------|-------------|---------|
 | `valueChange` | `EventEmitter<DatepickerValue>` | Stable | Emitted when value changes | `(valueChange)="onDateChange($event)"` |
 | `action` | `EventEmitter<{ type: string; payload?: any }>` | Stable | Emitted on user actions (dateSelected, timeChanged, etc.) | `(action)="handleAction($event)"` |
+| `validationError` | `EventEmitter<{ code: string; message: string }>` | Stable | Emitted when validation fails (e.g. invalid typed date, date before min, after max). Message is translated. | `(validationError)="onValidationError($event)"` |
 
 #### Methods
 

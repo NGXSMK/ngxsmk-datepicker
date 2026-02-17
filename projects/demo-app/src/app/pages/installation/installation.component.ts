@@ -15,12 +15,23 @@ import { I18nService } from '../../i18n/i18n.service';
       <p>{{ i18n.t().installation.npmLead }}</p>
       
       <div class="card bg-code">
-        <pre><code class="text-main">npm install ngxsmk-datepicker@2.1.3</code></pre>
+        <pre><code class="text-main">npm install ngxsmk-datepicker@2.1.5</code></pre>
       </div>
 
       <div class="tip">
         <strong>{{ i18n.t().installation.note.split(':')[0] }}:</strong> {{ i18n.t().installation.note.split(':')[1] }}
       </div>
+
+      <h2>{{ i18n.t().installation.altTitle }}</h2>
+      <p>{{ i18n.t().installation.altLead }}</p>
+      <div class="card bg-code">
+        <pre><code class="text-main">yarn add ngxsmk-datepicker@2.1.5
+pnpm add ngxsmk-datepicker@2.1.5
+bun add ngxsmk-datepicker@2.1.5</code></pre>
+      </div>
+      <p>
+        <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener noreferrer" class="link">{{ i18n.t().installation.moreLink }}</a>
+      </p>
 
       <h2>{{ i18n.t().installation.importTitle }}</h2>
       <p>{{ i18n.t().installation.importLead }}</p>
@@ -69,6 +80,7 @@ export class AppComponent {{ '{' }} {{ '}' }}</code></pre>
       }
     }
     .tip { margin-top: var(--space-lg); }
+    p a.link { display: inline-block; margin-top: var(--space-xs); }
   `]
 })
 export class InstallationComponent {

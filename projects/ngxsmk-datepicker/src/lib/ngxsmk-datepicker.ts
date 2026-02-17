@@ -57,8 +57,6 @@ import {
   get24Hour,
   update12HourState,
   processDateRanges,
-  generateYearGrid,
-  generateDecadeGrid,
 } from './utils/calendar.utils';
 import { CalendarHeaderComponent } from './components/calendar-header.component';
 import { CalendarMonthViewComponent } from './components/calendar-month-view.component';
@@ -140,6 +138,7 @@ interface MatFormFieldControlMock<T> {
     DatepickerParsingService,
     TouchGestureHandlerService,
     PopoverPositioningService,
+    DatePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -220,6 +219,7 @@ interface MatFormFieldControlMock<T> {
             }
           </div>
         } @else {
+          <div class="ngxsmk-input-and-error">
           <div
             class="ngxsmk-input-group"
             (click)="toggleCalendar($event)"
@@ -321,6 +321,16 @@ interface MatFormFieldControlMock<T> {
               </button>
             }
           </div>
+            @if (validationErrorMessage) {
+              <div
+                class="ngxsmk-validation-error"
+                role="alert"
+                [attr.aria-live]="'polite'"
+              >
+                {{ validationErrorMessage }}
+              </div>
+            }
+          </div>
         }
       }
 
@@ -371,6 +381,19 @@ interface MatFormFieldControlMock<T> {
               class="ngxsmk-datepicker-container"
               [ngClass]="classes?.container"
             >
+              @if (isCalendarOpening) {
+                <div
+                  class="ngxsmk-calendar-loading"
+                  role="status"
+                  aria-live="polite"
+                  [attr.aria-label]="getCalendarLoadingMessage()"
+                >
+                  <div class="ngxsmk-calendar-loading-spinner"></div>
+                  <span class="ngxsmk-calendar-loading-text">{{
+                    getCalendarLoadingMessage()
+                  }}</span>
+                </div>
+              }
               @if (
                 showRanges &&
                 rangesArray.length > 0 &&
@@ -968,7 +991,14 @@ interface MatFormFieldControlMock<T> {
  * @see {@link HolidayProvider} for custom holiday support
  */
 export class NgxsmkDatepickerComponent
-  implements OnInit, OnChanges, OnDestroy, AfterViewInit, ControlValueAccessor, MatFormFieldControlMock<DatepickerValue> {
+  implements
+    OnInit,
+    OnChanges,
+    OnDestroy,
+    AfterViewInit,
+    ControlValueAccessor,
+    MatFormFieldControlMock<DatepickerValue>
+{
   private static _idCounter = 0;
   private static _allInstances = new Set<NgxsmkDatepickerComponent>();
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
@@ -1005,12 +1035,12 @@ export class NgxsmkDatepickerComponent
     [];
   @Input() recurringPattern?: {
     pattern:
-    | 'daily'
-    | 'weekly'
-    | 'monthly'
-    | 'yearly'
-    | 'weekdays'
-    | 'weekends';
+      | 'daily'
+      | 'weekly'
+      | 'monthly'
+      | 'yearly'
+      | 'weekdays'
+      | 'weekends';
     startDate: Date;
     endDate?: Date;
     dayOfWeek?: number;
@@ -1114,7 +1144,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount must be at least 1. ` +
-          `Received: ${value}. Setting to 1.`,
+            `Received: ${value}. Setting to 1.`,
         );
       }
       this._calendarCount = 1;
@@ -1122,7 +1152,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
-          `Received: ${value}. Setting to 12.`,
+            `Received: ${value}. Setting to 12.`,
         );
       }
       this._calendarCount = 12;
@@ -1199,6 +1229,18 @@ export class NgxsmkDatepickerComponent
   }
 
   private isOpeningCalendar: boolean = false;
+  /** Public getter for template: true while calendar is opening/generating (loading state). */
+  get isCalendarOpening(): boolean {
+    return this.isOpeningCalendar;
+  }
+  /** Returns translated "Loading calendar..." for template and ARIA. */
+  getCalendarLoadingMessage(): string {
+    return (
+      this.getTranslation(
+        'calendarLoading' as keyof DatepickerTranslations,
+      ) || 'Loading calendar...'
+    );
+  }
   private openCalendarTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private lastToggleTime: number = 0;
   private touchStartTime: number = 0;
@@ -1259,14 +1301,14 @@ export class NgxsmkDatepickerComponent
         onErrorStateChanged: (hasError: boolean) => {
           this.errorState = hasError;
         },
-        onSyncError: (_error: unknown) => { },
+        onSyncError: (_error: unknown) => {},
         normalizeValue: (value: unknown) => {
           return this._normalizeValue(value);
         },
         isValueEqual: (val1: DatepickerValue, val2: DatepickerValue) => {
           return this.isValueEqual(val1, val2);
         },
-        onCalendarGenerated: () => { },
+        onCalendarGenerated: () => {},
         onStateChanged: () => {
           this.scheduleChangeDetection();
         },
@@ -1306,7 +1348,7 @@ export class NgxsmkDatepickerComponent
         this._errorState = hasError;
         this.stateChanges.next();
       },
-      onSyncError: (_error: unknown) => { },
+      onSyncError: (_error: unknown) => {},
       normalizeValue: (value: unknown) => {
         return this._normalizeValue(value);
       },
@@ -1431,8 +1473,8 @@ export class NgxsmkDatepickerComponent
 
   @Input() classes?: DatepickerClasses | undefined;
 
-  private onChange = (_: DatepickerValue) => { };
-  private onTouched = () => { };
+  private onChange = (_: DatepickerValue) => {};
+  private onTouched = () => {};
   public disabled = false;
   @Input() set disabledState(isDisabled: boolean) {
     if (this.disabled !== isDisabled) {
@@ -1540,6 +1582,31 @@ export class NgxsmkDatepickerComponent
 
   @Output() valueChange = new EventEmitter<DatepickerValue>();
   @Output() action = new EventEmitter<{ type: string; payload?: unknown }>();
+  /** Emitted when validation fails (e.g. invalid typed date, date before min, after max). Message is translated. */
+  @Output() validationError = new EventEmitter<{
+    code: string;
+    message: string;
+  }>();
+
+  private _validationErrorMessage: string | null = null;
+
+  /** User-facing validation error message when set (e.g. from typed input or min/max). */
+  get validationErrorMessage(): string | null {
+    return this._validationErrorMessage;
+  }
+
+  private setValidationError(code: string, message: string): void {
+    this._validationErrorMessage = message;
+    this.validationError.emit({ code, message });
+    this.cdr.markForCheck();
+  }
+
+  private clearValidationError(): void {
+    if (this._validationErrorMessage !== null) {
+      this._validationErrorMessage = null;
+      this.cdr.markForCheck();
+    }
+  }
 
   private _minDate: Date | null = null;
   @Input() set minDate(value: DateInput | null) {
@@ -1647,10 +1714,7 @@ export class NgxsmkDatepickerComponent
     generateMonthOptions(this._localeSignal(), this._currentYearSignal()),
   );
   public yearOptions = computed(() =>
-    generateYearOptions(
-      this._currentYearSignal(),
-      this.yearRange,
-    ),
+    generateYearOptions(this._currentYearSignal(), this.yearRange),
   );
   public decadeOptions: { label: string; value: number }[] = [];
   public yearGrid: number[] = [];
@@ -1906,6 +1970,11 @@ export class NgxsmkDatepickerComponent
    * This dramatically reduces DOM nodes for multi-calendar layouts.
    */
   renderedCalendars = computed(() => {
+    // Track month/year signal dependencies to trigger re-computation when navigating months
+    // This ensures the computed re-evaluates when changeMonth() or dropdown selection changes the month/year
+    this._currentMonthSignal();
+    this._currentYearSignal();
+
     const visibleIndices = this._visibleCalendarIndicesSignal();
     const allMonths = this.multiCalendarMonths;
     const lazyBuffer = 2; // Render 2 calendars outside viewport
@@ -2427,15 +2496,27 @@ export class NgxsmkDatepickerComponent
     }
 
     if (this.mode === 'single' && this.selectedDate) {
-      return this.formatDateSimple(this.selectedDate, this.displayFormat);
+      return this.parsingService.formatDateWithPattern(
+        this.selectedDate,
+        this.displayFormat ?? 'MM/DD/YYYY',
+      );
     } else if (this.mode === 'range' && this.startDate) {
       if (this.endDate) {
-        const start = this.formatDateSimple(this.startDate, this.displayFormat);
-        const end = this.formatDateSimple(this.endDate, this.displayFormat);
+        const start = this.parsingService.formatDateWithPattern(
+          this.startDate,
+          this.displayFormat ?? 'MM/DD/YYYY',
+        );
+        const end = this.parsingService.formatDateWithPattern(
+          this.endDate,
+          this.displayFormat ?? 'MM/DD/YYYY',
+        );
         return `${start} - ${end}`;
       } else {
         return (
-          this.formatDateSimple(this.startDate, this.displayFormat) + '...'
+          this.parsingService.formatDateWithPattern(
+            this.startDate,
+            this.displayFormat ?? 'MM/DD/YYYY',
+          ) + '...'
         );
       }
     } else if (this.mode === 'multiple' && this.selectedDates.length > 0) {
@@ -2518,39 +2599,6 @@ export class NgxsmkDatepickerComponent
     }
 
     return '';
-  }
-
-  private formatDateSimple(date: Date, format: string): string {
-    if (!date || isNaN(date.getTime())) return '';
-
-    const pad = (n: number, len: number = 2) => n.toString().padStart(len, '0');
-
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const hours12 = hours % 12 || 12;
-
-    return format
-      .replace(/YYYY/g, year.toString())
-      .replace(/YY/g, year.toString().slice(-2))
-      .replace(/MM/g, pad(month))
-      .replace(/M/g, month.toString())
-      .replace(/DD/g, pad(day))
-      .replace(/D/g, day.toString())
-      .replace(/hh/g, pad(hours12))
-      .replace(/h/g, hours12.toString())
-      .replace(/HH/g, pad(hours))
-      .replace(/H/g, hours.toString())
-      .replace(/mm/g, pad(minutes))
-      .replace(/m/g, minutes.toString())
-      .replace(/ss/g, pad(seconds))
-      .replace(/s/g, seconds.toString())
-      .replace(/a/g, ampm.toLowerCase())
-      .replace(/A/g, ampm);
   }
 
   get isBackArrowDisabled(): boolean {
@@ -2783,14 +2831,19 @@ export class NgxsmkDatepickerComponent
     }
 
     const nativeElement = this.elementRef?.nativeElement;
-    if (nativeElement && (nativeElement === target || nativeElement.contains(target))) {
+    if (
+      nativeElement &&
+      (nativeElement === target || nativeElement.contains(target))
+    ) {
       return true;
     }
 
     // Check portaled popover content if it exists
     if (this._shouldAppendToBody && this.portalViewRef) {
-      return this.portalViewRef.rootNodes.some((node: Node) =>
-        node === target || (node instanceof HTMLElement && node.contains(target))
+      return this.portalViewRef.rootNodes.some(
+        (node: Node) =>
+          node === target ||
+          (node instanceof HTMLElement && node.contains(target)),
       );
     }
 
@@ -3982,6 +4035,7 @@ export class NgxsmkDatepickerComponent
     }
 
     this.clearTouchHandledFlag();
+    this.clearValidationError();
 
     this.selectedDate = null;
     this.selectedDates = [];
@@ -4008,7 +4062,8 @@ export class NgxsmkDatepickerComponent
     if (this._currentMonth !== month) {
       this._currentMonth = month;
       this._currentMonthSignal.set(month);
-      this.currentDate.setMonth(month);
+      // Fix: Normalize to 1st of month to prevent Date overflow (e.g., Jan 31 -> Feb would become Mar)
+      this.currentDate = new Date(this.currentDate.getFullYear(), month, 1);
       this._invalidateMemoCache();
       this.generateCalendar();
     }
@@ -4023,7 +4078,8 @@ export class NgxsmkDatepickerComponent
     if (this._currentYear !== year) {
       this._currentYear = year;
       this._currentYearSignal.set(year);
-      this.currentDate.setFullYear(year);
+      // Fix: Normalize to 1st of month to prevent Date overflow (e.g., Feb 29 -> non-leap year)
+      this.currentDate = new Date(year, this.currentDate.getMonth(), 1);
       this._invalidateMemoCache();
       this.generateCalendar();
     }
@@ -4108,7 +4164,7 @@ export class NgxsmkDatepickerComponent
           try {
             const res = (resolvedField as () => unknown)();
             if (res && typeof res === 'object') resolvedField = res;
-          } catch { }
+          } catch {}
         }
 
         if (resolvedField && typeof resolvedField === 'object') {
@@ -4535,8 +4591,8 @@ export class NgxsmkDatepickerComponent
           if (isDevMode()) {
             console.warn(
               '[ngxsmk-datepicker] minDate is greater than maxDate. ' +
-              `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
-              'Adjusting maxDate to be at least 1 day after minDate.',
+                `minDate: ${this._minDate.toISOString()}, maxDate: ${this._maxDate.toISOString()}. ` +
+                'Adjusting maxDate to be at least 1 day after minDate.',
             );
           }
           // Prevent invalid state by adjusting maxDate to be at least 1 day after minDate
@@ -4555,7 +4611,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           '[ngxsmk-datepicker] timeOnly is only supported with mode="single". ' +
-          `Current mode: "${this.mode}". timeOnly will be disabled.`,
+            `Current mode: "${this.mode}". timeOnly will be disabled.`,
         );
       }
       this.timeOnly = false;
@@ -4568,7 +4624,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] minuteInterval must be at least 1. ` +
-          `Received: ${this.minuteInterval}. Setting to 1.`,
+            `Received: ${this.minuteInterval}. Setting to 1.`,
         );
       }
       this.minuteInterval = 1;
@@ -4579,7 +4635,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] secondInterval must be at least 1. ` +
-          `Received: ${this.secondInterval}. Setting to 1.`,
+            `Received: ${this.secondInterval}. Setting to 1.`,
         );
       }
       this.secondInterval = 1;
@@ -4590,7 +4646,7 @@ export class NgxsmkDatepickerComponent
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] yearRange must be at least 1. ` +
-          `Received: ${this.yearRange}. Setting to 1.`,
+            `Received: ${this.yearRange}. Setting to 1.`,
         );
       }
       this.yearRange = 1;
@@ -4899,7 +4955,7 @@ export class NgxsmkDatepickerComponent
           if (!isNaN(date.getTime())) {
             return date;
           }
-        } catch { }
+        } catch {}
       }
     }
     return momentObj.toDate();
@@ -5077,6 +5133,7 @@ export class NgxsmkDatepickerComponent
     if (!value) {
       this.clearValue();
       this.typedInputValue = '';
+      this.clearValidationError();
       this.scheduleChangeDetection();
       return;
     }
@@ -5087,9 +5144,52 @@ export class NgxsmkDatepickerComponent
     );
 
     if (parsedDate && this.isValidDate(parsedDate)) {
+      this.clearValidationError();
       this.applyTypedDate(parsedDate);
       this.typedInputValue = this.displayValue;
     } else {
+      if (!parsedDate) {
+        const msg =
+          this.getTranslation(
+            'invalidDateFormat' as keyof DatepickerTranslations,
+          ) || 'Please enter a valid date.';
+        this.setValidationError('invalidDateFormat', msg);
+      } else {
+        let code: string;
+        let msg: string;
+        if (this._minDate && parsedDate < this._minDate) {
+          const minFormatted = this.parsingService.formatDateWithPattern(
+            this._minDate,
+            this.displayFormat ?? 'MM/DD/YYYY',
+          );
+          msg =
+            this.getTranslation(
+              'dateBeforeMin' as keyof DatepickerTranslations,
+              undefined,
+              { minDate: minFormatted },
+            ) || `Date must be on or after ${minFormatted}.`;
+          code = 'dateBeforeMin';
+        } else if (this._maxDate && parsedDate > this._maxDate) {
+          const maxFormatted = this.parsingService.formatDateWithPattern(
+            this._maxDate,
+            this.displayFormat ?? 'MM/DD/YYYY',
+          );
+          msg =
+            this.getTranslation(
+              'dateAfterMax' as keyof DatepickerTranslations,
+              undefined,
+              { maxDate: maxFormatted },
+            ) || `Date must be on or before ${maxFormatted}.`;
+          code = 'dateAfterMax';
+        } else {
+          msg =
+            this.getTranslation(
+              'invalidDate' as keyof DatepickerTranslations,
+            ) || 'Invalid date.';
+          code = 'invalidDate';
+        }
+        this.setValidationError(code, msg);
+      }
       this.typedInputValue = this.displayValue;
       this.scheduleChangeDetection();
     }
@@ -5860,12 +5960,12 @@ export class NgxsmkDatepickerComponent
       if (this.recurringPattern) {
         const configBase: {
           pattern:
-          | 'daily'
-          | 'weekly'
-          | 'monthly'
-          | 'yearly'
-          | 'weekdays'
-          | 'weekends';
+            | 'daily'
+            | 'weekly'
+            | 'monthly'
+            | 'yearly'
+            | 'weekdays'
+            | 'weekends';
           startDate: Date;
           interval: number;
         } = {
@@ -5876,12 +5976,12 @@ export class NgxsmkDatepickerComponent
 
         const config: {
           pattern:
-          | 'daily'
-          | 'weekly'
-          | 'monthly'
-          | 'yearly'
-          | 'weekdays'
-          | 'weekends';
+            | 'daily'
+            | 'weekly'
+            | 'monthly'
+            | 'yearly'
+            | 'weekdays'
+            | 'weekends';
           startDate: Date;
           interval: number;
           endDate?: Date;
@@ -5931,10 +6031,10 @@ export class NgxsmkDatepickerComponent
       this.mode === 'single'
         ? this.selectedDate
         : this.mode === 'range' ||
-          this.mode === 'week' ||
-          this.mode === 'month' ||
-          this.mode === 'quarter' ||
-          this.mode === 'year'
+            this.mode === 'week' ||
+            this.mode === 'month' ||
+            this.mode === 'quarter' ||
+            this.mode === 'year'
           ? this.startDate
           : this.mode === 'multiple' && this.selectedDates.length > 0
             ? this.selectedDates[this.selectedDates.length - 1]
@@ -5986,8 +6086,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => { },
-        changeMonth: (_) => { },
+        onDateClick: (_) => {},
+        changeMonth: (_) => {},
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -6022,8 +6122,8 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => { },
-        changeMonth: (_) => { },
+        onDateClick: (_) => {},
+        changeMonth: (_) => {},
         onStateChanged: () => this.cdr.detectChanges(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -6052,7 +6152,7 @@ export class NgxsmkDatepickerComponent
           this.setTouchHandledFlag();
           this.onDateClick(d);
         },
-        changeMonth: (_) => { },
+        changeMonth: (_) => {},
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (d) => {
           this.hoveredDate = d;
@@ -6236,11 +6336,12 @@ export class NgxsmkDatepickerComponent
   }
 
   private generateYearGrid(): void {
-    this.yearGrid = generateYearGrid(this._currentYear);
+    this.yearGrid = this.calendarGenerationService.getYearGrid(this._currentYear);
   }
 
   private generateDecadeGrid(): void {
-    this.decadeGrid = generateDecadeGrid(this._currentDecade);
+    this.decadeGrid =
+      this.calendarGenerationService.getDecadeGrid(this._currentDecade);
   }
 
   public onYearClick(year: number): void {
@@ -6351,21 +6452,12 @@ export class NgxsmkDatepickerComponent
   private generateTimeline(): void {
     if (this.mode !== 'range') return;
 
-    const today = new Date();
-    const startDate = new Date(today);
-    startDate.setMonth(today.getMonth() - 6 * this.timelineZoomLevel);
-    const endDate = new Date(today);
-    endDate.setMonth(today.getMonth() + 6 * this.timelineZoomLevel);
-
-    this.timelineStartDate = startDate;
-    this.timelineEndDate = endDate;
-
-    this.timelineMonths = [];
-    const current = new Date(startDate);
-    while (current <= endDate) {
-      this.timelineMonths.push(new Date(current));
-      current.setMonth(current.getMonth() + 1);
-    }
+    const result = this.calendarGenerationService.getTimelineMonths(
+      this.timelineZoomLevel,
+    );
+    this.timelineStartDate = result.timelineStartDate;
+    this.timelineEndDate = result.timelineEndDate;
+    this.timelineMonths = result.timelineMonths;
 
     this.scheduleChangeDetection();
   }
@@ -6480,7 +6572,7 @@ export class NgxsmkDatepickerComponent
       },
       {
         isDateDisabled: (d) => this.isDateDisabled(d),
-        onDateClick: (_) => { },
+        onDateClick: (_) => {},
         changeMonth: (delta) => {
           if (!this.isBackArrowDisabled || delta > 0) {
             this.changeMonth(delta);
@@ -6492,7 +6584,7 @@ export class NgxsmkDatepickerComponent
           this.generateCalendar();
         },
         onStateChanged: () => this.cdr.markForCheck(),
-        onHoverChanged: (_) => { },
+        onHoverChanged: (_) => {},
       },
     );
   }
@@ -7077,7 +7169,7 @@ export class NgxsmkDatepickerComponent
       // Check for Ionic global object or key Ionic DOM elements/styles
       return (
         typeof (window as unknown as Record<string, unknown>)['Ionic'] !==
-        'undefined' ||
+          'undefined' ||
         (typeof document !== 'undefined' &&
           !!document.querySelector('ion-app')) ||
         (typeof getComputedStyle !== 'undefined' &&
@@ -7092,7 +7184,6 @@ export class NgxsmkDatepickerComponent
     }
   }
 
-
   private removeFocusTrap(): void {
     if (this.focusTrapCleanup) {
       this.focusTrapCleanup();
@@ -7100,5 +7191,3 @@ export class NgxsmkDatepickerComponent
     }
   }
 }
-
-

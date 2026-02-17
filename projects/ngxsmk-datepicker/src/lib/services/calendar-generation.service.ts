@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateInput } from '../utils/date.utils';
+import { generateYearGrid, generateDecadeGrid } from '../utils/calendar.utils';
 
 export interface CalendarMonth {
   month: number;
@@ -102,6 +103,48 @@ export class CalendarGenerationService {
    */
   clearCache(): void {
     this.monthCache.clear();
+  }
+
+  /**
+   * Get year grid for year view (12 years around current)
+   */
+  getYearGrid(currentYear: number): number[] {
+    return generateYearGrid(currentYear);
+  }
+
+  /**
+   * Get decade grid for decade view (12 decades)
+   */
+  getDecadeGrid(currentDecade: number): number[] {
+    return generateDecadeGrid(currentDecade);
+  }
+
+  /**
+   * Get timeline months for range mode timeline view
+   */
+  getTimelineMonths(zoomLevel: number): {
+    timelineStartDate: Date;
+    timelineEndDate: Date;
+    timelineMonths: Date[];
+  } {
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setMonth(today.getMonth() - 6 * zoomLevel);
+    const endDate = new Date(today);
+    endDate.setMonth(today.getMonth() + 6 * zoomLevel);
+
+    const timelineMonths: Date[] = [];
+    const current = new Date(startDate);
+    while (current <= endDate) {
+      timelineMonths.push(new Date(current));
+      current.setMonth(current.getMonth() + 1);
+    }
+
+    return {
+      timelineStartDate: startDate,
+      timelineEndDate: endDate,
+      timelineMonths,
+    };
   }
 
   /**

@@ -28,9 +28,9 @@
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.4` is live! This major update introduces a significant **UI Refresh (Border Detox)**, **Mobile Stability** improvements, and fixes for circular dependencies.
+> **Stable Release**: `v2.1.5` is live! This major update introduces a significant **UI Refresh (Border Detox)**, **Mobile Stability** improvements, and fixes for circular dependencies.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.4 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.5 or later.
 
 ---
 
@@ -137,7 +137,13 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 
 Install the package using npm:
 
-    npm install ngxsmk-datepicker@latest
+```bash
+npm install ngxsmk-datepicker@latest
+```
+
+### Alternative installation
+
+You can install without npm using Yarn, pnpm, Bun, from Git, a local path, or via CDN (ESM). Peer dependencies must still be installed in your app. For all options and caveats, see [INSTALLATION.md](../../docs/INSTALLATION.md) in the repo root.
 
 ## **Usage**
 
@@ -561,7 +567,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.4 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.5 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -654,7 +660,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.1.4:**
+### **Critical Updates in v2.1.5:**
 
 - ✅ **UI Refresh**: "Border Detox" for cleaner, modern aesthetics
 - ✅ **Mobile Stability**: Ghost click protection and better portaling logic

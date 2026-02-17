@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f5f5f5;
+}
+a {
+  color: #1976d2;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.app-nav {
+  padding: 1rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.app-nav h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  min-height: calc(100vh - 56px);
+}
+.page h2 {
+  margin-top: 0;
+}
+.instructions {
+  background: #f0f7ff;
+  border: 1px solid #c5d9f0;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+.instructions ol {
+  margin: 0.5rem 0 0 1.25rem;
+  padding: 0;
+}
+.instructions li {
+  margin: 0.25rem 0;
+}
+.datepicker-wrap {
+  margin: 1rem 0;
+}

@@ -133,7 +133,7 @@ const formatDate = (
  * Edge Cases and Coverage Tests for Calendar Utilities
  * Tests boundary conditions, leap years, and edge cases
  */
-xdescribe('Calendar Utils - Edge Cases & Coverage', () => {
+describe('Calendar Utils - Edge Cases & Coverage', () => {
   describe('isLeapYear - Edge Cases', () => {
     it('should identify standard leap years', () => {
       expect(isLeapYear(2024)).toBe(true);

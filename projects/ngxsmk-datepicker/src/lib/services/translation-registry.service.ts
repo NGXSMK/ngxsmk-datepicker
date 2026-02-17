@@ -122,6 +122,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Cargando calendario...',
       calendarReady: 'Calendario listo',
       keyboardShortcuts: 'Atajos de teclado',
+      invalidDateFormat: 'Ingrese una fecha válida.',
+      dateBeforeMin: 'La fecha debe ser igual o posterior a {{minDate}}.',
+      dateAfterMax: 'La fecha debe ser igual o anterior a {{maxDate}}.',
+      invalidDate: 'Fecha no válida.',
     };
     this.register('es', spanishTranslations);
     this.register('es-ES', spanishTranslations);
@@ -175,6 +179,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Chargement du calendrier...',
       calendarReady: 'Calendrier prêt',
       keyboardShortcuts: 'Raccourcis clavier',
+      invalidDateFormat: 'Veuillez saisir une date valide.',
+      dateBeforeMin: 'La date doit être égale ou postérieure à {{minDate}}.',
+      dateAfterMax: 'La date doit être égale ou antérieure à {{maxDate}}.',
+      invalidDate: 'Date invalide.',
     };
     this.register('fr', frenchTranslations);
     this.register('fr-FR', frenchTranslations);
@@ -228,6 +236,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Kalender wird geladen...',
       calendarReady: 'Kalender bereit',
       keyboardShortcuts: 'Tastaturkürzel',
+      invalidDateFormat: 'Bitte geben Sie ein gültiges Datum ein.',
+      dateBeforeMin: 'Das Datum muss am oder nach {{minDate}} liegen.',
+      dateAfterMax: 'Das Datum muss am oder vor {{maxDate}} liegen.',
+      invalidDate: 'Ungültiges Datum.',
     };
     this.register('de', germanTranslations);
     this.register('de-DE', germanTranslations);
@@ -281,6 +293,10 @@ export class TranslationRegistryService {
       calendarLoading: 'جارٍ تحميل التقويم...',
       calendarReady: 'التقويم جاهز',
       keyboardShortcuts: 'اختصارات لوحة المفاتيح',
+      invalidDateFormat: 'يرجى إدخال تاريخ صالح.',
+      dateBeforeMin: 'يجب أن يكون التاريخ في أو بعد {{minDate}}.',
+      dateAfterMax: 'يجب أن يكون التاريخ في أو قبل {{maxDate}}.',
+      invalidDate: 'تاريخ غير صالح.',
     };
     this.register('ar', arabicTranslations);
     this.register('ar-SA', arabicTranslations);
@@ -334,6 +350,10 @@ export class TranslationRegistryService {
       calendarLoading: '正在加载日历...',
       calendarReady: '日历已就绪',
       keyboardShortcuts: '键盘快捷键',
+      invalidDateFormat: '请输入有效日期。',
+      dateBeforeMin: '日期必须为 {{minDate}} 或之后。',
+      dateAfterMax: '日期必须为 {{maxDate}} 或之前。',
+      invalidDate: '无效日期。',
     };
     this.register('zh', chineseSimplifiedTranslations);
     this.register('zh-CN', chineseSimplifiedTranslations);
@@ -387,6 +407,10 @@ export class TranslationRegistryService {
       calendarLoading: 'カレンダーを読み込み中...',
       calendarReady: 'カレンダーの準備ができました',
       keyboardShortcuts: 'キーボードショートカット',
+      invalidDateFormat: '有効な日付を入力してください。',
+      dateBeforeMin: '日付は {{minDate}} 以降である必要があります。',
+      dateAfterMax: '日付は {{maxDate}} 以前である必要があります。',
+      invalidDate: '無効な日付です。',
     };
     this.register('ja', japaneseTranslations);
     this.register('ja-JP', japaneseTranslations);
@@ -440,6 +464,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Carregando calendário...',
       calendarReady: 'Calendário pronto',
       keyboardShortcuts: 'Atalhos de teclado',
+      invalidDateFormat: 'Insira uma data válida.',
+      dateBeforeMin: 'A data deve ser em ou após {{minDate}}.',
+      dateAfterMax: 'A data deve ser em ou antes de {{maxDate}}.',
+      invalidDate: 'Data inválida.',
     };
     this.register('pt', portugueseTranslations);
     this.register('pt-BR', portugueseTranslations);
@@ -493,6 +521,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Загрузка календаря...',
       calendarReady: 'Календарь готов',
       keyboardShortcuts: 'Сочетания клавиш',
+      invalidDateFormat: 'Введите правильную дату.',
+      dateBeforeMin: 'Дата должна быть не ранее {{minDate}}.',
+      dateAfterMax: 'Дата должна быть не позднее {{maxDate}}.',
+      invalidDate: 'Недопустимая дата.',
     };
     this.register('ru', russianTranslations);
     this.register('ru-RU', russianTranslations);
@@ -546,6 +578,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Laddar kalender...',
       calendarReady: 'Kalender redo',
       keyboardShortcuts: 'Kortkommandon',
+      invalidDateFormat: 'Ange ett giltigt datum.',
+      dateBeforeMin: 'Datumet måste vara den {{minDate}} eller senare.',
+      dateAfterMax: 'Datumet måste vara den {{maxDate}} eller tidigare.',
+      invalidDate: 'Ogiltigt datum.',
     };
     this.register('sv', swedishTranslations);
     this.register('sv-SE', swedishTranslations);
@@ -599,6 +635,10 @@ export class TranslationRegistryService {
       calendarLoading: '달력 로딩 중...',
       calendarReady: '달력 준비됨',
       keyboardShortcuts: '키보드 단축키',
+      invalidDateFormat: '올바른 날짜를 입력하세요.',
+      dateBeforeMin: '날짜는 {{minDate}} 또는 그 이후여야 합니다.',
+      dateAfterMax: '날짜는 {{maxDate}} 또는 그 이전이어야 합니다.',
+      invalidDate: '잘못된 날짜입니다.',
     };
     this.register('ko', koreanTranslations);
     this.register('ko-KR', koreanTranslations);
@@ -652,6 +692,10 @@ export class TranslationRegistryService {
       calendarLoading: '正在載入日曆...',
       calendarReady: '日曆已就緒',
       keyboardShortcuts: '鍵盤快捷鍵',
+      invalidDateFormat: '請輸入有效日期。',
+      dateBeforeMin: '日期必須為 {{minDate}} 或之後。',
+      dateAfterMax: '日期必須為 {{maxDate}} 或之前。',
+      invalidDate: '無效日期。',
     });
   }
 
@@ -704,6 +748,10 @@ export class TranslationRegistryService {
       calendarLoading: 'Loading calendar...',
       calendarReady: 'Calendar ready',
       keyboardShortcuts: 'Keyboard shortcuts',
+      invalidDateFormat: 'Please enter a valid date.',
+      dateBeforeMin: 'Date must be on or after {{minDate}}.',
+      dateAfterMax: 'Date must be on or before {{maxDate}}.',
+      invalidDate: 'Invalid date.',
     };
   }
 }

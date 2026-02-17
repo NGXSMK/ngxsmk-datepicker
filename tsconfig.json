@@ -48,6 +48,9 @@
     },
     {
       "path": "./projects/demo-app/tsconfig.spec.json"
+    },
+    {
+      "path": "./examples/angular-issue-test/tsconfig.app.json"
     }
   ]
 }
