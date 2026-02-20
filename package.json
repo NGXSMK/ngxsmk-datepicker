@@ -180,7 +180,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.0.2",
-    "@angular/cli": "^21.0.2",
+    "@angular/cli": "^21.1.4",
     "@angular/common": "^21.0.3",
     "@angular/compiler": "^21.0.3",
     "@angular/compiler-cli": "^21.0.3",
