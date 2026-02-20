@@ -4,7 +4,7 @@ import { DatepickerValue } from '../utils/calendar.utils';
 import type { DateAdapter } from '../adapters/date-adapter.interface';
 import { getStartOfDay } from '../utils/date.utils';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DatepickerParsingService {
   private datePipe = inject(DatePipe);
 

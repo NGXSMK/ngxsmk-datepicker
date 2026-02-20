@@ -2,8 +2,8 @@
 
 Complete API reference for ngxsmk-datepicker with JSDoc examples for improved IDE IntelliSense.
 
-**Version**: 2.1.6+  
-**Last Updated**: February 17, 2026
+**Version**: 2.1.7+  
+**Last Updated**: February 20, 2026
 
 ---
 
