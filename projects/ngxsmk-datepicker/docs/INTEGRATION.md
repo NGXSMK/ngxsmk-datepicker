@@ -1,6 +1,6 @@
 # Integration Guides
 
-**Last updated:** February 20, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 

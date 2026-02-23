@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.1.7+ | **Last updated**: February 20, 2026
+**Version**: 2.1.7+ | **Last updated**: February 23, 2026
 
 ## Versioning Policy
 
@@ -68,6 +68,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `ranges` | `DateRange` | `null` | Stable | Predefined date ranges | `[ranges]="quickRanges"` |
 | `holidayProvider` | `HolidayProvider \| null` | `null` | Stable | Custom holiday provider | `[holidayProvider]="myHolidayProvider"` |
 | `disableHolidays` | `boolean` | `false` | Stable | Disable holiday dates from selection | `[disableHolidays]="true"` |
+| `enableGoogleCalendar` | `boolean` | `false` | Stable | Enable seamless Google Calendar integration and sync. | `[enableGoogleCalendar]="true"` |
+| `googleClientId` | `string \| null` | `null` | Stable | Google API OAuth 2.0 Web Client ID for calendar sync. | `[googleClientId]="'my-client-id'"` |
 | `startAt` | `DateInput \| null` | `null` | Stable | Initial calendar view date | `[startAt]="nextMonth"` |
 | `weekStart` | `number \| null` | `null` | Stable | Override week start day (0=Sunday, 1=Monday, etc.) | `[weekStart]="1"` |
 | `yearRange` | `number` | `10` | Stable | Years to show in year selector | `[yearRange]="20"` |
@@ -102,6 +104,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 |--------|------|--------|-------------|---------|
 | `valueChange` | `EventEmitter<DatepickerValue>` | Stable | Emitted when value changes | `(valueChange)="onDateChange($event)"` |
 | `action` | `EventEmitter<{ type: string; payload?: any }>` | Stable | Emitted on user actions (dateSelected, timeChanged, etc.) | `(action)="handleAction($event)"` |
+| `googleSyncClick` | `EventEmitter<void>` | Stable | Emitted when the user clicks the Google Calendar sync button. | `(googleSyncClick)="onSyncClick()"` |
 | `validationError` | `EventEmitter<{ code: string; message: string }>` | Stable | Emitted when validation fails (e.g. invalid typed date, date before min, after max). Message is translated. | `(validationError)="onValidationError($event)"` |
 
 #### Methods

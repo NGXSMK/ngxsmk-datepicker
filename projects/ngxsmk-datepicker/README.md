@@ -24,7 +24,7 @@
 
 ---
 
-**Last updated:** February 20, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
 
 ### **Overview**
 
@@ -71,6 +71,7 @@
 
 ### **Advanced Functionality**
 
+- 📅 **Google Calendar Sync**: Built-in support for seamlessly syncing and displaying events natively from Google Calendar.
 - 🌐 **8-Language i18n**: Full localization for `en`, `de`, `es`, `sv`, `ko`, `zh`, `ja`, and `fr`.
 - 🛠️ **Plugin Architecture**: Extend functionality via hooks for rendering, validation, and shortcuts.
 - 🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.

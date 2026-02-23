@@ -2,12 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** February 20, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.7] - 2026-02-20
+## [2.1.7] - 2026-02-23
+
+### Added
+
+- **Google Calendar Integration**: Added full built-in support for syncing and displaying events from Google Calendar.
+  - New input `enableGoogleCalendar` (boolean) to toggle the feature directly from the template.
+  - New input `googleClientId` (string) to configure the Google OAuth Client ID.
+  - New `GoogleCalendarService` responsible for GIS library loading and seamless authentication syncing.
+  - Displays authenticated status natively within the calendar header popup.
+  - Emits `googleSyncClick` for tracking user interactions.
 
 ### Fixed
 
