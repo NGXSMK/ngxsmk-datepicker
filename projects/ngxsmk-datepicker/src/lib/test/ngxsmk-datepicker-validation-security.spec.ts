@@ -18,7 +18,7 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NgxsmkDatepickerComponent, ReactiveFormsModule],
-      providers: [DatePipe],
+      providers: [DatePipe, DatepickerParsingService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);

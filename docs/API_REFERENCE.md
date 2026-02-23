@@ -2,8 +2,8 @@
 
 Complete API reference for ngxsmk-datepicker with JSDoc examples for improved IDE IntelliSense.
 
-**Version**: 2.1.6+  
-**Last Updated**: February 17, 2026
+**Version**: 2.1.7+  
+**Last Updated**: February 23, 2026
 
 ---
 
@@ -547,6 +547,41 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
 @Input() showWeekNumbers: boolean = false;
 ```
 
+##### `enableGoogleCalendar`
+
+```typescript
+/**
+ * Enable seamless Google Calendar integration and sync
+ * @input enableGoogleCalendar
+ * @type {boolean}
+ * @default false
+ * @description
+ * Setting true enables features to sync and display
+ * Google Calendar events directly in the datepicker.
+ *
+ * @example
+ * <ngxsmk-datepicker [enableGoogleCalendar]="true"></ngxsmk-datepicker>
+ */
+@Input() enableGoogleCalendar: boolean = false;
+```
+
+##### `googleClientId`
+
+```typescript
+/**
+ * Google API OAuth 2.0 Web Client ID
+ * @input googleClientId
+ * @type {string | null}
+ * @default null
+ * @description
+ * Define a specific Google Client ID for the calendar integration.
+ *
+ * @example
+ * <ngxsmk-datepicker [googleClientId]="'my-client-id'"></ngxsmk-datepicker>
+ */
+@Input() googleClientId: string | null = null;
+```
+
 ##### `calendarCount`
 
 ```typescript
@@ -684,6 +719,30 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
  * }
  */
 @Output() dateChange = new EventEmitter<Date | Date[] | null>();
+```
+
+##### `googleSyncClick`
+
+```typescript
+/**
+ * Emitted when the user clicks the Google Calendar sync button
+ * @output googleSyncClick
+ * @type {EventEmitter<void>}
+ * @description
+ * Emitted when the user clicks the Google Calendar sync button in the calendar header.
+ * Use this to trigger the Google OAuth flow if manual handling is needed,
+ * or just for analytics tracking.
+ *
+ * @example
+ * <ngxsmk-datepicker
+ *   (googleSyncClick)="onSyncClick()"
+ * ></ngxsmk-datepicker>
+ *
+ * onSyncClick() {
+ *   console.log('Google Sync button clicked');
+ * }
+ */
+@Output() googleSyncClick = new EventEmitter<void>();
 ```
 
 ##### `calendarOpen`

@@ -6,7 +6,7 @@
  *
  * Usage:
  *   node scripts/set-beta-version.js 2.1.7-beta.0   # set exact version
- *   node scripts/set-beta-version.js next           # next beta (2.1.6 → 2.1.7-beta.0; 2.1.7-beta.0 → 2.1.7-beta.1)
+ *   node scripts/set-beta-version.js next           # next beta (2.1.7 → 2.1.8-beta.0; 2.1.8-beta.0 → 2.1.8-beta.1)
  */
 
 const fs = require('fs');

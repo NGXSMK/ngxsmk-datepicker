@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** February 2026 · **Current stable:** v2.1.6
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.6` is live! This release adds **validation messages (i18n)**, **calendar loading state**, **demo light/dark theme fix**, **installation options** doc, and an **issue-reproduction app**. No breaking changes.
+> **Stable Release**: `v2.1.7` is live! This release fixes the **DatePipe provider** issue (`NG0201`), making the library fully self-contained. It also includes all features from v2.1.6 like **validation messages (i18n)** and **calendar loading state**. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.6 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.7 or later.
 
 ---
 
@@ -71,6 +71,7 @@
 
 ### **Advanced Functionality**
 
+- 📅 **Google Calendar Sync**: Built-in support for seamlessly syncing and displaying events natively from Google Calendar.
 - 🌐 **8-Language i18n**: Full localization for `en`, `de`, `es`, `sv`, `ko`, `zh`, `ja`, and `fr`.
 - 🛠️ **Plugin Architecture**: Extend functionality via hooks for rendering, validation, and shortcuts.
 - 🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.
@@ -569,7 +570,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.6 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.7 now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -662,7 +663,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.1.6:**
+### **Critical Updates in v2.1.7:**
 
 - ✅ **Validation messages**: User-facing i18n strings for invalid date, min/max; `validationError` output and on-screen error display
 - ✅ **Calendar loading state**: Visual spinner + text and screen-reader announcement while calendar opens/generates

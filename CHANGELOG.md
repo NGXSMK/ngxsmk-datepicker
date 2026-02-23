@@ -2,10 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** February 2026 · **Current stable:** v2.1.6
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.1.7] - 2026-02-23
+
+### Added
+
+- **Google Calendar Integration**: Added full built-in support for syncing and displaying events from Google Calendar.
+  - New input `enableGoogleCalendar` (boolean) to toggle the feature directly from the template.
+  - New input `googleClientId` (string) to configure the Google OAuth Client ID.
+  - New `GoogleCalendarService` responsible for GIS library loading and seamless authentication syncing.
+  - Displays authenticated status natively within the calendar header popup.
+  - Emits `googleSyncClick` for tracking user interactions.
+
+### Fixed
+
+- **DatePipe Provider Issue**: Fixed `NG0201: No provider found for _DatePipe` error (Issue #193). Decoupled `DatepickerParsingService` from the root injector to ensure it correctly resolves `DatePipe` within the component context. Users no longer need to manually provide `DatePipe` in their application configuration.
 
 ## [2.1.6] - 2026-02-17
 
