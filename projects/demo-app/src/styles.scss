@@ -116,6 +116,8 @@ html[data-theme='light'] {
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-elevated) transparent;
 }
 
 html {
@@ -156,6 +158,8 @@ body {
     display: flex;
     margin-top: var(--header-height);
     flex: 1;
+    min-height: 0;
+    height: calc(100vh - var(--header-height));
 }
 
 .sidebar {
@@ -167,6 +171,7 @@ body {
     background: var(--color-bg-sidebar);
     border-right: 1px solid var(--color-border);
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 2rem 0;
     z-index: 90;
     transition: transform var(--transition-smooth);
@@ -186,10 +191,14 @@ body {
 
 .content-area {
     flex: 1;
+    min-height: 0;
     margin-left: var(--sidebar-width);
     padding: var(--space-2xl) var(--space-3xl);
     max-width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     transition: margin-left var(--transition-smooth);
+    -webkit-overflow-scrolling: touch;
 
     @media (max-width: 1024px) {
         margin-left: 0;
@@ -564,10 +573,6 @@ a.link:hover {
     padding: 0 var(--space-lg);
 }
 
-.flex {
-    display: flex;
-}
-
 .flex-col {
     flex-direction: column;
 }
@@ -576,16 +581,8 @@ a.link:hover {
     flex: 1;
 }
 
-.items-center {
-    align-items: center;
-}
-
 .justify-center {
     justify-content: center;
-}
-
-.justify-between {
-    justify-content: space-between;
 }
 
 .grid {
@@ -610,10 +607,6 @@ a.link:hover {
 
 .gap-sm {
     gap: var(--space-sm);
-}
-
-.gap-md {
-    gap: var(--space-md);
 }
 
 .gap-lg {
@@ -709,10 +702,6 @@ a.link:hover {
 }
 
 /* Typography Utilities */
-.text-center {
-    text-align: center;
-}
-
 .text-primary {
     color: var(--color-primary);
 }
@@ -786,10 +775,6 @@ a.link:hover {
 }
 
 /* Other Utilities */
-.w-full {
-    width: 100%;
-}
-
 .h-full {
     height: 100%;
 }
@@ -909,11 +894,6 @@ a.link:hover {
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-}
-
-* {
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-bg-elevated) transparent;
 }
 
 ::-webkit-scrollbar-track {

@@ -27,7 +27,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'New v2.1.7 Stability',
+            heroBadge: 'New v2.1.8 Stability',
             heroTitle: 'The Best Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'The most powerful, lightweight, and accessible datepicker for modern Angular projects. Seamless Signal-based state, Zoneless architecture, and infinite customization.',
@@ -288,7 +288,12 @@ export const translations = {
             ionicLead: 'For Ionic applications, the datepicker can be used inside ion-item. We recommend using useNativePicker: true on mobile devices for the best user experience.',
             proTip: 'Pro Tip',
             proTipText: 'Use appendToBody: true when using the datepicker inside Modals or Overlays to avoid stacking context issues.',
-            usageMatTitle: 'Usage with MatFormField'
+            usageMatTitle: 'Usage with MatFormField',
+            modalSectionTitle: 'Datepicker in a modal',
+            modalSectionLead: 'Click the button below to open a modal. The datepicker inside is auto-detected and its calendar is appended to the body so it opens above the modal.',
+            openModalBtn: 'Open modal with datepicker',
+            closeModal: 'Close',
+            modalDatePlaceholder: 'Select date'
         }
     },
     de: {
@@ -319,7 +324,7 @@ export const translations = {
             playground: 'Spielplatz'
         },
         home: {
-            heroBadge: 'Neu v2.1.7 Stabilität',
+            heroBadge: 'Neu v2.1.8 Stabilität',
             heroTitle: 'Der beste Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Der leistungsstärkste, leichteste und barrierefreieste Datepicker für moderne Angular-Projekte. Nahtloser Signal-basierter Status, Zoneless-Architektur und unendliche Anpassungsmöglichkeiten.',
@@ -562,7 +567,12 @@ export const translations = {
             ionicLead: 'Für Ionic-Anwendungen kann der Datepicker innerhalb von ion-item verwendet werden. Wir empfehlen die Verwendung von useNativePicker: true auf Mobilgeräten für das beste Benutzererlebnis.',
             proTip: 'Profi-Tipp',
             proTipText: 'Verwenden Sie appendToBody: true, wenn Sie den Datepicker in Modals oder Overlays verwenden, um Probleme mit dem Stacking-Kontext zu vermeiden.',
-            usageMatTitle: 'Verwendung mit MatFormField'
+            usageMatTitle: 'Verwendung mit MatFormField',
+            modalSectionTitle: 'Datepicker in einem Modal',
+            modalSectionLead: 'Klicken Sie auf die Schaltfläche, um ein Modal zu öffnen. Der Datepicker darin wird erkannt und sein Kalender wird am Body angehängt, sodass er über dem Modal erscheint.',
+            openModalBtn: 'Modal mit Datepicker öffnen',
+            closeModal: 'Schließen',
+            modalDatePlaceholder: 'Datum wählen'
         }
     },
     es: {
@@ -593,7 +603,7 @@ export const translations = {
             playground: 'Laboratorio'
         },
         home: {
-            heroBadge: 'Nuevo v2.1.7 Estabilidad',
+            heroBadge: 'Nuevo v2.1.8 Estabilidad',
             heroTitle: 'El mejor Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'El selector de fechas más potente, ligero y accesible para proyectos modernos de Angular. Estado impecable basado en Signals, arquitectura Zoneless y personalización infinita.',
@@ -818,7 +828,12 @@ export const translations = {
             ionicLead: 'Para aplicaciones Ionic, el selector de fechas se puede usar dentro de ion-item. Recomendamos usar useNativePicker: true en dispositivos móviles para la mejor experiencia de usuario.',
             proTip: 'Consejo Pro',
             proTipText: 'Use appendToBody: true cuando use el selector de fechas dentro de Modales o Superposiciones para evitar problemas de contexto de apilamiento.',
-            usageMatTitle: 'Uso con MatFormField'
+            usageMatTitle: 'Uso con MatFormField',
+            modalSectionTitle: 'Datepicker en un modal',
+            modalSectionLead: 'Haz clic en el botón para abrir un modal. El datepicker dentro se detecta y su calendario se ancla al body para mostrarse sobre el modal.',
+            openModalBtn: 'Abrir modal con datepicker',
+            closeModal: 'Cerrar',
+            modalDatePlaceholder: 'Seleccionar fecha'
         }
     },
     sv: {
@@ -849,7 +864,7 @@ export const translations = {
             playground: 'Lekplats'
         },
         home: {
-            heroBadge: 'Ny v2.1.7 stabilitet',
+            heroBadge: 'Ny v2.1.8 stabilitet',
             heroTitle: 'Den bästa open-source',
             heroSubtitle: 'Angular datumväljare',
             heroLead: 'Den mest kraftfulla, lätta och tillgängliga datumväljaren för moderna Angular-projekt. Sömlös signalbaserad status, zonlös arkitektur och oändlig anpassning.',
@@ -1074,7 +1089,12 @@ export const translations = {
             ionicLead: 'För Ionic-applikationer kan datumväljaren användas inuti ion-item. Vi rekommenderar att du använder useNativePicker: true på mobila enheter för bästa användarupplevelse.',
             proTip: 'Pro-tips',
             proTipText: 'Använd appendToBody: true när du använder datumväljaren inuti modaler eller överlägg för att undvika problem med staplingskontext.',
-            usageMatTitle: 'Användning med MatFormField'
+            usageMatTitle: 'Användning med MatFormField',
+            modalSectionTitle: 'Datepicker i en modal',
+            modalSectionLead: 'Klicka på knappen för att öppna en modal. Datepickern inuti upptäcks och dess kalender fästs vid body så att den visas ovanför modalen.',
+            openModalBtn: 'Öppna modal med datepicker',
+            closeModal: 'Stäng',
+            modalDatePlaceholder: 'Välj datum'
         }
     },
     ko: {
@@ -1105,7 +1125,7 @@ export const translations = {
             playground: '플레이그라운드'
         },
         home: {
-            heroBadge: '새로운 v2.1.7 안정성',
+            heroBadge: '새로운 v2.1.8 안정성',
             heroTitle: '최고의 오픈 소스',
             heroSubtitle: 'Angular 데이트피커',
             heroLead: '현대적인 Angular 프로젝트를 위한 가장 강력하고 가볍고 접근성이 좋은 데이트피커입니다. 원활한 Signal 기반 상태, Zoneless 아키텍처 및 무한한 커스터마이징을 제공합니다.',
@@ -1330,7 +1350,12 @@ export const translations = {
             ionicLead: 'Ionic 애플리케이션의 경우, 데이트피커를 ion-item 내에서 사용할 수 있습니다. 최상의 사용자 경험을 위해 모바일 기기에서는 useNativePicker: true를 사용하는 것이 좋습니다.',
             proTip: '프로 팁',
             proTipText: '모달이나 오버레이 내에서 데이트피커를 사용할 때는 스태킹 컨텍스트 문제를 피하기 위해 appendToBody: true를 사용하십시오.',
-            usageMatTitle: 'MatFormField와 함께 사용'
+            usageMatTitle: 'MatFormField와 함께 사용',
+            modalSectionTitle: '모달 내 데이트피커',
+            modalSectionLead: '아래 버튼을 클릭하면 모달이 열립니다. 내부의 데이트피커가 자동 감지되어 캘린더가 body에 추가되어 모달 위에 표시됩니다.',
+            openModalBtn: '데이트피커가 있는 모달 열기',
+            closeModal: '닫기',
+            modalDatePlaceholder: '날짜 선택'
         }
     },
     zh: {
@@ -1361,7 +1386,7 @@ export const translations = {
             playground: '演练场'
         },
         home: {
-            heroBadge: '全新 v2.1.7 稳定性',
+            heroBadge: '全新 v2.1.8 稳定性',
             heroTitle: '最佳开源',
             heroSubtitle: 'Angular 日期选择器',
             heroLead: '适用于现代 Angular 项目的功能最强大、轻量且符合无障碍标准的日期选择器。无缝的基于 Signal 的状态管理、无 Zone 架构和无限的自定义选项。',
@@ -1586,7 +1611,12 @@ export const translations = {
             ionicLead: '对于 Ionic 应用程序，日期选择器可以在 ion-item 内部使用。我们建议在移动设备上使用 useNativePicker: true 以获得最佳用户体验。',
             proTip: '小贴士',
             proTipText: '在模态框或弹出层中使用日期选择器时，请使用 appendToBody: true 以避免堆叠上下文问题。',
-            usageMatTitle: '在 MatFormField 中使用'
+            usageMatTitle: '在 MatFormField 中使用',
+            modalSectionTitle: '模态框中的日期选择器',
+            modalSectionLead: '点击下方按钮打开模态框。其中的日期选择器会被自动识别，其日历会附加到 body 上，从而显示在模态框上方。',
+            openModalBtn: '打开带日期选择器的模态框',
+            closeModal: '关闭',
+            modalDatePlaceholder: '选择日期'
         }
     },
     ja: {
@@ -1617,7 +1647,7 @@ export const translations = {
             playground: 'プレイグラウンド'
         },
         home: {
-            heroBadge: '新しい v2.1.7 の安定性',
+            heroBadge: '新しい v2.1.8 の安定性',
             heroTitle: '最高のオープンソース',
             heroSubtitle: 'Angular デートピッカー',
             heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、 そして 無限のカスタマイズを提供します。',
@@ -1842,7 +1872,12 @@ export const translations = {
             ionicLead: 'Ionic アプリケーションの場合、デートピッカーは ion-item 内で使用できます。最高のユーザー エクスペリエンスを実現するために、モバイル デバイスでは useNativePicker: true を使用することをお勧めします。',
             proTip: 'プロのヒント',
             proTipText: 'モーダルやオーバーレイ内でデートピッカーを使用する場合は、スタッキング コンテキストの問題を避けるために appendToBody: true を使用してください。',
-            usageMatTitle: 'MatFormField での使用'
+            usageMatTitle: 'MatFormField での使用',
+            modalSectionTitle: 'モーダル内のデートピッカー',
+            modalSectionLead: '下のボタンをクリックしてモーダルを開きます。内側のデートピッカーは自動検出され、カレンダーは body に追加されてモーダルの上に表示されます。',
+            openModalBtn: 'デートピッカー付きモーダルを開く',
+            closeModal: '閉じる',
+            modalDatePlaceholder: '日付を選択'
         }
     },
     fr: {
@@ -1873,7 +1908,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'Nouvelle stabilité v2.1.7',
+            heroBadge: 'Nouvelle stabilité v2.1.8',
             heroTitle: 'Le meilleur Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Le sélecteur de date le plus puissant, léger et accessible pour les projets Angular modernes. État fluide basé sur les Signals, architecture Zoneless et personnalisation infinie.',
@@ -2098,7 +2133,12 @@ export const translations = {
             ionicLead: 'Pour les applications Ionic, le sélecteur de date peut être utilisé à l\'intérieur de ion-item. Nous recommandons d\'utiliser useNativePicker: true sur les appareils mobiles pour une expérience utilisateur optimale.',
             proTip: 'Conseil de pro',
             proTipText: 'Utilisez appendToBody: true lorsque vous utilisez le sélecteur de date dans des modales ou des superpositions pour éviter les problèmes de contexte d\'empilement.',
-            usageMatTitle: 'Utilisation avec MatFormField'
+            usageMatTitle: 'Utilisation avec MatFormField',
+            modalSectionTitle: 'Datepicker dans un modal',
+            modalSectionLead: 'Cliquez sur le bouton pour ouvrir un modal. Le datepicker à l\'intérieur est détecté et son calendrier est attaché au body pour s\'afficher au-dessus du modal.',
+            openModalBtn: 'Ouvrir le modal avec le datepicker',
+            closeModal: 'Fermer',
+            modalDatePlaceholder: 'Choisir la date'
         }
     }
 };
