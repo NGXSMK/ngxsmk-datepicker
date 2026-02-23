@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.7` is live! This release fixes the **DatePipe provider** issue (`NG0201`), making the library fully self-contained. It also includes all features from v2.1.6 like **validation messages (i18n)** and **calendar loading state**. No breaking changes.
+> **Stable Release**: `v2.1.8` is live! This release fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS (SonarLint). Includes all fixes from v2.1.7 (DatePipe provider, etc.). No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.7 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.8 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.1.7
+npm install ngxsmk-datepicker@2.1.8
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.1.7` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.7` |
-| **Bun** | `bun add ngxsmk-datepicker@2.1.7` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.7` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.1.8` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.8` |
+| **Bun** | `bun add ngxsmk-datepicker@2.1.8` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.8` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.7/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.7/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.8/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.8/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -585,7 +585,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.7 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.8 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)

@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.1.7+ | **Last updated**: February 23, 2026
+**Version**: 2.1.8+ | **Last updated**: February 23, 2026
 
 ## Versioning Policy
 
@@ -90,7 +90,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `timezone` | `string` | `undefined` | Stable | IANA timezone name for display and value handling (e.g. `America/New_York`, `UTC`). | `timezone="Europe/London"` |
 | `useNativePicker` | `boolean` | `false` | Stable | Use the browser native date/time input when supported (e.g. on mobile). | `[useNativePicker]="true"` |
 | `autoDetectMobile` | `boolean` | `true` | Stable | When true, append popover to body and use mobile styles on small/touch devices. | `[autoDetectMobile]="false"` |
-| `appendToBody` | `boolean` | `false` | Stable | Append calendar popover to `document.body` (e.g. to avoid overflow clipping). | `[appendToBody]="true"` |
+| `appendToBody` | `boolean` | `false` | Stable | Append calendar popover to `document.body`. Use inside modals, dialogs, or overlays so the calendar positions correctly and is not clipped. Recommended when using the datepicker in a modal. | `[appendToBody]="true"` |
 | `mobileModalStyle` | `'bottom-sheet' \| 'center' \| 'fullscreen'` | `'bottom-sheet'` | Stable | How the calendar is shown on mobile (when detected). | `mobileModalStyle="fullscreen"` |
 | `mobileTimePickerStyle` | `'wheel' \| 'slider' \| 'native'` | `'slider'` | Stable | Time picker style on mobile. | `mobileTimePickerStyle="wheel"` |
 | `mobileTheme` | `'compact' \| 'comfortable' \| 'spacious'` | `'comfortable'` | Stable | Density of the calendar on mobile. | `mobileTheme="compact"` |

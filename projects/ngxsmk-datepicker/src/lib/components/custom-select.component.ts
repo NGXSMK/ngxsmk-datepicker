@@ -42,6 +42,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       -moz-user-select: none;
       -ms-user-select: none;
       z-index: 1;
+      box-sizing: border-box;
     }
     :host[data-open="true"] {
       z-index: 10000000;
@@ -54,6 +55,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
       position: relative;
       display: flex;
       width: 100%;
+      height: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -70,6 +74,11 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     .ngxsmk-select-display {
       display: flex; 
       align-items: center;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      box-sizing: border-box;
       border: 1px solid rgba(0, 0, 0, 0.06); 
       background: rgba(0, 0, 0, 0.02);
       color: var(--datepicker-text-color, #1f2937);

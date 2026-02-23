@@ -1,6 +1,6 @@
 # Integration Guides
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
@@ -9,6 +9,7 @@ This document provides integration examples for using ngxsmk-datepicker with pop
 - [Angular Material](#angular-material)
 - [Ionic](#ionic)
 - [Tailwind CSS](#tailwind-css)
+- [Modals and overlays](#modals-and-overlays)
 
 ## Angular Material
 
@@ -521,6 +522,20 @@ constructor(private themeBuilder: ThemeBuilderService) {
 - Make sure all required peer dependencies are installed
 - Check that Angular version is compatible (Angular 17+)
 - Verify that standalone components are properly imported
+
+## Modals and overlays
+
+When using the datepicker inside a modal, dialog, or overlay (e.g. `role="dialog"`, Angular Material dialog, or a custom modal), set **`[appendToBody]="true"`** so the calendar popover is appended to `document.body`. This avoids stacking-context and overflow issues and ensures the popover positions correctly and does not flash in the wrong place on first open. The library can auto-detect some modal containers and enable append-to-body; for reliability we recommend setting it explicitly:
+
+```html
+<ngxsmk-datepicker
+  [appendToBody]="true"
+  [(ngModel)]="myDate"
+  placeholder="Pick a date">
+</ngxsmk-datepicker>
+```
+
+See the demo app **Integrations** page for a full "Datepicker in a modal" example.
 
 ## Additional Resources
 

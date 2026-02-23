@@ -2,10 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.7
+**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.1.8] - 2026-02-23
+
+### Fixed
+
+- **appendToBody positioning (Issue #206)**: When `appendToBody` is enabled, the calendar popover now positions correctly next to the input. The popover uses viewport coordinates and `position: fixed` so it is no longer misplaced on scrolled pages. Inline styles are applied with `!important` so desktop CSS rules do not override the computed position.
+- **Datepicker in modal**: When the datepicker is used inside a modal (or any dialog), the popover no longer flashes in the wrong place on first open. The popover is hidden until positioned and then revealed; modal detection auto-enables `appendToBody`. Demo app Integrations page includes a "Datepicker in a modal" example with `[appendToBody]="true"`.
+- **Popover width**: The calendar popover now matches the input width (with a minimum of 280px) when positioning is applied, so the dropdown aligns visually with the trigger.
+
+### Changed
+
+- **Loading time**: Reduced opening/loading delays so the calendar appears sooner—desktop ~80–120ms (was 200–350ms), mobile ~280ms (was 800ms). Click path delay before positioning/reveal reduced from 100ms to 50ms.
+- **CSS (SonarLint)**: Resolved duplicate selectors, commented-out code, and duplicate properties in `datepicker.css` for cleaner styles.
 
 ## [2.1.7] - 2026-02-23
 

@@ -71,6 +71,9 @@
             "polyfills": [
               "zone.js"
             ],
+            "allowedCommonJsDependencies": [
+              "@tokiforge/core"
+            ],
             "assets": [
               {
                 "glob": "**/*",
@@ -104,8 +107,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "130kB",
-                  "maximumError": "150kB"
+                  "maximumWarning": "150kB",
+                  "maximumError": "170kB"
                 }
               ],
               "outputHashing": "all"
@@ -177,9 +180,13 @@
             "browser": "examples/angular-issue-test/src/main.ts",
             "tsConfig": "examples/angular-issue-test/tsconfig.app.json",
             "preserveSymlinks": true,
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "assets": [],
-            "styles": ["examples/angular-issue-test/src/styles.scss"]
+            "styles": [
+              "examples/angular-issue-test/src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
