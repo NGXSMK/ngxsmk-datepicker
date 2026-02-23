@@ -510,6 +510,8 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | clearAriaLabel     | string                                                                                                                                                 | 'Clear selection'  | Aria label for clear button.                                                                                    |
 | closeAriaLabel     | string                                                                                                                                                 | 'Close calendar'   | Aria label for close button.                                                                                    |
 | classes            | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, calendarBtn?, closeBtn? } | undefined          | Tailwind-friendly class overrides for theming.                                                                  |
+| enableGoogleCalendar| boolean                                                                                                                                                | false              | Enable seamless Google Calendar integration and sync.                                                           |
+| googleClientId     | string \| null                                                                                                                                         | null               | Google API OAuth 2.0 Web Client ID for authentication.                                                          |
 
 ### **Outputs**
 
@@ -517,6 +519,7 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | :---------- | :------------------------------ | :------------------------------------------------------------ |
 | valueChange | DatepickerValue                 | Emits the newly selected date, range, or array of dates.      |
 | action      | { type: string; payload?: any } | Emits various events like `dateSelected`, `timeChanged`, etc. |
+| googleSyncClick | void                          | Emitted when the user clicks the Google Calendar sync button. |
 
 ## **🎨 Theming**
 
