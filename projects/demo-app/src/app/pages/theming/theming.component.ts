@@ -27,8 +27,9 @@ import { NgxsmkDatepickerComponent, ThemeBuilderService, DatepickerTheme } from 
           </div>
           
           <div class="flex flex-col gap-sm" style="max-width: 300px;">
-            <label class="text-sm font-bold">Select Date</label>
+            <label class="text-sm font-bold" for="theming-datepicker">Select Date</label>
             <ngxsmk-datepicker 
+              id="theming-datepicker"
               [(ngModel)]="dateValue" 
               [appendToBody]="true"
               [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'">

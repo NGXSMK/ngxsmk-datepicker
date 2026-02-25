@@ -39,13 +39,56 @@ export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
       </div>
 
       <h2>Ionic Framework</h2>
-      <p>For Ionic applications, the datepicker can be used inside <code>ion-item</code>. We recommend using <code>useNativePicker: true</code> on mobile devices for the best user experience.</p>
+      <p>For Ionic applications, the datepicker feels right at home. It functions seamlessly inside <code>ion-item</code> and automatically inherits your application's Ionic CSS variables (like <code>--ion-color-primary</code> for the active state). We highly recommend enabling <code>[useNativePicker]="true"</code> to leverage the native OS device wheel pickers on mobile devices for the best user experience.</p>
       
       <div class="card">
         <pre><code class="text-main">&lt;ion-item&gt;
   &lt;ion-label position="floating"&gt;Date&lt;/ion-label&gt;
-  &lt;ngxsmk-datepicker [inline]="false"&gt;&lt;/ngxsmk-datepicker&gt;
+  &lt;ngxsmk-datepicker 
+    [useNativePicker]="true" 
+    [inline]="false"&gt;
+  &lt;/ngxsmk-datepicker&gt;
 &lt;/ion-item&gt;</code></pre>
+      </div>
+
+      <h2>React, Vue, & Vanilla JS</h2>
+      <p>Since <code>ngxsmk-datepicker</code> is a highly isolated Angular library without heavy dependencies, it can be compiled into <strong>Custom Web Components</strong> using Angular Elements. This allows you to use exactly the same beautiful datepicker in React, Vue, Svelte, or Vanilla JavaScript.</p>
+      <div class="card bg-code">
+        <pre><code class="text-main">// In your React component
+import React, {{ '{' }} useState, useEffect, useRef {{ '}' }} from 'react';
+// Import the compiled Angular Element bundle
+import 'ngxsmk-datepicker-element/bundle.js';
+
+export function DateSelector() {{ '{' }}
+  const datepickerRef = useRef(null);
+  
+  useEffect(() =&gt; {{ '{' }}
+    // Listen to custom events
+    datepickerRef.current.addEventListener('dateSelect', (e) =&gt; {{ '{' }}
+      console.log('Selected date:', e.detail);
+    {{ '}' }});
+  {{ '}' }}, []);
+
+  return (
+    &lt;div&gt;
+      &lt;ngxsmk-datepicker ref={{ '{' }}datepickerRef{{ '}' }} mode="range"&gt;&lt;/ngxsmk-datepicker&gt;
+    &lt;/div&gt;
+  );
+{{ '}' }}</code></pre>
+      </div>
+
+      <h2>Tailwind CSS</h2>
+      <p>Using Tailwind? No problem! The <code>ngxsmk-datepicker</code> supports a powerful <code>[classes]</code> input that allows you to easily inject utility classes into specific internal DOM elements. Override paddings, typography, backgrounds, or borders natively.</p>
+      
+      <div class="card bg-code">
+        <pre><code class="text-main">&lt;ngxsmk-datepicker
+  [classes]="&#123;
+    header: 'bg-indigo-600 text-white rounded-t-xl',
+    calendar: 'shadow-2xl border-indigo-200',
+    navPrev: 'hover:bg-indigo-500 text-white',
+    navNext: 'hover:bg-indigo-500 text-white'
+  &#125;"&gt;
+&lt;/ngxsmk-datepicker&gt;</code></pre>
       </div>
 
       <h2>{{ i18n.t().integrations.modalSectionTitle }}</h2>

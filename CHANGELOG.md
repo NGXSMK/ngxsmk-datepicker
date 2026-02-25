@@ -13,25 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Enhanced Visibility**: Fixed text contrast in dropdown options for better accessibility, ensuring high-contrast labels for month and year selections.
 
-### Changed
-
-- **Header Select Synchronization**: Migrated `CustomSelectComponent` and `CalendarHeaderComponent` to `ViewEncapsulation.None`. Consolidated all dropdown styles into `_header.scss` to enable seamless global layout control.
-- **Improved Dropdown Layout**: Implemented a flexbox-based `justify-content: space-between` layout for Month/Year selectors, ensuring a professional, edge-to-edge gap between text and icons on mobile screens.
-- **UI Refinement**: Unified container border radii to 12px for visual consistency, removed unnecessary borders from the popover container, and significantly reduced paddings/margins in the header, calendar grid, and footer for a tighter, more modern look.
-- **Performance Optimization**: Further reduced internal calendar opening timers for faster user feedback—Mobile delay reduced from 280ms to 150ms, and Desktop delay reduced to 60ms.
-
-## [2.1.9] - 2026-02-23
-
 ### Fixed
 
+- **TypeScript Strictness Overhaul**: Comprehensive rewrite of library component typing to eliminate all `any` types. Ensure full compatibility with `exactOptionalPropertyTypes` strict configurations.
+  - Corrected `classes` input type from `Record<string, unknown>` to the concrete `DatepickerClasses` interface explicitly allowing `| undefined = undefined` to support strict assignments.
+  - Applied specific types everywhere (`Date[]` for timelineMonths, `{label, value: boolean}[]` for ampmOptions, explicit Event and TouchEvent payloads).
+  - Adjusted Angular pseudo-event `keydown.enter` handlers expecting `KeyboardEvent` to use the base `Event` type for robust type safety.
 - **appendToBody positioning (Issue #206)**: When `appendToBody` is enabled, the calendar popover now positions correctly next to the input. The popover uses viewport coordinates and `position: fixed` so it is no longer misplaced on scrolled pages. Inline styles are applied with `!important` so desktop CSS rules do not override the computed position.
 - **Datepicker in modal**: When the datepicker is used inside a modal (or any dialog), the popover no longer flashes in the wrong place on first open. The popover is hidden until positioned and then revealed; modal detection auto-enables `appendToBody`. Demo app Integrations page includes a "Datepicker in a modal" example with `[appendToBody]="true"`.
 - **Popover width**: The calendar popover now matches the input width (with a minimum of 280px) when positioning is applied, so the dropdown aligns visually with the trigger.
 
 ### Changed
 
+- **Header Select Synchronization**: Migrated `CustomSelectComponent` and `CalendarHeaderComponent` to `ViewEncapsulation.None`. Consolidated all dropdown styles into `_header.scss` to enable seamless global layout control.
+- **Improved Dropdown Layout**: Implemented a flexbox-based `justify-content: space-between` layout for Month/Year selectors, ensuring a professional, edge-to-edge gap between text and icons on mobile screens.
+- **UI Refinement**: Unified container border radii to 12px for visual consistency, removed unnecessary borders from the popover container, and significantly reduced paddings/margins in the header, calendar grid, and footer for a tighter, more modern look.
+- **Performance Optimization**: Further reduced internal calendar opening timers for faster user feedback—Mobile delay reduced from 280ms to 150ms, and Desktop delay reduced to 60ms.
 - **Loading time**: Reduced opening/loading delays so the calendar appears sooner—desktop ~80–120ms (was 200–350ms), mobile ~280ms (was 800ms). Click path delay before positioning/reveal reduced from 100ms to 50ms.
-- **CSS (SonarLint)**: Resolved duplicate selectors, commented-out code, and duplicate properties in `datepicker.css` for cleaner styles.
+- **CSS & Linting (SonarLint)**: Resolved duplicate selectors, commented-out code, duplicate properties in `datepicker.css` for cleaner styles, and resolved all 38 remaining TypeScript library lint warnings.
+
 
 ## [2.1.7] - 2026-02-23
 
