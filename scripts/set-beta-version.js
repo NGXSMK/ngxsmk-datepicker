@@ -5,9 +5,9 @@
  * Use before publishing a beta so production release can follow later.
  *
  * Usage:
- *   node scripts/set-beta-version.js 2.1.9-beta.0   # set exact version
- *   node scripts/set-beta-version.js next           # next beta (2.1.8 → 2.1.9-beta.0; 2.1.9-beta.0 → 2.1.9-beta.1)
- *   node scripts/set-beta-version.js stable 2.1.9   # specific stable (e.g. 2.1.9);
+ *   node scripts/set-beta-version.js 2.2.0-beta.0   # set exact version
+ *   node scripts/set-beta-version.js next           # next beta (2.1.8 → 2.2.0-beta.0; 2.2.0-beta.0 → 2.2.0-beta.1)
+ *   node scripts/set-beta-version.js stable 2.2.0   # specific stable (e.g. 2.2.0);
  */
 
 const fs = require('fs');

@@ -2,12 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
+**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.9] - 2026-02-25
+## [2.2.0] - 2026-02-25
 
 - **Enhanced Visibility**: Fixed text contrast in dropdown options for better accessibility, ensuring high-contrast labels for month and year selections.
 - **Web Component Support**: Added capability to export the library as a standard Custom Web Component using Angular Elements, enabling full support for React, Vue, Svelte, and Vanilla JS.

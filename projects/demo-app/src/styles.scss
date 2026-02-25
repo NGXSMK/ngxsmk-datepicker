@@ -26,6 +26,18 @@
     --color-text-dim: hsl(0, 0%, 55%);
     --color-text-tertiary: hsl(0, 0%, 40%);
 
+    /* Syntax Highlighting (Dark - Primary) */
+    --code-text: #e0e6ed;
+    --code-keyword: #ff79c6;
+    --code-string: #f1fa8c;
+    --code-comment: #6272a4;
+    --code-function: #50fa7b;
+    --code-class: #8be9fd;
+    --code-operator: #ff79c6;
+    --code-number: #bd93f9;
+    --code-tag: #ff79c6;
+    --code-attr: #bd93f9;
+
     /* Borders */
     --color-border: hsla(0, 0%, 100%, 0.08);
     --color-border-light: hsla(0, 0%, 100%, 0.15);
@@ -105,6 +117,18 @@ html[data-theme='light'] {
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.15);
     --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+
+    /* Syntax Highlighting (Light) */
+    --code-text: hsl(240, 10%, 20%);
+    --code-keyword: #d32f2f;
+    --code-string: #2e7d32;
+    --code-comment: #757575;
+    --code-function: #7b1fa2;
+    --code-class: #ed6c02;
+    --code-operator: #c2185b;
+    --code-number: #1976d2;
+    --code-tag: #d32f2f;
+    --code-attr: #1976d2;
 }
 
 /* ============================================
@@ -479,16 +503,6 @@ code {
 }
 
 /* DOCUMENTATION SPECIFIC UTILITIES */
-kbd {
-    background: var(--color-bg-code);
-    border: 1px solid var(--color-border-light);
-    border-radius: 4px;
-    padding: 2px 6px;
-    font-family: inherit;
-    font-size: 0.8rem;
-    box-shadow: 0 2px 0 var(--color-border);
-    color: var(--color-secondary);
-}
 
 /* Content links (e.g. Installation page "See all options") */
 a.link {
@@ -498,6 +512,7 @@ a.link {
     transition: var(--transition-base);
     border-bottom: 1px solid transparent;
 }
+
 a.link:hover {
     color: var(--color-primary);
     border-bottom-color: var(--color-primary);
@@ -506,9 +521,11 @@ a.link:hover {
 .no-underline {
     text-decoration: none;
 }
+
 .hover\:text-primary:hover {
     color: var(--color-primary);
 }
+
 .transition-base {
     transition: var(--transition-base);
 }
@@ -919,5 +936,122 @@ a.link:hover {
         --font-size-4xl: 2rem;
         --font-size-3xl: 1.75rem;
         --font-size-2xl: 1.5rem;
+    }
+}
+
+/* ============================================
+   DATEPICKER GLOBAL OVERRIDES
+   ============================================ */
+ngxsmk-datepicker {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* ============================================
+   GLOBAL CODE WINDOW STYLES
+   ============================================ */
+.code-window {
+    background: var(--color-bg-code);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin: var(--space-xl) 0;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+
+    &.mt-0 {
+        margin-top: 0;
+    }
+
+    &.mb-0 {
+        margin-bottom: 0;
+    }
+
+    .window-header {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--color-border);
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+
+            &.red {
+                background: #ff5f56;
+            }
+
+            &.yellow {
+                background: #ffbd2e;
+            }
+
+            &.green {
+                background: #27c93f;
+            }
+        }
+
+        .window-title {
+            margin-left: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--color-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    pre {
+        margin: 0;
+        padding: var(--space-lg);
+        overflow-x: auto;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.7;
+
+        code {
+            background: none !important;
+            border: none !important;
+            padding: 0 !important;
+            color: var(--code-text);
+
+            .token-keyword {
+                color: var(--code-keyword);
+            }
+
+            .token-string {
+                color: var(--code-string);
+            }
+
+            .token-comment {
+                color: var(--code-comment);
+                font-style: italic;
+            }
+
+            .token-function {
+                color: var(--code-function);
+            }
+
+            .token-class {
+                color: var(--code-class);
+            }
+
+            .token-operator {
+                color: var(--code-operator);
+            }
+
+            .token-number {
+                color: var(--code-number);
+            }
+
+            .token-tag {
+                color: var(--code-tag);
+            }
+
+            .token-attr {
+                color: var(--code-attr);
+            }
+        }
     }
 }

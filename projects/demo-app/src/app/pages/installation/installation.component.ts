@@ -21,7 +21,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
       </div>
 
       <div class="tip">
@@ -37,9 +37,9 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span>
-<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span>
-<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span>
+<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span>
+<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
       </div>
       <p>
         <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener noreferrer" class="link">{{ i18n.t().installation.moreLink }}</a>
@@ -82,66 +82,7 @@ import { I18nService } from '../../i18n/i18n.service';
     h2 { margin-top: var(--space-3xl); margin-bottom: var(--space-sm); }
     p { margin-bottom: var(--space-md); }
 
-    .code-window {
-        background: var(--color-bg-code);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        margin: var(--space-xl) 0;
-        overflow: hidden;
-        box-shadow: var(--shadow-lg);
 
-        .window-header {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
-
-            .dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                &.red { background: #ff5f56; }
-                &.yellow { background: #ffbd2e; }
-                &.green { background: #27c93f; }
-            }
-            .window-title {
-                margin-left: 0.5rem;
-                font-size: 0.7rem;
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--color-text-dim);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-        }
-
-        pre {
-            margin: 0;
-            padding: var(--space-lg);
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.7;
-
-            code {
-                background: none;
-                border: none;
-                padding: 0;
-                color: #e0e6ed;
-                
-                .token-keyword { color: #ff79c6; }
-                .token-string { color: #f1fa8c; }
-                .token-comment { color: #6272a4; font-style: italic; }
-                .token-function { color: #50fa7b; }
-                .token-class { color: #8be9fd; }
-                .token-operator { color: #ff79c6; }
-                .token-number { color: #bd93f9; }
-                .token-tag { color: #ff79c6; }
-                .token-attr { color: #bd93f9; }
-            }
-        }
-    }
     .tip { margin-top: var(--space-lg); }
     p a.link { display: inline-block; margin-top: var(--space-xs); }
   `]

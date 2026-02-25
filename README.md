@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
+**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.9` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
+> **Stable Release**: `v2.2.0` is live! This release brings a **TypeScript Strictness Overhaul** (eliminating `any` types and ensuring `exactOptionalPropertyTypes` compatibility), fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS. No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.9 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.0 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.1.9
+npm install ngxsmk-datepicker@2.2.0
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.1.9` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.9` |
-| **Bun** | `bun add ngxsmk-datepicker@2.1.9` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.9` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.2.0` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.0` |
+| **Bun** | `bun add ngxsmk-datepicker@2.2.0` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.0` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.9/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.9/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.0/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.0/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -619,7 +619,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.9 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.0 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -877,9 +877,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.1.9** (Current Stable)
+### **v2.2.0** (Current Stable)
 
-- 🎉 **Version Update**: Updated to version 2.1.9.
+- 🎉 **Version Update**: Updated to version 2.2.0.
 - ✨ **Key Updates**: Optimized loading times, refined mobile header layout, and improved dropdown accessibility.
 - ✅ **Stable Release**: Full synchronization of header components with `ViewEncapsulation.None`.
 

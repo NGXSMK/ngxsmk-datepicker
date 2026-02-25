@@ -95,7 +95,7 @@ ngxsmk-custom-select {
 
     &:focus-within {
         outline: none;
-        border-color: var(--ngxsmk-color-primary);
+        border-color: var(--datepicker-primary-color, var(--ngxsmk-color-primary));
         box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
     }
 
@@ -171,8 +171,8 @@ ngxsmk-custom-select {
         }
 
         &.selected {
-            background-color: var(--ngxsmk-color-primary);
-            color: var(--ngxsmk-color-on-primary) !important;
+            background-color: var(--datepicker-primary-color, var(--ngxsmk-color-primary));
+            color: var(--datepicker-primary-contrast, var(--ngxsmk-color-on-primary)) !important;
             font-weight: 600;
         }
     }
