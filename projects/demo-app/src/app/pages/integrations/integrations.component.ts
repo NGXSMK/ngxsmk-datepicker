@@ -32,7 +32,7 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
   <span class="token-keyword">providers</span>: [
     <span class="token-function">provideMaterialFormFieldControl</span>(<span class="token-class">MAT_FORM_FIELD_CONTROL</span>) <span class="token-comment">// Enables MatFormField compatibility</span>
   ]
-{{ '}' }})
+{{ '}'}})
 <span class="token-keyword">export class</span> <span class="token-class">MyComponent</span> {{ '{' }} {{ '}' }}</code></pre>
       </div>
 
@@ -224,17 +224,17 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
                 background: none;
                 border: none;
                 padding: 0;
-                color: #e0e6ed; /* Softer white */
+                color: var(--code-text);
                 
-                .token-keyword { color: #ff79c6; } /* Pink */
-                .token-string { color: #f1fa8c; }  /* Yellow */
-                .token-comment { color: #6272a4; font-style: italic; } /* Blue-gray */
-                .token-function { color: #50fa7b; } /* Green */
-                .token-class { color: #8be9fd; }    /* Cyan */
-                .token-operator { color: #ff79c6; }
-                .token-number { color: #bd93f9; }   /* Purple */
-                .token-tag { color: #ff79c6; }
-                .token-attr { color: #bd93f9; }
+                .token-keyword { color: var(--code-keyword); }
+                .token-string { color: var(--code-string); }
+                .token-comment { color: var(--code-comment); font-style: italic; }
+                .token-function { color: var(--code-function); }
+                .token-class { color: var(--code-class); }
+                .token-operator { color: var(--code-operator); }
+                .token-number { color: var(--code-number); }
+                .token-tag { color: var(--code-tag); }
+                .token-attr { color: var(--code-attr); }
             }
         }
     }

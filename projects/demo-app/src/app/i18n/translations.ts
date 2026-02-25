@@ -27,7 +27,7 @@ export const translations = {
             playground: 'Interactive Playground'
         },
         home: {
-            heroBadge: 'The #1 Angular DatePicker v2.1.9',
+            heroBadge: 'The #1 Angular DatePicker v2.2.0',
             heroTitle: 'The Premier Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Experience the next-gen Angular DatePicker. Engineered with Signals and Zoneless architecture for maximum performance, multi-calendar support, and enterprise-grade accessibility.',
@@ -430,7 +430,7 @@ export const translations = {
             playground: 'Spielplatz'
         },
         home: {
-            heroBadge: 'Neu v2.1.9 Stabilität',
+            heroBadge: 'Neu v2.2.0 Stabilität',
             heroTitle: 'Der beste Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Der leistungsstärkste, leichteste und barrierefreieste Datepicker für moderne Angular-Projekte. Nahtloser Signal-basierter Status, Zoneless-Architektur und unendliche Anpassungsmöglichkeiten.',
@@ -833,7 +833,7 @@ export const translations = {
             playground: 'Laboratorio'
         },
         home: {
-            heroBadge: 'Nuevo v2.1.9 Estabilidad',
+            heroBadge: 'Nuevo v2.2.0 Estabilidad',
             heroTitle: 'El mejor Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'El selector de fechas más potente, ligero y accesible para proyectos modernos de Angular. Estado impecable basado en Signals, arquitectura Zoneless y personalización infinita.',
@@ -1218,7 +1218,7 @@ export const translations = {
             playground: 'Lekplats'
         },
         home: {
-            heroBadge: 'Ny v2.1.9 stabilitet',
+            heroBadge: 'Ny v2.2.0 stabilitet',
             heroTitle: 'Den bästa open-source',
             heroSubtitle: 'Angular datumväljare',
             heroLead: 'Den mest kraftfulla, lätta och tillgängliga datumväljaren för moderna Angular-projekt. Sömlös signalbaserad status, zonlös arkitektur och oändlig anpassning.',
@@ -1603,7 +1603,7 @@ export const translations = {
             playground: '플레이그라운드'
         },
         home: {
-            heroBadge: '새로운 v2.1.9 안정성',
+            heroBadge: '새로운 v2.2.0 안정성',
             heroTitle: '최고의 오픈 소스',
             heroSubtitle: 'Angular 데이트피커',
             heroLead: '현대적인 Angular 프로젝트를 위한 가장 강력하고 가볍고 접근성이 좋은 데이트피커입니다. 원활한 Signal 기반 상태, Zoneless 아키텍처 및 무한한 커스터마이징을 제공합니다.',
@@ -1984,7 +1984,7 @@ export const translations = {
             playground: '演练场'
         },
         home: {
-            heroBadge: '全新 v2.1.9 稳定性',
+            heroBadge: '全新 v2.2.0 稳定性',
             heroTitle: '最佳开源',
             heroSubtitle: 'Angular 日期选择器',
             heroLead: '适用于现代 Angular 项目的功能最强大、轻量且符合无障碍标准的日期选择器。无缝的基于 Signal 的状态管理、无 Zone 架构和无限的自定义选项。',
@@ -2365,7 +2365,7 @@ export const translations = {
             playground: 'プレイグラウンド'
         },
         home: {
-            heroBadge: '新しい v2.1.9 の安定性',
+            heroBadge: '新しい v2.2.0 の安定性',
             heroTitle: '最高のオープンソース',
             heroSubtitle: 'Angular デートピッカー',
             heroLead: '現代のAngularプロジェクトのための、最も強力で軽量、かつアクセシビリティに優れたデートピッカーです。シームレスなSignalベースの状態、Zonelessアーキテクチャ、 そして 無限のカスタマイズを提供します。',
@@ -2746,7 +2746,7 @@ export const translations = {
             playground: 'Playground'
         },
         home: {
-            heroBadge: 'Nouvelle stabilité v2.1.9',
+            heroBadge: 'Nouvelle stabilité v2.2.0',
             heroTitle: 'Le meilleur Open-Source',
             heroSubtitle: 'Angular DatePicker',
             heroLead: 'Le sélecteur de date le plus puissant, léger et accessible pour les projets Angular modernes. État fluide basé sur les Signals, architecture Zoneless et personnalisation infinie.',

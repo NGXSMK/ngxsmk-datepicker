@@ -86,12 +86,8 @@ import { I18nService } from '../../i18n/i18n.service';
 
             <div class="preview-footer mt-lg pt-md">
               <div class="flex justify-between items-center mb-sm">
-                <span class="text-xs font-bold uppercase text-dim">{{
-                  i18n.t().home.implementation
-                }}</span>
-                <span class="text-xs text-secondary">{{
-                  i18n.t().home.signalOptimized
-                }}</span>
+                <span class="text-xs font-bold uppercase text-dim">{{ i18n.t().home.implementation }}</span>
+                <span class="text-xs text-secondary">{{ i18n.t().home.signalOptimized }}</span>
               </div>
               <div class="code-window mt-md mb-0">
                 <div class="window-header">
@@ -138,7 +134,7 @@ import { I18nService } from '../../i18n/i18n.service';
                 <div class="dot green"></div>
                 <div class="window-title">terminal</div>
               </div>
-              <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span></code></pre>
+              <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.2.0</span></code></pre>
             </div>
         </div>
       </section>
@@ -602,17 +598,17 @@ import { I18nService } from '../../i18n/i18n.service';
                 background: none;
                 border: none;
                 padding: 0;
-                color: #e0e6ed;
+                color: var(--code-text);
                 
-                .token-keyword { color: #ff79c6; }
-                .token-string { color: #f1fa8c; }
-                .token-comment { color: #6272a4; font-style: italic; }
-                .token-function { color: #50fa7b; }
-                .token-class { color: #8be9fd; }
-                .token-operator { color: #ff79c6; }
-                .token-number { color: #bd93f9; }
-                .token-tag { color: #ff79c6; }
-                .token-attr { color: #bd93f9; }
+                .token-keyword { color: var(--code-keyword); }
+                .token-string { color: var(--code-string); }
+                .token-comment { color: var(--code-comment); font-style: italic; }
+                .token-function { color: var(--code-function); }
+                .token-class { color: var(--code-class); }
+                .token-operator { color: var(--code-operator); }
+                .token-number { color: var(--code-number); }
+                .token-tag { color: var(--code-tag); }
+                .token-attr { color: var(--code-attr); }
             }
         }
     }
