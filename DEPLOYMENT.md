@@ -2,7 +2,7 @@
 
 This document explains how the ngxsmk-datepicker demo app is deployed to GitHub Pages.
 
-**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
+**Last updated:** February 25, 2026 · **Current stable:** v2.2.0
 
 ## Automatic Deployment
 

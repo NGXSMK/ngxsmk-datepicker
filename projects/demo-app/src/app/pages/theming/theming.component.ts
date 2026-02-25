@@ -26,7 +26,7 @@ import { NgxsmkDatepickerComponent, ThemeBuilderService, DatepickerTheme } from 
             <button class="btn btn-outline" (click)="resetTheme()">Reset</button>
           </div>
           
-          <div class="flex flex-col gap-sm" style="max-width: 300px;">
+          <div class="flex flex-col gap-sm">
             <label class="text-sm font-bold" for="theming-datepicker">Select Date</label>
             <ngxsmk-datepicker 
               id="theming-datepicker"
@@ -82,11 +82,11 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
             </tr>
           </thead>
           <tbody>
-            <tr><td><code>--ngxsmk-primary</code></td><td>Main brand color for selection and highlights.</td></tr>
-            <tr><td><code>--ngxsmk-bg-popover</code></td><td>Background color of the calendar dropdown.</td></tr>
-            <tr><td><code>--ngxsmk-border-color</code></td><td>Border color for inputs and interactive elements.</td></tr>
-            <tr><td><code>--ngxsmk-radius-main</code></td><td>Corner radius for the main container and buttons.</td></tr>
-            <tr><td><code>--ngxsmk-font-family</code></td><td>Font used across the entire component.</td></tr>
+            <tr><td><code>--datepicker-primary-color</code></td><td>Main brand color for selection and highlights.</td></tr>
+            <tr><td><code>--datepicker-background</code></td><td>Background color of the calendar dropdown.</td></tr>
+            <tr><td><code>--datepicker-border-color</code></td><td>Border color for inputs and interactive elements.</td></tr>
+            <tr><td><code>--datepicker-border-radius</code></td><td>Corner radius for the main container and buttons.</td></tr>
+            <tr><td><code>--datepicker-font-family</code></td><td>Font used across the entire component.</td></tr>
           </tbody>
         </table>
       </div>
@@ -101,7 +101,7 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
           <div class="window-title">glass.css</div>
         </div>
         <pre><code class="text-main"><span class="token-keyword">.custom-glass</span> {{ '{' }}
-  <span class="token-operator">--ngxsmk-bg-popover</span>: <span class="token-function">rgba</span>(<span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">0.7</span>);
+  <span class="token-operator">--datepicker-background</span>: <span class="token-function">rgba</span>(<span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">0.7</span>);
   <span class="token-keyword">backdrop-filter</span>: <span class="token-function">blur</span>(<span class="token-number">12px</span>);
 {{ '}' }}</code></pre>
       </div>
@@ -117,8 +117,8 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
         </div>
         <pre><code class="text-main"><span class="token-keyword">&#64;layer base</span> {{ '{' }}
   <span class="token-keyword">:root</span> {{ '{' }}
-    <span class="token-operator">--ngxsmk-primary</span>: <span class="token-function">theme</span>(<span class="token-string">'colors.indigo.600'</span>);
-    <span class="token-operator">--ngxsmk-radius-main</span>: <span class="token-function">theme</span>(<span class="token-string">'borderRadius.lg'</span>);
+    <span class="token-operator">--datepicker-primary-color</span>: <span class="token-function">theme</span>(<span class="token-string">'colors.indigo.600'</span>);
+    <span class="token-operator">--datepicker-border-radius</span>: <span class="token-function">theme</span>(<span class="token-string">'borderRadius.lg'</span>);
   {{ '}' }}
 {{ '}' }}</code></pre>
       </div>
@@ -162,69 +162,7 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
       tr:last-child td { border-bottom: none; }
       code { color: var(--color-secondary); background: none; padding: 0; }
     }
-    .code-window {
-        background: var(--color-bg-code);
-        border: 1px solid var(--color-border);
-        border-radius: var(--radius-md);
-        margin: var(--space-xl) 0;
-        overflow: hidden;
-        box-shadow: var(--shadow-lg);
 
-        &.mt-0 { margin-top: 0; }
-        &.mb-0 { margin-bottom: 0; }
-
-        .window-header {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
-
-            .dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                &.red { background: #ff5f56; }
-                &.yellow { background: #ffbd2e; }
-                &.green { background: #27c93f; }
-            }
-            .window-title {
-                margin-left: 0.5rem;
-                font-size: 0.7rem;
-                font-family: 'JetBrains Mono', monospace;
-                color: var(--color-text-dim);
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
-            }
-        }
-
-        pre {
-            margin: 0;
-            padding: var(--space-lg);
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.7;
-
-            code {
-                background: none;
-                border: none;
-                padding: 0;
-                color: #e0e6ed;
-                
-                .token-keyword { color: #ff79c6; }
-                .token-string { color: #f1fa8c; }
-                .token-comment { color: #6272a4; font-style: italic; }
-                .token-function { color: #50fa7b; }
-                .token-class { color: #8be9fd; }
-                .token-operator { color: #ff79c6; }
-                .token-number { color: #bd93f9; }
-                .token-tag { color: #ff79c6; }
-                .token-attr { color: #bd93f9; }
-            }
-        }
-    }
     .glass-example {
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
       border: 1px solid var(--color-border-light);

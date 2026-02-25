@@ -121,7 +121,7 @@ export class ThemeBuilderService implements OnDestroy {
 
     if (targetElement) {
       // Apply theme to specific element only using a scoped style element
-      targetElement.setAttribute('data-theme-applied', '');
+      targetElement.dataset['themeApplied'] = '';
 
       // Remove existing scoped style if any
       const existingStyle = this.scopedStyleElements.get(targetElement);
@@ -132,7 +132,7 @@ export class ThemeBuilderService implements OnDestroy {
 
       // Create a scoped style element for this specific element
       const scopedStyle = document.createElement('style');
-      scopedStyle.setAttribute('data-datepicker-theme-scoped', '');
+      scopedStyle.dataset['datepickerThemeScoped'] = '';
 
       // Generate CSS targeting this specific element
       const elementId = targetElement.id || `datepicker-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
@@ -141,7 +141,7 @@ export class ThemeBuilderService implements OnDestroy {
       }
 
       // Optimized CSS generation - avoid duplication
-      const css = `#${elementId}, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop {\n${themeCss}\n}`;
+      const css = `#${elementId}, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop {\n${themeCss}\n}`;
       scopedStyle.textContent = css;
       document.head.appendChild(scopedStyle);
       this.scopedStyleElements.set(targetElement, scopedStyle);
@@ -152,7 +152,7 @@ export class ThemeBuilderService implements OnDestroy {
           targetElement.style.setProperty(property, value, 'important');
         });
 
-        const portalledElements = document.querySelectorAll('body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+        const portalledElements = document.querySelectorAll('ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
         portalledElements.forEach((element: Element) => {
           const htmlElement = element as HTMLElement;
           Object.entries(styles).forEach(([property, value]) => {
@@ -164,13 +164,13 @@ export class ThemeBuilderService implements OnDestroy {
       // Apply globally (original behavior) - optimized version
       if (!this.styleElement) {
         this.styleElement = document.createElement('style');
-        this.styleElement.setAttribute('data-datepicker-theme', '');
+        this.styleElement.dataset['datepickerTheme'] = '';
         document.head.appendChild(this.styleElement);
       }
 
       // Optimized CSS - use more specific selector to override global :root variables
       // Also apply to body-portalled popovers and backdrops for mobile
-      const css = `:root, :root > body, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop {\n${themeCss}\n}`;
+      const css = `:root, :root > body, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop {\n${themeCss}\n}`;
       this.styleElement.textContent = css;
 
       // Apply to elements more efficiently using requestAnimationFrame
@@ -189,14 +189,14 @@ export class ThemeBuilderService implements OnDestroy {
       return;
     }
 
-    const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+    const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
     const styles = this.generateStyleObject(theme);
 
     // Batch DOM operations for better performance
     datepickerElements.forEach((element: Element) => {
       const htmlElement = element as HTMLElement;
       // Mark element as having theme applied for CSS selector specificity
-      htmlElement.setAttribute('data-theme-applied', '');
+      htmlElement.dataset['themeApplied'] = '';
 
       // Batch style property updates
       Object.entries(styles).forEach(([property, value]) => {
@@ -267,7 +267,7 @@ export class ThemeBuilderService implements OnDestroy {
 
     if (targetElement) {
       // Remove theme from specific element only
-      targetElement.removeAttribute('data-theme-applied');
+      delete targetElement.dataset['themeApplied'];
 
       // Remove scoped style element
       const scopedStyle = this.scopedStyleElements.get(targetElement);
@@ -289,7 +289,7 @@ export class ThemeBuilderService implements OnDestroy {
         }
       });
       // Also clear from any open body-portalled popovers
-      const portalledElements = document.querySelectorAll('body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+      const portalledElements = document.querySelectorAll('ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
       portalledElements.forEach((element: Element) => {
         const htmlElement = element as HTMLElement;
         const portalledStyles = Array.from(htmlElement.style);
@@ -308,11 +308,11 @@ export class ThemeBuilderService implements OnDestroy {
       }
 
       // Clear inline styles from all datepicker elements and body-portalled popovers
-      const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+      const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, ngxsmk-datepicker-content .ngxsmk-popover-container, ngxsmk-datepicker-content .ngxsmk-backdrop');
       datepickerElements.forEach((element: Element) => {
         const htmlElement = element as HTMLElement;
         // Remove theme attribute
-        htmlElement.removeAttribute('data-theme-applied');
+        delete htmlElement.dataset['themeApplied'];
 
         // Remove all datepicker CSS variables
         const allStyles = Array.from(htmlElement.style);
@@ -338,13 +338,13 @@ export class ThemeBuilderService implements OnDestroy {
       return {};
     }
 
-    const computedStyle = window.getComputedStyle(element);
+    const computedStyle = globalThis.getComputedStyle(element);
     const theme: Partial<DatepickerTheme> = {
       colors: {},
       spacing: {},
       typography: {},
       borderRadius: {},
-      shadows: {},
+      shadows: {}
     };
 
     // Extract CSS variables
