@@ -62,6 +62,7 @@ This document provides migration instructions for upgrading between major versio
 - **Header Select Synchronization**: Migrated header components to `ViewEncapsulation.None` and consolidated styles into `_header.scss`.
 - **Improved Dropdown Layout**: Professional `space-between` layout for Month/Year selectors.
 - **Enhanced Visibility**: High-contrast text for non-selected dropdown options.
+- **Web Component Support**: New capability to compile/export as a Universal Custom Web Component for React, Vue, & Vanilla JS.
 - **Performance**: Reduced calendar opening timers for faster feedback (150ms mobile / 60ms desktop).
 
 ### Migration Steps

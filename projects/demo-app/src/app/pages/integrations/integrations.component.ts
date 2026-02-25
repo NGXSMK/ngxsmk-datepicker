@@ -17,62 +17,85 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
       <h2>Angular Material</h2>
       <p>The library provides built-in support for <code>MatFormField</code>. You can use the datepicker inside a standard Material field with floating labels, hints, and error states.</p>
       
-      <div class="card bg-code">
-        <pre><code class="text-main">import {{ '{' }} MAT_FORM_FIELD_CONTROL {{ '}' }} from '&#64;angular/material/form-field';
-import {{ '{' }} NgxsmkDatepickerComponent, provideMaterialFormFieldControl {{ '}' }} from 'ngxsmk-datepicker';
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">app.config.ts</div>
+        </div>
+        <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">MAT_FORM_FIELD_CONTROL</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'&#64;angular/material/form-field'</span>;
+<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span>, <span class="token-function">provideMaterialFormFieldControl</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
 
-&#64;Component({{ '{' }}
-  // ...
-  providers: [
-    provideMaterialFormFieldControl(MAT_FORM_FIELD_CONTROL) // Enables MatFormField compatibility
+<span class="token-keyword">&#64;Component</span>({{ '{' }}
+  <span class="token-comment">// ...</span>
+  <span class="token-keyword">providers</span>: [
+    <span class="token-function">provideMaterialFormFieldControl</span>(<span class="token-class">MAT_FORM_FIELD_CONTROL</span>) <span class="token-comment">// Enables MatFormField compatibility</span>
   ]
 {{ '}' }})
-export class MyComponent {{ '{' }} {{ '}' }}</code></pre>
+<span class="token-keyword">export class</span> <span class="token-class">MyComponent</span> {{ '{' }} {{ '}' }}</code></pre>
       </div>
 
-      <div class="card">
-        <h3>Usage with MatFormField</h3>
-        <pre><code class="text-main">&lt;mat-form-field&gt;
-  &lt;mat-label&gt;Select Date&lt;/mat-label&gt;
-  &lt;ngxsmk-datepicker matFormFieldControl&gt;&lt;/ngxsmk-datepicker&gt;
-&lt;/mat-form-field&gt;</code></pre>
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">template.html</div>
+        </div>
+        <pre><code class="text-main">&lt;<span class="token-tag">mat-form-field</span>&gt;
+  &lt;<span class="token-tag">mat-label</span>&gt;Select Date&lt;/<span class="token-tag">mat-label</span>&gt;
+  &lt;<span class="token-tag">ngxsmk-datepicker</span> <span class="token-attr">matFormFieldControl</span>&gt;&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;
+&lt;/<span class="token-tag">mat-form-field</span>&gt;</code></pre>
       </div>
 
       <h2>Ionic Framework</h2>
       <p>For Ionic applications, the datepicker feels right at home. It functions seamlessly inside <code>ion-item</code> and automatically inherits your application's Ionic CSS variables (like <code>--ion-color-primary</code> for the active state). We highly recommend enabling <code>[useNativePicker]="true"</code> to leverage the native OS device wheel pickers on mobile devices for the best user experience.</p>
       
-      <div class="card">
-        <pre><code class="text-main">&lt;ion-item&gt;
-  &lt;ion-label position="floating"&gt;Date&lt;/ion-label&gt;
-  &lt;ngxsmk-datepicker 
-    [useNativePicker]="true" 
-    [inline]="false"&gt;
-  &lt;/ngxsmk-datepicker&gt;
-&lt;/ion-item&gt;</code></pre>
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">ionic-page.html</div>
+        </div>
+        <pre><code class="text-main">&lt;<span class="token-tag">ion-item</span>&gt;
+  &lt;<span class="token-tag">ion-label</span> <span class="token-attr">position</span>=<span class="token-string">"floating"</span>&gt;Date&lt;/<span class="token-tag">ion-label</span>&gt;
+  &lt;<span class="token-tag">ngxsmk-datepicker</span> 
+    <span class="token-attr">[useNativePicker]</span>=<span class="token-string">"true"</span> 
+    <span class="token-attr">[inline]</span>=<span class="token-string">"false"</span>&gt;
+  &lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;
+&lt;/<span class="token-tag">ion-item</span>&gt;</code></pre>
       </div>
 
       <h2>React, Vue, & Vanilla JS</h2>
       <p>Since <code>ngxsmk-datepicker</code> is a highly isolated Angular library without heavy dependencies, it can be compiled into <strong>Custom Web Components</strong> using Angular Elements. This allows you to use exactly the same beautiful datepicker in React, Vue, Svelte, or Vanilla JavaScript.</p>
-      <div class="card bg-code">
-        <pre><code class="text-main">// In your React component
-import React, {{ '{' }} useState, useEffect, useRef {{ '}' }} from 'react';
-// Import the compiled Angular Element bundle
-import 'ngxsmk-datepicker-element/bundle.js';
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">ReactComponent.tsx</div>
+        </div>
+        <pre><code class="text-main"><span class="token-comment">// In your React component</span>
+<span class="token-keyword">import</span> <span class="token-class">React</span>, {{ '{' }} <span class="token-function">useState</span>, <span class="token-function">useEffect</span>, <span class="token-function">useRef</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'react'</span>;
+<span class="token-comment">// Import the compiled Angular Element bundle</span>
+<span class="token-keyword">import</span> <span class="token-string">'ngxsmk-datepicker-element/bundle.js'</span>;
 
-export function DateSelector() {{ '{' }}
-  const datepickerRef = useRef(null);
+<span class="token-keyword">export function</span> <span class="token-function">DateSelector</span>() {{ '{' }}
+  <span class="token-keyword">const</span> datepickerRef = <span class="token-function">useRef</span>(<span class="token-number">null</span>);
   
-  useEffect(() =&gt; {{ '{' }}
-    // Listen to custom events
-    datepickerRef.current.addEventListener('dateSelect', (e) =&gt; {{ '{' }}
-      console.log('Selected date:', e.detail);
+  <span class="token-function">useEffect</span>(() =&gt; {{ '{' }}
+    <span class="token-comment">// Listen to custom events</span>
+    datepickerRef.current.<span class="token-function">addEventListener</span>(<span class="token-string">'dateSelect'</span>, (e) =&gt; {{ '{' }}
+      console.<span class="token-function">log</span>(<span class="token-string">'Selected date:'</span>, e.detail);
     {{ '}' }});
   {{ '}' }}, []);
 
-  return (
-    &lt;div&gt;
-      &lt;ngxsmk-datepicker ref={{ '{' }}datepickerRef{{ '}' }} mode="range"&gt;&lt;/ngxsmk-datepicker&gt;
-    &lt;/div&gt;
+  <span class="token-keyword">return</span> (
+    &lt;<span class="token-tag">div</span>&gt;
+      &lt;<span class="token-tag">ngxsmk-datepicker</span> <span class="token-attr">ref</span>={{ '{' }}datepickerRef{{ '}' }} <span class="token-attr">mode</span>=<span class="token-string">"range"</span>&gt;&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;
+    &lt;/<span class="token-tag">div</span>&gt;
   );
 {{ '}' }}</code></pre>
       </div>
@@ -80,15 +103,21 @@ export function DateSelector() {{ '{' }}
       <h2>Tailwind CSS</h2>
       <p>Using Tailwind? No problem! The <code>ngxsmk-datepicker</code> supports a powerful <code>[classes]</code> input that allows you to easily inject utility classes into specific internal DOM elements. Override paddings, typography, backgrounds, or borders natively.</p>
       
-      <div class="card bg-code">
-        <pre><code class="text-main">&lt;ngxsmk-datepicker
-  [classes]="&#123;
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">tailwind-usage.html</div>
+        </div>
+        <pre><code class="text-main">&lt;<span class="token-tag">ngxsmk-datepicker</span>
+  <span class="token-attr">[classes]</span>=<span class="token-string">"&#123;
     header: 'bg-indigo-600 text-white rounded-t-xl',
     calendar: 'shadow-2xl border-indigo-200',
     navPrev: 'hover:bg-indigo-500 text-white',
     navNext: 'hover:bg-indigo-500 text-white'
-  &#125;"&gt;
-&lt;/ngxsmk-datepicker&gt;</code></pre>
+  &#125;"</span>&gt;
+&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;</code></pre>
       </div>
 
       <h2>{{ i18n.t().integrations.modalSectionTitle }}</h2>
@@ -149,16 +178,65 @@ export function DateSelector() {{ '{' }}
       margin-bottom: var(--space-md);
     }
 
-    .bg-code { 
-      background: var(--color-bg-code); 
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-    }
-    pre { overflow-x: auto; margin: 0; }
-    code { 
-        white-space: pre; 
-        font-size: var(--font-size-sm);
-        @media (min-width: 480px) { font-size: var(--font-size-base); }
+    .code-window {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                &.red { background: #ff5f56; }
+                &.yellow { background: #ffbd2e; }
+                &.green { background: #27c93f; }
+            }
+            .window-title {
+                margin-left: 0.5rem;
+                font-size: 0.7rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: var(--color-text-dim);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        pre {
+            margin: 0;
+            padding: var(--space-lg);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+
+            code {
+                background: none;
+                border: none;
+                padding: 0;
+                color: #e0e6ed; /* Softer white */
+                
+                .token-keyword { color: #ff79c6; } /* Pink */
+                .token-string { color: #f1fa8c; }  /* Yellow */
+                .token-comment { color: #6272a4; font-style: italic; } /* Blue-gray */
+                .token-function { color: #50fa7b; } /* Green */
+                .token-class { color: #8be9fd; }    /* Cyan */
+                .token-operator { color: #ff79c6; }
+                .token-number { color: #bd93f9; }   /* Purple */
+                .token-tag { color: #ff79c6; }
+                .token-attr { color: #bd93f9; }
+            }
+        }
     }
     .tip { margin-top: var(--space-2xl); }
 

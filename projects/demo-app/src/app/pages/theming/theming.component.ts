@@ -37,17 +37,25 @@ import { NgxsmkDatepickerComponent, ThemeBuilderService, DatepickerTheme } from 
           </div>
         </div>
         <div class="flex-1">
-          <pre><code class="text-main">const theme = {{ '{' }}
+          <div class="code-window mt-0 mb-0">
+            <div class="window-header">
+              <div class="dot red"></div>
+              <div class="dot yellow"></div>
+              <div class="dot green"></div>
+              <div class="window-title">apply-theme.ts</div>
+            </div>
+            <pre><code class="text-main"><span class="token-keyword">const</span> theme = {{ '{' }}
   colors: {{ '{' }}
-    primary: '{{ themes[currentTheme || 'ocean'].colors!.primary }}',
-    background: '{{ themes[currentTheme || 'ocean'].colors!.background }}',
-    text: '{{ themes[currentTheme || 'ocean'].colors!.text }}',
-    border: '{{ themes[currentTheme || 'ocean'].colors!.border }}'
+    primary: <span class="token-string">'{{ themes[currentTheme || 'ocean'].colors!.primary }}'</span>,
+    background: <span class="token-string">'{{ themes[currentTheme || 'ocean'].colors!.background }}'</span>,
+    text: <span class="token-string">'{{ themes[currentTheme || 'ocean'].colors!.text }}'</span>,
+    border: <span class="token-string">'{{ themes[currentTheme || 'ocean'].colors!.border }}'</span>
   {{ '}' }},
-  borderRadius: {{ '{' }} md: '{{ themes[currentTheme || 'ocean'].borderRadius!.md }}' {{ '}' }}
+  borderRadius: {{ '{' }} md: <span class="token-string">'{{ themes[currentTheme || 'ocean'].borderRadius!.md }}'</span> {{ '}' }}
 {{ '}' }};
 
-themeBuilder.applyTheme(theme, datepickerEl);</code></pre>
+themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl);</code></pre>
+          </div>
         </div>
       </div>
 
@@ -85,20 +93,32 @@ themeBuilder.applyTheme(theme, datepickerEl);</code></pre>
 
       <h2>Glassmorphism UI</h2>
       <p>Achieve modern, translucent effects by combining background blur with transparency.</p>
-      <div class="card glass-example mt-md">
-        <pre><code class="text-main">.custom-glass {{ '{' }}
-  --ngxsmk-bg-popover: rgba(15, 15, 15, 0.7);
-  backdrop-filter: blur(12px);
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">glass.css</div>
+        </div>
+        <pre><code class="text-main"><span class="token-keyword">.custom-glass</span> {{ '{' }}
+  <span class="token-operator">--ngxsmk-bg-popover</span>: <span class="token-function">rgba</span>(<span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">15</span>, <span class="token-number">0.7</span>);
+  <span class="token-keyword">backdrop-filter</span>: <span class="token-function">blur</span>(<span class="token-number">12px</span>);
 {{ '}' }}</code></pre>
       </div>
 
       <h2>Tailwind CSS Integration</h2>
       <p>You can easily map Tailwind colors to the datepicker variables inside your <code>tailwind.config.js</code> or CSS layers.</p>
-      <div class="card bg-sidebar">
-        <pre><code class="text-main">&#64;layer base {{ '{' }}
-  :root {{ '{' }}
-    --ngxsmk-primary: theme('colors.indigo.600');
-    --ngxsmk-radius-main: theme('borderRadius.lg');
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">tailwind.css</div>
+        </div>
+        <pre><code class="text-main"><span class="token-keyword">&#64;layer base</span> {{ '{' }}
+  <span class="token-keyword">:root</span> {{ '{' }}
+    <span class="token-operator">--ngxsmk-primary</span>: <span class="token-function">theme</span>(<span class="token-string">'colors.indigo.600'</span>);
+    <span class="token-operator">--ngxsmk-radius-main</span>: <span class="token-function">theme</span>(<span class="token-string">'borderRadius.lg'</span>);
   {{ '}' }}
 {{ '}' }}</code></pre>
       </div>
@@ -142,16 +162,68 @@ themeBuilder.applyTheme(theme, datepickerEl);</code></pre>
       tr:last-child td { border-bottom: none; }
       code { color: var(--color-secondary); background: none; padding: 0; }
     }
-    .card {
-      padding: var(--space-lg);
-      @media (max-width: 480px) { padding: var(--space-md); }
-      margin-bottom: var(--space-md);
-    }
-    pre { overflow-x: auto; margin: 0; }
-    code { 
-        white-space: pre; 
-        font-size: var(--font-size-sm);
-        @media (min-width: 480px) { font-size: var(--font-size-base); }
+    .code-window {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+
+        &.mt-0 { margin-top: 0; }
+        &.mb-0 { margin-bottom: 0; }
+
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                &.red { background: #ff5f56; }
+                &.yellow { background: #ffbd2e; }
+                &.green { background: #27c93f; }
+            }
+            .window-title {
+                margin-left: 0.5rem;
+                font-size: 0.7rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: var(--color-text-dim);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        pre {
+            margin: 0;
+            padding: var(--space-lg);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+
+            code {
+                background: none;
+                border: none;
+                padding: 0;
+                color: #e0e6ed;
+                
+                .token-keyword { color: #ff79c6; }
+                .token-string { color: #f1fa8c; }
+                .token-comment { color: #6272a4; font-style: italic; }
+                .token-function { color: #50fa7b; }
+                .token-class { color: #8be9fd; }
+                .token-operator { color: #ff79c6; }
+                .token-number { color: #bd93f9; }
+                .token-tag { color: #ff79c6; }
+                .token-attr { color: #bd93f9; }
+            }
+        }
     }
     .glass-example {
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));

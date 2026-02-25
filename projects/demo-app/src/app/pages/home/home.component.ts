@@ -93,9 +93,15 @@ import { I18nService } from '../../i18n/i18n.service';
                   i18n.t().home.signalOptimized
                 }}</span>
               </div>
-              <pre
-                class="demo-code"
-              ><code>&lt;ngxsmk-datepicker mode="{{ demoMode }}"&gt;&lt;/ngxsmk-datepicker&gt;</code></pre>
+              <div class="code-window mt-md mb-0">
+                <div class="window-header">
+                  <div class="dot red"></div>
+                  <div class="dot yellow"></div>
+                  <div class="dot green"></div>
+                  <div class="window-title">code.html</div>
+                </div>
+                <pre><code>&lt;<span class="token-tag">ngxsmk-datepicker</span> <span class="token-attr">mode</span>=<span class="token-string">"{{ demoMode }}"</span>&gt;&lt;/<span class="token-tag">ngxsmk-datepicker</span>&gt;</code></pre>
+              </div>
             </div>
           </div>
         </div>
@@ -125,9 +131,15 @@ import { I18nService } from '../../i18n/i18n.service';
             <h2>{{ i18n.t().common.readyToTransform }}</h2>
             <p>{{ i18n.t().common.installToday }}</p>
           </div>
-          <div class="cta-code">
-            <pre><code>npm install ngxsmk-datepicker@2.1.9</code></pre>
-          </div>
+            <div class="code-window mt-0 mb-0">
+              <div class="window-header">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+                <div class="window-title">terminal</div>
+              </div>
+              <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.1.9</span></code></pre>
+            </div>
         </div>
       </section>
     </div>
@@ -259,20 +271,25 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .preview-header {
-        padding: 1rem 1.5rem;
+        padding: 0.75rem 1rem;
         background: rgba(30, 41, 59, 0.5);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
       }
 
       .dots {
         display: flex;
         gap: 8px;
+        flex-shrink: 0;
         span {
-          width: 12px;
-          height: 12px;
+          width: 10px;
+          height: 10px;
           border-radius: 50%;
           &:nth-child(1) { background: #ff5f56; }
           &:nth-child(2) { background: #ffbd2e; }
@@ -282,7 +299,8 @@ import { I18nService } from '../../i18n/i18n.service';
 
       .preview-controls {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        flex-shrink: 0;
       }
 
       .preview-body {
@@ -484,39 +502,21 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .cta-code {
-        background: var(--color-bg-code);
-        padding: var(--space-md) var(--space-lg);
-        @media (max-width: 480px) {
-          padding-inline: 2rem;
-        }
-        border-radius: var(--radius-md);
-        border: 1px solid var(--color-border);
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
         width: 100%;
         max-width: 100%;
-        overflow-x: auto;
-        code {
-          color: var(--color-secondary);
-          background: none;
-          padding: 0;
-          font-size: var(--font-size-base);
-          white-space: nowrap;
-        }
         @media (min-width: 768px) {
-          padding: 1rem;
           width: auto;
-          code {
-            font-size: 0.8rem;
-          }
         }
       }
 
       .mode-btn {
-        padding: 0.35rem 0.6rem;
+        padding: 0.4rem 0.7rem;
         border-radius: 8px;
-        font-size: var(--font-size-xs);
+        font-size: 0.65rem;
+        white-space: nowrap;
         @media (min-width: 480px) {
           padding: 0.4rem 0.8rem;
+          font-size: 0.7rem;
         }
         font-weight: 700;
         text-transform: uppercase;
@@ -550,24 +550,72 @@ import { I18nService } from '../../i18n/i18n.service';
         }
       }
 
-      .demo-code {
-        margin: 0;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 0.75rem;
-        border-radius: 8px;
-        font-size: var(--font-size-xs);
-        @media (min-width: 768px) {
-          font-size: var(--font-size-sm);
+    .code-window {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        width: 100%;
+
+        &.mt-md { margin-top: var(--space-md); }
+        &.mt-0 { margin-top: 0; }
+        &.mb-0 { margin-bottom: 0; }
+
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                &.red { background: #ff5f56; }
+                &.yellow { background: #ffbd2e; }
+                &.green { background: #27c93f; }
+            }
+            .window-title {
+                margin-left: 0.5rem;
+                font-size: 0.7rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: var(--color-text-dim);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
         }
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        overflow-x: auto;
-        code {
-          color: var(--color-secondary);
-          padding: 0;
-          background: none;
-          white-space: pre;
+
+        pre {
+            margin: 0;
+            padding: var(--space-lg);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            text-align: left;
+
+            code {
+                background: none;
+                border: none;
+                padding: 0;
+                color: #e0e6ed;
+                
+                .token-keyword { color: #ff79c6; }
+                .token-string { color: #f1fa8c; }
+                .token-comment { color: #6272a4; font-style: italic; }
+                .token-function { color: #50fa7b; }
+                .token-class { color: #8be9fd; }
+                .token-operator { color: #ff79c6; }
+                .token-number { color: #bd93f9; }
+                .token-tag { color: #ff79c6; }
+                .token-attr { color: #bd93f9; }
+            }
         }
-      }
+    }
 
       .btn-lg {
         padding: 1rem 1.5rem;

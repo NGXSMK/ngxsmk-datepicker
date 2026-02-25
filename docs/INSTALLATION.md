@@ -63,6 +63,12 @@ npm install https://github.com/NGXSMK/ngxsmk-datepicker/releases/download/v2.1.9
 
 (Replace the version and URL with the actual release asset if provided.)
 
+## Web Components (React, Vue, Vanilla)
+
+If you intend to use `ngxsmk-datepicker` outside of an Angular application (in React, Vue, or Vanilla JS), you must compile it as a **Custom Web Component** using `@angular/elements`. 
+
+See the [Integration Guide](../projects/ngxsmk-datepicker/docs/INTEGRATION.md#react-vue--vanilla-js-web-components) for code snippets on how to bootstrap and register the component as a universal custom element.
+
 ## Caveats
 
 - **Peer dependencies:** Regardless of install method, your app must have the required peer dependencies: `@angular/common`, `@angular/core`, `@angular/forms` (and optionally `luxon`). See [package.json](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/package.json) for versions.

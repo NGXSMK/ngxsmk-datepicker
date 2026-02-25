@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.9] - 2026-02-25
 
-### Added
-
 - **Enhanced Visibility**: Fixed text contrast in dropdown options for better accessibility, ensuring high-contrast labels for month and year selections.
+- **Web Component Support**: Added capability to export the library as a standard Custom Web Component using Angular Elements, enabling full support for React, Vue, Svelte, and Vanilla JS.
+- **Example Applications**: Added React, Vue, and Vanilla JS implementation examples in the `/examples` directory.
 
 ### Fixed
 

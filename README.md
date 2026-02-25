@@ -415,6 +415,38 @@ export class IonicFormComponent {
 </ion-item>
 ```
 
+### **React, Vue, & Vanilla JS (Web Components)**
+
+Because `ngxsmk-datepicker` is highly decoupled from heavy external dependencies, it can be exported as a standard Custom Web Component using Angular Elements. This allows you to use exactly the same datepicker in React, Vue, Svelte, or Vanilla JavaScript projects seamlessly!
+
+**1. Create a Custom Element Wrapper**
+```typescript
+import { createApplication } from '@angular/platform-browser';
+import { createCustomElement } from '@angular/elements';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+(async () => {
+  const app = await createApplication();
+  const DatepickerElement = createCustomElement(NgxsmkDatepickerComponent, { injector: app.injector });
+  customElements.define('ngxsmk-datepicker', DatepickerElement);
+})().catch(console.error);
+```
+
+**2. Use It Natively Anywhere**
+```html
+<!-- In any HTML, React, Vue, or Svelte file -->
+<ngxsmk-datepicker id="myPicker" mode="range" theme="light"></ngxsmk-datepicker>
+
+<script>
+  // Add native DOM event listeners
+  document.getElementById('myPicker').addEventListener('dateSelect', (e) => {
+    console.log('Selected date:', e.detail);
+  });
+</script>
+```
+
+For full working examples (including React & Vue bindings), check out the `/examples` directory in our GitHub repository!
+
 ### **Plain HTML Inputs**
 
 Use with standard HTML form inputs for maximum flexibility:
