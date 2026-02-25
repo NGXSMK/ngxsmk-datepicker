@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker-workspace",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -47,6 +47,7 @@
     }
   },
   "dependencies": {
+    "@angular/elements": "^21.1.5",
     "@tokiforge/angular": "^2.0.0",
     "@tokiforge/core": "^2.0.0",
     "path-browserify": "^1.0.1",
@@ -180,6 +181,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.0.2",
+    "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/common": "^21.0.3",
     "@angular/compiler": "^21.0.3",
@@ -209,6 +211,7 @@
     "baseline-browser-mapping": "^2.9.11",
     "eslint": "^9.39.0",
     "jasmine-core": "^5.12.1",
+    "jsdom": "^27.1.0",
     "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "^2.2.1",
@@ -221,6 +224,7 @@
     "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.46.4",
+    "vitest": "^4.0.8",
     "zone.js": "^0.15.0"
   }
 }

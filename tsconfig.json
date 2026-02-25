@@ -51,6 +51,12 @@
     },
     {
       "path": "./examples/angular-issue-test/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/ngxsmk-datepicker-element/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/ngxsmk-datepicker-element/tsconfig.spec.json"
     }
   ]
 }

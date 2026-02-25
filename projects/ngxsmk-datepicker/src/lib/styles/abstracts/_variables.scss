@@ -1,0 +1,86 @@
+$breakpoints: (
+    md: 768px,
+    lg: 1025px
+);
+
+:root {
+    /* Spacing & Layout */
+    --ngxsmk-space-xs: 0.25rem;
+    --ngxsmk-space-sm: 0.5rem;
+    --ngxsmk-space-md: 0.75rem;
+    --ngxsmk-space-lg: 1rem;
+    --ngxsmk-space-xl: 1.5rem;
+    --ngxsmk-space-2xl: 2rem;
+
+    --ngxsmk-touch-target: 44px;
+    --ngxsmk-cell-size-desktop: 40px;
+
+    /* Typography */
+    --ngxsmk-font-size-xs: 0.625rem;
+    --ngxsmk-font-size-sm: 0.75rem;
+    --ngxsmk-font-size-base: 1rem;
+    --ngxsmk-font-size-lg: 1.125rem;
+    --ngxsmk-font-size-xl: 1.25rem;
+    --ngxsmk-line-height: 1.5;
+    --ngxsmk-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+
+    /* Colors */
+    --ngxsmk-color-primary: var(--ion-color-primary, #6d28d9);
+    --ngxsmk-color-on-primary: var(--ion-color-primary-contrast, #ffffff);
+    --ngxsmk-color-range-bg: var(--ion-color-primary-tint, #f5f3ff);
+    --ngxsmk-color-surface: var(--ion-background-color, #ffffff);
+    --ngxsmk-color-surface-hover: #f3f4f6;
+    --ngxsmk-color-text-main: var(--ion-text-color, #1f2937);
+    --ngxsmk-color-text-muted: var(--ion-text-color-step-400, #6b7280);
+    --ngxsmk-color-border: var(--ion-item-border-color, var(--ion-border-color, #e5e7eb));
+
+    /* Border Radii */
+    --ngxsmk-radius-sm: 6px;
+    --ngxsmk-radius-md: 8px;
+    --ngxsmk-radius-lg: 12px;
+    --ngxsmk-radius-xl: 16px;
+    --ngxsmk-radius-popup: 16px;
+
+    /* Shadows */
+    --ngxsmk-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --ngxsmk-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --ngxsmk-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Animation */
+    --ngxsmk-transition-duration: 150ms;
+    --ngxsmk-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --ngxsmk-transition: all var(--ngxsmk-transition-duration) var(--ngxsmk-transition-easing);
+
+    /* Z-Index */
+    --ngxsmk-z-backdrop: 2147483646;
+    --ngxsmk-z-popover: 2147483647;
+
+    /* =========================================================================
+       Legacy CSS Variable Mapping (Backward Compatibility Layer)
+       ========================================================================= */
+    --datepicker-primary-color: var(--ngxsmk-color-primary);
+    --datepicker-primary-contrast: var(--ngxsmk-color-on-primary);
+    --datepicker-range-background: var(--ngxsmk-color-range-bg);
+    --datepicker-background: var(--ngxsmk-color-surface);
+    --datepicker-hover-background: var(--ngxsmk-color-surface-hover);
+    --datepicker-text-color: var(--ngxsmk-color-text-main);
+    --datepicker-subtle-text-color: var(--ngxsmk-color-text-muted);
+    --datepicker-border-color: var(--ngxsmk-color-border);
+
+    /* Radius Mappings */
+    --datepicker-radius-sm: var(--ngxsmk-radius-sm);
+    --datepicker-radius-md: var(--ngxsmk-radius-md);
+    --datepicker-radius-lg: var(--ngxsmk-radius-lg);
+    --datepicker-border-radius: var(--ngxsmk-radius-lg);
+    /* Essential for ngxsmk-datepicker-container */
+
+    /* Typography & Spacing Mappings */
+    --datepicker-font-size-base: var(--ngxsmk-font-size-base);
+    --datepicker-font-size-lg: var(--ngxsmk-font-size-lg);
+    --datepicker-line-height: var(--ngxsmk-line-height);
+    --datepicker-spacing-xs: var(--ngxsmk-space-xs);
+    --datepicker-spacing-sm: var(--ngxsmk-space-sm);
+    --datepicker-spacing-md: var(--ngxsmk-space-md);
+    --datepicker-spacing-lg: var(--ngxsmk-space-lg);
+    --datepicker-transition: var(--ngxsmk-transition);
+}

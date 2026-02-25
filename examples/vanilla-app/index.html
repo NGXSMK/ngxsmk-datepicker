@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla JS + ngxsmk-datepicker</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            background-color: #f9fafb;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .picker-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        ngxsmk-datepicker {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .result {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        pre {
+            margin: 0;
+            color: #334155;
+        }
+    </style>
+
+    <!-- Import standard CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+</head>
+
+<body>
+    <h1>Vanilla JavaScript Integration</h1>
+    <p class="text-gray-600 mb-8">This page runs entirely without a framework, using pure HTML and standard DOM APIs to
+        interact with the Angular Web Component.</p>
+
+    <div class="card">
+        <div class="picker-container">
+            <!-- Standard HTML Custom Element -->
+            <ngxsmk-datepicker id="myDatepicker" mode="range" theme="light"></ngxsmk-datepicker>
+        </div>
+
+        <div class="result">
+            <strong class="block mb-2 text-sm text-gray-500 uppercase">Selected Range:</strong>
+            <pre id="output">No date selected</pre>
+        </div>
+    </div>
+
+    <!-- 1. Include the compiled Angular Element Bundle -->
+    <script src="./ngxsmk-element.js"></script>
+
+    <!-- 2. Write standard Javascript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const picker = document.getElementById('myDatepicker');
+            const output = document.getElementById('output');
+
+            // Pass complex objects / inputs programmatically
+            picker.classes = JSON.stringify({
+                header: 'bg-blue-600 text-white rounded-t-xl',
+                calendar: 'border border-blue-100 shadow-xl rounded-b-xl'
+            });
+
+            // Listen to standard DOM events
+            picker.addEventListener('dateSelect', (event) => {
+                console.log('User picked a date:', event.detail);
+
+                // Update DOM
+                if (event.detail && event.detail.start) {
+                    output.textContent = JSON.stringify(event.detail, null, 2);
+                } else {
+                    // single mode fallback
+                    output.textContent = JSON.stringify(event.detail, null, 2);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

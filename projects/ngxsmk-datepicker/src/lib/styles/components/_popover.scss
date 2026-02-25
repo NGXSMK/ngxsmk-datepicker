@@ -1,0 +1,73 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+.ngxsmk-popover-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 90dvb;
+    background: var(--ngxsmk-color-surface);
+    border-radius: var(--ngxsmk-radius-popup) var(--ngxsmk-radius-popup) 0 0;
+    z-index: var(--ngxsmk-z-popover);
+    @include safe-area-padding(0, 0, 1rem, 0);
+    box-shadow: var(--ngxsmk-shadow-xl);
+    border: unset !important;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
+
+    &.ngxsmk-popover-open {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    &.ngxsmk-inline-container {
+        position: static !important;
+        width: 100%;
+        margin: 0;
+        transform: none !important;
+        box-shadow: none !important;
+        border: none;
+        background: transparent;
+        padding: 0;
+        max-height: none;
+    }
+
+    @include respond-up(md) {
+        top: 50%;
+        left: 50%;
+        bottom: auto;
+        transform: translate(-50%, -50%);
+        width: clamp(320px, 80vw, 500px);
+        border-radius: var(--ngxsmk-radius-popup);
+        border: unset !important;
+        max-height: calc(100vh - 64px);
+        padding: 0;
+    }
+
+    @include respond-up(lg) {
+        position: absolute;
+        transform: none;
+        width: max-content;
+        min-width: 360px;
+        max-height: none;
+        border-radius: var(--ngxsmk-radius-md);
+        box-shadow: var(--ngxsmk-shadow-lg);
+        border: unset !important;
+    }
+}
+
+.ngxsmk-calendar-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @include respond-up(lg) {
+        &.ngxsmk-has-multi-calendar {
+            flex-direction: row;
+            min-width: 600px;
+        }
+    }
+}

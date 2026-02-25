@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
+import { NgxsmkDatepickerContentComponent } from '../components/datepicker-content.component';
 import { CalendarHeaderComponent } from '../components/calendar-header.component';
 import { CalendarMonthViewComponent } from '../components/calendar-month-view.component';
 import { CalendarYearViewComponent } from '../components/calendar-year-view.component';
@@ -127,6 +128,24 @@ describe('NgxsmkDatepickerComponent', () => {
       providers: [DatePipe],
     })
       .overrideComponent(NgxsmkDatepickerComponent, {
+        remove: {
+          imports: [
+            CalendarHeaderComponent,
+            CalendarMonthViewComponent,
+            CalendarYearViewComponent,
+            TimeSelectionComponent,
+          ],
+        },
+        add: {
+          imports: [
+            CalendarHeaderStubComponent,
+            CalendarMonthViewStubComponent,
+            CalendarYearViewStubComponent,
+            TimeSelectionStubComponent,
+          ],
+        },
+      })
+      .overrideComponent(NgxsmkDatepickerContentComponent, {
         remove: {
           imports: [
             CalendarHeaderComponent,

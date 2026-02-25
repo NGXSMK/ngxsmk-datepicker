@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
 import { I18nService } from '../../i18n/i18n.service';
+import { ThemeService } from '@tokiforge/angular';
 
 @Component({
   selector: 'app-advanced',
@@ -13,58 +14,74 @@ import { I18nService } from '../../i18n/i18n.service';
       <h1>{{ i18n.t().advanced.title }}</h1>
       <p class="text-lg">{{ i18n.t().advanced.lead }}</p>
 
-      <h2>Signal Forms Integration (Angular 21+)</h2>
-      <p>Seamlessly integrate with the latest Angular Signal-based forms. Minimal boilerplate, maximum reactivity.</p>
-      <div class="card bg-sidebar">
-        <ngxsmk-datepicker 
-          [field]="dateField"
-          placeholder="Signal-synced field">
-        </ngxsmk-datepicker>
-        <div class="tip mt-md">
-          Reactive State: <code>{{ dateField.value() | date:'medium' }}</code>
+      <h2>{{ i18n.t().advanced.signalFormsTitle }}</h2>
+      <p>{{ i18n.t().advanced.signalFormsLead }}</p>
+      <div class="code-window mt-md overflow-visible">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">signal-form.html</div>
+        </div>
+        <div class="p-lg preview-body-alt">
+          <ngxsmk-datepicker 
+            [field]="dateField"
+            [inline]="true"
+            [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+            [placeholder]="i18n.t().advanced.placeholders.signalField">
+          </ngxsmk-datepicker>
+          <div class="tip mt-md">
+            Reactive State: <code class="text-secondary">{{ dateField.value() | date:'medium' }}</code>
+          </div>
         </div>
       </div>
 
-      <h2>Keyboard Shortcuts</h2>
-      <p>Full A11y support. Navigate through dates and years purely with your keyboard.</p>
+      <h2>{{ i18n.t().advanced.keyboardTitle }}</h2>
+      <p>{{ i18n.t().advanced.keyboardLead }}</p>
       <div class="grid gap-md">
         <div class="card bg-sidebar">
-          <h3>Common Actions</h3>
+          <h3>{{ i18n.t().advanced.commonActions }}</h3>
           <ul class="shortcut-list">
-            <li><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> - Navigate Days/Weeks</li>
-            <li><kbd>PgUp</kbd> <kbd>PgDn</kbd> - Change Month</li>
-            <li><kbd>T</kbd> - Select Today</li>
-            <li><kbd>Esc</kbd> - Close Calendar</li>
-            <li><kbd>?</kbd> - Show Help Overlay</li>
+            <li><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> - {{ i18n.t().advanced.shortcuts.arrows }}</li>
+            <li><kbd>PgUp</kbd> <kbd>PgDn</kbd> - {{ i18n.t().advanced.shortcuts.pgUpDn }}</li>
+            <li><kbd>T</kbd> - {{ i18n.t().advanced.shortcuts.today }}</li>
+            <li><kbd>Esc</kbd> - {{ i18n.t().advanced.shortcuts.close }}</li>
+            <li><kbd>?</kbd> - {{ i18n.t().advanced.shortcuts.help }}</li>
           </ul>
         </div>
       </div>
 
-      <h2>Holiday Highlighting</h2>
-      <p>Provide a <code>HolidayProvider</code> to automatically highlight specific dates with labels.</p>
-      <div class="card bg-sidebar">
+      <h2>{{ i18n.t().advanced.holidaysTitle }}</h2>
+      <p>{{ i18n.t().advanced.holidaysLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
         <ngxsmk-datepicker 
           [holidayProvider]="holidayProvider"
-          placeholder="Hover over Holidays (e.g. July 4th)">
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+          [placeholder]="i18n.t().advanced.placeholders.holidayHover">
         </ngxsmk-datepicker>
       </div>
 
-      <h2>Time Picker Integration</h2>
-      <p>Enable precise time selection alongside your date picker.</p>
-      <div class="card bg-sidebar">
+      <h2>{{ i18n.t().advanced.timePickerTitle }}</h2>
+      <p>{{ i18n.t().advanced.timePickerLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
         <ngxsmk-datepicker 
           [showTime]="true" 
           [use24Hour]="true"
-          placeholder="Pick date and time">
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+          [placeholder]="i18n.t().advanced.placeholders.pickDateTime">
         </ngxsmk-datepicker>
       </div>
 
-      <h2>Disabled Dates Logic</h2>
-      <p>Restrict selection using custom logic or static arrays.</p>
-      <div class="card bg-sidebar">
+      <h2>{{ i18n.t().advanced.disabledDatesTitle }}</h2>
+      <p>{{ i18n.t().advanced.disabledDatesLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
         <ngxsmk-datepicker 
           [isInvalidDate]="isWeekend"
-          placeholder="Weekends are disabled">
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+          placeholder="{{ i18n.t().advanced.weekendsDisabled }}">
         </ngxsmk-datepicker>
       </div>
     </div>
@@ -105,29 +122,102 @@ import { I18nService } from '../../i18n/i18n.service';
       border-radius: 4px;
       padding: 2px 6px;
       font-size: 0.8em;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-family: 'JetBrains Mono', monospace;
       box-shadow: 0 2px 0 var(--color-border);
       color: var(--color-secondary);
     }
+    
+    .p-lg { padding: var(--space-lg); }
+    
+    .preview-body-alt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-2xl) var(--space-lg);
+      background: radial-gradient(circle at top, rgba(124, 58, 237, 0.05), transparent);
+    }
 
     ngxsmk-datepicker {
-      width: 100% !important;
-      max-width: 320px;
+      display: block;
+      width: fit-content !important;
+      margin: 0 auto;
     }
 
     .tip {
       font-size: var(--font-size-sm);
-      code {
-        background: rgba(124, 58, 237, 0.1);
-        color: var(--color-primary-light);
-        padding: 2px 6px;
-        border-radius: 4px;
-      }
+      text-align: center;
+      width: 100%;
+    }
+    
+    .overflow-visible { overflow: visible !important; }
+    
+    .code-window {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+
+        &.mt-md { margin-top: var(--space-md); }
+
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                &.red { background: #ff5f56; }
+                &.yellow { background: #ffbd2e; }
+                &.green { background: #27c93f; }
+            }
+            .window-title {
+                margin-left: 0.5rem;
+                font-size: 0.7rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: var(--color-text-dim);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        pre {
+            margin: 0;
+            padding: var(--space-lg);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+
+            code {
+                background: none;
+                border: none;
+                padding: 0;
+                color: #e0e6ed;
+                
+                .token-keyword { color: #ff79c6; }
+                .token-string { color: #f1fa8c; }
+                .token-comment { color: #6272a4; font-style: italic; }
+                .token-function { color: #50fa7b; }
+                .token-class { color: #8be9fd; }
+                .token-operator { color: #ff79c6; }
+                .token-number { color: #bd93f9; }
+                .token-tag { color: #ff79c6; }
+                .token-attr { color: #bd93f9; }
+            }
+        }
     }
   `]
 })
 export class AdvancedFeaturesComponent {
   i18n = inject(I18nService);
+  themeService = inject(ThemeService);
   dateField = {
     value: signal<Date | null>(new Date()),
     disabled: signal(false),
@@ -149,9 +239,10 @@ export class AdvancedFeaturesComponent {
     getHolidayLabel: (date: Date) => {
       const m = date.getMonth() + 1;
       const d = date.getDate();
-      if (m === 1 && d === 1) return 'New Year';
-      if (m === 7 && d === 4) return 'Independence Day';
-      if (m === 12 && d === 25) return 'Christmas';
+      const labels = this.i18n.t().advanced.holidayLabels;
+      if (m === 1 && d === 1) return labels.newYear;
+      if (m === 7 && d === 4) return labels.independenceDay;
+      if (m === 12 && d === 25) return labels.christmas;
       return null;
     }
   };

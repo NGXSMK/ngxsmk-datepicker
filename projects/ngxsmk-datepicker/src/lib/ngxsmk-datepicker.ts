@@ -58,11 +58,8 @@ import {
   update12HourState,
   processDateRanges,
 } from './utils/calendar.utils';
-import { CalendarHeaderComponent } from './components/calendar-header.component';
-import { CalendarMonthViewComponent } from './components/calendar-month-view.component';
-import { CalendarYearViewComponent } from './components/calendar-year-view.component';
-import { TimeSelectionComponent } from './components/time-selection.component';
-import { CustomSelectComponent } from './components/custom-select.component';
+import { NgxsmkDatepickerInputComponent } from './components/datepicker-input.component';
+import { NgxsmkDatepickerContentComponent } from './components/datepicker-content.component';
 import { createDateComparator } from './utils/performance.utils';
 import {
   DatepickerHooks,
@@ -141,11 +138,8 @@ interface MatFormFieldControlMock<T> {
   imports: [
     NgClass,
     NgTemplateOutlet,
-    DatePipe,
-    CalendarHeaderComponent,
-    CalendarMonthViewComponent,
-    CalendarYearViewComponent,
-    TimeSelectionComponent,
+    NgxsmkDatepickerInputComponent,
+    NgxsmkDatepickerContentComponent,
   ],
   providers: [
     FieldSyncService,
@@ -176,641 +170,178 @@ interface MatFormFieldControlMock<T> {
       [ngClass]="classes?.wrapper"
     >
       @if (!isInlineMode) {
-        @if (shouldUseNativePicker()) {
-          <div
-            class="ngxsmk-input-group ngxsmk-native-input-group"
-            [class.disabled]="disabled"
-            [ngClass]="classes?.inputGroup"
-          >
-            <input
-              [type]="getNativeInputType()"
-              #nativeDateInput
-              [value]="formatValueForNativeInput(value)"
-              [placeholder]="placeholder"
-              [id]="inputId || _uniqueId"
-              [name]="name"
-              [autocomplete]="autocomplete"
-              [disabled]="disabled"
-              [required]="required"
-              [attr.min]="getMinDateForNativeInput()"
-              [attr.max]="getMaxDateForNativeInput()"
-              [attr.aria-label]="
-                placeholder ||
-                getTranslation(timeOnly ? 'selectTime' : 'selectDate')
-              "
-              [attr.aria-required]="required"
-              [attr.aria-invalid]="errorState"
-              [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
-              class="ngxsmk-display-input ngxsmk-native-input"
-              [ngClass]="classes?.input"
-              (change)="onNativeInputChange($event)"
-              (blur)="onInputBlur($event)"
-            />
-            @if (formatValueForNativeInput(value)) {
-              <button
-                type="button"
-                class="ngxsmk-clear-button"
-                (click)="clearValue($event); $event.stopPropagation()"
-                [disabled]="disabled"
-                [attr.aria-label]="_clearAriaLabel"
-                [title]="_clearLabel"
-                [ngClass]="classes?.clearBtn"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="32"
-                    d="M368 368L144 144M368 144L144 368"
-                  />
-                </svg>
-              </button>
-            }
-          </div>
-        } @else {
-          <div class="ngxsmk-input-and-error">
-          <div
-            class="ngxsmk-input-group"
-            (click)="toggleCalendar($event)"
-            (pointerdown)="onPointerDown($event)"
-            (pointerup)="onPointerUp($event)"
-            (focus)="onInputGroupFocus()"
-            (keydown.enter)="toggleCalendar($event)"
-            (keydown.space)="toggleCalendar($event); $event.preventDefault()"
-            [class.disabled]="disabled"
-            role="button"
-            [attr.aria-disabled]="disabled"
-            aria-haspopup="dialog"
-            [attr.aria-expanded]="isCalendarOpen"
-            tabindex="0"
-            [ngClass]="classes?.inputGroup"
-          >
-            <input
-              type="text"
-              #dateInput
-              [value]="
-                allowTyping ? typedInputValue || displayValue : displayValue
-              "
-              [placeholder]="placeholder"
-              [id]="inputId || _uniqueId"
-              [name]="name"
-              [autocomplete]="autocomplete"
-              [readonly]="!allowTyping"
-              [disabled]="disabled"
-              [required]="required"
-              [attr.aria-label]="
-                placeholder ||
-                getTranslation(timeOnly ? 'selectTime' : 'selectDate')
-              "
-              [attr.aria-required]="required"
-              [attr.aria-invalid]="errorState"
-              [attr.aria-describedby]="'datepicker-help-' + _uniqueId"
-              class="ngxsmk-display-input"
-              [ngClass]="classes?.input"
-              (keydown.enter)="onInputKeyDown($event)"
-              (keydown.space)="onInputKeyDown($event)"
-              (keydown.escape)="onInputKeyDown($event)"
-              (input)="onInputChange($event)"
-              (blur)="onInputBlur($event)"
-              (focus)="onInputFocus($event)"
-            />
-            @if (displayValue) {
-              <button
-                type="button"
-                class="ngxsmk-clear-button"
-                (click)="clearValue($event); $event.stopPropagation()"
-                (touchstart)="$event.stopPropagation()"
-                (touchend)="$event.stopPropagation()"
-                (pointerdown)="$event.stopPropagation()"
-                (pointerup)="$event.stopPropagation()"
-                [disabled]="disabled"
-                [attr.aria-label]="_clearAriaLabel"
-                [title]="_clearLabel"
-                [ngClass]="classes?.clearBtn"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="32"
-                    d="M368 368L144 144M368 144L144 368"
-                  />
-                </svg>
-              </button>
-            }
-            @if (showCalendarButton) {
-              <button
-                type="button"
-                class="ngxsmk-calendar-button"
-                (click)="toggleCalendar($event); $event.stopPropagation()"
-                [disabled]="disabled"
-                [attr.aria-label]="
-                  getTranslation(timeOnly ? 'selectTime' : 'selectDate')
-                "
-                [title]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
-                [ngClass]="classes?.calendarBtn"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="32"
-                    d="M96 80H416c26.51 0 48 21.49 48 48V416c0 26.51-21.49 48-48 48H96c-26.51 0-48-21.49-48-48V128c0-26.51 21.49-48 48-48zM160 32v64M352 32v64M464 192H48M200 256h112M200 320h112M200 384h112M152 256h.01M152 320h.01M152 384h.01"
-                  />
-                </svg>
-              </button>
-            }
-          </div>
-            @if (validationErrorMessage) {
-              <div
-                class="ngxsmk-validation-error"
-                role="alert"
-                [attr.aria-live]="'polite'"
-              >
-                {{ validationErrorMessage }}
-              </div>
-            }
-          </div>
-        }
+        <ngxsmk-datepicker-input
+          #datepickerInput
+          [isNative]="shouldUseNativePicker()"
+          [disabled]="disabled"
+          [classes]="classes"
+          [nativeInputType]="getNativeInputType()"
+          [formattedValue]="formatValueForNativeInput(value)"
+          [placeholder]="placeholder"
+          [id]="inputId || _uniqueId"
+          [name]="name"
+          [autocomplete]="autocomplete"
+          [required]="required"
+          [minDateNative]="getMinDateForNativeInput()"
+          [maxDateNative]="getMaxDateForNativeInput()"
+          [ariaLabel]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+          [ariaDescribedBy]="'datepicker-help-' + _uniqueId"
+          [errorState]="errorState"
+          [clearAriaLabel]="_clearAriaLabel"
+          [clearLabel]="_clearLabel"
+          [isCalendarOpen]="isCalendarOpen"
+          [allowTyping]="allowTyping"
+          [typedInputValue]="typedInputValue"
+          [displayValue]="displayValue"
+          [showCalendarButton]="showCalendarButton"
+          [calendarAriaLabel]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
+          [validationErrorMessage]="validationErrorMessage"
+          (nativeInputChange)="onNativeInputChange($event)"
+          (inputBlur)="onInputBlur($event)"
+          (clearValue)="clearValue($event)"
+          (toggleCalendar)="toggleCalendar($event)"
+          (pointerDown)="onPointerDown($event)"
+          (pointerUp)="onPointerUp($event)"
+          (inputGroupFocus)="onInputGroupFocus()"
+          (inputKeyDown)="onInputKeyDown($event)"
+          (inputChange)="onInputChange($event)"
+          (inputFocus)="onInputFocus($event)"
+        ></ngxsmk-datepicker-input>
       }
 
       <ng-template #portalContent>
-        @if (isCalendarVisible) {
-          @if (!isInlineMode && isCalendarOpen) {
-            <div
-              class="ngxsmk-backdrop"
-              [class.ngxsmk-backdrop-allow-modal-scroll]="_shouldAppendToBody"
-              [class.dark-theme]="theme === 'dark'"
-              role="button"
-              tabindex="0"
-              [attr.aria-label]="getTranslation('closeCalendarOverlay')"
-              (click)="onBackdropInteract($event)"
-              (keydown.enter)="onBackdropInteract($event)"
-              (keydown.space)="onBackdropInteract($event)"
-            ></div>
-          }
-          <div
-            #popoverContainer
-            [id]="popoverId"
-            class="ngxsmk-popover-container"
-            [class.dark-theme]="theme === 'dark'"
-            [class.ngxsmk-inline-container]="isInlineMode"
-            [class.ngxsmk-popover-open]="isCalendarOpen && !isInlineMode"
-            [class.ngxsmk-time-only-popover]="timeOnly"
-            [class.ngxsmk-has-time-selection]="showTime || timeOnly"
-            [class.ngxsmk-bottom-sheet]="
-              isMobileDevice() &&
-              mobileModalStyle === 'bottom-sheet' &&
-              !isInlineMode
-            "
-            [class.ngxsmk-fullscreen]="
-              isMobileDevice() &&
-              mobileModalStyle === 'fullscreen' &&
-              !isInlineMode
-            "
-            [class.ngxsmk-align-left]="align === 'left'"
-            [class.ngxsmk-align-right]="align === 'right'"
-            [class.ngxsmk-align-center]="align === 'center'"
-            [ngClass]="classes?.popover"
-            role="dialog"
-            [attr.aria-label]="getCalendarAriaLabel()"
-            [attr.aria-modal]="!isInlineMode"
-            (touchstart)="onBottomSheetTouchStart($event)"
-            (touchmove)="onBottomSheetTouchMove($event)"
-            (touchend)="onBottomSheetTouchEnd($event)"
-          >
-            <div
-              class="ngxsmk-datepicker-container"
-              [ngClass]="classes?.container"
-            >
-              @if (isCalendarOpening) {
-                <div
-                  class="ngxsmk-calendar-loading"
-                  role="status"
-                  aria-live="polite"
-                  [attr.aria-label]="getCalendarLoadingMessage()"
-                >
-                  <div class="ngxsmk-calendar-loading-spinner"></div>
-                  <span class="ngxsmk-calendar-loading-text">{{
-                    getCalendarLoadingMessage()
-                  }}</span>
-                </div>
-              }
-              @if (
-                showRanges &&
-                rangesArray.length > 0 &&
-                mode === 'range' &&
-                !timeOnly
-              ) {
-                <div class="ngxsmk-ranges-container">
-                  <ul>
-                    @for (
-                      range of rangesArray;
-                      track trackByRange($index, range)
-                    ) {
-                      <li
-                        (click)="selectRange(range.value)"
-                        (keydown.enter)="selectRange(range.value)"
-                        (keydown.space)="
-                          selectRange(range.value); $event.preventDefault()
-                        "
-                        [class.disabled]="disabled"
-                        [attr.tabindex]="disabled ? -1 : 0"
-                        role="button"
-                        [attr.aria-disabled]="disabled"
-                      >
-                        {{ range.key }}
-                      </li>
-                    }
-                  </ul>
-                </div>
-              }
-              <div
-                class="ngxsmk-calendar-container"
-                [class.ngxsmk-time-only-mode]="timeOnly"
-                [class.ngxsmk-has-multi-calendar]="calendarCount > 1"
-                [class.ngxsmk-calendar-layout-horizontal]="
-                  calendarCount > 1 && calendarLayout === 'horizontal'
-                "
-                [class.ngxsmk-calendar-layout-vertical]="
-                  calendarCount > 1 && calendarLayout === 'vertical'
-                "
-                [class.ngxsmk-calendar-layout-auto]="
-                  calendarCount > 1 && calendarLayout === 'auto'
-                "
-                [ngClass]="classes?.calendar"
-              >
-                @if (!timeOnly) {
-                  @if (calendarViewMode === 'month') {
-                    <ngxsmk-calendar-header
-                      [headerClass]="classes?.header ?? ''"
-                      [navPrevClass]="classes?.navPrev ?? ''"
-                      [navNextClass]="classes?.navNext ?? ''"
-                      [monthOptions]="monthOptions()"
-                      [(currentMonth)]="currentMonth"
-                      [yearOptions]="yearOptions()"
-                      [(currentYear)]="currentYear"
-                      [disabled]="disabled"
-                      [isBackArrowDisabled]="isBackArrowDisabled"
-                      [prevMonthAriaLabel]="_prevMonthAriaLabel"
-                      [nextMonthAriaLabel]="_nextMonthAriaLabel"
-                      (previousMonth)="changeMonth(-1)"
-                      (nextMonth)="changeMonth(1)"
-                      (currentYearChange)="onYearSelectChange($event)"
-                    >
-                    </ngxsmk-calendar-header>
-                    <div
-                      class="ngxsmk-multi-calendar-container"
-                      [class.ngxsmk-multi-calendar]="calendarCount > 1"
-                      [class.ngxsmk-calendar-horizontal]="
-                        calendarCount > 1 && calendarLayout === 'horizontal'
-                      "
-                      [class.ngxsmk-calendar-vertical]="
-                        calendarCount > 1 && calendarLayout === 'vertical'
-                      "
-                      [class.ngxsmk-calendar-auto]="
-                        calendarCount > 1 && calendarLayout === 'auto'
-                      "
-                      [class.ngxsmk-sync-scroll-enabled]="
-                        syncScroll.enabled && calendarCount > 1
-                      "
-                    >
-                      @for (
-                        calendarMonth of renderedCalendars();
-                        track trackByCalendarMonth($index, calendarMonth)
-                      ) {
-                        <div
-                          class="ngxsmk-calendar-month"
-                          [attr.data-calendar-index]="
-                            multiCalendarMonths.indexOf(calendarMonth)
-                          "
-                          [class.ngxsmk-calendar-month-multi]="
-                            calendarCount > 1
-                          "
-                        >
-                          @if (calendarCount > 1) {
-                            <div class="ngxsmk-calendar-month-header">
-                              <span class="ngxsmk-calendar-month-title">{{
-                                getMonthYearLabel(
-                                  calendarMonth.month,
-                                  calendarMonth.year
-                                )
-                              }}</span>
-                            </div>
-                          }
-                          <ngxsmk-calendar-month-view
-                            [days]="calendarMonth.days"
-                            [weekDays]="weekDays"
-                            [classes]="classes"
-                            [mode]="mode"
-                            [selectedDate]="selectedDate"
-                            [startDate]="startDate"
-                            [endDate]="endDate"
-                            [focusedDate]="focusedDate"
-                            [today]="today"
-                            [currentMonth]="calendarMonth.month"
-                            [currentYear]="calendarMonth.year"
-                            [ariaLabel]="
-                              getCalendarAriaLabelForMonth(
-                                calendarMonth.month,
-                                calendarMonth.year
-                              )
-                            "
-                            [dateTemplate]="dateTemplate"
-                            [isDateDisabled]="boundIsDateDisabled"
-                            [isSameDay]="boundIsSameDay"
-                            [isHoliday]="boundIsHoliday"
-                            [isMultipleSelected]="boundIsMultipleSelected"
-                            [isInRange]="boundIsInRange"
-                            [isPreviewInRange]="boundIsPreviewInRange"
-                            [getAriaLabel]="boundGetAriaLabel"
-                            [getDayCellCustomClasses]="
-                              boundGetDayCellCustomClasses
-                            "
-                            [getDayCellTooltip]="boundGetDayCellTooltip"
-                            [formatDayNumber]="boundFormatDayNumber"
-                            (dateClick)="onDateClick($event)"
-                            (dateHover)="onDateHover($event)"
-                            (dateFocus)="onDateFocus($event)"
-                            (swipeStart)="onCalendarSwipeStart($event)"
-                            (swipeMove)="onCalendarSwipeMove($event)"
-                            (swipeEnd)="onCalendarSwipeEnd($event)"
-                            (touchStart)="
-                              onDateCellTouchStart($event.event, $event.day)
-                            "
-                            (touchMove)="onDateCellTouchMove($event)"
-                            (touchEnd)="
-                              onDateCellTouchEnd($event.event, $event.day)
-                            "
-                          >
-                          </ngxsmk-calendar-month-view>
-                        </div>
-                      }
-                    </div>
-                  }
-
-                  @if (calendarViewMode === 'year') {
-                    <ngxsmk-calendar-year-view
-                      viewMode="year"
-                      [yearGrid]="yearGrid"
-                      [currentYear]="_currentYear"
-                      [currentDecade]="_currentDecade"
-                      [today]="today"
-                      [disabled]="disabled"
-                      [headerClass]="classes?.header ?? ''"
-                      [navPrevClass]="classes?.navPrev ?? ''"
-                      [navNextClass]="classes?.navNext ?? ''"
-                      [previousYearsLabel]="getTranslation('previousYears')"
-                      [nextYearsLabel]="getTranslation('nextYears')"
-                      (viewModeChange)="calendarViewMode = $event"
-                      (changeYear)="changeYear($event)"
-                      (yearClick)="onYearClick($event)"
-                    >
-                    </ngxsmk-calendar-year-view>
-                  }
-
-                  @if (calendarViewMode === 'decade') {
-                    <ngxsmk-calendar-year-view
-                      viewMode="decade"
-                      [decadeGrid]="decadeGrid"
-                      [currentDecade]="_currentDecade"
-                      [disabled]="disabled"
-                      [headerClass]="classes?.header ?? ''"
-                      [navPrevClass]="classes?.navPrev ?? ''"
-                      [navNextClass]="classes?.navNext ?? ''"
-                      [previousDecadeLabel]="getTranslation('previousDecade')"
-                      [nextDecadeLabel]="getTranslation('nextDecade')"
-                      (changeDecade)="changeDecade($event)"
-                      (decadeClick)="onDecadeClick($event)"
-                    >
-                    </ngxsmk-calendar-year-view>
-                  }
-
-                  @if (calendarViewMode === 'timeline' && mode === 'range') {
-                    <div class="ngxsmk-timeline-view">
-                      <div class="ngxsmk-timeline-header">
-                        <div class="ngxsmk-timeline-controls">
-                          <button
-                            type="button"
-                            class="ngxsmk-timeline-zoom-out"
-                            (click)="timelineZoomOut()"
-                            [disabled]="disabled"
-                          >
-                            -
-                          </button>
-                          <span class="ngxsmk-timeline-range"
-                            >{{ timelineStartDate | date: 'shortDate' }} -
-                            {{ timelineEndDate | date: 'shortDate' }}</span
-                          >
-                          <button
-                            type="button"
-                            class="ngxsmk-timeline-zoom-in"
-                            (click)="timelineZoomIn()"
-                            [disabled]="disabled"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                      <div class="ngxsmk-timeline-container" #timelineContainer>
-                        <div class="ngxsmk-timeline-track">
-                          @for (
-                            month of timelineMonths;
-                            track month.getTime()
-                          ) {
-                            <div
-                              class="ngxsmk-timeline-month"
-                              [class.selected]="isTimelineMonthSelected(month)"
-                              (click)="
-                                onTimelineMonthClick(month);
-                                $event.stopPropagation()
-                              "
-                              (keydown.enter)="onTimelineMonthClick(month)"
-                              (keydown.space)="
-                                onTimelineMonthClick(month);
-                                $event.preventDefault()
-                              "
-                              role="button"
-                              tabindex="0"
-                              [attr.aria-label]="month | date: 'MMMM yyyy'"
-                            >
-                              <div class="ngxsmk-timeline-month-label">
-                                {{ month | date: 'MMM' }}
-                              </div>
-                              <div class="ngxsmk-timeline-month-year">
-                                {{ month | date: 'yyyy' }}
-                              </div>
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  }
-
-                  @if (
-                    calendarViewMode === 'time-slider' &&
-                    mode === 'range' &&
-                    showTime
-                  ) {
-                    <div class="ngxsmk-time-slider-view">
-                      <div class="ngxsmk-time-slider-header">
-                        <div class="ngxsmk-time-slider-label">
-                          {{ getTranslation('startTime') }}
-                        </div>
-                        <div class="ngxsmk-time-slider-value">
-                          {{ formatTimeSliderValue(startTimeSlider) }}
-                        </div>
-                      </div>
-                      <div class="ngxsmk-time-slider-container">
-                        <input
-                          #startTimeInput
-                          type="range"
-                          class="ngxsmk-time-slider"
-                          [min]="0"
-                          [max]="1440"
-                          [step]="minuteInterval"
-                          [value]="startTimeSlider"
-                          (input)="
-                            onStartTimeSliderChange(+startTimeInput.value)
-                          "
-                          [disabled]="disabled"
-                        />
-                      </div>
-                      <div class="ngxsmk-time-slider-header">
-                        <div class="ngxsmk-time-slider-label">
-                          {{ getTranslation('endTime') }}
-                        </div>
-                        <div class="ngxsmk-time-slider-value">
-                          {{ formatTimeSliderValue(endTimeSlider) }}
-                        </div>
-                      </div>
-                      <div class="ngxsmk-time-slider-container">
-                        <input
-                          #endTimeInput
-                          type="range"
-                          class="ngxsmk-time-slider"
-                          [min]="0"
-                          [max]="1440"
-                          [step]="minuteInterval"
-                          [value]="endTimeSlider"
-                          (input)="onEndTimeSliderChange(+endTimeInput.value)"
-                          [disabled]="disabled"
-                        />
-                      </div>
-                    </div>
-                  }
-                }
-
-                @if (showTime || timeOnly) {
-                  @if (!timeRangeMode) {
-                    <ngxsmk-time-selection
-                      [hourOptions]="hourOptions"
-                      [minuteOptions]="minuteOptions"
-                      [secondOptions]="secondOptions"
-                      [ampmOptions]="ampmOptions"
-                      [(currentDisplayHour)]="currentDisplayHour"
-                      [(currentMinute)]="currentMinute"
-                      [(currentSecond)]="currentSecond"
-                      [(isPm)]="isPm"
-                      [showSeconds]="showSeconds"
-                      [disabled]="disabled"
-                      [timeLabel]="getTranslation('time')"
-                      [showAmpm]="!use24Hour"
-                      (timeChange)="timeChange()"
-                    >
-                    </ngxsmk-time-selection>
-                  } @else {
-                    <div class="ngxsmk-time-range-container">
-                      <div class="ngxsmk-time-range-start">
-                        <span class="ngxsmk-time-range-label">{{
-                          getTranslation('from')
-                        }}</span>
-                        <ngxsmk-time-selection
-                          [hourOptions]="hourOptions"
-                          [minuteOptions]="minuteOptions"
-                          [secondOptions]="secondOptions"
-                          [ampmOptions]="ampmOptions"
-                          [(currentDisplayHour)]="startDisplayHour"
-                          [(currentMinute)]="startMinute"
-                          [(currentSecond)]="startSecond"
-                          [(isPm)]="startIsPm"
-                          [showSeconds]="showSeconds"
-                          [disabled]="disabled"
-                          timeLabel=""
-                          [showAmpm]="!use24Hour"
-                          (timeChange)="timeRangeChange()"
-                        >
-                        </ngxsmk-time-selection>
-                      </div>
-                      <div class="ngxsmk-time-range-end">
-                        <span class="ngxsmk-time-range-label">{{
-                          getTranslation('to')
-                        }}</span>
-                        <ngxsmk-time-selection
-                          [hourOptions]="hourOptions"
-                          [minuteOptions]="minuteOptions"
-                          [secondOptions]="secondOptions"
-                          [ampmOptions]="ampmOptions"
-                          [(currentDisplayHour)]="endDisplayHour"
-                          [(currentMinute)]="endMinute"
-                          [(currentSecond)]="endSecond"
-                          [(isPm)]="endIsPm"
-                          [showSeconds]="showSeconds"
-                          [disabled]="disabled"
-                          timeLabel=""
-                          [showAmpm]="!use24Hour"
-                          (timeChange)="timeRangeChange()"
-                        >
-                        </ngxsmk-time-selection>
-                      </div>
-                    </div>
-                  }
-                }
-
-                @if (!isInlineMode) {
-                  <div class="ngxsmk-footer" [ngClass]="classes?.footer">
-                    <button
-                      type="button"
-                      class="ngxsmk-clear-button-footer"
-                      (click)="clearValue($event)"
-                      [disabled]="disabled"
-                      [attr.aria-label]="_clearAriaLabel"
-                      [ngClass]="classes?.clearBtn"
-                    >
-                      {{ _clearLabel }}
-                    </button>
-                    <button
-                      type="button"
-                      class="ngxsmk-close-button"
-                      (click)="closeCalendarWithFocusRestore()"
-                      [disabled]="disabled"
-                      [attr.aria-label]="_closeAriaLabel"
-                      [ngClass]="classes?.closeBtn"
-                    >
-                      {{ _closeLabel }}
-                    </button>
-                  </div>
-                }
-              </div>
-            </div>
-          </div>
-        }
+        <ngxsmk-datepicker-content
+          #datepickerContent
+          [isCalendarVisible]="isCalendarVisible"
+          [isCalendarOpen]="isCalendarOpen"
+          [isInlineMode]="isInlineMode"
+          [shouldAppendToBody]="_shouldAppendToBody"
+          [theme]="theme"
+          [popoverId]="popoverId"
+          [classes]="classes"
+          [timeOnly]="timeOnly"
+          [showTime]="showTime"
+          [isMobile]="isMobileDevice()"
+          [mobileModalStyle]="mobileModalStyle"
+          [align]="align"
+          [ariaLabel]="getCalendarAriaLabel()"
+          [isCalendarOpening]="isCalendarOpening"
+          [loadingMessage]="getCalendarLoadingMessage()"
+          [showRanges]="showRanges"
+          [rangesArray]="rangesArray"
+          [mode]="mode"
+          [disabled]="disabled"
+          [calendarCount]="calendarCount"
+          [calendarLayout]="calendarLayout"
+          [syncScrollEnabled]="syncScroll.enabled ?? false"
+          [calendarMonths]="renderedCalendars()"
+          [weekDays]="weekDays"
+          [selectedDate]="selectedDate"
+          [startDate]="startDate"
+          [endDate]="endDate"
+          [focusedDate]="focusedDate"
+          [today]="today"
+          [dateTemplate]="dateTemplate"
+          [calendarViewMode]="calendarViewMode"
+          [monthOptions]="monthOptions()"
+          [currentMonth]="currentMonth"
+          [yearOptions]="yearOptions()"
+          [currentYear]="currentYear"
+          [isBackArrowDisabled]="isBackArrowDisabled"
+          [prevMonthAriaLabel]="_prevMonthAriaLabel"
+          [nextMonthAriaLabel]="_nextMonthAriaLabel"
+          [yearGrid]="yearGrid"
+          [currentDecade]="_currentDecade"
+          [decadeGrid]="decadeGrid"
+          [timelineStartDate]="timelineStartDate"
+          [timelineEndDate]="timelineEndDate"
+          [timelineMonths]="timelineMonths"
+          [minuteInterval]="minuteInterval"
+          [startTimeSlider]="startTimeSlider"
+          [endTimeSlider]="endTimeSlider"
+          [timeRangeMode]="timeRangeMode"
+          [hourOptions]="hourOptions"
+          [minuteOptions]="minuteOptions"
+          [secondOptions]="secondOptions"
+          [ampmOptions]="ampmOptions"
+          [currentDisplayHour]="currentDisplayHour"
+          [currentMinute]="currentMinute"
+          [currentSecond]="currentSecond"
+          [isPm]="isPm"
+          [showSeconds]="showSeconds"
+          [use24Hour]="use24Hour"
+          [startDisplayHour]="startDisplayHour"
+          [startMinute]="startMinute"
+          [startSecond]="startSecond"
+          [startIsPm]="startIsPm"
+          [endDisplayHour]="endDisplayHour"
+          [endMinute]="endMinute"
+          [endSecond]="endSecond"
+          [endIsPm]="endIsPm"
+          [clearAriaLabel]="_clearAriaLabel"
+          [clearLabel]="_clearLabel"
+          [closeAriaLabel]="_closeAriaLabel"
+          [closeLabel]="_closeLabel"
+          [translations]="_translations"
+          [boundIsDateDisabled]="boundIsDateDisabled"
+          [boundIsSameDay]="boundIsSameDay"
+          [boundIsHoliday]="boundIsHoliday"
+          [boundIsMultipleSelected]="boundIsMultipleSelected"
+          [boundIsInRange]="boundIsInRange"
+          [boundIsPreviewInRange]="boundIsPreviewInRange"
+          [boundGetAriaLabel]="boundGetAriaLabel"
+          [boundGetDayCellCustomClasses]="boundGetDayCellCustomClasses"
+          [boundGetDayCellTooltip]="boundGetDayCellTooltip"
+          [boundFormatDayNumber]="boundFormatDayNumber"
+          [getMonthYearLabel]="boundGetMonthYearLabel"
+          [getCalendarAriaLabelForMonth]="boundGetCalendarAriaLabelForMonth"
+          [isTimelineMonthSelected]="boundIsTimelineMonthSelected"
+          [formatTimeSliderValue]="boundFormatTimeSliderValue"
+          (backdropClick)="onBackdropInteract($event)"
+          (touchStartContainer)="onBottomSheetTouchStart($event)"
+          (touchMoveContainer)="onBottomSheetTouchMove($event)"
+          (touchEndContainer)="onBottomSheetTouchEnd($event)"
+          (rangeSelect)="selectRange($event)"
+          (previousMonth)="changeMonth(-1)"
+          (nextMonth)="changeMonth(1)"
+          (currentMonthChange)="currentMonth = $event"
+          (currentYearChange)="onYearSelectChange($event)"
+          (dateClick)="onDateClick($event)"
+          (dateHover)="onDateHover($event)"
+          (dateFocus)="onDateFocus($event)"
+          (swipeStart)="onCalendarSwipeStart($event)"
+          (swipeMove)="onCalendarSwipeMove($event)"
+          (swipeEnd)="onCalendarSwipeEnd($event)"
+          (touchStart)="onDateCellTouchStart($event.event, $event.day)"
+          (touchMove)="onDateCellTouchMove($event)"
+          (touchEnd)="onDateCellTouchEnd($event.event, $event.day)"
+          (viewModeChange)="calendarViewMode = $event"
+          (changeYear)="changeYear($event)"
+          (yearClick)="onYearClick($event)"
+          (changeDecade)="changeDecade($event)"
+          (decadeClick)="onDecadeClick($event)"
+          (timelineZoomOut)="timelineZoomOut()"
+          (timelineZoomIn)="timelineZoomIn()"
+          (timelineMonthClick)="onTimelineMonthClick($event)"
+          (startTimeSliderChange)="onStartTimeSliderChange($event)"
+          (endTimeSliderChange)="onEndTimeSliderChange($event)"
+          (currentDisplayHourChange)="currentDisplayHour = $event"
+          (currentMinuteChange)="currentMinute = $event"
+          (currentSecondChange)="currentSecond = $event"
+          (isPmChange)="isPm = $event"
+          (timeChange)="timeChange()"
+          (startDisplayHourChange)="startDisplayHour = $event"
+          (startMinuteChange)="startMinute = $event"
+          (startSecondChange)="startSecond = $event"
+          (startIsPmChange)="startIsPm = $event"
+          (endDisplayHourChange)="endDisplayHour = $event"
+          (endMinuteChange)="endMinute = $event"
+          (endSecondChange)="endSecond = $event"
+          (endIsPmChange)="endIsPm = $event"
+          (timeRangeChange)="timeRangeChange()"
+          (clearValue)="clearValue($event)"
+          (closeCalendar)="closeCalendarWithFocusRestore()"
+        ></ngxsmk-datepicker-content>
       </ng-template>
 
       @if (isCalendarVisible && !_shouldAppendToBody) {
@@ -1844,15 +1375,13 @@ export class NgxsmkDatepickerComponent
   @ViewChild('popoverContainer', { static: false })
   popoverContainer?: ElementRef<HTMLElement>;
   public readonly popoverId = 'ngxsmk-popover-' + Math.random().toString(36).substring(2, 9);
-  @ViewChild('dateInput', { static: false })
-  dateInput?: ElementRef<HTMLInputElement>;
-  @ViewChild('monthSelect', { static: false })
-  monthSelect?: CustomSelectComponent;
-  @ViewChild('yearSelect', { static: false })
-  yearSelect?: CustomSelectComponent;
+  @ViewChild('datepickerInput', { static: false })
+  datepickerInput?: NgxsmkDatepickerInputComponent;
+  @ViewChild('datepickerContent', { static: false })
+  datepickerContent?: NgxsmkDatepickerContentComponent;
   private focusTrapCleanup: (() => void) | null = null;
 
-  private _translations: DatepickerTranslations | null = null;
+  public _translations: DatepickerTranslations | null = null;
   private _translationService: TranslationService | null = null;
 
   private _changeDetectionScheduled = false;
@@ -2101,12 +1630,7 @@ export class NgxsmkDatepickerComponent
   }
 
   private closeMonthYearDropdowns(): void {
-    if (this.monthSelect && this.monthSelect.isOpen) {
-      this.monthSelect.isOpen = false;
-    }
-    if (this.yearSelect && this.yearSelect.isOpen) {
-      this.yearSelect.isOpen = false;
-    }
+    this.datepickerContent?.closeAllSelects();
   }
 
   private setTouchHandledFlag(duration: number = 300): void {
@@ -2336,6 +1860,14 @@ export class NgxsmkDatepickerComponent
     this.getDayCellTooltip(d);
   public readonly boundFormatDayNumber = (d: Date | null) =>
     this.formatDayNumber(d);
+  public readonly boundGetMonthYearLabel = (m: number, y: number) =>
+    this.getMonthYearLabel(m, y);
+  public readonly boundGetCalendarAriaLabelForMonth = (m: number, y: number) =>
+    this.getCalendarAriaLabelForMonth(m, y);
+  public readonly boundIsTimelineMonthSelected = (d: Date) =>
+    this.isTimelineMonthSelected(d);
+  public readonly boundFormatTimeSliderValue = (v: number) =>
+    this.formatTimeSliderValue(v);
 
   get isCalendarVisible(): boolean {
     return this.isInlineMode || this.isCalendarOpen;
@@ -2783,19 +2315,7 @@ export class NgxsmkDatepickerComponent
    * @param calendarMonth - The calendar month object
    * @returns Unique identifier combining year and month
    */
-  trackByCalendarMonth(
-    _index: number,
-    calendarMonth: { month: number; year: number; days: (Date | null)[] },
-  ): string {
-    return `${calendarMonth.year}-${calendarMonth.month}`;
-  }
 
-  trackByRange(
-    _index: number,
-    range: { key: string; value: [Date, Date] },
-  ): string {
-    return range.key;
-  }
 
   /**
    * Checks if a DOM node is contained within this datepicker instance,
@@ -2892,8 +2412,8 @@ export class NgxsmkDatepickerComponent
   }
 
   private focusInput(): void {
-    if (this.dateInput?.nativeElement) {
-      this.dateInput.nativeElement.focus();
+    if (this.datepickerInput) {
+      this.datepickerInput.focus();
     } else if (this.elementRef?.nativeElement) {
       const inputGroup = this.elementRef?.nativeElement?.querySelector(
         '.ngxsmk-input-group',
@@ -3009,7 +2529,7 @@ export class NgxsmkDatepickerComponent
       this.trackedDoubleRequestAnimationFrame(() => {
         this.setupPassiveTouchListeners();
         this.scheduleChangeDetection();
-        const timeoutDelay = this.isMobileDevice() ? 280 : 120;
+        const timeoutDelay = this.isMobileDevice() ? 150 : 60;
         if (this.isOpeningCalendar) {
           this.trackedSetTimeout(() => {
             this.isOpeningCalendar = false;
@@ -3106,7 +2626,7 @@ export class NgxsmkDatepickerComponent
         this.setupPassiveTouchListeners();
         this.scheduleChangeDetection();
       });
-      const timeoutDelay = this.isMobileDevice() ? 280 : 120;
+      const timeoutDelay = this.isMobileDevice() ? 150 : 60;
       this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
         this.isOpeningCalendar = false;
         this.setupPassiveTouchListeners();
@@ -3790,9 +3310,25 @@ export class NgxsmkDatepickerComponent
     this.closeCalendarWithFocusRestore();
     this.lastToggleTime = now;
   }
+  private scrollDebounceTimer: number | null = null;
+  private readonly updatePositionOnScroll = (): void => {
+    if (this.isCalendarOpen && this._shouldAppendToBody && this.isBrowser) {
+      if (this.scrollDebounceTimer === null) {
+        this.scrollDebounceTimer = requestAnimationFrame(() => {
+          this.positionPopoverRelativeToInput();
+          this.scrollDebounceTimer = null;
+        });
+      }
+    }
+  };
 
   private updateOpeningState(isOpening: boolean): void {
     if (isOpening) {
+      if (this.isBrowser && this._shouldAppendToBody) {
+        window.addEventListener('scroll', this.updatePositionOnScroll, { capture: true, passive: true });
+        window.addEventListener('resize', this.updatePositionOnScroll, { passive: true });
+      }
+
       this.isOpeningCalendar = true;
 
       // Handle Append To Body
@@ -3807,7 +3343,7 @@ export class NgxsmkDatepickerComponent
         clearTimeout(this.openCalendarTimeoutId);
       }
 
-      const timeoutDelay = this.isMobileDevice() ? 280 : 80;
+      const timeoutDelay = this.isMobileDevice() ? 150 : 60;
       this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
@@ -3818,6 +3354,11 @@ export class NgxsmkDatepickerComponent
         this.cdr.markForCheck();
       }, timeoutDelay);
     } else {
+      if (this.isBrowser) {
+        window.removeEventListener('scroll', this.updatePositionOnScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener('resize', this.updatePositionOnScroll);
+      }
+
       this.isOpeningCalendar = false;
 
       // Cleanup Append To Body

@@ -223,6 +223,70 @@
           }
         }
       }
+    },
+    "ngxsmk-datepicker-element": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/ngxsmk-datepicker-element",
+      "sourceRoot": "projects/ngxsmk-datepicker-element/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/ngxsmk-datepicker-element/src/main.ts",
+            "tsConfig": "projects/ngxsmk-datepicker-element/tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/ngxsmk-datepicker-element/public"
+              }
+            ],
+            "styles": [
+              "projects/ngxsmk-datepicker-element/src/styles.css"
+            ],
+            "extractLicenses": false
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2mb",
+                  "maximumError": "4mb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "ngxsmk-datepicker-element:build:production"
+            },
+            "development": {
+              "buildTarget": "ngxsmk-datepicker-element:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
     }
   },
   "cli": {

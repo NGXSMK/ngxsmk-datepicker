@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation, ViewChild } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
@@ -7,10 +7,12 @@ import { CustomSelectComponent } from './custom-select.component';
   standalone: true,
   imports: [NgClass, CustomSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: `
     <div class="ngxsmk-header" [ngClass]="headerClass">
       <div class="ngxsmk-month-year-selects">
         <ngxsmk-custom-select 
+          #monthSelect
           class="month-select" 
           [options]="monthOptions"
           [(value)]="currentMonth" 
@@ -18,6 +20,7 @@ import { CustomSelectComponent } from './custom-select.component';
           (valueChange)="onMonthSelect($event)">
         </ngxsmk-custom-select>
         <ngxsmk-custom-select 
+          #yearSelect
           class="year-select" 
           [options]="yearOptions" 
           [(value)]="currentYear" 
@@ -54,15 +57,7 @@ import { CustomSelectComponent } from './custom-select.component';
         </button>
       </div>
     </div>
-  `,
-  styles: [`
-    .month-select {
-      flex: 1.5;
-    }
-    .year-select {
-      flex: 1;
-    }
-  `]
+  `
 })
 /**
  * The header section of the calendar, containing navigation and selection controls.
@@ -73,6 +68,9 @@ import { CustomSelectComponent } from './custom-select.component';
  * - Previous/Next month navigation buttons
  */
 export class CalendarHeaderComponent {
+  @ViewChild('monthSelect') monthSelect?: CustomSelectComponent;
+  @ViewChild('yearSelect') yearSelect?: CustomSelectComponent;
+
   @Input() monthOptions: { label: string; value: number }[] = [];
   @Input() yearOptions: { label: string; value: number }[] = [];
   @Input() currentMonth: number = 0;

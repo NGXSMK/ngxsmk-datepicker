@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.1.8+ | **Last updated**: February 23, 2026
+**Version**: 2.1.9+ | **Last updated**: February 25, 2026
 
 ## Versioning Policy
 
@@ -73,7 +73,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `startAt` | `DateInput \| null` | `null` | Stable | Initial calendar view date | `[startAt]="nextMonth"` |
 | `weekStart` | `number \| null` | `null` | Stable | Override week start day (0=Sunday, 1=Monday, etc.) | `[weekStart]="1"` |
 | `yearRange` | `number` | `10` | Stable | Years to show in year selector | `[yearRange]="20"` |
-| `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes | `[classes]="{ inputGroup: 'custom-class' }"` |
+| `classes` | `DatepickerClasses \| null` | `null` | Stable | Custom CSS classes. Note: When used as a Web Component, this can also be passed as a JSON string. | `[classes]="{ inputGroup: 'custom-class' }"` |
 | `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization | `[hooks]="customHooks"` |
 | `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts. Press '?' for help. | `[enableKeyboardShortcuts]="false"` |
 | `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map | `[customShortcuts]="myShortcuts"` |

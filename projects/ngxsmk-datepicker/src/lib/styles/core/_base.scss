@@ -1,0 +1,107 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+ngxsmk-datepicker {
+    display: block;
+    width: 100%;
+    position: relative;
+    font-family: var(--ngxsmk-font-family);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    overflow: visible;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
+    z-index: var(--ngxsmk-z-popover) !important;
+}
+
+.ngxsmk-datepicker-wrapper {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    overflow: visible;
+
+    &.ngxsmk-calendar-open {
+        z-index: var(--ngxsmk-z-popover);
+        position: relative;
+        isolation: isolate;
+    }
+}
+
+/* Unified Border Radius and Appearance for Containers */
+.ngxsmk-datepicker-container,
+.ngxsmk-calendar-container {
+    border-radius: var(--ngxsmk-radius-lg) !important;
+    // Ensure overflow is hidden on the containers so children don't bleed out of the corners
+    overflow: hidden !important;
+}
+
+/* If ngxsmk-calendar-container is inside ngxsmk-datepicker-container, they should both share the same radius */
+.ngxsmk-datepicker-container .ngxsmk-calendar-container {
+    border-radius: inherit !important;
+}
+
+.ngxsmk-backdrop {
+    display: none;
+}
+
+@include respond-up(lg) {
+    .ngxsmk-backdrop:not(.ngxsmk-inline-backdrop) {
+        display: block !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: transparent !important;
+        z-index: var(--ngxsmk-z-backdrop) !important;
+        pointer-events: auto !important;
+
+        &.ngxsmk-backdrop-allow-modal-scroll {
+            pointer-events: none !important;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+
+    .ngxsmk-datepicker-wrapper.ngxsmk-calendar-open:not(.ngxsmk-inline-mode) .ngxsmk-backdrop,
+    .ngxsmk-backdrop:not(.ngxsmk-inline-backdrop) {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        z-index: var(--ngxsmk-z-backdrop) !important;
+        pointer-events: auto !important;
+        transition: opacity 0.3s ease-out !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ngxsmk-datepicker {
+        --ngxsmk-transition: none;
+    }
+
+    ngxsmk-datepicker *,
+    ngxsmk-datepicker *::before,
+    ngxsmk-datepicker *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

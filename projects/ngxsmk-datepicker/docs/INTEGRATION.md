@@ -1,6 +1,6 @@
 # Integration Guides
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
+**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
@@ -9,6 +9,7 @@ This document provides integration examples for using ngxsmk-datepicker with pop
 - [Angular Material](#angular-material)
 - [Ionic](#ionic)
 - [Tailwind CSS](#tailwind-css)
+- [React, Vue, & Vanilla JS (Web Components)](#react-vue--vanilla-js-web-components)
 - [Modals and overlays](#modals-and-overlays)
 
 ## Angular Material
@@ -522,6 +523,91 @@ constructor(private themeBuilder: ThemeBuilderService) {
 - Make sure all required peer dependencies are installed
 - Check that Angular version is compatible (Angular 17+)
 - Verify that standalone components are properly imported
+
+## React, Vue, & Vanilla JS (Web Components)
+
+Since `ngxsmk-datepicker` is built as a highly isolated Angular library without heavy dependencies, it can be compiled into **Custom Web Components** using Angular Elements. This allows you to use exactly the same datepicker in React, Vue, Svelte, or Vanilla JavaScript.
+
+### 1. Build as Custom Element
+
+You'll need a wrapper to bootstrap the Angular component as a custom element:
+
+```typescript
+import { createApplication } from '@angular/platform-browser';
+import { createCustomElement } from '@angular/elements';
+import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+
+(async () => {
+  const app = await createApplication();
+
+  const DatepickerElement = createCustomElement(NgxsmkDatepickerComponent, {
+    injector: app.injector
+  });
+
+  customElements.define('ngxsmk-datepicker', DatepickerElement);
+})().catch(err => console.error(err));
+```
+
+### 2. Framework-specific Usage
+
+Once registered as `<ngxsmk-datepicker>`, you can use it in any framework.
+
+#### React Example
+```jsx
+import React, { useEffect, useRef } from 'react';
+
+export function MyView() {
+  const datepickerRef = useRef(null);
+  
+  useEffect(() => {
+    // Listen to native custom events
+    const picker = datepickerRef.current;
+    const handleSelect = (e) => console.log('Selected:', e.detail);
+    
+    picker.addEventListener('dateSelect', handleSelect);
+    return () => picker.removeEventListener('dateSelect', handleSelect);
+  }, []);
+
+  return (
+    <ngxsmk-datepicker 
+      ref={datepickerRef} 
+      mode="range" 
+      theme="light">
+    </ngxsmk-datepicker>
+  );
+}
+```
+
+#### Vue Example
+```html
+<script setup>
+import { ref } from 'vue';
+
+const date = ref(null);
+const onDateSelect = (e) => {
+  date.value = e.detail;
+};
+</script>
+
+<template>
+  <ngxsmk-datepicker 
+    mode="single" 
+    @dateSelect="onDateSelect"
+  ></ngxsmk-datepicker>
+</template>
+```
+
+#### Vanilla JS
+```html
+<ngxsmk-datepicker id="myPicker"></ngxsmk-datepicker>
+
+<script>
+  const picker = document.getElementById('myPicker');
+  picker.addEventListener('dateSelect', (e) => {
+    alert('Date selected: ' + e.detail);
+  });
+</script>
+```
 
 ## Modals and overlays
 

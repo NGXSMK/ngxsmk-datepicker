@@ -52,17 +52,23 @@ import { I18nService } from '../../i18n/i18n.service';
       <h2>{{ i18n.t().architecture.adaptersTitle }}</h2>
       <p>{{ i18n.t().architecture.adaptersLead }}</p>
       
-      <div class="card bg-code">
-        <pre><code class="text-main">export class MyLuxonAdapter extends DateAdapter&lt;DateTime&gt; {{ '{' }}
-  // Implement formatting, parsing, and arithmetic logic
-  addMonths(date: DateTime, months: number): DateTime {{ '{' }}
-    return date.plus({{ '{' }} months {{ '}' }});
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">adapter.ts</div>
+        </div>
+        <pre><code class="text-main"><span class="token-keyword">export class</span> <span class="token-class">MyLuxonAdapter</span> <span class="token-keyword">extends</span> <span class="token-class">DateAdapter</span>&lt;<span class="token-class">DateTime</span>&gt; {{ '{' }}
+  <span class="token-comment">// Implement formatting, parsing, and arithmetic logic</span>
+  <span class="token-function">addMonths</span>(date: <span class="token-class">DateTime</span>, months: <span class="token-number">number</span>): <span class="token-class">DateTime</span> {{ '{' }}
+    <span class="token-keyword">return</span> date.<span class="token-function">plus</span>({{ '{' }} months {{ '}' }});
   {{ '}' }}
 {{ '}' }}
 
-// Register in providers
-providers: [
-  {{ '{' }} provide: DateAdapter, useClass: MyLuxonAdapter {{ '}' }}
+<span class="token-comment">// Register in providers</span>
+<span class="token-keyword">providers</span>: [
+  {{ '{' }} provide: <span class="token-class">DateAdapter</span>, <span class="token-keyword">useClass</span>: <span class="token-class">MyLuxonAdapter</span> {{ '}' }}
 ]</code></pre>
       </div>
 
@@ -104,13 +110,19 @@ providers: [
       <h2>{{ i18n.t().architecture.strategiesTitle }}</h2>
       <p>{{ i18n.t().architecture.strategiesLead }}</p>
       
-      <div class="card bg-code">
-        <pre><code class="text-main">@Injectable()
-export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{' }}
-  createSelection(date: Date, current: DateRange&lt;Date&gt;): DateRange&lt;Date&gt; {{ '{' }}
-    // Force selection to always span Monday to Friday
-    const start = this.adapter.getStartOfWeek(date);
-    return new DateRange(start, this.adapter.addDays(start, 4));
+      <div class="code-window">
+        <div class="window-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <div class="window-title">selection-strategy.ts</div>
+        </div>
+        <pre><code class="text-main"><span class="token-keyword">@Injectable</span>()
+<span class="token-keyword">export class</span> <span class="token-class">WorkingWeekStrategy</span> <span class="token-keyword">implements</span> <span class="token-class">SelectionStrategy</span>&lt;<span class="token-class">Date</span>&gt; {{ '{' }}
+  <span class="token-function">createSelection</span>(date: <span class="token-class">Date</span>, current: <span class="token-class">DateRange</span>&lt;<span class="token-class">Date</span>&gt;): <span class="token-class">DateRange</span>&lt;<span class="token-class">Date</span>&gt; {{ '{' }}
+    <span class="token-comment">// Force selection to always span Monday to Friday</span>
+    <span class="token-keyword">const</span> start = <span class="token-keyword">this</span>.adapter.<span class="token-function">getStartOfWeek</span>(date);
+    <span class="token-keyword">return new</span> <span class="token-class">DateRange</span>(start, <span class="token-keyword">this</span>.adapter.<span class="token-function">addDays</span>(start, <span class="token-number">4</span>));
   {{ '}' }}
 {{ '}' }}</code></pre>
       </div>
@@ -257,12 +269,63 @@ export class WorkingWeekStrategy implements SelectionStrategy&lt;Date&gt; {{ '{'
         .core-subtext { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; opacity: 0.8; }
       }
     }
-    .bg-code { 
-        background: var(--color-bg-code); 
-        padding: var(--space-lg); 
-        border-radius: var(--radius-md); 
-        margin: var(--space-md) 0; 
-        overflow-x: auto;
+    .code-window {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: var(--space-xl) 0;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+
+        .window-header {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                &.red { background: #ff5f56; }
+                &.yellow { background: #ffbd2e; }
+                &.green { background: #27c93f; }
+            }
+            .window-title {
+                margin-left: 0.5rem;
+                font-size: 0.7rem;
+                font-family: 'JetBrains Mono', monospace;
+                color: var(--color-text-dim);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+        }
+
+        pre {
+            margin: 0;
+            padding: var(--space-lg);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+
+            code {
+                background: none;
+                border: none;
+                padding: 0;
+                color: #e0e6ed; /* Softer white */
+                
+                .token-keyword { color: #ff79c6; } /* Pink */
+                .token-string { color: #f1fa8c; }  /* Yellow */
+                .token-comment { color: #6272a4; font-style: italic; } /* Blue-gray */
+                .token-function { color: #50fa7b; } /* Green */
+                .token-class { color: #8be9fd; }    /* Cyan */
+                .token-operator { color: #ff79c6; }
+                .token-number { color: #bd93f9; }   /* Purple */
+            }
+        }
     }
     .grid-2 { 
         display: grid; 
