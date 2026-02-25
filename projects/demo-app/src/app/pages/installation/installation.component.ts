@@ -15,7 +15,7 @@ import { I18nService } from '../../i18n/i18n.service';
       <p>{{ i18n.t().installation.npmLead }}</p>
       
       <div class="card bg-code">
-        <pre><code class="text-main">npm install ngxsmk-datepicker@2.1.8</code></pre>
+        <pre><code class="text-main">npm install ngxsmk-datepicker@2.1.9</code></pre>
       </div>
 
       <div class="tip">
@@ -25,9 +25,9 @@ import { I18nService } from '../../i18n/i18n.service';
       <h2>{{ i18n.t().installation.altTitle }}</h2>
       <p>{{ i18n.t().installation.altLead }}</p>
       <div class="card bg-code">
-        <pre><code class="text-main">yarn add ngxsmk-datepicker@2.1.8
-pnpm add ngxsmk-datepicker@2.1.8
-bun add ngxsmk-datepicker@2.1.8</code></pre>
+        <pre><code class="text-main">yarn add ngxsmk-datepicker@2.1.9
+pnpm add ngxsmk-datepicker@2.1.9
+bun add ngxsmk-datepicker@2.1.9</code></pre>
       </div>
       <p>
         <a href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md" target="_blank" rel="noopener noreferrer" class="link">{{ i18n.t().installation.moreLink }}</a>

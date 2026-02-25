@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
@@ -7,6 +7,7 @@ import { CustomSelectComponent } from './custom-select.component';
   standalone: true,
   imports: [NgClass, CustomSelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: `
     <div class="ngxsmk-header" [ngClass]="headerClass">
       <div class="ngxsmk-month-year-selects">
@@ -54,15 +55,7 @@ import { CustomSelectComponent } from './custom-select.component';
         </button>
       </div>
     </div>
-  `,
-  styles: [`
-    .month-select {
-      flex: 1.5;
-    }
-    .year-select {
-      flex: 1;
-    }
-  `]
+  `
 })
 /**
  * The header section of the calendar, containing navigation and selection controls.

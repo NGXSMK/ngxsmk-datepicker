@@ -1,15 +1,54 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { I18nService } from '../../i18n/i18n.service';
+import { ThemeService } from '@tokiforge/angular';
+import { NgxsmkDatepickerComponent, ThemeBuilderService, DatepickerTheme } from 'ngxsmk-datepicker';
 
 @Component({
   selector: 'app-theming',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgxsmkDatepickerComponent],
   template: `
     <div class="animate-fade-in">
       <h1>{{ i18n.t().nav.customTheming }}</h1>
       <p class="text-lg">Full control over the visual identity of your datepicker using a powerful CSS variables system.</p>
+
+      <h2>Dynamic Theming (ThemeBuilderService)</h2>
+      <p>Use the <code>ThemeBuilderService</code> to dynamically generate and apply themes at runtime. Try it on the datepicker below—custom themes now perfectly style the popover even when it portals to the body on mobile devices!</p>
+      
+      <div class="card flex flex-col md:flex-row gap-xl mt-md mb-2xl">
+        <div class="flex-1">
+          <div class="theme-buttons flex gap-sm mb-lg flex-wrap">
+            <button class="btn" [class.btn-primary]="currentTheme === 'ocean'" [class.btn-outline]="currentTheme !== 'ocean'" (click)="applyTheme('ocean')">Ocean</button>
+            <button class="btn" [class.btn-primary]="currentTheme === 'forest'" [class.btn-outline]="currentTheme !== 'forest'" (click)="applyTheme('forest')">Forest</button>
+            <button class="btn" [class.btn-primary]="currentTheme === 'sunset'" [class.btn-outline]="currentTheme !== 'sunset'" (click)="applyTheme('sunset')">Sunset</button>
+            <button class="btn btn-outline" (click)="resetTheme()">Reset</button>
+          </div>
+          
+          <div class="flex flex-col gap-sm" style="max-width: 300px;">
+            <label class="text-sm font-bold">Select Date</label>
+            <ngxsmk-datepicker 
+              [(ngModel)]="dateValue" 
+              [appendToBody]="true"
+              [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'">
+            </ngxsmk-datepicker>
+          </div>
+        </div>
+        <div class="flex-1">
+          <pre><code class="text-main">const theme = {{ '{' }}
+  colors: {{ '{' }}
+    primary: '{{ themes[currentTheme || 'ocean'].colors!.primary }}',
+    background: '{{ themes[currentTheme || 'ocean'].colors!.background }}',
+    text: '{{ themes[currentTheme || 'ocean'].colors!.text }}',
+    border: '{{ themes[currentTheme || 'ocean'].colors!.border }}'
+  {{ '}' }},
+  borderRadius: {{ '{' }} md: '{{ themes[currentTheme || 'ocean'].borderRadius!.md }}' {{ '}' }}
+{{ '}' }};
+
+themeBuilder.applyTheme(theme, datepickerEl);</code></pre>
+        </div>
+      </div>
 
       <div class="color-grid mt-xl">
         <div class="color-item" style="background: var(--color-primary)">
@@ -117,8 +156,81 @@ import { I18nService } from '../../i18n/i18n.service';
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
       border: 1px solid var(--color-border-light);
     }
+    .flex-wrap { flex-wrap: wrap; }
+    .flex-1 { flex: 1 1 0%; }
+    .flex-col { flex-direction: column; }
+    .md\\:flex-row { @media (min-width: 768px) { flex-direction: row; } }
+    .mb-2xl { margin-bottom: var(--space-2xl); }
   `]
 })
-export class ThemingComponent {
+export class ThemingComponent implements OnInit, OnDestroy {
   i18n = inject(I18nService);
+  themeBuilder = inject(ThemeBuilderService);
+  themeService = inject(ThemeService);
+
+  dateValue = new Date();
+  currentTheme: string | null = null;
+
+  @ViewChild(NgxsmkDatepickerComponent, { read: ElementRef, static: true }) datepickerRef!: ElementRef;
+
+  themes: Record<string, DatepickerTheme> = {
+    ocean: {
+      colors: {
+        primary: '#0ea5e9',
+        primaryContrast: '#ffffff',
+        background: '#f0f9ff',
+        text: '#0f172a',
+        border: '#bae6fd',
+        hover: '#e0f2fe'
+      },
+      borderRadius: { md: '12px' }
+    },
+    forest: {
+      colors: {
+        primary: '#10b981',
+        primaryContrast: '#ffffff',
+        background: '#ecfdf5',
+        text: '#064e3b',
+        border: '#a7f3d0',
+        hover: '#d1fae5'
+      },
+      borderRadius: { md: '4px' }
+    },
+    sunset: {
+      colors: {
+        primary: '#f43f5e',
+        primaryContrast: '#ffffff',
+        background: '#fff1f2',
+        text: '#881337',
+        border: '#fecdd3',
+        hover: '#ffe4e6'
+      },
+      borderRadius: { md: '24px' }
+    }
+  };
+
+  applyTheme(themeKey: string) {
+    this.currentTheme = themeKey;
+    if (this.datepickerRef) {
+      this.themeBuilder.applyTheme(this.themes[themeKey], this.datepickerRef.nativeElement);
+    }
+  }
+
+  ngOnInit() {
+    // Wait briefly for calendar initialization if needed, or apply synchronously if static
+    setTimeout(() => {
+      this.applyTheme('ocean');
+    });
+  }
+
+  resetTheme() {
+    this.currentTheme = null;
+    if (this.datepickerRef) {
+      this.themeBuilder.removeTheme(this.datepickerRef.nativeElement);
+    }
+  }
+
+  ngOnDestroy() {
+    this.resetTheme();
+  }
 }

@@ -24,15 +24,15 @@
 
 ---
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
+**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.1.8` is live! This release fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS (SonarLint). Includes all fixes from v2.1.7 (DatePipe provider, etc.). No breaking changes.
+> **Stable Release**: `v2.1.9` is live! This release fixes **appendToBody** popover positioning, datepicker-in-modal first-open behavior, and popover width matching the input; it also reduces loading time and cleans up CSS (SonarLint). Includes all fixes from v2.1.7 (DatePipe provider, etc.). No breaking changes.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.8 or later.
+> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.1.9 or later.
 
 ---
 
@@ -139,7 +139,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.1.8
+npm install ngxsmk-datepicker@2.1.9
 ```
 
 ### Alternative installation
@@ -148,12 +148,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.1.8` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.8` |
-| **Bun** | `bun add ngxsmk-datepicker@2.1.8` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.8` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.1.9` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.1.9` |
+| **Bun** | `bun add ngxsmk-datepicker@2.1.9` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.1.9` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.8/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.8/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.1.9/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.1.9/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -480,38 +480,40 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 
 ### **Inputs**
 
-| Property           | Type                                                                                                                                                   | Default            | Description                                                                                                     |
-| :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------- | :-------------------------------------------------------------------------------------------------------------- |
-| mode               | 'single' \| 'range' \| 'multiple'                                                                                                                      | 'single'           | The selection mode.                                                                                             |
-| inline             | boolean \| 'always' \| 'auto'                                                                                                                          | false              | Controls the display mode. `true` or `'always'` for inline, `'auto'` for responsive.                            |
-| locale             | string                                                                                                                                                 | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE').                                  |
-| theme              | 'light' \| 'dark'                                                                                                                                      | 'light'            | The color theme.                                                                                                |
-| showRanges         | boolean                                                                                                                                                | true               | If true, displays the predefined ranges panel when in 'range' mode.                                             |
-| minDate            | DateInput                                                                                                                                              | null               | The earliest selectable date.                                                                                   |
-| maxDate            | DateInput                                                                                                                                              | null               | The latest selectable date.                                                                                     |
-| isInvalidDate      | (date: Date) => boolean                                                                                                                                | () => false        | A function to programmatically disable specific dates.                                                          |
-| ranges             | DateRange                                                                                                                                              | null               | An object of predefined date ranges.                                                                            |
-| minuteInterval     | number                                                                                                                                                 | 1                  | Interval for minute dropdown options.                                                                           |
-| showTime           | boolean                                                                                                                                                | false              | Enables the hour/minute/AM/PM selection section.                                                                |
-| timeOnly           | boolean                                                                                                                                                | false              | Display time picker only (no calendar). Automatically enables `showTime`. Perfect for time selection scenarios. |
-| use24Hour          | boolean                                                                                                                                                | false              | Enable 24-hour time format (00-23) and hide AM/PM selector.                                                     |
-| showCalendarButton | boolean                                                                                                                                                | false              | Show/hide the calendar icon button. When `false`, users can still open calendar by clicking the input field.    |
-| value              | DatepickerValue                                                                                                                                        | null               | Programmatic value setting. Set the datepicker value from code (useful for server-side API data).               |
-| startAt            | DateInput                                                                                                                                              | null               | The date to initially center the calendar view on.                                                              |
-| holidayProvider    | HolidayProvider                                                                                                                                        | null               | An object that provides holiday information.                                                                    |
-| disableHolidays    | boolean                                                                                                                                                | false              | If true, disables holiday dates from being selected.                                                            |
-| disabledDates      | (string \| Date)[]                                                                                                                                     | []                 | Array of dates to disable. Supports both string dates (MM/DD/YYYY) and Date objects.                            |
-| weekStart          | number \| null                                                                                                                                         | null               | Override week start day (0=Sunday, 1=Monday, etc.). If null, uses locale-based week start.                      |
-| yearRange          | number                                                                                                                                                 | 10                 | Number of years before/after current year to show in year dropdown.                                             |
-| clearLabel         | string                                                                                                                                                 | 'Clear'            | Custom label for the clear button.                                                                              |
-| closeLabel         | string                                                                                                                                                 | 'Close'            | Custom label for the close button.                                                                              |
-| prevMonthAriaLabel | string                                                                                                                                                 | 'Previous month'   | Aria label for previous month navigation button.                                                                |
-| nextMonthAriaLabel | string                                                                                                                                                 | 'Next month'       | Aria label for next month navigation button.                                                                    |
-| clearAriaLabel     | string                                                                                                                                                 | 'Clear selection'  | Aria label for clear button.                                                                                    |
-| closeAriaLabel     | string                                                                                                                                                 | 'Close calendar'   | Aria label for close button.                                                                                    |
-| classes            | { wrapper?, inputGroup?, input?, popover?, container?, calendar?, header?, navPrev?, navNext?, dayCell?, footer?, clearBtn?, calendarBtn?, closeBtn? } | undefined          | Tailwind-friendly class overrides for theming.                                                                  |
-| enableGoogleCalendar| boolean                                                                                                                                                | false              | Enable seamless Google Calendar integration and sync.                                                           |
-| googleClientId     | string \| null                                                                                                                                         | null               | Google API OAuth 2.0 Web Client ID for authentication.                                                          |
+| Property           | Type | Default | Description |
+| :----------------- | :--- | :------ | :---------- |
+| mode               | 'single' \| 'range' \| 'multiple' | 'single' | The selection mode. |
+| inline             | boolean \| 'always' \| 'auto' | false | Controls the display mode. `true` or `'always'` for inline, `'auto'` for responsive. |
+| locale             | string | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE'). |
+| theme              | 'light' \| 'dark' | 'light' | The color theme. |
+| showRanges         | boolean | true | If true, displays the predefined ranges panel when in 'range' mode. |
+| minDate            | DateInput | null | The earliest selectable date. |
+| maxDate            | DateInput | null | The latest selectable date. |
+| isInvalidDate      | (date: Date) => boolean | () => false | A function to programmatically disable specific dates. |
+| ranges             | DateRange | null | An object of predefined date ranges. |
+| minuteInterval     | number | 1 | Interval for minute dropdown options. |
+| showTime           | boolean | false | Enables the hour/minute/AM/PM selection section. |
+| timeOnly           | boolean | false | Display time picker only (no calendar). Automatically enables `showTime`. |
+| use24Hour          | boolean | false | Enable 24-hour time format (00-23) and hide AM/PM selector. |
+| allowTyping        | boolean | false | Enable manual typing in the input field. Required for native validation. |
+| displayFormat      | string | null | Custom date format string (e.g., 'MM/DD/YYYY'). |
+| showCalendarButton | boolean | false | Show/hide the calendar icon button. |
+| value              | DatepickerValue | null | Programmatic value setting from code. |
+| startAt            | DateInput | null | The date to initially center the calendar view on. |
+| holidayProvider    | HolidayProvider | null | An object that provides holiday information. |
+| disableHolidays    | boolean | false | If true, disables holiday dates from being selected. |
+| disabledDates      | (string \| Date)[] | [] | Array of dates to disable. |
+| weekStart          | number \| null | null | Override week start day (0=Sunday, 1=Monday, etc.). |
+| yearRange          | number | 10 | Number of years before/after current year to show in year dropdown. |
+| clearLabel         | string | 'Clear' | Custom label for the clear button. |
+| closeLabel         | string | 'Close' | Custom label for the close button. |
+| prevMonthAriaLabel | string | 'Previous month' | Aria label for previous month navigation button. |
+| nextMonthAriaLabel | string | 'Next month' | Aria label for next month navigation button. |
+| clearAriaLabel     | string | 'Clear selection' | Aria label for clear button. |
+| closeAriaLabel     | string | 'Close calendar' | Aria label for close button. |
+| classes            | object | undefined | Tailwind-friendly class overrides (wrapper, input, popover, etc.). |
+| enableGoogleCalendar| boolean | false | Enable seamless Google Calendar integration and sync. |
+| googleClientId     | string \| null | null | Google API OAuth 2.0 Web Client ID for authentication. |
 
 ### **Outputs**
 
@@ -585,7 +587,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.1.8 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.1.9 now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -841,11 +843,13 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-### **v1.9.25** (Stable)
+For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-- 🎉 **Version Update**: Updated to version 1.9.25
-- ✅ **Stable Release**: Version 1.9.25 is the current stable version
-- ✨ **Improvements**: Fixed IDE template type-checking, fixed NPM README issues, updated docs with European localization support
+### **v2.1.9** (Current Stable)
+
+- 🎉 **Version Update**: Updated to version 2.1.9.
+- ✨ **Key Updates**: Optimized loading times, refined mobile header layout, and improved dropdown accessibility.
+- ✅ **Stable Release**: Full synchronization of header components with `ViewEncapsulation.None`.
 
 ### **v1.9.24**
 

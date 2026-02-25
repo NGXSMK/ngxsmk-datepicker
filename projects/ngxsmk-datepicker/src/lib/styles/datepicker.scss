@@ -1,0 +1,19 @@
+// Main Entry Point: datepicker.scss
+// Compiles to distribute styles for the ngxsmk-datepicker Angular Library
+
+// 0. Base Legacy Features
+@import './legacy-datepicker';
+
+// 1. Abstracts (Tokens, Functions, Mixins)
+@import './abstracts/variables';
+@import './abstracts/mixins';
+
+// 2. Core (Resets, Structure, Theming)
+@import './core/base';
+@import './core/theming';
+
+// 3. Components (Isolated Feature Logic)
+@import './components/datepicker';
+@import './components/calendar-grid';
+@import './components/header';
+@import './components/popover';

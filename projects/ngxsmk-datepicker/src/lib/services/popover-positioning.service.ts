@@ -33,7 +33,7 @@ export class PopoverPositioningService {
       return;
     }
 
-    const desktopBreakpoint = options.desktopBreakpoint ?? 1024;
+    const desktopBreakpoint = options.desktopBreakpoint ?? 1025;
     const isDesktop = window.innerWidth >= desktopBreakpoint;
     if (isDesktop && !options.shouldAppendToBody) {
       this.clearPositionStyles(popover, false);
@@ -75,7 +75,7 @@ export class PopoverPositioningService {
   ): void {
     const narrowViewport = options.narrowViewport ?? 500;
     const minHeight = options.minHeight ?? 400;
-    const minWidth = options.minWidth ?? 280;
+    const minWidth = options.minWidth ?? 360;
     const gap = options.gap ?? 8;
 
     const inputRect = inputGroup.getBoundingClientRect();
@@ -96,40 +96,50 @@ export class PopoverPositioningService {
     const popoverWidth = Math.max(minWidth, Math.round(inputRect.width));
 
     if (spaceBelow >= resolvedMinHeight && fitsHorizontal) {
-      const top = useViewportCoords ? inputRect.bottom + gap : inputRect.bottom + window.scrollY + gap;
-      const left = useViewportCoords ? inputRect.left : inputRect.left + window.scrollX;
-      this.setPlacement(setStyle, useViewportCoords, top, left);
-      this.setPopoverWidth(setStyle, popoverWidth);
+      const top = inputRect.bottom + window.scrollY + gap;
+      const left = inputRect.left + window.scrollX;
+      this.setPlacement(setStyle, top, left);
+      this.setPopoverWidth(popoverWidth, popover);
       return;
     }
     if (spaceAbove >= resolvedMinHeight && fitsHorizontal) {
-      const top = useViewportCoords
-        ? inputRect.top - popoverRect.height - gap
-        : inputRect.top + window.scrollY - popoverRect.height - gap;
-      const left = useViewportCoords ? inputRect.left : inputRect.left + window.scrollX;
-      this.setPlacement(setStyle, useViewportCoords, top, left);
-      this.setPopoverWidth(setStyle, popoverWidth);
+      const top = inputRect.top + window.scrollY - resolvedMinHeight - gap;
+      const left = inputRect.left + window.scrollX;
+      this.setPlacement(setStyle, top, left);
+      this.setPopoverWidth(popoverWidth, popover);
       return;
     }
     // When appended to body we must always set position so CSS (e.g. left: 0 !important) does not win
     if (useViewportCoords) {
-      const top = inputRect.bottom + gap;
-      const left = inputRect.left;
-      this.setPlacement(setStyle, true, top, left);
-      this.setPopoverWidth(setStyle, popoverWidth);
+      // Prioritize space above if below doesn't fit, otherwise fallback to bound below
+      let top: number;
+      if (spaceAbove > spaceBelow && spaceBelow < resolvedMinHeight) {
+        top = Math.max(window.scrollY + gap, inputRect.top + window.scrollY - resolvedMinHeight - gap);
+      } else {
+        const spaceExceeded = resolvedMinHeight - spaceBelow;
+        top = inputRect.bottom + window.scrollY + gap;
+        if (spaceExceeded > 0 && spaceBelow < resolvedMinHeight) {
+          top = Math.max(window.scrollY, top - spaceExceeded - gap * 2);
+        }
+      }
+      const left = inputRect.left + window.scrollX;
+      this.setPlacement(setStyle, top, left);
+      this.setPopoverWidth(popoverWidth, popover);
       return;
     }
     this.clearPositionStyles(popover, false);
   }
 
   private setPopoverWidth(
-    setStyle: (key: string, value: string) => void,
     widthPx: number,
+    popover: HTMLElement,
   ): void {
     const w = `${widthPx}px`;
-    setStyle('width', w);
-    setStyle('min-width', w);
-    setStyle('max-width', w);
+    // Avoid !important wrapper to allow consumer CSS overrides
+    popover.style.setProperty('min-width', w);
+    // Allow intrinsic sizing and consumer CSS overrides by clearing hard constraints
+    popover.style.removeProperty('width');
+    popover.style.removeProperty('max-width');
   }
 
   private createStyleSetter(
@@ -147,12 +157,10 @@ export class PopoverPositioningService {
 
   private setPlacement(
     setStyle: (key: string, value: string) => void,
-    useViewportCoords: boolean,
     top: number,
     left: number,
   ): void {
-    const position = useViewportCoords ? 'fixed' : 'absolute';
-    setStyle('position', position);
+    setStyle('position', 'absolute');
     setStyle('top', `${top}px`);
     setStyle('left', `${left}px`);
     setStyle('transform', 'none');

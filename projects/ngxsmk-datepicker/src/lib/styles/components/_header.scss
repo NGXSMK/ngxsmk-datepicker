@@ -1,0 +1,229 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+/* =========================================================================
+   Header Layout
+   ========================================================================= */
+.ngxsmk-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--ngxsmk-space-sm) var(--ngxsmk-space-md) var(--ngxsmk-space-xs);
+    width: 100%;
+    gap: var(--ngxsmk-space-sm);
+
+    @include respond-up(lg) {
+        padding: var(--ngxsmk-space-sm) var(--ngxsmk-space-md);
+    }
+}
+
+.ngxsmk-month-year-selects {
+    display: flex;
+    align-items: center;
+    gap: var(--ngxsmk-space-xs);
+    flex: 1;
+    min-width: 0;
+
+    .month-select {
+        flex: 1.5;
+    }
+
+    .year-select {
+        flex: 1;
+    }
+}
+
+.ngxsmk-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--ngxsmk-space-xs);
+}
+
+/* =========================================================================
+   Custom Select Component (Global Styles - ViewEncapsulation.None)
+   ========================================================================= */
+ngxsmk-custom-select {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    user-select: none;
+    box-sizing: border-box;
+    z-index: 1;
+
+    &[data-open="true"] {
+        z-index: 10000;
+    }
+}
+
+.ngxsmk-select-container {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    outline: none;
+
+    &.is-open {
+        z-index: 10000;
+    }
+}
+
+.ngxsmk-select-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Essential for mobile gap */
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: var(--ngxsmk-touch-target);
+    padding: 0 var(--ngxsmk-space-md);
+    background: var(--ngxsmk-color-surface);
+    border: 1px solid var(--ngxsmk-color-border);
+    border-radius: var(--ngxsmk-radius-sm);
+    font-size: var(--ngxsmk-font-size-base);
+    font-family: inherit;
+    color: var(--ngxsmk-color-text-main);
+    cursor: pointer;
+    transition: var(--ngxsmk-transition);
+    appearance: none;
+    -webkit-appearance: none;
+    gap: var(--ngxsmk-space-sm);
+
+    &:focus-within {
+        outline: none;
+        border-color: var(--ngxsmk-color-primary);
+        box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+    }
+
+    &:disabled {
+        background-color: var(--ngxsmk-color-surface-hover);
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    @media (hover: hover) {
+        &:hover:not(:disabled) {
+            background: var(--ngxsmk-color-surface-hover);
+            border-color: var(--ngxsmk-color-text-muted);
+        }
+    }
+
+    @include respond-up(lg) {
+        min-height: 36px;
+        font-size: var(--ngxsmk-font-size-sm);
+    }
+}
+
+.ngxsmk-arrow-icon {
+    width: 14px;
+    height: 14px;
+    transition: transform var(--ngxsmk-transition-duration) ease;
+    flex-shrink: 0;
+    color: var(--ngxsmk-color-text-muted);
+
+    .is-open & {
+        transform: rotate(180deg);
+    }
+}
+
+/* Options Panel */
+.ngxsmk-options-panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: var(--ngxsmk-color-surface);
+    border: 1px solid var(--ngxsmk-color-border);
+    border-radius: var(--ngxsmk-radius-md);
+    box-shadow: var(--ngxsmk-shadow-lg);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10001;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    ul {
+        list-style: none;
+        padding: var(--ngxsmk-space-xs);
+        margin: 0;
+    }
+
+    li {
+        padding: var(--ngxsmk-space-sm) var(--ngxsmk-space-md);
+        border-radius: var(--ngxsmk-radius-sm);
+        cursor: pointer;
+        transition: background-color 0.12s ease;
+        font-size: var(--ngxsmk-font-size-sm);
+        margin: 2px 0;
+        color: var(--ngxsmk-color-text-main) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        &:hover:not(.selected) {
+            background-color: var(--ngxsmk-color-surface-hover);
+        }
+
+        &.selected {
+            background-color: var(--ngxsmk-color-primary);
+            color: var(--ngxsmk-color-on-primary) !important;
+            font-weight: 600;
+        }
+    }
+
+    @media (max-width: 768px) {
+        li {
+            padding: var(--ngxsmk-space-md) var(--ngxsmk-space-lg);
+            min-height: var(--ngxsmk-touch-target);
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.ngxsmk-header-title {
+    font-size: var(--ngxsmk-font-size-lg);
+    font-weight: 600;
+    color: var(--ngxsmk-color-text-main);
+    text-align: center;
+    flex-grow: 1;
+}
+
+.ngxsmk-nav-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--ngxsmk-touch-target);
+    height: var(--ngxsmk-touch-target);
+    background: transparent;
+    border: none;
+    border-radius: var(--ngxsmk-radius-sm);
+    color: var(--ngxsmk-color-text-main);
+    transition: var(--ngxsmk-transition);
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover:not(:disabled) {
+        background: var(--ngxsmk-color-surface-hover);
+    }
+
+    &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    @include respond-up(lg) {
+        width: 32px;
+        height: 32px;
+    }
+}

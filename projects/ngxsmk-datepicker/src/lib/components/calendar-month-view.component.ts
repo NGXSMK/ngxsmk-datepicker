@@ -37,9 +37,9 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [class.multiple-selected]="
               mode === 'multiple' && isMultipleSelected(day)
             "
-            [class.start-date]="mode === 'range' && isSameDay(day, startDate)"
-            [class.end-date]="mode === 'range' && isSameDay(day, endDate)"
-            [class.in-range]="mode === 'range' && isInRange(day)"
+            [class.start-date]="isRangeType() && isSameDay(day, startDate)"
+            [class.end-date]="isRangeType() && isSameDay(day, endDate)"
+            [class.in-range]="isRangeType() && isInRange(day)"
             [class.preview-range]="isPreviewInRange(day)"
             [class.focused]="day && focusedDate && isSameDay(day, focusedDate)"
             [attr.tabindex]="day && !isDateDisabled(day) ? 0 : -1"
@@ -75,15 +75,15 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       selected:
                         (mode === 'single' && isSameDay(day, selectedDate)) ||
                         (mode === 'multiple' && isMultipleSelected(day)) ||
-                        (mode === 'range' &&
+                        (isRangeType() &&
                           (isSameDay(day, startDate) ||
                             isSameDay(day, endDate))),
                       disabled: isDateDisabled(day),
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
-                      inRange: mode === 'range' && isInRange(day),
-                      startDate: mode === 'range' && isSameDay(day, startDate),
-                      endDate: mode === 'range' && isSameDay(day, endDate),
+                      inRange: isRangeType() && isInRange(day),
+                      startDate: isRangeType() && isSameDay(day, startDate),
+                      endDate: isRangeType() && isSameDay(day, endDate),
                     }
                   "
                 ></ng-container>
@@ -96,13 +96,16 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       date: day,
                       selected:
                         (mode === 'single' && isSameDay(day, selectedDate)) ||
-                        (mode === 'multiple' && isMultipleSelected(day)),
+                        (mode === 'multiple' && isMultipleSelected(day)) ||
+                        (isRangeType() &&
+                          (isSameDay(day, startDate) ||
+                            isSameDay(day, endDate))),
                       disabled: isDateDisabled(day),
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
-                      inRange: mode === 'range' && isInRange(day),
-                      startDate: mode === 'range' && isSameDay(day, startDate),
-                      endDate: mode === 'range' && isSameDay(day, endDate),
+                      inRange: isRangeType() && isInRange(day),
+                      startDate: isRangeType() && isSameDay(day, startDate),
+                      endDate: isRangeType() && isSameDay(day, endDate),
                     }
                   "
                 ></ng-container>
@@ -188,6 +191,10 @@ export class CalendarMonthViewComponent {
     event: TouchEvent;
     day: Date | null;
   }>();
+
+  isRangeType(): boolean {
+    return ['range', 'week', 'month', 'quarter', 'year', 'timeRange'].includes(this.mode);
+  }
 
   trackByDay(index: number, day: Date | null): number {
     return day ? day.getTime() : index;

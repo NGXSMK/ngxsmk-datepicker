@@ -122,34 +122,42 @@ export class ThemeBuilderService implements OnDestroy {
     if (targetElement) {
       // Apply theme to specific element only using a scoped style element
       targetElement.setAttribute('data-theme-applied', '');
-      
+
       // Remove existing scoped style if any
       const existingStyle = this.scopedStyleElements.get(targetElement);
       if (existingStyle) {
         existingStyle.remove();
         this.scopedStyleElements.delete(targetElement);
       }
-      
+
       // Create a scoped style element for this specific element
       const scopedStyle = document.createElement('style');
       scopedStyle.setAttribute('data-datepicker-theme-scoped', '');
-      
+
       // Generate CSS targeting this specific element
       const elementId = targetElement.id || `datepicker-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
       if (!targetElement.id) {
         targetElement.id = elementId;
       }
-      
+
       // Optimized CSS generation - avoid duplication
-      const css = `#${elementId} {\n${themeCss}\n}`;
+      const css = `#${elementId}, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop {\n${themeCss}\n}`;
       scopedStyle.textContent = css;
       document.head.appendChild(scopedStyle);
       this.scopedStyleElements.set(targetElement, scopedStyle);
-      
+
       // Apply inline styles for immediate effect using batch updates
       requestAnimationFrame(() => {
         Object.entries(styles).forEach(([property, value]) => {
           targetElement.style.setProperty(property, value, 'important');
+        });
+
+        const portalledElements = document.querySelectorAll('body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+        portalledElements.forEach((element: Element) => {
+          const htmlElement = element as HTMLElement;
+          Object.entries(styles).forEach(([property, value]) => {
+            htmlElement.style.setProperty(property, value, 'important');
+          });
         });
       });
     } else {
@@ -161,9 +169,10 @@ export class ThemeBuilderService implements OnDestroy {
       }
 
       // Optimized CSS - use more specific selector to override global :root variables
-      const css = `:root, :root > body {\n${themeCss}\n}`;
+      // Also apply to body-portalled popovers and backdrops for mobile
+      const css = `:root, :root > body, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop {\n${themeCss}\n}`;
       this.styleElement.textContent = css;
-      
+
       // Apply to elements more efficiently using requestAnimationFrame
       requestAnimationFrame(() => {
         this.applyToElements(theme);
@@ -180,15 +189,15 @@ export class ThemeBuilderService implements OnDestroy {
       return;
     }
 
-    const datepickerElements = document.querySelectorAll('ngxsmk-datepicker');
+    const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
     const styles = this.generateStyleObject(theme);
-    
+
     // Batch DOM operations for better performance
     datepickerElements.forEach((element: Element) => {
       const htmlElement = element as HTMLElement;
       // Mark element as having theme applied for CSS selector specificity
       htmlElement.setAttribute('data-theme-applied', '');
-      
+
       // Batch style property updates
       Object.entries(styles).forEach(([property, value]) => {
         htmlElement.style.setProperty(property, value, 'important');
@@ -259,25 +268,36 @@ export class ThemeBuilderService implements OnDestroy {
     if (targetElement) {
       // Remove theme from specific element only
       targetElement.removeAttribute('data-theme-applied');
-      
+
       // Remove scoped style element
       const scopedStyle = this.scopedStyleElements.get(targetElement);
       if (scopedStyle) {
         scopedStyle.remove();
         this.scopedStyleElements.delete(targetElement);
       }
-      
+
       // Remove temporary ID if we added one
       if (targetElement.id && targetElement.id.startsWith('datepicker-')) {
         targetElement.removeAttribute('id');
       }
-      
+
       // Remove all datepicker CSS variables from this element
       const allStyles = Array.from(targetElement.style);
       allStyles.forEach(prop => {
         if (prop.startsWith('--datepicker-')) {
           targetElement.style.removeProperty(prop);
         }
+      });
+      // Also clear from any open body-portalled popovers
+      const portalledElements = document.querySelectorAll('body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
+      portalledElements.forEach((element: Element) => {
+        const htmlElement = element as HTMLElement;
+        const portalledStyles = Array.from(htmlElement.style);
+        portalledStyles.forEach(prop => {
+          if (prop.startsWith('--datepicker-')) {
+            htmlElement.style.removeProperty(prop);
+          }
+        });
       });
     } else {
       // Remove global theme (original behavior)
@@ -287,13 +307,13 @@ export class ThemeBuilderService implements OnDestroy {
         this.styleElement = null;
       }
 
-      // Clear inline styles from all datepicker elements
-      const datepickerElements = document.querySelectorAll('ngxsmk-datepicker');
+      // Clear inline styles from all datepicker elements and body-portalled popovers
+      const datepickerElements = document.querySelectorAll('ngxsmk-datepicker, body > .ngxsmk-popover-container, body > .ngxsmk-backdrop');
       datepickerElements.forEach((element: Element) => {
         const htmlElement = element as HTMLElement;
         // Remove theme attribute
         htmlElement.removeAttribute('data-theme-applied');
-        
+
         // Remove all datepicker CSS variables
         const allStyles = Array.from(htmlElement.style);
         allStyles.forEach(prop => {
@@ -329,7 +349,7 @@ export class ThemeBuilderService implements OnDestroy {
 
     // Extract CSS variables
     const allStyles = Array.from(computedStyle).filter(prop => prop.startsWith('--datepicker-'));
-    
+
     allStyles.forEach(prop => {
       const value = computedStyle.getPropertyValue(prop).trim();
       const key = prop.replace('--datepicker-', '');

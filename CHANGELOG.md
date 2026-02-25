@@ -2,12 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** February 23, 2026 · **Current stable:** v2.1.8
+**Last updated:** February 25, 2026 · **Current stable:** v2.1.9
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.8] - 2026-02-23
+## [2.1.9] - 2026-02-25
+
+### Added
+
+- **Enhanced Visibility**: Fixed text contrast in dropdown options for better accessibility, ensuring high-contrast labels for month and year selections.
+
+### Changed
+
+- **Header Select Synchronization**: Migrated `CustomSelectComponent` and `CalendarHeaderComponent` to `ViewEncapsulation.None`. Consolidated all dropdown styles into `_header.scss` to enable seamless global layout control.
+- **Improved Dropdown Layout**: Implemented a flexbox-based `justify-content: space-between` layout for Month/Year selectors, ensuring a professional, edge-to-edge gap between text and icons on mobile screens.
+- **UI Refinement**: Unified container border radii to 12px for visual consistency, removed unnecessary borders from the popover container, and significantly reduced paddings/margins in the header, calendar grid, and footer for a tighter, more modern look.
+- **Performance Optimization**: Further reduced internal calendar opening timers for faster user feedback—Mobile delay reduced from 280ms to 150ms, and Desktop delay reduced to 60ms.
+
+## [2.1.9] - 2026-02-23
 
 ### Fixed
 

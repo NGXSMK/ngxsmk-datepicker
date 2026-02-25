@@ -3009,7 +3009,7 @@ export class NgxsmkDatepickerComponent
       this.trackedDoubleRequestAnimationFrame(() => {
         this.setupPassiveTouchListeners();
         this.scheduleChangeDetection();
-        const timeoutDelay = this.isMobileDevice() ? 280 : 120;
+        const timeoutDelay = this.isMobileDevice() ? 150 : 60;
         if (this.isOpeningCalendar) {
           this.trackedSetTimeout(() => {
             this.isOpeningCalendar = false;
@@ -3106,7 +3106,7 @@ export class NgxsmkDatepickerComponent
         this.setupPassiveTouchListeners();
         this.scheduleChangeDetection();
       });
-      const timeoutDelay = this.isMobileDevice() ? 280 : 120;
+      const timeoutDelay = this.isMobileDevice() ? 150 : 60;
       this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
         this.isOpeningCalendar = false;
         this.setupPassiveTouchListeners();
@@ -3790,9 +3790,25 @@ export class NgxsmkDatepickerComponent
     this.closeCalendarWithFocusRestore();
     this.lastToggleTime = now;
   }
+  private scrollDebounceTimer: number | null = null;
+  private readonly updatePositionOnScroll = (): void => {
+    if (this.isCalendarOpen && this._shouldAppendToBody && this.isBrowser) {
+      if (this.scrollDebounceTimer === null) {
+        this.scrollDebounceTimer = requestAnimationFrame(() => {
+          this.positionPopoverRelativeToInput();
+          this.scrollDebounceTimer = null;
+        });
+      }
+    }
+  };
 
   private updateOpeningState(isOpening: boolean): void {
     if (isOpening) {
+      if (this.isBrowser && this._shouldAppendToBody) {
+        window.addEventListener('scroll', this.updatePositionOnScroll, { capture: true, passive: true });
+        window.addEventListener('resize', this.updatePositionOnScroll, { passive: true });
+      }
+
       this.isOpeningCalendar = true;
 
       // Handle Append To Body
@@ -3807,7 +3823,7 @@ export class NgxsmkDatepickerComponent
         clearTimeout(this.openCalendarTimeoutId);
       }
 
-      const timeoutDelay = this.isMobileDevice() ? 280 : 80;
+      const timeoutDelay = this.isMobileDevice() ? 150 : 60;
       this.openCalendarTimeoutId = this.trackedSetTimeout(() => {
         this.isOpeningCalendar = false;
         this.openCalendarTimeoutId = null;
@@ -3818,6 +3834,11 @@ export class NgxsmkDatepickerComponent
         this.cdr.markForCheck();
       }, timeoutDelay);
     } else {
+      if (this.isBrowser) {
+        window.removeEventListener('scroll', this.updatePositionOnScroll, { capture: true } as EventListenerOptions);
+        window.removeEventListener('resize', this.updatePositionOnScroll);
+      }
+
       this.isOpeningCalendar = false;
 
       // Cleanup Append To Body
