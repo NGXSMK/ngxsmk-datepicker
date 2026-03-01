@@ -220,7 +220,7 @@
     "luxon": "^3.4.4",
     "ng-packagr": "^21.0.0",
     "semantic-release": "^23.0.0",
-    "storybook": "^8.6.14",
+    "storybook": "^10.2.13",
     "typedoc": "^0.26.11",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.46.4",
