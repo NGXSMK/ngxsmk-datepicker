@@ -47,7 +47,7 @@
     }
   },
   "dependencies": {
-    "@angular/elements": "^21.1.5",
+    "@angular/elements": "^21.2.0",
     "@tokiforge/angular": "^2.0.0",
     "@tokiforge/core": "^2.0.0",
     "path-browserify": "^1.0.1",
