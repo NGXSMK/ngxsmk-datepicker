@@ -185,7 +185,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.0.2",
     "@angular/animations": "^21.2.0",
-    "@angular/build": "^21.0.2",
+    "@angular/build": "^21.2.6",
     "@angular/cdk": "^21.2.0",
     "@angular/cli": "^21.0.2",
     "@angular/common": "^21.0.3",
