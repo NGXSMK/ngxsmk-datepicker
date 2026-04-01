@@ -198,7 +198,7 @@
     "@angular/platform-browser-dynamic": "^21.0.3",
     "@angular/router": "^21.0.3",
     "@ionic/angular": "^8.7.16",
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.59.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/exec": "^6.0.3",
