@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@angular/elements": "^21.1.5",
-    "@tokiforge/angular": "^2.0.0",
+    "@tokiforge/angular": "^2.0.1",
     "@tokiforge/core": "^2.0.0",
     "path-browserify": "^1.0.1",
     "tslib": "^2.3.0"
