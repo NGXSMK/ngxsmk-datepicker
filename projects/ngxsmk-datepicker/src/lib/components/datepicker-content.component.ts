@@ -67,6 +67,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
         (touchmove)="touchMoveContainer.emit($event)"
         (touchend)="touchEndContainer.emit($event)"
         (mousedown)="$event.stopPropagation()"
+        (keydown.escape)="onPopoverEscape($event)"
       >
         <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
           @if (isCalendarOpening) {
@@ -547,6 +548,7 @@ export class NgxsmkDatepickerContentComponent {
   @Output() timeRangeChange = new EventEmitter<void>();
   @Output() clearValue = new EventEmitter<MouseEvent>();
   @Output() closeCalendar = new EventEmitter<void>();
+  @Output() escapeKey = new EventEmitter<Event>();
 
   @ViewChild(CalendarHeaderComponent) header?: CalendarHeaderComponent;
   @ViewChild('popoverContainer') popoverContainer?: ElementRef<HTMLElement>;
@@ -571,5 +573,14 @@ export class NgxsmkDatepickerContentComponent {
   onTimelineMonthSpace(month: Date, event: Event): void {
     event.preventDefault();
     this.timelineMonthClick.emit(month);
+  }
+
+  onPopoverEscape(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.escapeKey.emit(event);
+    if (!this.isInlineMode) {
+      this.closeCalendar.emit();
+    }
   }
 }

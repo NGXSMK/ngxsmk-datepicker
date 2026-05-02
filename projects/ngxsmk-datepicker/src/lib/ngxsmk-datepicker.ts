@@ -276,6 +276,7 @@ interface MatFormFieldControlMock<T> {
           [isTimelineMonthSelected]="boundIsTimelineMonthSelected"
           [formatTimeSliderValue]="boundFormatTimeSliderValue"
           (backdropClick)="onBackdropInteract($event)"
+          (escapeKey)="onPopoverEscape($event)"
           (touchStartContainer)="onBottomSheetTouchStart($event)"
           (touchMoveContainer)="onBottomSheetTouchMove($event)"
           (touchEndContainer)="onBottomSheetTouchEnd($event)"
@@ -424,52 +425,6 @@ export class NgxsmkDatepickerComponent
     if (globalToken) NgxsmkDatepickerComponent.withMaterialSupport(globalToken);
   }
 
-  private static _patchDefProviders(def: any, token: any, provider: any): void {
-    if (!def.providers) {
-      def.providers = [provider];
-    } else if (Array.isArray(def.providers)) {
-      if (!def.providers.some((p: any) => p === token || (p && p.provide === token))) {
-        def.providers.push(provider);
-      }
-    }
-  }
-
-  private static _patchResolverResult(result: any, token: any, provider: any): any {
-    if (Array.isArray(result) && !result.some((p: any) => p === token || (p && p.provide === token))) {
-      result.push(provider);
-    }
-    return result;
-  }
-
-  private static _patchProcessProviders(processProvidersFn: any, token: any, provider: any): any {
-    return (providers: any[], viewProviders: any[]) => {
-      const patched = [...(providers || [])];
-      const patchedView = [...(viewProviders || [])];
-      if (!patched.some((p) => p === token || (p && p.provide === token))) {
-        patched.push(provider);
-      }
-      if (!patchedView.some((p: any) => p === token || (p && p.provide === token))) {
-        patchedView.push(provider);
-      }
-      return processProvidersFn(patched, patchedView);
-    };
-  }
-
-  private static _patchDefResolver(def: any, token: any, provider: any): void {
-    if (typeof def.providersResolver === 'function') {
-      const originalResolver = def.providersResolver;
-      def.providersResolver = (definition: any, processProvidersFn: any) => {
-        if (typeof processProvidersFn !== 'function') {
-          return NgxsmkDatepickerComponent._patchResolverResult(originalResolver(definition), token, provider);
-        }
-        return originalResolver(
-          definition,
-          NgxsmkDatepickerComponent._patchProcessProviders(processProvidersFn, token, provider)
-        );
-      };
-    }
-  }
-
   private static _patchMetadataArrays(target: any, token: any, provider: any): void {
     const metadataKeys = ['__annotations__', 'decorators'];
     for (const key of metadataKeys) {
@@ -495,15 +450,9 @@ export class NgxsmkDatepickerComponent
 
     const provider = {
       provide: token,
-      useExisting: forwardRef(() => NgxsmkDatepickerComponent),
+      useExisting: forwardRef(() => targetCmp),
       multi: false,
     };
-
-    const initialCmp = targetCmp.ɵcmp;
-    if (initialCmp) {
-      NgxsmkDatepickerComponent._patchDefProviders(initialCmp, token, provider);
-      NgxsmkDatepickerComponent._patchDefResolver(initialCmp, token, provider);
-    }
 
     NgxsmkDatepickerComponent._patchMetadataArrays(targetCmp, token, provider);
   }
@@ -3034,6 +2983,11 @@ export class NgxsmkDatepickerComponent
 
     this.closeCalendarWithFocusRestore();
     this.lastToggleTime = now;
+  }
+
+  public onPopoverEscape(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
   }
   private scrollDebounceTimer: number | null = null;
   private readonly updatePositionOnScroll = (): void => {

@@ -1,27 +1,22 @@
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 
 describe('NgxsmkDatepickerComponent Coverage Boost', () => {
-  it('should patch def providers', () => {
-    const patchDefProviders = (NgxsmkDatepickerComponent as any)._patchDefProviders;
-    const def: any = { providers: [] };
-    patchDefProviders(def, 'TOKEN', 'PROVIDER');
-    expect(def.providers).toContain('PROVIDER');
+  it('should patch metadata providers arrays', () => {
+    const patchMetadataArrays = (NgxsmkDatepickerComponent as any)._patchMetadataArrays;
+    const target: any = {
+      decorators: [{ args: [{ providers: [] }] }],
+    };
+    patchMetadataArrays(target, 'TOKEN', 'PROVIDER');
+    expect(target.decorators[0].args[0].providers).toContain('PROVIDER');
   });
 
-  it('should patch resolver results', () => {
-    const patchResolverResult = (NgxsmkDatepickerComponent as any)._patchResolverResult;
-    const result: any = [];
-    patchResolverResult(result, 'TOKEN', 'PROVIDER');
-    expect(result).toContain('PROVIDER');
-  });
-
-  it('should handle material support static call on mock', () => {
+  it('should handle material support static call on metadata-only mock', () => {
     class MockComp {
-      static ɵcmp: any = { providers: [], type: MockComp };
+      static decorators: any[] = [{ args: [{ providers: [] }] }];
     }
     const token = { toString: () => 'MatFormFieldControl' };
     expect(() => NgxsmkDatepickerComponent.withMaterialSupport(token, MockComp)).not.toThrow();
-    expect((MockComp.ɵcmp.providers as any[]).length).toBeGreaterThan(0);
+    expect((MockComp.decorators[0].args[0].providers as any[]).length).toBeGreaterThan(0);
   });
 
   it('should detect environment-specific features gracefully', () => {
