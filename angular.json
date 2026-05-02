@@ -356,7 +356,15 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/ngxsmk-datepicker-element/tsconfig.spec.json",
+            "karmaConfig": "projects/ngxsmk-datepicker-element/karma.conf.js"
+          }
         }
       }
     }

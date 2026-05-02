@@ -1,9 +1,9 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "2.2.11",
+  "version": "2.2.12",
   "author": {
     "name": "Sachin Dilshan",
-    "url": "https://www.linkedin.com/in/sachindilshan/"
+    "url": "https://www.sachindilshan.com/"
   },
   "peerDependencies": {
     "@angular/common": ">=17.0.0 <24.0.0",

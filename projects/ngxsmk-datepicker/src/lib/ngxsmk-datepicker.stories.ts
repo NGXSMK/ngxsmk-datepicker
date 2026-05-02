@@ -322,3 +322,28 @@ export const CustomLabels: Story = {
     theme: 'light',
   },
 };
+
+/** Two months inline — regression coverage for multi-calendar layout. */
+export const MultiCalendarInline: Story = {
+  args: {
+    mode: 'range',
+    inline: true,
+    calendarCount: 2,
+    calendarLayout: 'horizontal',
+    theme: 'light',
+    syncScroll: { enabled: true, monthGap: 1 },
+  },
+  parameters: {
+    layout: 'padded',
+  },
+};
+
+/** Range mode with preset sidebar (`showRanges`). */
+export const RangeWithQuickPicks: Story = {
+  args: {
+    mode: 'range',
+    placeholder: 'Select range',
+    showRanges: true,
+    theme: 'light',
+  },
+};

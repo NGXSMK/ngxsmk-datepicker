@@ -276,6 +276,7 @@ interface MatFormFieldControlMock<T> {
           [isTimelineMonthSelected]="boundIsTimelineMonthSelected"
           [formatTimeSliderValue]="boundFormatTimeSliderValue"
           (backdropClick)="onBackdropInteract($event)"
+          (escapeKey)="onPopoverEscape($event)"
           (touchStartContainer)="onBottomSheetTouchStart($event)"
           (touchMoveContainer)="onBottomSheetTouchMove($event)"
           (touchEndContainer)="onBottomSheetTouchEnd($event)"
@@ -424,52 +425,6 @@ export class NgxsmkDatepickerComponent
     if (globalToken) NgxsmkDatepickerComponent.withMaterialSupport(globalToken);
   }
 
-  private static _patchDefProviders(def: any, token: any, provider: any): void {
-    if (!def.providers) {
-      def.providers = [provider];
-    } else if (Array.isArray(def.providers)) {
-      if (!def.providers.some((p: any) => p === token || (p && p.provide === token))) {
-        def.providers.push(provider);
-      }
-    }
-  }
-
-  private static _patchResolverResult(result: any, token: any, provider: any): any {
-    if (Array.isArray(result) && !result.some((p: any) => p === token || (p && p.provide === token))) {
-      result.push(provider);
-    }
-    return result;
-  }
-
-  private static _patchProcessProviders(processProvidersFn: any, token: any, provider: any): any {
-    return (providers: any[], viewProviders: any[]) => {
-      const patched = [...(providers || [])];
-      const patchedView = [...(viewProviders || [])];
-      if (!patched.some((p) => p === token || (p && p.provide === token))) {
-        patched.push(provider);
-      }
-      if (!patchedView.some((p: any) => p === token || (p && p.provide === token))) {
-        patchedView.push(provider);
-      }
-      return processProvidersFn(patched, patchedView);
-    };
-  }
-
-  private static _patchDefResolver(def: any, token: any, provider: any): void {
-    if (typeof def.providersResolver === 'function') {
-      const originalResolver = def.providersResolver;
-      def.providersResolver = (definition: any, processProvidersFn: any) => {
-        if (typeof processProvidersFn !== 'function') {
-          return NgxsmkDatepickerComponent._patchResolverResult(originalResolver(definition), token, provider);
-        }
-        return originalResolver(
-          definition,
-          NgxsmkDatepickerComponent._patchProcessProviders(processProvidersFn, token, provider)
-        );
-      };
-    }
-  }
-
   private static _patchMetadataArrays(target: any, token: any, provider: any): void {
     const metadataKeys = ['__annotations__', 'decorators'];
     for (const key of metadataKeys) {
@@ -495,15 +450,9 @@ export class NgxsmkDatepickerComponent
 
     const provider = {
       provide: token,
-      useExisting: forwardRef(() => NgxsmkDatepickerComponent),
+      useExisting: forwardRef(() => targetCmp),
       multi: false,
     };
-
-    const initialCmp = targetCmp.ɵcmp;
-    if (initialCmp) {
-      NgxsmkDatepickerComponent._patchDefProviders(initialCmp, token, provider);
-      NgxsmkDatepickerComponent._patchDefResolver(initialCmp, token, provider);
-    }
 
     NgxsmkDatepickerComponent._patchMetadataArrays(targetCmp, token, provider);
   }
@@ -624,13 +573,15 @@ export class NgxsmkDatepickerComponent
   @Input() allowTyping: boolean = false;
   private _calendarCount: number = 1;
   @Input() set calendarCount(value: number) {
+    const coerced = typeof value === 'string' ? Number.parseInt(value, 10) : Number(value);
+    const n = Number.isFinite(coerced) ? coerced : Number.NaN;
     // Clamp calendarCount to valid range (1-12) for performance
-    if (value < 1) {
+    if (!Number.isFinite(n) || n < 1) {
       if (isDevMode()) {
         console.warn(`[ngxsmk-datepicker] calendarCount must be at least 1. ` + `Received: ${value}. Setting to 1.`);
       }
       this._calendarCount = 1;
-    } else if (value > 12) {
+    } else if (n > 12) {
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
@@ -639,7 +590,7 @@ export class NgxsmkDatepickerComponent
       }
       this._calendarCount = 12;
     } else {
-      this._calendarCount = value;
+      this._calendarCount = Math.trunc(n);
     }
   }
   get calendarCount(): number {
@@ -1440,6 +1391,9 @@ export class NgxsmkDatepickerComponent
     new Set([0, 1, 2, 3, 4]) // Default: render first 5 months
   );
 
+  /** Bumped when `multiCalendarMonths` is regenerated so `renderedCalendars` invalidates (plain array is not a signal). */
+  private readonly _multiCalendarDataRevision = signal(0);
+
   /**
    * Computed signal for rendered calendars - only includes visible calendars + buffer.
    * This dramatically reduces DOM nodes for multi-calendar layouts.
@@ -1449,6 +1403,7 @@ export class NgxsmkDatepickerComponent
     // This ensures the computed re-evaluates when changeMonth() or dropdown selection changes the month/year
     this._currentMonthSignal();
     this._currentYearSignal();
+    this._multiCalendarDataRevision();
 
     const visibleIndices = this._visibleCalendarIndicesSignal();
     const allMonths = this.multiCalendarMonths;
@@ -1456,6 +1411,10 @@ export class NgxsmkDatepickerComponent
 
     if (allMonths.length <= 1) {
       // No lazy loading for single calendar
+      return allMonths;
+    }
+
+    if (visibleIndices.size === 0) {
       return allMonths;
     }
 
@@ -3034,6 +2993,11 @@ export class NgxsmkDatepickerComponent
 
     this.closeCalendarWithFocusRestore();
     this.lastToggleTime = now;
+  }
+
+  public onPopoverEscape(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
   }
   private scrollDebounceTimer: number | null = null;
   private readonly updatePositionOnScroll = (): void => {
@@ -5227,6 +5191,7 @@ export class NgxsmkDatepickerComponent
 
     const months = this.buildCalendarMonths(baseYear, baseMonth, count);
     this.multiCalendarMonths = months;
+    this._multiCalendarDataRevision.update((r: number) => r + 1);
 
     if (months.length > 0 && months[0]) {
       this.daysInMonth = months[0].days;

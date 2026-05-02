@@ -319,6 +319,18 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       // Inline mode should remain visible
       expect(component.isCalendarVisible).toBe(true);
     });
+
+    it('should swallow Escape bubbling from popover escape handler', () => {
+      const event = {
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation'),
+      } as unknown as KeyboardEvent;
+
+      component.onPopoverEscape(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(event.stopPropagation).toHaveBeenCalled();
+    });
   });
 
   describe('Disabled Keyboard Shortcuts', () => {

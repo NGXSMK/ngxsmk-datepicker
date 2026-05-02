@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "../../",
     "outDir": "../../out-tsc/lib",
     "declaration": true,
     "declarationMap": true,
@@ -13,7 +14,7 @@
     "exactOptionalPropertyTypes": true
   },
   "include": ["src/public-api.ts", "src/lib/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "src/material"],
+  "exclude": ["src/**/*.spec.ts", "src/material", "**/*.stories.ts"],
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "enableI18nLegacyMessageIdFormat": false,

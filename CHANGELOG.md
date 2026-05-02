@@ -2,10 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.11
+**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- **Documentation**: Added [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md) as the maintained anchor index for roadmap-linked improvements; added [FEATURE_SCOPING.md](projects/ngxsmk-datepicker/docs/FEATURE_SCOPING.md) and [REFACTOR_PLAN.md](projects/ngxsmk-datepicker/docs/REFACTOR_PLAN.md).
+- **Demo**: Playground **Advanced** controls (`syncScroll`, `appendToBody`, `disabledState`, `mobileModalStyle`) and stable `id`s for E2E.
+- **E2E**: [e2e/playground.spec.ts](e2e/playground.spec.ts) — RTL, multi-calendar inline, range quick picks; smoke tests target `.ngxsmk-popover-open` so inline `role="dialog"` calendars on `/examples` do not break strict locators.
+- **Storybook**: `MultiCalendarInline` and `RangeWithQuickPicks` stories.
+- **Examples**: [examples/ionic-test-app/README.md](examples/ionic-test-app/README.md) install and matrix notes.
+- **Compatibility**: CI / peer validation checklist in [COMPATIBILITY.md](projects/ngxsmk-datepicker/docs/COMPATIBILITY.md).
+
+### Changed
+
+- **Documentation**: Refreshed Markdown files across the repository with updated metadata headers (last updated/current stable), aligned compatibility wording, and contact links.
+- **Roadmap**: Updated main-component line count reference; roadmap links now resolve to `IMPROVEMENT_REPORT.md`.
+- **Compatibility Docs**: Clarified Vitest wording to describe compatibility without implying a default test runner requirement.
+- **i18n (demo)**: New playground strings for the Advanced section (all demo-app languages).
 
 ## [2.2.11] - 2026-03-24
 

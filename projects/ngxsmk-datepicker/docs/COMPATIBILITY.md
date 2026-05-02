@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-**Last updated:** March 21, 2026 · **Current stable:** v2.2.8
+**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
 
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
@@ -14,7 +14,7 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 | **Angular 18** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Enhanced signal support |
 | **Angular 19** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Optimized performance |
 | **Angular 20** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Fully supported |
-| **Angular 21** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | **Officially released - Current development target**<br/>✅ Signal Forms (experimental)<br/>✅ Zoneless by default<br/>✅ Vitest compatible<br/>✅ Angular Aria compatible |
+| **Angular 21** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | **Officially released - Current development target**<br/>✅ Signal Forms (experimental)<br/>✅ Zoneless by default<br/>✅ Compatible with Vitest-based apps<br/>✅ Angular Aria compatible |
 | **Angular 22+** | 🔄 Future Support | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | Peer dependency: `<24.0.0` |
 
 ### Feature Availability by Angular Version
@@ -50,7 +50,7 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 
 #### Angular 21 New Features Compatibility
 - ✅ **Zoneless by Default**: Fully compatible with Angular 21 apps that don't include Zone.js
-- ✅ **Vitest Test Runner**: Library works in apps using Vitest (Angular 21 default)
+- ✅ **Vitest Test Runner**: Library works in apps using Vitest-based setups
 - ✅ **Angular Aria**: Compatible with Angular Aria components; uses custom ARIA implementation for screen reader support
 
 ### Peer Dependencies
@@ -364,7 +364,7 @@ The component is tested against:
 - ✅ With and without Zone.js
 - ✅ SSR and CSR modes
 - ✅ Various browser environments
-- ✅ **Vitest Compatible**: Works in Angular 21 applications using Vitest (Angular 21 default test runner)
+- ✅ **Vitest Compatible**: Works in Angular 21 applications using Vitest-based test setups
   - Library tests use Karma/Jasmine, but the library itself is fully compatible with Vitest-based apps
   - No changes needed when using Vitest in your Angular 21 application
 
@@ -383,7 +383,7 @@ The component is tested against:
 - ✅ **No Changes Needed**: Existing code works without modification
 
 ### Vitest Test Runner
-- ✅ **Compatible**: Library works in apps using Vitest (Angular 21 default)
+- ✅ **Compatible**: Library works in apps using Vitest-based setups
 - ✅ **No Migration Required**: Use the library as-is in Vitest-based projects
 - ✅ **Test Suite**: Library tests use Karma/Jasmine but library is Vitest-compatible
 
@@ -399,10 +399,8 @@ The component is tested against:
 - [Angular SSR Guide](https://angular.dev/guide/ssr)
 - [Zoneless Angular Guide](https://angular.dev/guide/zoneless)
 - [Signal Forms Documentation](https://angular.dev/guide/forms/signal-forms)
-- [Angular Aria Documentation](https://angular.dev/guide/accessibility/angular-aria)
 - [Vitest Documentation](https://vitest.dev/)
 - [Angular Aria Documentation](https://angular.dev/guide/accessibility/angular-aria)
-- [Vitest Documentation](https://vitest.dev/)
 
 ## 🔍 Version Detection
 
@@ -439,5 +437,21 @@ npm list @angular/core @angular/common @angular/forms
 
 ### Issue: Translations not working in SSR
 **Solution**: Translations work in SSR. Ensure locale is explicitly set if auto-detection fails on server.
+
+## CI and Angular peer matrix (maintainers)
+
+Recommended validation before tagging a release:
+
+| Step | Command | Notes |
+|------|---------|--------|
+| Library build | `npx ng build ngxsmk-datepicker --configuration production` | Ensures `dist/ngxsmk-datepicker` artifacts |
+| Unit tests | `npm run test:coverage` | Karma/Jasmine for `ngxsmk-datepicker` project |
+| Demo build | `npx ng build demo-app --configuration production` | Catches app integration issues |
+| Lint | `npm run lint` | ESLint across workspace |
+| E2E (optional CI) | `npm run e2e` with `BASE_URL` pointing at served demo | Playwright; set `CI=1` and start demo separately in pipelines |
+
+**Angular minors**: Keep `@angular/*` on the same minor within the workspace (`package.json`). Bump peers in library `projects/ngxsmk-datepicker/package.json` when raising supported ceiling; update this doc’s matrix table and peer JSON block together.
+
+**Ionic/Capacitor sample**: The `examples/ionic-test-app` project may require `npm install --legacy-peer-deps` when Ionic’s peers lag Angular—see [examples/ionic-test-app/README.md](../../../examples/ionic-test-app/README.md).
 
 

@@ -2,7 +2,7 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** March 24, 2026 · **Current stable:** v2.2.11
+**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
 
 ## 🎯 Current Focus (Q1 2026 - Q2 2026)
 
@@ -92,7 +92,7 @@ This roadmap outlines the planned features, improvements, and enhancements for n
 
 - [ ] **Extract Calendar Generation Logic to Service**
   - Move `generateCalendar()`, `generateYearGrid()`, `generateDecadeGrid()`, `generateTimeline()` to `CalendarGenerationService`
-  - Reduce main component from 5,090 lines
+  - Reduce main component from ~6,060 lines (`ngxsmk-datepicker.ts`)
   - *Label: `refactoring`, `performance`, `maintainability`*
   - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#11-extract-calendar-generation-logic-to-service)*
 

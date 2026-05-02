@@ -60,6 +60,9 @@
     },
     {
       "path": "./projects/ngxsmk-datepicker-element/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngxsmk-datepicker/tsconfig.stories.json"
     }
   ]
 }
