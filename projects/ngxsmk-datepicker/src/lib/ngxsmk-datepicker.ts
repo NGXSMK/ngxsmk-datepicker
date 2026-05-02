@@ -573,13 +573,15 @@ export class NgxsmkDatepickerComponent
   @Input() allowTyping: boolean = false;
   private _calendarCount: number = 1;
   @Input() set calendarCount(value: number) {
+    const coerced = typeof value === 'string' ? Number.parseInt(value, 10) : Number(value);
+    const n = Number.isFinite(coerced) ? coerced : Number.NaN;
     // Clamp calendarCount to valid range (1-12) for performance
-    if (value < 1) {
+    if (!Number.isFinite(n) || n < 1) {
       if (isDevMode()) {
         console.warn(`[ngxsmk-datepicker] calendarCount must be at least 1. ` + `Received: ${value}. Setting to 1.`);
       }
       this._calendarCount = 1;
-    } else if (value > 12) {
+    } else if (n > 12) {
       if (isDevMode()) {
         console.warn(
           `[ngxsmk-datepicker] calendarCount should not exceed 12 for performance reasons. ` +
@@ -588,7 +590,7 @@ export class NgxsmkDatepickerComponent
       }
       this._calendarCount = 12;
     } else {
-      this._calendarCount = value;
+      this._calendarCount = Math.trunc(n);
     }
   }
   get calendarCount(): number {
@@ -1389,6 +1391,9 @@ export class NgxsmkDatepickerComponent
     new Set([0, 1, 2, 3, 4]) // Default: render first 5 months
   );
 
+  /** Bumped when `multiCalendarMonths` is regenerated so `renderedCalendars` invalidates (plain array is not a signal). */
+  private readonly _multiCalendarDataRevision = signal(0);
+
   /**
    * Computed signal for rendered calendars - only includes visible calendars + buffer.
    * This dramatically reduces DOM nodes for multi-calendar layouts.
@@ -1398,6 +1403,7 @@ export class NgxsmkDatepickerComponent
     // This ensures the computed re-evaluates when changeMonth() or dropdown selection changes the month/year
     this._currentMonthSignal();
     this._currentYearSignal();
+    this._multiCalendarDataRevision();
 
     const visibleIndices = this._visibleCalendarIndicesSignal();
     const allMonths = this.multiCalendarMonths;
@@ -1405,6 +1411,10 @@ export class NgxsmkDatepickerComponent
 
     if (allMonths.length <= 1) {
       // No lazy loading for single calendar
+      return allMonths;
+    }
+
+    if (visibleIndices.size === 0) {
       return allMonths;
     }
 
@@ -5181,6 +5191,7 @@ export class NgxsmkDatepickerComponent
 
     const months = this.buildCalendarMonths(baseYear, baseMonth, count);
     this.multiCalendarMonths = months;
+    this._multiCalendarDataRevision.update((r: number) => r + 1);
 
     if (months.length > 0 && months[0]) {
       this.daysInMonth = months[0].days;

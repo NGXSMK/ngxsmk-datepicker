@@ -285,7 +285,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       <div class="example-category">
         <h2 class="category-title">{{ i18n.t().examples.categories.visual }}</h2>
-        <div class="examples-grid">
+        <div class="examples-grid examples-grid--single">
           <div class="card demo-card">
             <div class="card-header">
               <h3>{{ i18n.t().examples.modes.multiMonth }}</h3>
@@ -311,6 +311,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="inline-wrapper vertical-wrapper">
               <ngxsmk-datepicker
                 [inline]="true"
+                mode="range"
                 [calendarCount]="2"
                 calendarLayout="vertical"
                 [(ngModel)]="verticalValue"
@@ -479,6 +480,11 @@ import { I18nService } from '../../i18n/i18n.service';
         gap: 1rem;
       }
 
+      /* Multi-calendar inline demos need full row width — 2-up grid halves the card and clips the grid */
+      .examples-grid--single {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
       .demo-card {
         background: var(--color-bg-sidebar);
         border-color: var(--color-border-light);
@@ -559,16 +565,23 @@ import { I18nService } from '../../i18n/i18n.service';
 
       .inline-wrapper {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
+        align-items: flex-start;
         background: var(--color-bg-card);
         padding: 1rem;
         border-radius: 12px;
-        overflow-x: auto;
+        overflow: auto;
+
+        /* Let inline datepickers breathe — their natural width determines the layout */
+        ngxsmk-datepicker {
+          width: auto !important;
+          max-width: none;
+          min-width: 0;
+        }
       }
 
       .vertical-wrapper {
-        max-height: 400px;
-        overflow-y: auto;
+        max-height: none;
       }
 
       /* Custom Template Styles */

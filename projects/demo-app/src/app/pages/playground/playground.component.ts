@@ -22,7 +22,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="config-group">
             <span class="group-label">{{ i18n.t().playground.selectionMode }}</span>
             <div class="config-item">
-              <select [(ngModel)]="mode">
+              <select id="pg-mode-select" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
                 <option value="single">{{ i18n.t().playground.singleDate }}</option>
                 <option value="range">{{ i18n.t().playground.dateRange }}</option>
                 <option value="multiple">{{ i18n.t().playground.multipleDates }}</option>
@@ -41,19 +41,19 @@ import { I18nService } from '../../i18n/i18n.service';
 
           <div class="config-group">
             <span class="group-label">{{ i18n.t().playground.functionalBehavior }}</span>
-            <div class="config-item">
+            <div class="config-item" *ngIf="!inline">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="allowTyping" />
                 {{ i18n.t().playground.allowTyping }}
               </label>
             </div>
-            <div class="config-item">
+            <div class="config-item" *ngIf="!inline">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="showCalendarButton" />
                 {{ i18n.t().playground.showIcon }}
               </label>
             </div>
-            <div class="config-item">
+            <div class="config-item" *ngIf="!inline">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="useNativePicker" />
                 {{ i18n.t().playground.nativePicker }}
@@ -87,9 +87,24 @@ import { I18nService } from '../../i18n/i18n.service';
             </div>
             <div class="config-item" *ngIf="showTime">
               <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="use24Hour" />
+                {{ i18n.t().playground.hour24 }}
+              </label>
+            </div>
+            <div class="config-item" *ngIf="showTime">
+              <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="showSeconds" />
                 {{ i18n.t().playground.showSeconds }}
               </label>
+            </div>
+            <div class="config-item" *ngIf="showTime">
+              <label for="minuteInterval">{{ i18n.t().playground.minuteStep }}</label>
+              <select id="minuteInterval" [(ngModel)]="minuteInterval">
+                <option [ngValue]="1">1</option>
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="15">15</option>
+                <option [ngValue]="30">30</option>
+              </select>
             </div>
             <div class="config-item">
               <label for="activeLocale">{{ i18n.t().playground.locale }}</label>
@@ -106,8 +121,14 @@ import { I18nService } from '../../i18n/i18n.service';
 
           <div class="config-group">
             <span class="group-label">{{ i18n.t().playground.positioningLimits }}</span>
-            <div class="config-item">
-              <label for="align">Alignment</label>
+            <div class="config-item" *ngIf="mode === 'range'">
+              <label class="checkbox-label">
+                <input id="pg-range-presets" type="checkbox" [(ngModel)]="showRangePresets" />
+                {{ i18n.t().playground.rangeQuickPicks }}
+              </label>
+            </div>
+            <div class="config-item" *ngIf="!inline">
+              <label for="align">{{ i18n.t().playground.alignLabel }}</label>
               <select id="align" [(ngModel)]="align">
                 <option value="left">Left</option>
                 <option value="right">Right</option>
@@ -128,7 +149,11 @@ import { I18nService } from '../../i18n/i18n.service';
             </div>
             <div class="config-item">
               <label for="weekStart">{{ i18n.t().playground.weekStart }}</label>
-              <select id="weekStart" [(ngModel)]="weekStart">
+              <select
+                id="weekStart"
+                [(ngModel)]="weekStart"
+                [compareWith]="compareWeekStart"
+              >
                 <option [ngValue]="null">{{ i18n.t().playground.autoLocale }}</option>
                 <option [ngValue]="0">{{ i18n.t().playground.sunday }} (0)</option>
                 <option [ngValue]="1">{{ i18n.t().playground.monday }} (1)</option>
@@ -159,6 +184,40 @@ import { I18nService } from '../../i18n/i18n.service';
             </div>
           </div>
 
+          <div class="config-group">
+            <span class="group-label">{{ i18n.t().playground.advancedBehavior }}</span>
+            <div class="config-item" *ngIf="calendarCount > 1">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="syncScrollEnabled" />
+                {{ i18n.t().playground.syncMultiCalendar }}
+              </label>
+            </div>
+            <div class="config-item" *ngIf="calendarCount > 1 && syncScrollEnabled">
+              <label for="monthGap">{{ i18n.t().playground.monthGapLabel }}</label>
+              <input type="number" id="monthGap" [(ngModel)]="monthGap" min="1" max="6" />
+            </div>
+            <div class="config-item" *ngIf="!inline">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="appendToBody" />
+                {{ i18n.t().playground.appendToBodyLabel }}
+              </label>
+            </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="pickerDisabled" />
+                {{ i18n.t().playground.disabledLabel }}
+              </label>
+            </div>
+            <div class="config-item" *ngIf="!inline">
+              <label for="mobileModal">{{ i18n.t().playground.mobileModalLabel }}</label>
+              <select id="mobileModal" [(ngModel)]="mobileModalStyle">
+                <option value="center">{{ i18n.t().playground.mobileModalCenter }}</option>
+                <option value="bottom-sheet">{{ i18n.t().playground.mobileModalBottomSheet }}</option>
+                <option value="fullscreen">{{ i18n.t().playground.mobileModalFullscreen }}</option>
+              </select>
+            </div>
+          </div>
+
           <button class="btn btn-outline reset-btn" (click)="reset()">{{ i18n.t().playground.reset }}</button>
         </aside>
 
@@ -179,7 +238,7 @@ import { I18nService } from '../../i18n/i18n.service';
               [showSeconds]="showSeconds"
               [minuteInterval]="minuteInterval"
               [theme]="theme"
-              [dir]="direction"
+              [rtl]="effectiveRtl"
               [allowTyping]="allowTyping"
               [showCalendarButton]="showCalendarButton"
               [calendarCount]="calendarCount"
@@ -191,6 +250,11 @@ import { I18nService } from '../../i18n/i18n.service';
               [minDate]="effectiveMinDate"
               [maxDate]="effectiveMaxDate"
               [holidayProvider]="useHolidayProvider ? holidayProvider : null"
+              [showRanges]="showRangePresets"
+              [syncScroll]="syncScrollConfig"
+              [appendToBody]="appendToBody"
+              [disabledState]="pickerDisabled"
+              [mobileModalStyle]="mobileModalStyle"
               [(ngModel)]="value"
             >
             </ngxsmk-datepicker>
@@ -429,7 +493,6 @@ import { I18nService } from '../../i18n/i18n.service';
 export class PlaygroundComponent {
   i18n = inject(I18nService);
   mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
-  direction: 'ltr' | 'rtl' = 'ltr';
   inline: boolean | 'always' | 'auto' = false;
   locale = 'en-US';
   showTime = false;
@@ -439,7 +502,19 @@ export class PlaygroundComponent {
   theme: 'light' | 'dark' = 'dark';
   allowTyping = false;
   showCalendarButton = true;
-  calendarCount = 1;
+  /** Coerced 1–3; `<input type="number">` may bind as string without this. */
+  private _calendarCount = 1;
+  get calendarCount(): number {
+    return this._calendarCount;
+  }
+  set calendarCount(value: unknown) {
+    const n = typeof value === 'number' && Number.isFinite(value) ? value : Number(value);
+    if (Number.isFinite(n)) {
+      this._calendarCount = Math.min(3, Math.max(1, Math.round(n)));
+    } else {
+      this._calendarCount = 1;
+    }
+  }
   calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'horizontal';
   useNativePicker = false;
   useCustomTemplate = false;
@@ -449,6 +524,37 @@ export class PlaygroundComponent {
   useHolidayProvider = false;
   enableMinDate = false;
   enableMaxDate = false;
+  /** Mirrors library default (`showRanges`); toggles preset ranges in range mode. */
+  showRangePresets = true;
+
+  syncScrollEnabled = false;
+  monthGap = 1;
+  appendToBody = false;
+  pickerDisabled = false;
+  mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
+
+  get syncScrollConfig(): { enabled: boolean; monthGap: number } {
+    const gap =
+      typeof this.monthGap === 'number' && Number.isFinite(this.monthGap)
+        ? Math.min(6, Math.max(1, Math.round(this.monthGap)))
+        : 1;
+    return { enabled: this.syncScrollEnabled && this.calendarCount > 1, monthGap: gap };
+  }
+
+  /** RTL is driven by `[rtl]` on the datepicker; `null` lets locale infer when not Arabic/Hebrew. */
+  get effectiveRtl(): boolean | null {
+    const lc = this.locale.toLowerCase();
+    if (lc.startsWith('ar') || lc.startsWith('he')) return true;
+    return null;
+  }
+
+  compareWeekStart(a: number | null | undefined, b: number | null | undefined): boolean {
+    return (a ?? null) === (b ?? null);
+  }
+
+  onModeChange(): void {
+    this.value = null;
+  }
 
   get effectiveMinDate(): Date | null {
     if (!this.enableMinDate) return null;
@@ -480,7 +586,6 @@ export class PlaygroundComponent {
 
   reset() {
     this.mode = 'single';
-    this.direction = 'ltr';
     this.inline = false;
     this.locale = 'en-US';
     this.showTime = false;
@@ -500,5 +605,11 @@ export class PlaygroundComponent {
     this.enableMinDate = false;
     this.enableMaxDate = false;
     this.align = 'left';
+    this.showRangePresets = true;
+    this.syncScrollEnabled = false;
+    this.monthGap = 1;
+    this.appendToBody = false;
+    this.pickerDisabled = false;
+    this.mobileModalStyle = 'center';
   }
 }

@@ -3099,7 +3099,8 @@ ngxsmk-datepicker.ngxsmk-inline {
     flex-shrink: 0 !important;
   }
 
-  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+  /* Side-by-side multi-month only — vertical layout must stay full width below the shared header */
+  .ngxsmk-multi-calendar-container:not(.ngxsmk-calendar-vertical) .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
     min-width: calc(50% - 12px) !important;
     max-width: calc(50% - 12px) !important;
     width: calc(50% - 12px) !important;
@@ -4510,7 +4511,7 @@ ngxsmk-datepicker.ngxsmk-inline {
     flex-shrink: 0 !important;
   }
 
-  .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
+  .ngxsmk-multi-calendar-container:not(.ngxsmk-calendar-vertical) .ngxsmk-calendar-month.ngxsmk-calendar-month-multi {
     min-width: calc(50% - 14px) !important;
     max-width: calc(50% - 14px) !important;
     width: calc(50% - 14px) !important;
@@ -7895,10 +7896,19 @@ ngxsmk-custom-select[data-open=true] {
   width: 100%;
 }
 
+/* Multi-calendar: column keeps nav above grids (row split header vs grids on wide screens). */
 @media (min-width: 1025px) {
   .ngxsmk-calendar-container.ngxsmk-has-multi-calendar {
-    flex-direction: row;
+    flex-direction: column;
+    align-items: stretch;
     min-width: 600px;
+  }
+
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar > ngxsmk-calendar-header,
+  .ngxsmk-calendar-container.ngxsmk-has-multi-calendar > .ngxsmk-multi-calendar-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 }
 

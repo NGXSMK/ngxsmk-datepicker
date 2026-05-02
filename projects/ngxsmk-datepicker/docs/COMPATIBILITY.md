@@ -438,4 +438,20 @@ npm list @angular/core @angular/common @angular/forms
 ### Issue: Translations not working in SSR
 **Solution**: Translations work in SSR. Ensure locale is explicitly set if auto-detection fails on server.
 
+## CI and Angular peer matrix (maintainers)
+
+Recommended validation before tagging a release:
+
+| Step | Command | Notes |
+|------|---------|--------|
+| Library build | `npx ng build ngxsmk-datepicker --configuration production` | Ensures `dist/ngxsmk-datepicker` artifacts |
+| Unit tests | `npm run test:coverage` | Karma/Jasmine for `ngxsmk-datepicker` project |
+| Demo build | `npx ng build demo-app --configuration production` | Catches app integration issues |
+| Lint | `npm run lint` | ESLint across workspace |
+| E2E (optional CI) | `npm run e2e` with `BASE_URL` pointing at served demo | Playwright; set `CI=1` and start demo separately in pipelines |
+
+**Angular minors**: Keep `@angular/*` on the same minor within the workspace (`package.json`). Bump peers in library `projects/ngxsmk-datepicker/package.json` when raising supported ceiling; update this doc’s matrix table and peer JSON block together.
+
+**Ionic/Capacitor sample**: The `examples/ionic-test-app` project may require `npm install --legacy-peer-deps` when Ionic’s peers lag Angular—see [examples/ionic-test-app/README.md](../../../examples/ionic-test-app/README.md).
+
 
