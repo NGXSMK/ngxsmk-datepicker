@@ -2,7 +2,7 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
+**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
 
 ## Table of Contents
 
@@ -58,6 +58,14 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## npm: skip v2.2.12
+
+The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.2.13`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+
+```bash
+npm install ngxsmk-datepicker@2.2.13
+```
+
 ## v2.2.7 → v2.2.11
 
 ### Changes
@@ -69,7 +77,7 @@ This document provides migration instructions for upgrading between major versio
 No breaking changes.
 
 ```bash
-npm install ngxsmk-datepicker@2.2.11
+npm install ngxsmk-datepicker@2.2.13
 ```
 
 ## v2.2.6 → v2.2.7
@@ -84,7 +92,7 @@ npm install ngxsmk-datepicker@2.2.11
 No breaking changes. Use **2.2.11** on npm (the `2.2.7` npm package was incomplete; 2.2.11 matches the intended 2.2.7 release).
 
 ```bash
-npm install ngxsmk-datepicker@2.2.11
+npm install ngxsmk-datepicker@2.2.13
 ```
 
 ## v2.2.3 → v2.2.6
@@ -313,7 +321,6 @@ npm install ngxsmk-datepicker@2.0.8
 ### Changes
 
 - **Version Update**: Updated to version 2.0.7
-- **Stable Release**: Version 2.2.12 is the current stable version
 - No breaking changes.
 
 ### Migration Steps

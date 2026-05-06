@@ -28,6 +28,8 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
+      # Fail fast if ng-packagr output cannot be produced (avoids publishing docs-only tarballs).
+      - run: npm run build:optimized && npm run prepublish:copy-assets && node scripts/assert-dist-lib-ready.cjs && npm run verify:dist-tarball
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

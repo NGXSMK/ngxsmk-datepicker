@@ -2,12 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
+**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased]`r`n`r`n## [2.2.13] - 2026-05-06`r`n`r`n### Fixed`r`n`r`n- **npm package**: Republished with complete build artifacts (`fesm2022/`, `types/`) and release safeguards to prevent docs-only tarballs.`r`n
 
 ### Added
 
@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Roadmap**: Updated main-component line count reference; roadmap links now resolve to `IMPROVEMENT_REPORT.md`.
 - **Compatibility Docs**: Clarified Vitest wording to describe compatibility without implying a default test runner requirement.
 - **i18n (demo)**: New playground strings for the Advanced section (all demo-app languages).
+
+## [2.2.12] - 2026-05-02 [BROKEN - NPM PACKAGE]
+
+### Fixed
+
+- **npm package**: The `2.2.12` tarball on the registry omitted `fesm2022/` and `types/` (only docs, styles, and package metadata). **Use `ngxsmk-datepicker@2.2.11` until `2.2.13` or later** with a full ng-packagr build ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ## [2.2.11] - 2026-03-24
 
