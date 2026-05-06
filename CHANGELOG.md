@@ -7,7 +7,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]`r`n`r`n## [2.2.13] - 2026-05-06`r`n`r`n### Fixed`r`n`r`n- **npm package**: Republished with complete build artifacts (`fesm2022/`, `types/`) and release safeguards to prevent docs-only tarballs.`r`n
+## [Unreleased]
+
+### Changed
+
+- **Documentation**: README — CI badge, “Why this library?” vs Material, discoverability (topics, lists, StackBlitz), consolidated SEO section; CONTRIBUTING — visibility notes; published package `description` and npm keywords in `projects/ngxsmk-datepicker/package.json`.
+- **Changelog**: Fixed malformed newline artifacts in the 2.2.13 header.
+
+## [2.2.13] - 2026-05-06
+
+### Fixed
+
+- **npm package**: Republished with complete build artifacts (`fesm2022/`, `types/`) and release safeguards to prevent docs-only tarballs.
 
 ### Added
 

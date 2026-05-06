@@ -291,6 +291,14 @@ Check the [Roadmap](ROADMAP.md) to see planned features and improvements. Issues
 - Review the [documentation](README.md)
 - Check the [roadmap](ROADMAP.md) for planned features
 
+## Visibility and discoverability
+
+These steps help users find the library without changing code:
+
+- **GitHub Topics** (repository settings): e.g. `angular`, `datepicker`, `date-range-picker`, `luxon`, `standalone-components`, `i18n`, `ssr`, `angular-universal`, `accessibility`, `ionic`.
+- **Awesome lists**: many curated Angular lists accept a short addition via PR; follow each repo’s rules (description + link only, no spam).
+- **Content**: technical posts or answers that link the [live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) and state the problem solved (range mode, timezones, Signal Forms, etc.) are more useful than generic “use my package” posts.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.

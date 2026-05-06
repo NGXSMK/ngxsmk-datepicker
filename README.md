@@ -11,6 +11,7 @@
 ### _The Gold Standard for Premium Angular Calendar Selection_
 
 [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg?style=flat-square&color=6d28d9)](https://www.npmjs.com/package/ngxsmk-datepicker)
+[![CI](https://img.shields.io/github/actions/workflow/status/NGXSMK/ngxsmk-datepicker/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/actions/workflows/ci.yml)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-toozuuu-orange?style=flat-square&logo=buy-me-a-coffee)](https://buymeacoffee.com/toozuuu)
@@ -19,7 +20,9 @@
 
 **`npm i ngxsmk-datepicker`**
 
-[Explore Live Demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [Buy me a coffee](https://buymeacoffee.com/toozuuu) • [API Documentation](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Submit Issue](https://github.com/NGXSMK/ngxsmk-datepicker/issues)
+[Live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [StackBlitz (repo)](https://stackblitz.com/github/NGXSMK/ngxsmk-datepicker) • [API docs](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Issues](https://github.com/NGXSMK/ngxsmk-datepicker/issues) • [Buy me a coffee](https://buymeacoffee.com/toozuuu)
+
+*StackBlitz:* after it boots, run `npm install` then `npm start` in the terminal to serve the demo app (`demo-app`).
 
 </div>
 
@@ -41,14 +44,16 @@
 
 1. [📷 Screenshots](#-screenshots)
 2. [✨ Features](#-features)
-3. [📋 Compatibility](#-compatibility)
-4. [🌍 Localization (i18n)](#-localization-i18n)
-5. [📦 Installation](#-installation)
-6. [🚀 Quick Start](#-quick-start)
-7. [🔌 Framework Integration](#-framework-integration)
-8. [⚙️ API Reference](#-api-reference)
-9. [🎨 Theming](#-theming)
-10. [⌨️ Keyboard Navigation](#-keyboard-navigation)
+3. [🤔 Why this library?](#why-this-library)
+4. [🌐 Discoverability](#-discoverability)
+5. [📋 Compatibility](#-compatibility)
+6. [🌍 Localization (i18n)](#-localization-i18n)
+7. [📦 Installation](#-installation)
+8. [🚀 Quick start / usage](#usage)
+9. [🔌 Framework Integration](#-framework-integration)
+10. [⚙️ API Reference](#-api-reference)
+11. [🎨 Theming](#-theming)
+12. [⌨️ Keyboard Navigation](#-keyboard-navigation)
 
 ---
 
@@ -67,7 +72,7 @@
 - 💎 **Signal-Driven Engine**: Hyper-reactive state management using Angular Signals.
 - 🌓 **Native Dark Mode**: Beautifully crafted themes for light and dark environments.
 - 📱 **Mobile-First UX**: Native mobile picker integration with touch gestures and haptic feedback.
-- 🧩 **Zero Dependencies**: Lightweight standalone component with no external bloat.
+- 🧩 **Minimal footprint**: Standalone component; **Luxon** is the only date peer beyond Angular (no full UI suite required).
 - ⚡ **Performance++**: Lazy-loaded calendar months, memoized calculations, and tree-shakable architecture.
 
 ### **Advanced Functionality**
@@ -78,6 +83,27 @@
 - 🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.
 - 🚀 **Zoneless Ready**: Optimized for the future of Angular—works perfectly without zone.js.
 - ♿ **Full Accessibility**: WAI-ARIA compliant with extensive keyboard navigation support.
+
+## Why this library?
+
+Use **ngxsmk-datepicker** when you want a focused **date / range picker** with strong **mobile**, **i18n**, **timezone**, and **SSR** story on **Angular 17+**, without adopting a full Material UI stack. It is a **standalone** component with **Luxon** as the single date peer (plus Angular).
+
+| | ngxsmk-datepicker | Angular Material datepicker |
+| --- | --- | --- |
+| **Fit** | Picker-first; optional Material/CDK peers for overlays only | Part of Material; best when you already use Material forms & CDK |
+| **Peer deps** | Angular + **Luxon** | **@angular/material** + **@angular/cdk** |
+| **Forms** | Template-driven, Reactive Forms, Signals; **Signal Forms** (`[field]`) on Angular 21+ | Reactive + template-driven; integrates with Material form field |
+| **Stack** | Tree-shakable package aimed at picker scenarios | Broader design system and bundle footprint |
+
+This is **not** a drop-in replacement for every Material datepicker API; choose based on whether you need **Material’s form-field ecosystem** or a **standalone picker** you can theme and ship with **zoneless** / **SSR** setups. See the [live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) and [COMPATIBILITY](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/COMPATIBILITY.md) for details.
+
+## **🌐 Discoverability**
+
+**Maintainers (GitHub):** consider repository **Topics** such as: `angular`, `datepicker`, `date-range-picker`, `luxon`, `standalone-components`, `i18n`, `angular-universal`, `ionic`, `accessibility`.
+
+**Community:** if this project helped you, stars and accurate comparisons in blog posts or issue threads help others find it. Curated lists (for example **awesome-angular**-style repos) usually accept small PRs that add a one-line link and follow their contribution rules—check each list’s guidelines before opening a PR.
+
+**Security:** report sensitive issues per [SECURITY.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/SECURITY.md), not via public issues.
 
 ## **📋 Compatibility**
 
@@ -887,19 +913,9 @@ Perfect for managing design tokens, creating theme systems, and implementing dar
 
 MIT License - see [LICENSE](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE) file for details.
 
-## **🔍 SEO & Discoverability**
+## **🔍 SEO (demo site)**
 
-This library is optimized for search engine visibility, especially for European markets:
-
-- **Keywords**: Angular datepicker, date range picker, calendar component, Angular 17-21, TypeScript, Signal Forms, SSR compatible
-- **European SEO**: Optimized for Germany, France, Spain, Italy, Netherlands, Poland, Portugal, Sweden, Norway, Finland, Denmark, Belgium, Switzerland, Austria, and United Kingdom
-- **Multi-language Support**: hreflang tags for 15+ European languages and locales
-- **European Geo-targeting**: Geo tags and structured data optimized for European Union countries
-- **Meta Tags**: Comprehensive Open Graph and Twitter Card support with European locale alternates
-- **Structured Data**: JSON-LD schema markup with European audience targeting and area served information
-- **Documentation**: Complete API documentation with examples
-- **Performance**: Optimized bundle size (~127KB) for fast loading
-- **European Localization**: Full i18n support for European date formats, week start days, and regional preferences
+The hosted **[live demo](https://ngxsmk.github.io/ngxsmk-datepicker/)** build ships with meta tags (Open Graph, Twitter cards, `hreflang`, structured data) and locale-aware content for broader discovery. For **GitHub/npm** visibility—topics, awesome lists, StackBlitz, and security reporting—see [**Discoverability**](#-discoverability) near the top of this README.
 
 ## **👨‍💻 Author**
 

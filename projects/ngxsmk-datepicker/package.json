@@ -1,6 +1,7 @@
 {
   "name": "ngxsmk-datepicker",
   "version": "2.2.13",
+  "description": "Lightweight, accessible date and range picker for Angular 17+. Standalone component, Signals, SSR and zoneless-ready, Luxon-based i18n and timezones.",
   "author": {
     "name": "Sachin Dilshan",
     "url": "https://www.sachindilshan.com/"
@@ -59,15 +60,24 @@
     "date-range-picker",
     "calendar",
     "standalone-component",
+    "reactive-forms",
+    "luxon",
     "angular-17",
     "angular-18",
     "angular-19",
     "angular-20",
     "angular-21",
+    "angular-22",
+    "angular-23",
     "typescript",
     "date-selection",
     "i18n",
-    "localization"
+    "localization",
+    "ssr",
+    "angular-universal",
+    "zoneless",
+    "accessibility",
+    "a11y"
   ],
   "optimization": {
     "treeShaking": true,
