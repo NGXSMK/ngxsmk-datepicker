@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** May 2, 2026 · **Current stable:** v2.2.12
+**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.12` restores correct **npm** artifacts (compiled `fesm2022/` and types), adds range-mode **`allowSameDay`** for single-day selections, and continues to ship **IANA timezone** support, validation fixes, and strict TypeScript improvements from the v2.2.x line.
+> **Stable Release**: `v2.2.13` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> ⚠️ **Important**: Versions 2.0.10 and 2.0.11 are broken and have been unpublished. Please use v2.2.12 or later.
+> **Stable line**: v2.2.x includes range-mode **`allowSameDay`**, **IANA timezone** support, validation fixes, and strict TypeScript improvements. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.2.13** on npm.
 
 ---
 
@@ -140,7 +140,7 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.2.12
+npm install ngxsmk-datepicker@2.2.13
 ```
 
 ### Alternative installation
@@ -149,12 +149,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.2.12` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.12` |
-| **Bun** | `bun add ngxsmk-datepicker@2.2.12` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.12` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.2.13` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.13` |
+| **Bun** | `bun add ngxsmk-datepicker@2.2.13` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.2.13` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.12/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.12/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.2.13/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.13/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -605,7 +605,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.12 now features **full localization synchronization** for:
+ngxsmk-datepicker v2.2.x now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -865,7 +865,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** v2.2.12 — npm publish pipeline fix (full `fesm2022`/types), `allowSameDay` range mode, plus TypeScript strictness, appendToBody/popover fixes, and CSS cleanup from v2.2.x. Versions 2.0.10 and 2.0.11 are unpublished; use v2.2.12 or later.
+**Recent:** Use **v2.2.13** on npm. The v2.2.x line adds `allowSameDay` range mode, IANA timezone support, TypeScript strictness, appendToBody/popover fixes, and CSS cleanup. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v2.2.13**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 
