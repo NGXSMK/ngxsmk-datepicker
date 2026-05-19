@@ -2,14 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.14
+**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [2.2.14] - 2026-05-19
+## [2.2.15] - 2026-05-19
 
 ### Added
 
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Unnecessary Type Assertions Cleanup**: Cleaned up dozens of redundant type assertions (e.g. `as keyof DatepickerTranslations`, `as HTMLElement`, `as DatepickerValue`, `as EventListenerOptions`) to fully align with standard Angular strict compiler guidelines and eliminate all IDE compiler warnings.
 - **Spec Styling Overhaul**: Refactored the test suite to move the `createMockEvent` helper to the top-level outer scope and transitioned elements cleanup to the modern `insideNode.remove()` native DOM standard.
 
-## [2.2.13] - 2026-05-06
+## [2.2.15] - 2026-05-06
 
 ### Fixed
 
@@ -51,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **npm package**: The `2.2.12` tarball on the registry omitted `fesm2022/` and `types/` (only docs, styles, and package metadata). **Use `ngxsmk-datepicker@2.2.11` until `2.2.13` or later** with a full ng-packagr build ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+- **npm package**: The `2.2.12` tarball on the registry omitted `fesm2022/` and `types/` (only docs, styles, and package metadata). **Use `ngxsmk-datepicker@2.2.11` until `2.2.15` or later** with a full ng-packagr build ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ## [2.2.11] - 2026-03-24
 

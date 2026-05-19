@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.14
+**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.13` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v2.2.15` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.2.x includes **`allowSameDay`**, **IANA timezone** support, validation fixes, and strict TypeScript improvements. Versions **2.0.10** and **2.0.11** were **unpublished**; use **v2.1.1+** or **v2.2.13** on npm.
+> **Stable line**: v2.2.x includes **`allowSameDay`**, **IANA timezone** support, validation fixes, and strict TypeScript improvements. Versions **2.0.10** and **2.0.11** were **unpublished**; use **v2.1.1+** or **v2.2.15** on npm.
 
 ---
 
@@ -850,7 +850,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.2.13** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
+### **v2.2.15** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
 
 ### **Earlier Versions**
 
