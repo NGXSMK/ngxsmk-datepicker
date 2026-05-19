@@ -2,17 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
+**Last updated:** May 19, 2026 - **Current stable:** v2.2.14
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.2.14] - 2026-05-19
+
+### Added
+
+- **Shadow DOM Compatibility (Issue #268)**: Added full, native support for running inside Angular Shadow DOM containers (`ViewEncapsulation.ShadowDom`) and Custom Web Components.
+  - Interaction listeners now query and utilize `event.composedPath()` to correctly identify clicked targets originating inside the component shadow boundary, preventing calendar dropdowns and header custom selects from closing prematurely due to event target retargeting.
+  - Added new comprehensive Shadow DOM unit test suite (`shadow-dom-compatibility.spec.ts`).
+
 ### Changed
 
-- **Documentation**: README — CI badge, “Why this library?” vs Material, discoverability (topics, lists, StackBlitz), consolidated SEO section; CONTRIBUTING — visibility notes; published package `description` and npm keywords in `projects/ngxsmk-datepicker/package.json`.
-- **Changelog**: Fixed malformed newline artifacts in the 2.2.13 header.
+- **Code Quality & Cognitive Complexity Reductions**:
+  - Flattened highly nested condition structures in `CustomSelectComponent.onDocumentTouchStart()`, reducing cognitive complexity to well below the limit of 15.
+  - Decomposed monolithic date check inside `NgxsmkDatepickerComponent.containsNode()` into private helper functions (`containsNodeViaComposedPath`, `containsNodeViaDOM`), drastically improving maintainability and reducing complexity down to 2.
+- **Unnecessary Type Assertions Cleanup**: Cleaned up dozens of redundant type assertions (e.g. `as keyof DatepickerTranslations`, `as HTMLElement`, `as DatepickerValue`, `as EventListenerOptions`) to fully align with standard Angular strict compiler guidelines and eliminate all IDE compiler warnings.
+- **Spec Styling Overhaul**: Refactored the test suite to move the `createMockEvent` helper to the top-level outer scope and transitioned elements cleanup to the modern `insideNode.remove()` native DOM standard.
 
 ## [2.2.13] - 2026-05-06
 

@@ -1,6 +1,6 @@
 # Ionic Framework Integration Guide
 
-**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
+**Last updated:** May 19, 2026 - **Current stable:** v2.2.14
 
 This guide provides step-by-step instructions for integrating ngxsmk-datepicker with Ionic Angular applications.
 

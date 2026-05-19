@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-**Last updated:** May 6, 2026 - **Current stable:** v2.2.13
+**Last updated:** May 19, 2026 - **Current stable:** v2.2.14
 
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
@@ -250,6 +250,18 @@ export class MyComponent {
 }
 ```
 
+## 🧩 Shadow DOM & Web Components Compatibility
+
+`ngxsmk-datepicker` is fully compatible with **Shadow DOM encapsulation** (`ViewEncapsulation.ShadowDom`) and deployment as an **Angular Element (Custom Web Component)** inside other frameworks (React, Vue, etc.).
+
+### Composed Path Event Retargeting
+When components are loaded inside a Shadow root, the browser retargets event targets when they bubble outside of the Shadow boundary. Standard `.contains()` checks on the host node will fail when checking external interaction listeners (e.g. document close listeners).
+
+`ngxsmk-datepicker` natively handles this by tracking event composed paths:
+* Inspects `event.composedPath()` when available to accurately check event origins inside Shadow DOM trees.
+* Falls back to standard light DOM `.contains(target)` when composed paths are not supported by the environment.
+* Supported across both the primary Datepicker component and Custom Select dropdown components.
+
 ## 🔧 Feature Compatibility Matrix
 
 ### By Angular Version
@@ -258,6 +270,7 @@ export class MyComponent {
 |---------|------------|-----------|------------|------------|-------------|
 | **Standalone Component** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Signals** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Shadow DOM Support** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Computed Signals** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Effects** | ⚠️ Limited | ✅ | ✅ | ✅ | ✅ |
 | **Signal Forms** | ❌ | ❌ | ❌ | ❌ | ✅ |
