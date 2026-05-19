@@ -700,7 +700,7 @@ export class NgxsmkDatepickerComponent
   }
   /** Returns translated "Loading calendar..." for template and ARIA. */
   getCalendarLoadingMessage(): string {
-    return this.getTranslation('calendarLoading' as keyof DatepickerTranslations) || 'Loading calendar...';
+    return this.getTranslation('calendarLoading') || 'Loading calendar...';
   }
   private openCalendarTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private lastToggleTime: number = 0;
@@ -2069,18 +2069,30 @@ export class NgxsmkDatepickerComponent
    * @returns Unique identifier combining year and month
    */
 
-  /**
-   * Checks if a DOM node is contained within this datepicker instance,
-   * including its input group and any portaled popover content.
-   *
-   * @param target - The node to check
-   * @returns True if the node is inside this datepicker's DOM tree
-   */
-  public containsNode(target: Node | null): boolean {
-    if (!this.isBrowser || !target) {
-      return false;
+  private containsNodeViaComposedPath(path: EventTarget[]): boolean {
+    const nativeElement = this.elementRef?.nativeElement;
+    if (nativeElement && path.includes(nativeElement)) {
+      return true;
     }
 
+    // Check portaled popover content if it exists
+    if (this._shouldAppendToBody && this.portalViewRef) {
+      if (this.portalViewRef.rootNodes.some((node: Node) => path.includes(node))) {
+        return true;
+      }
+    }
+
+    // Check inline popover Container (secondary fallback)
+    if (this.popoverContainer?.nativeElement) {
+      if (path.includes(this.popoverContainer.nativeElement)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private containsNodeViaDOM(target: Node): boolean {
     const nativeElement = this.elementRef?.nativeElement;
     if (nativeElement && (nativeElement === target || nativeElement.contains(target))) {
       return true;
@@ -2104,13 +2116,33 @@ export class NgxsmkDatepickerComponent
     return false;
   }
 
+  /**
+   * Checks if a DOM node is contained within this datepicker instance,
+   * including its input group and any portaled popover content.
+   *
+   * @param target - The node to check
+   * @returns True if the node is inside this datepicker's DOM tree
+   */
+  public containsNode(target: Node | null, event?: UIEvent): boolean {
+    if (!this.isBrowser || !target) {
+      return false;
+    }
+
+    // Support shadow DOM by checking composedPath if event is provided
+    if (event && typeof event.composedPath === 'function') {
+      return this.containsNodeViaComposedPath(event.composedPath());
+    }
+
+    return this.containsNodeViaDOM(target);
+  }
+
   /** Shared logic for closing calendar when user interacts outside (click or touch). */
-  private tryCloseCalendarOnOutsideInteraction(target: Node): void {
-    if (this.containsNode(target)) return;
+  private tryCloseCalendarOnOutsideInteraction(target: Node, event?: UIEvent): void {
+    if (this.containsNode(target, event)) return;
     const isInsideOtherDatepicker = Array.from(NgxsmkDatepickerComponent._allInstances).some(
       (instance: NgxsmkDatepickerComponent) => {
         if (instance === this || instance.isInlineMode) return false;
-        return instance.containsNode(target);
+        return instance.containsNode(target, event);
       }
     );
     if (isInsideOtherDatepicker || !this.isCalendarOpen) return;
@@ -2136,7 +2168,7 @@ export class NgxsmkDatepickerComponent
     if (!this.isBrowser || this.isInlineMode) return;
     const target = event.target as Node;
     if (!target) return;
-    this.tryCloseCalendarOnOutsideInteraction(target);
+    this.tryCloseCalendarOnOutsideInteraction(target, event);
   }
 
   public onTouchStart(event: TouchEvent): void {
@@ -2284,7 +2316,7 @@ export class NgxsmkDatepickerComponent
     this.isPointerEvent = true;
     this.pointerDownTime = Date.now();
     this.touchStartTime = Date.now();
-    this.touchStartElement = event.currentTarget as HTMLElement;
+    this.touchStartElement = event.currentTarget;
   }
 
   public onPointerUp(event: PointerEvent): void {
@@ -2965,13 +2997,13 @@ export class NgxsmkDatepickerComponent
     });
     const year = String(this.currentDate.getFullYear());
     const msg =
-      this.getTranslation('calendarOpened' as keyof DatepickerTranslations, undefined, { month: monthName, year }) ||
+      this.getTranslation('calendarOpened', undefined, { month: monthName, year }) ||
       `Calendar opened for ${monthName} ${year}`;
     this.ariaLiveService.announce(msg, 'polite');
   }
 
   private announceCalendarClosed(): void {
-    const msg = this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
+    const msg = this.getTranslation('calendarClosed') || 'Calendar closed';
     this.ariaLiveService.announce(msg, 'polite');
   }
 
@@ -3042,7 +3074,7 @@ export class NgxsmkDatepickerComponent
 
   private _startClosingState(): void {
     if (this.isBrowser) {
-      window.removeEventListener('scroll', this.updatePositionOnScroll, { capture: true } as EventListenerOptions);
+      window.removeEventListener('scroll', this.updatePositionOnScroll, { capture: true });
       window.removeEventListener('resize', this.updatePositionOnScroll);
     }
 
@@ -3126,7 +3158,7 @@ export class NgxsmkDatepickerComponent
       this.removeFocusTrap();
       this.closeCalendarWithFocusRestore();
       const calendarClosedMsg =
-        this.getTranslation('calendarClosed' as keyof DatepickerTranslations) || 'Calendar closed';
+        this.getTranslation('calendarClosed') || 'Calendar closed';
       this.ariaLiveService.announce(calendarClosedMsg, 'polite');
       this.cdr.markForCheck();
     }
@@ -3915,7 +3947,7 @@ export class NgxsmkDatepickerComponent
   private _normalizeValue(val: unknown): DatepickerValue {
     if (val === null || val === undefined) return null;
     if (val instanceof Date) {
-      return this._normalizeDate(val) as DatepickerValue;
+      return this._normalizeDate(val);
     }
     if (this.isMomentObject(val)) {
       const momentObj = val as {
@@ -3923,21 +3955,21 @@ export class NgxsmkDatepickerComponent
         utcOffset?: () => number;
         format?: (format: string) => string;
       };
-      return this._normalizeDate(this.momentToDate(momentObj)) as DatepickerValue;
+      return this._normalizeDate(this.momentToDate(momentObj));
     }
     if (typeof val === 'object' && val !== null && 'start' in val && 'end' in val) {
-      return this._normalizeRangeValue(val as { start: unknown; end: unknown });
+      return this._normalizeRangeValue(val);
     }
     if (Array.isArray(val)) {
       return this._normalizeArrayValue(val);
     }
     if (typeof val === 'string' && this.displayFormat) {
       const parsed = this.parsingService.parseCustomDateString(val, this.displayFormat);
-      return parsed as DatepickerValue;
+      return parsed;
     }
     if (typeof val === 'string' || (typeof val === 'object' && val !== null && 'getTime' in val)) {
       const normalized = this._normalizeDate(val as DateInput);
-      return normalized as DatepickerValue;
+      return normalized;
     }
     return null;
   }
@@ -3965,7 +3997,7 @@ export class NgxsmkDatepickerComponent
         )
       )
       : this._normalizeDate(range.end as DateInput);
-    if (start && end) return { start, end } as DatepickerValue;
+    if (start && end) return { start, end };
     return null;
   }
 
@@ -3986,7 +4018,7 @@ export class NgxsmkDatepickerComponent
         return this._normalizeDate(d as DateInput);
       })
       .filter((d): d is Date => d !== null);
-    return dates as DatepickerValue;
+    return dates;
   }
 
   /**
@@ -4223,7 +4255,7 @@ export class NgxsmkDatepickerComponent
           this.displayFormat ?? 'MM/DD/YYYY'
         );
         const msg =
-          this.getTranslation('dateBeforeMin' as keyof DatepickerTranslations, undefined, { minDate: minFormatted }) ||
+          this.getTranslation('dateBeforeMin', undefined, { minDate: minFormatted }) ||
           `Date must be on or after ${minFormatted}.`;
         this.setValidationError('dateBeforeMin', msg);
       } else if (this._maxDate && parsedDate > this._maxDate) {
@@ -4232,16 +4264,16 @@ export class NgxsmkDatepickerComponent
           this.displayFormat ?? 'MM/DD/YYYY'
         );
         const msg =
-          this.getTranslation('dateAfterMax' as keyof DatepickerTranslations, undefined, { maxDate: maxFormatted }) ||
+          this.getTranslation('dateAfterMax', undefined, { maxDate: maxFormatted }) ||
           `Date must be on or before ${maxFormatted}.`;
         this.setValidationError('dateAfterMax', msg);
       } else {
-        const msg = this.getTranslation('invalidDate' as keyof DatepickerTranslations) || 'Invalid date.';
+        const msg = this.getTranslation('invalidDate') || 'Invalid date.';
         this.setValidationError('invalidDate', msg);
       }
     } else {
       const msg =
-        this.getTranslation('invalidDateFormat' as keyof DatepickerTranslations) || 'Please enter a valid date.';
+        this.getTranslation('invalidDateFormat') || 'Please enter a valid date.';
       this.setValidationError('invalidDateFormat', msg);
     }
   }
@@ -4768,7 +4800,7 @@ export class NgxsmkDatepickerComponent
       this.timezone
     );
     const msg =
-      this.getTranslation('dateSelected' as keyof DatepickerTranslations, undefined, { date: formattedDate }) ||
+      this.getTranslation('dateSelected', undefined, { date: formattedDate }) ||
       formattedDate;
     this.ariaLiveService.announce(msg, 'polite');
   }
@@ -4875,7 +4907,7 @@ export class NgxsmkDatepickerComponent
       this.timezone
     );
     const msg =
-      this.getTranslation('rangeSelected' as keyof DatepickerTranslations, undefined, {
+      this.getTranslation('rangeSelected', undefined, {
         start: startFormatted,
         end: endFormatted,
       }) || `${startFormatted} to ${endFormatted}`;
@@ -5175,7 +5207,7 @@ export class NgxsmkDatepickerComponent
   public generateCalendar(): void {
     if (this.isCalendarOpen || this.isInlineMode) {
       const loadingMsg =
-        this.getTranslation('calendarLoading' as keyof DatepickerTranslations) || 'Loading calendar...';
+        this.getTranslation('calendarLoading') || 'Loading calendar...';
       this.ariaLiveService.announce(loadingMsg, 'polite');
     }
 
@@ -5203,7 +5235,7 @@ export class NgxsmkDatepickerComponent
 
     // Announce calendar ready state for screen readers
     if (this.isCalendarOpen || this.isInlineMode) {
-      const readyMsg = this.getTranslation('calendarReady' as keyof DatepickerTranslations) || 'Calendar ready';
+      const readyMsg = this.getTranslation('calendarReady') || 'Calendar ready';
       this.ariaLiveService.announce(readyMsg, 'polite');
     }
 
@@ -5338,7 +5370,7 @@ export class NgxsmkDatepickerComponent
     }
 
     const yearChangedMsg =
-      this.getTranslation('yearChanged' as keyof DatepickerTranslations, undefined, {
+      this.getTranslation('yearChanged', undefined, {
         year: String(this._currentYear),
       }) || `Year ${this._currentYear}`;
     this.ariaLiveService.announce(yearChangedMsg, 'polite');
@@ -5536,7 +5568,7 @@ export class NgxsmkDatepickerComponent
     });
     const year = newDate.getFullYear();
     const monthChangedMsg =
-      this.getTranslation('monthChanged' as keyof DatepickerTranslations, undefined, {
+      this.getTranslation('monthChanged', undefined, {
         month: monthName,
         year: String(year),
       }) || `${monthName} ${year}`;
