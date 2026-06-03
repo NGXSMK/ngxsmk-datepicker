@@ -23,7 +23,7 @@
     "format:check": "prettier --check \"projects/**/*.{ts,html,scss,css,json}\" \"examples/**/*.{ts,html,scss,css,json}\"",
     "deploy": "npm run build:demo && node scripts/manual-deploy.js",
     "prepublishOnly": "npm run build:optimized && node scripts/assert-dist-lib-ready.cjs",
-    "prepublish:copy-assets": "node -e \"const fs = require('fs'); const files = ['LICENSE', 'README.md', 'CHANGELOG.md', 'MIGRATION.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'ROADMAP.md', 'IMPROVEMENT_REPORT.md', 'SECURITY.md']; files.forEach(f => { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/ngxsmk-datepicker/' + f); });\"",
+    "prepublish:copy-assets": "node -e \"const fs = require('fs'); const files = ['LICENSE', 'README.md', 'CHANGELOG.md', 'MIGRATION.md']; files.forEach(f => { if (fs.existsSync(f)) fs.copyFileSync(f, 'dist/ngxsmk-datepicker/' + f); });\"",
     "publish:lib": "npm run build:optimized && npm run prepublish:copy-assets",
     "unpublish:version": "node scripts/unpublish-version.js",
     "version:beta": "node scripts/set-beta-version.js next",
