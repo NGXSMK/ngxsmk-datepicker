@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker-workspace",
-  "version": "2.2.15",
+  "version": "2.3.0",
   "description": "A lightweight, customizable, and easy-to-use datepicker and date range picker for Angular applications.",
   "license": "MIT",
   "engines": {
@@ -54,6 +54,7 @@
     "@angular/elements": "^21.2.11",
     "@tokiforge/angular": "^2.0.0",
     "@tokiforge/core": "^2.0.0",
+    "motion": "^12.40.0",
     "path-browserify": "^1.0.1",
     "tslib": "^2.3.0"
   },

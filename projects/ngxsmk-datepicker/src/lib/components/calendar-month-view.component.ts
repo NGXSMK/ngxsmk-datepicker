@@ -18,7 +18,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
         @for (day of weekDays; track $index) {
           <div class="ngxsmk-day-name">{{ day }}</div>
         }
-        @for (day of days; track trackByDay($index, day)) {
+        @for (day of days; track (day ? day.getTime() : $index)) {
           <div
             class="ngxsmk-day-cell"
             [ngClass]="classes?.dayCell"

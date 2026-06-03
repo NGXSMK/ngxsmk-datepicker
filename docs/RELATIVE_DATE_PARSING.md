@@ -1,6 +1,6 @@
 # 🧠 Relative Date Parsing Strategy
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
 
 This document outlines the strategy for implementing Natural Language date entry (e.g., "next Friday", "in 2 weeks") in `ngxsmk-datepicker`.
 

@@ -218,4 +218,63 @@ describe('NgxsmkDatepickerComponent', () => {
     expect(component.isDateDisabled(disabledDate)).toBe(true);
     expect(component.isDateDisabled(enabledDate)).toBe(false);
   });
+
+  describe('New Features Integration', () => {
+    it('should support natural language input fallback on blur', () => {
+      component.enableNaturalLanguage = true;
+      component.allowTyping = true;
+      spyOn(component.naturalLanguageResolved, 'emit');
+      fixture.detectChanges();
+
+      const event = {
+        target: { value: 'today' },
+        relatedTarget: null
+      } as unknown as FocusEvent;
+
+      component.onInputBlur(event);
+      expect(component.selectedDate).toBeDefined();
+      expect(component.naturalLanguageResolved.emit).toHaveBeenCalled();
+    });
+
+    it('should alias calendars to calendarCount', () => {
+      component.calendars = 3;
+      expect(component.calendarCount).toBe(3);
+      expect(component.calendars).toBe(3);
+    });
+
+    it('should build presets using rangePresetFactory', () => {
+      component.rangePresetFactory = (today: Date) => [
+        {
+          id: 'test-preset',
+          name: 'Test Preset',
+          calculate: (t: Date) => ({ start: t, end: t })
+        }
+      ];
+      (component as any).updateRangesArray();
+      expect(component.rangesArray.length).toBeGreaterThan(0);
+      expect(component.rangesArray[0].key).toBe('Test Preset');
+    });
+
+    it('should validate range selection and emit invalidRange if disabled date is inside', () => {
+      component.mode = 'range';
+      component.isDateDisabled = (d: Date | null) => {
+        if (!d) return false;
+        return d.getDate() === 15; // Disable 15th
+      };
+      spyOn(component.invalidRange, 'emit');
+
+      const start = new Date(2026, 5, 10);
+      const end = new Date(2026, 5, 20);
+      component.checkAndEmitInvalidRange(start, end);
+
+      expect(component.invalidRange.emit).toHaveBeenCalled();
+    });
+
+    it('should handle timezone selector selection changes', () => {
+      spyOn(component.timezoneChange, 'emit');
+      component.setTimezone('America/New_York');
+      expect(component.timezone).toBe('America/New_York');
+      expect(component.timezoneChange.emit).toHaveBeenCalledWith('America/New_York');
+    });
+  });
 });
