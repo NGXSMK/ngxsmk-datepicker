@@ -1,6 +1,6 @@
 # Timezone Support
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 ## Overview
 
@@ -257,6 +257,19 @@ const date = new Date(serverResponse.dateString.replace('Z', '')); // Don't remo
 - **Default**: `undefined` (uses browser's local timezone)
 - **Description**: IANA timezone name for date formatting
 - **Example**: `'America/New_York'`, `'UTC'`, `'Europe/London'`
+
+### Input: `showTimezoneSelector`
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Description**: Enables a searchable timezone selection dropdown UI in the datepicker header.
+- **Example**: `[showTimezoneSelector]="true"`
+
+### Output: `timezoneChange`
+
+- **Type**: `EventEmitter<string>`
+- **Description**: Emitted when the user changes the active timezone via the selector UI.
+- **Example**: `(timezoneChange)="onTimezoneChange($event)"`
 
 ### Utility Functions
 

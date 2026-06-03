@@ -1,6 +1,6 @@
 # SEO Optimization Guide
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 This document outlines the SEO optimizations implemented for ngxsmk-datepicker to improve search engine visibility and discoverability.
 
@@ -209,5 +209,6 @@ ngxsmk-datepicker has been optimized for search engines with comprehensive meta 
 - [Open Graph Protocol](https://ogp.me/)
 - [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards)
 - [Web.dev SEO Guide](https://web.dev/learn/seo/)
+
 
 

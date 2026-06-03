@@ -1,6 +1,6 @@
 # Security Policy
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 ## Supported Versions
 
@@ -8,6 +8,8 @@ We actively support the following versions with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 2.3.x   | :white_check_mark: |
+| 2.2.x   | :white_check_mark: |
 | 2.1.x   | :white_check_mark: |
 | 2.0.x   | :white_check_mark: |
 | 1.10.x  | :white_check_mark: |

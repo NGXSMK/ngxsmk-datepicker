@@ -2,23 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [2.3.0] - 2026-05-19
+## [2.3.1] - 2026-06-03
 
 ### Added
 
+- **Natural Language Input**: Integrated a lightweight, zero-dependency parser engine that resolves text expressions like "today", "tomorrow", relative day/week offsets, and quarter descriptors. Features a dynamic preview suggestion tooltip beneath the input field.
+- **Multi-Calendar View**: Supported side-by-side calendar renders via `[calendars]="2"` or `[calendars]="3"` inputs, with seamless range highlights extending across all month boundaries.
+- **Dynamic Presets Factory**: Introduced the `[rangePresetFactory]` callback input allowing developers to supply dynamic rolling ranges (e.g., fiscal quarters or rolling business-day windows).
+- **Invalid Range Warning**: Highlights ranges with a warning style if a disabled date falls inside the selected range, emitting details via the `(invalidRange)` output.
+- **Timezone Selector UI**: Added a searchable timezone dropdown via `[showTimezoneSelector]="true"` input, with timezone change values emitted via the `(timezoneChange)` output.
 - **Shadow DOM Compatibility (Issue #268)**: Added full, native support for running inside Angular Shadow DOM containers (`ViewEncapsulation.ShadowDom`) and Custom Web Components.
   - Interaction listeners now query and utilize `event.composedPath()` to correctly identify clicked targets originating inside the component shadow boundary, preventing calendar dropdowns and header custom selects from closing prematurely due to event target retargeting.
   - Added new comprehensive Shadow DOM unit test suite (`shadow-dom-compatibility.spec.ts`).
 
 ### Changed
 
+- **AOT & AoT Compilation Boundaries**: Refactored internal component signals (`_isCalendarOpen`, `_currentMonthSignal`, and `_currentYearSignal`) to `protected` access modifiers to prevent strict production AoT compilation errors.
 - **Code Quality & Cognitive Complexity Reductions**:
   - Flattened highly nested condition structures in `CustomSelectComponent.onDocumentTouchStart()`, reducing cognitive complexity to well below the limit of 15.
   - Decomposed monolithic date check inside `NgxsmkDatepickerComponent.containsNode()` into private helper functions (`containsNodeViaComposedPath`, `containsNodeViaDOM`), drastically improving maintainability and reducing complexity down to 2.

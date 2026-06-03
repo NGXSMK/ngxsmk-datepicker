@@ -2,8 +2,8 @@
 
 Complete API reference for ngxsmk-datepicker with JSDoc examples for improved IDE IntelliSense.
 
-**Version**: 2.3.0+  
-**Last Updated**: March 10, 2026
+**Version**: 2.3.1+  
+**Last Updated**: June 3, 2026
 
 ---
 
@@ -680,6 +680,79 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
 @Input() animationConfig: AnimationConfig = DEFAULT_ANIMATION_CONFIG;
 ```
 
+##### `calendars`
+
+```typescript
+/**
+ * Multi-calendar layout support (supported values: 1, 2, or 3)
+ * @input calendars
+ * @type {number}
+ * @default 1
+ * @description
+ * Setting `[calendars]="2"` or `[calendars]="3"` displays multiple months side-by-side.
+ * Range selections automatically highlight dates across month boundaries.
+ *
+ * @example
+ * <ngxsmk-datepicker [mode]="'range'" [calendars]="2"></ngxsmk-datepicker>
+ */
+@Input() calendars: number = 1;
+```
+
+##### `rangePresetFactory`
+
+```typescript
+/**
+ * Dynamic range presets callback builder
+ * @input rangePresetFactory
+ * @type {(today: Date) => DatePreset[]}
+ * @default null
+ * @description
+ * Supplies a callback function to dynamically generate rolling date ranges
+ * (e.g. rolling quarters or rolling business-day windows).
+ *
+ * @example
+ * <ngxsmk-datepicker [mode]="'range'" [rangePresetFactory]="myPresetFactory"></ngxsmk-datepicker>
+ */
+@Input() rangePresetFactory?: (today: Date) => DatePreset[];
+```
+
+##### `showTimezoneSelector`
+
+```typescript
+/**
+ * Enables searchable timezone selection dropdown UI
+ * @input showTimezoneSelector
+ * @type {boolean}
+ * @default false
+ * @description
+ * Shows a searchable timezone selection dropdown in the datepicker header,
+ * allowing users to dynamically switch between timezones.
+ *
+ * @example
+ * <ngxsmk-datepicker [showTimezoneSelector]="true"></ngxsmk-datepicker>
+ */
+@Input() showTimezoneSelector: boolean = false;
+```
+
+##### `enableNaturalLanguage`
+
+```typescript
+/**
+ * Enables natural language relative keyboard typing input
+ * @input enableNaturalLanguage
+ * @type {boolean}
+ * @default false
+ * @description
+ * Allows users to type relative expressions (e.g., "today", "tomorrow",
+ * "next Friday", "in 3 weeks") which are parsed into valid dates.
+ * A dynamic suggestion preview tooltip is displayed under the input field.
+ *
+ * @example
+ * <ngxsmk-datepicker [enableNaturalLanguage]="true"></ngxsmk-datepicker>
+ */
+@Input() enableNaturalLanguage: boolean = false;
+```
+
 ### Outputs
 
 ##### `dateChange`
@@ -791,6 +864,62 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
  * }
  */
 @Output() calendarClose = new EventEmitter<void>();
+```
+
+##### `invalidRange`
+
+```typescript
+/**
+ * Emitted when selection contains disabled dates
+ * @output invalidRange
+ * @type {EventEmitter<{ start: Date; end: Date; disabledDatesInside: Date[] }>}
+ * @description
+ * Emitted in range mode when the user selects a range that spans across
+ * one or more disabled dates. The selected range is styled as invalid.
+ *
+ * @example
+ * <ngxsmk-datepicker
+ *   (invalidRange)="onInvalidRange($event)"
+ * ></ngxsmk-datepicker>
+ */
+@Output() invalidRange = new EventEmitter<{ start: Date; end: Date; disabledDatesInside: Date[] }>();
+```
+
+##### `naturalLanguageResolved`
+
+```typescript
+/**
+ * Emitted when natural language input is parsed successfully
+ * @output naturalLanguageResolved
+ * @type {EventEmitter<Date | { start: Date; end: Date }>}
+ * @description
+ * Emitted when a typed relative natural language date expression is resolved.
+ *
+ * @example
+ * <ngxsmk-datepicker
+ *   (naturalLanguageResolved)="onNaturalLanguageResolved($event)"
+ * ></ngxsmk-datepicker>
+ */
+@Output() naturalLanguageResolved = new EventEmitter<Date | { start: Date; end: Date }>();
+```
+
+##### `timezoneChange`
+
+```typescript
+/**
+ * Emitted when timezone selection is changed
+ * @output timezoneChange
+ * @type {EventEmitter<string>}
+ * @description
+ * Emitted when the user changes the active timezone via the timezone selector UI.
+ *
+ * @example
+ * <ngxsmk-datepicker
+ *   (timezoneChange)="onTimezoneChange($event)"
+ * ></ngxsmk-datepicker>
+ */
+@Output() timezoneChange = new EventEmitter<string>();
+```
 ```
 
 ### Public Methods
