@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.2.15` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v2.3.1` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.2.x includes **`allowSameDay`**, **IANA timezone** support, validation fixes, and strict TypeScript improvements. Versions **2.0.10** and **2.0.11** were **unpublished**; use **v2.1.1+** or **v2.2.15** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.3.1** on npm.
 
 ---
 
@@ -518,6 +518,10 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | classes            | object | undefined | Tailwind-friendly class overrides (wrapper, input, popover, etc.). |
 | enableGoogleCalendar| boolean | false | Enable seamless Google Calendar integration and sync. |
 | googleClientId     | string \| null | null | Google API OAuth 2.0 Web Client ID for authentication. |
+| calendars          | number | 1 | Multi-calendar display layout (supports 1, 2, or 3 side-by-side calendars). |
+| rangePresetFactory | (today: Date) => DatePreset[] | null | Callback function supplying dynamic rolling range presets. |
+| showTimezoneSelector | boolean | false | Enables searchable IANA timezone selection dropdown UI. |
+| enableNaturalLanguage | boolean | false | Enables manual relative keyboard typing input (e.g. "today", "in 3 days"). |
 
 ### **Outputs**
 
@@ -526,6 +530,9 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | valueChange | DatepickerValue                 | Emits the newly selected date, range, or array of dates.      |
 | action      | { type: string; payload?: any } | Emits various events like `dateSelected`, `timeChanged`, etc. |
 | googleSyncClick | void                          | Emitted when the user clicks the Google Calendar sync button. |
+| invalidRange | { start: Date; end: Date; disabledDatesInside: Date[] } | Emitted when selected date range contains disabled dates. |
+| naturalLanguageResolved | Date \| { start: Date; end: Date } | Emitted when user types relative natural language date input. |
+| timezoneChange | string | Emitted when timezone selection is changed. |
 
 ## **🎨 Theming**
 
@@ -850,7 +857,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.2.15** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
+### **v2.3.1** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
 
 ### **Earlier Versions**
 

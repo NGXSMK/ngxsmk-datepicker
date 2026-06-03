@@ -1,6 +1,6 @@
 # Theme Tokens & CSS Custom Properties
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 Complete reference for all CSS custom properties (CSS variables) available in ngxsmk-datepicker.
 
@@ -319,5 +319,6 @@ CSS custom properties are supported in all modern browsers:
 - Edge 15+
 
 For older browsers, consider using a CSS custom properties polyfill or provide fallback values.
+
 
 

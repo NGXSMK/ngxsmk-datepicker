@@ -1,36 +1,57 @@
-# 🧠 Relative Date Parsing Strategy
+# 🧠 Natural Language Relative Date Parsing
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
-This document outlines the strategy for implementing Natural Language date entry (e.g., "next Friday", "in 2 weeks") in `ngxsmk-datepicker`.
+This document describes the Natural Language date entry and relative date parsing engine implemented in `ngxsmk-datepicker`.
 
 ## 🎯 Objective
-Allow users to type human-readable strings into the input field and have them automatically converted into valid `Date` objects.
 
-## 🛠️ Implementation Plan
+Allow users to type human-readable relative date expressions (e.g., "today", "tomorrow", "next Friday", "in 2 weeks") into the input field and have them resolved automatically into valid `Date` objects or ranges.
 
-### 1. Token Recognition
-The `DatepickerParsingService` will be extended with a regex-based token matcher:
-- **Relative Keywords**: `next`, `last`, `this`, `in`, `ago`
-- **Units**: `day`, `week`, `month`, `year`
-- **Weekdays**: `monday`, `tue`, `wednesday`, etc.
-- **Specifics**: `today`, `tomorrow`, `yesterday`
+## 🛠️ Implementation Details
+
+The datepicker integrates `NaturalLanguageParserService` to handle relative inputs. It is zero-dependency, maintaining a lightweight package bundle.
+
+### 1. Supported Expressions
+
+The parser resolves several classes of human-readable text inputs:
+- **Specific dates**: `today`, `tomorrow`, `yesterday`
+- **Relative offsets**: `in X days`, `X days ago`, `in Y weeks`, `Y weeks ago`, `in Z months`, `Z months ago`, `in N years`
+- **Relative weekdays**: `next friday`, `last monday`, `this wednesday`
+- **Quarter descriptors**: `this quarter`, `next quarter`, `last quarter`
 
 ### 2. Logic Flow
-1. **Sanitize**: Strip non-alphanumeric characters.
-2. **Match**: Check if the string matches any relative patterns.
-3. **Calculate**:
-   - `tomorrow` -> `new Date() + 1 day`
-   - `next friday` -> Find the first Friday after `today`.
-   - `2 weeks from now` -> `new Date() + 14 days`.
-4. **Fallback**: If no relative match is found, proceed to standard date parsing.
 
-## 📦 Recommended Libraries
-To keep the bundle small, we should implement a lightweight custom parser or use an optional adapter for:
-- [Chrono](https://github.com/wanasit/chrono) (Powerful but larger)
-- [date-fns/add](https://date-fns.org/v3.3.1/docs/add) (Modular and lightweight)
+When `[enableNaturalLanguage]="true"` is active:
+1. As the user types in the input field, the component dynamically runs the text through the `NaturalLanguageParserService`.
+2. If a valid relative pattern is matched, a floating **suggestion preview tooltip** appears underneath the input field showing the resolved date/range format.
+3. On input blur or press of Enter, the resolved value is set and the calendar view automatically jumps to the resolved date.
+4. The event `(naturalLanguageResolved)` is emitted with the resolved `Date` or `DateRange` value.
 
-## 🚀 UX Integration
-- **Ghost Text**: As the user types "next f", show "next Friday" as ghost text in the input.
-- **Instant Preview**: Update the calendar view immediately as a relative date is recognized.
+## 🚀 UX Configuration
 
+Enable natural language input in your template:
+
+```html
+<ngxsmk-datepicker
+  [enableNaturalLanguage]="true"
+  (naturalLanguageResolved)="onResolved($event)">
+</ngxsmk-datepicker>
+```
+
+### Custom Preview Template
+
+You can override the default suggestion preview tooltip using the `naturalLanguagePreviewTemplate` input:
+
+```html
+<ngxsmk-datepicker
+  [enableNaturalLanguage]="true"
+  [naturalLanguagePreviewTemplate]="customPreviewTpl">
+</ngxsmk-datepicker>
+
+<ng-template #customPreviewTpl let-previewText>
+  <div class="custom-tooltip">
+    ✨ Suggestion: <strong>{{ previewText }}</strong>
+  </div>
+</ng-template>
+```

@@ -1,6 +1,6 @@
 # Version Compatibility Matrix
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
@@ -466,5 +466,6 @@ Recommended validation before tagging a release:
 **Angular minors**: Keep `@angular/*` on the same minor within the workspace (`package.json`). Bump peers in library `projects/ngxsmk-datepicker/package.json` when raising supported ceiling; update this doc’s matrix table and peer JSON block together.
 
 **Ionic/Capacitor sample**: The `examples/ionic-test-app` project may require `npm install --legacy-peer-deps` when Ionic’s peers lag Angular—see [examples/ionic-test-app/README.md](../../../examples/ionic-test-app/README.md).
+
 
 

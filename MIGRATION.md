@@ -2,10 +2,11 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 ## Table of Contents
 
+- [v2.2.15 → v2.3.1](#v2215---v231)
 - [v2.2.7 → v2.2.11](#v227---v228)
 - [v2.2.6 → v2.2.7](#v226---v227)
 - [v2.2.3 → v2.2.6](#v223---v226)
@@ -58,12 +59,30 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
-## npm: skip v2.2.12
+## v2.2.15 → v2.3.1
 
-The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.3.0`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+### Changes
+
+- **Natural Language Input**: Standard text inputs can now resolve relative expressions (e.g. "today", "tomorrow", relative day/week/month/year offsets, quarter descriptors). Controlled via `[enableNaturalLanguage]` and emits via `(naturalLanguageResolved)`.
+- **Multi-Calendar Layouts**: Support for showing 2 or 3 calendars side-by-side via `[calendars]`.
+- **Dynamic Presets**: Supply a custom preset callback via `[rangePresetFactory]`.
+- **Timezone Selection**: Searchable timezone selection dropdown via `[showTimezoneSelector]`.
+- **Range Warnings**: Emits `(invalidRange)` if a range contains disabled dates.
+
+### Migration Steps
+
+No breaking changes. Upgrade with:
 
 ```bash
-npm install ngxsmk-datepicker@2.3.0
+npm install ngxsmk-datepicker@2.3.1
+```
+
+## npm: skip v2.2.12
+
+The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.3.1`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+
+```bash
+npm install ngxsmk-datepicker@2.3.1
 ```
 
 ## v2.2.7 → v2.2.11
@@ -77,7 +96,7 @@ npm install ngxsmk-datepicker@2.3.0
 No breaking changes.
 
 ```bash
-npm install ngxsmk-datepicker@2.3.0
+npm install ngxsmk-datepicker@2.3.1
 ```
 
 ## v2.2.6 → v2.2.7
@@ -92,7 +111,7 @@ npm install ngxsmk-datepicker@2.3.0
 No breaking changes. Use **2.2.11** on npm (the `2.2.7` npm package was incomplete; 2.2.11 matches the intended 2.2.7 release).
 
 ```bash
-npm install ngxsmk-datepicker@2.3.0
+npm install ngxsmk-datepicker@2.3.1
 ```
 
 ## v2.2.3 → v2.2.6

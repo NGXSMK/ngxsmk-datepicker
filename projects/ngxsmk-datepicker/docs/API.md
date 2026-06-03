@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.2.15+ | **Last updated**: March 21, 2026
+**Version**: 2.3.1+ | **Last updated**: June 3, 2026
 
 ## Stable vs experimental
 
@@ -102,6 +102,10 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `enableHapticFeedback` | `boolean` | `false` | Stable | Trigger haptic feedback on supported devices when selecting/clearing. | `[enableHapticFeedback]="true"` |
 | `enablePullToRefresh` | `boolean` | `false` | Experimental | Reserve for future pull-to-refresh on mobile. | — |
 | `enableVoiceInput` | `boolean` | `false` | Experimental | Reserve for future voice input. | — |
+| `calendars` | `number` | `1` | Stable | Multi-calendar display layout (1, 2, or 3 months side-by-side) | `[calendars]="2"` |
+| `rangePresetFactory` | `(today: Date) => DatePreset[]` | `null` | Stable | Callback function supplying dynamic range presets | `[rangePresetFactory]="myPresetFactory"` |
+| `showTimezoneSelector` | `boolean` | `false` | Stable | Enables searchable timezone selection dropdown UI | `[showTimezoneSelector]="true"` |
+| `enableNaturalLanguage` | `boolean` | `false` | Stable | Enables relative natural language input parsing (e.g. "today", "tomorrow") | `[enableNaturalLanguage]="true"` |
 
 ##### Outputs
 
@@ -111,6 +115,9 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `action` | `EventEmitter<{ type: string; payload?: any }>` | Stable | Emitted on user actions (dateSelected, timeChanged, etc.) | `(action)="handleAction($event)"` |
 | `googleSyncClick` | `EventEmitter<void>` | Stable | Emitted when the user clicks the Google Calendar sync button. | `(googleSyncClick)="onSyncClick()"` |
 | `validationError` | `EventEmitter<{ code: string; message: string }>` | Stable | Emitted when validation fails (e.g. invalid typed date, date before min, after max). Message is translated. | `(validationError)="onValidationError($event)"` |
+| `invalidRange` | `EventEmitter<{ start: Date; end: Date; disabledDatesInside: Date[] }>` | Stable | Emitted when selected date range contains disabled dates | `(invalidRange)="onInvalidRange($event)"` |
+| `naturalLanguageResolved` | `EventEmitter<Date \| { start: Date; end: Date }>` | Stable | Emitted when natural language input is parsed successfully | `(naturalLanguageResolved)="onResolved($event)"` |
+| `timezoneChange` | `EventEmitter<string>` | Stable | Emitted when timezone is changed via selector UI | `(timezoneChange)="onTimezoneChange($event)"` |
 
 #### Methods
 

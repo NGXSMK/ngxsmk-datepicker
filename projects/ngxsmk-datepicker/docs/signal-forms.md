@@ -1,6 +1,6 @@
 # Signal Forms Integration
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 This guide covers using ngxsmk-datepicker with Angular 21+ Signal Forms API.
 
@@ -595,5 +595,6 @@ If `form().dirty()` returns `false` after selecting a date:
    ```
 
 4. **Check dev console warnings**: In development mode, the datepicker logs warnings if it falls back to direct signal mutation, which may not track dirty state correctly.
+
 
 

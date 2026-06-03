@@ -1,6 +1,6 @@
 # Locale Packs & i18n Contributor Guide
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 Guide for adding locale support and contributing translations to ngxsmk-datepicker.
 
@@ -295,5 +295,6 @@ If you encounter issues with a specific locale or want to contribute improvement
 ---
 
 **Thank you for contributing to ngxsmk-datepicker's internationalization!**
+
 
 

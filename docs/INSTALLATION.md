@@ -1,6 +1,6 @@
 # Installation options for ngxsmk-datepicker
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 This document lists all supported ways to install `ngxsmk-datepicker` in your Angular project. The package is published to the npm registry and can also be installed via other package managers, from Git, from a local path, or via CDN (ESM).
 
@@ -10,20 +10,20 @@ All of these resolve the package from the npm registry. Use the same version (e.
 
 | Method | Command |
 |--------|--------|
-| **npm** | `npm install ngxsmk-datepicker@2.2.8` |
-| **Yarn** | `yarn add ngxsmk-datepicker@2.2.8` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.2.8` |
-| **Bun** | `bun add ngxsmk-datepicker@2.2.8` |
+| **npm** | `npm install ngxsmk-datepicker@2.3.1` |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.3.1` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.3.1` |
+| **Bun** | `bun add ngxsmk-datepicker@2.3.1` |
 
 ## Install from Git
 
 You can install from the GitHub repository using a tag or branch:
 
 ```bash
-npm install github:NGXSMK/ngxsmk-datepicker#v2.2.8
+npm install github:NGXSMK/ngxsmk-datepicker#v2.3.1
 # or
-yarn add github:NGXSMK/ngxsmk-datepicker#v2.2.8
-pnpm add github:NGXSMK/ngxsmk-datepicker#v2.2.8
+yarn add github:NGXSMK/ngxsmk-datepicker#v2.3.1
+pnpm add github:NGXSMK/ngxsmk-datepicker#v2.3.1
 ```
 
 **Caveat:** This requires that the ref (e.g. `v2.2.8`) exists and that the built output is available (e.g. the tag includes a built `dist` or you have a postinstall that builds). If the repo does not ship built artifacts for that ref, clone the repo, run `npx ng build ngxsmk-datepicker` in the repo root, then use the [Local path](#local-path) method pointing at the built output.
@@ -48,8 +48,8 @@ Useful for local development or offline use:
 
 The package is ESM-only (FESM). You can point your bundler or import map at a CDN URL. Peer dependencies (Angular, etc.) must still be installed in your application.
 
-- **unpkg:** `https://unpkg.com/ngxsmk-datepicker@2.2.8/fesm2022/ngxsmk-datepicker.mjs`
-- **jsDelivr:** `https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.2.8/fesm2022/ngxsmk-datepicker.mjs`
+- **unpkg:** `https://unpkg.com/ngxsmk-datepicker@2.3.1/fesm2022/ngxsmk-datepicker.mjs`
+- **jsDelivr:** `https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.3.1/fesm2022/ngxsmk-datepicker.mjs`
 
 Use with ESM-aware setups (e.g. Vite, import maps). Not for classic `<script>` tags.
 
@@ -58,7 +58,7 @@ Use with ESM-aware setups (e.g. Vite, import maps). Not for classic `<script>` t
 If a tarball is attached to a [GitHub Release](https://github.com/NGXSMK/ngxsmk-datepicker/releases), you can install it with:
 
 ```bash
-npm install https://github.com/NGXSMK/ngxsmk-datepicker/releases/download/v2.2.8/ngxsmk-datepicker-2.2.8.tgz
+npm install https://github.com/NGXSMK/ngxsmk-datepicker/releases/download/v2.3.1/ngxsmk-datepicker-2.3.1.tgz
 ```
 
 (Replace the version and URL with the actual release asset if provided.)

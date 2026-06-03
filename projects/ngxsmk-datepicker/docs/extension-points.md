@@ -1,6 +1,6 @@
 # Extension Points and Hooks
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
 
 ngxsmk-datepicker provides comprehensive extension points through the `hooks` input, allowing you to customize rendering, validation, keyboard shortcuts, formatting, and event handling.
 
@@ -414,5 +414,6 @@ import {
   KeyboardShortcutHelp
 } from 'ngxsmk-datepicker';
 ```
+
 
 
