@@ -144,4 +144,80 @@ describe('NgxsmkDatepickerComponent - Date Constraints', () => {
       expect(component.isDateDisabled(validDate)).toBe(false);
     });
   });
+
+  describe('Month and Year Dropdown Constraints', () => {
+    it('should disable years before minDate year and after maxDate year', () => {
+      component.minDate = new Date(2025, 5, 15);
+      component.maxDate = new Date(2027, 8, 20);
+      component.currentDate = new Date(2026, 0, 1);
+      fixture.detectChanges();
+
+      const yearOpts = component.yearOptions();
+      const year2024 = yearOpts.find(y => y.value === 2024);
+      const year2025 = yearOpts.find(y => y.value === 2025);
+      const year2026 = yearOpts.find(y => y.value === 2026);
+      const year2027 = yearOpts.find(y => y.value === 2027);
+      const year2028 = yearOpts.find(y => y.value === 2028);
+
+      if (year2024) expect(year2024.disabled).toBe(true);
+      if (year2025) expect(year2025.disabled).toBe(false);
+      if (year2026) expect(year2026.disabled).toBe(false);
+      if (year2027) expect(year2027.disabled).toBe(false);
+      if (year2028) expect(year2028.disabled).toBe(true);
+    });
+
+    it('should disable months before minDate month in minDate year and after maxDate month in maxDate year', () => {
+      component.minDate = new Date(2026, 3, 15); // April 15
+      component.maxDate = new Date(2026, 8, 10); // September 10
+      component.currentDate = new Date(2026, 5, 1); // June 1
+      fixture.detectChanges();
+
+      const monthOpts = component.monthOptions();
+      // Months are 0-indexed (Jan = 0, April = 3, Sept = 8)
+      expect(monthOpts[2].disabled).toBe(true);  // March
+      expect(monthOpts[3].disabled).toBe(false); // April
+      expect(monthOpts[5].disabled).toBe(false); // June
+      expect(monthOpts[8].disabled).toBe(false); // September
+      expect(monthOpts[9].disabled).toBe(true);  // October
+    });
+
+    it('should snap currentMonth to minDate month if new year equals minDate year and current month precedes minMonth', () => {
+      component.minDate = new Date(2026, 3, 15); // April 15
+      component.currentYear = 2027;
+      component.currentMonth = 1; // February
+      fixture.detectChanges();
+
+      // Change year to 2026
+      component.currentYear = 2026;
+      fixture.detectChanges();
+
+      expect(component.currentMonth).toBe(3); // Should snap to April
+    });
+
+    it('should snap currentMonth to maxDate month if new year equals maxDate year and current month exceeds maxMonth', () => {
+      component.maxDate = new Date(2026, 8, 10); // September 10
+      component.currentYear = 2025;
+      component.currentMonth = 10; // November
+      fixture.detectChanges();
+
+      // Change year to 2026
+      component.currentYear = 2026;
+      fixture.detectChanges();
+
+      expect(component.currentMonth).toBe(8); // Should snap to September
+    });
+
+    it('should snap currentYear and currentMonth to valid ranges when minDate changes dynamically', () => {
+      component.currentYear = 2025;
+      component.currentMonth = 5; // June
+      fixture.detectChanges();
+
+      // Change minDate dynamically to 2026 August
+      component.minDate = new Date(2026, 7, 15);
+      fixture.detectChanges();
+
+      expect(component.currentYear).toBe(2026);
+      expect(component.currentMonth).toBe(7); // August
+    });
+  });
 });

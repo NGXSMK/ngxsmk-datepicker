@@ -67,6 +67,7 @@ export interface DatepickerTranslations {
   dateBeforeMin: string; // "Date must be on or after {minDate}."
   dateAfterMax: string; // "Date must be on or before {maxDate}."
   invalidDate: string; // "Invalid date."
+  timezone?: string;
 }
 
 /**

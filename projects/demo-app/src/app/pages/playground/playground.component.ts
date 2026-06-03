@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
 import { I18nService } from '../../i18n/i18n.service';
+import { animate } from 'motion';
 
 @Component({
   selector: 'app-playground',
@@ -107,6 +108,12 @@ import { I18nService } from '../../i18n/i18n.service';
               </select>
             </div>
             <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="showTimezoneSelector" />
+                Show Timezone Selector
+              </label>
+            </div>
+            <div class="config-item">
               <label for="activeLocale">{{ i18n.t().playground.locale }}</label>
               <select id="activeLocale" [(ngModel)]="locale">
                 <option value="en-US">English (US)</option>
@@ -125,6 +132,12 @@ import { I18nService } from '../../i18n/i18n.service';
               <label class="checkbox-label">
                 <input id="pg-range-presets" type="checkbox" [(ngModel)]="showRangePresets" />
                 {{ i18n.t().playground.rangeQuickPicks }}
+              </label>
+            </div>
+            <div class="config-item" *ngIf="mode === 'range'">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="useCustomPresetFactory" />
+                Use Custom Preset Factory
               </label>
             </div>
             <div class="config-item" *ngIf="!inline">
@@ -222,11 +235,17 @@ import { I18nService } from '../../i18n/i18n.service';
         </aside>
 
         <main class="preview-panel card">
-          <div class="preview-header">
+          <div class="preview-header flex flex-col gap-sm items-center">
             <div class="value-chip" *ngIf="value">
               {{ i18n.t().playground.value }}: <code>{{ value | json }}</code>
             </div>
             <div class="value-chip" *ngIf="!value">{{ i18n.t().playground.noSelection }}</div>
+            <div class="value-chip" *ngIf="showTimezoneSelector">
+              Active Timezone: <code>{{ timezoneValue }}</code>
+            </div>
+            <div class="value-chip text-danger" *ngIf="invalidRangeDates.length > 0" style="color: #ef4444; font-weight: bold; margin-top: 5px;">
+              ⚠️ Selection contains {{ invalidRangeDates.length }} disabled dates!
+            </div>
           </div>
           <div class="preview-canvas">
             <ngxsmk-datepicker
@@ -255,6 +274,11 @@ import { I18nService } from '../../i18n/i18n.service';
               [appendToBody]="appendToBody"
               [disabledState]="pickerDisabled"
               [mobileModalStyle]="mobileModalStyle"
+              [showTimezoneSelector]="showTimezoneSelector"
+              [timezone]="timezoneValue"
+              (timezoneChange)="timezoneValue = $event"
+              [rangePresetFactory]="useCustomPresetFactory ? myCustomPresetFactory : undefined"
+              (invalidRange)="onInvalidRange($event)"
               [(ngModel)]="value"
             >
             </ngxsmk-datepicker>
@@ -416,7 +440,7 @@ import { I18nService } from '../../i18n/i18n.service';
         margin-top: 1rem;
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1024px) {
         .playground-hero {
           text-align: center;
         }
@@ -490,8 +514,32 @@ import { I18nService } from '../../i18n/i18n.service';
     `,
   ],
 })
-export class PlaygroundComponent {
+export class PlaygroundComponent implements AfterViewInit {
   i18n = inject(I18nService);
+
+  ngAfterViewInit() {
+    animate(
+      '.playground-hero h1' as any,
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.6, ease: 'easeOut' }
+    );
+    animate(
+      '.playground-hero p' as any,
+      { opacity: [0, 1], y: [15, 0] },
+      { duration: 0.6, ease: 'easeOut', delay: 0.15 }
+    );
+    animate(
+      '.config-panel' as any,
+      { opacity: [0, 1], x: [-30, 0] },
+      { duration: 0.5, ease: 'easeOut' }
+    );
+    animate(
+      '.preview-canvas' as any,
+      { opacity: [0, 1], scale: [0.95, 1] },
+      { duration: 0.5, ease: 'easeOut' }
+    );
+  }
+
   mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
   inline: boolean | 'always' | 'auto' = false;
   locale = 'en-US';
@@ -532,6 +580,10 @@ export class PlaygroundComponent {
   appendToBody = false;
   pickerDisabled = false;
   mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
+  showTimezoneSelector = false;
+  timezoneValue = 'UTC';
+  useCustomPresetFactory = false;
+  invalidRangeDates: Date[] = [];
 
   get syncScrollConfig(): { enabled: boolean; monthGap: number } {
     const gap =
@@ -611,5 +663,36 @@ export class PlaygroundComponent {
     this.appendToBody = false;
     this.pickerDisabled = false;
     this.mobileModalStyle = 'center';
+    this.showTimezoneSelector = false;
+    this.timezoneValue = 'UTC';
+    this.useCustomPresetFactory = false;
+    this.invalidRangeDates = [];
+  }
+
+  myCustomPresetFactory = (today: Date) => {
+    return [
+      {
+        id: 'factory-next-10',
+        name: 'Factory: Next 10 Days',
+        calculate: (t: Date) => {
+          const end = new Date(t);
+          end.setDate(end.getDate() + 10);
+          return { start: t, end };
+        }
+      },
+      {
+        id: 'factory-last-5',
+        name: 'Factory: Last 5 Days',
+        calculate: (t: Date) => {
+          const start = new Date(t);
+          start.setDate(start.getDate() - 5);
+          return { start, end: t };
+        }
+      }
+    ];
+  };
+
+  onInvalidRange(event: { start: Date; end: Date; disabledDatesInside: Date[]; }): void {
+    this.invalidRangeDates = event.disabledDatesInside;
   }
 }

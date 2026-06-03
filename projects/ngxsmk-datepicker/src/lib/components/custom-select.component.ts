@@ -53,12 +53,14 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
             @for (option of options; track option.value) {
               <li
                 [class.selected]="option.value === value"
-                (click)="selectOption(option); $event.stopPropagation()"
-                (keydown.enter)="selectOption(option); $event.stopPropagation()"
-                (keydown.space)="selectOption(option); $event.stopPropagation(); $event.preventDefault()"
-                [attr.tabindex]="0"
+                [class.disabled]="option.disabled"
+                (click)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
+                (keydown.enter)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
+                (keydown.space)="option.disabled ? null : selectOption(option); $event.stopPropagation(); $event.preventDefault()"
+                [attr.tabindex]="option.disabled ? -1 : 0"
                 role="option"
                 [attr.aria-selected]="option.value === value"
+                [attr.aria-disabled]="option.disabled ? true : null"
               >
                 {{ option.label }}
               </li>
@@ -70,7 +72,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
   `,
 })
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {
-  @Input() options: { label: string; value: unknown }[] = [];
+  @Input() options: { label: string; value: unknown; disabled?: boolean }[] = [];
   @Input() value: unknown;
   @Input() disabled: boolean = false;
   @Output() valueChange = new EventEmitter<unknown>();

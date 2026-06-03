@@ -1,6 +1,6 @@
 # Performance Testing
 
-**Last updated:** May 19, 2026 - **Current stable:** v2.2.15
+**Last updated:** May 19, 2026 - **Current stable:** v2.3.0
 
 This document outlines the performance testing infrastructure for the ngxsmk-datepicker library.
 

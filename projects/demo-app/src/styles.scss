@@ -62,14 +62,14 @@
   }
 
   /* Typography */
-  --font-size-xs: clamp(0.65rem, 2vw, 0.75rem);
-  --font-size-sm: clamp(0.75rem, 2.5vw, 0.875rem);
-  --font-size-base: clamp(0.85rem, 3vw, 1rem);
-  --font-size-lg: clamp(0.95rem, 3.5vw, 1.125rem);
-  --font-size-xl: clamp(1rem, 4.5vw, 1.25rem);
-  --font-size-2xl: clamp(1.2rem, 6vw, 1.5rem);
-  --font-size-3xl: clamp(1.4rem, 8vw, 1.875rem);
-  --font-size-4xl: clamp(1.75rem, 10vw, 2.25rem);
+  --font-size-xs: clamp(0.65rem, 0.6rem + 0.2vw, 0.75rem);
+  --font-size-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.85rem);
+  --font-size-base: clamp(0.85rem, 0.8rem + 0.3vw, 0.975rem);
+  --font-size-lg: clamp(0.95rem, 0.9rem + 0.4vw, 1.15rem);
+  --font-size-xl: clamp(1.05rem, 1rem + 0.5vw, 1.3rem);
+  --font-size-2xl: clamp(1.2rem, 1.1rem + 0.7vw, 1.55rem);
+  --font-size-3xl: clamp(1.4rem, 1.3rem + 0.9vw, 1.95rem);
+  --font-size-4xl: clamp(1.75rem, 1.5rem + 1.2vw, 2.75rem);
   --font-weight-normal: 400;
   --font-weight-medium: 510;
   --font-weight-semibold: 620;
@@ -248,7 +248,7 @@ body {
    ============================================ */
 
 h1 {
-  font-size: clamp(1.5rem, 8vw, 4rem);
+  font-size: clamp(2.2rem, 1.8rem + 2.5vw, 3.8rem);
   font-weight: var(--font-weight-extrabold);
   margin-bottom: var(--space-md);
   color: var(--color-text-main);

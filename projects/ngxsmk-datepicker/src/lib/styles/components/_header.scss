@@ -166,6 +166,14 @@ ngxsmk-custom-select {
     opacity: 1 !important;
     visibility: visible !important;
 
+    &.disabled {
+      opacity: 0.35 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      background-color: transparent !important;
+      color: var(--ngxsmk-color-text-muted) !important;
+    }
+
     &:hover:not(.selected) {
       background-color: var(--ngxsmk-color-surface-hover);
     }

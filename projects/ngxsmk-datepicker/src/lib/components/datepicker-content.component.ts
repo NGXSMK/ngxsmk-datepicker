@@ -15,6 +15,7 @@ import { CalendarMonthViewComponent } from './calendar-month-view.component';
 import { CalendarYearViewComponent } from './calendar-year-view.component';
 import { TimeSelectionComponent } from './time-selection.component';
 import { NgxsmkDatepickerPresetsComponent } from './datepicker-presets.component';
+import { CustomSelectComponent } from './custom-select.component';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 import { DatepickerTranslations } from '../interfaces/datepicker-translations.interface';
 
@@ -29,6 +30,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
     CalendarYearViewComponent,
     TimeSelectionComponent,
     NgxsmkDatepickerPresetsComponent,
+    CustomSelectComponent,
   ],
   template: `
     @if (isCalendarVisible) {
@@ -79,6 +81,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
           @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
             <ngxsmk-datepicker-presets
               [ranges]="rangesArray"
+              [selectedRange]="selectedRange"
               [disabled]="disabled"
               [classes]="classes"
               (rangeSelected)="rangeSelect.emit($event)"
@@ -381,6 +384,18 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
               }
             }
 
+            @if (showTimezoneSelector) {
+              <div class="ngxsmk-timezone-selection">
+                <span class="ngxsmk-timezone-label">{{ translations?.timezone || 'Timezone' }}:</span>
+                <ngxsmk-custom-select
+                  [options]="timezoneOptions"
+                  [value]="currentTimezone"
+                  [disabled]="disabled"
+                  (valueChange)="onTimezoneChange($event)"
+                ></ngxsmk-custom-select>
+              </div>
+            }
+
             @if (!isInlineMode) {
               <div class="ngxsmk-footer" [ngClass]="classes?.footer">
                 <button
@@ -485,6 +500,12 @@ export class NgxsmkDatepickerContentComponent {
   @Input() closeAriaLabel: string = '';
   @Input() closeLabel: string = '';
   @Input() translations: DatepickerTranslations | null = null;
+  @Input() selectedRange: [Date | null, Date | null] | null = null;
+  @Input() showTimezoneSelector: boolean = false;
+  @Input() timezoneOptions: { label: string; value: string }[] = [];
+  @Input() currentTimezone: string = 'UTC';
+
+  @Output() timezoneChange = new EventEmitter<string>();
 
   // Bound functions
   @Input() boundIsDateDisabled!: (date: Date | null) => boolean;
@@ -581,6 +602,12 @@ export class NgxsmkDatepickerContentComponent {
     this.escapeKey.emit(event);
     if (!this.isInlineMode) {
       this.closeCalendar.emit();
+    }
+  }
+
+  onTimezoneChange(val: unknown): void {
+    if (typeof val === 'string') {
+      this.timezoneChange.emit(val);
     }
   }
 }

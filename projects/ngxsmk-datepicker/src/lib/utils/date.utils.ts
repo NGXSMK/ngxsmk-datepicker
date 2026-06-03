@@ -1,5 +1,7 @@
 export function getStartOfDay(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+  const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0);
+  start.setHours(0, 0, 0, 0);
+  return start;
 }
 
 export function getEndOfDay(d: Date): Date {
