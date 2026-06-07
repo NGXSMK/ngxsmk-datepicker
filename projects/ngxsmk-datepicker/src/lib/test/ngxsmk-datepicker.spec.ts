@@ -70,12 +70,12 @@ class CalendarMonthViewStubComponent {
   readonly dateClick = output<Date>();
   readonly dateHover = output<Date>();
   readonly dateFocus = output<unknown>();
-  readonly swipeStart = output<any>();
-  readonly swipeMove = output<any>();
-  readonly swipeEnd = output<any>();
-  readonly touchStart = output<any>();
-  readonly touchMove = output<any>();
-  readonly touchEnd = output<any>();
+  readonly swipeStart = output<unknown>();
+  readonly swipeMove = output<unknown>();
+  readonly swipeEnd = output<unknown>();
+  readonly touchStart = output<unknown>();
+  readonly touchMove = output<unknown>();
+  readonly touchEnd = output<unknown>();
 }
 
 @Component({
@@ -243,14 +243,14 @@ describe('NgxsmkDatepickerComponent', () => {
     });
 
     it('should build presets using rangePresetFactory', () => {
-      component.rangePresetFactory = (today: Date) => [
+      component.rangePresetFactory = (_today: Date) => [
         {
           id: 'test-preset',
           name: 'Test Preset',
           calculate: (t: Date) => ({ start: t, end: t }),
         },
       ];
-      (component as any).updateRangesArray();
+      (component as unknown as { updateRangesArray: () => void }).updateRangesArray();
       expect(component.rangesArray.length).toBeGreaterThan(0);
       expect(component.rangesArray[0].key).toBe('Test Preset');
     });

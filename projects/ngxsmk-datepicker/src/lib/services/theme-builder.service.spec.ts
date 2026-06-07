@@ -293,9 +293,9 @@ describe('ThemeBuilderService', () => {
           expect(innerDatepicker.style.getPropertyValue('--datepicker-primary-color')).toBe('#6d28d9');
           container.remove();
           done();
-        } catch (e: any) {
+        } catch (e: unknown) {
           container.remove();
-          done.fail(e);
+          done.fail(e as Error);
         }
       });
     });

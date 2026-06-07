@@ -366,10 +366,10 @@ describe('NgxsmkDatepickerComponent - Input Validation & Security', () => {
             capturedError = error;
             return null;
           }
-          return new NativeDateAdapter().parse(value as any, onError);
+          return new NativeDateAdapter().parse(value as Date | string | number, onError);
         },
         format: (date: Date) => new NativeDateAdapter().format(date),
-        isValid: (value: unknown) => new NativeDateAdapter().isValid(value as any),
+        isValid: (value: unknown) => new NativeDateAdapter().isValid(value as Date | string | number),
         startOfDay: (date: Date) => new NativeDateAdapter().startOfDay(date),
         endOfDay: (date: Date) => new NativeDateAdapter().endOfDay(date),
         addMonths: (date: Date, months: number) => new NativeDateAdapter().addMonths(date, months),

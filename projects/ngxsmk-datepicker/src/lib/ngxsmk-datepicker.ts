@@ -26,6 +26,9 @@ import {
   input,
   viewChild,
   output,
+  Type,
+  Provider,
+  InjectionToken,
 } from '@angular/core';
 import { isPlatformBrowser, NgClass, NgTemplateOutlet, DatePipe, DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
@@ -447,35 +450,56 @@ export class NgxsmkDatepickerComponent
   private static _materialSupportRegistered = false;
 
   static {
-    const globalToken = (globalThis as any).__NGXSMK_MAT_FORM_FIELD_CONTROL__;
+    const globalToken = (globalThis as Record<string, unknown>)['__NGXSMK_MAT_FORM_FIELD_CONTROL__'];
     if (globalToken) NgxsmkDatepickerComponent.withMaterialSupport(globalToken);
   }
 
-  private static _patchMetadataArrays(target: any, token: any, provider: any): void {
+  private static _patchMetadataArrays(
+    target: Type<unknown>,
+    token: unknown,
+    provider: Provider
+  ): void {
     const metadataKeys = ['__annotations__', 'decorators'];
     for (const key of metadataKeys) {
-      const list = target[key] || [];
+      const list = ((target as unknown as Record<string, unknown>)[key] as unknown[]) || [];
       for (const entry of list) {
-        const config = entry?.args?.[0] ?? entry;
-        if (config?.providers && Array.isArray(config.providers)) {
-          if (!config.providers.some((p: any) => p === token || (p && p.provide === token))) {
-            config.providers.push(provider);
+        if (!entry || typeof entry !== 'object') continue;
+        const entryObj = entry as Record<string, unknown>;
+        const args = entryObj['args'];
+        const config = (Array.isArray(args) ? args[0] : null) ?? entry;
+        if (config && typeof config === 'object') {
+          const configObj = config as Record<string, unknown>;
+          const providers = configObj['providers'];
+          if (Array.isArray(providers)) {
+            const alreadyHasToken = providers.some((p: unknown) => {
+              if (p === token) return true;
+              if (p && typeof p === 'object' && 'provide' in p) {
+                return (p as { provide: unknown }).provide === token;
+              }
+              return false;
+            });
+            if (!alreadyHasToken) {
+              providers.push(provider);
+            }
           }
         }
       }
     }
   }
 
-  public static withMaterialSupport(matFormFieldControlToken: any, targetCmp: any = NgxsmkDatepickerComponent): void {
+  public static withMaterialSupport(
+    matFormFieldControlToken: unknown,
+    targetCmp: Type<unknown> = NgxsmkDatepickerComponent
+  ): void {
     if (targetCmp === NgxsmkDatepickerComponent) {
       if (NgxsmkDatepickerComponent._materialSupportRegistered) return;
       NgxsmkDatepickerComponent._materialSupportRegistered = true;
     }
 
-    const token = (globalThis as any).__NGXSMK_MAT_FORM_FIELD_CONTROL__ ?? matFormFieldControlToken;
+    const token = (globalThis as Record<string, unknown>)['__NGXSMK_MAT_FORM_FIELD_CONTROL__'] ?? matFormFieldControlToken;
 
-    const provider = {
-      provide: token,
+    const provider: Provider = {
+      provide: token as InjectionToken<unknown>,
       useExisting: forwardRef(() => targetCmp),
       multi: false,
     };

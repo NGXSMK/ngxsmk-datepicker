@@ -1,10 +1,42 @@
 import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const google: any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const gapi: any;
+interface GoogleGsi {
+  accounts: {
+    oauth2: {
+      initTokenClient: (config: {
+        client_id: string;
+        scope: string;
+        callback: (response: { error?: string; access_token: string }) => void;
+      }) => { requestAccessToken: (options: { prompt: string }) => void };
+      revoke: (accessToken: string) => void;
+    };
+  };
+}
+
+interface GoogleGapi {
+  load: (apiName: string, callback: () => void) => void;
+  client: {
+    init: (config: Record<string, unknown>) => Promise<void>;
+    load: (name: string, version: string) => Promise<void>;
+    calendar: {
+      events: {
+        list: (options: {
+          calendarId: string;
+          timeMin?: string;
+          timeMax?: string;
+          showDeleted?: boolean;
+          singleEvents?: boolean;
+          maxResults?: number;
+          orderBy?: string;
+        }) => Promise<{ result: { items: GoogleCalendarEvent[] } }>;
+      };
+    };
+  };
+}
+
+declare const google: GoogleGsi | undefined;
+declare const gapi: GoogleGapi;
 
 export interface GoogleCalendarEvent {
   id: string;

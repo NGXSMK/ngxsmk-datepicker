@@ -7,8 +7,13 @@ import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 import { DatePipe } from '@angular/common';
 
-const form: any = undefined;
-const objectSchema: any = undefined;
+interface MockForm {
+  (): { dirty: () => boolean };
+  dateField: { dirty: () => boolean; setValue?: unknown; updateValue?: unknown };
+}
+
+const form: (value: unknown, schema: unknown) => MockForm = undefined as unknown as (value: unknown, schema: unknown) => MockForm;
+const objectSchema: ((...args: unknown[]) => unknown) & { [key: string]: unknown } = undefined as unknown as ((...args: unknown[]) => unknown) & { [key: string]: unknown };
 
 class TestHolidayProvider implements HolidayProvider {
   private readonly holidays: { [key: string]: string } = {

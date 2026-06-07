@@ -519,22 +519,22 @@ export class PlaygroundComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     animate(
-      '.playground-hero h1' as any,
+      '.playground-hero h1',
       { opacity: [0, 1], y: [20, 0] },
       { duration: 0.6, ease: 'easeOut' }
     );
     animate(
-      '.playground-hero p' as any,
+      '.playground-hero p',
       { opacity: [0, 1], y: [15, 0] },
       { duration: 0.6, ease: 'easeOut', delay: 0.15 }
     );
     animate(
-      '.config-panel' as any,
+      '.config-panel',
       { opacity: [0, 1], x: [-30, 0] },
       { duration: 0.5, ease: 'easeOut' }
     );
     animate(
-      '.preview-canvas' as any,
+      '.preview-canvas',
       { opacity: [0, 1], scale: [0.95, 1] },
       { duration: 0.5, ease: 'easeOut' }
     );
@@ -669,7 +669,7 @@ export class PlaygroundComponent implements AfterViewInit {
     this.invalidRangeDates = [];
   }
 
-  myCustomPresetFactory = (today: Date) => {
+  myCustomPresetFactory = (_today: Date) => {
     return [
       {
         id: 'factory-next-10',
