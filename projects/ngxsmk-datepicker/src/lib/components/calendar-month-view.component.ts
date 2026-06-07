@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, TemplateRef, input, output } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 
@@ -14,31 +14,31 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
       (touchmove)="swipeMove.emit($event)"
       (touchend)="swipeEnd.emit($event)"
     >
-      <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="ariaLabel">
-        @for (day of weekDays; track $index) {
+      <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="ariaLabel()">
+        @for (day of weekDays(); track $index) {
           <div class="ngxsmk-day-name">{{ day }}</div>
         }
-        @for (day of days; track (day ? day.getTime() : $index)) {
+        @for (day of days(); track day ? day.getTime() : $index) {
           <div
             class="ngxsmk-day-cell"
-            [ngClass]="classes?.dayCell"
+            [ngClass]="classes()?.dayCell"
             [class.empty]="!isCurrentMonth(day)"
-            [class.disabled]="isDateDisabled(day)"
-            [class.today]="isSameDay(day, today)"
-            [class.holiday]="isHoliday(day)"
-            [class.selected]="mode === 'single' && isSameDay(day, selectedDate)"
-            [class.multiple-selected]="mode === 'multiple' && isMultipleSelected(day)"
-            [class.start-date]="isRangeType() && isSameDay(day, startDate)"
-            [class.end-date]="isRangeType() && isSameDay(day, endDate)"
-            [class.in-range]="isRangeType() && isInRange(day)"
-            [class.preview-range]="isPreviewInRange(day)"
-            [class.focused]="day && focusedDate && isSameDay(day, focusedDate)"
-            [attr.tabindex]="day && !isDateDisabled(day) ? 0 : -1"
+            [class.disabled]="isDateDisabled()(day)"
+            [class.today]="isSameDay()(day, today())"
+            [class.holiday]="isHoliday()(day)"
+            [class.selected]="mode() === 'single' && isSameDay()(day, selectedDate())"
+            [class.multiple-selected]="mode() === 'multiple' && isMultipleSelected()(day)"
+            [class.start-date]="isRangeType() && isSameDay()(day, startDate())"
+            [class.end-date]="isRangeType() && isSameDay()(day, endDate())"
+            [class.in-range]="isRangeType() && isInRange()(day)"
+            [class.preview-range]="isPreviewInRange()(day)"
+            [class.focused]="day && focusedDate() && isSameDay()(day, focusedDate())"
+            [attr.tabindex]="day && !isDateDisabled()(day) ? 0 : -1"
             [attr.role]="day ? 'gridcell' : null"
-            [attr.aria-selected]="day && mode === 'single' && isSameDay(day, selectedDate) ? 'true' : null"
-            [attr.aria-label]="day ? getAriaLabel(day) : null"
-            [ngClass]="getDayCellCustomClasses(day)"
-            [attr.title]="day ? getDayCellTooltip(day) : null"
+            [attr.aria-selected]="day && mode() === 'single' && isSameDay()(day, selectedDate()) ? 'true' : null"
+            [attr.aria-label]="day ? getAriaLabel()(day) : null"
+            [ngClass]="getDayCellCustomClasses()(day)"
+            [attr.title]="day ? getDayCellTooltip()(day) : null"
             [attr.data-date]="day ? day.getTime() : null"
             (click)="onDateClick(day)"
             (mousedown)="onDateMouseDown(day)"
@@ -60,15 +60,15 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       $implicit: day,
                       date: day,
                       selected:
-                        (mode === 'single' && isSameDay(day, selectedDate)) ||
-                        (mode === 'multiple' && isMultipleSelected(day)) ||
-                        (isRangeType() && (isSameDay(day, startDate) || isSameDay(day, endDate))),
-                      disabled: isDateDisabled(day),
-                      today: isSameDay(day, today),
-                      holiday: isHoliday(day),
-                      inRange: isRangeType() && isInRange(day),
-                      startDate: isRangeType() && isSameDay(day, startDate),
-                      endDate: isRangeType() && isSameDay(day, endDate),
+                        (mode() === 'single' && isSameDay()(day, selectedDate())) ||
+                        (mode() === 'multiple' && isMultipleSelected()(day)) ||
+                        (isRangeType() && (isSameDay()(day, startDate()) || isSameDay()(day, endDate()))),
+                      disabled: isDateDisabled()(day),
+                      today: isSameDay()(day, today()),
+                      holiday: isHoliday()(day),
+                      inRange: isRangeType() && isInRange()(day),
+                      startDate: isRangeType() && isSameDay()(day, startDate()),
+                      endDate: isRangeType() && isSameDay()(day, endDate()),
                     }
                   "
                 ></ng-container>
@@ -80,20 +80,20 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       $implicit: day,
                       date: day,
                       selected:
-                        (mode === 'single' && isSameDay(day, selectedDate)) ||
-                        (mode === 'multiple' && isMultipleSelected(day)) ||
-                        (isRangeType() && (isSameDay(day, startDate) || isSameDay(day, endDate))),
-                      disabled: isDateDisabled(day),
-                      today: isSameDay(day, today),
-                      holiday: isHoliday(day),
-                      inRange: isRangeType() && isInRange(day),
-                      startDate: isRangeType() && isSameDay(day, startDate),
-                      endDate: isRangeType() && isSameDay(day, endDate),
+                        (mode() === 'single' && isSameDay()(day, selectedDate())) ||
+                        (mode() === 'multiple' && isMultipleSelected()(day)) ||
+                        (isRangeType() && (isSameDay()(day, startDate()) || isSameDay()(day, endDate()))),
+                      disabled: isDateDisabled()(day),
+                      today: isSameDay()(day, today()),
+                      holiday: isHoliday()(day),
+                      inRange: isRangeType() && isInRange()(day),
+                      startDate: isRangeType() && isSameDay()(day, startDate()),
+                      endDate: isRangeType() && isSameDay()(day, endDate()),
                     }
                   "
                 ></ng-container>
               } @else {
-                <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
+                <div class="ngxsmk-day-number">{{ formatDayNumber()(day) }}</div>
               }
             }
           </div>
@@ -116,56 +116,64 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
  * - Delegating complex logic (isDateDisabled, etc.) back to the parent via bound functions
  */
 export class CalendarMonthViewComponent {
-  @Input() days: (Date | null)[] = [];
-  @Input() weekDays: string[] = [];
-  @Input() classes?: DatepickerClasses | undefined;
+  readonly days = input<(Date | null)[]>([]);
+  readonly weekDays = input<string[]>([]);
+  readonly classes = input<DatepickerClasses>();
   @Input() dateTemplate: TemplateRef<unknown> | null = null;
   @Input() dayTemplate: TemplateRef<unknown> | null = null;
-  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
-  @Input() selectedDate: Date | null = null;
-  @Input() startDate: Date | null = null;
-  @Input() endDate: Date | null = null;
-  @Input() focusedDate: Date | null = null;
-  @Input() today: Date = new Date();
-  @Input() currentMonth: number = 0;
-  @Input() currentYear: number = 0;
-  @Input() ariaLabel: string = '';
+  readonly mode = input<'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange'>(
+    'single'
+  );
+  readonly selectedDate = input<Date | null>(null);
+  readonly startDate = input<Date | null>(null);
+  readonly endDate = input<Date | null>(null);
+  readonly focusedDate = input<Date | null>(null);
+  readonly today = input<Date>(new Date());
+  readonly currentMonth = input<number>(0);
+  readonly currentYear = input<number>(0);
+  readonly ariaLabel = input<string>('');
 
   // Function inputs for logic checks
-  @Input() isDateDisabled: (date: Date | null) => boolean = () => false;
-  @Input() isSameDay: (date1: Date | null, date2: Date | null) => boolean = () => false;
-  @Input() isHoliday: (date: Date | null) => boolean = () => false;
-  @Input() isMultipleSelected: (date: Date | null) => boolean = () => false;
-  @Input() isInRange: (date: Date | null) => boolean = () => false;
-  @Input() isPreviewInRange: (date: Date | null) => boolean = () => false;
-  @Input() getAriaLabel: (date: Date | null) => string = () => '';
-  @Input() getDayCellCustomClasses: (
-    date: Date | null
-  ) => string | string[] | Set<string> | { [klass: string]: unknown } = () => ({});
-  @Input() getDayCellTooltip: (date: Date | null) => string | null = () => '';
-  @Input() formatDayNumber: (date: Date | null) => string | null = (d) => (d ? d.getDate().toString() : '');
+  readonly isDateDisabled = input<(date: Date | null) => boolean>(() => false);
+  readonly isSameDay = input<(date1: Date | null, date2: Date | null) => boolean>(() => false);
+  readonly isHoliday = input<(date: Date | null) => boolean>(() => false);
+  readonly isMultipleSelected = input<(date: Date | null) => boolean>(() => false);
+  readonly isInRange = input<(date: Date | null) => boolean>(() => false);
+  readonly isPreviewInRange = input<(date: Date | null) => boolean>(() => false);
+  readonly getAriaLabel = input<(date: Date | null) => string>(() => '');
+  readonly getDayCellCustomClasses = input<
+    (date: Date | null) =>
+      | string
+      | string[]
+      | Set<string>
+      | {
+          [klass: string]: unknown;
+        }
+  >(() => ({}));
+  readonly getDayCellTooltip = input<(date: Date | null) => string | null>(() => '');
+  readonly formatDayNumber = input<(date: Date | null) => string | null>((d) => (d ? d.getDate().toString() : ''));
 
-  @Output() dateClick = new EventEmitter<Date>();
-  @Output() dateMouseDown = new EventEmitter<Date>();
-  @Output() dateMouseUp = new EventEmitter<void>();
-  @Output() dateHover = new EventEmitter<Date>();
-  @Output() dateFocus = new EventEmitter<Date>();
-  @Output() swipeStart = new EventEmitter<TouchEvent>();
-  @Output() swipeMove = new EventEmitter<TouchEvent>();
-  @Output() swipeEnd = new EventEmitter<TouchEvent>();
+  readonly dateClick = output<Date>();
+  readonly dateMouseDown = output<Date>();
+  readonly dateMouseUp = output<void>();
+  readonly dateHover = output<Date>();
+  readonly dateFocus = output<Date>();
+  readonly swipeStart = output<TouchEvent>();
+  readonly swipeMove = output<TouchEvent>();
+  readonly swipeEnd = output<TouchEvent>();
 
-  @Output() touchStart = new EventEmitter<{
+  readonly touchStart = output<{
     event: TouchEvent;
     day: Date | null;
   }>();
-  @Output() touchMove = new EventEmitter<TouchEvent>();
-  @Output() touchEnd = new EventEmitter<{
+  readonly touchMove = output<TouchEvent>();
+  readonly touchEnd = output<{
     event: TouchEvent;
     day: Date | null;
   }>();
 
   isRangeType(): boolean {
-    return ['range', 'week', 'month', 'quarter', 'year', 'timeRange'].includes(this.mode);
+    return ['range', 'week', 'month', 'quarter', 'year', 'timeRange'].includes(this.mode());
   }
 
   trackByDay(index: number, day: Date | null): number {
@@ -173,11 +181,11 @@ export class CalendarMonthViewComponent {
   }
 
   isCurrentMonth(date: Date | null): boolean {
-    return !!date && date.getMonth() === this.currentMonth && date.getFullYear() === this.currentYear;
+    return !!date && date.getMonth() === this.currentMonth() && date.getFullYear() === this.currentYear();
   }
 
   onDateClick(day: Date | null) {
-    if (day && !this.isDateDisabled(day)) {
+    if (day && !this.isDateDisabled()(day)) {
       this.dateClick.emit(day);
     }
   }
@@ -195,7 +203,7 @@ export class CalendarMonthViewComponent {
   }
 
   onDateMouseDown(day: Date | null) {
-    if (day && !this.isDateDisabled(day)) {
+    if (day && !this.isDateDisabled()(day)) {
       this.dateMouseDown.emit(day);
     }
   }

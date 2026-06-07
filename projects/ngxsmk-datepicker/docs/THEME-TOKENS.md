@@ -1,6 +1,6 @@
 # Theme Tokens & CSS Custom Properties
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.2
 
 Complete reference for all CSS custom properties (CSS variables) available in ngxsmk-datepicker.
 

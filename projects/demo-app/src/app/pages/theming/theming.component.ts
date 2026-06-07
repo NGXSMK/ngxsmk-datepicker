@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, ElementRef, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { I18nService } from '../../i18n/i18n.service';
@@ -285,7 +285,7 @@ export class ThemingComponent implements OnInit, OnDestroy {
   dateValue = new Date();
   currentTheme: string | null = null;
 
-  @ViewChild(NgxsmkDatepickerComponent, { read: ElementRef, static: true }) datepickerRef!: ElementRef;
+  readonly datepickerRef = viewChild.required(NgxsmkDatepickerComponent, { read: ElementRef });
 
   themes: Record<string, DatepickerTheme> = {
     ocean: {
@@ -325,8 +325,9 @@ export class ThemingComponent implements OnInit, OnDestroy {
 
   applyTheme(themeKey: string) {
     this.currentTheme = themeKey;
-    if (this.datepickerRef) {
-      this.themeBuilder.applyTheme(this.themes[themeKey], this.datepickerRef.nativeElement);
+    const datepickerRef = this.datepickerRef();
+    if (datepickerRef) {
+      this.themeBuilder.applyTheme(this.themes[themeKey], datepickerRef.nativeElement);
     }
   }
 
@@ -339,8 +340,9 @@ export class ThemingComponent implements OnInit, OnDestroy {
 
   resetTheme() {
     this.currentTheme = null;
-    if (this.datepickerRef) {
-      this.themeBuilder.removeTheme(this.datepickerRef.nativeElement);
+    const datepickerRef = this.datepickerRef();
+    if (datepickerRef) {
+      this.themeBuilder.removeTheme(datepickerRef.nativeElement);
     }
   }
 

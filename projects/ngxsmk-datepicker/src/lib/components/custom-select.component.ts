@@ -1,16 +1,16 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
   HostListener,
   inject,
   Input,
-  Output,
   PLATFORM_ID,
-  ViewChild,
   AfterViewInit,
   OnDestroy,
   ViewEncapsulation,
+  viewChild,
+  output,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 
@@ -18,6 +18,7 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
   selector: 'ngxsmk-custom-select',
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.Default,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-open]': 'isOpen',
@@ -56,7 +57,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
                 [class.disabled]="option.disabled"
                 (click)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
                 (keydown.enter)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
-                (keydown.space)="option.disabled ? null : selectOption(option); $event.stopPropagation(); $event.preventDefault()"
+                (keydown.space)="
+                  option.disabled ? null : selectOption(option); $event.stopPropagation(); $event.preventDefault()
+                "
                 [attr.tabindex]="option.disabled ? -1 : 0"
                 role="option"
                 [attr.aria-selected]="option.value === value"
@@ -75,10 +78,10 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @Input() options: { label: string; value: unknown; disabled?: boolean }[] = [];
   @Input() value: unknown;
   @Input() disabled: boolean = false;
-  @Output() valueChange = new EventEmitter<unknown>();
-  @ViewChild('container', { static: false }) container!: ElementRef<HTMLDivElement>;
-  @ViewChild('button', { static: false }) button!: ElementRef<HTMLButtonElement>;
-  @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
+  readonly valueChange = output<unknown>();
+  readonly container = viewChild.required<ElementRef<HTMLDivElement>>('container');
+  readonly button = viewChild.required<ElementRef<HTMLButtonElement>>('button');
+  readonly panel = viewChild<ElementRef<HTMLDivElement>>('panel');
 
   public isOpen = false;
 
@@ -112,8 +115,9 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
           this.updatePanelPosition();
         }
       });
-      if (this.container?.nativeElement) {
-        this.resizeObserver.observe(this.container.nativeElement);
+      const container = this.container();
+      if (container?.nativeElement) {
+        this.resizeObserver.observe(container.nativeElement);
       }
     }
   }
@@ -190,9 +194,10 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   private scrollToSelected(): void {
-    if (!this.isBrowser || !this.panel?.nativeElement) return;
+    const panel = this.panel();
+    if (!this.isBrowser || !panel?.nativeElement) return;
 
-    const selectedEl = this.panel.nativeElement.querySelector('.selected') as HTMLElement;
+    const selectedEl = panel.nativeElement.querySelector('.selected') as HTMLElement;
     if (selectedEl) {
       selectedEl.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }

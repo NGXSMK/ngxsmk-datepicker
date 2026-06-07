@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { NgxsmkDatepickerContentComponent } from '../components/datepicker-content.component';
@@ -17,21 +17,21 @@ import { getStartOfDay } from '../utils/date.utils';
   standalone: true,
 })
 class CalendarHeaderStubComponent {
-  @Input() currentMonth: unknown;
-  @Input() currentYear: unknown;
-  @Input() monthOptions: unknown;
-  @Input() yearOptions: unknown;
-  @Input() disabled: unknown;
-  @Input() isBackArrowDisabled: unknown;
-  @Input() headerClass: unknown;
-  @Input() navPrevClass: unknown;
-  @Input() navNextClass: unknown;
-  @Input() prevMonthAriaLabel: unknown;
-  @Input() nextMonthAriaLabel: unknown;
-  @Output() nextMonth = new EventEmitter<void>();
-  @Output() previousMonth = new EventEmitter<void>();
-  @Output() currentMonthChange = new EventEmitter<number>();
-  @Output() currentYearChange = new EventEmitter<number>();
+  readonly currentMonth = input<unknown>();
+  readonly currentYear = input<unknown>();
+  readonly monthOptions = input<unknown>();
+  readonly yearOptions = input<unknown>();
+  readonly disabled = input<unknown>();
+  readonly isBackArrowDisabled = input<unknown>();
+  readonly headerClass = input<unknown>();
+  readonly navPrevClass = input<unknown>();
+  readonly navNextClass = input<unknown>();
+  readonly prevMonthAriaLabel = input<unknown>();
+  readonly nextMonthAriaLabel = input<unknown>();
+  readonly nextMonth = output<void>();
+  readonly previousMonth = output<void>();
+  readonly currentMonthChange = output<number>();
+  readonly currentYearChange = output<number>();
 }
 
 @Component({
@@ -40,42 +40,42 @@ class CalendarHeaderStubComponent {
   standalone: true,
 })
 class CalendarMonthViewStubComponent {
-  @Input() days: unknown;
-  @Input() selectedDate: unknown;
-  @Input() selectedDates: unknown;
-  @Input() startDate: unknown;
-  @Input() endDate: unknown;
-  @Input() currentMonth: unknown;
-  @Input() currentYear: unknown;
-  @Input() weekDays: unknown;
-  @Input() isDateDisabled: unknown;
-  @Input() isSameDay: unknown;
-  @Input() isHoliday: unknown;
-  @Input() getHolidayLabel: unknown;
-  @Input() formatDayNumber: unknown;
-  @Input() getDayCellCustomClasses: unknown;
-  @Input() getDayCellTooltip: unknown;
-  @Input() dayCellRenderHook: unknown;
-  @Input() trackByDay: unknown;
-  @Input() classes: unknown;
-  @Input() ariaLabel: unknown;
-  @Input() getAriaLabel: unknown;
-  @Input() isInRange: unknown;
-  @Input() isPreviewInRange: unknown;
-  @Input() isMultipleSelected: unknown;
-  @Input() mode: unknown;
-  @Input() focusedDate: unknown;
-  @Input() today: unknown;
-  @Input() dateTemplate: unknown;
-  @Output() dateClick = new EventEmitter<Date>();
-  @Output() dateHover = new EventEmitter<Date>();
-  @Output() dateFocus = new EventEmitter<unknown>();
-  @Output() swipeStart = new EventEmitter<any>();
-  @Output() swipeMove = new EventEmitter<any>();
-  @Output() swipeEnd = new EventEmitter<any>();
-  @Output() touchStart = new EventEmitter<any>();
-  @Output() touchMove = new EventEmitter<any>();
-  @Output() touchEnd = new EventEmitter<any>();
+  readonly days = input<unknown>();
+  readonly selectedDate = input<unknown>();
+  readonly selectedDates = input<unknown>();
+  readonly startDate = input<unknown>();
+  readonly endDate = input<unknown>();
+  readonly currentMonth = input<unknown>();
+  readonly currentYear = input<unknown>();
+  readonly weekDays = input<unknown>();
+  readonly isDateDisabled = input<unknown>();
+  readonly isSameDay = input<unknown>();
+  readonly isHoliday = input<unknown>();
+  readonly getHolidayLabel = input<unknown>();
+  readonly formatDayNumber = input<unknown>();
+  readonly getDayCellCustomClasses = input<unknown>();
+  readonly getDayCellTooltip = input<unknown>();
+  readonly dayCellRenderHook = input<unknown>();
+  readonly trackByDay = input<unknown>();
+  readonly classes = input<unknown>();
+  readonly ariaLabel = input<unknown>();
+  readonly getAriaLabel = input<unknown>();
+  readonly isInRange = input<unknown>();
+  readonly isPreviewInRange = input<unknown>();
+  readonly isMultipleSelected = input<unknown>();
+  readonly mode = input<unknown>();
+  readonly focusedDate = input<unknown>();
+  readonly today = input<unknown>();
+  readonly dateTemplate = input<unknown>();
+  readonly dateClick = output<Date>();
+  readonly dateHover = output<Date>();
+  readonly dateFocus = output<unknown>();
+  readonly swipeStart = output<any>();
+  readonly swipeMove = output<any>();
+  readonly swipeEnd = output<any>();
+  readonly touchStart = output<any>();
+  readonly touchMove = output<any>();
+  readonly touchEnd = output<any>();
 }
 
 @Component({
@@ -84,14 +84,14 @@ class CalendarMonthViewStubComponent {
   standalone: true,
 })
 class CalendarYearViewStubComponent {
-  @Input() viewMode: unknown;
-  @Input() currentYear: unknown;
-  @Input() minYear: unknown;
-  @Input() maxYear: unknown;
-  @Input() years: unknown;
-  @Input() decades: unknown;
-  @Output() yearSelected = new EventEmitter<number>();
-  @Output() decadeSelected = new EventEmitter<number>();
+  readonly viewMode = input<unknown>();
+  readonly currentYear = input<unknown>();
+  readonly minYear = input<unknown>();
+  readonly maxYear = input<unknown>();
+  readonly years = input<unknown>();
+  readonly decades = input<unknown>();
+  readonly yearSelected = output<number>();
+  readonly decadeSelected = output<number>();
 }
 
 @Component({
@@ -100,22 +100,22 @@ class CalendarYearViewStubComponent {
   standalone: true,
 })
 class TimeSelectionStubComponent {
-  @Input() currentDisplayHour: unknown;
-  @Input() currentMinute: unknown;
-  @Input() currentSecond: unknown;
-  @Input() isPm: unknown;
-  @Input() hourOptions: unknown;
-  @Input() minuteOptions: unknown;
-  @Input() secondOptions: unknown;
-  @Input() ampmOptions: unknown;
-  @Input() disabled: unknown;
-  @Input() timeLabel: unknown;
-  @Input() showSeconds: unknown;
-  @Output() timeChange = new EventEmitter<void>();
-  @Output() currentDisplayHourChange = new EventEmitter<number>();
-  @Output() currentMinuteChange = new EventEmitter<number>();
-  @Output() currentSecondChange = new EventEmitter<number>();
-  @Output() isPmChange = new EventEmitter<boolean>();
+  readonly currentDisplayHour = input<unknown>();
+  readonly currentMinute = input<unknown>();
+  readonly currentSecond = input<unknown>();
+  readonly isPm = input<unknown>();
+  readonly hourOptions = input<unknown>();
+  readonly minuteOptions = input<unknown>();
+  readonly secondOptions = input<unknown>();
+  readonly ampmOptions = input<unknown>();
+  readonly disabled = input<unknown>();
+  readonly timeLabel = input<unknown>();
+  readonly showSeconds = input<unknown>();
+  readonly timeChange = output<void>();
+  readonly currentDisplayHourChange = output<number>();
+  readonly currentMinuteChange = output<number>();
+  readonly currentSecondChange = output<number>();
+  readonly isPmChange = output<boolean>();
 }
 
 describe('NgxsmkDatepickerComponent', () => {
@@ -228,7 +228,7 @@ describe('NgxsmkDatepickerComponent', () => {
 
       const event = {
         target: { value: 'today' },
-        relatedTarget: null
+        relatedTarget: null,
       } as unknown as FocusEvent;
 
       component.onInputBlur(event);
@@ -247,8 +247,8 @@ describe('NgxsmkDatepickerComponent', () => {
         {
           id: 'test-preset',
           name: 'Test Preset',
-          calculate: (t: Date) => ({ start: t, end: t })
-        }
+          calculate: (t: Date) => ({ start: t, end: t }),
+        },
       ];
       (component as any).updateRangesArray();
       expect(component.rangesArray.length).toBeGreaterThan(0);

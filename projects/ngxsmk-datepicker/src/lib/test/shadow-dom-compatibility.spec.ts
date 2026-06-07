@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, viewChild } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { CustomSelectComponent } from '../components/custom-select.component';
 import { DatePipe } from '@angular/common';
@@ -21,8 +21,8 @@ function createMockEvent(type: string, path: Node[], target: Node): MouseEvent {
   encapsulation: ViewEncapsulation.ShadowDom,
 })
 class ShadowContainerComponent {
-  @ViewChild('datepicker') datepicker!: NgxsmkDatepickerComponent;
-  @ViewChild('customSelect') customSelect!: CustomSelectComponent;
+  readonly datepicker = viewChild.required<NgxsmkDatepickerComponent>('datepicker');
+  readonly customSelect = viewChild.required<CustomSelectComponent>('customSelect');
 
   selectOptions = [
     { label: 'Option 1', value: 1 },
@@ -48,7 +48,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
 
   describe('NgxsmkDatepickerComponent', () => {
     it('should identify target inside component via composedPath()', () => {
-      const datepicker = containerComponent.datepicker;
+      const datepicker = containerComponent.datepicker();
       const nativeElement = datepicker['elementRef'].nativeElement;
 
       // Mock a node outside
@@ -72,7 +72,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
     });
 
     it('should fallback to contains() if composedPath is not available', () => {
-      const datepicker = containerComponent.datepicker;
+      const datepicker = containerComponent.datepicker();
       const nativeElement = datepicker['elementRef'].nativeElement;
 
       const insideNode = document.createElement('span');
@@ -89,8 +89,8 @@ describe('Shadow DOM & composedPath Compatibility', () => {
     });
 
     it('should not close calendar on document click if event composedPath includes nativeElement', fakeAsync(() => {
-      const datepicker = containerComponent.datepicker;
-      
+      const datepicker = containerComponent.datepicker();
+
       // Open the calendar
       datepicker.isCalendarOpen = true;
       datepicker['cdr'].markForCheck();
@@ -109,8 +109,8 @@ describe('Shadow DOM & composedPath Compatibility', () => {
     }));
 
     it('should close calendar on document click if event composedPath does not include nativeElement', fakeAsync(() => {
-      const datepicker = containerComponent.datepicker;
-      
+      const datepicker = containerComponent.datepicker();
+
       // Open the calendar
       datepicker.isCalendarOpen = true;
       datepicker['cdr'].markForCheck();
@@ -130,8 +130,8 @@ describe('Shadow DOM & composedPath Compatibility', () => {
 
   describe('CustomSelectComponent', () => {
     it('should keep custom select open on document click if event composedPath includes nativeElement', fakeAsync(() => {
-      const customSelect = containerComponent.customSelect;
-      
+      const customSelect = containerComponent.customSelect();
+
       // Open select dropdown
       customSelect.isOpen = true;
       fixture.detectChanges();
@@ -149,8 +149,8 @@ describe('Shadow DOM & composedPath Compatibility', () => {
     }));
 
     it('should close custom select on document click if event composedPath does not include nativeElement', fakeAsync(() => {
-      const customSelect = containerComponent.customSelect;
-      
+      const customSelect = containerComponent.customSelect();
+
       // Open select dropdown
       customSelect.isOpen = true;
       fixture.detectChanges();

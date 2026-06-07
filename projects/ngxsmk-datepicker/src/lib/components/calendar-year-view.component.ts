@@ -1,14 +1,13 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   ChangeDetectionStrategy,
   signal,
   computed,
-  ViewChild,
   ElementRef,
   OnInit,
+  input,
+  viewChild,
+  output,
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import {
@@ -24,16 +23,16 @@ import {
   imports: [NgClass],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (viewMode === 'year') {
-      <div class="ngxsmk-header" [ngClass]="headerClass">
+    @if (viewMode() === 'year') {
+      <div class="ngxsmk-header" [ngClass]="headerClass()">
         <div class="ngxsmk-year-display">
           <button
             type="button"
             class="ngxsmk-view-toggle"
             (click)="viewModeChange.emit('decade')"
-            [disabled]="disabled"
+            [disabled]="disabled()"
           >
-            {{ currentDecade }} - {{ currentDecade + 9 }}
+            {{ currentDecade() }} - {{ currentDecade() + 9 }}
           </button>
         </div>
         <div class="ngxsmk-nav-buttons">
@@ -41,9 +40,9 @@ import {
             type="button"
             class="ngxsmk-nav-button"
             (click)="changeYear.emit(-12)"
-            [disabled]="disabled"
-            [attr.aria-label]="previousYearsLabel"
-            [ngClass]="navPrevClass"
+            [disabled]="disabled()"
+            [attr.aria-label]="previousYearsLabel()"
+            [ngClass]="navPrevClass()"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path
@@ -60,9 +59,9 @@ import {
             type="button"
             class="ngxsmk-nav-button"
             (click)="changeYear.emit(12)"
-            [disabled]="disabled"
-            [attr.aria-label]="nextYearsLabel"
-            [ngClass]="navNextClass"
+            [disabled]="disabled()"
+            [attr.aria-label]="nextYearsLabel()"
+            [ngClass]="navNextClass()"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path
@@ -81,7 +80,7 @@ import {
         class="ngxsmk-year-grid-container"
         #yearScrollContainer
         (scroll)="onYearScroll($event)"
-        [style.height.px]="yearContainerHeight"
+        [style.height.px]="yearContainerHeight()"
       >
         <div
           class="ngxsmk-year-grid"
@@ -92,9 +91,9 @@ import {
             <button
               type="button"
               class="ngxsmk-year-cell"
-              [class.selected]="item.data === currentYear"
-              [class.today]="item.data === today.getFullYear()"
-              [disabled]="disabled"
+              [class.selected]="item.data === currentYear()"
+              [class.today]="item.data === today().getFullYear()"
+              [disabled]="disabled()"
               (click)="yearClick.emit(item.data); $event.stopPropagation()"
               (keydown.enter)="yearClick.emit(item.data)"
               [attr.aria-label]="getYearAriaLabel(item.data)"
@@ -106,17 +105,17 @@ import {
       </div>
     }
 
-    @if (viewMode === 'decade') {
-      <div class="ngxsmk-header" [ngClass]="headerClass">
-        <div class="ngxsmk-decade-display">{{ currentDecade }} - {{ currentDecade + 99 }}</div>
+    @if (viewMode() === 'decade') {
+      <div class="ngxsmk-header" [ngClass]="headerClass()">
+        <div class="ngxsmk-decade-display">{{ currentDecade() }} - {{ currentDecade() + 99 }}</div>
         <div class="ngxsmk-nav-buttons">
           <button
             type="button"
             class="ngxsmk-nav-button"
             (click)="changeDecade.emit(-1)"
-            [disabled]="disabled"
-            [attr.aria-label]="previousDecadeLabel"
-            [ngClass]="navPrevClass"
+            [disabled]="disabled()"
+            [attr.aria-label]="previousDecadeLabel()"
+            [ngClass]="navPrevClass()"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path
@@ -133,9 +132,9 @@ import {
             type="button"
             class="ngxsmk-nav-button"
             (click)="changeDecade.emit(1)"
-            [disabled]="disabled"
-            [attr.aria-label]="nextDecadeLabel"
-            [ngClass]="navNextClass"
+            [disabled]="disabled()"
+            [attr.aria-label]="nextDecadeLabel()"
+            [ngClass]="navNextClass()"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path
@@ -154,7 +153,7 @@ import {
         class="ngxsmk-decade-grid-container"
         #decadeScrollContainer
         (scroll)="onDecadeScroll($event)"
-        [style.height.px]="decadeContainerHeight"
+        [style.height.px]="decadeContainerHeight()"
       >
         <div
           class="ngxsmk-decade-grid"
@@ -165,8 +164,8 @@ import {
             <button
               type="button"
               class="ngxsmk-decade-cell"
-              [class.selected]="item.data === currentDecade"
-              [disabled]="disabled"
+              [class.selected]="item.data === currentDecade()"
+              [disabled]="disabled()"
               (click)="decadeClick.emit(item.data); $event.stopPropagation()"
               (keydown.enter)="decadeClick.emit(item.data)"
               [attr.aria-label]="getDecadeAriaLabel(item.data)"
@@ -193,37 +192,37 @@ import {
  * This component is stateless and relies on the parent for logic and state management.
  */
 export class CalendarYearViewComponent implements OnInit {
-  @Input() viewMode: 'year' | 'decade' = 'year';
-  @Input() yearGrid: number[] = [];
-  @Input() decadeGrid: number[] = [];
-  @Input() currentYear: number = new Date().getFullYear();
-  @Input() currentDecade: number = new Date().getFullYear();
-  @Input() today: Date = new Date();
-  @Input() disabled: boolean = false;
+  readonly viewMode = input<'year' | 'decade'>('year');
+  readonly yearGrid = input<number[]>([]);
+  readonly decadeGrid = input<number[]>([]);
+  readonly currentYear = input<number>(new Date().getFullYear());
+  readonly currentDecade = input<number>(new Date().getFullYear());
+  readonly today = input<Date>(new Date());
+  readonly disabled = input<boolean>(false);
 
   // Virtual scrolling container heights
-  @Input() yearContainerHeight: number = 280; // Adjust based on CSS height
-  @Input() decadeContainerHeight: number = 280;
+  readonly yearContainerHeight = input<number>(280); // Adjust based on CSS height
+  readonly decadeContainerHeight = input<number>(280);
 
   // Translation labels
-  @Input() previousYearsLabel: string = 'Previous Years';
-  @Input() nextYearsLabel: string = 'Next Years';
-  @Input() previousDecadeLabel: string = 'Previous Decade';
-  @Input() nextDecadeLabel: string = 'Next Decade';
+  readonly previousYearsLabel = input<string>('Previous Years');
+  readonly nextYearsLabel = input<string>('Next Years');
+  readonly previousDecadeLabel = input<string>('Previous Decade');
+  readonly nextDecadeLabel = input<string>('Next Decade');
 
   // Styling classes
-  @Input() headerClass?: string;
-  @Input() navPrevClass?: string;
-  @Input() navNextClass?: string;
+  readonly headerClass = input<string>();
+  readonly navPrevClass = input<string>();
+  readonly navNextClass = input<string>();
 
-  @ViewChild('yearScrollContainer') yearScrollContainer?: ElementRef;
-  @ViewChild('decadeScrollContainer') decadeScrollContainer?: ElementRef;
+  readonly yearScrollContainer = viewChild<ElementRef>('yearScrollContainer');
+  readonly decadeScrollContainer = viewChild<ElementRef>('decadeScrollContainer');
 
-  @Output() viewModeChange = new EventEmitter<'year' | 'decade'>();
-  @Output() yearClick = new EventEmitter<number>();
-  @Output() decadeClick = new EventEmitter<number>();
-  @Output() changeYear = new EventEmitter<number>();
-  @Output() changeDecade = new EventEmitter<number>();
+  readonly viewModeChange = output<'year' | 'decade'>();
+  readonly yearClick = output<number>();
+  readonly decadeClick = output<number>();
+  readonly changeYear = output<number>();
+  readonly changeDecade = output<number>();
 
   // Virtual scrolling signals
   private yearScrollPositionSignal = signal<number>(0);
@@ -237,7 +236,7 @@ export class CalendarYearViewComponent implements OnInit {
   yearVirtualResult = computed(() => {
     return calculateVirtualScroll<number>(this.largeYearRange, this.yearScrollPositionSignal(), {
       itemHeight: 40, // Adjust based on CSS button height
-      containerHeight: this.yearContainerHeight,
+      containerHeight: this.yearContainerHeight(),
       overscan: 5,
       itemsPerRow: 4, // 4 columns for year grid
     } as VirtualScrollConfig);
@@ -246,7 +245,7 @@ export class CalendarYearViewComponent implements OnInit {
   decadeVirtualResult = computed(() => {
     return calculateVirtualScroll<number>(this.largeDecadeRange, this.decadeScrollPositionSignal(), {
       itemHeight: 40, // Adjust based on CSS button height
-      containerHeight: this.decadeContainerHeight,
+      containerHeight: this.decadeContainerHeight(),
       overscan: 5,
       itemsPerRow: 3, // 3 columns for decade grid
     } as VirtualScrollConfig);
@@ -255,8 +254,8 @@ export class CalendarYearViewComponent implements OnInit {
   ngOnInit(): void {
     // Generate large ranges for virtual scrolling
     // Centers on current year/decade with 100 years / 50 decades range
-    this.largeYearRange = generateLargeYearRange(this.currentYear, 100);
-    this.largeDecadeRange = generateLargeDecadeRange(this.currentDecade, 50);
+    this.largeYearRange = generateLargeYearRange(this.currentYear(), 100);
+    this.largeDecadeRange = generateLargeDecadeRange(this.currentDecade(), 50);
   }
 
   onYearScroll(event: Event): void {

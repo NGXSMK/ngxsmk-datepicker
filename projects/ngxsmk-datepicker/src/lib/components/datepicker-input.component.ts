@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ElementRef, ChangeDetectionStrategy, input, viewChild, output } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 
@@ -7,42 +7,42 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
   standalone: true,
   imports: [NgClass],
   template: `
-    @if (isNative) {
+    @if (isNative()) {
       <div
         class="ngxsmk-input-group ngxsmk-native-input-group"
-        [class.disabled]="disabled"
-        [ngClass]="classes?.inputGroup"
+        [class.disabled]="disabled()"
+        [ngClass]="classes()?.inputGroup"
       >
         <input
-          [type]="nativeInputType"
+          [type]="nativeInputType()"
           #nativeInput
-          [value]="formattedValue"
-          [placeholder]="placeholder"
-          [id]="id"
-          [name]="name"
-          [autocomplete]="autocomplete"
-          [disabled]="disabled"
-          [required]="required"
-          [attr.min]="minDateNative"
-          [attr.max]="maxDateNative"
-          [attr.aria-label]="ariaLabel"
-          [attr.aria-required]="required"
-          [attr.aria-invalid]="errorState"
-          [attr.aria-describedby]="ariaDescribedBy"
+          [value]="formattedValue()"
+          [placeholder]="placeholder()"
+          [id]="id()"
+          [name]="name()"
+          [autocomplete]="autocomplete()"
+          [disabled]="disabled()"
+          [required]="required()"
+          [attr.min]="minDateNative()"
+          [attr.max]="maxDateNative()"
+          [attr.aria-label]="ariaLabel()"
+          [attr.aria-required]="required()"
+          [attr.aria-invalid]="errorState()"
+          [attr.aria-describedby]="ariaDescribedBy()"
           class="ngxsmk-display-input ngxsmk-native-input"
-          [ngClass]="classes?.input"
+          [ngClass]="classes()?.input"
           (change)="onNativeInputChange($event)"
           (blur)="onInputBlur($event)"
         />
-        @if (formattedValue) {
+        @if (formattedValue()) {
           <button
             type="button"
             class="ngxsmk-clear-button"
             (click)="onClearValue($event)"
-            [disabled]="disabled"
-            [attr.aria-label]="clearAriaLabel"
-            [title]="clearLabel"
-            [ngClass]="classes?.clearBtn"
+            [disabled]="disabled()"
+            [attr.aria-label]="clearAriaLabel()"
+            [title]="clearLabel()"
+            [ngClass]="classes()?.clearBtn"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
               <path
@@ -67,31 +67,31 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
           (focus)="onInputGroupFocus()"
           (keydown.enter)="onToggleCalendar($event)"
           (keydown.space)="onToggleCalendar($event); $event.preventDefault()"
-          [class.disabled]="disabled"
+          [class.disabled]="disabled()"
           role="button"
-          [attr.aria-disabled]="disabled"
+          [attr.aria-disabled]="disabled()"
           aria-haspopup="dialog"
-          [attr.aria-expanded]="isCalendarOpen"
+          [attr.aria-expanded]="isCalendarOpen()"
           tabindex="0"
-          [ngClass]="classes?.inputGroup"
+          [ngClass]="classes()?.inputGroup"
         >
           <input
             type="text"
             #customInput
-            [value]="allowTyping ? typedInputValue || displayValue : displayValue"
-            [placeholder]="placeholder"
-            [id]="id"
-            [name]="name"
-            [autocomplete]="autocomplete"
-            [readonly]="!allowTyping"
-            [disabled]="disabled"
-            [required]="required"
-            [attr.aria-label]="ariaLabel"
-            [attr.aria-required]="required"
-            [attr.aria-invalid]="errorState"
-            [attr.aria-describedby]="ariaDescribedBy"
+            [value]="allowTyping() ? typedInputValue() || displayValue() : displayValue()"
+            [placeholder]="placeholder()"
+            [id]="id()"
+            [name]="name()"
+            [autocomplete]="autocomplete()"
+            [readonly]="!allowTyping()"
+            [disabled]="disabled()"
+            [required]="required()"
+            [attr.aria-label]="ariaLabel()"
+            [attr.aria-required]="required()"
+            [attr.aria-invalid]="errorState()"
+            [attr.aria-describedby]="ariaDescribedBy()"
             class="ngxsmk-display-input"
-            [ngClass]="classes?.input"
+            [ngClass]="classes()?.input"
             (keydown.enter)="onInputKeyDown($event)"
             (keydown.space)="onInputKeyDown($event)"
             (keydown.escape)="onInputKeyDown($event)"
@@ -99,7 +99,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             (blur)="onInputBlur($event)"
             (focus)="onInputFocus($event)"
           />
-          @if (displayValue) {
+          @if (displayValue()) {
             <button
               type="button"
               class="ngxsmk-clear-button"
@@ -108,10 +108,10 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
               (touchend)="$event.stopPropagation()"
               (pointerdown)="$event.stopPropagation()"
               (pointerup)="$event.stopPropagation()"
-              [disabled]="disabled"
-              [attr.aria-label]="clearAriaLabel"
-              [title]="clearLabel"
-              [ngClass]="classes?.clearBtn"
+              [disabled]="disabled()"
+              [attr.aria-label]="clearAriaLabel()"
+              [title]="clearLabel()"
+              [ngClass]="classes()?.clearBtn"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
                 <path
@@ -125,15 +125,15 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
               </svg>
             </button>
           }
-          @if (showCalendarButton) {
+          @if (showCalendarButton()) {
             <button
               type="button"
               class="ngxsmk-calendar-button"
               (click)="onToggleCalendar($event); $event.stopPropagation()"
-              [disabled]="disabled"
-              [attr.aria-label]="calendarAriaLabel"
-              [title]="calendarAriaLabel"
-              [ngClass]="classes?.calendarBtn"
+              [disabled]="disabled()"
+              [attr.aria-label]="calendarAriaLabel()"
+              [title]="calendarAriaLabel()"
+              [ngClass]="classes()?.calendarBtn"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path
@@ -159,50 +159,50 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxsmkDatepickerInputComponent {
-  @Input() isNative: boolean = false;
-  @Input() disabled: boolean = false;
-  @Input() classes: DatepickerClasses | undefined = undefined;
-  @Input() nativeInputType: string = 'date';
-  @Input() formattedValue: string = '';
-  @Input() placeholder: string = '';
-  @Input() id: string = '';
-  @Input() name: string = '';
-  @Input() autocomplete: string = 'off';
-  @Input() required: boolean = false;
-  @Input() minDateNative: string | null = null;
-  @Input() maxDateNative: string | null = null;
-  @Input() ariaLabel: string = '';
-  @Input() ariaDescribedBy: string = '';
-  @Input() errorState: boolean = false;
-  @Input() clearAriaLabel: string = '';
-  @Input() clearLabel: string = '';
-  @Input() isCalendarOpen: boolean = false;
-  @Input() allowTyping: boolean = false;
-  @Input() typedInputValue: string = '';
-  @Input() displayValue: string = '';
-  @Input() showCalendarButton: boolean = false;
-  @Input() calendarAriaLabel: string = '';
+  readonly isNative = input<boolean>(false);
+  readonly disabled = input<boolean>(false);
+  readonly classes = input<DatepickerClasses>();
+  readonly nativeInputType = input<string>('date');
+  readonly formattedValue = input<string>('');
+  readonly placeholder = input<string>('');
+  readonly id = input<string>('');
+  readonly name = input<string>('');
+  readonly autocomplete = input<string>('off');
+  readonly required = input<boolean>(false);
+  readonly minDateNative = input<string | null>(null);
+  readonly maxDateNative = input<string | null>(null);
+  readonly ariaLabel = input<string>('');
+  readonly ariaDescribedBy = input<string>('');
+  readonly errorState = input<boolean>(false);
+  readonly clearAriaLabel = input<string>('');
+  readonly clearLabel = input<string>('');
+  readonly isCalendarOpen = input<boolean>(false);
+  readonly allowTyping = input<boolean>(false);
+  readonly typedInputValue = input<string>('');
+  readonly displayValue = input<string>('');
+  readonly showCalendarButton = input<boolean>(false);
+  readonly calendarAriaLabel = input<string>('');
   @Input() validationErrorMessage: string | null = null;
 
-  @Output() nativeInputChange = new EventEmitter<Event>();
-  @Output() inputBlur = new EventEmitter<FocusEvent>();
-  @Output() clearValue = new EventEmitter<MouseEvent>();
-  @Output() toggleCalendar = new EventEmitter<Event>();
-  @Output() pointerDown = new EventEmitter<PointerEvent>();
-  @Output() pointerUp = new EventEmitter<PointerEvent>();
-  @Output() inputGroupFocus = new EventEmitter<void>();
-  @Output() inputKeyDown = new EventEmitter<Event>();
-  @Output() inputChange = new EventEmitter<Event>();
-  @Output() inputFocus = new EventEmitter<FocusEvent>();
+  readonly nativeInputChange = output<Event>();
+  readonly inputBlur = output<FocusEvent>();
+  readonly clearValue = output<MouseEvent>();
+  readonly toggleCalendar = output<Event>();
+  readonly pointerDown = output<PointerEvent>();
+  readonly pointerUp = output<PointerEvent>();
+  readonly inputGroupFocus = output<void>();
+  readonly inputKeyDown = output<Event>();
+  readonly inputChange = output<Event>();
+  readonly inputFocus = output<FocusEvent>();
 
-  @ViewChild('nativeInput') nativeInput?: ElementRef<HTMLInputElement>;
-  @ViewChild('customInput') customInput?: ElementRef<HTMLInputElement>;
+  readonly nativeInput = viewChild<ElementRef<HTMLInputElement>>('nativeInput');
+  readonly customInput = viewChild<ElementRef<HTMLInputElement>>('customInput');
 
   focus(): void {
-    if (this.isNative) {
-      this.nativeInput?.nativeElement.focus();
+    if (this.isNative()) {
+      this.nativeInput()?.nativeElement.focus();
     } else {
-      this.customInput?.nativeElement.focus();
+      this.customInput()?.nativeElement.focus();
     }
   }
 

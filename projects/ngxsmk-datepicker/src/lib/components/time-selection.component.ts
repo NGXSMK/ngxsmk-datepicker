@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { CustomSelectComponent } from './custom-select.component';
 
 @Component({
@@ -36,7 +36,7 @@ import { CustomSelectComponent } from './custom-select.component';
         >
         </ngxsmk-custom-select>
       }
-      @if (showAmpm) {
+      @if (showAmpm()) {
         <ngxsmk-custom-select
           class="ampm-select"
           [options]="ampmOptions"
@@ -72,13 +72,13 @@ export class TimeSelectionComponent {
   @Input() disabled: boolean = false;
   @Input() timeLabel: string = 'Time';
   @Input() showSeconds: boolean = false;
-  @Input() showAmpm: boolean = true;
+  readonly showAmpm = input<boolean>(true);
 
-  @Output() timeChange = new EventEmitter<void>();
-  @Output() currentDisplayHourChange = new EventEmitter<number>();
-  @Output() currentMinuteChange = new EventEmitter<number>();
-  @Output() currentSecondChange = new EventEmitter<number>();
-  @Output() isPmChange = new EventEmitter<boolean>();
+  readonly timeChange = output<void>();
+  readonly currentDisplayHourChange = output<number>();
+  readonly currentMinuteChange = output<number>();
+  readonly currentSecondChange = output<number>();
+  readonly isPmChange = output<boolean>();
 
   onHourChange(value: unknown): void {
     this.currentDisplayHourChange.emit(Number(value));

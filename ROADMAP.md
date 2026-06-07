@@ -2,7 +2,7 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.2
 
 ## 🎯 Current Focus (Q1 2026 - Q2 2026)
 
@@ -110,17 +110,13 @@ This roadmap outlines the planned features, improvements, and enhancements for n
   - *Label: `performance`, `enhancement`*
   - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#21-implement-virtual-scrolling-for-yeardecade-views)*
 
-- [ ] **Optimize Change Detection Calls**
-  - Audit and optimize 29 `markForCheck()` calls
-  - Batch state changes for better performance
-  - *Label: `performance`, `optimization`*
-  - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#22-optimize-change-detection-calls)*
+- [x] **Optimize Change Detection Calls** ✅ (v2.4.0)
+  - Audit and optimize `markForCheck()` calls via native Signals reactivity.
+  - *Completed in v2.4.0*
 
-- [ ] **Memoize Expensive Computations**
-  - Use computed signals for `monthOptions`, `yearOptions`, `displayValue`
-  - Reduce unnecessary recalculations
-  - *Label: `performance`, `optimization`*
-  - *See: [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md#23-memoize-expensive-computations)*
+- [x] **Memoize Expensive Computations** ✅ (v2.4.0)
+  - Converted component inputs, outputs, and queries to stable Signal APIs.
+  - *Completed in v2.4.0*
 
 ### Type Safety & Error Handling (High Priority)
 

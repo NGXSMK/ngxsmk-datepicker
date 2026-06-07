@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  ViewEncapsulation,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation, viewChild, output } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { CustomSelectComponent } from './custom-select.component';
 
@@ -92,8 +84,8 @@ import { CustomSelectComponent } from './custom-select.component';
  * - Previous/Next month navigation buttons
  */
 export class CalendarHeaderComponent {
-  @ViewChild('monthSelect') monthSelect?: CustomSelectComponent;
-  @ViewChild('yearSelect') yearSelect?: CustomSelectComponent;
+  readonly monthSelect = viewChild<CustomSelectComponent>('monthSelect');
+  readonly yearSelect = viewChild<CustomSelectComponent>('yearSelect');
 
   @Input() monthOptions: { label: string; value: number }[] = [];
   @Input() yearOptions: { label: string; value: number }[] = [];
@@ -107,10 +99,10 @@ export class CalendarHeaderComponent {
   @Input() navPrevClass?: string;
   @Input() navNextClass?: string;
 
-  @Output() currentYearChange = new EventEmitter<number>();
-  @Output() currentMonthChange = new EventEmitter<number>();
-  @Output() previousMonth = new EventEmitter<void>();
-  @Output() nextMonth = new EventEmitter<void>();
+  readonly currentYearChange = output<number>();
+  readonly currentMonthChange = output<number>();
+  readonly previousMonth = output<void>();
+  readonly nextMonth = output<void>();
 
   onMonthSelect(value: unknown): void {
     this.currentMonthChange.emit(value as number);

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, input, output } from '@angular/core';
 
 @Component({
   selector: 'ngxsmk-datepicker-keyboard-help',
@@ -14,21 +14,16 @@ import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, ViewEn
       (keydown.space)="closeRequested.emit()"
       tabindex="0"
       role="button"
-      [attr.aria-label]="backdropLabel"
+      [attr.aria-label]="backdropLabel()"
     ></div>
-    <div
-      class="ngxsmk-keyboard-help-dialog"
-      role="dialog"
-      aria-modal="true"
-      [attr.aria-label]="title"
-    >
+    <div class="ngxsmk-keyboard-help-dialog" role="dialog" aria-modal="true" [attr.aria-label]="title()">
       <div class="ngxsmk-keyboard-help-header">
-        <h3 class="ngxsmk-keyboard-help-title">{{ title }}</h3>
+        <h3 class="ngxsmk-keyboard-help-title">{{ title() }}</h3>
         <button
           type="button"
           class="ngxsmk-keyboard-help-close"
           (click)="closeRequested.emit()"
-          [attr.aria-label]="closeLabel"
+          [attr.aria-label]="closeLabel()"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -118,8 +113,8 @@ import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, ViewEn
   `,
 })
 export class NgxsmkDatepickerKeyboardHelpComponent {
-  @Input() title = 'Keyboard shortcuts';
-  @Input() closeLabel = 'Close';
-  @Input() backdropLabel = 'Close overlay';
-  @Output() closeRequested = new EventEmitter<void>();
+  readonly title = input('Keyboard shortcuts');
+  readonly closeLabel = input('Close');
+  readonly backdropLabel = input('Close overlay');
+  readonly closeRequested = output<void>();
 }

@@ -2,11 +2,12 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** June 3, 2026 - **Current stable:** v2.3.2
 
 ## Table of Contents
 
-- [v2.2.15 → v2.3.1](#v2215---v231)
+- [v2.3.2 → v2.4.0](#v231---v240)
+- [v2.2.15 → v2.3.2](#v2215---v231)
 - [v2.2.7 → v2.2.11](#v227---v228)
 - [v2.2.6 → v2.2.7](#v226---v227)
 - [v2.2.3 → v2.2.6](#v223---v226)
@@ -59,7 +60,29 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
-## v2.2.15 → v2.3.1
+## v2.3.2 → v2.4.0
+
+### Changes
+
+- **Angular 22 & TypeScript 6 Support**: Upgraded dependency baseline to Angular 22 and TypeScript 6.
+- **Stable Signals Refactor**: Migrated the library components' communication APIs internally from traditional decorators (`@Input`, `@Output`, `@ViewChild`) to stable Signal-based equivalents (`input()`, `model()`, `output()`, `viewChild()`).
+
+### Migration Steps
+
+1. Update the library dependency:
+   ```bash
+   npm install ngxsmk-datepicker@latest
+   ```
+
+2. **Template Binding Compatibility**:
+   No changes are required for standard bindings in HTML templates. Property bindings (e.g., `[mode]="'single'"`) and event bindings (e.g., `(valueChange)="onValueChange($event)"`) continue to work seamlessly.
+
+3. **TypeScript API Changes (For programmatic access)**:
+   If your application code accesses the component instance programmatically (e.g., via `@ViewChild` or `viewChild` in your own components), the properties are now exposed as Angular Signals:
+   - Reading component properties: Use signal call syntax (e.g., `component.mode()` instead of `component.mode`).
+   - Writable values (such as `value`): Use the writable signal API (e.g., `component.value.set(newDate)` or `component.value()`).
+
+## v2.2.15 → v2.3.2
 
 ### Changes
 
@@ -74,15 +97,15 @@ This document provides migration instructions for upgrading between major versio
 No breaking changes. Upgrade with:
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.3.2
 ```
 
 ## npm: skip v2.2.12
 
-The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.3.1`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.3.2`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.3.2
 ```
 
 ## v2.2.7 → v2.2.11
@@ -96,7 +119,7 @@ npm install ngxsmk-datepicker@2.3.1
 No breaking changes.
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.3.2
 ```
 
 ## v2.2.6 → v2.2.7
@@ -111,7 +134,7 @@ npm install ngxsmk-datepicker@2.3.1
 No breaking changes. Use **2.2.11** on npm (the `2.2.7` npm package was incomplete; 2.2.11 matches the intended 2.2.7 release).
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.3.2
 ```
 
 ## v2.2.3 → v2.2.6
