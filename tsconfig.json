@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -25,7 +24,7 @@
     ],
     "paths": {
       "ngxsmk-datepicker": [
-        "projects/ngxsmk-datepicker/src/public-api.ts"
+        "./projects/ngxsmk-datepicker/src/public-api.ts"
       ]
     }
   },

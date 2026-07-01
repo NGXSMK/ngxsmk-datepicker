@@ -61,6 +61,7 @@ class CalendarMonthViewStubComponent {
   @Input() ariaLabel: unknown;
   @Input() getAriaLabel: unknown;
   @Input() isInRange: unknown;
+  @Input() isInComparisonRange: unknown;
   @Input() isPreviewInRange: unknown;
   @Input() isMultipleSelected: unknown;
   @Input() mode: unknown;
@@ -243,7 +244,7 @@ describe('NgxsmkDatepickerComponent', () => {
     });
 
     it('should build presets using rangePresetFactory', () => {
-      component.rangePresetFactory = (today: Date) => [
+      component.rangePresetFactory = (_today: Date) => [
         {
           id: 'test-preset',
           name: 'Test Preset',

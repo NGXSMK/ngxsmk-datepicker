@@ -14,7 +14,7 @@ describe('CustomSelectComponent', () => {
 
     fixture = TestBed.createComponent(CustomSelectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    fixture.autoDetectChanges();
   });
 
   it('should create', () => {
@@ -27,13 +27,13 @@ describe('CustomSelectComponent', () => {
     expect(component.isOpen).toBe(false);
   });
 
-  it('should display selected option label', () => {
-    component.options = [
+  it('should display selected option label', async () => {
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.value = 1;
-    fixture.detectChanges();
+    ]);
+    fixture.componentRef.setInput('value', 1);
+    await fixture.whenStable();
 
     const display = fixture.nativeElement.querySelector('.ngxsmk-select-display span');
     expect(display.textContent.trim()).toBe('Option 1');
@@ -97,18 +97,18 @@ describe('CustomSelectComponent', () => {
     expect(preventDefaultSpy).toHaveBeenCalled();
   });
 
-  it('should select option and emit valueChange', () => {
+  it('should select option and emit valueChange', async () => {
     spyOn(component.valueChange, 'emit');
-    component.options = [
+    component.isOpen = true;
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.isOpen = true;
-    fixture.detectChanges();
+    ]);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     options[1].click();
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.value).toBe(2);
     expect(component.valueChange.emit).toHaveBeenCalledWith(2);
@@ -130,10 +130,10 @@ describe('CustomSelectComponent', () => {
     document.body.removeChild(outsideElement);
   });
 
-  it('should not close dropdown when clicking inside', () => {
-    component.options = [{ label: 'Option 1', value: 1 }];
+  it('should not close dropdown when clicking inside', async () => {
     component.isOpen = true;
-    fixture.detectChanges();
+    fixture.componentRef.setInput('options', [{ label: 'Option 1', value: 1 }]);
+    await fixture.whenStable();
 
     // The document click handler should not close when clicking inside the element
     const panel = fixture.nativeElement.querySelector('.ngxsmk-options-panel');
@@ -143,46 +143,48 @@ describe('CustomSelectComponent', () => {
     const mockEvent = {
       target: panel,
       type: 'click',
-    } as MouseEvent;
+    } as unknown as MouseEvent;
 
     // Call the document click handler directly with our mocked event
     component['onDocumentClick'](mockEvent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // The dropdown should remain open because the click was inside
     expect(component.isOpen).toBe(true);
   });
 
-  it('should mark selected option with selected class', () => {
-    component.options = [
+  it('should mark selected option with selected class', async () => {
+    component.isOpen = true;
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.value = 2;
-    component.isOpen = true;
-    fixture.detectChanges();
+    ]);
+    fixture.componentRef.setInput('value', 2);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     expect(options[1].classList.contains('selected')).toBe(true);
     expect(options[0].classList.contains('selected')).toBe(false);
   });
 
-  it('should set aria-expanded attribute', () => {
+  it('should set aria-expanded attribute', async () => {
     component.isOpen = true;
-    fixture.detectChanges();
+    // Any input change triggers a full CD pass that re-reads the `isOpen` binding.
+    fixture.componentRef.setInput('options', []);
+    await fixture.whenStable();
 
     const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
     expect(container.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('should set aria-selected on options', () => {
-    component.options = [
+  it('should set aria-selected on options', async () => {
+    component.isOpen = true;
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.value = 1;
-    component.isOpen = true;
-    fixture.detectChanges();
+    ]);
+    fixture.componentRef.setInput('value', 1);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     expect(options[0].getAttribute('aria-selected')).toBe('true');
@@ -257,53 +259,53 @@ describe('CustomSelectComponent', () => {
     document.body.removeChild(popover);
   }));
 
-  it('should select option on Enter key', () => {
+  it('should select option on Enter key', async () => {
     spyOn(component.valueChange, 'emit');
-    component.options = [
+    component.isOpen = true;
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.isOpen = true;
-    fixture.detectChanges();
+    ]);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
     options[1].dispatchEvent(enterEvent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.value).toBe(2);
     expect(component.valueChange.emit).toHaveBeenCalledWith(2);
   });
 
-  it('should select option on Space key', () => {
+  it('should select option on Space key', async () => {
     spyOn(component.valueChange, 'emit');
-    component.options = [
+    component.isOpen = true;
+    fixture.componentRef.setInput('options', [
       { label: 'Option 1', value: 1 },
       { label: 'Option 2', value: 2 },
-    ];
-    component.isOpen = true;
-    fixture.detectChanges();
+    ]);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     const spaceEvent = new KeyboardEvent('keydown', { key: ' ', cancelable: true, bubbles: true });
     const preventDefaultSpy = spyOn(spaceEvent, 'preventDefault');
     options[1].dispatchEvent(spaceEvent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(component.value).toBe(2);
     expect(component.valueChange.emit).toHaveBeenCalledWith(2);
     expect(preventDefaultSpy).toHaveBeenCalled();
   });
 
-  it('should stop propagation when selecting option', () => {
-    component.options = [{ label: 'Option 1', value: 1 }];
+  it('should stop propagation when selecting option', async () => {
     component.isOpen = true;
-    fixture.detectChanges();
+    fixture.componentRef.setInput('options', [{ label: 'Option 1', value: 1 }]);
+    await fixture.whenStable();
 
     const options = fixture.nativeElement.querySelectorAll('li');
     const clickEvent = new MouseEvent('click', { bubbles: true });
     options[0].dispatchEvent(clickEvent);
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // Note: stopPropagation is called in template, but we can't easily test it
     // The important thing is that the option is selected

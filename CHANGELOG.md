@@ -2,12 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.4.0] - 2026-07-02
+
+### Added
+
+- **Dual-Range Comparison**: New `[comparisonRange]="[start, end]"` input highlights a secondary,
+  purely-presentational range alongside the primary selection (analytics "this period vs previous"
+  use case). Themeable via the `--datepicker-comparison-range-color` CSS variable; does not affect
+  selection or emitted values.
+
+### Changed
+
+- **Modern reactivity (non-breaking)**: Migrated all `@Output()`s to the `output()` function and an
+  initial batch of read-only `@Input()`s to signal `input()`. Public template bindings
+  (`[x]="…"` / `(event)="…"`) are unchanged.
+- **Signal-backed internal state**: Converted transient state (`isOpeningCalendar`,
+  `naturalLanguagePreview`, `showNaturalLanguagePreview`, `validationErrorMessage`, `typedInputValue`)
+  to signals and made the `displayValue` getter side-effect free, reducing manual `markForCheck()`.
+
+### Fixed
+
+- **TypeScript 6.0 build compatibility**: Removed the now-invalid `baseUrl` and `importsNotUsedAsValues`
+  compiler options that broke the production build and test suite on the TS 6 toolchain.
+- Corrected three internal guards (`autoApplyClose`, `timeRangeMode`, `allowSameDay`) surfaced during
+  the signal migration.
+
+### Removed
+
+- **Dead SCSS architecture** (~7k lines): the unreferenced, stale `datepicker.scss` +
+  `styles/{components,core,abstracts}/` partials, `_legacy-datepicker.scss`, and an orphaned
+  `datepicker.css.map`. The maintained flat `styles/datepicker.css` is unaffected.
 
 ## [2.3.1] - 2026-06-03
 

@@ -31,6 +31,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [class.start-date]="isRangeType() && isSameDay(day, startDate)"
             [class.end-date]="isRangeType() && isSameDay(day, endDate)"
             [class.in-range]="isRangeType() && isInRange(day)"
+            [class.in-comparison-range]="isInComparisonRange(day)"
             [class.preview-range]="isPreviewInRange(day)"
             [class.focused]="day && focusedDate && isSameDay(day, focusedDate)"
             [attr.tabindex]="day && !isDateDisabled(day) ? 0 : -1"
@@ -67,6 +68,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
                       inRange: isRangeType() && isInRange(day),
+                      inComparisonRange: isInComparisonRange(day),
                       startDate: isRangeType() && isSameDay(day, startDate),
                       endDate: isRangeType() && isSameDay(day, endDate),
                     }
@@ -87,6 +89,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       today: isSameDay(day, today),
                       holiday: isHoliday(day),
                       inRange: isRangeType() && isInRange(day),
+                      inComparisonRange: isInComparisonRange(day),
                       startDate: isRangeType() && isSameDay(day, startDate),
                       endDate: isRangeType() && isSameDay(day, endDate),
                     }
@@ -137,6 +140,7 @@ export class CalendarMonthViewComponent {
   @Input() isHoliday: (date: Date | null) => boolean = () => false;
   @Input() isMultipleSelected: (date: Date | null) => boolean = () => false;
   @Input() isInRange: (date: Date | null) => boolean = () => false;
+  @Input() isInComparisonRange: (date: Date | null) => boolean = () => false;
   @Input() isPreviewInRange: (date: Date | null) => boolean = () => false;
   @Input() getAriaLabel: (date: Date | null) => string = () => '';
   @Input() getDayCellCustomClasses: (

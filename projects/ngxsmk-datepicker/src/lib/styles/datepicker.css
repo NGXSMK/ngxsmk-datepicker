@@ -1827,6 +1827,25 @@ ngxsmk-datepicker.ngxsmk-inline {
   z-index: 1;
 }
 
+/* Secondary comparison range (see the `comparisonRange` input). Rendered as a distinct
+   underline bar beneath the cell so it stays legible alongside the primary selection. */
+.ngxsmk-day-cell.in-comparison-range {
+  position: relative;
+}
+
+.ngxsmk-day-cell.in-comparison-range::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  left: 2px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--datepicker-comparison-range-color, #f59e0b);
+  pointer-events: none;
+  z-index: 3;
+}
+
 .ngxsmk-day-cell.start-date.in-range,
 .ngxsmk-day-cell.end-date.in-range,
 .ngxsmk-day-cell.start-date.preview-range,
@@ -7957,5 +7976,3 @@ ngxsmk-custom-select[data-open=true] {
     min-width: 0;
   }
 }
-
-/*# sourceMappingURL=datepicker.css.map */

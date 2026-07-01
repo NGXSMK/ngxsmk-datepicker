@@ -153,6 +153,7 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                         [isHoliday]="boundIsHoliday"
                         [isMultipleSelected]="boundIsMultipleSelected"
                         [isInRange]="boundIsInRange"
+                        [isInComparisonRange]="boundIsInComparisonRange"
                         [isPreviewInRange]="boundIsPreviewInRange"
                         [getAriaLabel]="boundGetAriaLabel"
                         [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
@@ -513,6 +514,7 @@ export class NgxsmkDatepickerContentComponent {
   @Input() boundIsHoliday!: (date: Date | null) => boolean;
   @Input() boundIsMultipleSelected!: (date: Date | null) => boolean;
   @Input() boundIsInRange!: (date: Date | null) => boolean;
+  @Input() boundIsInComparisonRange: (date: Date | null) => boolean = () => false;
   @Input() boundIsPreviewInRange!: (date: Date | null) => boolean;
   @Input() boundGetAriaLabel!: (date: Date | null) => string;
   @Input() boundGetDayCellCustomClasses!: (

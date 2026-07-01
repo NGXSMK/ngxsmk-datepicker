@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.3.1` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v2.4.0` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.3.1** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.4.0** on npm.
 
 ---
 
@@ -78,6 +78,26 @@
 - 🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.
 - 🚀 **Zoneless Ready**: Optimized for the future of Angular—works perfectly without zone.js.
 - ♿ **Full Accessibility**: WAI-ARIA compliant with extensive keyboard navigation support.
+
+## **⚖️ Why ngxsmk-datepicker? (Comparison)**
+
+| Capability | **ngxsmk-datepicker** | @angular/material | ngx-bootstrap | ng-pick-datetime |
+| --- | :---: | :---: | :---: | :---: |
+| Standalone / no NgModule | ✅ | ✅ | ⚠️ | ❌ |
+| Signals & Zoneless-ready | ✅ | ⚠️ | ❌ | ❌ |
+| SSR / Angular Universal | ✅ | ✅ | ⚠️ | ❌ |
+| Date **range** picker | ✅ | ✅ | ✅ | ✅ |
+| Multiple / week / month / quarter / year modes | ✅ | ❌ | ❌ | ❌ |
+| Time & timezone-aware selection | ✅ | ❌ | ⚠️ | ✅ |
+| Natural-language input ("next friday") | ✅ | ❌ | ❌ | ❌ |
+| Dual-range **comparison** highlight | ✅ | ❌ | ❌ | ❌ |
+| Built-in i18n (8 languages) + RTL | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| React / Vue / Web-Component wrappers | ✅ | ❌ | ❌ | ❌ |
+| Zero peer-dep bloat (only Luxon) | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| Actively maintained (Angular 17–21+) | ✅ | ✅ | ⚠️ | ❌ |
+
+<sub>✅ first-class · ⚠️ partial / extra setup · ❌ not available. Comparison reflects each library's
+publicly documented features at the time of writing; corrections welcome via PR.</sub>
 
 ## **📋 Compatibility**
 
@@ -857,7 +877,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.3.1** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
+### **v2.4.0** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
 
 ### **Earlier Versions**
 
