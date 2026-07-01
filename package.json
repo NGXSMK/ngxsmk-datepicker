@@ -213,7 +213,7 @@
     "@storybook/addon-docs": "^8.6.18",
     "@storybook/addon-essentials": "^8.6.18",
     "@storybook/addon-interactions": "^8.6.18",
-    "@storybook/angular": "^8.6.18",
+    "@storybook/angular": "^10.4.6",
     "@types/jasmine": "^5.1.12",
     "@types/luxon": "^3.3.7",
     "angular-eslint": "^21.3.1",
