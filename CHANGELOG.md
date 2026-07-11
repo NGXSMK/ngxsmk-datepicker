@@ -2,12 +2,84 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- **`ng add ngxsmk-datepicker` schematic**: installs the package, adds the missing `luxon` peer
+  dependency, and prints a getting-started snippet. Shipped in the npm package under `schematics/`
+  and self-verified on every publish.
+- **ISO week numbers**: `[showWeekNumbers]` renders an ISO 8601 week-number column; header label is
+  customizable via `[weekNumberLabel]` (e.g. `"KW"`). New exported util `getISOWeekNumber`.
+- **Guided input masking**: `[inputMask]` (requires `allowTyping`) slots typed digits into
+  `DD`/`MM`/`YY`/`YYYY`/`HH`/`mm`/`ss` tokens and auto-inserts separators. `true` uses
+  `displayFormat` (falling back to `MM/DD/YYYY`); a string sets an explicit pattern.
+- **Server-driven disabled dates**: `[asyncDateFilter]` is called with the visible month range on
+  every navigation and disables the resolved dates. Stale responses are discarded; new
+  `(asyncDateFilterLoading)` and `(asyncDateFilterError)` outputs report request state.
+- **Secondary calendar systems**: `[secondaryCalendar]` annotates each day cell with its date in a
+  second calendar (`islamic`, `persian`, `hebrew`, `buddhist`, `japanese`) rendered via `Intl`;
+  the grid itself remains Gregorian. New exported utils `getSecondaryDayLabel` and
+  `formatDateInCalendarSystem`.
+- **Per-day metadata decorations**: `[dayMetadata]` provider adds a label under the day number
+  (e.g. a price), an indicator dot, extra CSS classes, and a tooltip per day — booking-style
+  calendars without custom templates. Also available as `meta` in day-template contexts.
+  New exported types `DayMetadata` / `DayMetadataProvider`.
+- **Header/footer action slots**: `[calendarHeaderTemplate]` renders custom content at the top of
+  the popover; `[calendarFooterTemplate]` replaces the default Clear/Close footer (and, unlike the
+  default, also renders in inline mode). Both receive `{ clear(), close() }` actions in context.
+
+### Fixed
+
+- **Memory leak — multi-calendar lazy-loading observer**: the `IntersectionObserver` was stored in
+  the timeout set and "cleaned up" with `clearTimeout`, so it was never disconnected and retained
+  the whole component. It is now tracked separately and disconnected on destroy.
+- **Memory leak — destroy with open popover**: destroying the component while the calendar was open
+  (e.g. route navigation) leaked the window `scroll`/`resize` listeners and left the body-appended
+  portal view attached to `ApplicationRef`. `ngOnDestroy` now tears both down.
+- **Input mask zero-padding**: with `displayFormat` set, typing a partial token was zero-padded
+  (typing `1` became `10`), corrupting subsequent input. Partial tokens are now left as typed, and
+  the caret stays at the end when the mask inserts separators.
+- `ngOnDestroy` "state clearing" used no-op `??=` assignments; date references are now actually
+  released.
+- The workspace root `package.json` is now `private`, preventing an accidental `npm publish` of the
+  workspace itself (releases publish from `dist/ngxsmk-datepicker` as before).
+
+## [2.4.0] - 2026-07-02
+
+### Added
+
+- **Dual-Range Comparison**: New `[comparisonRange]="[start, end]"` input highlights a secondary,
+  purely-presentational range alongside the primary selection (analytics "this period vs previous"
+  use case). Themeable via the `--datepicker-comparison-range-color` CSS variable; does not affect
+  selection or emitted values.
+
+### Changed
+
+- **Modern reactivity (non-breaking)**: Migrated all `@Output()`s to the `output()` function and an
+  initial batch of read-only `@Input()`s to signal `input()`. Public template bindings
+  (`[x]="…"` / `(event)="…"`) are unchanged.
+- **Signal-backed internal state**: Converted transient state (`isOpeningCalendar`,
+  `naturalLanguagePreview`, `showNaturalLanguagePreview`, `validationErrorMessage`, `typedInputValue`)
+  to signals and made the `displayValue` getter side-effect free, reducing manual `markForCheck()`.
+
+### Fixed
+
+- **TypeScript 6.0 build compatibility**: Removed the now-invalid `baseUrl` and `importsNotUsedAsValues`
+  compiler options that broke the production build and test suite on the TS 6 toolchain.
+- Corrected three internal guards (`autoApplyClose`, `timeRangeMode`, `allowSameDay`) surfaced during
+  the signal migration.
+
+### Removed
+
+- **Dead SCSS architecture** (~7k lines): the unreferenced, stale `datepicker.scss` +
+  `styles/{components,core,abstracts}/` partials, `_legacy-datepicker.scss`, and an orphaned
+  `datepicker.css.map`. The maintained flat `styles/datepicker.css` is unaffected.
 
 ## [2.3.1] - 2026-06-03
 
@@ -57,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **npm package**: The `2.2.12` tarball on the registry omitted `fesm2022/` and `types/` (only docs, styles, and package metadata). **Use `ngxsmk-datepicker@2.2.11` until `2.3.0` or later** with a full ng-packagr build ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+- **npm package**: The `2.2.12` tarball on the registry omitted `fesm2022/` and `types/` (only docs, styles, and package metadata). **Use `ngxsmk-datepicker@2.2.11` until `2.4.0` or later** with a full ng-packagr build ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ## [2.2.11] - 2026-03-24
 
@@ -939,7 +1011,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No breaking changes from v1.9.11
 - SEO improvements are automatic and require no code changes
 - See [MIGRATION.md](MIGRATION.md) for detailed migration guide
-- See [docs/SEO.md](projects/ngxsmk-datepicker/docs/SEO.md) for SEO best practices
+- See docs/SEO.md for SEO best practices *(document removed in July 2026 cleanup)*
 
 ## [1.9.11] - 2025-11-17
 

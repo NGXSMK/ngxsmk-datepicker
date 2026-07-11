@@ -2,10 +2,11 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
 
 ## Table of Contents
 
+- [v2.4.0 → next release](#v240---next-release)
 - [v2.2.15 → v2.3.1](#v2215---v231)
 - [v2.2.7 → v2.2.11](#v227---v228)
 - [v2.2.6 → v2.2.7](#v226---v227)
@@ -59,6 +60,29 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
+## v2.4.0 → next release
+
+### Changes
+
+All new functionality is opt-in; existing markup keeps working unchanged.
+
+- **`ng add ngxsmk-datepicker`**: new-install schematic (existing projects don't need it).
+- **ISO Week Numbers**: `[showWeekNumbers]` + `[weekNumberLabel]`.
+- **Input Masking**: `[inputMask]` (with `allowTyping`). Note: if you already used `displayFormat` with typing enabled, masking existed but zero-padded partial tokens (typing `1` showed `10`); that bug is fixed and partial input now stays as typed.
+- **Async Disabled Dates**: `[asyncDateFilter]`, with `(asyncDateFilterLoading)` / `(asyncDateFilterError)`.
+- **Secondary Calendars**: `[secondaryCalendar]` (`islamic` | `persian` | `hebrew` | `buddhist` | `japanese`).
+- **Day Metadata**: `[dayMetadata]` provider for per-day labels, indicator dots, classes, tooltips. Custom day templates additionally receive a `meta` context field.
+- **Action Slots**: `[calendarHeaderTemplate]` and `[calendarFooterTemplate]`. A custom footer **replaces** the default Clear/Close buttons and also renders in inline mode.
+- **Memory-leak fixes**: components destroyed while the popover was open (or using multi-calendar lazy loading) no longer leak window listeners, portal views, or observers. No action needed.
+
+### Migration Steps
+
+No breaking changes. Upgrade with:
+
+```bash
+npm install ngxsmk-datepicker@latest
+```
+
 ## v2.2.15 → v2.3.1
 
 ### Changes
@@ -79,10 +103,10 @@ npm install ngxsmk-datepicker@2.3.1
 
 ## npm: skip v2.2.12
 
-The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.3.1`** (or newer) once published ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
+The **`2.2.12`** package on the registry is missing **`fesm2022/`** and **`types/`**. Stay on **`2.2.11`** or upgrade to **`2.4.0`** (or newer) ([#230](https://github.com/NGXSMK/ngxsmk-datepicker/issues/230)).
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.4.0
 ```
 
 ## v2.2.7 → v2.2.11
@@ -96,7 +120,7 @@ npm install ngxsmk-datepicker@2.3.1
 No breaking changes.
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.4.0
 ```
 
 ## v2.2.6 → v2.2.7
@@ -111,7 +135,7 @@ npm install ngxsmk-datepicker@2.3.1
 No breaking changes. Use **2.2.11** on npm (the `2.2.7` npm package was incomplete; 2.2.11 matches the intended 2.2.7 release).
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+npm install ngxsmk-datepicker@2.4.0
 ```
 
 ## v2.2.3 → v2.2.6

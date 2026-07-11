@@ -17,7 +17,7 @@ describe('NgxsmkDatepickerComponent — allowSameDay range (issue #231)', () => 
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
     component = fixture.componentInstance;
     component.mode = 'range';
-    component.allowSameDay = true;
+    fixture.componentRef.setInput('allowSameDay', true);
     component.valueChange.subscribe((v) => emitted.push(v));
     fixture.detectChanges();
   });
@@ -47,7 +47,7 @@ describe('NgxsmkDatepickerComponent — allowSameDay range (issue #231)', () => 
   });
 
   it('should not complete same-day range when allowSameDay is false', () => {
-    component.allowSameDay = false;
+    fixture.componentRef.setInput('allowSameDay', false);
     const day = new Date(2026, 2, 10);
     component.onDateClick(day);
     fixture.detectChanges();

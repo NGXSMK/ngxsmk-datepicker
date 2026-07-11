@@ -1,6 +1,6 @@
 # Refactor plan: thin `NgxsmkDatepickerComponent`
 
-**Last updated:** May 2, 2026
+**Last updated:** July 11, 2026
 
 This plan operationalizes [IMPROVEMENT_REPORT.md](../../IMPROVEMENT_REPORT.md) items **1.1**–**1.6** without blocking feature work. Phases are incremental and test-backed.
 

@@ -1,6 +1,6 @@
 # Feature scoping: Enhanced Localization & Enhanced Time Selection
 
-**Last updated:** May 2, 2026 · Aligns with [ROADMAP.md](../../../ROADMAP.md) (Current Focus).
+**Last updated:** July 11, 2026 · Aligns with [ROADMAP.md](../../../ROADMAP.md) (Current Focus).
 
 This document defines **concrete inputs and behaviors** for roadmap items *Enhanced Localization* and *Enhanced Time Selection* so implementations can proceed without API ambiguity. Until shipped, treat these as **design proposals**; minor renames may occur in minor releases with changelog notes.
 
@@ -20,8 +20,8 @@ This document defines **concrete inputs and behaviors** for roadmap items *Enhan
 | Input | Type | Purpose |
 |-------|------|---------|
 | `numberingSystem` | `'latn' \| 'arab' \| 'arabext' \| ... \| undefined` | Pass-through to `Intl` / formatting where supported; `undefined` = locale default. |
-| `calendarPreference` | `'gregory' \| 'iso8601' \| undefined` | Opt-in calendar system for display (browser capability dependent). |
-| `currencyDisplayForAddons` | `'symbol' \| 'narrowSymbol' \| 'code'` | If future price/booking templates show currency beside dates. |
+| ~~`calendarPreference`~~ | — | **Superseded (2026-07):** shipped as `secondaryCalendar` (Intl-rendered day annotations for islamic/persian/hebrew/buddhist/japanese; grid stays Gregorian). Full non-Gregorian grids remain a v3+ candidate. |
+| ~~`currencyDisplayForAddons`~~ | — | **Superseded (2026-07):** shipped as `dayMetadata` (per-day `label` covers prices; callers format currency themselves). |
 
 ### Non-input work
 

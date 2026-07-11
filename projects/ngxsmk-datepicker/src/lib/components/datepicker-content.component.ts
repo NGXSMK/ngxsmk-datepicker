@@ -9,7 +9,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { NgClass, DatePipe } from '@angular/common';
+import { NgClass, NgTemplateOutlet, DatePipe } from '@angular/common';
 import { CalendarHeaderComponent } from './calendar-header.component';
 import { CalendarMonthViewComponent } from './calendar-month-view.component';
 import { CalendarYearViewComponent } from './calendar-year-view.component';
@@ -18,12 +18,15 @@ import { NgxsmkDatepickerPresetsComponent } from './datepicker-presets.component
 import { CustomSelectComponent } from './custom-select.component';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
 import { DatepickerTranslations } from '../interfaces/datepicker-translations.interface';
+import type { CalendarSystem } from '../services/locale-registry.service';
+import type { DayMetadata } from '../interfaces/day-metadata.interface';
 
 @Component({
   selector: 'ngxsmk-datepicker-content',
   standalone: true,
   imports: [
     NgClass,
+    NgTemplateOutlet,
     DatePipe,
     CalendarHeaderComponent,
     CalendarMonthViewComponent,
@@ -76,6 +79,11 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
             <div class="ngxsmk-calendar-loading" role="status" aria-live="polite" [attr.aria-label]="loadingMessage">
               <div class="ngxsmk-calendar-loading-spinner"></div>
               <span class="ngxsmk-calendar-loading-text">{{ loadingMessage }}</span>
+            </div>
+          }
+          @if (calendarHeaderTemplate) {
+            <div class="ngxsmk-custom-header-slot">
+              <ng-container *ngTemplateOutlet="calendarHeaderTemplate; context: slotContext"></ng-container>
             </div>
           }
           @if (showRanges && rangesArray.length > 0 && mode === 'range' && !timeOnly) {
@@ -137,6 +145,10 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                       <ngxsmk-calendar-month-view
                         [days]="calendarMonth.days"
                         [weekDays]="weekDays"
+                        [showWeekNumbers]="showWeekNumbers"
+                        [weekNumberLabel]="weekNumberLabel"
+                        [secondaryCalendar]="secondaryCalendar"
+                        [secondaryCalendarLocale]="secondaryCalendarLocale"
                         [classes]="classes"
                         [mode]="mode"
                         [selectedDate]="selectedDate"
@@ -149,10 +161,12 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
                         [ariaLabel]="getCalendarAriaLabelForMonth(calendarMonth.month, calendarMonth.year)"
                         [dateTemplate]="dateTemplate"
                         [isDateDisabled]="boundIsDateDisabled"
+                        [getDayMetadata]="boundGetDayMetadata"
                         [isSameDay]="boundIsSameDay"
                         [isHoliday]="boundIsHoliday"
                         [isMultipleSelected]="boundIsMultipleSelected"
                         [isInRange]="boundIsInRange"
+                        [isInComparisonRange]="boundIsInComparisonRange"
                         [isPreviewInRange]="boundIsPreviewInRange"
                         [getAriaLabel]="boundGetAriaLabel"
                         [getDayCellCustomClasses]="boundGetDayCellCustomClasses"
@@ -396,7 +410,11 @@ import { DatepickerTranslations } from '../interfaces/datepicker-translations.in
               </div>
             }
 
-            @if (!isInlineMode) {
+            @if (calendarFooterTemplate) {
+              <div class="ngxsmk-footer ngxsmk-custom-footer-slot" [ngClass]="classes?.footer">
+                <ng-container *ngTemplateOutlet="calendarFooterTemplate; context: slotContext"></ng-container>
+              </div>
+            } @else if (!isInlineMode) {
               <div class="ngxsmk-footer" [ngClass]="classes?.footer">
                 <button
                   type="button"
@@ -453,6 +471,10 @@ export class NgxsmkDatepickerContentComponent {
   @Input() syncScrollEnabled: boolean = false;
   @Input() calendarMonths: { month: number; year: number; days: (Date | null)[] }[] = [];
   @Input() weekDays: string[] = [];
+  @Input() showWeekNumbers: boolean = false;
+  @Input() weekNumberLabel: string = 'Wk';
+  @Input() secondaryCalendar: CalendarSystem | null = null;
+  @Input() secondaryCalendarLocale: string = 'en-US';
   @Input() selectedDate: Date | null = null;
   @Input() startDate: Date | null = null;
   @Input() endDate: Date | null = null;
@@ -509,10 +531,25 @@ export class NgxsmkDatepickerContentComponent {
 
   // Bound functions
   @Input() boundIsDateDisabled!: (date: Date | null) => boolean;
+  @Input() boundGetDayMetadata: (date: Date | null) => DayMetadata | null = () => null;
+  @Input() calendarHeaderTemplate: TemplateRef<unknown> | null = null;
+  @Input() calendarFooterTemplate: TemplateRef<unknown> | null = null;
+
+  /**
+   * Stable context handed to the header/footer slot templates.
+   * `$implicit` exposes the popover actions (`clear`, `close`).
+   */
+  readonly slotContext = {
+    $implicit: {
+      clear: (): void => this.clearValue.emit(new MouseEvent('click')),
+      close: (): void => this.closeCalendar.emit(),
+    },
+  };
   @Input() boundIsSameDay!: (date1: Date | null, date2: Date | null) => boolean;
   @Input() boundIsHoliday!: (date: Date | null) => boolean;
   @Input() boundIsMultipleSelected!: (date: Date | null) => boolean;
   @Input() boundIsInRange!: (date: Date | null) => boolean;
+  @Input() boundIsInComparisonRange: (date: Date | null) => boolean = () => false;
   @Input() boundIsPreviewInRange!: (date: Date | null) => boolean;
   @Input() boundGetAriaLabel!: (date: Date | null) => string;
   @Input() boundGetDayCellCustomClasses!: (

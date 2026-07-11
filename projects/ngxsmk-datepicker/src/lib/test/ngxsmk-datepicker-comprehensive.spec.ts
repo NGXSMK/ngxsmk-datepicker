@@ -273,20 +273,20 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
         popover: 'custom-popover',
         dayCell: 'custom-day-cell',
       };
-      component.classes = customClasses;
+      fixture.componentRef.setInput('classes', customClasses);
       fixture.detectChanges();
 
-      expect(component.classes).toEqual(customClasses);
+      expect(component.classes()).toEqual(customClasses);
     });
 
     it('should handle partial classes object', () => {
       const partialClasses = {
         inputGroup: 'custom-input-group',
       };
-      component.classes = partialClasses;
+      fixture.componentRef.setInput('classes', partialClasses);
       fixture.detectChanges();
 
-      expect(component.classes?.inputGroup).toBe('custom-input-group');
+      expect(component.classes()?.inputGroup).toBe('custom-input-group');
     });
   });
 

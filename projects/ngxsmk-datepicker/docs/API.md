@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 2.3.1+ | **Last updated**: June 3, 2026
+**Version**: 2.4.0+ (includes unreleased `main` additions) | **Last updated**: July 11, 2026
 
 ## Stable vs experimental
 
@@ -106,6 +106,14 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `rangePresetFactory` | `(today: Date) => DatePreset[]` | `null` | Stable | Callback function supplying dynamic range presets | `[rangePresetFactory]="myPresetFactory"` |
 | `showTimezoneSelector` | `boolean` | `false` | Stable | Enables searchable timezone selection dropdown UI | `[showTimezoneSelector]="true"` |
 | `enableNaturalLanguage` | `boolean` | `false` | Stable | Enables relative natural language input parsing (e.g. "today", "tomorrow") | `[enableNaturalLanguage]="true"` |
+| `showWeekNumbers` | `boolean` | `false` | Stable | Shows an ISO 8601 week-number column on the left of the day grid | `[showWeekNumbers]="true"` |
+| `weekNumberLabel` | `string` | `'Wk'` | Stable | Header label for the week-number column | `weekNumberLabel="KW"` |
+| `inputMask` | `boolean \| string` | `false` | Stable | Guided input masking while typing (requires `allowTyping`); `true` uses `displayFormat`/MM/DD/YYYY, a string sets the pattern | `inputMask="DD.MM.YYYY"` |
+| `asyncDateFilter` | `(start: Date, end: Date) => Promise<DateInput[]>` | `null` | Stable | Server-driven disabled dates for the visible range; stale responses discarded | `[asyncDateFilter]="loadBlocked"` |
+| `secondaryCalendar` | `CalendarSystem` | `null` | Stable | Annotates day cells with a second calendar system (islamic, persian, hebrew, buddhist, japanese) via Intl | `secondaryCalendar="persian"` |
+| `dayMetadata` | `(date: Date) => DayMetadata` | `null` | Stable | Per-day label/indicator dot/classes/tooltip without custom templates | `[dayMetadata]="priceMeta"` |
+| `calendarHeaderTemplate` | `TemplateRef` | `null` | Stable | Custom content at the top of the popover/inline calendar; context `{ clear(), close() }` | `[calendarHeaderTemplate]="hdr"` |
+| `calendarFooterTemplate` | `TemplateRef` | `null` | Stable | Replaces the default Clear/Close footer; also renders in inline mode | `[calendarFooterTemplate]="ftr"` |
 
 ##### Outputs
 
@@ -118,6 +126,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `invalidRange` | `EventEmitter<{ start: Date; end: Date; disabledDatesInside: Date[] }>` | Stable | Emitted when selected date range contains disabled dates | `(invalidRange)="onInvalidRange($event)"` |
 | `naturalLanguageResolved` | `EventEmitter<Date \| { start: Date; end: Date }>` | Stable | Emitted when natural language input is parsed successfully | `(naturalLanguageResolved)="onResolved($event)"` |
 | `timezoneChange` | `EventEmitter<string>` | Stable | Emitted when timezone is changed via selector UI | `(timezoneChange)="onTimezoneChange($event)"` |
+| `asyncDateFilterLoading` | `OutputEmitterRef<boolean>` | Stable | True while an `asyncDateFilter` request is in flight, false when it settles | `(asyncDateFilterLoading)="loading = $event"` |
+| `asyncDateFilterError` | `OutputEmitterRef<unknown>` | Stable | Emitted when `asyncDateFilter` rejects; previous disabled set is kept | `(asyncDateFilterError)="onErr($event)"` |
 
 #### Methods
 

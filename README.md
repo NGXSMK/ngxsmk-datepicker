@@ -28,15 +28,15 @@
 
 ---
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.3.1` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v2.4.0` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.3.1** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.4.0** on npm.
 
 ---
 
@@ -79,6 +79,11 @@
 
 - 📅 **Google Calendar Sync**: Built-in support for seamlessly syncing and displaying events natively from Google Calendar.
 - 🌐 **8-Language i18n**: Full localization for `en`, `de`, `es`, `sv`, `ko`, `zh`, `ja`, and `fr`.
+- 🔢 **ISO Week Numbers**: Optional week-number column via `[showWeekNumbers]`.
+- ⌨️ **Guided Input Masking**: `[inputMask]` auto-inserts separators as users type (e.g. `12` → `12/`).
+- 🌍 **Secondary Calendars**: Annotate day cells with Hijri, Jalali, Hebrew, Buddhist, or Japanese dates via `[secondaryCalendar]`.
+- 🏨 **Availability Calendars**: Per-day prices, indicator dots, and classes via `[dayMetadata]`; server-driven blocked dates via `[asyncDateFilter]`.
+- 🎛️ **Custom Action Bars**: `[calendarHeaderTemplate]` / `[calendarFooterTemplate]` slots with `clear()`/`close()` actions.
 - 🛠️ **Plugin Architecture**: Extend functionality via hooks for rendering, validation, and shortcuts.
 - 🧪 **Signal Forms Native**: Direct integration with Angular 21's new Signal Forms API.
 - 🚀 **Zoneless Ready**: Optimized for the future of Angular—works perfectly without zone.js.
@@ -166,7 +171,13 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ## **📦 Installation**
 
 ```bash
-npm install ngxsmk-datepicker@2.3.1
+ng add ngxsmk-datepicker
+```
+
+The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
+
+```bash
+npm install ngxsmk-datepicker@2.4.0
 ```
 
 ### Alternative installation
@@ -175,12 +186,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.3.1` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.3.1` |
-| **Bun** | `bun add ngxsmk-datepicker@2.3.1` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.3.1` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@2.4.0` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@2.4.0` |
+| **Bun** | `bun add ngxsmk-datepicker@2.4.0` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.4.0` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.3.1/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.3.1/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.4.0/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.4.0/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -562,6 +573,14 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | rangePresetFactory | (today: Date) => DatePreset[] | null | Callback function supplying dynamic rolling range presets. |
 | showTimezoneSelector | boolean | false | Enables searchable IANA timezone selection dropdown UI. |
 | enableNaturalLanguage | boolean | false | Enables manual relative keyboard typing input (e.g. "today", "in 3 days"). |
+| showWeekNumbers    | boolean | false | Shows an ISO 8601 week-number column on the left of the day grid. |
+| weekNumberLabel    | string | 'Wk' | Header label for the week-number column (e.g. "KW", "S"). |
+| inputMask          | boolean \| string | false | Guided input masking while typing: `true` uses `displayFormat` (or MM/DD/YYYY); a string (e.g. `'DD.MM.YYYY'`) sets an explicit pattern. Requires `allowTyping`. |
+| asyncDateFilter    | (start: Date, end: Date) => Promise<DateInput[]> | null | Server-driven disabled dates: called with the visible range on every navigation; resolved dates are disabled. Stale responses are discarded. |
+| secondaryCalendar  | 'islamic' \| 'persian' \| 'hebrew' \| 'buddhist' \| 'japanese' | null | Annotates each day cell with its date in a second calendar system (rendered via Intl; the grid stays Gregorian). |
+| dayMetadata        | (date: Date) => DayMetadata | null | Per-day decorations without templates: label under the day number (e.g. a price), indicator dot color, extra CSS classes, tooltip. |
+| calendarHeaderTemplate | TemplateRef | null | Custom content at the top of the popover/inline calendar. Context: `let-actions` → `{ clear(), close() }`. |
+| calendarFooterTemplate | TemplateRef | null | Replaces the default Clear/Close footer with custom actions. Context: `let-actions` → `{ clear(), close() }`. |
 
 ### **Outputs**
 
@@ -573,6 +592,8 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | invalidRange | { start: Date; end: Date; disabledDatesInside: Date[] } | Emitted when selected date range contains disabled dates. |
 | naturalLanguageResolved | Date \| { start: Date; end: Date } | Emitted when user types relative natural language date input. |
 | timezoneChange | string | Emitted when timezone selection is changed. |
+| asyncDateFilterLoading | boolean | Emits true while an `asyncDateFilter` request is in flight, false when it settles. |
+| asyncDateFilterError | unknown | Emitted when `asyncDateFilter` rejects; the previous disabled set is kept. |
 
 ## **🎨 Theming**
 
@@ -638,7 +659,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.x now features **full localization synchronization** for:
+ngxsmk-datepicker v2.4.0+ now features **full localization synchronization** for:
 
 - �� English (`en`)
 - �� German (`de`)
@@ -731,7 +752,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.2.6:**
+### **Critical Updates (included since v2.2.6):**
 
 - ✅ **Timezone Support**: Added full support for IANA timezones in "Today" calculation.
 - ✅ **Date Validation**: Fixed "Today" unselectable bug by normalizing `minDate` boundary checks.
@@ -898,7 +919,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v2.3.1** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v2.3.1**.
+**Recent:** Use **v2.4.0** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v2.4.0**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "node16",
+    "moduleResolution": "node16",
+    "target": "es2020",
+    "lib": ["es2020"],
+    "outDir": "../../../dist/ngxsmk-datepicker/schematics",
+    "rootDir": ".",
+    "declaration": false,
+    "sourceMap": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["ng-add/index.ts"]
+}

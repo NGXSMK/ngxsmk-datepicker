@@ -1,8 +1,14 @@
 # Comprehensive Improvement Report
 
-**Last updated:** June 3, 2026 - **Current stable:** v2.3.1
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
 
 This document is the **maintained index** for architectural and quality initiatives referenced from [ROADMAP.md](ROADMAP.md). Each section maps to anchor links used across the repository. Effort levels: **S** small, **M** medium, **L** large.
+
+> **Resolved 2026-07-11 (unreleased):** lifecycle memory leaks — destroying the component with the
+> popover open leaked window `scroll`/`resize` listeners and the body-appended portal view; the
+> multi-calendar lazy-loading `IntersectionObserver` was tracked as a timeout and never
+> disconnected; ngOnDestroy "state clearing" used no-op `??=`. All fixed in `ngOnDestroy`. The
+> workspace root `package.json` is now `private`. See [CHANGELOG.md](CHANGELOG.md#unreleased).
 
 ---
 
