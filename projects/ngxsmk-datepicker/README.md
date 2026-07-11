@@ -618,7 +618,7 @@ The `locale` input controls all internationalization. It automatically formats m
 
 ### **Global Language Support**
 
-ngxsmk-datepicker v2.2.x now features **full localization synchronization** for:
+ngxsmk-datepicker v2.4.0+ now features **full localization synchronization** for:
 
 - 🇺🇸 English (`en`)
 - 🇩🇪 German (`de`)
@@ -711,7 +711,7 @@ This library has been optimized for maximum performance:
 
 ## **🐛 Bug Fixes & Improvements**
 
-### **Critical Updates in v2.2.6:**
+### **Critical Updates (included since v2.2.6):**
 
 - ✅ **Timezone Support**: Added full support for IANA timezones in "Today" calculation.
 - ✅ **Date Validation**: Fixed "Today" unselectable bug by normalizing `minDate` boundary checks.

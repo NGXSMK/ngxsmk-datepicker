@@ -1,12 +1,20 @@
 # Installation options for ngxsmk-datepicker
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
 
 This document lists all supported ways to install `ngxsmk-datepicker` in your Angular project. The package is published to the npm registry and can also be installed via other package managers, from Git, from a local path, or via CDN (ESM).
 
+## Angular CLI (recommended)
+
+```bash
+ng add ngxsmk-datepicker
+```
+
+The `ng add` schematic installs the package, adds the `luxon` peer dependency to your `package.json` if it is missing, and prints a getting-started snippet. No `angular.json` changes are made — component styles ship bundled.
+
 ## Package managers (npm registry)
 
-All of these resolve the package from the npm registry. Use the same version (e.g. `2.2.8`) or `@latest`.
+All of these resolve the package from the npm registry. Use the same version (e.g. `2.4.0`) or `@latest`.
 
 | Method | Command |
 |--------|--------|
@@ -26,7 +34,7 @@ yarn add github:NGXSMK/ngxsmk-datepicker#v2.4.0
 pnpm add github:NGXSMK/ngxsmk-datepicker#v2.4.0
 ```
 
-**Caveat:** This requires that the ref (e.g. `v2.2.8`) exists and that the built output is available (e.g. the tag includes a built `dist` or you have a postinstall that builds). If the repo does not ship built artifacts for that ref, clone the repo, run `npx ng build ngxsmk-datepicker` in the repo root, then use the [Local path](#local-path) method pointing at the built output.
+**Caveat:** This requires that the ref (e.g. `v2.4.0`) exists and that the built output is available (e.g. the tag includes a built `dist` or you have a postinstall that builds). If the repo does not ship built artifacts for that ref, clone the repo, run `npx ng build ngxsmk-datepicker` in the repo root, then use the [Local path](#local-path) method pointing at the built output.
 
 ## Local path
 

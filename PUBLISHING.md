@@ -2,7 +2,7 @@
 
 This document outlines the process for publishing new versions of `ngxsmk-datepicker` to npm.
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
 
 ## Prerequisites
 
@@ -28,7 +28,7 @@ This document outlines the process for publishing new versions of `ngxsmk-datepi
 If you need to publish manually:
 
 ```bash
-# Build the library
+# Build the library (also compiles + smoke-tests the ng-add schematics into dist/ngxsmk-datepicker/schematics)
 npm run build:optimized
 
 # Copy assets to dist
@@ -38,6 +38,10 @@ npm run prepublish:copy-assets
 cd dist/ngxsmk-datepicker
 npm publish --tag latest
 ```
+
+> **Note:** `build:optimized` runs `build:schematics` (tsc-compiles `projects/ngxsmk-datepicker/schematics/`,
+> copies `collection.json`/`schema.json`, and runs `scripts/smoke-test-ng-add.cjs`). If the smoke test fails,
+> the build fails — never publish a tarball whose `ng add` is broken.
 
 ## Automated Publishing
 
@@ -91,7 +95,7 @@ Release a **beta** first so testers can install `ngxsmk-datepicker@beta`; when r
 ### 1. Publish a beta
 
 ```bash
-# Bump to next beta (e.g. 2.2.1 → 2.2.1-beta.0; run again for 2.2.1-beta.1)
+# Bump to next beta (e.g. 2.4.0 → 2.4.0-beta.0; run again for 2.4.0-beta.1)
 npm run version:beta
 
 # Build and publish under the "beta" tag (does not affect "latest")
