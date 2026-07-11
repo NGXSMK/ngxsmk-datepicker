@@ -56,7 +56,9 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
                 [class.disabled]="option.disabled"
                 (click)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
                 (keydown.enter)="option.disabled ? null : selectOption(option); $event.stopPropagation()"
-                (keydown.space)="option.disabled ? null : selectOption(option); $event.stopPropagation(); $event.preventDefault()"
+                (keydown.space)="
+                  option.disabled ? null : selectOption(option); $event.stopPropagation(); $event.preventDefault()
+                "
                 [attr.tabindex]="option.disabled ? -1 : 0"
                 role="option"
                 [attr.aria-selected]="option.value === value"

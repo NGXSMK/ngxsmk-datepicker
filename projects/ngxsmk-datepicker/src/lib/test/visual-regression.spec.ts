@@ -394,8 +394,12 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
 
       // Check viewport coverage
       const viewportTypes = scenarios.map((s) => (s.viewport.isMobile ? 'mobile' : 'desktop'));
-      expect(viewportTypes.filter((v) => v === 'mobile').length).withContext('Should have 2 mobile scenarios').toBe(2);
-      expect(viewportTypes.filter((v) => v === 'desktop').length).withContext('Should have 2 desktop scenarios').toBe(2);
+      expect(viewportTypes.filter((v) => v === 'mobile').length)
+        .withContext('Should have 2 mobile scenarios')
+        .toBe(2);
+      expect(viewportTypes.filter((v) => v === 'desktop').length)
+        .withContext('Should have 2 desktop scenarios')
+        .toBe(2);
     });
 
     it('should execute light theme mobile scenario', async () => {

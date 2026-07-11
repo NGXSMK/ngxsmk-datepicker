@@ -90,7 +90,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
 
     it('should not close calendar on document click if event composedPath includes nativeElement', fakeAsync(() => {
       const datepicker = containerComponent.datepicker;
-      
+
       // Open the calendar
       datepicker.isCalendarOpen = true;
       datepicker['cdr'].markForCheck();
@@ -110,7 +110,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
 
     it('should close calendar on document click if event composedPath does not include nativeElement', fakeAsync(() => {
       const datepicker = containerComponent.datepicker;
-      
+
       // Open the calendar
       datepicker.isCalendarOpen = true;
       datepicker['cdr'].markForCheck();
@@ -131,7 +131,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
   describe('CustomSelectComponent', () => {
     it('should keep custom select open on document click if event composedPath includes nativeElement', fakeAsync(() => {
       const customSelect = containerComponent.customSelect;
-      
+
       // Open select dropdown
       customSelect.isOpen = true;
       fixture.detectChanges();
@@ -150,7 +150,7 @@ describe('Shadow DOM & composedPath Compatibility', () => {
 
     it('should close custom select on document click if event composedPath does not include nativeElement', fakeAsync(() => {
       const customSelect = containerComponent.customSelect;
-      
+
       // Open select dropdown
       customSelect.isOpen = true;
       fixture.detectChanges();

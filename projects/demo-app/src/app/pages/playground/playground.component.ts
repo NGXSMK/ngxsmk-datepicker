@@ -162,11 +162,7 @@ import { animate } from 'motion';
             </div>
             <div class="config-item">
               <label for="weekStart">{{ i18n.t().playground.weekStart }}</label>
-              <select
-                id="weekStart"
-                [(ngModel)]="weekStart"
-                [compareWith]="compareWeekStart"
-              >
+              <select id="weekStart" [(ngModel)]="weekStart" [compareWith]="compareWeekStart">
                 <option [ngValue]="null">{{ i18n.t().playground.autoLocale }}</option>
                 <option [ngValue]="0">{{ i18n.t().playground.sunday }} (0)</option>
                 <option [ngValue]="1">{{ i18n.t().playground.monday }} (1)</option>
@@ -243,7 +239,11 @@ import { animate } from 'motion';
             <div class="value-chip" *ngIf="showTimezoneSelector">
               Active Timezone: <code>{{ timezoneValue }}</code>
             </div>
-            <div class="value-chip text-danger" *ngIf="invalidRangeDates.length > 0" style="color: #ef4444; font-weight: bold; margin-top: 5px;">
+            <div
+              class="value-chip text-danger"
+              *ngIf="invalidRangeDates.length > 0"
+              style="color: #ef4444; font-weight: bold; margin-top: 5px;"
+            >
               ⚠️ Selection contains {{ invalidRangeDates.length }} disabled dates!
             </div>
           </div>
@@ -518,26 +518,14 @@ export class PlaygroundComponent implements AfterViewInit {
   i18n = inject(I18nService);
 
   ngAfterViewInit() {
-    animate(
-      '.playground-hero h1' as any,
-      { opacity: [0, 1], y: [20, 0] },
-      { duration: 0.6, ease: 'easeOut' }
-    );
+    animate('.playground-hero h1' as any, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, ease: 'easeOut' });
     animate(
       '.playground-hero p' as any,
       { opacity: [0, 1], y: [15, 0] },
       { duration: 0.6, ease: 'easeOut', delay: 0.15 }
     );
-    animate(
-      '.config-panel' as any,
-      { opacity: [0, 1], x: [-30, 0] },
-      { duration: 0.5, ease: 'easeOut' }
-    );
-    animate(
-      '.preview-canvas' as any,
-      { opacity: [0, 1], scale: [0.95, 1] },
-      { duration: 0.5, ease: 'easeOut' }
-    );
+    animate('.config-panel' as any, { opacity: [0, 1], x: [-30, 0] }, { duration: 0.5, ease: 'easeOut' });
+    animate('.preview-canvas' as any, { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.5, ease: 'easeOut' });
   }
 
   mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';
@@ -678,7 +666,7 @@ export class PlaygroundComponent implements AfterViewInit {
           const end = new Date(t);
           end.setDate(end.getDate() + 10);
           return { start: t, end };
-        }
+        },
       },
       {
         id: 'factory-last-5',
@@ -687,12 +675,12 @@ export class PlaygroundComponent implements AfterViewInit {
           const start = new Date(t);
           start.setDate(start.getDate() - 5);
           return { start, end: t };
-        }
-      }
+        },
+      },
     ];
   };
 
-  onInvalidRange(event: { start: Date; end: Date; disabledDatesInside: Date[]; }): void {
+  onInvalidRange(event: { start: Date; end: Date; disabledDatesInside: Date[] }): void {
     this.invalidRangeDates = event.disabledDatesInside;
   }
 }

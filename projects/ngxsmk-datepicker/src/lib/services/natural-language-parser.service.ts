@@ -32,7 +32,7 @@ export class NaturalLanguageParserService {
       if (unit === 'day') {
         result.setDate(today.getDate() + amount * direction);
       } else if (unit === 'week') {
-        result.setDate(today.getDate() + (amount * 7) * direction);
+        result.setDate(today.getDate() + amount * 7 * direction);
       } else if (unit === 'month') {
         result.setMonth(today.getMonth() + amount * direction);
       } else if (unit === 'year') {

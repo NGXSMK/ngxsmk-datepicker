@@ -71,10 +71,13 @@ export class ThemeBuilderService implements OnDestroy {
       // Bridge internal --ngxsmk-color-* from public --datepicker-* (Issue #222)
       if (theme.colors.primary) cssVars.push(`--ngxsmk-color-primary: ${theme.colors.primary};`);
       if (theme.colors.background) cssVars.push(`--ngxsmk-color-surface: ${theme.colors.background};`);
-      if (theme.colors.border ?? theme.colors['borderColor']) cssVars.push(`--ngxsmk-color-border: ${theme.colors.border ?? theme.colors['borderColor']};`);
-      if (theme.colors.hover ?? theme.colors['hoverBackground']) cssVars.push(`--ngxsmk-color-surface-hover: ${theme.colors.hover ?? theme.colors['hoverBackground']};`);
+      if (theme.colors.border ?? theme.colors['borderColor'])
+        cssVars.push(`--ngxsmk-color-border: ${theme.colors.border ?? theme.colors['borderColor']};`);
+      if (theme.colors.hover ?? theme.colors['hoverBackground'])
+        cssVars.push(`--ngxsmk-color-surface-hover: ${theme.colors.hover ?? theme.colors['hoverBackground']};`);
       if (theme.colors.text) cssVars.push(`--ngxsmk-color-text-main: ${theme.colors.text};`);
-      if (theme.colors.textSecondary ?? theme.colors['subtleText']) cssVars.push(`--ngxsmk-color-text-muted: ${theme.colors.textSecondary ?? theme.colors['subtleText']};`);
+      if (theme.colors.textSecondary ?? theme.colors['subtleText'])
+        cssVars.push(`--ngxsmk-color-text-muted: ${theme.colors.textSecondary ?? theme.colors['subtleText']};`);
       if (theme.colors['rangeBackground']) cssVars.push(`--ngxsmk-color-range-bg: ${theme.colors['rangeBackground']};`);
     }
 
@@ -247,10 +250,13 @@ export class ThemeBuilderService implements OnDestroy {
       });
       if (theme.colors.primary) styles['--ngxsmk-color-primary'] = theme.colors.primary;
       if (theme.colors.background) styles['--ngxsmk-color-surface'] = theme.colors.background;
-      if (theme.colors.border ?? theme.colors['borderColor']) styles['--ngxsmk-color-border'] = String(theme.colors.border ?? theme.colors['borderColor']);
-      if (theme.colors.hover ?? theme.colors['hoverBackground']) styles['--ngxsmk-color-surface-hover'] = String(theme.colors.hover ?? theme.colors['hoverBackground']);
+      if (theme.colors.border ?? theme.colors['borderColor'])
+        styles['--ngxsmk-color-border'] = String(theme.colors.border ?? theme.colors['borderColor']);
+      if (theme.colors.hover ?? theme.colors['hoverBackground'])
+        styles['--ngxsmk-color-surface-hover'] = String(theme.colors.hover ?? theme.colors['hoverBackground']);
       if (theme.colors.text) styles['--ngxsmk-color-text-main'] = theme.colors.text;
-      if (theme.colors.textSecondary ?? theme.colors['subtleText']) styles['--ngxsmk-color-text-muted'] = String(theme.colors.textSecondary ?? theme.colors['subtleText']);
+      if (theme.colors.textSecondary ?? theme.colors['subtleText'])
+        styles['--ngxsmk-color-text-muted'] = String(theme.colors.textSecondary ?? theme.colors['subtleText']);
       if (theme.colors['rangeBackground']) styles['--ngxsmk-color-range-bg'] = theme.colors['rangeBackground'];
     }
 

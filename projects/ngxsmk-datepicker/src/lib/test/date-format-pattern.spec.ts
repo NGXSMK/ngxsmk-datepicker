@@ -61,8 +61,8 @@ describe('NgxsmkDatepickerComponent - dateFormatPattern', () => {
 
     component.mode = 'single';
     component.dateFormatPattern = 'DDD';
-    
-    days.forEach(day => {
+
+    days.forEach((day) => {
       component.value = day.date;
       fixture.detectChanges();
       expect(component.displayValue).toBe(day.expected);

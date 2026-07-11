@@ -12,7 +12,11 @@ import type { CalendarSystem } from '../services/locale-registry.service';
 
 const formatterCache = new Map<string, Intl.DateTimeFormat>();
 
-function getFormatter(locale: string, calendar: CalendarSystem, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat | null {
+function getFormatter(
+  locale: string,
+  calendar: CalendarSystem,
+  options: Intl.DateTimeFormatOptions
+): Intl.DateTimeFormat | null {
   const key = `${locale}|${calendar}|${JSON.stringify(options)}`;
   const cached = formatterCache.get(key);
   if (cached) return cached;

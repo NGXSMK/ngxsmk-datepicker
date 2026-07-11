@@ -234,7 +234,7 @@ describe('NgxsmkDatepickerComponent', () => {
 
       const event = {
         target: { value: 'today' },
-        relatedTarget: null
+        relatedTarget: null,
       } as unknown as FocusEvent;
 
       component.onInputBlur(event);
@@ -253,8 +253,8 @@ describe('NgxsmkDatepickerComponent', () => {
         {
           id: 'test-preset',
           name: 'Test Preset',
-          calculate: (t: Date) => ({ start: t, end: t })
-        }
+          calculate: (t: Date) => ({ start: t, end: t }),
+        },
       ];
       (component as any).updateRangesArray();
       expect(component.rangesArray.length).toBeGreaterThan(0);

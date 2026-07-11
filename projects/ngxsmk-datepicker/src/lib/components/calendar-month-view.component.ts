@@ -30,7 +30,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         @for (day of weekDays; track $index) {
           <div class="ngxsmk-day-name">{{ day }}</div>
         }
-        @for (day of days; track (day ? day.getTime() : $index)) {
+        @for (day of days; track day ? day.getTime() : $index) {
           @if (showWeekNumbers && $index % 7 === 0) {
             <div class="ngxsmk-week-number" aria-hidden="true">{{ getWeekNumberForRow($index) }}</div>
           }
@@ -119,7 +119,11 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
                 }
                 @if (getDayMetadata(day); as meta) {
                   @if (meta.indicatorColor) {
-                    <span class="ngxsmk-day-indicator" aria-hidden="true" [style.background-color]="meta.indicatorColor"></span>
+                    <span
+                      class="ngxsmk-day-indicator"
+                      aria-hidden="true"
+                      [style.background-color]="meta.indicatorColor"
+                    ></span>
                   }
                   @if (meta.label) {
                     <div class="ngxsmk-day-meta-label">{{ meta.label }}</div>

@@ -16,12 +16,7 @@ import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, ViewEn
       role="button"
       [attr.aria-label]="backdropLabel"
     ></div>
-    <div
-      class="ngxsmk-keyboard-help-dialog"
-      role="dialog"
-      aria-modal="true"
-      [attr.aria-label]="title"
-    >
+    <div class="ngxsmk-keyboard-help-dialog" role="dialog" aria-modal="true" [attr.aria-label]="title">
       <div class="ngxsmk-keyboard-help-header">
         <h3 class="ngxsmk-keyboard-help-title">{{ title }}</h3>
         <button

@@ -153,11 +153,11 @@ describe('NgxsmkDatepickerComponent - Date Constraints', () => {
       fixture.detectChanges();
 
       const yearOpts = component.yearOptions();
-      const year2024 = yearOpts.find(y => y.value === 2024);
-      const year2025 = yearOpts.find(y => y.value === 2025);
-      const year2026 = yearOpts.find(y => y.value === 2026);
-      const year2027 = yearOpts.find(y => y.value === 2027);
-      const year2028 = yearOpts.find(y => y.value === 2028);
+      const year2024 = yearOpts.find((y) => y.value === 2024);
+      const year2025 = yearOpts.find((y) => y.value === 2025);
+      const year2026 = yearOpts.find((y) => y.value === 2026);
+      const year2027 = yearOpts.find((y) => y.value === 2027);
+      const year2028 = yearOpts.find((y) => y.value === 2028);
 
       if (year2024) expect(year2024.disabled).toBe(true);
       if (year2025) expect(year2025.disabled).toBe(false);
@@ -174,11 +174,11 @@ describe('NgxsmkDatepickerComponent - Date Constraints', () => {
 
       const monthOpts = component.monthOptions();
       // Months are 0-indexed (Jan = 0, April = 3, Sept = 8)
-      expect(monthOpts[2].disabled).toBe(true);  // March
+      expect(monthOpts[2].disabled).toBe(true); // March
       expect(monthOpts[3].disabled).toBe(false); // April
       expect(monthOpts[5].disabled).toBe(false); // June
       expect(monthOpts[8].disabled).toBe(false); // September
-      expect(monthOpts[9].disabled).toBe(true);  // October
+      expect(monthOpts[9].disabled).toBe(true); // October
     });
 
     it('should snap currentMonth to minDate month if new year equals minDate year and current month precedes minMonth', () => {

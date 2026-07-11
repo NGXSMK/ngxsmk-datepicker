@@ -5,8 +5,6 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 @Directive({
   selector: 'ngxsmk-datepicker[ngxsmkMatFormFieldControl]',
   standalone: true,
-  providers: [
-    { provide: MatFormFieldControl, useExisting: forwardRef(() => NgxsmkDatepickerComponent) },
-  ],
+  providers: [{ provide: MatFormFieldControl, useExisting: forwardRef(() => NgxsmkDatepickerComponent) }],
 })
 export class NgxsmkDatepickerMatFormFieldControlDirective {}
