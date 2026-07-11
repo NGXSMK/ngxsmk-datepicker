@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "ngxsmk-datepicker-ng-add",
+  "title": "ngxsmk-datepicker ng-add schematic",
+  "type": "object",
+  "properties": {
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip scheduling the package install task after adding missing peer dependencies.",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

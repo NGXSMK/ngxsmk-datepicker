@@ -18,6 +18,7 @@ export { CustomSelectComponent } from './lib/components/custom-select.component'
 export {
   getStartOfDay,
   getEndOfDay,
+  getISOWeekNumber,
   addMonths,
   subtractDays,
   getStartOfMonth,
@@ -53,6 +54,8 @@ export {
   type ExportOptions,
 } from './lib/utils/export-import.utils';
 
+export { getSecondaryDayLabel, formatDateInCalendarSystem } from './lib/utils/calendar-systems.utils';
+
 export {
   formatDateWithTimezone,
   parseDateWithTimezone,
@@ -60,6 +63,8 @@ export {
   getTimezoneOffset,
   isValidTimezone,
 } from './lib/utils/timezone.utils';
+
+export type { DayMetadata, DayMetadataProvider } from './lib/interfaces/day-metadata.interface';
 
 export type {
   DayCellRenderHook,

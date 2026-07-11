@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
 import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
+import { getISOWeekNumber } from '../utils/date.utils';
+import { getSecondaryDayLabel } from '../utils/calendar-systems.utils';
+import type { CalendarSystem } from '../services/locale-registry.service';
+import type { DayMetadata } from '../interfaces/day-metadata.interface';
 
 @Component({
   selector: 'ngxsmk-calendar-month-view',
@@ -14,11 +18,22 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
       (touchmove)="swipeMove.emit($event)"
       (touchend)="swipeEnd.emit($event)"
     >
-      <div class="ngxsmk-days-grid" role="grid" [attr.aria-label]="ariaLabel">
+      <div
+        class="ngxsmk-days-grid"
+        role="grid"
+        [attr.aria-label]="ariaLabel"
+        [class.ngxsmk-with-week-numbers]="showWeekNumbers"
+      >
+        @if (showWeekNumbers) {
+          <div class="ngxsmk-day-name ngxsmk-week-number-header" aria-hidden="true">{{ weekNumberLabel }}</div>
+        }
         @for (day of weekDays; track $index) {
           <div class="ngxsmk-day-name">{{ day }}</div>
         }
         @for (day of days; track (day ? day.getTime() : $index)) {
+          @if (showWeekNumbers && $index % 7 === 0) {
+            <div class="ngxsmk-week-number" aria-hidden="true">{{ getWeekNumberForRow($index) }}</div>
+          }
           <div
             class="ngxsmk-day-cell"
             [ngClass]="classes?.dayCell"
@@ -71,6 +86,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       inComparisonRange: isInComparisonRange(day),
                       startDate: isRangeType() && isSameDay(day, startDate),
                       endDate: isRangeType() && isSameDay(day, endDate),
+                      meta: getDayMetadata(day),
                     }
                   "
                 ></ng-container>
@@ -92,11 +108,23 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
                       inComparisonRange: isInComparisonRange(day),
                       startDate: isRangeType() && isSameDay(day, startDate),
                       endDate: isRangeType() && isSameDay(day, endDate),
+                      meta: getDayMetadata(day),
                     }
                   "
                 ></ng-container>
               } @else {
                 <div class="ngxsmk-day-number">{{ formatDayNumber(day) }}</div>
+                @if (secondaryCalendar) {
+                  <div class="ngxsmk-day-secondary" aria-hidden="true">{{ getSecondaryDay(day) }}</div>
+                }
+                @if (getDayMetadata(day); as meta) {
+                  @if (meta.indicatorColor) {
+                    <span class="ngxsmk-day-indicator" aria-hidden="true" [style.background-color]="meta.indicatorColor"></span>
+                  }
+                  @if (meta.label) {
+                    <div class="ngxsmk-day-meta-label">{{ meta.label }}</div>
+                  }
+                }
               }
             }
           </div>
@@ -133,6 +161,10 @@ export class CalendarMonthViewComponent {
   @Input() currentMonth: number = 0;
   @Input() currentYear: number = 0;
   @Input() ariaLabel: string = '';
+  @Input() showWeekNumbers: boolean = false;
+  @Input() weekNumberLabel: string = 'Wk';
+  @Input() secondaryCalendar: CalendarSystem | null = null;
+  @Input() secondaryCalendarLocale: string = 'en-US';
 
   // Function inputs for logic checks
   @Input() isDateDisabled: (date: Date | null) => boolean = () => false;
@@ -147,6 +179,7 @@ export class CalendarMonthViewComponent {
     date: Date | null
   ) => string | string[] | Set<string> | { [klass: string]: unknown } = () => ({});
   @Input() getDayCellTooltip: (date: Date | null) => string | null = () => '';
+  @Input() getDayMetadata: (date: Date | null) => DayMetadata | null = () => null;
   @Input() formatDayNumber: (date: Date | null) => string | null = (d) => (d ? d.getDate().toString() : '');
 
   @Output() dateClick = new EventEmitter<Date>();
@@ -174,6 +207,22 @@ export class CalendarMonthViewComponent {
 
   trackByDay(index: number, day: Date | null): number {
     return day ? day.getTime() : index;
+  }
+
+  getSecondaryDay(day: Date | null): string {
+    if (!day || !this.secondaryCalendar) return '';
+    return getSecondaryDayLabel(day, this.secondaryCalendar, this.secondaryCalendarLocale);
+  }
+
+  /** ISO week number for the row starting at `startIndex`, from its first real day. */
+  getWeekNumberForRow(startIndex: number): string {
+    for (let i = startIndex; i < startIndex + 7 && i < this.days.length; i++) {
+      const day = this.days[i];
+      if (day) {
+        return String(getISOWeekNumber(day));
+      }
+    }
+    return '';
   }
 
   isCurrentMonth(date: Date | null): boolean {

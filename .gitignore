@@ -7,8 +7,8 @@
 /bazel-out
 # /examples - Commented out to allow test projects for issue reproduction
 
-# Node
-/node_modules
+# Node (any depth — example apps have their own node_modules)
+node_modules/
 npm-debug.log
 yarn-error.log
 

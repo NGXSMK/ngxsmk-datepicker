@@ -1,6 +1,7 @@
 import {
   getStartOfDay,
   getEndOfDay,
+  getISOWeekNumber,
   addMonths,
   subtractDays,
   getStartOfMonth,
@@ -303,6 +304,32 @@ describe('Date Utils', () => {
     it('should handle invalid date strings', () => {
       const result = normalizeDate('invalid-date');
       expect(result).toBeNull();
+    });
+  });
+
+  describe('getISOWeekNumber', () => {
+    it('returns week 1 for a year starting on Thursday (2026-01-01)', () => {
+      expect(getISOWeekNumber(new Date(2026, 0, 1))).toBe(1);
+    });
+
+    it('assigns late December to week 1 of the next ISO year (2025-12-29)', () => {
+      expect(getISOWeekNumber(new Date(2025, 11, 29))).toBe(1);
+    });
+
+    it('assigns early January to week 53 of the previous ISO year (2016-01-01)', () => {
+      expect(getISOWeekNumber(new Date(2016, 0, 1))).toBe(53);
+    });
+
+    it('handles a 53-week year (2020-12-28)', () => {
+      expect(getISOWeekNumber(new Date(2020, 11, 28))).toBe(53);
+    });
+
+    it('handles a mid-year date (2026-07-11 is week 28)', () => {
+      expect(getISOWeekNumber(new Date(2026, 6, 11))).toBe(28);
+    });
+
+    it('handles leap-day (2024-02-29 is week 9)', () => {
+      expect(getISOWeekNumber(new Date(2024, 1, 29))).toBe(9);
     });
   });
 });

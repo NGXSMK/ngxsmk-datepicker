@@ -40,7 +40,13 @@
     "url": "https://github.com/NGXSMK/ngxsmk-datepicker/issues"
   },
   "sideEffects": false,
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "dependencies"
+  },
   "files": [
+    "schematics/**/*.js",
+    "schematics/**/*.json",
     "fesm2022/**/*.mjs",
     "**/*.d.ts",
     "**/*.metadata.json",
@@ -49,6 +55,9 @@
     "CHANGELOG.md",
     "MIGRATION.md",
     "docs/*.md",
+    "!docs/REFACTOR_PLAN.md",
+    "!docs/FEATURE_SCOPING.md",
+    "!docs/IONIC_TESTING.md",
     "!docs/**/*.png",
     "!docs/**/*.jpg",
     "!docs/**/*.gif",

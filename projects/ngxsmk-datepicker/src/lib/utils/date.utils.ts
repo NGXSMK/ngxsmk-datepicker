@@ -36,6 +36,22 @@ export function getEndOfMonth(d: Date): Date {
   return getEndOfDay(lastDay);
 }
 
+/**
+ * Returns the ISO 8601 week number (1-53) for the given date.
+ *
+ * ISO weeks start on Monday; week 1 is the week containing the year's first
+ * Thursday, so early January can belong to week 52/53 of the previous year
+ * and late December to week 1 of the next.
+ */
+export function getISOWeekNumber(d: Date): number {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  // Shift to the Thursday of this ISO week (ISO day: Mon=1..Sun=7)
+  const isoDay = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - isoDay);
+  const yearStart = Date.UTC(date.getUTCFullYear(), 0, 1);
+  return Math.ceil(((date.getTime() - yearStart) / 86400000 + 1) / 7);
+}
+
 export function getStartOfWeek(d: Date, firstDayOfWeek: number = 0): Date {
   const date = new Date(d);
   const day = date.getDay();

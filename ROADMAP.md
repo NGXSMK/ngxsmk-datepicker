@@ -2,7 +2,20 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 11, 2026 - **Current stable:** v2.4.0
+
+## ✅ Recently Shipped (unreleased, on `main`)
+
+- **`ng add` schematic** — one-command install with peer-dependency setup.
+- **ISO week numbers** — `[showWeekNumbers]` / `[weekNumberLabel]`.
+- **Guided input masking** — `[inputMask]` for typed input (also fixes zero-padding bug in the old `displayFormat` mask).
+- **Async disabled dates** — `[asyncDateFilter]` for server-driven availability.
+- **Secondary calendar systems** — `[secondaryCalendar]` day annotations (Hijri, Jalali, Hebrew, Buddhist, Japanese).
+- **Day metadata decorations** — `[dayMetadata]` for per-day labels/dots/classes/tooltips (booking-style calendars).
+- **Header/footer action slots** — `[calendarHeaderTemplate]` / `[calendarFooterTemplate]`.
+- **Memory-leak fixes** — popover-open destroy path and lazy-loading observer cleanup.
+
+See [CHANGELOG.md](CHANGELOG.md#unreleased) for details.
 
 ## 🎯 Current Focus (Q1 2026 - Q2 2026)
 

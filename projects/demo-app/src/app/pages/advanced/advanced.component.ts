@@ -1,7 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent, type DayMetadata, type HolidayProvider } from 'ngxsmk-datepicker';
 import { I18nService } from '../../i18n/i18n.service';
 import { ThemeService } from '@tokiforge/angular';
 
@@ -88,6 +88,102 @@ import { ThemeService } from '@tokiforge/angular';
         >
         </ngxsmk-datepicker>
       </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.weekNumbersTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.weekNumbersLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [showWeekNumbers]="true"
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+      </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.inputMaskTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.inputMaskLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [allowTyping]="true"
+          [inputMask]="true"
+          displayFormat="MM/DD/YYYY"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+          [placeholder]="i18n.t().advanced.whatsNew.inputMaskPlaceholder"
+        >
+        </ngxsmk-datepicker>
+      </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.asyncFilterTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.asyncFilterLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [asyncDateFilter]="loadBlockedDates"
+          (asyncDateFilterLoading)="availabilityLoading.set($event)"
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+        @if (availabilityLoading()) {
+          <div class="tip mt-md">{{ i18n.t().advanced.whatsNew.asyncLoading }}</div>
+        }
+      </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.secondaryCalendarTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.secondaryCalendarLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <div class="system-picker">
+          @for (system of calendarSystems; track system) {
+            <button
+              type="button"
+              class="system-button"
+              [class.active]="secondaryCalendar() === system"
+              (click)="secondaryCalendar.set(system)"
+            >
+              {{ system }}
+            </button>
+          }
+        </div>
+        <ngxsmk-datepicker
+          [secondaryCalendar]="secondaryCalendar()"
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+      </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.dayMetadataTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.dayMetadataLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [dayMetadata]="priceMetadata"
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+      </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.actionSlotsTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.actionSlotsLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [inline]="true"
+          [calendarHeaderTemplate]="slotHeader"
+          [calendarFooterTemplate]="slotFooter"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+        <ng-template #slotHeader>
+          <div class="slot-header">{{ i18n.t().advanced.whatsNew.headerSlotText }}</div>
+        </ng-template>
+        <ng-template #slotFooter let-actions>
+          <button type="button" class="slot-button" (click)="actions.clear()">
+            {{ i18n.t().advanced.whatsNew.actionReset }}
+          </button>
+          <button type="button" class="slot-button slot-button-primary" (click)="actions.close()">
+            {{ i18n.t().advanced.whatsNew.actionDone }}
+          </button>
+        </ng-template>
+      </div>
     </div>
   `,
   styles: [
@@ -172,6 +268,57 @@ import { ThemeService } from '@tokiforge/angular';
       .overflow-visible {
         overflow: visible !important;
       }
+
+      .system-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        justify-content: center;
+        margin-bottom: var(--space-md);
+      }
+
+      .system-button {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: var(--font-size-sm);
+        cursor: pointer;
+        color: inherit;
+        text-transform: capitalize;
+        &.active {
+          border-color: var(--color-secondary);
+          color: var(--color-secondary);
+        }
+      }
+
+      .slot-header {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .slot-button {
+        background: var(--color-bg-code);
+        border: 1px solid var(--color-border);
+        border-radius: 6px;
+        padding: 6px 14px;
+        font-size: var(--font-size-sm);
+        cursor: pointer;
+        color: inherit;
+        margin: 0 4px;
+        &.slot-button-primary {
+          border-color: var(--color-secondary);
+          color: var(--color-secondary);
+        }
+      }
+
+      ::ng-deep .demo-sold-out {
+        opacity: 0.45;
+        text-decoration: line-through;
+      }
     `,
   ],
 })
@@ -188,6 +335,34 @@ export class AdvancedFeaturesComponent {
   isWeekend = (date: Date): boolean => {
     const day = date.getDay();
     return day === 0 || day === 6;
+  };
+
+  availabilityLoading = signal(false);
+
+  /** Simulates a booking API: blocks three fixed days of the visible month after a short delay. */
+  loadBlockedDates = (start: Date, _end: Date): Promise<Date[]> => {
+    const y = start.getFullYear();
+    const m = start.getMonth();
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([new Date(y, m, 4), new Date(y, m, 12), new Date(y, m, 20)]), 600);
+    });
+  };
+
+  readonly calendarSystems = ['islamic', 'persian', 'hebrew', 'buddhist', 'japanese'] as const;
+  secondaryCalendar = signal<(typeof this.calendarSystems)[number]>('persian');
+
+  /** Booking-style demo: weekday prices, weekend sold-out styling, a promo dot on the 15th. */
+  priceMetadata = (date: Date): DayMetadata | null => {
+    const day = date.getDay();
+    if (day === 0 || day === 6) {
+      return { label: '—', cssClass: 'demo-sold-out', tooltip: 'Sold out' };
+    }
+    const price = 89 + (date.getDate() % 5) * 10;
+    return {
+      label: '$' + price,
+      indicatorColor: date.getDate() === 15 ? '#7c3aed' : undefined,
+      tooltip: date.getDate() === 15 ? 'Promo day' : undefined,
+    };
   };
 
   holidayProvider: HolidayProvider = {

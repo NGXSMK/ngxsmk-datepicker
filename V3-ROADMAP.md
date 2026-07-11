@@ -1,7 +1,7 @@
 # ngxsmk-datepicker — v3 Roadmap
 
 v3 is a **breaking** modernization release. It is delivered in **stages**, each landing on `main`
-with the full test suite green (currently **1256 tests**) and the production build passing.
+with the full test suite green (currently **1301 tests**) and the production build passing.
 Non-breaking modernizations ship in `2.x`; anything that changes the public API waits for `3.0.0`.
 
 > Guiding rule: never regress the published package. Every stage is independently shippable,
@@ -16,7 +16,14 @@ Non-breaking modernizations ship in `2.x`; anything that changes the public API 
       `showNaturalLanguagePreview`, `validationErrorMessage`, `typedInputValue`).
 - [x] Make the `displayValue` getter pure (remove render-time state writes).
 - [x] Migrate `@Output()` → `output()` (non-breaking; consumers keep `(event)="…"`).
+- [x] Fix ngOnDestroy leaks (open-popover window listeners + portal view; lazy-loading
+      IntersectionObserver mis-tracked as a timeout) — shipped in 2.x.
 - [ ] Migrate remaining internal `cdr.markForCheck()` reliance to signals (path to zoneless-by-default).
+
+> **Note (2026-07-11):** the 2.x feature batch (week numbers, `inputMask`, `asyncDateFilter`,
+> `secondaryCalendar`, `dayMetadata`, header/footer slots) added ~8 new plain `@Input()`s and one
+> `effect()`; fold them into the Stage 1 `input()` batches. `secondaryCalendar` is the interim
+> answer to non-Gregorian support — full non-Gregorian **grids** remain a v3+ candidate.
 
 ## Stage 1 — Signal inputs & `model()` (3.0.0, breaking)
 The component has **78 `@Input()`s** and a `ControlValueAccessor` with a custom `value` setter.

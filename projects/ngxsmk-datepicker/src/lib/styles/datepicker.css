@@ -1551,6 +1551,58 @@ ngxsmk-datepicker.ngxsmk-inline {
   margin: calc(var(--datepicker-spacing-xs) / 2);
 }
 
+.ngxsmk-days-grid.ngxsmk-with-week-numbers {
+  grid-template-columns: minmax(1.5em, auto) repeat(7, 1fr);
+}
+
+.ngxsmk-week-number,
+.ngxsmk-week-number-header {
+  font-size: var(--datepicker-font-size-sm);
+  color: var(--datepicker-subtle-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Stack day number above secondary/meta labels only when they are present */
+.ngxsmk-day-cell:has(.ngxsmk-day-secondary),
+.ngxsmk-day-cell:has(.ngxsmk-day-meta-label) {
+  -webkit-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.ngxsmk-day-meta-label {
+  font-size: 0.6em;
+  line-height: 1;
+  color: var(--datepicker-subtle-text-color);
+  margin-top: 1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ngxsmk-day-indicator {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.ngxsmk-day-secondary {
+  font-size: 0.62em;
+  line-height: 1;
+  color: var(--datepicker-subtle-text-color);
+  margin-top: 1px;
+}
+
 .ngxsmk-day-name {
   font-size: var(--datepicker-font-size-sm);
   padding: var(--datepicker-spacing-md) 0;

@@ -2,8 +2,8 @@
 
 Complete API reference for ngxsmk-datepicker with JSDoc examples for improved IDE IntelliSense.
 
-**Version**: 2.4.0+  
-**Last Updated**: June 3, 2026
+**Version**: 2.4.0+ (includes unreleased `main` additions)  
+**Last Updated**: July 11, 2026
 
 ---
 
@@ -547,6 +547,131 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
 @Input() showWeekNumbers: boolean = false;
 ```
 
+##### `weekNumberLabel`
+
+```typescript
+/**
+ * Header label for the week-number column
+ * @input weekNumberLabel
+ * @type {string}
+ * @default 'Wk'
+ * @description
+ * Shown above the ISO week-number column when `showWeekNumbers` is enabled
+ * (e.g. "KW" for German, "S" for French).
+ *
+ * @example
+ * <ngxsmk-datepicker [showWeekNumbers]="true" weekNumberLabel="KW"></ngxsmk-datepicker>
+ */
+@Input() weekNumberLabel: string = 'Wk';
+```
+
+##### `inputMask`
+
+```typescript
+/**
+ * Guided input masking while typing (requires `allowTyping`)
+ * @input inputMask
+ * @type {boolean | string}
+ * @default false
+ * @description
+ * Slots typed digits into DD/MM/YY/YYYY/HH/mm/ss tokens and auto-inserts
+ * separators. `true` masks using `displayFormat` (falling back to MM/DD/YYYY);
+ * a string sets an explicit pattern. Partial tokens stay as typed.
+ *
+ * @example
+ * <ngxsmk-datepicker [allowTyping]="true" [inputMask]="true"></ngxsmk-datepicker>
+ * <ngxsmk-datepicker [allowTyping]="true" inputMask="DD.MM.YYYY"></ngxsmk-datepicker>
+ */
+@Input() inputMask: boolean | string = false;
+```
+
+##### `asyncDateFilter`
+
+```typescript
+/**
+ * Server-driven disabled dates
+ * @input asyncDateFilter
+ * @type {(visibleStart: Date, visibleEnd: Date) => Promise<DateInput[]> | DateInput[]}
+ * @default null
+ * @description
+ * Called with the first and last visible day whenever the visible month range
+ * changes; the resolved dates are disabled. Stale responses (superseded by a
+ * newer navigation) are discarded. Pair with `(asyncDateFilterLoading)` and
+ * `(asyncDateFilterError)`.
+ *
+ * @example
+ * loadBlocked = (start: Date, end: Date) =>
+ *   firstValueFrom(this.http.get<string[]>(`/api/blocked?from=${start.toISOString()}&to=${end.toISOString()}`));
+ * // <ngxsmk-datepicker [asyncDateFilter]="loadBlocked"></ngxsmk-datepicker>
+ */
+@Input() asyncDateFilter: ((visibleStart: Date, visibleEnd: Date) => Promise<DateInput[]> | DateInput[]) | null = null;
+```
+
+##### `secondaryCalendar`
+
+```typescript
+/**
+ * Secondary calendar-system day annotations
+ * @input secondaryCalendar
+ * @type {'gregorian' | 'islamic' | 'buddhist' | 'japanese' | 'hebrew' | 'persian' | null}
+ * @default null
+ * @description
+ * Annotates each day cell with its date in a second calendar system, rendered
+ * via Intl using the active locale's numbering system. The calendar grid
+ * itself remains Gregorian.
+ *
+ * @example
+ * <ngxsmk-datepicker secondaryCalendar="persian" locale="fa-IR"></ngxsmk-datepicker>
+ */
+@Input() secondaryCalendar: CalendarSystem | null = null;
+```
+
+##### `dayMetadata`
+
+```typescript
+/**
+ * Per-day decorations without custom templates
+ * @input dayMetadata
+ * @type {(date: Date) => DayMetadata | null | undefined}
+ * @default null
+ * @description
+ * Returns `{ label?, indicatorColor?, cssClass?, tooltip? }` per day: a small
+ * label under the day number (e.g. a price), an indicator dot, extra cell
+ * classes, and a tooltip. Called during rendering — keep it fast (precompute
+ * or memoize lookups). Custom day templates receive it as the `meta` context field.
+ *
+ * @example
+ * priceMeta = (d: Date) => this.prices.has(+d) ? { label: '$' + this.prices.get(+d) } : null;
+ * // <ngxsmk-datepicker [dayMetadata]="priceMeta"></ngxsmk-datepicker>
+ */
+@Input() dayMetadata: DayMetadataProvider | null = null;
+```
+
+##### `calendarHeaderTemplate` / `calendarFooterTemplate`
+
+```typescript
+/**
+ * Header/footer action slots
+ * @input calendarHeaderTemplate, calendarFooterTemplate
+ * @type {TemplateRef<unknown> | null}
+ * @default null
+ * @description
+ * `calendarHeaderTemplate` renders custom content at the top of the popover or
+ * inline calendar. `calendarFooterTemplate` REPLACES the default Clear/Close
+ * footer and, unlike the default, also renders in inline mode. Both receive
+ * `{ clear(): void; close(): void }` as the implicit template context.
+ *
+ * @example
+ * <ngxsmk-datepicker [calendarFooterTemplate]="footer"></ngxsmk-datepicker>
+ * <ng-template #footer let-actions>
+ *   <button (click)="actions.clear()">Reset</button>
+ *   <button (click)="actions.close()">Done</button>
+ * </ng-template>
+ */
+@Input() calendarHeaderTemplate: TemplateRef<unknown> | null = null;
+@Input() calendarFooterTemplate: TemplateRef<unknown> | null = null;
+```
+
 ##### `enableGoogleCalendar`
 
 ```typescript
@@ -920,6 +1045,27 @@ Complete API reference for ngxsmk-datepicker with JSDoc examples for improved ID
  */
 @Output() timezoneChange = new EventEmitter<string>();
 ```
+
+##### `asyncDateFilterLoading` / `asyncDateFilterError`
+
+```typescript
+/**
+ * asyncDateFilter request state
+ * @output asyncDateFilterLoading, asyncDateFilterError
+ * @description
+ * `asyncDateFilterLoading` emits `true` while an `asyncDateFilter` request is
+ * in flight and `false` when it settles. `asyncDateFilterError` emits when the
+ * filter rejects; the previously loaded disabled set is kept.
+ *
+ * @example
+ * <ngxsmk-datepicker
+ *   [asyncDateFilter]="loadBlocked"
+ *   (asyncDateFilterLoading)="loading = $event"
+ *   (asyncDateFilterError)="onFilterError($event)"
+ * ></ngxsmk-datepicker>
+ */
+readonly asyncDateFilterLoading = output<boolean>();
+readonly asyncDateFilterError = output<unknown>();
 ```
 
 ### Public Methods
