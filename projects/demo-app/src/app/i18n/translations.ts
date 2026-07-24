@@ -26,6 +26,7 @@ export const translations = {
       references: 'Technical Specs',
       apiReference: 'DatePicker API Reference',
       playground: 'Interactive Playground',
+      dateSchedule: 'Date Schedule Planner',
     },
     home: {
       heroBadge: 'The #1 Angular DatePicker v3.0.0',
@@ -477,6 +478,7 @@ export const translations = {
       references: 'Referenzen',
       apiReference: 'API-Referenz',
       playground: 'Spielplatz',
+      dateSchedule: 'Terminplaner',
     },
     home: {
       heroBadge: 'Neu v3.0.0 Stabilität',
@@ -934,6 +936,7 @@ export const translations = {
       references: 'Referencias',
       apiReference: 'Referencia de API',
       playground: 'Laboratorio',
+      dateSchedule: 'Agenda de Citas',
     },
     home: {
       heroBadge: 'Nuevo v3.0.0 Estabilidad',
@@ -1390,6 +1393,7 @@ export const translations = {
       references: 'Referenser',
       apiReference: 'API-referens',
       playground: 'Lekplats',
+      dateSchedule: 'Tidsplanering',
     },
     home: {
       heroBadge: 'Ny v3.0.0 stabilitet',
@@ -1837,6 +1841,7 @@ export const translations = {
       references: '참조',
       apiReference: 'API 참조',
       playground: '플레이그라운드',
+      dateSchedule: '일정 플래너',
     },
     home: {
       heroBadge: '새로운 v3.0.0 안정성',
@@ -2270,6 +2275,7 @@ export const translations = {
       references: '参考资料',
       apiReference: 'API 参考',
       playground: '演练场',
+      dateSchedule: '日程计划器',
     },
     home: {
       heroBadge: '全新 v3.0.0 稳定性',
@@ -2690,6 +2696,7 @@ export const translations = {
       references: 'リファレンス',
       apiReference: 'APIリファレンス',
       playground: 'プレイグラウンド',
+      dateSchedule: 'スケジュール帳',
     },
     home: {
       heroBadge: '新しい v3.0.0 の安定性',
@@ -3129,6 +3136,7 @@ export const translations = {
       references: 'Références',
       apiReference: 'Référence API',
       playground: 'Playground',
+      dateSchedule: 'Planificateur de dates',
     },
     home: {
       heroBadge: 'Nouvelle stabilité v3.0.0',

@@ -59,6 +59,17 @@ import { NgxsmkDatepickerInputComponent } from './components/datepicker-input.co
 import { NgxsmkDatepickerContentComponent } from './components/datepicker-content.component';
 import { NgxsmkDatepickerKeyboardHelpComponent } from './components/keyboard-help.component';
 import { createDateComparator } from './utils/performance.utils';
+import {
+  ScheduleItem,
+  ScheduleColor,
+  ScheduleFieldsConfig,
+  ScheduleFormTemplates,
+  ScheduleChangeEvent,
+  DEFAULT_SCHEDULE_FIELDS,
+  DEFAULT_SCHEDULE_COLORS,
+  DEFAULT_SCHEDULE_ICONS,
+} from './interfaces/schedule-item.interface';
+import { ScheduleEditorComponent } from './components/schedule-editor.component';
 import { DatepickerHooks, KeyboardShortcutContext } from './interfaces/datepicker-hooks.interface';
 import {
   DATEPICKER_CONFIG,
@@ -142,6 +153,7 @@ interface DecoratorMetadataConfig {
     NgxsmkDatepickerInputComponent,
     NgxsmkDatepickerContentComponent,
     NgxsmkDatepickerKeyboardHelpComponent,
+    ScheduleEditorComponent,
   ],
   providers: [
     FieldSyncService,
@@ -227,8 +239,57 @@ interface DecoratorMetadataConfig {
       </ng-template>
 
       <ng-template #portalContent>
-        <ngxsmk-datepicker-content
-          #datepickerContent
+        @if (mode === 'schedule') {
+          <smk-schedule-editor
+            [fullPage]="scheduleFullPage"
+            [scheduleItems]="scheduleItems"
+            [scheduleTitle]="scheduleTitle"
+            [scheduleAddLabel]="scheduleAddLabel"
+            [scheduleFields]="scheduleFields"
+            [scheduleFormTemplates]="scheduleFormTemplates"
+            [scheduleShowTime]="scheduleShowTime"
+            [scheduleUse24Hour]="scheduleUse24Hour"
+            [scheduleColorPresets]="scheduleColorPresets"
+            [scheduleIconPresets]="scheduleIconPresets"
+            [scheduleCategoryOptions]="scheduleCategoryOptions"
+            [scheduleTagSuggestions]="scheduleTagSuggestions"
+            [scheduleAllowOverlap]="scheduleAllowOverlap"
+            [scheduleMaxItems]="scheduleMaxItems"
+            [scheduleShowDragHandle]="scheduleShowDragHandle"
+            [scheduleShowComplete]="scheduleShowComplete"
+            [scheduleShowDuplicate]="scheduleShowDuplicate"
+            [scheduleShowExport]="scheduleShowExport"
+            [scheduleShowImport]="scheduleShowImport"
+            [scheduleShowSearch]="scheduleShowSearch"
+            [scheduleShowSort]="scheduleShowSort"
+            [scheduleShowFilter]="scheduleShowFilter"
+            [scheduleShowConflicts]="scheduleShowConflicts"
+            [scheduleRowTemplate]="scheduleRowTemplate"
+            [scheduleBadgeTemplate]="scheduleBadgeTemplate"
+            [scheduleActionsTemplate]="scheduleActionsTemplate"
+            [scheduleEmptyTemplate]="scheduleEmptyTemplate"
+            [scheduleHeaderTemplate]="scheduleHeaderTemplate"
+            [scheduleFooterTemplate]="scheduleFooterTemplate"
+            [formatItemDate]="formatItemDate"
+            [formatItemDuration]="formatItemDuration"
+            [onBeforeAdd]="onBeforeAdd"
+            [onBeforeEdit]="onBeforeEdit"
+            [onBeforeDelete]="onBeforeDelete"
+            [onBeforeReorder]="onBeforeReorder"
+            [validateScheduleItem]="validateScheduleItem"
+            (scheduleChange)="onScheduleChange($event)"
+            (scheduleApply)="onScheduleApply($event)"
+            (scheduleCancel)="onScheduleCancel()"
+            (itemAdd)="itemAdd.emit($event)"
+            (itemEdit)="itemEdit.emit($event)"
+            (itemDelete)="itemDelete.emit($event)"
+            (itemDuplicate)="itemDuplicate.emit($event)"
+            (itemReorder)="itemReorder.emit($event)"
+            (itemClick)="itemClick.emit($event)"
+          ></smk-schedule-editor>
+        } @else {
+          <ngxsmk-datepicker-content
+            #datepickerContent
           [isCalendarVisible]="isCalendarVisible"
           [isCalendarOpen]="_isCalendarOpen()"
           [isInlineMode]="isInlineMode"
@@ -373,6 +434,7 @@ interface DecoratorMetadataConfig {
           (clearValue)="clearValue($event)"
           (closeCalendar)="closeCalendarWithFocusRestore()"
         ></ngxsmk-datepicker-content>
+        }
       </ng-template>
 
       @if (isCalendarVisible && !_shouldAppendToBody) {
@@ -519,7 +581,61 @@ export class NgxsmkDatepickerComponent
 
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
 
-  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
+  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule' = 'single';
+
+  // ─── Schedule Mode Inputs ──────────────────────────────────────────────────
+  @Input() scheduleItems: ScheduleItem[] = [];
+  @Input() scheduleFullPage: boolean = false;
+  @Input() scheduleTitle: string = 'Date Schedule';
+  @Input() scheduleAddLabel: string = 'Add Item';
+  @Input() scheduleFields: ScheduleFieldsConfig = DEFAULT_SCHEDULE_FIELDS;
+  @Input() scheduleFormTemplates: ScheduleFormTemplates | null = null;
+  @Input() scheduleShowTime: boolean = false;
+  @Input() scheduleUse24Hour: boolean = false;
+  @Input() scheduleColorPresets: (ScheduleColor | string)[] = [...DEFAULT_SCHEDULE_COLORS];
+  @Input() scheduleIconPresets: string[] = [...DEFAULT_SCHEDULE_ICONS];
+  @Input() scheduleCategoryOptions: string[] = [];
+  @Input() scheduleTagSuggestions: string[] = [];
+  @Input() scheduleAllowOverlap: boolean = true;
+  @Input() scheduleMaxItems: number | null = null;
+
+  @Input() scheduleShowDragHandle: boolean = true;
+  @Input() scheduleShowComplete: boolean = true;
+  @Input() scheduleShowDuplicate: boolean = true;
+  @Input() scheduleShowExport: boolean = true;
+  @Input() scheduleShowImport: boolean = true;
+  @Input() scheduleShowSearch: boolean = true;
+  @Input() scheduleShowSort: boolean = true;
+  @Input() scheduleShowFilter: boolean = true;
+  @Input() scheduleShowConflicts: boolean = true;
+
+  @Input() scheduleRowTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
+  @Input() scheduleBadgeTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
+  @Input() scheduleActionsTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
+  @Input() scheduleEmptyTemplate: TemplateRef<void> | null = null;
+  @Input() scheduleHeaderTemplate: TemplateRef<void> | null = null;
+  @Input() scheduleFooterTemplate: TemplateRef<{ items: ScheduleItem[] }> | null = null;
+
+  @Input() formatItemDate: ((item: ScheduleItem) => string) | null = null;
+  @Input() formatItemDuration: ((item: ScheduleItem) => string) | null = null;
+
+  @Input() onBeforeAdd: ((item: ScheduleItem) => boolean) | null = null;
+  @Input() onBeforeEdit: ((item: ScheduleItem) => boolean) | null = null;
+  @Input() onBeforeDelete: ((item: ScheduleItem) => boolean) | null = null;
+  @Input() onBeforeReorder: ((from: number, to: number, items: ScheduleItem[]) => boolean) | null = null;
+  @Input() validateScheduleItem: ((item: ScheduleItem, all: ScheduleItem[]) => string | null) | null = null;
+
+  // ─── Schedule Mode Outputs ─────────────────────────────────────────────────
+  readonly scheduleChange = output<ScheduleChangeEvent>();
+  readonly scheduleApply = output<ScheduleItem[]>();
+  readonly scheduleCancel = output<void>();
+
+  readonly itemAdd = output<ScheduleItem>();
+  readonly itemEdit = output<ScheduleItem>();
+  readonly itemDelete = output<ScheduleItem>();
+  readonly itemDuplicate = output<ScheduleItem>();
+  readonly itemReorder = output<{ from: number; to: number; items: ScheduleItem[] }>();
+  readonly itemClick = output<ScheduleItem>();
   @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   /**
@@ -1769,6 +1885,9 @@ export class NgxsmkDatepickerComponent
   private passiveTouchListeners: Array<() => void> = [];
 
   get isInlineMode(): boolean {
+    if (this.mode === 'schedule') {
+      return true;
+    }
     if (this.inline === true || this.inline === 'always') {
       return true;
     }
@@ -2013,8 +2132,12 @@ export class NgxsmkDatepickerComponent
   // `typedInputValue` getter deriving from this value (see below), so this can be
   // safely read during template rendering.
   get displayValue(): string {
+    if (this.mode === 'schedule') {
+      const count = this.scheduleItems?.length || 0;
+      return count > 0 ? `${count} item(s) scheduled` : '';
+    }
     if (this.hooks?.formatDisplayValue) {
-      return this.hooks.formatDisplayValue(this._value, this.mode) ?? '';
+      return this.hooks.formatDisplayValue(this._value as DatepickerValue, this.mode) ?? '';
     }
     if (this._dateFormatPattern && this.customDateFormatService) {
       return this.formatWithCustomPattern();
@@ -2994,8 +3117,8 @@ export class NgxsmkDatepickerComponent
     if (this.isInvalidDate?.(date)) return false;
     if (this.isDateDisabledMemo(date)) return false;
 
-    if (this.hooks?.validateDate) {
-      if (!this.hooks.validateDate(date, this._value, this.mode)) {
+    if (this.hooks?.validateDate && this.mode !== 'schedule') {
+      if (!this.hooks.validateDate(date, this._value as DatepickerValue, this.mode)) {
         return false;
       }
     }
@@ -3005,15 +3128,55 @@ export class NgxsmkDatepickerComponent
 
   /** Resolves `dayMetadata` for a day, tolerating provider errors. */
   public getDayMetadata(day: Date | null): DayMetadata | null {
-    if (!day || !this.dayMetadata) return null;
-    try {
-      return this.dayMetadata(day) ?? null;
-    } catch (error) {
-      if (isDevMode()) {
-        console.warn('[ngxsmk-datepicker] Error in dayMetadata provider:', error);
+    if (!day) return null;
+    let customMeta: DayMetadata | null = null;
+    if (this.dayMetadata) {
+      try {
+        customMeta = this.dayMetadata(day) ?? null;
+      } catch (error) {
+        if (isDevMode()) {
+          console.warn('[ngxsmk-datepicker] Error in dayMetadata provider:', error);
+        }
       }
-      return null;
     }
+
+    const items = this.scheduleItems || [];
+    if (items.length > 0) {
+      const dayStart = getStartOfDay(day);
+      const dayEnd = getEndOfDay(day);
+      const dayItems = items.filter((item) => {
+        const itemStart = getStartOfDay(item.start);
+        const itemEnd = getEndOfDay(item.end ?? item.start);
+        return itemStart <= dayEnd && itemEnd >= dayStart;
+      });
+
+      if (dayItems.length > 0) {
+        const first = dayItems[0]!;
+        const autoMeta: DayMetadata = {
+          tooltip: dayItems.map((i) => i.title).join(', '),
+          cssClass: 'ngxsmk-day-has-schedule',
+        };
+        if (first.color) {
+          autoMeta.indicatorColor = first.color.startsWith('#')
+            ? first.color
+            : `var(--datepicker-schedule-color-${first.color})`;
+        }
+        if (dayItems.length > 1) {
+          autoMeta.label = `${dayItems.length}`;
+        }
+
+        return {
+          ...autoMeta,
+          ...customMeta,
+          cssClass: [
+            ...(Array.isArray(autoMeta.cssClass) ? autoMeta.cssClass : [autoMeta.cssClass]),
+            ...(customMeta ? (Array.isArray(customMeta.cssClass) ? customMeta.cssClass : customMeta.cssClass ? [customMeta.cssClass] : []) : []),
+          ].filter(Boolean) as string[],
+        };
+      }
+    }
+
+    return customMeta;
   }
 
   getDayCellCustomClasses(day: Date | null): string[] {
@@ -4251,6 +4414,12 @@ export class NgxsmkDatepickerComponent
    * Performance: O(1) for single/range, O(n) for multiple mode where n = array length
    */
   private initializeValue(value: DatepickerValue): void {
+    if (this.mode === 'schedule') {
+      if (Array.isArray(value)) {
+        this.scheduleItems = value as unknown as ScheduleItem[];
+      }
+      return;
+    }
     const initialDate = this.applyValueToSelection(value);
     const viewCenterDate = this.resolveViewCenterDate(initialDate);
     if (viewCenterDate) {
@@ -4340,6 +4509,9 @@ export class NgxsmkDatepickerComponent
    */
   private _normalizeValue(val: unknown): DatepickerValue {
     if (val === null || val === undefined) return null;
+    if (this.mode === 'schedule') {
+      return Array.isArray(val) ? (val as any) : [];
+    }
     if (val instanceof Date) {
       return this._normalizeDate(val);
     }
@@ -5592,7 +5764,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -5628,7 +5800,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -5653,7 +5825,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -5926,6 +6098,26 @@ export class NgxsmkDatepickerComponent
     this.calendarViewMode = mode;
   }
 
+  public onScheduleChange(event: ScheduleChangeEvent): void {
+    this._value = event.items as any;
+    this.scheduleItems = event.items;
+    this.onChange(this._value as any);
+    this.scheduleChange.emit(event);
+  }
+
+  public onScheduleApply(items: ScheduleItem[]): void {
+    this._value = items as any;
+    this.scheduleItems = items;
+    this.onChange(this._value as any);
+    this.scheduleApply.emit(items);
+    this.closeCalendar();
+  }
+
+  public onScheduleCancel(): void {
+    this.scheduleCancel.emit();
+    this.closeCalendar();
+  }
+
   public onYearSelectChange(year: unknown): void {
     const yearValue = typeof year === 'number' ? year : Number(year);
     if (Number.isNaN(yearValue)) return;
@@ -6055,7 +6247,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6410,23 +6602,28 @@ export class NgxsmkDatepickerComponent
 
     if (this._translations) {
       // Use optional chaining and nullish coalescing for safer access
-      let translation = this._translations[key] ?? null;
+      const raw = this._translations[key] ?? null;
+      const translation = typeof raw === 'string' ? raw : null;
+      let fallbackTranslation: string | null = null;
       if (!translation && fallbackKey) {
-        translation = this._translations[fallbackKey] ?? null;
+        const rawFb = this._translations[fallbackKey] ?? null;
+        fallbackTranslation = typeof rawFb === 'string' ? rawFb : null;
       }
-      if (translation && params) {
-        let result = translation;
+      const resolved = translation ?? fallbackTranslation;
+      if (resolved && params) {
+        let result = resolved;
         for (const [paramKey, paramValue] of Object.entries(params)) {
           result = result.replaceAll(new RegExp(`{{${paramKey}}}`, 'g'), String(paramValue));
         }
         return result;
       }
-      return translation || key;
+      return resolved || key;
     }
 
     if (this.translationRegistry && this._locale) {
       const registryTranslations = this.translationRegistry.getTranslations(this._locale);
-      return registryTranslations?.[key] ?? key;
+      const regRaw = registryTranslations?.[key];
+      return (typeof regRaw === 'string' ? regRaw : null) ?? key;
     }
     return key;
   }

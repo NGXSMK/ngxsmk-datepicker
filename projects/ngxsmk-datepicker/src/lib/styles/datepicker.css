@@ -8028,3 +8028,1354 @@ ngxsmk-custom-select[data-open=true] {
     min-width: 0;
   }
 }
+
+/* ============================================================/* ============================================================
+   === Schedule Mode (Redesigned Edition) =====================
+   ============================================================ */
+
+ngxsmk-datepicker,
+smk-schedule-editor {
+  --datepicker-schedule-panel-bg:              var(--datepicker-background, #ffffff);
+  --datepicker-schedule-panel-radius:          14px;
+  --datepicker-schedule-panel-padding:         20px;
+  --datepicker-schedule-panel-min-width:       320px;
+  --datepicker-schedule-panel-max-height:      600px;
+  --datepicker-schedule-panel-border:          1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  --datepicker-schedule-panel-shadow:          0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06);
+
+  --datepicker-schedule-header-font-size:      16px;
+  --datepicker-schedule-header-font-weight:    600;
+  --datepicker-schedule-header-color:          var(--datepicker-text-color, #1f2937);
+  --datepicker-schedule-header-gap:            10px;
+
+  --datepicker-schedule-add-btn-bg:            var(--datepicker-primary-color, #6366f1);
+  --datepicker-schedule-add-btn-color:         #fff;
+  --datepicker-schedule-add-btn-radius:        8px;
+  --datepicker-schedule-add-btn-padding:       7px 16px;
+  --datepicker-schedule-add-btn-font-weight:   500;
+
+  --datepicker-schedule-list-gap:              6px;
+
+  --datepicker-schedule-item-radius:           10px;
+  --datepicker-schedule-item-padding:          12px 14px;
+  --datepicker-schedule-item-gap:              10px;
+  --datepicker-schedule-item-border:           1px solid var(--datepicker-border-color, rgba(0,0,0,0.05));
+  --datepicker-schedule-item-bg:               var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  --datepicker-schedule-item-bg-hover:         var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  --datepicker-schedule-item-bg-editing:       rgba(99,102,241,0.04);
+  --datepicker-schedule-item-bg-dragging:      rgba(99,102,241,0.08);
+  --datepicker-schedule-item-shadow-hover:     0 2px 8px rgba(0,0,0,0.06);
+  --datepicker-schedule-item-transition:       all 200ms ease;
+
+  --datepicker-schedule-color-red:             #f87171;
+  --datepicker-schedule-color-orange:          #fb923c;
+  --datepicker-schedule-color-yellow:          #facc15;
+  --datepicker-schedule-color-green:           #4ade80;
+  --datepicker-schedule-color-teal:            #2dd4bf;
+  --datepicker-schedule-color-blue:            #60a5fa;
+  --datepicker-schedule-color-indigo:          #818cf8;
+  --datepicker-schedule-color-purple:          #a78bfa;
+  --datepicker-schedule-color-pink:            #f472b6;
+  --datepicker-schedule-color-gray:            #9ca3af;
+
+  --datepicker-schedule-form-bg:               var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  --datepicker-schedule-form-border:           1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  --datepicker-schedule-form-radius:           10px;
+  --datepicker-schedule-form-padding:          16px;
+  --datepicker-schedule-form-gap:              12px;
+
+  /* — Toolbar / segmented control — */
+  --datepicker-schedule-toolbar-gap:             12px;
+  --datepicker-schedule-segment-bg:              var(--datepicker-hover-background, rgba(0,0,0,0.04));
+  --datepicker-schedule-segment-border:          1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  --datepicker-schedule-segment-radius:          9px;
+  --datepicker-schedule-segment-pad:             3px;
+  --datepicker-schedule-segment-thumb-bg:        var(--datepicker-background, #fff);
+  --datepicker-schedule-segment-thumb-shadow:     0 1px 2px rgba(0,0,0,0.08);
+  --datepicker-schedule-segment-active-color:    var(--datepicker-text-color, #1f2937);
+  --datepicker-schedule-segment-color:           var(--datepicker-subtle-text-color, #6b7280);
+
+  /* — Action button cluster (header Add, icon buttons) — */
+  --datepicker-schedule-action-btn-radius:       8px;
+  --datepicker-schedule-action-btn-pad:           7px 12px;
+  --datepicker-schedule-action-btn-icon-pad:     7px 10px;
+
+  /* — Filter bar — */
+  --datepicker-schedule-filter-summary-color:   var(--datepicker-subtle-text-color, #6b7280);
+  --datepicker-schedule-filter-summary-gap:     8px;
+  --datepicker-schedule-filter-tag-chip-bg:     transparent;
+  --datepicker-schedule-filter-tag-chip-color:  var(--datepicker-subtle-text-color, #6b7280);
+  --datepicker-schedule-filter-tag-chip-border: 1px dashed var(--datepicker-border-color, rgba(0,0,0,0.18));
+  --datepicker-schedule-filter-cat-chip-bg:     color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 10%, transparent);
+  --datepicker-schedule-filter-cat-chip-color:  var(--datepicker-primary-color, #6366f1);
+  --datepicker-schedule-filter-cat-chip-border: 1px solid color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 22%, transparent);
+
+  /* — Item row — */
+  --datepicker-schedule-item-action-opacity:      0.55;
+  --datepicker-schedule-item-action-opacity-hover: 1;
+  --datepicker-schedule-priority-pill-pad:        2px 8px;
+  --datepicker-schedule-priority-pill-radius:    999px;
+  --datepicker-schedule-datebadge-bg:            color-mix(in srgb, var(--item-color, var(--datepicker-primary-color, #6366f1)) 8%, var(--datepicker-background, #fff));
+  --datepicker-schedule-datebadge-border:        1px solid color-mix(in srgb, var(--item-color, var(--datepicker-primary-color, #6366f1)) 16%, transparent);
+  --datepicker-schedule-datebadge-radius:        8px;
+  --datepicker-schedule-conflict-ring:           0 0 0 1px rgba(239,68,68,0.25);
+
+  /* — Form sections — */
+  --datepicker-schedule-form-section-gap:        4px;
+  --datepicker-schedule-form-section-label-color: var(--datepicker-subtle-text-color, #9ca3af);
+  --datepicker-schedule-form-section-label-size:  10px;
+  --datepicker-schedule-form-divider:            1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+
+  /* — Timeline — */
+  --datepicker-schedule-tl-day-width:            48px;
+  --datepicker-schedule-tl-weekend-bg:           color-mix(in srgb, var(--datepicker-text-color, #1f2937) 4%, transparent);
+  --datepicker-schedule-tl-week-sep:            1px solid color-mix(in srgb, var(--datepicker-border-color, rgba(0,0,0,0.08)) 70%, transparent);
+  --datepicker-schedule-tl-today-line:          2px solid var(--datepicker-primary-color, #6366f1);
+  --datepicker-schedule-tl-today-line-alpha:    0.55;
+  --datepicker-schedule-tl-row-hover-bg:        color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 4%, transparent);
+  --datepicker-schedule-tl-bar-height:          28px;
+  --datepicker-schedule-tl-bar-gap:             2px;
+  --datepicker-schedule-tl-bar-radius:          6px;
+  --datepicker-schedule-tl-bar-shadow:          0 1px 2px rgba(0,0,0,0.08);
+  --datepicker-schedule-tl-bar-shadow-hover:   0 3px 8px rgba(0,0,0,0.14);
+  --datepicker-schedule-tl-nav-icon-pad:        7px 10px;
+}
+
+/* ── Panel ───────────────────────────────────────────────────── */
+.smk-schedule-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--datepicker-schedule-panel-bg);
+  border-radius: var(--datepicker-schedule-panel-radius);
+  border: var(--datepicker-schedule-panel-border);
+  box-shadow: var(--datepicker-schedule-panel-shadow);
+  padding: var(--datepicker-schedule-panel-padding);
+  width: var(--datepicker-schedule-panel-width, auto);
+  min-width: var(--datepicker-schedule-panel-min-width);
+  max-width: var(--datepicker-schedule-panel-max-width, 100%);
+  height: var(--datepicker-schedule-panel-height, auto);
+  max-height: var(--datepicker-schedule-panel-max-height);
+  overflow: hidden;
+  font-family: var(--datepicker-font-family, system-ui, -apple-system, sans-serif);
+  box-sizing: border-box;
+  transition: all 250ms ease;
+}
+
+.smk-schedule-panel--full-page {
+  --datepicker-schedule-panel-width: 100%;
+  --datepicker-schedule-panel-height: 100%;
+  --datepicker-schedule-panel-max-height: 100%;
+  --datepicker-schedule-panel-radius: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 100%;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.smk-schedule-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--datepicker-schedule-header-gap);
+  padding: 0 0 14px 0;
+  border-bottom: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.smk-schedule-panel__title {
+  font-size: var(--datepicker-schedule-header-font-size);
+  font-weight: var(--datepicker-schedule-header-font-weight);
+  color: var(--datepicker-schedule-header-color);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.smk-schedule-panel__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.smk-schedule-panel__add-btn {
+  background: var(--datepicker-schedule-add-btn-bg);
+  color: var(--datepicker-schedule-add-btn-color);
+  border: none;
+  border-radius: var(--datepicker-schedule-add-btn-radius);
+  padding: var(--datepicker-schedule-add-btn-padding);
+  font-size: 13px;
+  font-weight: var(--datepicker-schedule-add-btn-font-weight);
+  cursor: pointer;
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+.smk-schedule-panel__add-btn:hover {
+  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+}
+.smk-schedule-panel__add-btn:active {
+  transform: scale(0.97);
+}
+.smk-schedule-panel__add-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ── Search & Sort ──────────────────────────────────────────── */
+.smk-schedule-search__input {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: var(--datepicker-text-color, #1f2937);
+  outline: none;
+  width: 160px;
+  transition: all 200ms ease;
+  font-family: inherit;
+}
+.smk-schedule-search__input::placeholder {
+  color: var(--datepicker-subtle-text-color, #9ca3af);
+}
+.smk-schedule-search__input:focus {
+  border-color: var(--datepicker-primary-color, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+  background: var(--datepicker-background, #fff);
+}
+
+.smk-schedule-sort {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--datepicker-text-color, #1f2937);
+  cursor: pointer;
+  outline: none;
+  transition: all 200ms ease;
+  font-family: inherit;
+}
+.smk-schedule-sort:focus {
+  border-color: var(--datepicker-primary-color, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+/* ── Filter Chips ───────────────────────────────────────────── */
+.smk-schedule-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.smk-schedule-filter__chip {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.04));
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.smk-schedule-filter__chip:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.04));
+  border-color: var(--datepicker-border-color, rgba(0,0,0,0.08));
+}
+.smk-schedule-filter__chip--active {
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 10%, transparent);
+  color: var(--datepicker-primary-color, #6366f1);
+  border-color: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 20%, transparent);
+  font-weight: 600;
+}
+
+/* ── Item Row ────────────────────────────────────────────────── */
+.smk-schedule-item {
+  display: flex;
+  align-items: center;
+  gap: var(--datepicker-schedule-item-gap);
+  padding: var(--datepicker-schedule-item-padding);
+  background: var(--datepicker-schedule-item-bg);
+  border: var(--datepicker-schedule-item-border);
+  border-left: 3px solid var(--item-color, var(--datepicker-primary-color, #6366f1));
+  border-radius: var(--datepicker-schedule-item-radius);
+  cursor: default;
+  transition: var(--datepicker-schedule-item-transition);
+  box-sizing: border-box;
+  position: relative;
+}
+.smk-schedule-item:hover {
+  background: var(--datepicker-schedule-item-bg-hover);
+  box-shadow: var(--datepicker-schedule-item-shadow-hover);
+}
+.smk-schedule-item--editing {
+  background: var(--datepicker-schedule-item-bg-editing);
+  border-color: var(--datepicker-primary-color, #6366f1);
+}
+.smk-schedule-item--completed {
+  opacity: 0.5;
+}
+.smk-schedule-item--completed .smk-schedule-item__title {
+  text-decoration: line-through;
+}
+.smk-schedule-item--conflict {
+  border-left-color: #ef4444 !important;
+}
+.smk-schedule-item--conflict::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--datepicker-schedule-item-radius);
+  border: 1px solid rgba(239,68,68,0.15);
+  pointer-events: none;
+}
+
+/* ── Drag Handle ─────────────────────────────────────────────── */
+.smk-schedule-item__drag {
+  color: var(--datepicker-subtle-text-color, #9ca3af);
+  font-size: 16px;
+  cursor: grab;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  width: 16px;
+  text-align: center;
+}
+.smk-schedule-item:hover .smk-schedule-item__drag {
+  opacity: 1;
+}
+.smk-schedule-item__drag--placeholder {
+  width: 16px;
+  flex-shrink: 0;
+}
+.smk-schedule-item__drag:active {
+  cursor: grabbing;
+}
+
+/* ── Color Dot / Icon ────────────────────────────────────────── */
+.smk-schedule-item__color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--item-color, var(--datepicker-primary-color, #6366f1));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.smk-schedule-item__icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* ── Title & Meta ────────────────────────────────────────────── */
+.smk-schedule-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.smk-schedule-item__title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.smk-schedule-item__title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--datepicker-text-color, #1f2937);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.smk-schedule-item__badge-pill {
+  background: var(--datepicker-primary-color, #6366f1);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.smk-schedule-item__lock-icon,
+.smk-schedule-item__recurrence-icon {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.smk-schedule-item__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.smk-schedule-item__category {
+  font-size: 10px;
+  color: var(--datepicker-primary-color, #6366f1);
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 8%, transparent);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.smk-schedule-item__priority {
+  font-size: 10px;
+  font-weight: 600;
+}
+.smk-schedule-item__priority--low     { color: #9ca3af; }
+.smk-schedule-item__priority--medium  { color: #60a5fa; }
+.smk-schedule-item__priority--high    { color: #fb923c; }
+.smk-schedule-item__priority--critical{ color: #f87171; }
+
+.smk-schedule-item__tag {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  border-radius: 3px;
+  padding: 0 5px;
+  font-size: 9px;
+}
+.smk-schedule-item__tag--more {
+  font-weight: 600;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+}
+
+/* ── Date Badge ──────────────────────────────────────────────── */
+.smk-schedule-item__date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  flex-shrink: 0;
+}
+.smk-schedule-item__date {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  white-space: nowrap;
+}
+.smk-schedule-item__duration {
+  font-size: 9px;
+  color: var(--datepicker-subtle-text-color, #9ca3af);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Conflict Warning ────────────────────────────────────────── */
+.smk-schedule-item__conflict {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* ── Actions ─────────────────────────────────────────────────── */
+.smk-schedule-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.smk-schedule-item__action {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: var(--datepicker-subtle-text-color, #9ca3af);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 150ms ease;
+  opacity: 0.6;
+}
+.smk-schedule-item:hover .smk-schedule-item__action {
+  opacity: 1;
+}
+.smk-schedule-item__action:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.04));
+  color: var(--datepicker-text-color, #1f2937);
+  opacity: 1;
+}
+.smk-schedule-item__action--active {
+  color: var(--datepicker-primary-color, #6366f1);
+  opacity: 1;
+}
+.smk-schedule-item__action--delete:hover {
+  color: #ef4444;
+  background: rgba(239,68,68,0.08);
+}
+
+/* ── Form ────────────────────────────────────────────────────── */
+.smk-schedule-form {
+  background: var(--datepicker-schedule-form-bg);
+  border: var(--datepicker-schedule-form-border);
+  border-radius: var(--datepicker-schedule-form-radius);
+  padding: var(--datepicker-schedule-form-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--datepicker-schedule-form-gap);
+  margin-top: 6px;
+  animation: smkScheduleFormSlideIn 200ms ease;
+}
+
+@keyframes smkScheduleFormSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.smk-schedule-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.smk-schedule-form__field--inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.smk-schedule-form__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+}
+
+.smk-schedule-form__input,
+.smk-schedule-form__select,
+.smk-schedule-form__textarea {
+  background: var(--datepicker-background, #fff);
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.08));
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--datepicker-text-color, #1f2937);
+  outline: none;
+  width: 100%;
+  transition: all 200ms ease;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.smk-schedule-form__input:focus,
+.smk-schedule-form__select:focus,
+.smk-schedule-form__textarea:focus {
+  border-color: var(--datepicker-primary-color, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+.smk-schedule-form__textarea {
+  resize: vertical;
+  min-height: 56px;
+}
+
+.smk-schedule-form__field--error .smk-schedule-form__input,
+.smk-schedule-form__field--error .smk-schedule-form__select,
+.smk-schedule-form__field--error .smk-schedule-form__textarea {
+  border-color: #ef4444;
+}
+.smk-schedule-form__field--error .smk-schedule-form__input:focus,
+.smk-schedule-form__field--error .smk-schedule-form__select:focus,
+.smk-schedule-form__field--error .smk-schedule-form__textarea:focus {
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+}
+
+.smk-schedule-form__error {
+  font-size: 11px;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.smk-schedule-form__global-error {
+  font-size: 12px;
+  color: #ef4444;
+  background: rgba(239,68,68,0.06);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: 1px solid rgba(239,68,68,0.12);
+}
+
+/* ── Toggle Switch ───────────────────────────────────────────── */
+.smk-schedule-toggle {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--datepicker-border-color, rgba(0,0,0,0.1));
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 200ms ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+.smk-schedule-toggle--on {
+  background: var(--datepicker-primary-color, #6366f1);
+}
+.smk-schedule-toggle__thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 200ms ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+.smk-schedule-toggle--on .smk-schedule-toggle__thumb {
+  transform: translateX(16px);
+}
+
+/* ── Color Picker ────────────────────────────────────────────── */
+.smk-schedule-color-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.smk-schedule-color-picker__swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-sizing: border-box;
+}
+.smk-schedule-color-picker__swatch:hover {
+  transform: scale(1.15);
+}
+.smk-schedule-color-picker__swatch--active {
+  border-color: var(--datepicker-primary-color, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+  transform: scale(1.1);
+}
+.smk-schedule-color-picker__custom {
+  position: relative;
+}
+.smk-schedule-color-picker__hex {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Icon Picker ─────────────────────────────────────────────── */
+.smk-schedule-icon-picker {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.smk-schedule-icon-picker__btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 6px;
+  background: transparent;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.smk-schedule-icon-picker__btn:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  border-color: var(--datepicker-border-color, rgba(0,0,0,0.1));
+}
+.smk-schedule-icon-picker__btn--active {
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 8%, transparent);
+  border-color: var(--datepicker-primary-color, #6366f1);
+}
+.smk-schedule-icon-picker__custom {
+  width: 40px;
+  height: 30px;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 6px;
+  background: transparent;
+  text-align: center;
+  font-size: 15px;
+  outline: none;
+  transition: all 150ms ease;
+}
+.smk-schedule-icon-picker__custom:focus {
+  border-color: var(--datepicker-primary-color, #6366f1);
+}
+
+/* ── Priority Picker ─────────────────────────────────────────── */
+.smk-schedule-priority-picker {
+  display: flex;
+  gap: 6px;
+}
+.smk-schedule-priority-picker__btn {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 6px;
+  background: transparent;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.smk-schedule-priority-picker__btn:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  color: var(--datepicker-text-color, #1f2937);
+}
+.smk-schedule-priority-picker__btn--low.smk-schedule-priority-picker__btn--active { background: #9ca3af; color: #fff; border-color: #9ca3af; }
+.smk-schedule-priority-picker__btn--medium.smk-schedule-priority-picker__btn--active { background: #60a5fa; color: #fff; border-color: #60a5fa; }
+.smk-schedule-priority-picker__btn--high.smk-schedule-priority-picker__btn--active { background: #fb923c; color: #fff; border-color: #fb923c; }
+.smk-schedule-priority-picker__btn--critical.smk-schedule-priority-picker__btn--active { background: #f87171; color: #fff; border-color: #f87171; }
+
+/* ── Tags Input ──────────────────────────────────────────────── */
+.smk-schedule-tags-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 8px;
+  background: var(--datepicker-background, #fff);
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.08));
+  border-radius: 6px;
+  transition: all 200ms ease;
+}
+.smk-schedule-tags-input:focus-within {
+  border-color: var(--datepicker-primary-color, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+.smk-schedule-tag {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 8%, transparent);
+  color: var(--datepicker-primary-color, #6366f1);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.smk-schedule-tag__remove {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.7;
+}
+.smk-schedule-tag__remove:hover {
+  opacity: 1;
+}
+.smk-schedule-tags-input__field {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--datepicker-text-color, #1f2937);
+  outline: none;
+  flex: 1;
+  min-width: 60px;
+  padding: 2px 0;
+  font-family: inherit;
+}
+
+/* ── Form Footer ─────────────────────────────────────────────── */
+.smk-schedule-form__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}
+.smk-schedule-form__btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.08));
+  background: var(--datepicker-background, #fff);
+  color: var(--datepicker-text-color, #1f2937);
+  transition: all 150ms ease;
+  font-family: inherit;
+}
+.smk-schedule-form__btn:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+}
+.smk-schedule-form__btn--save {
+  background: var(--datepicker-primary-color, #6366f1);
+  color: #fff;
+  border-color: transparent;
+}
+.smk-schedule-form__btn--save:hover {
+  opacity: 0.9;
+}
+.smk-schedule-form__btn--save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── List Layout & Scrollbar ─────────────────────────────────── */
+.smk-schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--datepicker-schedule-list-gap);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  min-height: 0;
+  padding-right: 4px;
+}
+.smk-schedule-list::-webkit-scrollbar {
+  width: 4px;
+}
+.smk-schedule-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.smk-schedule-list::-webkit-scrollbar-thumb {
+  background: var(--datepicker-border-color, rgba(0,0,0,0.1));
+  border-radius: 10px;
+}
+.smk-schedule-list::-webkit-scrollbar-thumb:hover {
+  background: var(--datepicker-subtle-text-color, #9ca3af);
+}
+
+/* ── Empty State ─────────────────────────────────────────────── */
+.smk-schedule-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  text-align: center;
+  gap: 8px;
+}
+.smk-schedule-empty__icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+.smk-schedule-empty__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--datepicker-text-color, #1f2937);
+  margin: 0;
+}
+.smk-schedule-empty__subtitle {
+  font-size: 13px;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  margin: 0;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.smk-schedule-panel__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 14px 0 0 0;
+  border-top: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+.smk-schedule-panel__footer-left,
+.smk-schedule-panel__footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.smk-schedule-panel__footer-btn {
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  background: var(--datepicker-background, #fff);
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  transition: all 150ms ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.smk-schedule-panel__footer-btn:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  color: var(--datepicker-text-color, #1f2937);
+}
+.smk-schedule-panel__footer-btn--apply {
+  background: var(--datepicker-primary-color, #6366f1);
+  color: #fff;
+  border-color: transparent;
+}
+.smk-schedule-panel__footer-btn--apply:hover {
+  opacity: 0.9;
+  background: var(--datepicker-primary-color, #6366f1);
+  color: #fff;
+}
+.smk-schedule-panel__footer-btn--cancel {
+  color: var(--datepicker-subtle-text-color, #6b7280);
+}
+
+/* Hidden file input inside import label */
+.smk-schedule-import-input {
+  display: none;
+}
+
+/* ── Dark Theme ──────────────────────────────────────────────── */
+.dark-theme smk-schedule-editor,
+.dark-theme .smk-schedule-panel,
+smk-schedule-editor.dark-theme,
+[data-theme="dark"] smk-schedule-editor {
+  --datepicker-schedule-panel-bg:            #1e2433;
+  --datepicker-schedule-panel-border:        1px solid rgba(255,255,255,0.06);
+  --datepicker-schedule-panel-shadow:        0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.3);
+  --datepicker-schedule-header-color:        #f1f5f9;
+  --datepicker-schedule-item-bg:             #252d3d;
+  --datepicker-schedule-item-bg-hover:       #2e3850;
+  --datepicker-schedule-item-bg-editing:     rgba(99,102,241,0.12);
+  --datepicker-schedule-item-bg-dragging:    rgba(99,102,241,0.18);
+  --datepicker-schedule-item-border:         1px solid rgba(255,255,255,0.04);
+  --datepicker-schedule-item-shadow-hover:   0 2px 8px rgba(0,0,0,0.2);
+  --datepicker-schedule-form-bg:             #252d3d;
+  --datepicker-subtle-text-color:            #94a3b8;
+  --datepicker-text-color:                   #f1f5f9;
+
+  .smk-schedule-search__input,
+  .smk-schedule-sort {
+    background: rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.06);
+    color: #f1f5f9;
+  }
+  .smk-schedule-search__input::placeholder {
+    color: #64748b;
+  }
+  .smk-schedule-form__input,
+  .smk-schedule-form__select,
+  .smk-schedule-form__textarea {
+    background: rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.06);
+    color: #f1f5f9;
+  }
+  .smk-schedule-tags-input {
+    background: rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.06);
+  }
+  .smk-schedule-tags-input__field {
+    color: #f1f5f9;
+  }
+  .smk-schedule-panel__footer-btn {
+    background: rgba(0,0,0,0.15);
+    border-color: rgba(255,255,255,0.06);
+    color: #94a3b8;
+  }
+  .smk-schedule-panel__footer-btn:hover {
+    background: rgba(255,255,255,0.06);
+    color: #f1f5f9;
+  }
+  .smk-schedule-form__btn {
+    background: rgba(0,0,0,0.15);
+    border-color: rgba(255,255,255,0.06);
+    color: #f1f5f9;
+  }
+  .smk-schedule-form__btn:hover {
+    background: rgba(255,255,255,0.06);
+  }
+}
+
+/* ── Reduced Motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .smk-schedule-panel,
+  .smk-schedule-item,
+  .smk-schedule-form,
+  .smk-schedule-form-wrapper,
+  .smk-schedule-panel__add-btn,
+  .smk-schedule-color-picker__swatch,
+  .smk-schedule-toggle,
+  .smk-schedule-toggle__thumb,
+  .cdk-drag-animating .smk-schedule-item {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── RTL Support ─────────────────────────────────────────────── */
+[dir="rtl"] .smk-schedule-panel__header-actions { flex-direction: row-reverse; }
+[dir="rtl"] .smk-schedule-item__date-badge { align-items: flex-start; }
+[dir="rtl"] .smk-schedule-form__footer { flex-direction: row-reverse; }
+[dir="rtl"] .smk-schedule-panel__footer { flex-direction: row-reverse; }
+[dir="rtl"] .smk-schedule-toggle__thumb { left: auto; right: 2px; }
+[dir="rtl"] .smk-schedule-toggle--on .smk-schedule-toggle__thumb {
+  transform: translateX(-16px);
+}
+
+/* ── High Contrast ───────────────────────────────────────────── */
+@media (prefers-contrast: high) {
+  .smk-schedule-item { border-width: 2px; }
+  .smk-schedule-item--conflict { border-color: #ef4444; border-width: 2px; }
+  .smk-schedule-item__action { border: 1px solid currentColor; }
+  .smk-schedule-panel__add-btn,
+  .smk-schedule-form__btn--save,
+  .smk-schedule-panel__footer-btn--apply { outline: 2px solid currentColor; }
+}
+
+/* ── View Toggle ─────────────────────────────────────────────── */
+.smk-schedule-panel__title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.smk-schedule-view-toggle {
+  display: flex;
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.smk-schedule-view-btn {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.smk-schedule-view-btn:hover {
+  color: var(--datepicker-text-color, #1f2937);
+}
+.smk-schedule-view-btn--active {
+  background: var(--datepicker-background, #fff);
+  color: var(--datepicker-text-color, #1f2937) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* ── Timeline ────────────────────────────────────────────────── */
+.smk-timeline-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.smk-timeline-nav-btn {
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  background: var(--datepicker-background, #fff);
+  color: var(--datepicker-text-color, #1f2937);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-family: inherit;
+  font-weight: 500;
+}
+.smk-timeline-nav-btn:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.03));
+}
+.smk-timeline-nav-btn--today {
+  font-weight: 600;
+  border-color: var(--datepicker-primary-color, #6366f1);
+  color: var(--datepicker-primary-color, #6366f1);
+}
+.smk-timeline-nav-range {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--datepicker-text-color, #1f2937);
+  min-width: 180px;
+  text-align: center;
+  font-family: inherit;
+}
+
+.smk-timeline-workspace {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.smk-timeline-scroll-container {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  border-radius: 8px;
+}
+.smk-timeline-grid {
+  display: flex;
+  flex-direction: column;
+  min-width: 1100px;
+}
+
+.smk-timeline-grid-header {
+  display: flex;
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.02));
+  border-bottom: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.smk-timeline-grid-header-resource {
+  width: 160px;
+  padding: 10px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  border-right: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.06));
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.smk-timeline-grid-header-days {
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  flex: 1;
+}
+.smk-timeline-header-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+  border-right: 1px solid color-mix(in srgb, var(--datepicker-border-color) 60%, transparent);
+  box-sizing: border-box;
+}
+.smk-timeline-header-day:last-child { border-right: none; }
+.smk-timeline-day-name {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+}
+.smk-timeline-day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--datepicker-text-color, #1f2937);
+}
+.smk-timeline-header-day--today {
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 8%, transparent);
+}
+.smk-timeline-header-day--today .smk-timeline-day-num {
+  color: var(--datepicker-primary-color, #6366f1);
+  font-weight: 700;
+}
+
+.smk-timeline-grid-body {
+  display: flex;
+  flex-direction: column;
+}
+.smk-timeline-grid-row {
+  display: flex;
+  border-bottom: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.04));
+  min-height: 56px;
+  position: relative;
+}
+.smk-timeline-grid-row:last-child { border-bottom: none; }
+.smk-timeline-row-resource {
+  width: 160px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--datepicker-text-color, #1f2937);
+  border-right: 1px solid var(--datepicker-border-color, rgba(0,0,0,0.04));
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.smk-timeline-row-columns {
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  flex: 1;
+  position: relative;
+  box-sizing: border-box;
+}
+.smk-timeline-grid-cell {
+  border-right: 1px solid color-mix(in srgb, var(--datepicker-border-color) 40%, transparent);
+  height: 100%;
+  cursor: cell;
+  transition: background 150ms ease;
+  box-sizing: border-box;
+}
+.smk-timeline-grid-cell:last-child { border-right: none; }
+.smk-timeline-grid-cell:hover {
+  background: var(--datepicker-hover-background, rgba(0,0,0,0.02));
+}
+.smk-timeline-grid-cell--today {
+  background: color-mix(in srgb, var(--datepicker-primary-color, #6366f1) 3%, transparent);
+}
+
+.smk-timeline-item-bar {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 3px;
+  right: 3px;
+  z-index: 2;
+  border-radius: 6px;
+  border-left: 3px solid var(--item-color, var(--datepicker-primary-color, #6366f1));
+  background: color-mix(in srgb, var(--item-color, var(--datepicker-primary-color, #6366f1)) 8%, var(--datepicker-background, #fff));
+  padding: 4px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.smk-timeline-item-bar:hover {
+  background: color-mix(in srgb, var(--item-color, var(--datepicker-primary-color, #6366f1)) 14%, var(--datepicker-background, #fff));
+}
+.smk-timeline-item-bar--completed {
+  opacity: 0.45;
+}
+.smk-timeline-item-bar--completed .smk-timeline-item-bar__title {
+  text-decoration: line-through;
+}
+.smk-timeline-item-bar--locked {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.smk-timeline-item-bar__icon {
+  font-size: 11px;
+  margin-right: 4px;
+}
+.smk-timeline-item-bar__title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--datepicker-text-color, #1f2937);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: inherit;
+}
+.smk-timeline-item-bar__dates {
+  font-size: 9px;
+  color: var(--datepicker-subtle-text-color, #6b7280);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: inherit;
+}
+
+.smk-schedule-form-wrapper {
+  animation: smkScheduleFormSlideIn 200ms ease;
+}
+
+.smk-schedule-form-wrapper--timeline {
+  margin-bottom: 14px;
+}
+
+/* ── Mobile Responsive ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .smk-schedule-panel {
+    --datepicker-schedule-panel-padding: 14px;
+    --datepicker-schedule-panel-max-height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+
+  .smk-schedule-panel__header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .smk-schedule-panel__title-group {
+    width: 100%;
+  }
+
+  .smk-schedule-panel__header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .smk-schedule-search__input {
+    width: 100%;
+    flex: 1;
+  }
+
+  .smk-schedule-sort {
+    flex: 1;
+  }
+
+  .smk-schedule-item {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .smk-schedule-item__date-badge {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .smk-schedule-item__actions {
+    opacity: 1;
+    transform: none;
+  }
+
+  .smk-schedule-item__drag {
+    opacity: 1;
+  }
+
+  .smk-schedule-panel__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .smk-schedule-panel__footer-left,
+  .smk-schedule-panel__footer-right {
+    justify-content: center;
+  }
+
+  .smk-schedule-form__field--inline {
+    flex-direction: row;
+  }
+
+  .smk-schedule-priority-picker {
+    flex-wrap: wrap;
+  }
+
+  .smk-schedule-priority-picker__btn {
+    flex: 0 1 auto;
+    padding: 6px 12px;
+  }
+
+  .smk-timeline-nav {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .smk-timeline-nav-range {
+    min-width: 120px;
+    font-size: 12px;
+    order: -1;
+    width: 100%;
+  }
+}

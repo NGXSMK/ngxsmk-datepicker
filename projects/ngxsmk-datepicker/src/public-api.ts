@@ -114,3 +114,28 @@ export type { SignalFormField, SignalFormFieldConfig } from './lib/services/fiel
 // Material (mat-form-field) integration is optional. The main bundle does not import @angular/material.
 // To use with mat-form-field: install @angular/material and @angular/cdk, then add the directive
 // from the repo or use the snippet in INTEGRATION.md § Angular Material.
+
+// ─── Schedule Mode ────────────────────────────────────────────────────────────
+// Enabled when `mode="schedule"` on NgxsmkDatepickerComponent.
+// The ScheduleEditorComponent can also be used standalone.
+export type {
+  ScheduleItem,
+  ScheduleColor,
+  SchedulePriority,
+  ScheduleRecurrence,
+  ScheduleChangeEvent,
+  ScheduleFieldsConfig,
+  ScheduleFormTemplates,
+  ScheduleFormContext,
+} from './lib/interfaces/schedule-item.interface';
+export {
+  DEFAULT_SCHEDULE_FIELDS,
+  DEFAULT_SCHEDULE_COLORS,
+  DEFAULT_SCHEDULE_ICONS,
+} from './lib/interfaces/schedule-item.interface';
+export { ScheduleService } from './lib/services/schedule.service';
+export type { ScheduleValidationError, ScheduleValidationResult } from './lib/services/schedule.service';
+export { ScheduleEditorComponent } from './lib/components/schedule-editor.component';
+export { ScheduleItemRowComponent } from './lib/components/schedule-item-row.component';
+export { ScheduleFormComponent } from './lib/components/schedule-form.component';
+
