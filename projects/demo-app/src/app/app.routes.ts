@@ -37,6 +37,7 @@ export const routes: Routes = [
     path: 'playground',
     loadComponent: () => import('./pages/playground/playground.component').then((m) => m.PlaygroundComponent),
   },
+
   {
     path: '**',
     redirectTo: '',

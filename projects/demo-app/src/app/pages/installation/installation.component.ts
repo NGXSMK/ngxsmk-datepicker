@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { I18nService } from '../../i18n/i18n.service';
 
@@ -21,7 +21,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.4.0</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">3.0.2</span></code></pre>
       </div>
 
       <div class="tip">
@@ -37,9 +37,9 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">2.4.0</span>
-<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">2.4.0</span>
-<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">2.4.0</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">3.0.2</span>
+<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">3.0.2</span>
+<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">3.0.2</span></code></pre>
       </div>
       <p>
         <a

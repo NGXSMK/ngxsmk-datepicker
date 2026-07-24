@@ -520,6 +520,7 @@ export class NgxsmkDatepickerComponent
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
 
   @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
+
   @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   /**
@@ -736,6 +737,12 @@ export class NgxsmkDatepickerComponent
     return this._calendarCount;
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
+  /**
+   * Whether selecting a date shifts the calendar view to that date's month.
+   * Set to `false` in multi-calendar mode to keep the visible months fixed
+   * when the user clicks a date in a calendar other than the first one.
+   */
+  @Input({ transform: booleanAttribute }) changeActiveMonthOnSelection: boolean = true;
   /** Shows an ISO 8601 week-number column on the left of the day grid. */
   @Input({ transform: booleanAttribute }) showWeekNumbers: boolean = false;
   /** Header label for the week-number column (e.g. "Wk", "KW", "S"). */
@@ -2008,7 +2015,7 @@ export class NgxsmkDatepickerComponent
   // safely read during template rendering.
   get displayValue(): string {
     if (this.hooks?.formatDisplayValue) {
-      return this.hooks.formatDisplayValue(this._value, this.mode) ?? '';
+      return this.hooks.formatDisplayValue(this._value as DatepickerValue, this.mode) ?? '';
     }
     if (this._dateFormatPattern && this.customDateFormatService) {
       return this.formatWithCustomPattern();
@@ -2989,7 +2996,7 @@ export class NgxsmkDatepickerComponent
     if (this.isDateDisabledMemo(date)) return false;
 
     if (this.hooks?.validateDate) {
-      if (!this.hooks.validateDate(date, this._value, this.mode)) {
+      if (!this.hooks.validateDate(date, this._value as DatepickerValue, this.mode)) {
         return false;
       }
     }
@@ -2999,15 +3006,19 @@ export class NgxsmkDatepickerComponent
 
   /** Resolves `dayMetadata` for a day, tolerating provider errors. */
   public getDayMetadata(day: Date | null): DayMetadata | null {
-    if (!day || !this.dayMetadata) return null;
-    try {
-      return this.dayMetadata(day) ?? null;
-    } catch (error) {
-      if (isDevMode()) {
-        console.warn('[ngxsmk-datepicker] Error in dayMetadata provider:', error);
+    if (!day) return null;
+    let customMeta: DayMetadata | null = null;
+    if (this.dayMetadata) {
+      try {
+        customMeta = this.dayMetadata(day) ?? null;
+      } catch (error) {
+        if (isDevMode()) {
+          console.warn('[ngxsmk-datepicker] Error in dayMetadata provider:', error);
+        }
       }
-      return null;
     }
+
+    return customMeta;
   }
 
   getDayCellCustomClasses(day: Date | null): string[] {
@@ -5305,6 +5316,7 @@ export class NgxsmkDatepickerComponent
   }
 
   private _navigateToMonthOfDay(day: Date): void {
+    if (!this.changeActiveMonthOnSelection) return;
     if (this.isCurrentMonth(day)) return;
 
     this._currentMonth = day.getMonth();
@@ -5585,7 +5597,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -5621,7 +5633,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -5646,7 +5658,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6048,7 +6060,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode,
+        mode: this.mode as any,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6403,23 +6415,28 @@ export class NgxsmkDatepickerComponent
 
     if (this._translations) {
       // Use optional chaining and nullish coalescing for safer access
-      let translation = this._translations[key] ?? null;
+      const raw = this._translations[key] ?? null;
+      const translation = typeof raw === 'string' ? raw : null;
+      let fallbackTranslation: string | null = null;
       if (!translation && fallbackKey) {
-        translation = this._translations[fallbackKey] ?? null;
+        const rawFb = this._translations[fallbackKey] ?? null;
+        fallbackTranslation = typeof rawFb === 'string' ? rawFb : null;
       }
-      if (translation && params) {
-        let result = translation;
+      const resolved = translation ?? fallbackTranslation;
+      if (resolved && params) {
+        let result = resolved;
         for (const [paramKey, paramValue] of Object.entries(params)) {
           result = result.replaceAll(new RegExp(`{{${paramKey}}}`, 'g'), String(paramValue));
         }
         return result;
       }
-      return translation || key;
+      return resolved || key;
     }
 
     if (this.translationRegistry && this._locale) {
       const registryTranslations = this.translationRegistry.getTranslations(this._locale);
-      return registryTranslations?.[key] ?? key;
+      const regRaw = registryTranslations?.[key];
+      return (typeof regRaw === 'string' ? regRaw : null) ?? key;
     }
     return key;
   }

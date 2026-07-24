@@ -20,7 +20,7 @@ export interface TouchGestureState {
 
 export interface TouchGestureConfig {
   disabled: boolean;
-  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange';
+  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule';
   swipeThreshold: number;
   swipeTimeThreshold: number;
 }

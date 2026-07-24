@@ -122,6 +122,20 @@
           }
         </div>
       }
+
+      <a
+        href="https://github.com/NGXSMK/ngxsmk-ui-kit"
+        target="_blank"
+        rel="noopener"
+        class="sidebar-promo no-underline"
+      >
+        <span class="sidebar-promo-badge">✨ From the NGXSMK team</span>
+        <span class="sidebar-promo-title">ngxsmk-ui-kit</span>
+        <p class="sidebar-promo-desc">
+          200+ standalone Angular components — dashboards, data grids, kanban boards, design tokens &amp; more.
+        </p>
+        <span class="sidebar-promo-cta">Explore the kit <span aria-hidden="true">→</span></span>
+      </a>
     </aside>
 
     <!-- Main Content AREA -->
@@ -162,4 +176,53 @@
       ></div>
     }
   </div>
+
+  <!-- One-time ngxsmk-ui-kit promo modal -->
+  @if (showUiKitPromo()) {
+    <div
+      class="uikit-modal-overlay"
+      (click)="dismissUiKitPromo()"
+      (keydown.enter)="dismissUiKitPromo()"
+      tabindex="0"
+      role="button"
+      aria-label="Close dialog"
+    >
+      <div
+        class="uikit-modal card animate-fade-in"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="uikit-modal-title"
+        (click)="$event.stopPropagation()"
+        (keydown.enter)="$event.stopPropagation()"
+        tabindex="-1"
+      >
+        <button class="uikit-modal-close icon-btn" (click)="dismissUiKitPromo()" title="Close" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+
+        <span class="uikit-modal-badge">✨ From the NGXSMK team</span>
+        <h2 id="uikit-modal-title" class="uikit-modal-title">Building more than a date picker?</h2>
+        <p class="uikit-modal-desc">
+          Check out <strong>ngxsmk-ui-kit</strong> — 200+ standalone Angular components: dashboards, data grids, kanban
+          boards, design tokens, dark mode, and more. Signals-first, SSR &amp; zoneless ready.
+        </p>
+
+        <div class="uikit-modal-actions">
+          <a
+            href="https://github.com/NGXSMK/ngxsmk-ui-kit"
+            target="_blank"
+            rel="noopener"
+            class="uikit-modal-cta no-underline"
+            (click)="dismissUiKitPromo()"
+          >
+            Explore ngxsmk-ui-kit
+          </a>
+          <button class="uikit-modal-dismiss" (click)="dismissUiKitPromo()">Maybe later</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>

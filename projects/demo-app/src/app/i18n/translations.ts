@@ -1,4 +1,4 @@
-export const translations = {
+﻿export const translations = {
   en: {
     common: {
       getStarted: 'Start Using NGXSMK',
@@ -26,9 +26,10 @@ export const translations = {
       references: 'Technical Specs',
       apiReference: 'DatePicker API Reference',
       playground: 'Interactive Playground',
+      dateSchedule: 'Date Schedule Planner',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v2.4.0',
+      heroBadge: 'The #1 Angular DatePicker v3.0.2',
       heroTitle: 'The Premier Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -477,9 +478,10 @@ export const translations = {
       references: 'Referenzen',
       apiReference: 'API-Referenz',
       playground: 'Spielplatz',
+      dateSchedule: 'Terminplaner',
     },
     home: {
-      heroBadge: 'Neu v2.4.0 Stabilität',
+      heroBadge: 'Neu v3.0.2 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -934,9 +936,10 @@ export const translations = {
       references: 'Referencias',
       apiReference: 'Referencia de API',
       playground: 'Laboratorio',
+      dateSchedule: 'Agenda de Citas',
     },
     home: {
-      heroBadge: 'Nuevo v2.4.0 Estabilidad',
+      heroBadge: 'Nuevo v3.0.2 Estabilidad',
       heroTitle: 'El mejor Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -1390,9 +1393,10 @@ export const translations = {
       references: 'Referenser',
       apiReference: 'API-referens',
       playground: 'Lekplats',
+      dateSchedule: 'Tidsplanering',
     },
     home: {
-      heroBadge: 'Ny v2.4.0 stabilitet',
+      heroBadge: 'Ny v3.0.2 stabilitet',
       heroTitle: 'Den bästa open-source',
       heroSubtitle: 'Angular datumväljare',
       heroLead:
@@ -1837,9 +1841,10 @@ export const translations = {
       references: '참조',
       apiReference: 'API 참조',
       playground: '플레이그라운드',
+      dateSchedule: '일정 플래너',
     },
     home: {
-      heroBadge: '새로운 v2.4.0 안정성',
+      heroBadge: '새로운 v3.0.2 안정성',
       heroTitle: '최고의 오픈 소스',
       heroSubtitle: 'Angular 데이트피커',
       heroLead:
@@ -2270,9 +2275,10 @@ export const translations = {
       references: '参考资料',
       apiReference: 'API 参考',
       playground: '演练场',
+      dateSchedule: '日程计划器',
     },
     home: {
-      heroBadge: '全新 v2.4.0 稳定性',
+      heroBadge: '全新 v3.0.2 稳定性',
       heroTitle: '最佳开源',
       heroSubtitle: 'Angular 日期选择器',
       heroLead:
@@ -2690,9 +2696,10 @@ export const translations = {
       references: 'リファレンス',
       apiReference: 'APIリファレンス',
       playground: 'プレイグラウンド',
+      dateSchedule: 'スケジュール帳',
     },
     home: {
-      heroBadge: '新しい v2.4.0 の安定性',
+      heroBadge: '新しい v3.0.2 の安定性',
       heroTitle: '最高のオープンソース',
       heroSubtitle: 'Angular デートピッカー',
       heroLead:
@@ -3129,9 +3136,10 @@ export const translations = {
       references: 'Références',
       apiReference: 'Référence API',
       playground: 'Playground',
+      dateSchedule: 'Planificateur de dates',
     },
     home: {
-      heroBadge: 'Nouvelle stabilité v2.4.0',
+      heroBadge: 'Nouvelle stabilité v3.0.2',
       heroTitle: 'Le meilleur Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:

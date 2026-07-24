@@ -63,3 +63,51 @@ describe('NgxsmkDatepickerComponent Month Navigation Bug', () => {
     expect(component.currentDate.getMonth()).toBe(2, 'Should navigate to March');
   }));
 });
+
+describe('NgxsmkDatepickerComponent changeActiveMonthOnSelection', () => {
+  let component: NgxsmkDatepickerComponent;
+  let fixture: ComponentFixture<NgxsmkDatepickerComponent>;
+  const initialDate = new Date(2024, 0, 15); // Jan 15, 2024
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NgxsmkDatepickerComponent],
+      providers: [DatePipe],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
+    component = fixture.componentInstance;
+    component.inline = true;
+    component.mode = 'range';
+    component.calendarCount = 2;
+    component.startAt = initialDate;
+
+    fixture.detectChanges();
+  });
+
+  it('defaults to true and jumps the view to the clicked date month (multi-calendar)', () => {
+    expect(component.currentDate.getMonth()).toBe(0); // Jan
+
+    // Clicking a date in the second visible month (Feb) currently jumps the view.
+    const febDate = new Date(2024, 1, 10);
+    component.onDateClick(febDate);
+    fixture.detectChanges();
+
+    expect(component.currentDate.getMonth()).toBe(1); // Feb
+  });
+
+  it('keeps the visible month fixed when disabled, even for dates outside the first calendar', () => {
+    component.changeActiveMonthOnSelection = false;
+    fixture.detectChanges();
+
+    expect(component.currentDate.getMonth()).toBe(0); // Jan
+
+    const febDate = new Date(2024, 1, 10);
+    component.onDateClick(febDate);
+    fixture.detectChanges();
+
+    // View should NOT move to Feb, but the date should still be selected.
+    expect(component.currentDate.getMonth()).toBe(0); // Still Jan
+    expect(component.startDate?.getTime()).toBe(febDate.getTime());
+  });
+});

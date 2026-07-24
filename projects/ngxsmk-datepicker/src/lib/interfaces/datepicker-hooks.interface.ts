@@ -16,7 +16,7 @@ export interface ValidationHook {
   validateDate?(
     date: Date,
     currentValue: DatepickerValue,
-    mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange'
+    mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule'
   ): boolean;
   validateRange?(startDate: Date, endDate: Date): boolean;
   getValidationError?(date: Date): string | null;
@@ -33,7 +33,7 @@ export interface KeyboardShortcutContext {
   startDate: Date | null;
   endDate: Date | null;
   selectedDates: Date[];
-  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange';
+  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule';
   focusedDate: Date | null;
   isCalendarOpen: boolean;
 }
@@ -47,7 +47,7 @@ export interface KeyboardShortcutHelp {
 export interface DateFormatHook {
   formatDisplayValue?(
     value: DatepickerValue,
-    mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange'
+    mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule'
   ): string;
   formatAriaLabel?(date: Date): string;
 }

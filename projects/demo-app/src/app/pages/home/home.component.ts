@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -113,7 +113,7 @@ import { I18nService } from '../../i18n/i18n.service';
               <div class="dot green"></div>
               <div class="window-title">terminal</div>
             </div>
-            <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">2.4.0</span></code></pre>
+            <pre><code><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">3.0.2</span></code></pre>
           </div>
         </div>
       </section>

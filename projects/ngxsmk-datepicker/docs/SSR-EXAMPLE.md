@@ -1,6 +1,6 @@
-# Server-Side Rendering (SSR) Example
+﻿# Server-Side Rendering (SSR) Example
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 24, 2026 - **Current stable:** v3.0.2
 
 Complete example demonstrating ngxsmk-datepicker with Angular Universal (SSR).
 
