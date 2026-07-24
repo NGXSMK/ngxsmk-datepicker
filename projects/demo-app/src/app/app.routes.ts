@@ -37,10 +37,7 @@ export const routes: Routes = [
     path: 'playground',
     loadComponent: () => import('./pages/playground/playground.component').then((m) => m.PlaygroundComponent),
   },
-  {
-    path: 'schedule',
-    loadComponent: () => import('./pages/schedule/schedule-demo.component').then((m) => m.ScheduleDemoComponent),
-  },
+
   {
     path: '**',
     redirectTo: '',

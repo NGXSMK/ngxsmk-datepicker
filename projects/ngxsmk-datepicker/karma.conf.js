@@ -29,10 +29,10 @@ module.exports = function karmaConfig(config) {
       check: {
         global: {
           // Enforce minimum coverage; goal is 100% (see coverage plan)
-          statements: 63,
-          branches: 53,
-          functions: 62,
-          lines: 63
+          statements: 70,
+          branches: 58,
+          functions: 74,
+          lines: 71
         }
       }
     },

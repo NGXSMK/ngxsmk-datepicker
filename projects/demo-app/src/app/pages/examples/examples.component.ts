@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent, HolidayProvider, ScheduleItem } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent, HolidayProvider } from 'ngxsmk-datepicker';
 import { ThemeService } from '@tokiforge/angular';
 import { I18nService } from '../../i18n/i18n.service';
 
@@ -112,25 +112,6 @@ import { I18nService } from '../../i18n/i18n.service';
             ></ngxsmk-datepicker>
             <div class="selection-box" *ngIf="yearValue">
               <code>{{ yearValue.start | date: 'yyyy' }}</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="example-category">
-          <h2 class="category-title">Date Schedule</h2>
-          <div class="examples-grid">
-            <div class="card demo-card">
-              <div class="card-header">
-                <h3>Interactive Schedule Planner</h3>
-                <span class="badge">New</span>
-              </div>
-              <p class="card-desc">
-                Canva-style schedule planner. Runs natively inline. Add, edit, remove, and drag items directly.
-              </p>
-              <ngxsmk-datepicker mode="schedule" [(ngModel)]="scheduleValue"></ngxsmk-datepicker>
-              <div class="selection-box" *ngIf="scheduleValue.length">
-                <code>{{ scheduleValue.length }} item(s) in schedule</code>
-              </div>
             </div>
           </div>
         </div>
@@ -646,15 +627,6 @@ export class ExamplesComponent {
   monthValue: { start: Date; end: Date } | null = null;
   weekValue: { start: Date; end: Date } | null = null;
   yearValue: { start: Date; end: Date } | null = null;
-  scheduleValue: ScheduleItem[] = [
-    {
-      id: 'demo-1',
-      title: 'Intro to Schedule Mode',
-      start: new Date(),
-      color: 'blue',
-      icon: '📅',
-    },
-  ];
 
   dateTimeValue: Date | null = null;
   dateTime24Value: Date | null = null;

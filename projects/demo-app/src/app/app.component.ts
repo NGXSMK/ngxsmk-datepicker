@@ -145,10 +145,6 @@ export class AppComponent {
         ],
       },
       {
-        label: (t as any).dateSchedule || 'Date Schedule',
-        links: [{ path: '/schedule', label: 'Planner Demos' }],
-      },
-      {
         label: t.extensibility,
         links: [{ path: '/architecture', label: t.pluginArchitecture }],
       },

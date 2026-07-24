@@ -59,17 +59,6 @@ import { NgxsmkDatepickerInputComponent } from './components/datepicker-input.co
 import { NgxsmkDatepickerContentComponent } from './components/datepicker-content.component';
 import { NgxsmkDatepickerKeyboardHelpComponent } from './components/keyboard-help.component';
 import { createDateComparator } from './utils/performance.utils';
-import {
-  ScheduleItem,
-  ScheduleColor,
-  ScheduleFieldsConfig,
-  ScheduleFormTemplates,
-  ScheduleChangeEvent,
-  DEFAULT_SCHEDULE_FIELDS,
-  DEFAULT_SCHEDULE_COLORS,
-  DEFAULT_SCHEDULE_ICONS,
-} from './interfaces/schedule-item.interface';
-import { ScheduleEditorComponent } from './components/schedule-editor.component';
 import { DatepickerHooks, KeyboardShortcutContext } from './interfaces/datepicker-hooks.interface';
 import {
   DATEPICKER_CONFIG,
@@ -153,7 +142,6 @@ interface DecoratorMetadataConfig {
     NgxsmkDatepickerInputComponent,
     NgxsmkDatepickerContentComponent,
     NgxsmkDatepickerKeyboardHelpComponent,
-    ScheduleEditorComponent,
   ],
   providers: [
     FieldSyncService,
@@ -239,202 +227,152 @@ interface DecoratorMetadataConfig {
       </ng-template>
 
       <ng-template #portalContent>
-        @if (mode === 'schedule') {
-          <smk-schedule-editor
-            [fullPage]="scheduleFullPage"
-            [scheduleItems]="scheduleItems"
-            [scheduleTitle]="scheduleTitle"
-            [scheduleAddLabel]="scheduleAddLabel"
-            [scheduleFields]="scheduleFields"
-            [scheduleFormTemplates]="scheduleFormTemplates"
-            [scheduleShowTime]="scheduleShowTime"
-            [scheduleUse24Hour]="scheduleUse24Hour"
-            [scheduleColorPresets]="scheduleColorPresets"
-            [scheduleIconPresets]="scheduleIconPresets"
-            [scheduleCategoryOptions]="scheduleCategoryOptions"
-            [scheduleTagSuggestions]="scheduleTagSuggestions"
-            [scheduleAllowOverlap]="scheduleAllowOverlap"
-            [scheduleMaxItems]="scheduleMaxItems"
-            [scheduleShowDragHandle]="scheduleShowDragHandle"
-            [scheduleShowComplete]="scheduleShowComplete"
-            [scheduleShowDuplicate]="scheduleShowDuplicate"
-            [scheduleShowExport]="scheduleShowExport"
-            [scheduleShowImport]="scheduleShowImport"
-            [scheduleShowSearch]="scheduleShowSearch"
-            [scheduleShowSort]="scheduleShowSort"
-            [scheduleShowFilter]="scheduleShowFilter"
-            [scheduleShowConflicts]="scheduleShowConflicts"
-            [scheduleRowTemplate]="scheduleRowTemplate"
-            [scheduleBadgeTemplate]="scheduleBadgeTemplate"
-            [scheduleActionsTemplate]="scheduleActionsTemplate"
-            [scheduleEmptyTemplate]="scheduleEmptyTemplate"
-            [scheduleHeaderTemplate]="scheduleHeaderTemplate"
-            [scheduleFooterTemplate]="scheduleFooterTemplate"
-            [formatItemDate]="formatItemDate"
-            [formatItemDuration]="formatItemDuration"
-            [onBeforeAdd]="onBeforeAdd"
-            [onBeforeEdit]="onBeforeEdit"
-            [onBeforeDelete]="onBeforeDelete"
-            [onBeforeReorder]="onBeforeReorder"
-            [validateScheduleItem]="validateScheduleItem"
-            (scheduleChange)="onScheduleChange($event)"
-            (scheduleApply)="onScheduleApply($event)"
-            (scheduleCancel)="onScheduleCancel()"
-            (itemAdd)="itemAdd.emit($event)"
-            (itemEdit)="itemEdit.emit($event)"
-            (itemDelete)="itemDelete.emit($event)"
-            (itemDuplicate)="itemDuplicate.emit($event)"
-            (itemReorder)="itemReorder.emit($event)"
-            (itemClick)="itemClick.emit($event)"
-          ></smk-schedule-editor>
-        } @else {
-          <ngxsmk-datepicker-content
-            #datepickerContent
-            [isCalendarVisible]="isCalendarVisible"
-            [isCalendarOpen]="_isCalendarOpen()"
-            [isInlineMode]="isInlineMode"
-            [shouldAppendToBody]="_shouldAppendToBody"
-            [theme]="theme"
-            [popoverId]="popoverId"
-            [classes]="classes()"
-            [timeOnly]="timeOnly"
-            [showTime]="showTime"
-            [isMobile]="isMobileDevice()"
-            [mobileModalStyle]="mobileModalStyle"
-            [align]="align"
-            [ariaLabel]="calendarAriaLabel()"
-            [isCalendarOpening]="isCalendarOpening"
-            [loadingMessage]="calendarLoadingMessage()"
-            [showRanges]="showRanges()"
-            [rangesArray]="rangesArray"
-            [selectedRange]="[startDate, endDate]"
-            [showTimezoneSelector]="showTimezoneSelector()"
-            [timezoneOptions]="getTimezoneOptions()"
-            [currentTimezone]="timezone || defaultTimezone"
-            [mode]="mode"
-            [disabled]="disabled"
-            [calendarCount]="calendarCount"
-            [calendarLayout]="calendarLayout"
-            [syncScrollEnabled]="syncScroll().enabled ?? false"
-            [calendarMonths]="renderedCalendars()"
-            [weekDays]="weekDays"
-            [showWeekNumbers]="showWeekNumbers"
-            [weekNumberLabel]="weekNumberLabel"
-            [secondaryCalendar]="secondaryCalendar"
-            [secondaryCalendarLocale]="locale"
-            [selectedDate]="selectedDate"
-            [startDate]="startDate"
-            [endDate]="endDate"
-            [focusedDate]="focusedDate"
-            [today]="today"
-            [dateTemplate]="dateTemplate()"
-            [calendarViewMode]="calendarViewMode"
-            [monthOptions]="monthOptions()"
-            [currentMonth]="_currentMonthSignal()"
-            [yearOptions]="yearOptions()"
-            [currentYear]="_currentYearSignal()"
-            [isBackArrowDisabled]="isBackArrowDisabled"
-            [prevMonthAriaLabel]="_prevMonthAriaLabel"
-            [nextMonthAriaLabel]="_nextMonthAriaLabel"
-            [yearGrid]="yearGrid"
-            [currentDecade]="_currentDecade"
-            [decadeGrid]="decadeGrid"
-            [timelineStartDate]="timelineStartDate"
-            [timelineEndDate]="timelineEndDate"
-            [timelineMonths]="timelineMonths"
-            [minuteInterval]="minuteInterval"
-            [startTimeSlider]="startTimeSlider"
-            [endTimeSlider]="endTimeSlider"
-            [timeRangeMode]="timeRangeMode()"
-            [hourOptions]="hourOptions"
-            [minuteOptions]="minuteOptions"
-            [secondOptions]="secondOptions"
-            [ampmOptions]="ampmOptions"
-            [currentDisplayHour]="currentDisplayHour"
-            [currentMinute]="currentMinute"
-            [currentSecond]="currentSecond"
-            [isPm]="isPm"
-            [showSeconds]="showSeconds"
-            [use24Hour]="use24Hour"
-            [startDisplayHour]="startDisplayHour"
-            [startMinute]="startMinute"
-            [startSecond]="startSecond"
-            [startIsPm]="startIsPm"
-            [endDisplayHour]="endDisplayHour"
-            [endMinute]="endMinute"
-            [endSecond]="endSecond"
-            [endIsPm]="endIsPm"
-            [clearAriaLabel]="_clearAriaLabel"
-            [clearLabel]="_clearLabel"
-            [closeAriaLabel]="_closeAriaLabel"
-            [closeLabel]="_closeLabel"
-            [translations]="_translations"
-            [boundIsDateDisabled]="boundIsDateDisabled"
-            [boundGetDayMetadata]="boundGetDayMetadata"
-            [calendarHeaderTemplate]="calendarHeaderTemplate"
-            [calendarFooterTemplate]="calendarFooterTemplate"
-            [boundIsSameDay]="boundIsSameDay"
-            [boundIsHoliday]="boundIsHoliday"
-            [boundIsMultipleSelected]="boundIsMultipleSelected"
-            [boundIsInRange]="boundIsInRange"
-            [boundIsInComparisonRange]="boundIsInComparisonRange"
-            [boundIsPreviewInRange]="boundIsPreviewInRange"
-            [boundGetAriaLabel]="boundGetAriaLabel"
-            [boundGetDayCellCustomClasses]="boundGetDayCellCustomClasses"
-            [boundGetDayCellTooltip]="boundGetDayCellTooltip"
-            [boundFormatDayNumber]="boundFormatDayNumber"
-            [getMonthYearLabel]="boundGetMonthYearLabel"
-            [getCalendarAriaLabelForMonth]="boundGetCalendarAriaLabelForMonth"
-            [isTimelineMonthSelected]="boundIsTimelineMonthSelected"
-            [formatTimeSliderValue]="boundFormatTimeSliderValue"
-            (backdropClick)="onBackdropInteract($event)"
-            (escapeKey)="onPopoverEscape($event)"
-            (touchStartContainer)="onBottomSheetTouchStart($event)"
-            (touchMoveContainer)="onBottomSheetTouchMove($event)"
-            (touchEndContainer)="onBottomSheetTouchEnd($event)"
-            (rangeSelect)="selectRange($event)"
-            (timezoneChange)="setTimezone($event)"
-            (previousMonth)="changeMonth(-1)"
-            (nextMonth)="changeMonth(1)"
-            (currentMonthChange)="currentMonth = $event"
-            (currentYearChange)="onYearSelectChange($event)"
-            (dateClick)="onDateClick($event)"
-            (dateHover)="onDateHover($event)"
-            (dateFocus)="onDateFocus($event)"
-            (swipeStart)="onCalendarSwipeStart($event)"
-            (swipeMove)="onCalendarSwipeMove($event)"
-            (swipeEnd)="onCalendarSwipeEnd($event)"
-            (touchStart)="onDateCellTouchStart($event.event, $event.day)"
-            (touchMove)="onDateCellTouchMove($event)"
-            (touchEnd)="onDateCellTouchEnd($event.event, $event.day)"
-            (viewModeChange)="onViewModeChange($event)"
-            (changeYear)="changeYear($event)"
-            (yearClick)="onYearClick($event)"
-            (changeDecade)="changeDecade($event)"
-            (decadeClick)="onDecadeClick($event)"
-            (timelineZoomOut)="timelineZoomOut()"
-            (timelineZoomIn)="timelineZoomIn()"
-            (timelineMonthClick)="onTimelineMonthClick($event)"
-            (startTimeSliderChange)="onStartTimeSliderChange($event)"
-            (endTimeSliderChange)="onEndTimeSliderChange($event)"
-            (currentDisplayHourChange)="currentDisplayHour = $event"
-            (currentMinuteChange)="currentMinute = $event"
-            (currentSecondChange)="currentSecond = $event"
-            (isPmChange)="isPm = $event"
-            (timeChange)="timeChange()"
-            (startDisplayHourChange)="startDisplayHour = $event"
-            (startMinuteChange)="startMinute = $event"
-            (startSecondChange)="startSecond = $event"
-            (startIsPmChange)="startIsPm = $event"
-            (endDisplayHourChange)="endDisplayHour = $event"
-            (endMinuteChange)="endMinute = $event"
-            (endSecondChange)="endSecond = $event"
-            (endIsPmChange)="endIsPm = $event"
-            (timeRangeChange)="timeRangeChange()"
-            (clearValue)="clearValue($event)"
-            (closeCalendar)="closeCalendarWithFocusRestore()"
-          ></ngxsmk-datepicker-content>
-        }
+        <ngxsmk-datepicker-content
+          #datepickerContent
+          [isCalendarVisible]="isCalendarVisible"
+          [isCalendarOpen]="_isCalendarOpen()"
+          [isInlineMode]="isInlineMode"
+          [shouldAppendToBody]="_shouldAppendToBody"
+          [theme]="theme"
+          [popoverId]="popoverId"
+          [classes]="classes()"
+          [timeOnly]="timeOnly"
+          [showTime]="showTime"
+          [isMobile]="isMobileDevice()"
+          [mobileModalStyle]="mobileModalStyle"
+          [align]="align"
+          [ariaLabel]="calendarAriaLabel()"
+          [isCalendarOpening]="isCalendarOpening"
+          [loadingMessage]="calendarLoadingMessage()"
+          [showRanges]="showRanges()"
+          [rangesArray]="rangesArray"
+          [selectedRange]="[startDate, endDate]"
+          [showTimezoneSelector]="showTimezoneSelector()"
+          [timezoneOptions]="getTimezoneOptions()"
+          [currentTimezone]="timezone || defaultTimezone"
+          [mode]="mode"
+          [disabled]="disabled"
+          [calendarCount]="calendarCount"
+          [calendarLayout]="calendarLayout"
+          [syncScrollEnabled]="syncScroll().enabled ?? false"
+          [calendarMonths]="renderedCalendars()"
+          [weekDays]="weekDays"
+          [showWeekNumbers]="showWeekNumbers"
+          [weekNumberLabel]="weekNumberLabel"
+          [secondaryCalendar]="secondaryCalendar"
+          [secondaryCalendarLocale]="locale"
+          [selectedDate]="selectedDate"
+          [startDate]="startDate"
+          [endDate]="endDate"
+          [focusedDate]="focusedDate"
+          [today]="today"
+          [dateTemplate]="dateTemplate()"
+          [calendarViewMode]="calendarViewMode"
+          [monthOptions]="monthOptions()"
+          [currentMonth]="_currentMonthSignal()"
+          [yearOptions]="yearOptions()"
+          [currentYear]="_currentYearSignal()"
+          [isBackArrowDisabled]="isBackArrowDisabled"
+          [prevMonthAriaLabel]="_prevMonthAriaLabel"
+          [nextMonthAriaLabel]="_nextMonthAriaLabel"
+          [yearGrid]="yearGrid"
+          [currentDecade]="_currentDecade"
+          [decadeGrid]="decadeGrid"
+          [timelineStartDate]="timelineStartDate"
+          [timelineEndDate]="timelineEndDate"
+          [timelineMonths]="timelineMonths"
+          [minuteInterval]="minuteInterval"
+          [startTimeSlider]="startTimeSlider"
+          [endTimeSlider]="endTimeSlider"
+          [timeRangeMode]="timeRangeMode()"
+          [hourOptions]="hourOptions"
+          [minuteOptions]="minuteOptions"
+          [secondOptions]="secondOptions"
+          [ampmOptions]="ampmOptions"
+          [currentDisplayHour]="currentDisplayHour"
+          [currentMinute]="currentMinute"
+          [currentSecond]="currentSecond"
+          [isPm]="isPm"
+          [showSeconds]="showSeconds"
+          [use24Hour]="use24Hour"
+          [startDisplayHour]="startDisplayHour"
+          [startMinute]="startMinute"
+          [startSecond]="startSecond"
+          [startIsPm]="startIsPm"
+          [endDisplayHour]="endDisplayHour"
+          [endMinute]="endMinute"
+          [endSecond]="endSecond"
+          [endIsPm]="endIsPm"
+          [clearAriaLabel]="_clearAriaLabel"
+          [clearLabel]="_clearLabel"
+          [closeAriaLabel]="_closeAriaLabel"
+          [closeLabel]="_closeLabel"
+          [translations]="_translations"
+          [boundIsDateDisabled]="boundIsDateDisabled"
+          [boundGetDayMetadata]="boundGetDayMetadata"
+          [calendarHeaderTemplate]="calendarHeaderTemplate"
+          [calendarFooterTemplate]="calendarFooterTemplate"
+          [boundIsSameDay]="boundIsSameDay"
+          [boundIsHoliday]="boundIsHoliday"
+          [boundIsMultipleSelected]="boundIsMultipleSelected"
+          [boundIsInRange]="boundIsInRange"
+          [boundIsInComparisonRange]="boundIsInComparisonRange"
+          [boundIsPreviewInRange]="boundIsPreviewInRange"
+          [boundGetAriaLabel]="boundGetAriaLabel"
+          [boundGetDayCellCustomClasses]="boundGetDayCellCustomClasses"
+          [boundGetDayCellTooltip]="boundGetDayCellTooltip"
+          [boundFormatDayNumber]="boundFormatDayNumber"
+          [getMonthYearLabel]="boundGetMonthYearLabel"
+          [getCalendarAriaLabelForMonth]="boundGetCalendarAriaLabelForMonth"
+          [isTimelineMonthSelected]="boundIsTimelineMonthSelected"
+          [formatTimeSliderValue]="boundFormatTimeSliderValue"
+          (backdropClick)="onBackdropInteract($event)"
+          (escapeKey)="onPopoverEscape($event)"
+          (touchStartContainer)="onBottomSheetTouchStart($event)"
+          (touchMoveContainer)="onBottomSheetTouchMove($event)"
+          (touchEndContainer)="onBottomSheetTouchEnd($event)"
+          (rangeSelect)="selectRange($event)"
+          (timezoneChange)="setTimezone($event)"
+          (previousMonth)="changeMonth(-1)"
+          (nextMonth)="changeMonth(1)"
+          (currentMonthChange)="currentMonth = $event"
+          (currentYearChange)="onYearSelectChange($event)"
+          (dateClick)="onDateClick($event)"
+          (dateHover)="onDateHover($event)"
+          (dateFocus)="onDateFocus($event)"
+          (swipeStart)="onCalendarSwipeStart($event)"
+          (swipeMove)="onCalendarSwipeMove($event)"
+          (swipeEnd)="onCalendarSwipeEnd($event)"
+          (touchStart)="onDateCellTouchStart($event.event, $event.day)"
+          (touchMove)="onDateCellTouchMove($event)"
+          (touchEnd)="onDateCellTouchEnd($event.event, $event.day)"
+          (viewModeChange)="onViewModeChange($event)"
+          (changeYear)="changeYear($event)"
+          (yearClick)="onYearClick($event)"
+          (changeDecade)="changeDecade($event)"
+          (decadeClick)="onDecadeClick($event)"
+          (timelineZoomOut)="timelineZoomOut()"
+          (timelineZoomIn)="timelineZoomIn()"
+          (timelineMonthClick)="onTimelineMonthClick($event)"
+          (startTimeSliderChange)="onStartTimeSliderChange($event)"
+          (endTimeSliderChange)="onEndTimeSliderChange($event)"
+          (currentDisplayHourChange)="currentDisplayHour = $event"
+          (currentMinuteChange)="currentMinute = $event"
+          (currentSecondChange)="currentSecond = $event"
+          (isPmChange)="isPm = $event"
+          (timeChange)="timeChange()"
+          (startDisplayHourChange)="startDisplayHour = $event"
+          (startMinuteChange)="startMinute = $event"
+          (startSecondChange)="startSecond = $event"
+          (startIsPmChange)="startIsPm = $event"
+          (endDisplayHourChange)="endDisplayHour = $event"
+          (endMinuteChange)="endMinute = $event"
+          (endSecondChange)="endSecond = $event"
+          (endIsPmChange)="endIsPm = $event"
+          (timeRangeChange)="timeRangeChange()"
+          (clearValue)="clearValue($event)"
+          (closeCalendar)="closeCalendarWithFocusRestore()"
+        ></ngxsmk-datepicker-content>
       </ng-template>
 
       @if (isCalendarVisible && !_shouldAppendToBody) {
@@ -581,62 +519,8 @@ export class NgxsmkDatepickerComponent
 
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
 
-  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule' =
-    'single';
+  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
 
-  // ─── Schedule Mode Inputs ──────────────────────────────────────────────────
-  @Input() scheduleItems: ScheduleItem[] = [];
-  @Input() scheduleFullPage: boolean = false;
-  @Input() scheduleTitle: string = 'Date Schedule';
-  @Input() scheduleAddLabel: string = 'Add Item';
-  @Input() scheduleFields: ScheduleFieldsConfig = DEFAULT_SCHEDULE_FIELDS;
-  @Input() scheduleFormTemplates: ScheduleFormTemplates | null = null;
-  @Input() scheduleShowTime: boolean = false;
-  @Input() scheduleUse24Hour: boolean = false;
-  @Input() scheduleColorPresets: (ScheduleColor | string)[] = [...DEFAULT_SCHEDULE_COLORS];
-  @Input() scheduleIconPresets: string[] = [...DEFAULT_SCHEDULE_ICONS];
-  @Input() scheduleCategoryOptions: string[] = [];
-  @Input() scheduleTagSuggestions: string[] = [];
-  @Input() scheduleAllowOverlap: boolean = true;
-  @Input() scheduleMaxItems: number | null = null;
-
-  @Input() scheduleShowDragHandle: boolean = true;
-  @Input() scheduleShowComplete: boolean = true;
-  @Input() scheduleShowDuplicate: boolean = true;
-  @Input() scheduleShowExport: boolean = true;
-  @Input() scheduleShowImport: boolean = true;
-  @Input() scheduleShowSearch: boolean = true;
-  @Input() scheduleShowSort: boolean = true;
-  @Input() scheduleShowFilter: boolean = true;
-  @Input() scheduleShowConflicts: boolean = true;
-
-  @Input() scheduleRowTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
-  @Input() scheduleBadgeTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
-  @Input() scheduleActionsTemplate: TemplateRef<{ $implicit: ScheduleItem }> | null = null;
-  @Input() scheduleEmptyTemplate: TemplateRef<void> | null = null;
-  @Input() scheduleHeaderTemplate: TemplateRef<void> | null = null;
-  @Input() scheduleFooterTemplate: TemplateRef<{ items: ScheduleItem[] }> | null = null;
-
-  @Input() formatItemDate: ((item: ScheduleItem) => string) | null = null;
-  @Input() formatItemDuration: ((item: ScheduleItem) => string) | null = null;
-
-  @Input() onBeforeAdd: ((item: ScheduleItem) => boolean) | null = null;
-  @Input() onBeforeEdit: ((item: ScheduleItem) => boolean) | null = null;
-  @Input() onBeforeDelete: ((item: ScheduleItem) => boolean) | null = null;
-  @Input() onBeforeReorder: ((from: number, to: number, items: ScheduleItem[]) => boolean) | null = null;
-  @Input() validateScheduleItem: ((item: ScheduleItem, all: ScheduleItem[]) => string | null) | null = null;
-
-  // ─── Schedule Mode Outputs ─────────────────────────────────────────────────
-  readonly scheduleChange = output<ScheduleChangeEvent>();
-  readonly scheduleApply = output<ScheduleItem[]>();
-  readonly scheduleCancel = output<void>();
-
-  readonly itemAdd = output<ScheduleItem>();
-  readonly itemEdit = output<ScheduleItem>();
-  readonly itemDelete = output<ScheduleItem>();
-  readonly itemDuplicate = output<ScheduleItem>();
-  readonly itemReorder = output<{ from: number; to: number; items: ScheduleItem[] }>();
-  readonly itemClick = output<ScheduleItem>();
   @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
   @Input() isInvalidDate: (date: Date) => boolean = () => false;
   /**
@@ -1886,9 +1770,6 @@ export class NgxsmkDatepickerComponent
   private passiveTouchListeners: Array<() => void> = [];
 
   get isInlineMode(): boolean {
-    if (this.mode === 'schedule') {
-      return true;
-    }
     if (this.inline === true || this.inline === 'always') {
       return true;
     }
@@ -2133,10 +2014,6 @@ export class NgxsmkDatepickerComponent
   // `typedInputValue` getter deriving from this value (see below), so this can be
   // safely read during template rendering.
   get displayValue(): string {
-    if (this.mode === 'schedule') {
-      const count = this.scheduleItems?.length || 0;
-      return count > 0 ? `${count} item(s) scheduled` : '';
-    }
     if (this.hooks?.formatDisplayValue) {
       return this.hooks.formatDisplayValue(this._value as DatepickerValue, this.mode) ?? '';
     }
@@ -3118,7 +2995,7 @@ export class NgxsmkDatepickerComponent
     if (this.isInvalidDate?.(date)) return false;
     if (this.isDateDisabledMemo(date)) return false;
 
-    if (this.hooks?.validateDate && this.mode !== 'schedule') {
+    if (this.hooks?.validateDate) {
       if (!this.hooks.validateDate(date, this._value as DatepickerValue, this.mode)) {
         return false;
       }
@@ -3138,48 +3015,6 @@ export class NgxsmkDatepickerComponent
         if (isDevMode()) {
           console.warn('[ngxsmk-datepicker] Error in dayMetadata provider:', error);
         }
-      }
-    }
-
-    const items = this.scheduleItems || [];
-    if (items.length > 0) {
-      const dayStart = getStartOfDay(day);
-      const dayEnd = getEndOfDay(day);
-      const dayItems = items.filter((item) => {
-        const itemStart = getStartOfDay(item.start);
-        const itemEnd = getEndOfDay(item.end ?? item.start);
-        return itemStart <= dayEnd && itemEnd >= dayStart;
-      });
-
-      if (dayItems.length > 0) {
-        const first = dayItems[0]!;
-        const autoMeta: DayMetadata = {
-          tooltip: dayItems.map((i) => i.title).join(', '),
-          cssClass: 'ngxsmk-day-has-schedule',
-        };
-        if (first.color) {
-          autoMeta.indicatorColor = first.color.startsWith('#')
-            ? first.color
-            : `var(--datepicker-schedule-color-${first.color})`;
-        }
-        if (dayItems.length > 1) {
-          autoMeta.label = `${dayItems.length}`;
-        }
-
-        return {
-          ...autoMeta,
-          ...customMeta,
-          cssClass: [
-            ...(Array.isArray(autoMeta.cssClass) ? autoMeta.cssClass : [autoMeta.cssClass]),
-            ...(customMeta
-              ? Array.isArray(customMeta.cssClass)
-                ? customMeta.cssClass
-                : customMeta.cssClass
-                  ? [customMeta.cssClass]
-                  : []
-              : []),
-          ].filter(Boolean) as string[],
-        };
       }
     }
 
@@ -4421,12 +4256,6 @@ export class NgxsmkDatepickerComponent
    * Performance: O(1) for single/range, O(n) for multiple mode where n = array length
    */
   private initializeValue(value: DatepickerValue): void {
-    if (this.mode === 'schedule') {
-      if (Array.isArray(value)) {
-        this.scheduleItems = value as unknown as ScheduleItem[];
-      }
-      return;
-    }
     const initialDate = this.applyValueToSelection(value);
     const viewCenterDate = this.resolveViewCenterDate(initialDate);
     if (viewCenterDate) {
@@ -4516,9 +4345,6 @@ export class NgxsmkDatepickerComponent
    */
   private _normalizeValue(val: unknown): DatepickerValue {
     if (val === null || val === undefined) return null;
-    if (this.mode === 'schedule') {
-      return Array.isArray(val) ? (val as any) : [];
-    }
     if (val instanceof Date) {
       return this._normalizeDate(val);
     }
@@ -6103,26 +5929,6 @@ export class NgxsmkDatepickerComponent
 
   public onViewModeChange(mode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider'): void {
     this.calendarViewMode = mode;
-  }
-
-  public onScheduleChange(event: ScheduleChangeEvent): void {
-    this._value = event.items as any;
-    this.scheduleItems = event.items;
-    this.onChange(this._value as any);
-    this.scheduleChange.emit(event);
-  }
-
-  public onScheduleApply(items: ScheduleItem[]): void {
-    this._value = items as any;
-    this.scheduleItems = items;
-    this.onChange(this._value as any);
-    this.scheduleApply.emit(items);
-    this.closeCalendar();
-  }
-
-  public onScheduleCancel(): void {
-    this.scheduleCancel.emit();
-    this.closeCalendar();
   }
 
   public onYearSelectChange(year: unknown): void {
