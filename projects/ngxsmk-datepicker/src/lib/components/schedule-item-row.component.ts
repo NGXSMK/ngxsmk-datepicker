@@ -172,12 +172,7 @@ const PRIORITY_ICON: Record<string, string> = {
 
         <!-- Conflict Warning -->
         @if (conflicts().length > 0 && showConflictWarning()) {
-          <span
-            class="smk-schedule-item__conflict"
-            [title]="conflictTitle()"
-            aria-label="Date conflict"
-            >⚡</span
-          >
+          <span class="smk-schedule-item__conflict" [title]="conflictTitle()" aria-label="Date conflict">⚡</span>
         }
 
         <!-- Actions -->
