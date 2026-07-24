@@ -79,7 +79,10 @@ for (const relPath of manifestTargets) {
    process.exit(1);
  }
 
-const listing = run(`tar -tzf "${tgzPath}"`)
+// Use the tarball's bare filename (not the absolute path) when invoking `tar`.
+// On Windows, an absolute path like "D:\..." makes bsdtar's `-f` parser treat
+// the drive letter as a "host:" remote-archive prefix and fail to open the file.
+const listing = run(`tar -tzf "${tgzName}"`)
   .split('\n')
   .map((entry) => entry.trim())
   .filter(Boolean);

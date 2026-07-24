@@ -28,15 +28,15 @@
 
 ---
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 24, 2026 - **Current stable:** v3.0.0
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.4.0` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.0` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.4.0** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.0** on npm.
 
 ---
 
@@ -177,7 +177,7 @@ ng add ngxsmk-datepicker
 The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
 
 ```bash
-npm install ngxsmk-datepicker@2.4.0
+npm install ngxsmk-datepicker@3.0.0
 ```
 
 ### Alternative installation
@@ -186,12 +186,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@2.4.0` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@2.4.0` |
-| **Bun** | `bun add ngxsmk-datepicker@2.4.0` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v2.4.0` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@3.0.0` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.0` |
+| **Bun** | `bun add ngxsmk-datepicker@3.0.0` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.0` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@2.4.0/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@2.4.0/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.0/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.0/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -919,7 +919,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v2.4.0** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v2.4.0**.
+**Recent:** Use **v3.0.0** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.0**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

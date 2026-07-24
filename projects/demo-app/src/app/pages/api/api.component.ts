@@ -218,6 +218,13 @@ export class ApiComponent {
     },
     { name: 'calendarCount', type: 'number', default: '1', description: 'Number of calendars to show (max 12).' },
     {
+      name: 'changeActiveMonthOnSelection',
+      type: 'boolean',
+      default: 'true',
+      description:
+        "If false, selecting a date won't shift the visible month(s) — useful in multi-calendar mode to keep both calendars fixed when picking a date from the second/third one.",
+    },
+    {
       name: 'calendarLayout',
       type: "'horizontal' | 'vertical' | 'auto'",
       default: "'auto'",

@@ -6,6 +6,8 @@ import { themeConfig } from './theme/theme.config';
 import { I18nService, SupportedLanguage } from './i18n/i18n.service';
 import { filter } from 'rxjs/operators';
 
+const UI_KIT_PROMO_DISMISSED_KEY = 'ngxsmk-uikit-promo-dismissed';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,6 +18,7 @@ import { filter } from 'rxjs/operators';
 export class AppComponent {
   isSidebarOpen = false;
   isLangMenuOpen = false;
+  showUiKitPromo = signal(false);
 
   private title = inject(Title);
   private meta = inject(Meta);
@@ -66,6 +69,27 @@ export class AppComponent {
     });
     this.fetchNpmDownloads();
     this.initSeo();
+    this.scheduleUiKitPromo();
+  }
+
+  private scheduleUiKitPromo() {
+    if (typeof localStorage === 'undefined') return;
+    if (localStorage.getItem(UI_KIT_PROMO_DISMISSED_KEY)) return;
+    setTimeout(() => this.showUiKitPromo.set(true), 2000);
+  }
+
+  dismissUiKitPromo() {
+    this.showUiKitPromo.set(false);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(UI_KIT_PROMO_DISMISSED_KEY, '1');
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey() {
+    if (this.showUiKitPromo()) {
+      this.dismissUiKitPromo();
+    }
   }
 
   private initSeo() {

@@ -25,15 +25,15 @@
 
 ---
 
-**Last updated:** July 2, 2026 - **Current stable:** v2.4.0
+**Last updated:** July 24, 2026 - **Current stable:** v3.0.0
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v2.4.0` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.0` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v2.4.0** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.0** on npm.
 
 ---
 
@@ -539,6 +539,7 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | enableGoogleCalendar| boolean | false | Enable seamless Google Calendar integration and sync. |
 | googleClientId     | string \| null | null | Google API OAuth 2.0 Web Client ID for authentication. |
 | calendars          | number | 1 | Multi-calendar display layout (supports 1, 2, or 3 side-by-side calendars). |
+| changeActiveMonthOnSelection | boolean | true | If false, selecting a date won't shift the visible month(s) — useful in multi-calendar mode to keep both calendars fixed when picking a date from the second/third one. |
 | rangePresetFactory | (today: Date) => DatePreset[] | null | Callback function supplying dynamic rolling range presets. |
 | showTimezoneSelector | boolean | false | Enables searchable IANA timezone selection dropdown UI. |
 | enableNaturalLanguage | boolean | false | Enables manual relative keyboard typing input (e.g. "today", "in 3 days"). |
@@ -877,7 +878,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v2.4.0** (Current Stable)`r`n`r`n- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
+### **v3.0.0** (Current Stable)
+
+- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
 
 ### **Earlier Versions**
 

@@ -736,6 +736,12 @@ export class NgxsmkDatepickerComponent
     return this._calendarCount;
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
+  /**
+   * Whether selecting a date shifts the calendar view to that date's month.
+   * Set to `false` in multi-calendar mode to keep the visible months fixed
+   * when the user clicks a date in a calendar other than the first one.
+   */
+  @Input({ transform: booleanAttribute }) changeActiveMonthOnSelection: boolean = true;
   /** Shows an ISO 8601 week-number column on the left of the day grid. */
   @Input({ transform: booleanAttribute }) showWeekNumbers: boolean = false;
   /** Header label for the week-number column (e.g. "Wk", "KW", "S"). */
@@ -5305,6 +5311,7 @@ export class NgxsmkDatepickerComponent
   }
 
   private _navigateToMonthOfDay(day: Date): void {
+    if (!this.changeActiveMonthOnSelection) return;
     if (this.isCurrentMonth(day)) return;
 
     this._currentMonth = day.getMonth();
