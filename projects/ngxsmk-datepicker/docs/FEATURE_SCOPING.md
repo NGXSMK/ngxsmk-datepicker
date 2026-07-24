@@ -1,6 +1,6 @@
 # Feature scoping: Enhanced Localization & Enhanced Time Selection
 
-**Last updated:** July 11, 2026 · Aligns with [ROADMAP.md](../../../ROADMAP.md) (Current Focus).
+**Last updated:** July 24, 2026 · Aligns with [ROADMAP.md](../../../ROADMAP.md) (Current Focus).
 
 This document defines **concrete inputs and behaviors** for roadmap items *Enhanced Localization* and *Enhanced Time Selection* so implementations can proceed without API ambiguity. Until shipped, treat these as **design proposals**; minor renames may occur in minor releases with changelog notes.
 
