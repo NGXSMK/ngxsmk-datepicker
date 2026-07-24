@@ -29,7 +29,7 @@ module.exports = tseslint.config(
         "error",
         {
           type: "element",
-          prefix: ["ngxsmk", "app"],
+          prefix: ["ngxsmk", "app", "smk"],
           style: "kebab-case",
         },
       ],

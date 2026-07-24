@@ -151,7 +151,7 @@ function resolveColor(color: string | undefined): string {
           />
         } @else {
           <div class="smk-schedule-form__field">
-            <label class="smk-schedule-form__label">Color</label>
+            <span class="smk-schedule-form__label">Color</span>
             <div class="smk-schedule-color-picker" role="group" aria-label="Color options">
               @for (color of colorPresets(); track color) {
                 <button
@@ -190,7 +190,7 @@ function resolveColor(color: string | undefined): string {
           />
         } @else {
           <div class="smk-schedule-form__field">
-            <label class="smk-schedule-form__label">Icon</label>
+            <span class="smk-schedule-form__label">Icon</span>
             <div class="smk-schedule-icon-picker" role="group" aria-label="Icon options">
               @for (icon of iconPresets(); track icon) {
                 <button
@@ -322,7 +322,7 @@ function resolveColor(color: string | undefined): string {
           />
         } @else {
           <div class="smk-schedule-form__field">
-            <label class="smk-schedule-form__label">Priority</label>
+            <span class="smk-schedule-form__label">Priority</span>
             <div class="smk-schedule-priority-picker" role="group" aria-label="Priority level">
               @for (level of priorityLevels; track level.value) {
                 <button
@@ -570,6 +570,7 @@ export class ScheduleFormComponent implements OnInit {
   readonly save = output<ScheduleItem>();
 
   /** Emitted when the user clicks Cancel. */
+  // eslint-disable-next-line @angular-eslint/no-output-native
   readonly cancel = output<void>();
 
   // ─── Internal State ───────────────────────────────────────────────

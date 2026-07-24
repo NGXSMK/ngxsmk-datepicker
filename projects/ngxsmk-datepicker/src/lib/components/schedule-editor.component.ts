@@ -241,12 +241,16 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                     <div class="smk-timeline-row-columns">
                       <!-- Interactive background cells -->
                       @for (day of timelineDays(); track day.getTime()) {
-                        <div 
-                          class="smk-timeline-grid-cell" 
-                          [class.smk-timeline-grid-cell--today]="isToday(day)"
-                          (click)="onTimelineCellClick(category, day)"
-                          title="Click cell to schedule item here"
-                        ></div>
+<div 
+                            class="smk-timeline-grid-cell" 
+                            [class.smk-timeline-grid-cell--today]="isToday(day)"
+                            (click)="onTimelineCellClick(category, day)"
+                            (keydown.enter)="onTimelineCellClick(category, day)"
+                            (keydown.space)="onTimelineCellClick(category, day); $event.preventDefault()"
+                            tabindex="0"
+                            role="button"
+                            title="Click cell to schedule item here"
+                          ></div>
                       }
 
                       <!-- Item spans overlaid -->
@@ -260,6 +264,10 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                             [class.smk-timeline-item-bar--completed]="item.completed"
                             [class.smk-timeline-item-bar--locked]="item.locked"
                             (click)="onTimelineItemClick(item, $event)"
+                            (keydown.enter)="onTimelineItemClick(item, $event)"
+                            (keydown.space)="onTimelineItemClick(item, $event); $event.preventDefault()"
+                            tabindex="0"
+                            role="button"
                             [title]="item.title"
                           >
                             @if (item.icon) {

@@ -86,6 +86,10 @@ const PRIORITY_ICON: Record<string, string> = {
         [attr.data-item-id]="item().id"
         [attr.aria-label]="item().title"
         (click)="onRowClick()"
+        (keydown.enter)="onRowClick()"
+        (keydown.space)="onRowClick(); $event.preventDefault()"
+        tabindex="0"
+        role="button"
       >
         <!-- Drag Handle -->
         @if (showDragHandle() && !item().locked) {
