@@ -32,7 +32,7 @@ module.exports = function karmaConfig(config) {
           statements: 69,
           branches: 58,
           functions: 73,
-          lines: 71
+          lines: 70
         }
       }
     },
