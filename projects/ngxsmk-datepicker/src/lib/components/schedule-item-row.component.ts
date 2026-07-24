@@ -174,7 +174,7 @@ const PRIORITY_ICON: Record<string, string> = {
         @if (conflicts().length > 0 && showConflictWarning()) {
           <span
             class="smk-schedule-item__conflict"
-            [title]="'Overlaps with: ' + conflicts().map(c => c.title).join(', ')"
+            [title]="conflictTitle()"
             aria-label="Date conflict"
             >⚡</span
           >
@@ -340,6 +340,11 @@ export class ScheduleItemRowComponent {
     if (fn) return fn(item);
     const fmt = (d: Date) => d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     return item.end ? `${fmt(item.start)} – ${fmt(item.end)}` : fmt(item.start);
+  });
+
+  readonly conflictTitle = computed(() => {
+    const titles = this.conflicts().map((c) => c.title);
+    return 'Overlaps with: ' + titles.join(', ');
   });
 
   // ─── Handlers ───────────────────────────────────────────────────────
