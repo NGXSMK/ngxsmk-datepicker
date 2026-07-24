@@ -138,4 +138,3 @@ export type { ScheduleValidationError, ScheduleValidationResult } from './lib/se
 export { ScheduleEditorComponent } from './lib/components/schedule-editor.component';
 export { ScheduleItemRowComponent } from './lib/components/schedule-item-row.component';
 export { ScheduleFormComponent } from './lib/components/schedule-form.component';
-

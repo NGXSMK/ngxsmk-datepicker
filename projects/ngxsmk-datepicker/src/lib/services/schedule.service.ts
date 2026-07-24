@@ -92,9 +92,9 @@ export class ScheduleService {
     return this.items().filter((item) => {
       if (item.hidden) return false;
       if (text) {
-        const inTitle    = item.title.toLowerCase().includes(text);
-        const inNotes    = item.notes?.toLowerCase().includes(text) ?? false;
-        const inTags     = item.tags?.some((t) => t.toLowerCase().includes(text)) ?? false;
+        const inTitle = item.title.toLowerCase().includes(text);
+        const inNotes = item.notes?.toLowerCase().includes(text) ?? false;
+        const inTags = item.tags?.some((t) => t.toLowerCase().includes(text)) ?? false;
         const inCategory = item.category?.toLowerCase().includes(text) ?? false;
         if (!inTitle && !inNotes && !inTags && !inCategory) return false;
       }
@@ -136,7 +136,9 @@ export class ScheduleService {
   /** De-duplicated list of all categories across visible items. */
   readonly allCategories = computed<string[]>(() => {
     const set = new Set<string>();
-    this.items().forEach((item) => { if (item.category) set.add(item.category); });
+    this.items().forEach((item) => {
+      if (item.category) set.add(item.category);
+    });
     return [...set].sort();
   });
 
@@ -187,9 +189,7 @@ export class ScheduleService {
    * Emits no change if the id is not found.
    */
   update(id: string, patch: Partial<Omit<ScheduleItem, 'id'>>): void {
-    this.items.update((list) =>
-      list.map((item) => (item.id === id ? { ...item, ...patch } : item))
-    );
+    this.items.update((list) => list.map((item) => (item.id === id ? { ...item, ...patch } : item)));
   }
 
   /**
@@ -222,23 +222,17 @@ export class ScheduleService {
 
   /** Toggle the `completed` flag on an item. */
   toggleComplete(id: string): void {
-    this.items.update((list) =>
-      list.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item))
-    );
+    this.items.update((list) => list.map((item) => (item.id === id ? { ...item, completed: !item.completed } : item)));
   }
 
   /** Toggle the `hidden` flag on an item. */
   toggleHidden(id: string): void {
-    this.items.update((list) =>
-      list.map((item) => (item.id === id ? { ...item, hidden: !item.hidden } : item))
-    );
+    this.items.update((list) => list.map((item) => (item.id === id ? { ...item, hidden: !item.hidden } : item)));
   }
 
   /** Toggle the `locked` flag on an item. */
   toggleLocked(id: string): void {
-    this.items.update((list) =>
-      list.map((item) => (item.id === id ? { ...item, locked: !item.locked } : item))
-    );
+    this.items.update((list) => list.map((item) => (item.id === id ? { ...item, locked: !item.locked } : item)));
   }
 
   // ─── Ordering ────────────────────────────────────────────────────────
@@ -263,9 +257,7 @@ export class ScheduleService {
   sortByDate(direction: 'asc' | 'desc' = 'asc'): void {
     this.items.update((list) =>
       [...list].sort((a, b) =>
-        direction === 'asc'
-          ? a.start.getTime() - b.start.getTime()
-          : b.start.getTime() - a.start.getTime()
+        direction === 'asc' ? a.start.getTime() - b.start.getTime() : b.start.getTime() - a.start.getTime()
       )
     );
     this.sortMode.set('date');
@@ -325,16 +317,12 @@ export class ScheduleService {
 
   /** Toggle a tag in the active tag filter. */
   toggleTagFilter(tag: string): void {
-    this.filterTags.update((tags) =>
-      tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag]
-    );
+    this.filterTags.update((tags) => (tags.includes(tag) ? tags.filter((t) => t !== tag) : [...tags, tag]));
   }
 
   /** Toggle a category in the active category filter. */
   toggleCategoryFilter(cat: string): void {
-    this.filterCategories.update((cats) =>
-      cats.includes(cat) ? cats.filter((c) => c !== cat) : [...cats, cat]
-    );
+    this.filterCategories.update((cats) => (cats.includes(cat) ? cats.filter((c) => c !== cat) : [...cats, cat]));
   }
 
   // ─── Conflict Helpers ────────────────────────────────────────────────
@@ -458,17 +446,19 @@ export class ScheduleService {
     const header = 'id,title,start,end,color,priority,tags,category,notes';
     const rows = this.items()
       .filter((i) => !i.hidden)
-      .map((i) => [
-        i.id,
-        `"${i.title.replace(/"/g, '""')}"`,
-        i.start.toISOString(),
-        i.end?.toISOString() ?? '',
-        i.color ?? '',
-        i.priority ?? '',
-        (i.tags ?? []).join(';'),
-        i.category ?? '',
-        `"${(i.notes ?? '').replace(/"/g, '""')}"`,
-      ].join(','));
+      .map((i) =>
+        [
+          i.id,
+          `"${i.title.replace(/"/g, '""')}"`,
+          i.start.toISOString(),
+          i.end?.toISOString() ?? '',
+          i.color ?? '',
+          i.priority ?? '',
+          (i.tags ?? []).join(';'),
+          i.category ?? '',
+          `"${(i.notes ?? '').replace(/"/g, '""')}"`,
+        ].join(',')
+      );
     return [header, ...rows].join('\n');
   }
 
@@ -483,7 +473,7 @@ export class ScheduleService {
         const cols = row.match(/(".*?"|[^,]+|(?<=,)(?=,))/g) ?? [];
         const clean = (s: string | undefined) => (s ?? '').replace(/^"|"$/g, '').replace(/""/g, '"');
         const item: ScheduleItem = {
-          id:    clean(cols[0]) || uuid(),
+          id: clean(cols[0]) || uuid(),
           title: clean(cols[1]) || 'Untitled',
           start: new Date(clean(cols[2])),
         };
@@ -533,10 +523,7 @@ export class ScheduleService {
    * Build a `ScheduleChangeEvent` for the given action.
    * Used internally by components to emit consistent change events.
    */
-  buildChangeEvent(
-    action: ScheduleChangeEvent['action'],
-    affected: ScheduleItem[]
-  ): ScheduleChangeEvent {
+  buildChangeEvent(action: ScheduleChangeEvent['action'], affected: ScheduleItem[]): ScheduleChangeEvent {
     return { items: this.items(), action, affected };
   }
 }

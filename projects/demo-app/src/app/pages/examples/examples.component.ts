@@ -113,360 +113,360 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="selection-box" *ngIf="yearValue">
               <code>{{ yearValue.start | date: 'yyyy' }}</code>
             </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">Date Schedule</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>Interactive Schedule Planner</h3>
-              <span class="badge">New</span>
-            </div>
-            <p class="card-desc">Canva-style schedule planner. Runs natively inline. Add, edit, remove, and drag items directly.</p>
-            <ngxsmk-datepicker
-              mode="schedule"
-              [(ngModel)]="scheduleValue"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="scheduleValue.length">
-              <code>{{ scheduleValue.length }} item(s) in schedule</code>
-            </div>
           </div>
         </div>
-      </div>
 
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.dateTime }}</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.dateTime }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.time }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.dateTimeDesc }}</p>
-            <ngxsmk-datepicker
-              [showTime]="true"
-              [(ngModel)]="dateTimeValue"
-              [placeholder]="i18n.t().examples.placeholders.selectDateTime"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="dateTimeValue">
-              <code>{{ dateTimeValue | date: 'short' }}</code>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.dateTime24 }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.time24 }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.dateTime24Desc }}</p>
-            <ngxsmk-datepicker
-              [showTime]="true"
-              [use24Hour]="true"
-              [(ngModel)]="dateTime24Value"
-              [placeholder]="i18n.t().examples.placeholders.select24h"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="dateTime24Value">
-              <code>{{ dateTime24Value | date: 'medium' }}</code>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.timeOnly }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.timeOnly }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.timeOnlyDesc }}</p>
-            <ngxsmk-datepicker
-              [timeOnly]="true"
-              [(ngModel)]="timeOnlyValue"
-              [placeholder]="i18n.t().examples.placeholders.selectTime"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="timeOnlyValue">
-              <code>{{ timeOnlyValue | date: 'shortTime' }}</code>
-            </div>
-          </div>
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.timeSeconds }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.seconds }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.timeSecondsDesc }}</p>
-            <ngxsmk-datepicker
-              [timeOnly]="true"
-              [showSeconds]="true"
-              [(ngModel)]="timeSecondsValue"
-              [placeholder]="i18n.t().examples.placeholders.selectSeconds"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="timeSecondsValue">
-              <code>{{ timeSecondsValue | date: 'mediumTime' }}</code>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.timeRange }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.new }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.timeRangeDesc }}</p>
-            <ngxsmk-datepicker
-              [timeRangeMode]="true"
-              [showTime]="true"
-              [use24Hour]="true"
-              [(ngModel)]="timeRangeValue"
-              [placeholder]="i18n.t().examples.placeholders.selectTimeRange"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="timeRangeValue">
-              <code>{{ timeRangeValue.start | date: 'HH:mm' }} - {{ timeRangeValue.end | date: 'HH:mm' }}</code>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.customFormat }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.new }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.customFormatDesc }}</p>
-            <ngxsmk-datepicker
-              [dateFormatPattern]="'YYYY-MM-DD HH:mm'"
-              [showTime]="true"
-              [(ngModel)]="customFormatValue"
-              [placeholder]="i18n.t().examples.placeholders.customFormat"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="customFormatValue">
-              <code>{{ customFormatValue | date: 'medium' }}</code>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.multiCalendar }}</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.syncScroll }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.new }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.syncScrollDesc }}</p>
-            <ngxsmk-datepicker
-              mode="range"
-              [calendarCount]="2"
-              [syncScroll]="{ enabled: true, monthGap: 1 }"
-              [(ngModel)]="syncScrollValue"
-              [placeholder]="i18n.t().examples.placeholders.syncedLayout"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="syncScrollValue">
-              <code
-                >{{ syncScrollValue.start | date: 'shortDate' }} - {{ syncScrollValue.end | date: 'shortDate' }}</code
-              >
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.animations }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.new }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.animationsDesc }}</p>
-            <ngxsmk-datepicker
-              [animationConfig]="{
-                enabled: true,
-                duration: 100,
-                easing: 'ease-out',
-              }"
-              [(ngModel)]="animationValue"
-              [placeholder]="i18n.t().examples.placeholders.fastAnimations"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="animationValue">
-              <code>{{ animationValue | date: 'shortDate' }}</code>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.noAnimations }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.a11y }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.noAnimationsDesc }}</p>
-            <ngxsmk-datepicker
-              [animationConfig]="{ enabled: false }"
-              [(ngModel)]="noAnimValue"
-              [placeholder]="i18n.t().examples.placeholders.noAnimations"
-            ></ngxsmk-datepicker>
-            <div class="selection-box" *ngIf="noAnimValue">
-              <code>{{ noAnimValue | date: 'shortDate' }}</code>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.visual }}</h2>
-        <div class="examples-grid examples-grid--single">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.multiMonth }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.multiView }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.multiMonthDesc }}</p>
-            <div class="inline-wrapper">
-              <ngxsmk-datepicker
-                [inline]="true"
-                mode="range"
-                [calendarCount]="2"
-                [(ngModel)]="multiMonthValue"
-              ></ngxsmk-datepicker>
-            </div>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.vertical }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.layout }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.verticalDesc }}</p>
-            <div class="inline-wrapper vertical-wrapper">
-              <ngxsmk-datepicker
-                [inline]="true"
-                mode="range"
-                [calendarCount]="2"
-                calendarLayout="vertical"
-                [(ngModel)]="verticalValue"
-              ></ngxsmk-datepicker>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.validation }}</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.minMax }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.bounds }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.minMaxDesc }}</p>
-            <ngxsmk-datepicker
-              [minDate]="today"
-              [maxDate]="nextWeek"
-              [(ngModel)]="constrainedValue"
-              [placeholder]="i18n.t().examples.placeholders.next7Days"
-            ></ngxsmk-datepicker>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.disabledDates }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.specific }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.disabledDatesDesc }}</p>
-            <ngxsmk-datepicker
-              [disabledDates]="disabledDates"
-              [(ngModel)]="disabledSpecificValue"
-              [placeholder]="i18n.t().examples.placeholders.try15th"
-            ></ngxsmk-datepicker>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.customLogic }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.function }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.customLogicDesc }}</p>
-            <ngxsmk-datepicker
-              [isInvalidDate]="isWeekend"
-              [(ngModel)]="weekendValue"
-              [placeholder]="i18n.t().examples.placeholders.noWeekends"
-            ></ngxsmk-datepicker>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.holidays }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.provider }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.holidaysDesc }}</p>
-            <ngxsmk-datepicker
-              [holidayProvider]="holidayProvider"
-              [(ngModel)]="holidayValue"
-              [placeholder]="i18n.t().examples.placeholders.seeHolidays"
-            ></ngxsmk-datepicker>
-          </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.localization }}</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.locales.german }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.locale }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.locales.germanDesc }}</p>
-            <ngxsmk-datepicker
-              locale="de-DE"
-              [(ngModel)]="localeDeValue"
-              [placeholder]="i18n.t().examples.placeholders.german"
-            ></ngxsmk-datepicker>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.locales.japanese }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.locale }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.locales.japaneseDesc }}</p>
-            <ngxsmk-datepicker
-              locale="ja-JP"
-              [(ngModel)]="localeJaValue"
-              [placeholder]="i18n.t().examples.placeholders.japanese"
-            ></ngxsmk-datepicker>
-          </div>
-
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.locales.arabic }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.rtl }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.locales.arabicDesc }}</p>
-            <div dir="rtl">
-              <ngxsmk-datepicker
-                locale="ar-SA"
-                dir="rtl"
-                [(ngModel)]="localeArValue"
-                [placeholder]="i18n.t().examples.placeholders.arabic"
-              ></ngxsmk-datepicker>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="example-category">
-        <h2 class="category-title">{{ i18n.t().examples.categories.templates }}</h2>
-        <div class="examples-grid">
-          <div class="card demo-card">
-            <div class="card-header">
-              <h3>{{ i18n.t().examples.modes.customTemplate }}</h3>
-              <span class="badge">{{ i18n.t().examples.badges.template }}</span>
-            </div>
-            <p class="card-desc">{{ i18n.t().examples.modes.customTemplateDesc }}</p>
-            <ngxsmk-datepicker
-              [(ngModel)]="templateValue"
-              [dateTemplate]="customDateCell"
-              [placeholder]="i18n.t().examples.placeholders.check1st15th"
-            ></ngxsmk-datepicker>
-
-            <ng-template #customDateCell let-day let-selected="selected">
-              <div class="custom-cell" [class.selected]="selected">
-                <span class="day-num">{{ day.getDate() }}</span>
-                <div class="dots" *ngIf="day.getDate() === 15"></div>
-                <div class="tag" *ngIf="day.getDate() === 1">{{ i18n.t().examples.badges.first }}</div>
+        <div class="example-category">
+          <h2 class="category-title">Date Schedule</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>Interactive Schedule Planner</h3>
+                <span class="badge">New</span>
               </div>
-            </ng-template>
+              <p class="card-desc">
+                Canva-style schedule planner. Runs natively inline. Add, edit, remove, and drag items directly.
+              </p>
+              <ngxsmk-datepicker mode="schedule" [(ngModel)]="scheduleValue"></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="scheduleValue.length">
+                <code>{{ scheduleValue.length }} item(s) in schedule</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.dateTime }}</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.dateTime }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.time }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.dateTimeDesc }}</p>
+              <ngxsmk-datepicker
+                [showTime]="true"
+                [(ngModel)]="dateTimeValue"
+                [placeholder]="i18n.t().examples.placeholders.selectDateTime"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="dateTimeValue">
+                <code>{{ dateTimeValue | date: 'short' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.dateTime24 }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.time24 }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.dateTime24Desc }}</p>
+              <ngxsmk-datepicker
+                [showTime]="true"
+                [use24Hour]="true"
+                [(ngModel)]="dateTime24Value"
+                [placeholder]="i18n.t().examples.placeholders.select24h"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="dateTime24Value">
+                <code>{{ dateTime24Value | date: 'medium' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.timeOnly }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.timeOnly }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.timeOnlyDesc }}</p>
+              <ngxsmk-datepicker
+                [timeOnly]="true"
+                [(ngModel)]="timeOnlyValue"
+                [placeholder]="i18n.t().examples.placeholders.selectTime"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="timeOnlyValue">
+                <code>{{ timeOnlyValue | date: 'shortTime' }}</code>
+              </div>
+            </div>
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.timeSeconds }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.seconds }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.timeSecondsDesc }}</p>
+              <ngxsmk-datepicker
+                [timeOnly]="true"
+                [showSeconds]="true"
+                [(ngModel)]="timeSecondsValue"
+                [placeholder]="i18n.t().examples.placeholders.selectSeconds"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="timeSecondsValue">
+                <code>{{ timeSecondsValue | date: 'mediumTime' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.timeRange }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.new }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.timeRangeDesc }}</p>
+              <ngxsmk-datepicker
+                [timeRangeMode]="true"
+                [showTime]="true"
+                [use24Hour]="true"
+                [(ngModel)]="timeRangeValue"
+                [placeholder]="i18n.t().examples.placeholders.selectTimeRange"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="timeRangeValue">
+                <code>{{ timeRangeValue.start | date: 'HH:mm' }} - {{ timeRangeValue.end | date: 'HH:mm' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.customFormat }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.new }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.customFormatDesc }}</p>
+              <ngxsmk-datepicker
+                [dateFormatPattern]="'YYYY-MM-DD HH:mm'"
+                [showTime]="true"
+                [(ngModel)]="customFormatValue"
+                [placeholder]="i18n.t().examples.placeholders.customFormat"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="customFormatValue">
+                <code>{{ customFormatValue | date: 'medium' }}</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.multiCalendar }}</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.syncScroll }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.new }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.syncScrollDesc }}</p>
+              <ngxsmk-datepicker
+                mode="range"
+                [calendarCount]="2"
+                [syncScroll]="{ enabled: true, monthGap: 1 }"
+                [(ngModel)]="syncScrollValue"
+                [placeholder]="i18n.t().examples.placeholders.syncedLayout"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="syncScrollValue">
+                <code
+                  >{{ syncScrollValue.start | date: 'shortDate' }} - {{ syncScrollValue.end | date: 'shortDate' }}</code
+                >
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.animations }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.new }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.animationsDesc }}</p>
+              <ngxsmk-datepicker
+                [animationConfig]="{
+                  enabled: true,
+                  duration: 100,
+                  easing: 'ease-out',
+                }"
+                [(ngModel)]="animationValue"
+                [placeholder]="i18n.t().examples.placeholders.fastAnimations"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="animationValue">
+                <code>{{ animationValue | date: 'shortDate' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.noAnimations }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.a11y }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.noAnimationsDesc }}</p>
+              <ngxsmk-datepicker
+                [animationConfig]="{ enabled: false }"
+                [(ngModel)]="noAnimValue"
+                [placeholder]="i18n.t().examples.placeholders.noAnimations"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="noAnimValue">
+                <code>{{ noAnimValue | date: 'shortDate' }}</code>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.visual }}</h2>
+          <div class="examples-grid examples-grid--single">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.multiMonth }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.multiView }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.multiMonthDesc }}</p>
+              <div class="inline-wrapper">
+                <ngxsmk-datepicker
+                  [inline]="true"
+                  mode="range"
+                  [calendarCount]="2"
+                  [(ngModel)]="multiMonthValue"
+                ></ngxsmk-datepicker>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.vertical }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.layout }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.verticalDesc }}</p>
+              <div class="inline-wrapper vertical-wrapper">
+                <ngxsmk-datepicker
+                  [inline]="true"
+                  mode="range"
+                  [calendarCount]="2"
+                  calendarLayout="vertical"
+                  [(ngModel)]="verticalValue"
+                ></ngxsmk-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.validation }}</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.minMax }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.bounds }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.minMaxDesc }}</p>
+              <ngxsmk-datepicker
+                [minDate]="today"
+                [maxDate]="nextWeek"
+                [(ngModel)]="constrainedValue"
+                [placeholder]="i18n.t().examples.placeholders.next7Days"
+              ></ngxsmk-datepicker>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.disabledDates }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.specific }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.disabledDatesDesc }}</p>
+              <ngxsmk-datepicker
+                [disabledDates]="disabledDates"
+                [(ngModel)]="disabledSpecificValue"
+                [placeholder]="i18n.t().examples.placeholders.try15th"
+              ></ngxsmk-datepicker>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.customLogic }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.function }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.customLogicDesc }}</p>
+              <ngxsmk-datepicker
+                [isInvalidDate]="isWeekend"
+                [(ngModel)]="weekendValue"
+                [placeholder]="i18n.t().examples.placeholders.noWeekends"
+              ></ngxsmk-datepicker>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.holidays }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.provider }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.holidaysDesc }}</p>
+              <ngxsmk-datepicker
+                [holidayProvider]="holidayProvider"
+                [(ngModel)]="holidayValue"
+                [placeholder]="i18n.t().examples.placeholders.seeHolidays"
+              ></ngxsmk-datepicker>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.localization }}</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.locales.german }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.locale }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.locales.germanDesc }}</p>
+              <ngxsmk-datepicker
+                locale="de-DE"
+                [(ngModel)]="localeDeValue"
+                [placeholder]="i18n.t().examples.placeholders.german"
+              ></ngxsmk-datepicker>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.locales.japanese }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.locale }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.locales.japaneseDesc }}</p>
+              <ngxsmk-datepicker
+                locale="ja-JP"
+                [(ngModel)]="localeJaValue"
+                [placeholder]="i18n.t().examples.placeholders.japanese"
+              ></ngxsmk-datepicker>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.locales.arabic }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.rtl }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.locales.arabicDesc }}</p>
+              <div dir="rtl">
+                <ngxsmk-datepicker
+                  locale="ar-SA"
+                  dir="rtl"
+                  [(ngModel)]="localeArValue"
+                  [placeholder]="i18n.t().examples.placeholders.arabic"
+                ></ngxsmk-datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="example-category">
+          <h2 class="category-title">{{ i18n.t().examples.categories.templates }}</h2>
+          <div class="examples-grid">
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>{{ i18n.t().examples.modes.customTemplate }}</h3>
+                <span class="badge">{{ i18n.t().examples.badges.template }}</span>
+              </div>
+              <p class="card-desc">{{ i18n.t().examples.modes.customTemplateDesc }}</p>
+              <ngxsmk-datepicker
+                [(ngModel)]="templateValue"
+                [dateTemplate]="customDateCell"
+                [placeholder]="i18n.t().examples.placeholders.check1st15th"
+              ></ngxsmk-datepicker>
+
+              <ng-template #customDateCell let-day let-selected="selected">
+                <div class="custom-cell" [class.selected]="selected">
+                  <span class="day-num">{{ day.getDate() }}</span>
+                  <div class="dots" *ngIf="day.getDate() === 15"></div>
+                  <div class="tag" *ngIf="day.getDate() === 1">{{ i18n.t().examples.badges.first }}</div>
+                </div>
+              </ng-template>
+            </div>
           </div>
         </div>
       </div>
@@ -652,8 +652,8 @@ export class ExamplesComponent {
       title: 'Intro to Schedule Mode',
       start: new Date(),
       color: 'blue',
-      icon: '📅'
-    }
+      icon: '📅',
+    },
   ];
 
   dateTimeValue: Date | null = null;

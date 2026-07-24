@@ -62,10 +62,11 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['../styles/variables.css', '../styles/datepicker.css'],
   template: `
-    <div class="smk-schedule-panel"
-         [class.smk-schedule-panel--has-conflicts]="service.hasConflicts()"
-         [class.smk-schedule-panel--full-page]="fullPage()">
-
+    <div
+      class="smk-schedule-panel"
+      [class.smk-schedule-panel--has-conflicts]="service.hasConflicts()"
+      [class.smk-schedule-panel--full-page]="fullPage()"
+    >
       <!-- ─── Custom Header ────────────────────────────────────── -->
       @if (scheduleHeaderTemplate()) {
         <ng-container [ngTemplateOutlet]="scheduleHeaderTemplate()!" />
@@ -80,14 +81,18 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                 [class.smk-schedule-view-btn--active]="viewMode() === 'timeline'"
                 (click)="setViewMode('timeline')"
                 title="Timeline View"
-              >Timeline</button>
+              >
+                Timeline
+              </button>
               <button
                 type="button"
                 class="smk-schedule-view-btn"
                 [class.smk-schedule-view-btn--active]="viewMode() === 'list'"
                 (click)="setViewMode('list')"
                 title="List View"
-              >List</button>
+              >
+                List
+              </button>
             </div>
           </div>
           <div class="smk-schedule-panel__header-actions">
@@ -103,23 +108,16 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
               </div>
             }
             @if (scheduleShowSort() && viewMode() === 'list') {
-              <select
-                class="smk-schedule-sort"
-                [ngModel]="service.sortMode()"
-                (ngModelChange)="onSortChange($event)"
-              >
+              <select class="smk-schedule-sort" [ngModel]="service.sortMode()" (ngModelChange)="onSortChange($event)">
                 <option value="manual">Manual Order</option>
                 <option value="date">Sort by Date</option>
                 <option value="priority">Sort by Priority</option>
                 <option value="title">Sort by Title</option>
               </select>
             }
-            <button
-              class="smk-schedule-panel__add-btn"
-              type="button"
-              [disabled]="maxReached()"
-              (click)="onAddClick()"
-            >+ {{ scheduleAddLabel() }}</button>
+            <button class="smk-schedule-panel__add-btn" type="button" [disabled]="maxReached()" (click)="onAddClick()">
+              + {{ scheduleAddLabel() }}
+            </button>
           </div>
         </div>
       }
@@ -132,20 +130,21 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
               class="smk-schedule-filter__chip"
               [class.smk-schedule-filter__chip--active]="service.filterTags().includes(tag)"
               (click)="service.toggleTagFilter(tag)"
-            >#{{ tag }}</button>
+            >
+              #{{ tag }}
+            </button>
           }
           @for (cat of service.allCategories(); track cat) {
             <button
               class="smk-schedule-filter__chip"
               [class.smk-schedule-filter__chip--active]="service.filterCategories().includes(cat)"
               (click)="service.toggleCategoryFilter(cat)"
-            >{{ cat }}</button>
+            >
+              {{ cat }}
+            </button>
           }
           @if (service.filterTags().length > 0 || service.filterCategories().length > 0) {
-            <button
-              class="smk-schedule-filter__clear"
-              (click)="service.clearFilters()"
-            >Clear Filters</button>
+            <button class="smk-schedule-filter__clear" (click)="service.clearFilters()">Clear Filters</button>
           }
         </div>
       }
@@ -153,11 +152,10 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
       <!-- ─── Conflict Banner ───────────────────────────────────── -->
       @if (scheduleShowConflicts() && service.hasConflicts()) {
         <div class="smk-schedule-conflict-banner" role="alert" aria-live="polite">
-          Conflict Warning: {{ service.conflicts().length }} overlap{{ service.conflicts().length !== 1 ? 's' : '' }} detected
+          Conflict Warning: {{ service.conflicts().length }} overlap{{ service.conflicts().length !== 1 ? 's' : '' }}
+          detected
           @for (pair of service.conflicts(); track pair[0].id + pair[1].id) {
-            <span class="smk-schedule-conflict-banner__pair">
-              "{{ pair[0].title }}" ↔ "{{ pair[1].title }}"
-            </span>
+            <span class="smk-schedule-conflict-banner__pair"> "{{ pair[0].title }}" ↔ "{{ pair[1].title }}" </span>
           }
         </div>
       }
@@ -214,7 +212,13 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
             <button type="button" class="smk-timeline-nav-btn" (click)="shiftTimeline(-7)">&lt;</button>
             <span class="smk-timeline-nav-range">{{ timelineSpannedMonths() }}</span>
             <button type="button" class="smk-timeline-nav-btn" (click)="shiftTimeline(7)">&gt;</button>
-            <button type="button" class="smk-timeline-nav-btn smk-timeline-nav-btn--today" (click)="shiftTimelineToday()">Today</button>
+            <button
+              type="button"
+              class="smk-timeline-nav-btn smk-timeline-nav-btn--today"
+              (click)="shiftTimelineToday()"
+            >
+              Today
+            </button>
           </div>
 
           <div class="smk-timeline-scroll-container">
@@ -237,26 +241,26 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                 @for (category of timelineCategories(); track category) {
                   <div class="smk-timeline-grid-row">
                     <div class="smk-timeline-row-resource">{{ category }}</div>
-                    
+
                     <div class="smk-timeline-row-columns">
                       <!-- Interactive background cells -->
                       @for (day of timelineDays(); track day.getTime()) {
-<div 
-                            class="smk-timeline-grid-cell" 
-                            [class.smk-timeline-grid-cell--today]="isToday(day)"
-                            (click)="onTimelineCellClick(category, day)"
-                            (keydown.enter)="onTimelineCellClick(category, day)"
-                            (keydown.space)="onTimelineCellClick(category, day); $event.preventDefault()"
-                            tabindex="0"
-                            role="button"
-                            title="Click cell to schedule item here"
-                          ></div>
+                        <div
+                          class="smk-timeline-grid-cell"
+                          [class.smk-timeline-grid-cell--today]="isToday(day)"
+                          (click)="onTimelineCellClick(category, day)"
+                          (keydown.enter)="onTimelineCellClick(category, day)"
+                          (keydown.space)="onTimelineCellClick(category, day); $event.preventDefault()"
+                          tabindex="0"
+                          role="button"
+                          title="Click cell to schedule item here"
+                        ></div>
                       }
 
                       <!-- Item spans overlaid -->
                       @for (item of getItemsForCategory(category); track item.id) {
                         @if (isItemInWindow(item)) {
-                          <div 
+                          <div
                             class="smk-timeline-item-bar"
                             [style.grid-column-start]="getColumnStart(item)"
                             [style.grid-column-end]="getColumnEnd(item)"
@@ -305,7 +309,7 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
               >
                 <!-- Drag preview placeholder -->
                 <div class="smk-schedule-list__drag-preview" *cdkDragPlaceholder></div>
-  
+
                 <smk-schedule-item-row
                   [item]="item"
                   [isEditing]="service.editingId() === item.id"
@@ -326,7 +330,7 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                   (toggleLock)="onToggleLock($event)"
                   (itemClick)="itemClick.emit($event)"
                 />
-  
+
                 <!-- Inline Edit Form -->
                 @if (service.editingId() === item.id) {
                   <div class="smk-schedule-form-wrapper">
@@ -359,7 +363,9 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
             <div class="smk-schedule-empty" aria-label="No schedule items">
               <div class="smk-schedule-empty__icon">📋</div>
               <p class="smk-schedule-empty__title">No items yet</p>
-              <p class="smk-schedule-empty__subtitle">Click <strong>+ {{ scheduleAddLabel() }}</strong> to get started</p>
+              <p class="smk-schedule-empty__subtitle">
+                Click <strong>+ {{ scheduleAddLabel() }}</strong> to get started
+              </p>
             </div>
           }
         }
@@ -380,19 +386,25 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
                 type="button"
                 (click)="onExport('json')"
                 title="Export as JSON"
-              >Export JSON</button>
+              >
+                Export JSON
+              </button>
               <button
                 class="smk-schedule-panel__footer-btn smk-schedule-panel__footer-btn--export"
                 type="button"
                 (click)="onExport('csv')"
                 title="Export as CSV"
-              >Export CSV</button>
+              >
+                Export CSV
+              </button>
               <button
                 class="smk-schedule-panel__footer-btn smk-schedule-panel__footer-btn--export"
                 type="button"
                 (click)="onExport('ics')"
                 title="Export as ICS calendar"
-              >Export ICS</button>
+              >
+                Export ICS
+              </button>
             }
             @if (scheduleShowImport()) {
               <label
@@ -415,12 +427,16 @@ import { getStartOfDay, isSameDay } from '../utils/date.utils';
               class="smk-schedule-panel__footer-btn smk-schedule-panel__footer-btn--cancel"
               type="button"
               (click)="scheduleCancel.emit()"
-            >Cancel</button>
+            >
+              Cancel
+            </button>
             <button
               class="smk-schedule-panel__footer-btn smk-schedule-panel__footer-btn--apply"
               type="button"
               (click)="scheduleApply.emit(service.items())"
-            >Apply Schedule</button>
+            >
+              Apply Schedule
+            </button>
           </div>
         </div>
       }
@@ -439,77 +455,77 @@ export class ScheduleEditorComponent implements OnInit {
   // ─── Panel Configuration ─────────────────────────────────────────
 
   /** Panel heading text. */
-  readonly scheduleTitle     = input<string>('Date Schedule');
+  readonly scheduleTitle = input<string>('Date Schedule');
   /** Label for the add-item button. */
-  readonly scheduleAddLabel  = input<string>('Add Item');
+  readonly scheduleAddLabel = input<string>('Add Item');
 
   // ─── Form Passthrough ────────────────────────────────────────────
 
-  readonly scheduleFields            = input<ScheduleFieldsConfig>(DEFAULT_SCHEDULE_FIELDS);
-  readonly scheduleFormTemplates     = input<ScheduleFormTemplates | null>(null);
-  readonly scheduleShowTime          = input<boolean>(false);
-  readonly scheduleUse24Hour         = input<boolean>(false);
-  readonly scheduleColorPresets      = input<(ScheduleColor | string)[]>([...DEFAULT_SCHEDULE_COLORS]);
-  readonly scheduleIconPresets       = input<string[]>([...DEFAULT_SCHEDULE_ICONS]);
-  readonly scheduleCategoryOptions   = input<string[]>([]);
-  readonly scheduleTagSuggestions    = input<string[]>([]);
-  readonly scheduleAllowOverlap      = input<boolean>(true);
-  readonly scheduleMaxItems          = input<number | null>(null);
+  readonly scheduleFields = input<ScheduleFieldsConfig>(DEFAULT_SCHEDULE_FIELDS);
+  readonly scheduleFormTemplates = input<ScheduleFormTemplates | null>(null);
+  readonly scheduleShowTime = input<boolean>(false);
+  readonly scheduleUse24Hour = input<boolean>(false);
+  readonly scheduleColorPresets = input<(ScheduleColor | string)[]>([...DEFAULT_SCHEDULE_COLORS]);
+  readonly scheduleIconPresets = input<string[]>([...DEFAULT_SCHEDULE_ICONS]);
+  readonly scheduleCategoryOptions = input<string[]>([]);
+  readonly scheduleTagSuggestions = input<string[]>([]);
+  readonly scheduleAllowOverlap = input<boolean>(true);
+  readonly scheduleMaxItems = input<number | null>(null);
 
   // ─── Feature Toggles ─────────────────────────────────────────────
 
-  readonly scheduleShowDragHandle    = input<boolean>(true);
-  readonly scheduleShowComplete      = input<boolean>(true);
-  readonly scheduleShowDuplicate     = input<boolean>(true);
-  readonly scheduleShowExport        = input<boolean>(true);
-  readonly scheduleShowImport        = input<boolean>(true);
-  readonly scheduleShowSearch        = input<boolean>(true);
-  readonly scheduleShowSort          = input<boolean>(true);
-  readonly scheduleShowFilter        = input<boolean>(true);
-  readonly scheduleShowConflicts     = input<boolean>(true);
+  readonly scheduleShowDragHandle = input<boolean>(true);
+  readonly scheduleShowComplete = input<boolean>(true);
+  readonly scheduleShowDuplicate = input<boolean>(true);
+  readonly scheduleShowExport = input<boolean>(true);
+  readonly scheduleShowImport = input<boolean>(true);
+  readonly scheduleShowSearch = input<boolean>(true);
+  readonly scheduleShowSort = input<boolean>(true);
+  readonly scheduleShowFilter = input<boolean>(true);
+  readonly scheduleShowConflicts = input<boolean>(true);
 
   // ─── Template Slots ──────────────────────────────────────────────
 
-  readonly scheduleRowTemplate       = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
-  readonly scheduleBadgeTemplate     = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
-  readonly scheduleActionsTemplate   = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
-  readonly scheduleEmptyTemplate     = input<TemplateRef<void> | null>(null);
-  readonly scheduleHeaderTemplate    = input<TemplateRef<void> | null>(null);
-  readonly scheduleFooterTemplate    = input<TemplateRef<{ items: ScheduleItem[] }> | null>(null);
+  readonly scheduleRowTemplate = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
+  readonly scheduleBadgeTemplate = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
+  readonly scheduleActionsTemplate = input<TemplateRef<{ $implicit: ScheduleItem }> | null>(null);
+  readonly scheduleEmptyTemplate = input<TemplateRef<void> | null>(null);
+  readonly scheduleHeaderTemplate = input<TemplateRef<void> | null>(null);
+  readonly scheduleFooterTemplate = input<TemplateRef<{ items: ScheduleItem[] }> | null>(null);
 
   // ─── Formatter Hooks ─────────────────────────────────────────────
 
-  readonly formatItemDate            = input<((item: ScheduleItem) => string) | null>(null);
-  readonly formatItemDuration        = input<((item: ScheduleItem) => string) | null>(null);
+  readonly formatItemDate = input<((item: ScheduleItem) => string) | null>(null);
+  readonly formatItemDuration = input<((item: ScheduleItem) => string) | null>(null);
 
   // ─── Lifecycle Hooks ─────────────────────────────────────────────
 
   /** Return `false` to cancel add. Called before the add form opens. */
-  readonly onBeforeAdd               = input<((item: ScheduleItem) => boolean) | null>(null);
+  readonly onBeforeAdd = input<((item: ScheduleItem) => boolean) | null>(null);
   /** Return `false` to cancel edit. Called before the edit form opens. */
-  readonly onBeforeEdit              = input<((item: ScheduleItem) => boolean) | null>(null);
+  readonly onBeforeEdit = input<((item: ScheduleItem) => boolean) | null>(null);
   /** Return `false` to cancel delete. Called before the item is removed. */
-  readonly onBeforeDelete            = input<((item: ScheduleItem) => boolean) | null>(null);
+  readonly onBeforeDelete = input<((item: ScheduleItem) => boolean) | null>(null);
   /** Return `false` to cancel reorder. Called before the drop is applied. */
-  readonly onBeforeReorder           = input<((from: number, to: number, items: ScheduleItem[]) => boolean) | null>(null);
+  readonly onBeforeReorder = input<((from: number, to: number, items: ScheduleItem[]) => boolean) | null>(null);
   /** Custom validation per item. Return an error string or `null`. */
-  readonly validateScheduleItem      = input<((item: ScheduleItem, all: ScheduleItem[]) => string | null) | null>(null);
+  readonly validateScheduleItem = input<((item: ScheduleItem, all: ScheduleItem[]) => string | null) | null>(null);
 
   // ─── Outputs ─────────────────────────────────────────────────────
 
   /** Emitted on every mutation (add, edit, delete, reorder, import). */
-  readonly scheduleChange  = output<ScheduleChangeEvent>();
+  readonly scheduleChange = output<ScheduleChangeEvent>();
   /** Emitted when the user clicks "Apply Schedule". */
-  readonly scheduleApply   = output<ScheduleItem[]>();
+  readonly scheduleApply = output<ScheduleItem[]>();
   /** Emitted when the user clicks "Cancel". */
-  readonly scheduleCancel  = output<void>();
+  readonly scheduleCancel = output<void>();
 
-  readonly itemAdd         = output<ScheduleItem>();
-  readonly itemEdit        = output<ScheduleItem>();
-  readonly itemDelete      = output<ScheduleItem>();
-  readonly itemDuplicate   = output<ScheduleItem>();
-  readonly itemReorder     = output<{ from: number; to: number; items: ScheduleItem[] }>();
-  readonly itemClick       = output<ScheduleItem>();
+  readonly itemAdd = output<ScheduleItem>();
+  readonly itemEdit = output<ScheduleItem>();
+  readonly itemDelete = output<ScheduleItem>();
+  readonly itemDuplicate = output<ScheduleItem>();
+  readonly itemReorder = output<{ from: number; to: number; items: ScheduleItem[] }>();
+  readonly itemClick = output<ScheduleItem>();
 
   // ─── Internal State ──────────────────────────────────────────────
 
@@ -632,7 +648,7 @@ export class ScheduleEditorComponent implements OnInit {
     this.addingNew.set(true);
   }
 
-  onTimelineItemClick(item: ScheduleItem, event: MouseEvent) {
+  onTimelineItemClick(item: ScheduleItem, event: Event) {
     event.stopPropagation();
     this.timelineNewItem.set(null);
     this.service.editingId.set(item.id);
@@ -650,16 +666,16 @@ export class ScheduleEditorComponent implements OnInit {
   resolveColor(color: string | undefined): string {
     if (!color) return 'var(--datepicker-schedule-color-blue)';
     const COLOR_TOKEN_MAP: Record<string, string> = {
-      red:    'var(--datepicker-schedule-color-red)',
+      red: 'var(--datepicker-schedule-color-red)',
       orange: 'var(--datepicker-schedule-color-orange)',
       yellow: 'var(--datepicker-schedule-color-yellow)',
-      green:  'var(--datepicker-schedule-color-green)',
-      teal:   'var(--datepicker-schedule-color-teal)',
-      blue:   'var(--datepicker-schedule-color-blue)',
+      green: 'var(--datepicker-schedule-color-green)',
+      teal: 'var(--datepicker-schedule-color-teal)',
+      blue: 'var(--datepicker-schedule-color-blue)',
       indigo: 'var(--datepicker-schedule-color-indigo)',
       purple: 'var(--datepicker-schedule-color-purple)',
-      pink:   'var(--datepicker-schedule-color-pink)',
-      gray:   'var(--datepicker-schedule-color-gray)',
+      pink: 'var(--datepicker-schedule-color-pink)',
+      gray: 'var(--datepicker-schedule-color-gray)',
     };
     return COLOR_TOKEN_MAP[color] ?? color;
   }
@@ -682,10 +698,17 @@ export class ScheduleEditorComponent implements OnInit {
 
   onSortChange(mode: string): void {
     switch (mode) {
-      case 'date':     this.service.sortByDate(); break;
-      case 'priority': this.service.sortByPriority(); break;
-      case 'title':    this.service.sortByTitle(); break;
-      default:         this.service.sortMode.set('manual');
+      case 'date':
+        this.service.sortByDate();
+        break;
+      case 'priority':
+        this.service.sortByPriority();
+        break;
+      case 'title':
+        this.service.sortByTitle();
+        break;
+      default:
+        this.service.sortMode.set('manual');
     }
   }
 
@@ -700,7 +723,7 @@ export class ScheduleEditorComponent implements OnInit {
     this.service.reorder(event.previousIndex, event.currentIndex);
     this.itemReorder.emit({
       from: event.previousIndex,
-      to:   event.currentIndex,
+      to: event.currentIndex,
       items: this.service.items(),
     });
     this.emit('reorder', []);
@@ -713,7 +736,9 @@ export class ScheduleEditorComponent implements OnInit {
     const gate = this.onBeforeAdd();
     if (gate) {
       const dummy: ScheduleItem = {
-        id: '', title: '', start: new Date(),
+        id: '',
+        title: '',
+        start: new Date(),
       };
       if (!gate(dummy)) return;
     }
@@ -796,27 +821,27 @@ export class ScheduleEditorComponent implements OnInit {
 
     switch (format) {
       case 'json':
-        content  = this.service.toJson();
+        content = this.service.toJson();
         filename = 'schedule.json';
-        mime     = 'application/json';
+        mime = 'application/json';
         break;
       case 'csv':
-        content  = this.service.toCsv();
+        content = this.service.toCsv();
         filename = 'schedule.csv';
-        mime     = 'text/csv';
+        mime = 'text/csv';
         break;
       case 'ics':
-        content  = this.service.toIcs();
+        content = this.service.toIcs();
         filename = 'schedule.ics';
-        mime     = 'text/calendar';
+        mime = 'text/calendar';
         break;
     }
 
     if (!content) return;
     const blob = new Blob([content], { type: mime });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
     a.download = filename;
     a.click();
     URL.revokeObjectURL(url);

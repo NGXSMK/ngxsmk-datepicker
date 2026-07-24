@@ -211,38 +211,38 @@ export interface ScheduleChangeEvent {
  * ```
  */
 export interface ScheduleFieldsConfig {
-  showTitle:       boolean; // default: true
-  showCategory:    boolean; // default: true
-  showColor:       boolean; // default: true
-  showIcon:        boolean; // default: true
-  showStart:       boolean; // default: true
-  showEnd:         boolean; // default: true
-  showAllDay:      boolean; // default: true
-  showNotes:       boolean; // default: true
-  showTags:        boolean; // default: true
-  showPriority:    boolean; // default: true
-  showUrl:         boolean; // default: true
-  showRecurrence:  boolean; // default: false
-  showBadgeText:   boolean; // default: false
-  showTimezone:    boolean; // default: false
+  showTitle: boolean; // default: true
+  showCategory: boolean; // default: true
+  showColor: boolean; // default: true
+  showIcon: boolean; // default: true
+  showStart: boolean; // default: true
+  showEnd: boolean; // default: true
+  showAllDay: boolean; // default: true
+  showNotes: boolean; // default: true
+  showTags: boolean; // default: true
+  showPriority: boolean; // default: true
+  showUrl: boolean; // default: true
+  showRecurrence: boolean; // default: false
+  showBadgeText: boolean; // default: false
+  showTimezone: boolean; // default: false
 }
 
 /** Default field visibility — all fields on, optional ones off. */
 export const DEFAULT_SCHEDULE_FIELDS: ScheduleFieldsConfig = {
-  showTitle:      true,
-  showCategory:   true,
-  showColor:      true,
-  showIcon:       true,
-  showStart:      true,
-  showEnd:        true,
-  showAllDay:     true,
-  showNotes:      true,
-  showTags:       true,
-  showPriority:   true,
-  showUrl:        true,
+  showTitle: true,
+  showCategory: true,
+  showColor: true,
+  showIcon: true,
+  showStart: true,
+  showEnd: true,
+  showAllDay: true,
+  showNotes: true,
+  showTags: true,
+  showPriority: true,
+  showUrl: true,
   showRecurrence: false,
-  showBadgeText:  false,
-  showTimezone:   false,
+  showBadgeText: false,
+  showTimezone: false,
 };
 
 // ─── Template Context ─────────────────────────────────────────────────────────
@@ -285,30 +285,57 @@ export interface ScheduleFormContext {
  * unspecified fields use the built-in form field.
  */
 export interface ScheduleFormTemplates {
-  titleField?:     import('@angular/core').TemplateRef<ScheduleFormContext>;
-  categoryField?:  import('@angular/core').TemplateRef<ScheduleFormContext>;
-  colorField?:     import('@angular/core').TemplateRef<ScheduleFormContext>;
-  iconField?:      import('@angular/core').TemplateRef<ScheduleFormContext>;
-  startField?:     import('@angular/core').TemplateRef<ScheduleFormContext>;
-  endField?:       import('@angular/core').TemplateRef<ScheduleFormContext>;
-  allDayField?:    import('@angular/core').TemplateRef<ScheduleFormContext>;
-  notesField?:     import('@angular/core').TemplateRef<ScheduleFormContext>;
-  tagsField?:      import('@angular/core').TemplateRef<ScheduleFormContext>;
-  priorityField?:  import('@angular/core').TemplateRef<ScheduleFormContext>;
-  urlField?:       import('@angular/core').TemplateRef<ScheduleFormContext>;
-  extraFields?:    import('@angular/core').TemplateRef<ScheduleFormContext>;
-  footer?:         import('@angular/core').TemplateRef<ScheduleFormContext>;
+  titleField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  categoryField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  colorField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  iconField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  startField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  endField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  allDayField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  notesField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  tagsField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  priorityField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  urlField?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  extraFields?: import('@angular/core').TemplateRef<ScheduleFormContext>;
+  footer?: import('@angular/core').TemplateRef<ScheduleFormContext>;
 }
 
 // ─── Default Color Presets ────────────────────────────────────────────────────
 
 /** Built-in color preset list used when `scheduleColorPresets` is not provided. */
 export const DEFAULT_SCHEDULE_COLORS: ScheduleColor[] = [
-  'red', 'orange', 'yellow', 'green', 'teal', 'blue', 'indigo', 'purple', 'pink', 'gray',
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'teal',
+  'blue',
+  'indigo',
+  'purple',
+  'pink',
+  'gray',
 ];
 
 /** Built-in icon preset list used when `scheduleIconPresets` is not provided. */
 export const DEFAULT_SCHEDULE_ICONS: string[] = [
-  '📅', '🚀', '🎯', '📣', '🎉', '✅', '🔴', '⭐', '🔥', '💡',
-  '📌', '🏷️', '📝', '🤝', '💼', '🌍', '🎨', '⚡', '🧩', '🔔',
+  '📅',
+  '🚀',
+  '🎯',
+  '📣',
+  '🎉',
+  '✅',
+  '🔴',
+  '⭐',
+  '🔥',
+  '💡',
+  '📌',
+  '🏷️',
+  '📝',
+  '🤝',
+  '💼',
+  '🌍',
+  '🎨',
+  '⚡',
+  '🧩',
+  '🔔',
 ];

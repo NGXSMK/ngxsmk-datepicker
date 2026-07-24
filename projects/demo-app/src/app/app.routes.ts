@@ -39,8 +39,7 @@ export const routes: Routes = [
   },
   {
     path: 'schedule',
-    loadComponent: () =>
-      import('./pages/schedule/schedule-demo.component').then((m) => m.ScheduleDemoComponent),
+    loadComponent: () => import('./pages/schedule/schedule-demo.component').then((m) => m.ScheduleDemoComponent),
   },
   {
     path: '**',

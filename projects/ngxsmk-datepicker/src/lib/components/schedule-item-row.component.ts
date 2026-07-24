@@ -13,16 +13,16 @@ import { ScheduleItem } from '../interfaces/schedule-item.interface';
 // ─── Color Map ────────────────────────────────────────────────────────────────
 
 const COLOR_TOKEN_MAP: Record<string, string> = {
-  red:    'var(--datepicker-schedule-color-red)',
+  red: 'var(--datepicker-schedule-color-red)',
   orange: 'var(--datepicker-schedule-color-orange)',
   yellow: 'var(--datepicker-schedule-color-yellow)',
-  green:  'var(--datepicker-schedule-color-green)',
-  teal:   'var(--datepicker-schedule-color-teal)',
-  blue:   'var(--datepicker-schedule-color-blue)',
+  green: 'var(--datepicker-schedule-color-green)',
+  teal: 'var(--datepicker-schedule-color-teal)',
+  blue: 'var(--datepicker-schedule-color-blue)',
   indigo: 'var(--datepicker-schedule-color-indigo)',
   purple: 'var(--datepicker-schedule-color-purple)',
-  pink:   'var(--datepicker-schedule-color-pink)',
-  gray:   'var(--datepicker-schedule-color-gray)',
+  pink: 'var(--datepicker-schedule-color-pink)',
+  gray: 'var(--datepicker-schedule-color-gray)',
 };
 
 function resolveColor(color: string | undefined): string {
@@ -39,7 +39,10 @@ function durationLabel(item: ScheduleItem, formatFn?: (i: ScheduleItem) => strin
 }
 
 const PRIORITY_ICON: Record<string, string> = {
-  low: '▽', medium: '◆', high: '▲', critical: '⚠',
+  low: '▽',
+  medium: '◆',
+  high: '▲',
+  critical: '⚠',
 };
 
 /**
@@ -71,10 +74,7 @@ const PRIORITY_ICON: Record<string, string> = {
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (rowTemplate()) {
-      <ng-container
-        [ngTemplateOutlet]="rowTemplate()!"
-        [ngTemplateOutletContext]="{ $implicit: item() }"
-      />
+      <ng-container [ngTemplateOutlet]="rowTemplate()!" [ngTemplateOutletContext]="{ $implicit: item() }" />
     } @else {
       <div
         class="smk-schedule-item"
@@ -93,12 +93,7 @@ const PRIORITY_ICON: Record<string, string> = {
       >
         <!-- Drag Handle -->
         @if (showDragHandle() && !item().locked) {
-          <span
-            class="smk-schedule-item__drag"
-            cdkDragHandle
-            aria-hidden="true"
-            title="Drag to reorder"
-          >⠿</span>
+          <span class="smk-schedule-item__drag" cdkDragHandle aria-hidden="true" title="Drag to reorder">⠿</span>
         } @else {
           <span class="smk-schedule-item__drag smk-schedule-item__drag--placeholder"></span>
         }
@@ -165,10 +160,7 @@ const PRIORITY_ICON: Record<string, string> = {
 
         <!-- Date Badge -->
         @if (badgeTemplate()) {
-          <ng-container
-            [ngTemplateOutlet]="badgeTemplate()!"
-            [ngTemplateOutletContext]="{ $implicit: item() }"
-          />
+          <ng-container [ngTemplateOutlet]="badgeTemplate()!" [ngTemplateOutletContext]="{ $implicit: item() }" />
         } @else {
           <span class="smk-schedule-item__date-badge">
             @if (showDuration()) {
@@ -184,15 +176,13 @@ const PRIORITY_ICON: Record<string, string> = {
             class="smk-schedule-item__conflict"
             [title]="'Overlaps with: ' + conflicts().map(c => c.title).join(', ')"
             aria-label="Date conflict"
-          >⚡</span>
+            >⚡</span
+          >
         }
 
         <!-- Actions -->
         @if (actionsTemplate()) {
-          <ng-container
-            [ngTemplateOutlet]="actionsTemplate()!"
-            [ngTemplateOutletContext]="{ $implicit: item() }"
-          />
+          <ng-container [ngTemplateOutlet]="actionsTemplate()!" [ngTemplateOutletContext]="{ $implicit: item() }" />
         } @else {
           <span class="smk-schedule-item__actions">
             @if (showComplete()) {
@@ -203,7 +193,9 @@ const PRIORITY_ICON: Record<string, string> = {
                 [attr.aria-label]="item().completed ? 'Mark incomplete' : 'Mark complete'"
                 [class.smk-schedule-item__action--active]="item().completed"
                 (click)="onToggleComplete($event)"
-              >{{ item().completed ? '✓' : '○' }}</button>
+              >
+                {{ item().completed ? '✓' : '○' }}
+              </button>
             }
 
             @if (!item().locked) {
@@ -213,7 +205,9 @@ const PRIORITY_ICON: Record<string, string> = {
                 title="Edit"
                 aria-label="Edit item"
                 (click)="onEdit($event)"
-              >✏️</button>
+              >
+                ✏️
+              </button>
 
               @if (showDuplicate()) {
                 <button
@@ -222,7 +216,9 @@ const PRIORITY_ICON: Record<string, string> = {
                   title="Duplicate"
                   aria-label="Duplicate item"
                   (click)="onDuplicate($event)"
-                >⎘</button>
+                >
+                  ⎘
+                </button>
               }
 
               <button
@@ -231,7 +227,9 @@ const PRIORITY_ICON: Record<string, string> = {
                 title="Delete"
                 aria-label="Delete item"
                 (click)="onDelete($event)"
-              >🗑️</button>
+              >
+                🗑️
+              </button>
             } @else {
               <button
                 class="smk-schedule-item__action smk-schedule-item__action--unlock"
@@ -239,7 +237,9 @@ const PRIORITY_ICON: Record<string, string> = {
                 title="Locked — click to unlock"
                 aria-label="Unlock item"
                 (click)="onToggleLock($event)"
-              >🔒</button>
+              >
+                🔒
+              </button>
             }
           </span>
         }
@@ -338,8 +338,7 @@ export class ScheduleItemRowComponent {
     const item = this.item();
     const fn = this.formatItemDate();
     if (fn) return fn(item);
-    const fmt = (d: Date) =>
-      d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    const fmt = (d: Date) => d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
     return item.end ? `${fmt(item.start)} – ${fmt(item.end)}` : fmt(item.start);
   });
 

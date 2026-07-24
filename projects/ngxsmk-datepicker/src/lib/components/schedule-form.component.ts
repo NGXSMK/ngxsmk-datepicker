@@ -27,16 +27,16 @@ import { ScheduleService, ScheduleValidationError } from '../services/schedule.s
 // ─── Colour Token Map ─────────────────────────────────────────────────────────
 
 const COLOR_TOKEN_MAP: Record<string, string> = {
-  red:    'var(--datepicker-schedule-color-red)',
+  red: 'var(--datepicker-schedule-color-red)',
   orange: 'var(--datepicker-schedule-color-orange)',
   yellow: 'var(--datepicker-schedule-color-yellow)',
-  green:  'var(--datepicker-schedule-color-green)',
-  teal:   'var(--datepicker-schedule-color-teal)',
-  blue:   'var(--datepicker-schedule-color-blue)',
+  green: 'var(--datepicker-schedule-color-green)',
+  teal: 'var(--datepicker-schedule-color-teal)',
+  blue: 'var(--datepicker-schedule-color-blue)',
   indigo: 'var(--datepicker-schedule-color-indigo)',
   purple: 'var(--datepicker-schedule-color-purple)',
-  pink:   'var(--datepicker-schedule-color-pink)',
-  gray:   'var(--datepicker-schedule-color-gray)',
+  pink: 'var(--datepicker-schedule-color-pink)',
+  gray: 'var(--datepicker-schedule-color-gray)',
 };
 
 function resolveColor(color: string | undefined): string {
@@ -76,9 +76,12 @@ function resolveColor(color: string | undefined): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="smk-schedule-form" [class.smk-schedule-form--new]="isNew()" role="form"
-         [attr.aria-label]="isNew() ? 'Add schedule item' : 'Edit schedule item'">
-
+    <div
+      class="smk-schedule-form"
+      [class.smk-schedule-form--new]="isNew()"
+      role="form"
+      [attr.aria-label]="isNew() ? 'Add schedule item' : 'Edit schedule item'"
+    >
       <!-- ─── Title Field ─────────────────────────────────────── -->
       @if (fields().showTitle) {
         @if (formTemplates()?.titleField) {
@@ -200,7 +203,9 @@ function resolveColor(color: string | undefined): string {
                   [attr.aria-label]="icon"
                   [attr.aria-pressed]="draft().icon === icon"
                   (click)="updateField('icon', draft().icon === icon ? undefined : icon)"
-                >{{ icon }}</button>
+                >
+                  {{ icon }}
+                </button>
               }
               <input
                 class="smk-schedule-icon-picker__custom"
@@ -255,7 +260,7 @@ function resolveColor(color: string | undefined): string {
             <input
               id="smk-sched-start"
               class="smk-schedule-form__input"
-              [type]="(draft().allDay || !showTime()) ? 'date' : 'datetime-local'"
+              [type]="draft().allDay || !showTime() ? 'date' : 'datetime-local'"
               [value]="formatDateInput(draft().start)"
               (change)="onDateChange('start', $any($event.target).value)"
             />
@@ -269,17 +274,14 @@ function resolveColor(color: string | undefined): string {
       <!-- ─── End Field ──────────────────────────────────────── -->
       @if (fields().showEnd) {
         @if (formTemplates()?.endField) {
-          <ng-container
-            [ngTemplateOutlet]="formTemplates()!.endField!"
-            [ngTemplateOutletContext]="templateContext()"
-          />
+          <ng-container [ngTemplateOutlet]="formTemplates()!.endField!" [ngTemplateOutletContext]="templateContext()" />
         } @else {
           <div class="smk-schedule-form__field" [class.smk-schedule-form__field--error]="hasError('end')">
             <label class="smk-schedule-form__label" for="smk-sched-end">End</label>
             <input
               id="smk-sched-end"
               class="smk-schedule-form__input"
-              [type]="(draft().allDay || !showTime()) ? 'date' : 'datetime-local'"
+              [type]="draft().allDay || !showTime() ? 'date' : 'datetime-local'"
               [value]="formatDateInput(draft().end)"
               [min]="formatDateInput(draft().start)"
               (change)="onDateChange('end', $any($event.target).value)"
@@ -333,7 +335,9 @@ function resolveColor(color: string | undefined): string {
                   [attr.aria-pressed]="draft().priority === level.value"
                   [attr.aria-label]="level.label"
                   (click)="updateField('priority', draft().priority === level.value ? undefined : level.value)"
-                >{{ level.label }}</button>
+                >
+                  {{ level.label }}
+                </button>
               }
             </div>
           </div>
@@ -351,7 +355,7 @@ function resolveColor(color: string | undefined): string {
           <div class="smk-schedule-form__field">
             <label class="smk-schedule-form__label" for="smk-sched-tags">Tags</label>
             <div class="smk-schedule-tags-input">
-              @for (tag of (draft().tags ?? []); track tag) {
+              @for (tag of draft().tags ?? []; track tag) {
                 <span class="smk-schedule-tag">
                   {{ tag }}
                   <button
@@ -359,7 +363,9 @@ function resolveColor(color: string | undefined): string {
                     class="smk-schedule-tag__remove"
                     [attr.aria-label]="'Remove tag ' + tag"
                     (click)="removeTag(tag)"
-                  >×</button>
+                  >
+                    ×
+                  </button>
                 </span>
               }
               <input
@@ -410,10 +416,7 @@ function resolveColor(color: string | undefined): string {
       <!-- ─── URL Field ──────────────────────────────────────── -->
       @if (fields().showUrl) {
         @if (formTemplates()?.urlField) {
-          <ng-container
-            [ngTemplateOutlet]="formTemplates()!.urlField!"
-            [ngTemplateOutletContext]="templateContext()"
-          />
+          <ng-container [ngTemplateOutlet]="formTemplates()!.urlField!" [ngTemplateOutletContext]="templateContext()" />
         } @else {
           <div class="smk-schedule-form__field">
             <label class="smk-schedule-form__label" for="smk-sched-url">URL</label>
@@ -483,23 +486,20 @@ function resolveColor(color: string | undefined): string {
 
       <!-- ─── Footer ─────────────────────────────────────────── -->
       @if (formTemplates()?.footer) {
-        <ng-container
-          [ngTemplateOutlet]="formTemplates()!.footer!"
-          [ngTemplateOutletContext]="templateContext()"
-        />
+        <ng-container [ngTemplateOutlet]="formTemplates()!.footer!" [ngTemplateOutletContext]="templateContext()" />
       } @else {
         <div class="smk-schedule-form__footer">
-          <button
-            class="smk-schedule-form__btn smk-schedule-form__btn--cancel"
-            type="button"
-            (click)="onCancel()"
-          >Cancel</button>
+          <button class="smk-schedule-form__btn smk-schedule-form__btn--cancel" type="button" (click)="onCancel()">
+            Cancel
+          </button>
           <button
             class="smk-schedule-form__btn smk-schedule-form__btn--save"
             type="button"
             [disabled]="!canSave()"
             (click)="onSave()"
-          >{{ isNew() ? 'Add Item' : 'Save' }} →</button>
+          >
+            {{ isNew() ? 'Add Item' : 'Save' }} →
+          </button>
         </div>
       }
     </div>
@@ -601,22 +601,24 @@ export class ScheduleFormComponent implements OnInit {
     return this.iconPresets().includes(icon) ? '' : icon;
   });
 
-  readonly templateContext = computed((): ScheduleFormContext => ({
-    item: this.draft(),
-    updateField: (key, value) => this.updateField(key, value),
-    isNew: this.isNew(),
-    hasError: (field) => this.hasError(field),
-    getError: (field) => this.getError(field),
-    save: () => this.onSave(),
-    cancel: () => this.onCancel(),
-  }));
+  readonly templateContext = computed(
+    (): ScheduleFormContext => ({
+      item: this.draft(),
+      updateField: (key, value) => this.updateField(key, value),
+      isNew: this.isNew(),
+      hasError: (field) => this.hasError(field),
+      getError: (field) => this.getError(field),
+      save: () => this.onSave(),
+      cancel: () => this.onCancel(),
+    })
+  );
 
   // ─── Priority Levels ──────────────────────────────────────────────
 
   readonly priorityLevels: { value: SchedulePriority; label: string }[] = [
-    { value: 'low',      label: 'Low'      },
-    { value: 'medium',   label: 'Medium'   },
-    { value: 'high',     label: 'High'     },
+    { value: 'low', label: 'Low' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'high', label: 'High' },
     { value: 'critical', label: 'Critical' },
   ];
 
@@ -658,7 +660,7 @@ export class ScheduleFormComponent implements OnInit {
     if (!date) return '';
     try {
       if (this.draft().allDay || !this.showTime()) {
-        return (date.toISOString().split('T')[0]) as string;
+        return date.toISOString().split('T')[0] as string;
       }
       return date.toISOString().slice(0, 16);
     } catch {
@@ -707,7 +709,10 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   removeTag(tag: string): void {
-    this.updateField('tags', (this.draft().tags ?? []).filter((t) => t !== tag));
+    this.updateField(
+      'tags',
+      (this.draft().tags ?? []).filter((t) => t !== tag)
+    );
   }
 
   resolveColor(color: string): string {
@@ -727,7 +732,9 @@ export class ScheduleFormComponent implements OnInit {
 
     if (!result.valid) {
       const map: Record<string, string> = {};
-      result.errors.forEach((e: ScheduleValidationError) => { map[e.field] = e.message; });
+      result.errors.forEach((e: ScheduleValidationError) => {
+        map[e.field] = e.message;
+      });
       this.errors.set(map);
       return;
     }
