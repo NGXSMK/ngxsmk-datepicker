@@ -60,6 +60,12 @@ import { animate } from 'motion';
                 {{ i18n.t().playground.nativePicker }}
               </label>
             </div>
+            <div class="config-item">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="showOtherMonths" />
+                Show Adjacent Month Days
+              </label>
+            </div>
           </div>
 
           <div class="config-group">
@@ -274,6 +280,7 @@ import { animate } from 'motion';
               [appendToBody]="appendToBody"
               [disabledState]="pickerDisabled"
               [mobileModalStyle]="mobileModalStyle"
+              [showOtherMonths]="showOtherMonths"
               [showTimezoneSelector]="showTimezoneSelector"
               [timezone]="timezoneValue"
               (timezoneChange)="timezoneValue = $event"
@@ -536,6 +543,7 @@ export class PlaygroundComponent implements AfterViewInit {
   showSeconds = false;
   minuteInterval = 1;
   theme: 'light' | 'dark' = 'dark';
+  showOtherMonths = false;
   allowTyping = false;
   showCalendarButton = true;
   /** Coerced 1–3; `<input type="number">` may bind as string without this. */

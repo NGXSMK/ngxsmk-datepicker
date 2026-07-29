@@ -2,12 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** July 24, 2026 - **Current stable:** v3.0.2
+**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.0.3] - 2026-07-29
+
+### Added
+
+- **Option to disable responsive layout**: Added `[responsive]` input on `ngxsmk-datepicker` (and `responsive?: boolean` in `DatepickerConfig`), defaulting to `true`. When set to `false`, viewport-based `@media (max-width: ...)` overrides are disabled, enabling fixed-size inline/embedded usage without viewport width affecting layout ([#299](https://github.com/NGXSMK/ngxsmk-datepicker/issues/299)).
+- **Adjacent Month Days (`[showOtherMonths]`)**: Added `[showOtherMonths]` input option to display trailing and leading days from adjacent months in the 6-row calendar grid.
+- **Enhanced WCAG 1.3.1 Weekday Headers**: Added `role="columnheader"` and localized full day name `aria-label`s on weekday header cells for screen reader accessibility.
+- **Range Selection ARIA Announcements**: Added dynamic ARIA live region announcements (`startDateSelected`) when selecting range start dates.
+
+### Fixed
+
+- **Year & Period Selection Logic**: Fixed year mode full-range selection, range disablement for `minDate`/`maxDate`, auto-close behavior in period modes (`year`, `month`, `quarter`, `week`), and UI selection highlighting.
+- **Date-Time Preservation on Selection**: Preserved existing time (hours/minutes) when selecting a new date in date+time mode ([#30181](https://github.com/angular/components/issues/30181)).
+- **DST Hour Mapping**: Fixed Luxon / Intl timezone hour mapping edge cases during Daylight Saving Time (DST) spring-forward/fall-back transitions ([#31803](https://github.com/angular/components/issues/31803)).
+- **iOS Safari Background Scroll Lock**: Added automatic body scroll lock (`.ngxsmk-scroll-locked`) when popover overlay is open on touch devices ([#14938](https://github.com/angular/components/issues/14938)).
+- **External Reset Selection Clearing**: Ensured memoized cell selection highlights clear immediately when external form value resets to `null` while calendar is open ([#29877](https://github.com/angular/components/issues/29877)).
+- **Responsive CSS overrides & specificity**: Dropped `!important` flags from responsive `@media` rules in `datepicker.css` and scoped them under `.ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive)` ([#299](https://github.com/NGXSMK/ngxsmk-datepicker/issues/299)).
 
 ## [3.0.2] - 2026-07-24
 

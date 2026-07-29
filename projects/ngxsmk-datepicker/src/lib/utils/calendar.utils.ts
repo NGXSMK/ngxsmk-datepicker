@@ -114,6 +114,17 @@ export function generateWeekDays(locale: string, firstDayOfWeek: number = 0): st
   });
 }
 
+export function generateWeekDaysFull(locale: string, firstDayOfWeek: number = 0): string[] {
+  const day = new Date(2024, 0, 7 + firstDayOfWeek);
+  return Array.from({ length: 7 }).map(() => {
+    const weekDay = new Date(day).toLocaleDateString(locale, {
+      weekday: 'long',
+    });
+    day.setDate(day.getDate() + 1);
+    return weekDay;
+  });
+}
+
 /**
  * Determines the first day of the week (0 = Sunday, 1 = Monday, etc.) for a given locale.
  * Uses Intl.Locale API when available, with fallback to locale mapping for older browsers.

@@ -279,6 +279,42 @@ import { I18nService } from '../../i18n/i18n.service';
                 <code>{{ noAnimValue | date: 'shortDate' }}</code>
               </div>
             </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>Adjacent Month Grid</h3>
+                <span class="badge badge-new">NEW v3.0.3</span>
+              </div>
+              <p class="card-desc">
+                Displays trailing and leading days from adjacent months in the 6-row calendar grid.
+              </p>
+              <ngxsmk-datepicker
+                [showOtherMonths]="true"
+                [(ngModel)]="otherMonthsValue"
+                placeholder="Select date (adjacent days visible)"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="otherMonthsValue">
+                <code>{{ otherMonthsValue | date: 'mediumDate' }}</code>
+              </div>
+            </div>
+
+            <div class="card demo-card">
+              <div class="card-header">
+                <h3>Fixed Container Mode</h3>
+                <span class="badge badge-new">NEW v3.0.3</span>
+              </div>
+              <p class="card-desc">
+                Disables viewport max-width overrides for fixed-width embedded or sidebar layouts (#299).
+              </p>
+              <ngxsmk-datepicker
+                [responsive]="false"
+                [(ngModel)]="nonResponsiveValue"
+                placeholder="Fixed container mode"
+              ></ngxsmk-datepicker>
+              <div class="selection-box" *ngIf="nonResponsiveValue">
+                <code>{{ nonResponsiveValue | date: 'mediumDate' }}</code>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -533,6 +569,18 @@ import { I18nService } from '../../i18n/i18n.service';
         border: 1px solid var(--color-border);
       }
 
+      .badge-new {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff !important;
+        border: none;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      }
+
       .card-desc {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
@@ -640,6 +688,8 @@ export class ExamplesComponent {
   syncScrollValue: { start: Date; end: Date } | null = null;
   animationValue: Date | null = null;
   noAnimValue: Date | null = null;
+  otherMonthsValue: Date | null = null;
+  nonResponsiveValue: Date | null = null;
   darkThemeValue: Date | null = null;
 
   constrainedValue: Date | null = null;

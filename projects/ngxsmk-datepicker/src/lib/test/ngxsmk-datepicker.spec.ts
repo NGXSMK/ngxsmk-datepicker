@@ -48,6 +48,8 @@ class CalendarMonthViewStubComponent {
   @Input() currentMonth: unknown;
   @Input() currentYear: unknown;
   @Input() weekDays: unknown;
+  @Input() weekDaysFull: unknown;
+  @Input() showOtherMonths: unknown;
   @Input() showWeekNumbers: unknown;
   @Input() weekNumberLabel: unknown;
   @Input() secondaryCalendar: unknown;

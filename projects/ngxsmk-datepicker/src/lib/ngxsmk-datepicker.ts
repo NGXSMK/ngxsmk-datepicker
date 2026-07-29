@@ -50,6 +50,7 @@ import {
   generateYearOptions,
   generateTimeOptions,
   generateWeekDays,
+  generateWeekDaysFull,
   getFirstDayOfWeek,
   get24Hour,
   update12HourState,
@@ -165,6 +166,7 @@ interface DecoratorMetadataConfig {
       [class.ngxsmk-append-to-body]="_shouldAppendToBody"
       [class.ngxsmk-rtl]="isRtl"
       [class.ngxsmk-native-picker]="shouldUseNativePicker()"
+      [class.ngxsmk-no-responsive]="!responsive"
       [ngClass]="classes()?.wrapper"
     >
       @if (!isInlineMode) {
@@ -257,6 +259,8 @@ interface DecoratorMetadataConfig {
           [syncScrollEnabled]="syncScroll().enabled ?? false"
           [calendarMonths]="renderedCalendars()"
           [weekDays]="weekDays"
+          [weekDaysFull]="weekDaysFull"
+          [showOtherMonths]="showOtherMonths"
           [showWeekNumbers]="showWeekNumbers"
           [weekNumberLabel]="weekNumberLabel"
           [secondaryCalendar]="secondaryCalendar"
@@ -309,6 +313,8 @@ interface DecoratorMetadataConfig {
           [closeLabel]="_closeLabel"
           [translations]="_translations"
           [boundIsDateDisabled]="boundIsDateDisabled"
+          [boundIsYearDisabled]="boundIsYearDisabled"
+          [boundIsDecadeDisabled]="boundIsDecadeDisabled"
           [boundGetDayMetadata]="boundGetDayMetadata"
           [calendarHeaderTemplate]="calendarHeaderTemplate"
           [calendarFooterTemplate]="calendarFooterTemplate"
@@ -570,6 +576,22 @@ export class NgxsmkDatepickerComponent
   }
   @Input() inline: boolean | 'always' | 'auto' = false;
 
+  /**
+   * When `false`, disables all viewport-based responsive/mobile layout overrides
+   * (the `@media (max-width: …)` rules that force the center-dialog mobile presentation).
+   * Useful when the datepicker is embedded as a fixed-size inline widget and the browser
+   * window width should not affect the calendar layout.
+   *
+   * Defaults to `true` (responsive layout enabled, existing behavior preserved).
+   *
+   * @example
+   * ```html
+   * <!-- Force desktop layout regardless of viewport width -->
+   * <ngxsmk-datepicker [responsive]="false" />
+   * ```
+   */
+  @Input() responsive: boolean = true;
+
   private _inputId: string = '';
   @Input() set inputId(value: string) {
     this._inputId = value;
@@ -639,6 +661,12 @@ export class NgxsmkDatepickerComponent
     return this._yearRange();
   }
   @Input() timezone?: string;
+  /**
+   * When true, trailing and leading days from adjacent months are displayed in the 6-row calendar grid.
+   * Adjacent month days are dimmed (`opacity: 0.45`) and styled with `.ngxsmk-other-month`.
+   */
+  @Input() showOtherMonths: boolean = false;
+  public weekDaysFull: string[] = [];
   @Input() hooks: DatepickerHooks | null = null;
   @Input() enableKeyboardShortcuts: boolean = true;
   @Input() customShortcuts: {
@@ -2006,6 +2034,29 @@ export class NgxsmkDatepickerComponent
   public readonly boundIsTimelineMonthSelected = (d: Date) => this.isTimelineMonthSelected(d);
   public readonly boundFormatTimeSliderValue = (v: number) => this.formatTimeSliderValue(v);
 
+  public isYearDisabled = (year: number): boolean => {
+    if (this._minDate && year < this._minDate.getFullYear()) {
+      return true;
+    }
+    if (this._maxDate && year > this._maxDate.getFullYear()) {
+      return true;
+    }
+    return false;
+  };
+
+  public isDecadeDisabled = (decade: number): boolean => {
+    if (this._minDate && decade + 9 < this._minDate.getFullYear()) {
+      return true;
+    }
+    if (this._maxDate && decade > this._maxDate.getFullYear()) {
+      return true;
+    }
+    return false;
+  };
+
+  public readonly boundIsYearDisabled = (year: number) => this.isYearDisabled(year);
+  public readonly boundIsDecadeDisabled = (decade: number) => this.isDecadeDisabled(decade);
+
   get isCalendarVisible(): boolean {
     return this.isInlineMode || this.isCalendarOpen;
   }
@@ -3120,6 +3171,7 @@ export class NgxsmkDatepickerComponent
     const normalizedVal = val !== null && val !== undefined ? this._normalizeValue(val) : null;
     this._value = normalizedVal;
     this.initializeValue(normalizedVal);
+    this._invalidateMemoCache();
     this._updateMemoSignals();
     this.generateCalendar();
     this.scheduleChangeDetection();
@@ -3491,7 +3543,20 @@ export class NgxsmkDatepickerComponent
       this.document.body.appendChild(node);
     });
     this.hideBodyPopoverUntilPositioned();
+    this.lockBodyScroll();
     this.cdr.markForCheck();
+  }
+
+  private lockBodyScroll(): void {
+    if (!this.isBrowser || this.isInlineMode) return;
+    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+      document.body.classList.add('ngxsmk-scroll-locked');
+    }
+  }
+
+  private unlockBodyScroll(): void {
+    if (!this.isBrowser) return;
+    document.body.classList.remove('ngxsmk-scroll-locked');
   }
 
   /** Hides the body-appended popover so loading/calendar are not visible at wrong position. */
@@ -3528,6 +3593,7 @@ export class NgxsmkDatepickerComponent
 
       this.portalViewRef.destroy();
       this.portalViewRef = null;
+      this.unlockBodyScroll();
     }
   }
 
@@ -4893,6 +4959,7 @@ export class NgxsmkDatepickerComponent
     // monthOptions is now a computed signal - no need to regenerate
     this.firstDayOfWeek = this.weekStart ?? getFirstDayOfWeek(this.locale);
     this.weekDays = generateWeekDays(this.locale, this.firstDayOfWeek);
+    this.weekDaysFull = generateWeekDaysFull(this.locale, this.firstDayOfWeek);
   }
 
   private updateRangesArray(): void {
@@ -5385,6 +5452,16 @@ export class NgxsmkDatepickerComponent
       this.hoveredDate = null;
       this._invalidateMemoCache();
       this.scheduleChangeDetection();
+      const startFormatted = formatDateWithTimezone(
+        this.startDate,
+        this.locale,
+        { year: 'numeric', month: 'long', day: 'numeric' },
+        this.timezone
+      );
+      const msg =
+        this.getTranslation('startDateSelected', undefined, { date: startFormatted }) ||
+        `Start date set to ${startFormatted}. Select end date.`;
+      this.ariaLiveService.announce(msg, 'polite');
     } else if (this.startDate && !this.endDate) {
       this._handleRangeEndSelection(day, dayTime, startTime!);
     }
@@ -5840,16 +5917,20 @@ export class NgxsmkDatepickerComponent
   }
 
   public onYearClick(year: number): void {
-    if (this.disabled) return;
-    this._currentYear = year;
-    this._currentYearSignal.set(year);
-    this.currentDate.setFullYear(year);
+    if (this.disabled || this.isYearDisabled(year)) return;
+    this.currentYear = year;
+    this.generateYearGrid();
+
+    if (this.mode === 'year') {
+      const yearStart = new Date(year, 0, 1);
+      this.onDateClick(yearStart);
+      return;
+    }
+
     const wasInYearView = this.calendarViewMode === 'year';
     if (wasInYearView) {
       this.calendarViewMode = 'month';
     }
-    this.generateYearGrid();
-    this.generateCalendar();
     this.scheduleChangeDetection();
 
     if (wasInYearView && this.isBrowser && this.isCalendarOpen) {
@@ -5860,11 +5941,9 @@ export class NgxsmkDatepickerComponent
   }
 
   public onDecadeClick(decade: number): void {
-    if (this.disabled) return;
+    if (this.disabled || this.isDecadeDisabled(decade)) return;
     this._currentDecade = decade;
-    this._currentYear = decade;
-    this._currentYearSignal.set(decade);
-    this.currentDate.setFullYear(decade);
+    this.currentYear = decade;
     if (this.calendarViewMode === 'decade') {
       this.calendarViewMode = 'year';
     }
@@ -5907,11 +5986,8 @@ export class NgxsmkDatepickerComponent
    */
   public changeYear(delta: number): void {
     if (this.disabled) return;
-    this._currentYear += delta;
-    this.currentDate.setFullYear(this._currentYear);
-    this._invalidateMemoCache();
+    this.currentYear = this._currentYear + delta;
     this.generateYearGrid();
-    this.generateCalendar();
     this.scheduleChangeDetection();
 
     if (this.isBrowser && this.isCalendarOpen && this.calendarViewMode === 'month') {
@@ -5933,14 +6009,14 @@ export class NgxsmkDatepickerComponent
 
   public onYearSelectChange(year: unknown): void {
     const yearValue = typeof year === 'number' ? year : Number(year);
-    if (Number.isNaN(yearValue)) return;
-    this._currentYear = yearValue;
-    this._currentYearSignal.set(yearValue);
-    this.currentDate.setFullYear(yearValue);
-    this.adjustDisplayedDateToRange();
-    this._invalidateMemoCache();
+    if (Number.isNaN(yearValue) || this.isYearDisabled(yearValue)) return;
+    this.currentYear = yearValue;
     this.generateYearGrid();
-    this.generateCalendar();
+
+    if (this.mode === 'year') {
+      const yearStart = new Date(yearValue, 0, 1);
+      this.onDateClick(yearStart);
+    }
   }
 
   private generateTimeline(): void {
@@ -6216,6 +6292,9 @@ export class NgxsmkDatepickerComponent
     }
     if (this.mobileModalStyle === 'center' && g.mobileModalStyle !== undefined) {
       this.mobileModalStyle = g.mobileModalStyle;
+    }
+    if (this.responsive === true && g.responsive !== undefined) {
+      this.responsive = g.responsive;
     }
   }
 
