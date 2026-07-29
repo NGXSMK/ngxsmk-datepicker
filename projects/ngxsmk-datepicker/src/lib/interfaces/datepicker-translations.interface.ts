@@ -55,6 +55,7 @@ export interface DatepickerTranslations {
   calendarOpened: string; // "Calendar opened for {month} {year}"
   calendarClosed: string;
   dateSelected: string; // "Date selected: {date}"
+  startDateSelected?: string; // "Start date set to {date}. Select end date."
   rangeSelected: string; // "Range selected: {start} to {end}"
   monthChanged: string; // "Changed to {month} {year}"
   yearChanged: string; // "Changed to year {year}"

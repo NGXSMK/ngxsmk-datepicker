@@ -1,4 +1,4 @@
-﻿<!--
+<!--
   SEO Keywords: Angular DatePicker, Angular Date Range Picker, Lightweight Calendar Component, Angular Signals DatePicker, SSR Ready DatePicker, Zoneless Angular, A11y DatePicker, Mobile-Friendly DatePicker, Ionic DatePicker
   Meta Description: The most powerful, lightweight, and accessible date and range picker for modern Angular (17-21+). Built with Signals, Zoneless-ready, and zero dependencies.
 -->
@@ -28,15 +28,15 @@
 
 ---
 
-**Last updated:** July 24, 2026 - **Current stable:** v3.0.2
+**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.2` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.3` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.2** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.3** on npm.
 
 ---
 
@@ -78,6 +78,8 @@
 ### **Advanced Functionality**
 
 - 📅 **Google Calendar Sync**: Built-in support for seamlessly syncing and displaying events natively from Google Calendar.
+- 🗓️ **Adjacent Month Days (`showOtherMonths`)**: Display trailing and leading days from adjacent months in the calendar grid.
+- 📐 **Responsive Control (`[responsive]`)**: Disable viewport max-width responsive overrides for fixed-width container embedding (#299).
 - 🌐 **8-Language i18n**: Full localization for `en`, `de`, `es`, `sv`, `ko`, `zh`, `ja`, and `fr`.
 - 🔢 **ISO Week Numbers**: Optional week-number column via `[showWeekNumbers]`.
 - ⌨️ **Guided Input Masking**: `[inputMask]` auto-inserts separators as users type (e.g. `12` → `12/`).
@@ -91,16 +93,23 @@
 
 ## Why this library?
 
-Use **ngxsmk-datepicker** when you want a focused **date / range picker** with strong **mobile**, **i18n**, **timezone**, and **SSR** story on **Angular 17+**, without adopting a full Material UI stack. It is a **standalone** component with **Luxon** as the single date peer (plus Angular).
+Use **ngxsmk-datepicker** when you want an enterprise-grade **date / range picker** with strong **mobile**, **i18n**, **timezone**, **Ionic**, and **SSR** support on **Angular 17–22+**, without adopting a heavy Material UI stack or legacy Day.js dependencies.
 
-| | ngxsmk-datepicker | Angular Material datepicker |
-| --- | --- | --- |
-| **Fit** | Picker-first; optional Material/CDK peers for overlays only | Part of Material; best when you already use Material forms & CDK |
-| **Peer deps** | Angular + **Luxon** | **@angular/material** + **@angular/cdk** |
-| **Forms** | Template-driven, Reactive Forms, Signals; **Signal Forms** (`[field]`) on Angular 21+ | Reactive + template-driven; integrates with Material form field |
-| **Stack** | Tree-shakable package aimed at picker scenarios | Broader design system and bundle footprint |
+### Feature Comparison Matrix
 
-This is **not** a drop-in replacement for every Material datepicker API; choose based on whether you need **Material’s form-field ecosystem** or a **standalone picker** you can theme and ship with **zoneless** / **SSR** setups. See the [live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) and [COMPATIBILITY](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/COMPATIBILITY.md) for details.
+| Feature / Capability | ngxsmk-datepicker | Angular Material datepicker | vlio20/angular-datepicker |
+| --- | --- | --- | --- |
+| **Angular 17–22+ Signals Engine** | ⚡ Native Signals (0% Zone.js) | ⚠️ RxJS / Legacy ChangeDetector | ❌ Legacy Angular 15-18 |
+| **Standalone Component & Zero CDK** | ✅ Yes (Lightweight ~127KB) | ❌ Requires `@angular/material` + `@angular/cdk` | ⚠️ Requires legacy CDK |
+| **Mobile & Touch (Ionic 7/8+)** | 📱 Built-in Touch & Safe Area Insets | ⚠️ Mobile UI requires custom CSS | ❌ Poor Mobile / iOS support |
+| **Date-Time Preservation (#30181)** | ✅ Preserves hours/minutes on click | ❌ Resets time on date click | ❌ No native time preservation |
+| **Adjacent Month Days (`showOtherMonths`)** | ✅ Built-in input | ⚠️ Not supported natively | ⚠️ Partial support |
+| **Fixed Container Control (`[responsive]`)** | ✅ Built-in input (#299) | ❌ Not supported | ❌ Not supported |
+| **Signal Forms Native (`[field]`)** | ✅ Built-in (Angular 21+) | ❌ Not supported | ❌ Not supported |
+| **Google Calendar Sync & Multi-Calendars** | ✅ Built-in | ❌ Requires custom code | ❌ Not supported |
+| **SSR / Hydration Safety** | ✅ 100% Guarded (`DOCUMENT`) | ⚠️ Requires CDK SSR overlays | ❌ Window access errors |
+
+This is **not** a heavy UI framework; it is a **standalone datepicker** engineered for maximum performance, accessibility, and theming flexibility. See the [live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) and [COMPATIBILITY](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/COMPATIBILITY.md) for details.
 
 ## **🌐 Discoverability**
 
@@ -177,7 +186,7 @@ ng add ngxsmk-datepicker
 The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
 
 ```bash
-npm install ngxsmk-datepicker@3.0.2
+npm install ngxsmk-datepicker@3.0.3
 ```
 
 ### Alternative installation
@@ -186,12 +195,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@3.0.2` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.2` |
-| **Bun** | `bun add ngxsmk-datepicker@3.0.2` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.2` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@3.0.3` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.3` |
+| **Bun** | `bun add ngxsmk-datepicker@3.0.3` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.3` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.2/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.2/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.3/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.3/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -919,7 +928,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v3.0.2** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.2**.
+**Recent:** Use **v3.0.3** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.3**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

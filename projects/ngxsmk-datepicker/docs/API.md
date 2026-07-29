@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 3.0.2+ (includes unreleased `main` additions) | **Last updated**: July 24, 2026
+**Version**: 3.0.3+ (includes unreleased `main` additions) | **Last updated**: July 24, 2026
 
 ## Stable vs experimental
 
@@ -60,6 +60,8 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `locale` | `string` | `'en-US'` | Stable | Locale for formatting | `locale="de-DE"` or `[locale]="'fr-FR'"` |
 | `theme` | `'light' \| 'dark'` | `'light'` | Stable | Color theme | `[theme]="'dark'"` |
 | `inline` | `boolean \| 'always' \| 'auto'` | `false` | Stable | Inline display mode | `[inline]="true"` or `inline="auto"` |
+| `showOtherMonths` | `boolean` | `false` | Stable | Display trailing and leading days from adjacent months in the 6-row calendar grid | `[showOtherMonths]="true"` |
+| `responsive` | `boolean` | `true` | Stable | Enable/disable viewport max-width responsive layout rules | `[responsive]="false"` |
 | `showTime` | `boolean` | `false` | Stable | Show time selection | `[showTime]="true"` |
 | `timeOnly` | `boolean` | `false` | Stable | Display time picker only (no calendar). Automatically enables `showTime`. | `[timeOnly]="true"` |
 | `allowTyping` | `boolean` | `false` | Stable | Enable manual typing in the input field. Required for native validation. | `[allowTyping]="true"` |

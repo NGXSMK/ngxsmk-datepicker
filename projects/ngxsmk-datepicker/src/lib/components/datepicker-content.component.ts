@@ -145,6 +145,8 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
                       <ngxsmk-calendar-month-view
                         [days]="calendarMonth.days"
                         [weekDays]="weekDays"
+                        [weekDaysFull]="weekDaysFull"
+                        [showOtherMonths]="showOtherMonths"
                         [showWeekNumbers]="showWeekNumbers"
                         [weekNumberLabel]="weekNumberLabel"
                         [secondaryCalendar]="secondaryCalendar"
@@ -196,6 +198,10 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
                   [currentDecade]="currentDecade"
                   [today]="today"
                   [disabled]="disabled"
+                  [isYearDisabled]="boundIsYearDisabled"
+                  [selectedDate]="selectedDate"
+                  [startDate]="startDate"
+                  [mode]="mode"
                   [headerClass]="classes?.header ?? ''"
                   [navPrevClass]="classes?.navPrev ?? ''"
                   [navNextClass]="classes?.navNext ?? ''"
@@ -214,6 +220,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
                   [decadeGrid]="decadeGrid"
                   [currentDecade]="currentDecade"
                   [disabled]="disabled"
+                  [isDecadeDisabled]="boundIsDecadeDisabled"
                   [headerClass]="classes?.header ?? ''"
                   [navPrevClass]="classes?.navPrev ?? ''"
                   [navNextClass]="classes?.navNext ?? ''"
@@ -471,6 +478,8 @@ export class NgxsmkDatepickerContentComponent {
   @Input() syncScrollEnabled: boolean = false;
   @Input() calendarMonths: { month: number; year: number; days: (Date | null)[] }[] = [];
   @Input() weekDays: string[] = [];
+  @Input() weekDaysFull: string[] = [];
+  @Input() showOtherMonths: boolean = false;
   @Input() showWeekNumbers: boolean = false;
   @Input() weekNumberLabel: string = 'Wk';
   @Input() secondaryCalendar: CalendarSystem | null = null;
@@ -530,7 +539,9 @@ export class NgxsmkDatepickerContentComponent {
   @Output() timezoneChange = new EventEmitter<string>();
 
   // Bound functions
-  @Input() boundIsDateDisabled!: (date: Date | null) => boolean;
+  @Input() boundIsDateDisabled: (date: Date | null) => boolean = () => false;
+  @Input() boundIsYearDisabled?: ((year: number) => boolean) | undefined;
+  @Input() boundIsDecadeDisabled?: ((decade: number) => boolean) | undefined;
   @Input() boundGetDayMetadata: (date: Date | null) => DayMetadata | null = () => null;
   @Input() calendarHeaderTemplate: TemplateRef<unknown> | null = null;
   @Input() calendarFooterTemplate: TemplateRef<unknown> | null = null;

@@ -9,6 +9,8 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import {
@@ -33,7 +35,7 @@ import {
             (click)="viewModeChange.emit('decade')"
             [disabled]="disabled"
           >
-            {{ currentDecade }} - {{ currentDecade + 9 }}
+            {{ getDecadeRangeLabel() }}
           </button>
         </div>
         <div class="ngxsmk-nav-buttons">
@@ -92,11 +94,11 @@ import {
             <button
               type="button"
               class="ngxsmk-year-cell"
-              [class.selected]="item.data === currentYear"
+              [class.selected]="isYearSelected(item.data)"
               [class.today]="item.data === today.getFullYear()"
-              [disabled]="disabled"
-              (click)="yearClick.emit(item.data); $event.stopPropagation()"
-              (keydown.enter)="yearClick.emit(item.data)"
+              [disabled]="disabled || (isYearDisabled ? isYearDisabled(item.data) : false)"
+              (click)="onYearCellClick(item.data, $event)"
+              (keydown.enter)="onYearCellClick(item.data, $event)"
               [attr.aria-label]="getYearAriaLabel(item.data)"
             >
               {{ item.data }}
@@ -166,9 +168,9 @@ import {
               type="button"
               class="ngxsmk-decade-cell"
               [class.selected]="item.data === currentDecade"
-              [disabled]="disabled"
-              (click)="decadeClick.emit(item.data); $event.stopPropagation()"
-              (keydown.enter)="decadeClick.emit(item.data)"
+              [disabled]="disabled || (isDecadeDisabled ? isDecadeDisabled(item.data) : false)"
+              (click)="onDecadeCellClick(item.data, $event)"
+              (keydown.enter)="onDecadeCellClick(item.data, $event)"
               [attr.aria-label]="getDecadeAriaLabel(item.data)"
             >
               {{ item.data }} - {{ item.data + 9 }}
@@ -192,7 +194,7 @@ import {
  *
  * This component is stateless and relies on the parent for logic and state management.
  */
-export class CalendarYearViewComponent implements OnInit {
+export class CalendarYearViewComponent implements OnInit, OnChanges {
   @Input() viewMode: 'year' | 'decade' = 'year';
   @Input() yearGrid: number[] = [];
   @Input() decadeGrid: number[] = [];
@@ -200,6 +202,11 @@ export class CalendarYearViewComponent implements OnInit {
   @Input() currentDecade: number = new Date().getFullYear();
   @Input() today: Date = new Date();
   @Input() disabled: boolean = false;
+  @Input() isYearDisabled?: ((year: number) => boolean) | undefined;
+  @Input() isDecadeDisabled?: ((decade: number) => boolean) | undefined;
+  @Input() selectedDate: Date | null = null;
+  @Input() startDate: Date | null = null;
+  @Input() mode: string = 'single';
 
   // Virtual scrolling container heights
   @Input() yearContainerHeight: number = 280; // Adjust based on CSS height
@@ -224,6 +231,39 @@ export class CalendarYearViewComponent implements OnInit {
   @Output() decadeClick = new EventEmitter<number>();
   @Output() changeYear = new EventEmitter<number>();
   @Output() changeDecade = new EventEmitter<number>();
+
+  onYearCellClick(year: number, event: Event): void {
+    event.stopPropagation();
+    if (this.disabled || (this.isYearDisabled && this.isYearDisabled(year))) return;
+    this.yearClick.emit(year);
+  }
+
+  onDecadeCellClick(decade: number, event: Event): void {
+    event.stopPropagation();
+    if (this.disabled || (this.isDecadeDisabled && this.isDecadeDisabled(decade))) return;
+    this.decadeClick.emit(decade);
+  }
+
+  isYearSelected(year: number): boolean {
+    if (
+      this.mode === 'year' ||
+      this.mode === 'month' ||
+      this.mode === 'quarter' ||
+      this.mode === 'range' ||
+      this.mode === 'week'
+    ) {
+      return this.startDate !== null && this.startDate.getFullYear() === year;
+    }
+    if (this.selectedDate !== null) {
+      return this.selectedDate.getFullYear() === year;
+    }
+    return false;
+  }
+
+  getDecadeRangeLabel(): string {
+    const decadeStart = Math.floor(this.currentYear / 10) * 10;
+    return `${decadeStart} - ${decadeStart + 9}`;
+  }
 
   // Virtual scrolling signals
   private yearScrollPositionSignal = signal<number>(0);
@@ -255,8 +295,24 @@ export class CalendarYearViewComponent implements OnInit {
   ngOnInit(): void {
     // Generate large ranges for virtual scrolling
     // Centers on current year/decade with 100 years / 50 decades range
+    const decadeStart = Math.floor(this.currentYear / 10) * 10;
     this.largeYearRange = generateLargeYearRange(this.currentYear, 100);
-    this.largeDecadeRange = generateLargeDecadeRange(this.currentDecade, 50);
+    this.largeDecadeRange = generateLargeDecadeRange(decadeStart, 50);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentYear'] && !changes['currentYear'].firstChange) {
+      const year = changes['currentYear'].currentValue;
+      if (year && !this.largeYearRange.includes(year)) {
+        this.largeYearRange = generateLargeYearRange(year, 100);
+      }
+    }
+    if (changes['currentDecade'] && !changes['currentDecade'].firstChange) {
+      const decade = changes['currentDecade'].currentValue;
+      if (decade && !this.largeDecadeRange.includes(decade)) {
+        this.largeDecadeRange = generateLargeDecadeRange(decade, 50);
+      }
+    }
   }
 
   onYearScroll(event: Event): void {

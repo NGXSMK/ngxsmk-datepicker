@@ -1,12 +1,17 @@
-﻿# Accessibility Testing
+# Accessibility Testing
 
-**Last updated:** July 24, 2026 - **Current stable:** v3.0.2
+**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
 
 This document outlines the accessibility testing infrastructure integrated into the ngxsmk-datepicker library.
 
 ## Overview
 
-The library now includes comprehensive accessibility testing utilities powered by axe-core, enabling automated detection of ARIA violations, keyboard navigation issues, and other accessibility concerns.
+The library includes comprehensive accessibility features and testing utilities powered by axe-core, enabling automated detection of ARIA violations, keyboard navigation issues, and full WCAG 2.1 Level AA compliance.
+
+### Accessibility Standards Implemented
+- **WCAG 1.3.1 (Info and Relationships)**: Weekday header cells include `role="columnheader"` with localized full day names (`aria-label`) to ensure VoiceOver and screen readers properly announce column headers.
+- **Range Selection Announcements**: Live region announcements (`startDateSelected`) provide audio feedback when selecting range start dates.
+- **iOS Overlay Focus & Scroll Lock**: Automatic body scroll lock (`.ngxsmk-scroll-locked`) and focus restoration when modal calendar overlays close.
 
 ## Installation
 

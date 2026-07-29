@@ -28,7 +28,9 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
           <div class="ngxsmk-day-name ngxsmk-week-number-header" aria-hidden="true">{{ weekNumberLabel }}</div>
         }
         @for (day of weekDays; track $index) {
-          <div class="ngxsmk-day-name">{{ day }}</div>
+          <div class="ngxsmk-day-name" role="columnheader" [attr.aria-label]="weekDaysFull[$index] || day">
+            {{ day }}
+          </div>
         }
         @for (day of days; track day ? day.getTime() : $index) {
           @if (showWeekNumbers && $index % 7 === 0) {
@@ -37,7 +39,8 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
           <div
             class="ngxsmk-day-cell"
             [ngClass]="classes?.dayCell"
-            [class.empty]="!isCurrentMonth(day)"
+            [class.empty]="!isCurrentMonth(day) && !showOtherMonths"
+            [class.ngxsmk-other-month]="!isCurrentMonth(day)"
             [class.disabled]="isDateDisabled(day)"
             [class.today]="isSameDay(day, today)"
             [class.holiday]="isHoliday(day)"
@@ -153,6 +156,8 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
 export class CalendarMonthViewComponent {
   @Input() days: (Date | null)[] = [];
   @Input() weekDays: string[] = [];
+  @Input() weekDaysFull: string[] = [];
+  @Input() showOtherMonths: boolean = false;
   @Input() classes?: DatepickerClasses | undefined;
   @Input() dateTemplate: TemplateRef<unknown> | null = null;
   @Input() dayTemplate: TemplateRef<unknown> | null = null;

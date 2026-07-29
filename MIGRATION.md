@@ -2,11 +2,11 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** July 24, 2026 - **Current stable:** v3.0.2
+**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
 
 ## Table of Contents
 
-- [v2.4.0 → v3.0.2](#v240---v302)
+- [v2.4.0 → v3.0.3](#v240---v302)
 - [v2.2.15 → v2.3.1](#v2215---v231)
 - [v2.2.7 → v2.2.11](#v227---v228)
 - [v2.2.6 → v2.2.7](#v226---v227)
@@ -60,7 +60,7 @@ This document provides migration instructions for upgrading between major versio
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
 
-## v2.4.0 → v3.0.2
+## v2.4.0 → v3.0.3
 
 ### Changes
 

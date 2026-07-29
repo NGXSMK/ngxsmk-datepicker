@@ -15,6 +15,15 @@ export interface DatepickerConfig {
   animations?: AnimationConfig;
   autoDetectMobile?: boolean;
   mobileModalStyle?: 'bottom-sheet' | 'center' | 'fullscreen';
+  /**
+   * When `false`, disables all viewport-based responsive/mobile layout overrides
+   * (the `@media (max-width: …)` rules that force the mobile center-dialog presentation).
+   * Useful when embedding the datepicker as a fixed-size inline widget where the browser
+   * window width should not control the layout.
+   *
+   * Defaults to `true` (responsive layout enabled).
+   */
+  responsive?: boolean;
 }
 
 export interface AnimationConfig {

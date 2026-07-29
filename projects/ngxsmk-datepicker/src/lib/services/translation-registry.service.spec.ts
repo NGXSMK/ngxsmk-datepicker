@@ -41,6 +41,7 @@ function createMinimalTranslations(overrides: Partial<DatepickerTranslations> = 
     calendarOpened: 'Calendar opened for {{month}} {{year}}',
     calendarClosed: 'Calendar closed',
     dateSelected: 'Date selected: {{date}}',
+    startDateSelected: 'Start date set to {{date}}. Select end date.',
     rangeSelected: 'Range selected: {{start}} to {{end}}',
     monthChanged: 'Changed to {{month}} {{year}}',
     yearChanged: 'Changed to year {{year}}',
