@@ -11,6 +11,7 @@
 ### _The Gold Standard for Premium Angular Calendar Selection_
 
 [![npm version](https://img.shields.io/npm/v/ngxsmk-datepicker.svg?style=flat-square&color=6d28d9)](https://www.npmjs.com/package/ngxsmk-datepicker)
+[![npm downloads](https://img.shields.io/npm/dm/ngxsmk-datepicker.svg?style=flat-square)](https://www.npmjs.com/package/ngxsmk-datepicker)
 [![CI](https://img.shields.io/github/actions/workflow/status/NGXSMK/ngxsmk-datepicker/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/actions/workflows/ci.yml)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
