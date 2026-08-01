@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@angular/elements": "^21.2.11",
-    "@tokiforge/angular": "^2.0.0",
+    "@tokiforge/angular": "^2.3.0",
     "@tokiforge/core": "^2.0.0",
     "motion": "^12.40.0",
     "path-browserify": "^1.0.1",
