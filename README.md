@@ -15,13 +15,14 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/NGXSMK/ngxsmk-datepicker/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/actions/workflows/ci.yml)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
+[![WhatsApp Channel](https://img.shields.io/badge/WhatsApp-Channel-25D366?style=flat-square&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-toozuuu-orange?style=flat-square&logo=buy-me-a-coffee)](https://buymeacoffee.com/toozuuu)
 [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-success.svg?style=flat-square)](https://bundlephobia.com/package/ngxsmk-datepicker)
 [![Zoneless](https://img.shields.io/badge/Zoneless-Ready-blueviolet.svg?style=flat-square)](https://angular.dev/guide/zoneless)
 
 **`npm i ngxsmk-datepicker`**
 
-[Live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [StackBlitz (repo)](https://stackblitz.com/github/NGXSMK/ngxsmk-datepicker) • [API docs](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Issues](https://github.com/NGXSMK/ngxsmk-datepicker/issues) • [Buy me a coffee](https://buymeacoffee.com/toozuuu)
+[Live demo](https://ngxsmk.github.io/ngxsmk-datepicker/) • [WhatsApp Channel](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p) • [StackBlitz (repo)](https://stackblitz.com/github/NGXSMK/ngxsmk-datepicker) • [API docs](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/projects/ngxsmk-datepicker/docs/API.md) • [Issues](https://github.com/NGXSMK/ngxsmk-datepicker/issues) • [Buy me a coffee](https://buymeacoffee.com/toozuuu)
 
 *StackBlitz:* after it boots, run `npm install` then `npm start` in the terminal to serve the demo app (`demo-app`).
 
@@ -961,15 +962,20 @@ The hosted **[live demo](https://ngxsmk.github.io/ngxsmk-datepicker/)** build sh
 
 - 📧 Email: [sachindilshan040@gmail.com](mailto:sachindilshan040@gmail.com)
 - 🐙 GitHub: [@toozuuu](https://github.com/toozuuu)
+- 💬 WhatsApp Channel: [NGXSMK Channel](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p)
 - 📦 NPM: [ngxsmk-datepicker](https://www.npmjs.com/package/ngxsmk-datepicker)
 - 🌐 Website: [sachindilshan.com](https://www.sachindilshan.com/)
 - 💼 LinkedIn: [sachindilshan](https://www.linkedin.com/in/sachindilshan/)
 
-## **⭐ Support**
+## **⭐ Community & Support**
+
+Stay connected and receive updates, release announcements, and tips via our official WhatsApp Channel:
+👉 **[Join WhatsApp Channel](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p)**
 
 If you find this library helpful, please consider:
 
 - ⭐ **Starring** the repository
+- 💬 **Joining** our [WhatsApp Channel](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p)
 - 🐛 **Reporting** bugs and issues
 - 💡 **Suggesting** new features
 - 🤝 **Contributing** code improvements
