@@ -188,6 +188,17 @@
   }
 }
 
+.whatsapp-btn {
+  color: #25d366;
+  border-color: rgba(37, 211, 102, 0.2) !important;
+
+  &:hover {
+    color: #25d366 !important;
+    background: rgba(37, 211, 102, 0.1) !important;
+    border-color: #25d366 !important;
+  }
+}
+
 .coffee-btn {
   color: #ff9300;
   border-color: rgba(255, 147, 0, 0.2) !important;

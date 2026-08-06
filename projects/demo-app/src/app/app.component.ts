@@ -97,19 +97,50 @@ export class AppComponent {
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
         const url = event.urlAfterRedirects;
-        let pageTitle = 'Elite DatePicker';
+        let pageTitle = 'Modern Angular DatePicker & Range Picker';
+        let desc =
+          'The #1 Signal-based, Zoneless date and range picker component for Angular 17-22+. Light, fast, accessible, with timezone dropdown, i18n, and secondary calendars.';
 
-        if (url.includes('playground')) pageTitle = 'Interactive Playground';
-        else if (url.includes('architecture')) pageTitle = 'Plugin Architecture';
-        else if (url.includes('installation')) pageTitle = 'Fast Installation';
-        else if (url.includes('examples')) pageTitle = 'Feature Showcase';
-        else if (url.includes('advanced')) pageTitle = 'Advanced Features';
+        if (url.includes('installation')) {
+          pageTitle = 'Installation & Setup Guide';
+          desc = 'Quick start guide for installing ngxsmk-datepicker via npm or ng add in Angular apps.';
+        } else if (url.includes('integrations')) {
+          pageTitle = 'Framework Integrations & Signal Forms';
+          desc = 'Learn how to integrate ngxsmk-datepicker with Angular Signal Forms, Reactive Forms, Ionic, and SSR.';
+        } else if (url.includes('examples')) {
+          pageTitle = 'Interactive Code Examples & Demos';
+          desc =
+            'Explore date range selection, time selection, custom templates, and preset shortcuts with live code snippets.';
+        } else if (url.includes('advanced')) {
+          pageTitle = 'Advanced Features, Timezones & Secondary Calendars';
+          desc =
+            'Discover timezone selection, Hijri/Jalali secondary calendars, availability metadata, and natural language date typing.';
+        } else if (url.includes('theming')) {
+          pageTitle = 'Custom Theming & Design Tokens';
+          desc = 'Customize ngxsmk-datepicker visual themes, dark mode, and TokiForge design token integration.';
+        } else if (url.includes('architecture')) {
+          pageTitle = 'Signal Architecture & Plugin System';
+          desc =
+            'Deep dive into the Signal-driven reactive engine, performance optimizations, and plugin architecture of ngxsmk-datepicker.';
+        } else if (url.includes('api')) {
+          pageTitle = 'API Reference & Component Inputs/Outputs';
+          desc =
+            'Complete API documentation listing all inputs, outputs, types, interfaces, and methods of ngxsmk-datepicker.';
+        } else if (url.includes('playground')) {
+          pageTitle = 'Interactive Live Playground';
+          desc = 'Test all ngxsmk-datepicker configurations in real time with interactive property controls.';
+        }
 
-        this.title.setTitle(`${pageTitle} | NGXSMK DatePicker`);
-        this.meta.updateTag({
-          name: 'description',
-          content: `Experience ${pageTitle} in NGXSMK DatePicker - The best Signal-based, Zoneless date selection library for Angular.`,
-        });
+        const fullTitle = `${pageTitle} | NGXSMK DatePicker`;
+        const canonicalUrl = `https://ngxsmk.com${url === '/' ? '' : url}`;
+
+        this.title.setTitle(fullTitle);
+        this.meta.updateTag({ name: 'description', content: desc });
+        this.meta.updateTag({ property: 'og:title', content: fullTitle });
+        this.meta.updateTag({ property: 'og:description', content: desc });
+        this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
+        this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
+        this.meta.updateTag({ name: 'twitter:description', content: desc });
       });
   }
 

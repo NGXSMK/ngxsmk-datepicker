@@ -934,17 +934,14 @@ MIT License - see [LICENSE](https://github.com/NGXSMK/ngxsmk-datepicker/blob/mai
 
 ## **🔍 SEO & Discoverability**
 
-This library is optimized for search engine visibility, especially for European markets:
+This library is optimized for search engine visibility, AI search engines, and global developer discovery:
 
-- **Keywords**: Angular datepicker, date range picker, calendar component, Angular 17-21, TypeScript, Signal Forms, SSR compatible
-- **European SEO**: Optimized for Germany, France, Spain, Italy, Netherlands, Poland, Portugal, Sweden, Norway, Finland, Denmark, Belgium, Switzerland, Austria, and United Kingdom
-- **Multi-language Support**: hreflang tags for 15+ European languages and locales
-- **European Geo-targeting**: Geo tags and structured data optimized for European Union countries
-- **Meta Tags**: Comprehensive Open Graph and Twitter Card support with European locale alternates
-- **Structured Data**: JSON-LD schema markup with European audience targeting and area served information
-- **Documentation**: Complete API documentation with examples
-- **Performance**: Optimized bundle size (~127KB) for fast loading
-- **European Localization**: Full i18n support for European date formats, week start days, and regional preferences
+- **Keywords**: Angular DatePicker, Date Range Picker, Calendar Component, Angular 17-22+, Signals, Zoneless Angular, TypeScript, Signal Forms, Timezone Dropdown, Secondary Calendars (Hijri, Jalali), SSR Compatible, Ionic DatePicker
+- **Global & European SEO**: Optimized for worldwide developer discovery across North America, Europe (Germany, France, UK, Spain, Sweden, Netherlands, Poland), Asia (Japan, South Korea, China), and Latin America
+- **Multi-language Support**: i18n support and hreflang meta tags for 15+ global languages and regional locales
+- **Social & Community Visibility**: Rich Open Graph metadata, Twitter Cards, JSON-LD structured data (SoftwareApplication & Organization schema), and official [WhatsApp Channel](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p) updates
+- **Documentation**: Complete API documentation with live interactive code examples
+- **Performance**: Optimized bundle size (~127KB) for fast initial page load and high Lighthouse SEO scores
 
 ## **👨‍💻 Author**
 
