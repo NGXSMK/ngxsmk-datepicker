@@ -246,7 +246,7 @@ interface DecoratorMetadataConfig {
           [ariaLabel]="calendarAriaLabel()"
           [isCalendarOpening]="isCalendarOpening"
           [loadingMessage]="calendarLoadingMessage()"
-          [showRanges]="showRanges()"
+          [showRanges]="showRanges() || showPresets()"
           [rangesArray]="rangesArray"
           [selectedRange]="[startDate, endDate]"
           [showTimezoneSelector]="showTimezoneSelector()"
@@ -550,6 +550,7 @@ export class NgxsmkDatepickerComponent
   /** Emits when asyncDateFilter rejects; the previous disabled set is kept. */
   readonly asyncDateFilterError = output<unknown>();
   readonly showRanges = input<boolean>(true);
+  readonly showPresets = input<boolean>(false);
   @Input() showTime: boolean = false;
   @Input() timeOnly: boolean = false;
   readonly timeRangeMode = input<boolean>(false);
@@ -560,8 +561,25 @@ export class NgxsmkDatepickerComponent
   @Input() showSeconds: boolean = false;
   @Input() holidayProvider: HolidayProvider | null = null;
   @Input() disableHolidays: boolean = false;
-  @Input() disabledDates: (string | Date)[] = [];
-  @Input() disabledRanges: Array<{ start: Date | string; end: Date | string }> = [];
+  private _disabledDates: (string | Date)[] = [];
+  @Input() set disabledDates(val: (string | Date)[] | null | undefined) {
+    this._disabledDates = Array.isArray(val) ? val : [];
+    this._syncDisabledDatesCache();
+    this._updateMemoSignals();
+  }
+  get disabledDates(): (string | Date)[] {
+    return this._disabledDates;
+  }
+
+  private _disabledRanges: Array<{ start: Date | string; end: Date | string }> = [];
+  @Input() set disabledRanges(val: Array<{ start: Date | string; end: Date | string }> | null | undefined) {
+    this._disabledRanges = Array.isArray(val) ? val : [];
+    this._syncDisabledDatesCache();
+    this._updateMemoSignals();
+  }
+  get disabledRanges(): Array<{ start: Date | string; end: Date | string }> {
+    return this._disabledRanges;
+  }
   @Input() recurringPattern?: RecurringPatternInput;
   readonly dateTemplate = input<TemplateRef<unknown> | null>(null);
   private _placeholder: string | null = null;
@@ -1783,6 +1801,48 @@ export class NgxsmkDatepickerComponent
     };
   }
 
+  private _disabledDatesTimestamps = new Set<number>();
+  private _parsedDisabledRanges: Array<{ startTime: number; endTime: number }> = [];
+
+  private _syncDisabledDatesCache(): void {
+    const set = new Set<number>();
+    if (this._disabledDates && this._disabledDates.length > 0) {
+      for (const d of this._disabledDates) {
+        let parsed: Date | null = null;
+        if (typeof d === 'string') {
+          parsed = this.parsingService ? this.parsingService.parseDateString(d) : normalizeDate(d);
+        } else if (d instanceof Date) {
+          parsed = getStartOfDay(d);
+        }
+        if (parsed && !Number.isNaN(parsed.getTime())) {
+          set.add(getStartOfDay(parsed).getTime());
+        }
+      }
+    }
+    this._disabledDatesTimestamps = set;
+
+    const ranges: Array<{ startTime: number; endTime: number }> = [];
+    if (this._disabledRanges && this._disabledRanges.length > 0) {
+      for (const r of this._disabledRanges) {
+        const s =
+          typeof r.start === 'string'
+            ? (this.parsingService ? this.parsingService.parseDateString(r.start) : normalizeDate(r.start))
+            : getStartOfDay(r.start);
+        const e =
+          typeof r.end === 'string'
+            ? (this.parsingService ? this.parsingService.parseDateString(r.end) : normalizeDate(r.end))
+            : getStartOfDay(r.end);
+        if (s && e && !Number.isNaN(s.getTime()) && !Number.isNaN(e.getTime())) {
+          ranges.push({
+            startTime: getStartOfDay(s).getTime(),
+            endTime: getEndOfDay(e).getTime(),
+          });
+        }
+      }
+    }
+    this._parsedDisabledRanges = ranges;
+  }
+
   private _updateMemoSignals(): void {
     this._currentMonthSignal.set(this._currentMonth);
     this._currentYearSignal.set(this._currentYear);
@@ -1793,6 +1853,7 @@ export class NgxsmkDatepickerComponent
       disabledDates: this.disabledDates.length > 0 ? this.disabledDates : null,
       disabledRanges: this.disabledRanges.length > 0 ? this.disabledRanges : null,
     });
+    this._syncDisabledDatesCache();
   }
 
   private passiveTouchListeners: Array<() => void> = [];
@@ -2675,6 +2736,9 @@ export class NgxsmkDatepickerComponent
       this.currentDate = nextMonth;
       this._currentMonth = nextMonth.getMonth();
       this._currentYear = nextMonth.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this._invalidateMemoCache();
     }
 
@@ -3380,11 +3444,17 @@ export class NgxsmkDatepickerComponent
       this.currentDate = nextMonth;
       this._currentMonth = nextMonth.getMonth();
       this._currentYear = nextMonth.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this._invalidateMemoCache();
     } else if (this.mode === 'range' && this.startDate) {
       this.currentDate = new Date(this.startDate);
       this._currentMonth = this.startDate.getMonth();
       this._currentYear = this.startDate.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this._invalidateMemoCache();
     }
   }
@@ -3661,9 +3731,18 @@ export class NgxsmkDatepickerComponent
 
     this.emitValue(null);
     this.action.emit({ type: 'clear', payload: null });
-    this.currentDate = new Date();
+    let resetDate = new Date();
+    if (this._startAtDate) {
+      resetDate = new Date(this._startAtDate);
+    } else if (this._minDate && getStartOfDay(this._minDate).getTime() > this.today.getTime()) {
+      resetDate = new Date(this._minDate);
+    }
+    this.currentDate = resetDate;
     this._currentMonth = this.currentDate.getMonth();
     this._currentYear = this.currentDate.getFullYear();
+    this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+    this._currentMonthSignal.set(this._currentMonth);
+    this._currentYearSignal.set(this._currentYear);
     this._invalidateMemoCache();
     this.generateCalendar();
   }
@@ -3772,6 +3851,9 @@ export class NgxsmkDatepickerComponent
       this.currentDate = new Date(today);
       this._currentMonth = today.getMonth();
       this._currentYear = today.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this._invalidateMemoCache();
     }
   }
@@ -4154,6 +4236,9 @@ export class NgxsmkDatepickerComponent
       this.currentDate = new Date(this._startAtDate);
       this._currentMonth = this.currentDate.getMonth();
       this._currentYear = this.currentDate.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this.generateCalendar();
       this.cdr.markForCheck();
     }
@@ -4169,6 +4254,9 @@ export class NgxsmkDatepickerComponent
         this.currentDate = new Date(this._minDate);
         this._currentMonth = this.currentDate.getMonth();
         this._currentYear = this.currentDate.getFullYear();
+        this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+        this._currentMonthSignal.set(this._currentMonth);
+        this._currentYearSignal.set(this._currentYear);
         this.generateCalendar();
         this.cdr.markForCheck();
       }
@@ -4328,6 +4416,9 @@ export class NgxsmkDatepickerComponent
       this.currentDate = new Date(viewCenterDate);
       this._currentMonth = viewCenterDate.getMonth();
       this._currentYear = viewCenterDate.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
       this.currentHour = viewCenterDate.getHours();
       this.currentMinute = viewCenterDate.getMinutes();
       if (this.showSeconds) {
@@ -4962,6 +5053,36 @@ export class NgxsmkDatepickerComponent
     this.weekDaysFull = generateWeekDaysFull(this.locale, this.firstDayOfWeek);
   }
 
+  private _getDefaultPresets(): { key: string; value: [Date, Date] }[] {
+    const today = this.today || new Date();
+    const todayStart = getStartOfDay(today);
+    const todayEnd = getEndOfDay(today);
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const last7Days = new Date(today);
+    last7Days.setDate(last7Days.getDate() - 6);
+
+    const last30Days = new Date(today);
+    last30Days.setDate(last30Days.getDate() - 29);
+
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    const endOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
+
+    return [
+      { key: this.getTranslation('today') || 'Today', value: [todayStart, todayEnd] },
+      { key: 'Yesterday', value: [getStartOfDay(yesterday), getEndOfDay(yesterday)] },
+      { key: 'Last 7 Days', value: [getStartOfDay(last7Days), todayEnd] },
+      { key: 'Last 30 Days', value: [getStartOfDay(last30Days), todayEnd] },
+      { key: 'This Month', value: [startOfMonth, endOfMonth] },
+      { key: 'Last Month', value: [startOfLastMonth, endOfLastMonth] },
+    ];
+  }
+
   private updateRangesArray(): void {
     let factoryPresets: { key: string; value: [Date, Date] }[] = [];
     if (this.rangePresetFactory) {
@@ -4980,7 +5101,11 @@ export class NgxsmkDatepickerComponent
     }
 
     const standardPresets = this._ranges ? Object.entries(this._ranges).map(([key, value]) => ({ key, value })) : [];
-    this.rangesArray = [...standardPresets, ...factoryPresets];
+    if (standardPresets.length === 0 && factoryPresets.length === 0 && this.showPresets()) {
+      this.rangesArray = this._getDefaultPresets();
+    } else {
+      this.rangesArray = [...standardPresets, ...factoryPresets];
+    }
   }
 
   public setTimezone(tz: string): void {
@@ -5137,33 +5262,22 @@ export class NgxsmkDatepickerComponent
   }
 
   private _isInDisabledDates(dateOnly: Date): boolean {
-    if (this.disabledDates.length === 0) return false;
-    for (const disabledDate of this.disabledDates) {
-      const parsedDate =
-        typeof disabledDate === 'string'
-          ? this.parsingService.parseDateString(disabledDate)
-          : getStartOfDay(disabledDate);
-      if (dateOnly.getTime() === parsedDate?.getTime()) {
-        return true;
-      }
+    if (this._disabledDates.length === 0) return false;
+    if (this._disabledDatesTimestamps.size === 0) {
+      this._syncDisabledDatesCache();
     }
-    return false;
+    return this._disabledDatesTimestamps.has(dateOnly.getTime());
   }
 
   private _isInDisabledRanges(dateOnly: Date): boolean {
-    if (this.disabledRanges.length === 0) return false;
+    if (this._disabledRanges.length === 0) return false;
+    if (this._parsedDisabledRanges.length === 0) {
+      this._syncDisabledDatesCache();
+    }
     const dateTime = dateOnly.getTime();
-    for (const range of this.disabledRanges) {
-      const startDate =
-        typeof range.start === 'string' ? this.parsingService.parseDateString(range.start) : getStartOfDay(range.start);
-      const endDate =
-        typeof range.end === 'string' ? this.parsingService.parseDateString(range.end) : getStartOfDay(range.end);
-      if (startDate && endDate) {
-        const startTime = getStartOfDay(startDate).getTime();
-        const endTime = getEndOfDay(endDate).getTime();
-        if (dateTime >= startTime && dateTime <= endTime) {
-          return true;
-        }
+    for (const range of this._parsedDisabledRanges) {
+      if (dateTime >= range.startTime && dateTime <= range.endTime) {
+        return true;
       }
     }
     return false;
@@ -5847,6 +5961,9 @@ export class NgxsmkDatepickerComponent
     const baseMonth = this.currentDate.getMonth();
     this._currentMonth = baseMonth;
     this._currentYear = baseYear;
+    this._currentDecade = Math.floor(baseYear / 10) * 10;
+    this._currentMonthSignal.set(baseMonth);
+    this._currentYearSignal.set(baseYear);
     this.generateDropdownOptions();
 
     const months = this.buildCalendarMonths(baseYear, baseMonth, count);
@@ -6195,11 +6312,19 @@ export class NgxsmkDatepickerComponent
       month: 'long',
     });
     const year = newDate.getFullYear();
-    const monthChangedMsg =
-      this.getTranslation('monthChanged', undefined, {
-        month: monthName,
-        year: String(year),
-      }) || `${monthName} ${year}`;
+    let monthChangedMsg: string;
+    if (this.calendars > 1) {
+      const endMonthDate = new Date(year, newDate.getMonth() + this.calendars - 1, 1);
+      const endMonthName = endMonthDate.toLocaleDateString(this.locale, { month: 'long' });
+      const endYear = endMonthDate.getFullYear();
+      monthChangedMsg = `${monthName} ${year} – ${endMonthName} ${endYear}`;
+    } else {
+      monthChangedMsg =
+        this.getTranslation('monthChanged', undefined, {
+          month: monthName,
+          year: String(year),
+        }) || `${monthName} ${year}`;
+    }
     this.ariaLiveService.announce(monthChangedMsg, 'polite');
 
     this.action.emit({ type: 'monthChanged', payload: { delta: delta } });

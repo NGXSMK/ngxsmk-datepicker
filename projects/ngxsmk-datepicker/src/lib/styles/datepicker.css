@@ -6821,19 +6821,35 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ngxsmk-datepicker {
-    --ngxsmk-transition: none;
+  ngxsmk-datepicker,
+  .ngxsmk-datepicker,
+  .ngxsmk-datepicker-panel,
+  .ngxsmk-datepicker-overlay,
+  .ngxsmk-datepicker-dialog,
+  .ngxsmk-datepicker-dropdown,
+  .ngxsmk-datepicker-container,
+  .ngxsmk-presets-drawer {
+    --ngxsmk-transition: none !important;
+    --ngxsmk-transition-duration: 0.01ms !important;
   }
 
   ngxsmk-datepicker *,
   ngxsmk-datepicker *::before,
-  ngxsmk-datepicker *::after {
+  ngxsmk-datepicker *::after,
+  .ngxsmk-datepicker-panel *,
+  .ngxsmk-datepicker-panel *::before,
+  .ngxsmk-datepicker-panel *::after,
+  .ngxsmk-datepicker-overlay *,
+  .ngxsmk-datepicker-dialog *,
+  .ngxsmk-datepicker-dropdown *,
+  .ngxsmk-presets-drawer * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
+
 
 :root {
   /* Spacing & Layout */

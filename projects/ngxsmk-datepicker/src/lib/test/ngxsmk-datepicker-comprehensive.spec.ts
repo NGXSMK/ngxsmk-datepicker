@@ -607,6 +607,82 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       expect(component.selectedDates.length).toBe(0);
     });
+
+    it('should synchronize month and year signals with the calendar view after clearing a selected date (Issue #311)', () => {
+      component.mode = 'single';
+      const pastDate = new Date(2017, 10, 29); // 2017-11-29
+      component.onDateClick(pastDate);
+      fixture.detectChanges();
+
+      expect(component.currentMonth).toBe(10);
+      expect(component.currentYear).toBe(2017);
+      expect(component['_currentMonthSignal']()).toBe(10);
+      expect(component['_currentYearSignal']()).toBe(2017);
+      expect(component.multiCalendarMonths[0].month).toBe(10);
+      expect(component.multiCalendarMonths[0].year).toBe(2017);
+
+      component.clearValue();
+      fixture.detectChanges();
+
+      const expectedToday = new Date();
+      expect(component.selectedDate).toBeNull();
+      expect(component.currentMonth).toBe(expectedToday.getMonth());
+      expect(component.currentYear).toBe(expectedToday.getFullYear());
+      expect(component['_currentMonthSignal']()).toBe(expectedToday.getMonth());
+      expect(component['_currentYearSignal']()).toBe(expectedToday.getFullYear());
+      expect(component.multiCalendarMonths[0].month).toBe(expectedToday.getMonth());
+      expect(component.multiCalendarMonths[0].year).toBe(expectedToday.getFullYear());
+
+      // Changing month afterwards should smoothly navigate from the current date
+      component.changeMonth(1);
+      fixture.detectChanges();
+
+      const nextMonthDate = new Date(expectedToday.getFullYear(), expectedToday.getMonth() + 1, 1);
+      expect(component.currentMonth).toBe(nextMonthDate.getMonth());
+      expect(component.currentYear).toBe(nextMonthDate.getFullYear());
+      expect(component['_currentMonthSignal']()).toBe(nextMonthDate.getMonth());
+      expect(component['_currentYearSignal']()).toBe(nextMonthDate.getFullYear());
+      expect(component.multiCalendarMonths[0].month).toBe(nextMonthDate.getMonth());
+      expect(component.multiCalendarMonths[0].year).toBe(nextMonthDate.getFullYear());
+    });
+
+    it('should reset view to startAt date when clearing a selected date', () => {
+      component.mode = 'single';
+      component.startAt = new Date(2020, 3, 1); // 2020-04-01
+      component.onDateClick(new Date(2022, 7, 15));
+      fixture.detectChanges();
+
+      component.clearValue();
+      fixture.detectChanges();
+
+      expect(component.selectedDate).toBeNull();
+      expect(component.currentMonth).toBe(3);
+      expect(component.currentYear).toBe(2020);
+      expect(component['_currentMonthSignal']()).toBe(3);
+      expect(component['_currentYearSignal']()).toBe(2020);
+      expect(component.multiCalendarMonths[0].month).toBe(3);
+      expect(component.multiCalendarMonths[0].year).toBe(2020);
+    });
+
+    it('should reset view to minDate when minDate is in the future and clearing a selected date', () => {
+      component.mode = 'single';
+      const futureYear = new Date().getFullYear() + 2;
+      const futureMin = new Date(futureYear, 0, 15);
+      component.minDate = futureMin;
+      component.onDateClick(new Date(futureYear + 1, 5, 20));
+      fixture.detectChanges();
+
+      component.clearValue();
+      fixture.detectChanges();
+
+      expect(component.selectedDate).toBeNull();
+      expect(component.currentMonth).toBe(0);
+      expect(component.currentYear).toBe(futureYear);
+      expect(component['_currentMonthSignal']()).toBe(0);
+      expect(component['_currentYearSignal']()).toBe(futureYear);
+      expect(component.multiCalendarMonths[0].month).toBe(0);
+      expect(component.multiCalendarMonths[0].year).toBe(futureYear);
+    });
   });
 
   describe('Month Navigation', () => {
@@ -765,4 +841,22 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
       });
     });
   });
+
+  describe('Range Presets', () => {
+    it('should generate default presets when showPresets is true in range mode', () => {
+      fixture.componentRef.setInput('showPresets', true);
+      component.mode = 'range';
+      component.ngOnInit();
+      fixture.detectChanges();
+
+      expect(component.rangesArray.length).toBeGreaterThan(0);
+      const keys = component.rangesArray.map((r) => r.key);
+      expect(keys).toContain('Today');
+      expect(keys).toContain('Yesterday');
+      expect(keys).toContain('Last 7 Days');
+      expect(keys).toContain('This Month');
+    });
+  });
 });
+
+

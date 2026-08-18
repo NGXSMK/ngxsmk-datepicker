@@ -1,6 +1,6 @@
-﻿# Comprehensive Improvement Report
+# Comprehensive Improvement Report
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 This document is the **maintained index** for architectural and quality initiatives referenced from [ROADMAP.md](ROADMAP.md). Each section maps to anchor links used across the repository. Effort levels: **S** small, **M** medium, **L** large.
 

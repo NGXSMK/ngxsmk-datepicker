@@ -87,16 +87,21 @@ import {
       >
         <div
           class="ngxsmk-year-grid"
+          role="grid"
+          aria-label="Select Year"
           [style.height.px]="yearVirtualResult().totalHeight"
           [style.transform]="'translateY(' + (yearVirtualResult().offsetY || 0) + 'px)'"
         >
           @for (item of yearVirtualResult().visibleItems; track item.index) {
             <button
               type="button"
+              role="gridcell"
               class="ngxsmk-year-cell"
               [class.selected]="isYearSelected(item.data)"
               [class.today]="item.data === today.getFullYear()"
               [disabled]="disabled || (isYearDisabled ? isYearDisabled(item.data) : false)"
+              [attr.aria-selected]="isYearSelected(item.data)"
+              [attr.aria-current]="item.data === today.getFullYear() ? 'date' : null"
               (click)="onYearCellClick(item.data, $event)"
               (keydown.enter)="onYearCellClick(item.data, $event)"
               [attr.aria-label]="getYearAriaLabel(item.data)"
@@ -160,15 +165,19 @@ import {
       >
         <div
           class="ngxsmk-decade-grid"
+          role="grid"
+          aria-label="Select Decade"
           [style.height.px]="decadeVirtualResult().totalHeight"
           [style.transform]="'translateY(' + (decadeVirtualResult().offsetY || 0) + 'px)'"
         >
           @for (item of decadeVirtualResult().visibleItems; track item.index) {
             <button
               type="button"
+              role="gridcell"
               class="ngxsmk-decade-cell"
               [class.selected]="item.data === currentDecade"
               [disabled]="disabled || (isDecadeDisabled ? isDecadeDisabled(item.data) : false)"
+              [attr.aria-selected]="item.data === currentDecade"
               (click)="onDecadeCellClick(item.data, $event)"
               (keydown.enter)="onDecadeCellClick(item.data, $event)"
               [attr.aria-label]="getDecadeAriaLabel(item.data)"

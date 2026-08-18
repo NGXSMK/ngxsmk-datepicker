@@ -1,8 +1,8 @@
-﻿# GitHub Pages Deployment Guide
+# GitHub Pages Deployment Guide
 
 This document explains how the ngxsmk-datepicker demo app is deployed to GitHub Pages.
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 ## Automatic Deployment
 

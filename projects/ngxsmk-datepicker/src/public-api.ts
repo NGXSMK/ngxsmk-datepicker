@@ -107,9 +107,21 @@ export type { DatePreset } from './lib/services/date-presets.service';
 export { AriaLiveService } from './lib/services/aria-live.service';
 export { FocusTrapService } from './lib/services/focus-trap.service';
 export { HapticFeedbackService } from './lib/services/haptic-feedback.service';
+export { DatepickerOverlayService } from './lib/services/datepicker-overlay.service';
+export type { OverlayPositionOptions, CalculatedOverlayPosition } from './lib/services/datepicker-overlay.service';
+
 
 export { FieldSyncService } from './lib/services/field-sync.service';
 export type { SignalFormField, SignalFormFieldConfig } from './lib/services/field-sync.service';
+
+export {
+  ngxsmkMinDateValidator,
+  ngxsmkMaxDateValidator,
+  ngxsmkDateRangeValidator,
+  ngxsmkBlockedDatesValidator,
+  type DynamicDateInput,
+  type DateRangeValidatorOptions,
+} from './lib/validators/datepicker.validators';
 
 // Material (mat-form-field) integration is optional. The main bundle does not import @angular/material.
 // To use with mat-form-field: install @angular/material and @angular/cdk, then add the directive

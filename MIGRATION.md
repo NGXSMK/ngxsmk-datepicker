@@ -2,11 +2,12 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 ## Table of Contents
 
-- [v2.4.0 → v3.0.3](#v240---v302)
+- [v3.0.3 → v3.0.4](#v303---v304)
+- [v2.4.0 → v3.0.3](#v240---v303)
 - [v2.2.15 → v2.3.1](#v2215---v231)
 - [v2.2.7 → v2.2.11](#v227---v228)
 - [v2.2.6 → v2.2.7](#v226---v227)
@@ -59,6 +60,17 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v1.9.1](#v190---v191)
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v3.0.3 → v3.0.4
+
+### Changes
+
+All new functionality is backwards-compatible and opt-in:
+- **Built-in Reactive Forms Validators**: Added type-safe validators `ngxsmkMinDateValidator`, `ngxsmkMaxDateValidator`, `ngxsmkDateRangeValidator`, and `ngxsmkBlockedDatesValidator` in `@ngxsmk/datepicker` public API.
+- **Built-in Range Presets (`[showPresets]`)**: Standard preset ranges for range picker mode (*Today*, *Yesterday*, *Last 7 Days*, *Last 30 Days*, *This Month*, *Last Month*).
+- **Performance**: Precomputed lookup Set for disabled dates and parsed ranges, eliminating per-cell string parsing during calendar grid rendering.
+- **Accessibility**: Reduced-motion styles across all overlay/drawer surfaces, and ARIA grid attributes for year/decade views.
+- **Bug Fix**: Fixed Issue #311 (Month/year dropdowns desynchronize after clear).
 
 ## v2.4.0 → v3.0.3
 

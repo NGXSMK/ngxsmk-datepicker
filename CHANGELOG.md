@@ -2,12 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.0.4] - 2026-08-18
+
+### Added
+
+- **Built-in Angular Reactive Forms Validators**: Added type-safe Angular `ValidatorFn` utilities exported in the public API:
+  - `ngxsmkMinDateValidator(minDate)`: Validates single dates, ranges, and multiple date arrays against a minimum date.
+  - `ngxsmkMaxDateValidator(maxDate)`: Validates dates against a maximum date.
+  - `ngxsmkDateRangeValidator(options)`: Validates minimum/maximum range duration (`minDays`, `maxDays`) and complete range requirements (`requireBoth`).
+  - `ngxsmkBlockedDatesValidator(blocked)`: Validates that selected dates/ranges do not intersect blocked or blacklisted dates.
+- **Built-in Range Presets UI (`[showPresets]`)**: Added `[showPresets]` input signal to display standard presets (*Today*, *Yesterday*, *Last 7 Days*, *Last 30 Days*, *This Month*, *Last Month*) when in range mode.
+- **Datepicker Overlay Service**: Added and exported `DatepickerOverlayService` for automated viewport collision detection, auto-flipping, and responsive positioning.
+- **Accessibility & Reduced Motion**: Enhanced `@media (prefers-reduced-motion: reduce)` across all popovers, drawers, and overlay panels; added `role="grid"` and `role="gridcell"` attributes on Year/Decade views; added visible month span announcements for multi-calendar navigation.
+
+### Fixed
+
+- **Month & Year Select Sync on Clear (Issue #311)**: Fixed issue where clearing a date and re-opening the calendar or navigating months caused header dropdowns to desynchronize with the rendered days grid ([#311](https://github.com/NGXSMK/ngxsmk-datepicker/issues/311)).
+- **Performance Optimization**: Implemented precomputed timestamp `Set<number>` lookups ($O(1)$) for disabled dates and parsed ranges, eliminating per-cell string parsing overhead during calendar grid rendering.
 
 ## [3.0.3] - 2026-07-29
 

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
-import { DATEPICKER_CONFIG, DatepickerConfig } from '../config/datepicker.config';
 
 @Component({
   standalone: true,
