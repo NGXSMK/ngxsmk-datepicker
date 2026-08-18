@@ -262,6 +262,7 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
       }
       .flex-1 {
         flex: 1 1 0%;
+        min-width: 0;
       }
       .flex-col {
         flex-direction: column;

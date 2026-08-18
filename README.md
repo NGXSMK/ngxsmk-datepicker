@@ -30,15 +30,15 @@
 
 ---
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.3` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.4` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.3** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.4** on npm.
 
 ---
 
@@ -188,7 +188,7 @@ ng add ngxsmk-datepicker
 The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
 
 ```bash
-npm install ngxsmk-datepicker@3.0.3
+npm install ngxsmk-datepicker@3.0.4
 ```
 
 ### Alternative installation
@@ -197,12 +197,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@3.0.3` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.3` |
-| **Bun** | `bun add ngxsmk-datepicker@3.0.3` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.3` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@3.0.4` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.4` |
+| **Bun** | `bun add ngxsmk-datepicker@3.0.4` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.4` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.3/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.3/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.4/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.4/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -542,6 +542,38 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 2. **Custom Validation Logic:**
    If you prefer the readonly behavior, ensure your form submission handler explicitly checks `form.invalid` before proceeding, as the browser won't stop the submit button click.
 
+### **Built-in Reactive Forms Validators**
+
+`ngxsmk-datepicker` exports convenient, type-safe Angular `ValidatorFn` functions for standard form validation:
+
+```typescript
+import { FormControl, FormGroup } from '@angular/forms';
+import {
+  ngxsmkMinDateValidator,
+  ngxsmkMaxDateValidator,
+  ngxsmkDateRangeValidator,
+  ngxsmkBlockedDatesValidator
+} from 'ngxsmk-datepicker';
+
+const form = new FormGroup({
+  // Minimum date validator (Date, string, or dynamic factory)
+  arrivalDate: new FormControl(null, [ngxsmkMinDateValidator(new Date())]),
+
+  // Maximum date validator
+  departureDate: new FormControl(null, [ngxsmkMaxDateValidator(new Date(2026, 11, 31))]),
+
+  // Range validation: requires both dates, 2 to 14 days duration
+  tripRange: new FormControl(null, [
+    ngxsmkDateRangeValidator({ minDays: 2, maxDays: 14, requireBoth: true })
+  ]),
+
+  // Disallow weekends or specific blackout dates
+  bookingDate: new FormControl(null, [
+    ngxsmkBlockedDatesValidator((d: Date) => d.getDay() === 0 || d.getDay() === 6)
+  ]),
+});
+```
+
 ## **⚙️ API Reference**
 
 ### **Inputs**
@@ -552,7 +584,8 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 | inline             | boolean \| 'always' \| 'auto' | false | Controls the display mode. `true` or `'always'` for inline, `'auto'` for responsive. |
 | locale             | string | navigator.language | Sets the locale for language and regional formatting (e.g., 'en-US', 'de-DE'). |
 | theme              | 'light' \| 'dark' | 'light' | The color theme. |
-| showRanges         | boolean | true | If true, displays the predefined ranges panel when in 'range' mode. |
+| showRanges         | boolean | true | If true, displays custom predefined ranges panel when in 'range' mode. |
+| showPresets        | boolean | false | If true, displays standard quick presets (*Today*, *Yesterday*, *Last 7 Days*, *This Month*, etc.). |
 | minDate            | DateInput | null | The earliest selectable date. |
 | maxDate            | DateInput | null | The latest selectable date. |
 | isInvalidDate      | (date: Date) => boolean | () => false | A function to programmatically disable specific dates. |
@@ -930,7 +963,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v3.0.3** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.3**.
+**Recent:** Use **v3.0.4** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.4**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

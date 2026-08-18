@@ -151,21 +151,15 @@ import { I18nService } from '../../i18n/i18n.service';
 
       th {
         background: rgba(255, 255, 255, 0.03);
-        font-size: 0.65rem;
-        @media (min-width: 768px) {
-          font-size: 0.75rem;
-        }
-        font-weight: 800;
+        font-size: var(--font-size-xs);
+        font-weight: 700;
         color: var(--color-text-dim);
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.06em;
       }
 
       td {
-        font-size: 0.85rem;
-        @media (min-width: 768px) {
-          font-size: 0.95rem;
-        }
+        font-size: var(--font-size-sm);
         vertical-align: top;
         color: var(--color-text-muted);
       }
@@ -175,7 +169,7 @@ import { I18nService } from '../../i18n/i18n.service';
         padding: 0;
       }
       .text-xs {
-        font-size: 0.75rem;
+        font-size: var(--font-size-xs);
       }
     `,
   ],

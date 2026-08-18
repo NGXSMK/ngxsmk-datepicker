@@ -283,7 +283,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Adjacent Month Grid</h3>
-                <span class="badge badge-new">NEW v3.0.3</span>
+                <span class="badge badge-new">NEW v3.0.4</span>
               </div>
               <p class="card-desc">
                 Displays trailing and leading days from adjacent months in the 6-row calendar grid.
@@ -301,7 +301,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Fixed Container Mode</h3>
-                <span class="badge badge-new">NEW v3.0.3</span>
+                <span class="badge badge-new">NEW v3.0.4</span>
               </div>
               <p class="card-desc">
                 Disables viewport max-width overrides for fixed-width embedded or sidebar layouts (#299).
@@ -512,8 +512,17 @@ import { I18nService } from '../../i18n/i18n.service';
 
       .examples-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.25rem;
+
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+          gap: 1rem;
+        }
+
+        @media (max-width: 640px) {
+          grid-template-columns: 1fr;
+        }
       }
 
       /* Multi-calendar inline demos need full row width — 2-up grid halves the card and clips the grid */
@@ -525,6 +534,7 @@ import { I18nService } from '../../i18n/i18n.service';
         background: var(--color-bg-sidebar);
         border-color: var(--color-border-light);
         padding: 1.5rem;
+        min-width: 0;
         transition:
           transform 0.2s,
           box-shadow 0.2s,
@@ -558,11 +568,11 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .badge {
-        font-size: 0.65rem;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         font-weight: 700;
-        letter-spacing: 0.05em;
-        padding: 2px 6px;
+        letter-spacing: 0.04em;
+        padding: 2px 8px;
         border-radius: 4px;
         background: rgba(255, 255, 255, 0.05);
         color: var(--color-text-dim);
@@ -575,9 +585,9 @@ import { I18nService } from '../../i18n/i18n.service';
         border: none;
         padding: 3px 8px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: var(--font-size-xs);
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.03em;
         box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
       }
 

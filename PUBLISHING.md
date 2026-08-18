@@ -1,8 +1,8 @@
-﻿# Publishing Guide
+# Publishing Guide
 
 This document outlines the process for publishing new versions of `ngxsmk-datepicker` to npm.
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
 
 ## Prerequisites
 

@@ -97,51 +97,80 @@ export class AppComponent {
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
         const url = event.urlAfterRedirects;
-        let pageTitle = 'Modern Angular DatePicker & Range Picker';
+        let pageTitle = '#1 Angular DatePicker | NGXSMK Elite Signal-Based Date Selection';
         let desc =
-          'The #1 Signal-based, Zoneless date and range picker component for Angular 17-22+. Light, fast, accessible, with timezone dropdown, i18n, and secondary calendars.';
+          'The #1 Signal-based, Zoneless date and range picker component for Angular 17-21+. Light, fast, accessible, with timezone dropdown, i18n, presets, and secondary calendars.';
+        let keywords =
+          'angular datepicker, angular signals datepicker, zoneless angular datepicker, angular range picker, ngxsmk';
 
         if (url.includes('installation')) {
-          pageTitle = 'Installation & Setup Guide';
-          desc = 'Quick start guide for installing ngxsmk-datepicker via npm or ng add in Angular apps.';
+          pageTitle = 'Installation & Setup Guide | NGXSMK DatePicker';
+          desc =
+            'Quick start guide for installing ngxsmk-datepicker via npm, yarn, pnpm, or bun in modern Angular apps.';
+          keywords =
+            'install ngxsmk-datepicker, angular datepicker npm, setup angular calendar, standalone angular datepicker';
         } else if (url.includes('integrations')) {
-          pageTitle = 'Framework Integrations & Signal Forms';
-          desc = 'Learn how to integrate ngxsmk-datepicker with Angular Signal Forms, Reactive Forms, Ionic, and SSR.';
+          pageTitle = 'Framework Integrations & Signal Forms | NGXSMK DatePicker';
+          desc =
+            'Learn how to integrate ngxsmk-datepicker with Angular Material, Ionic, React, Vue, Signal Forms, and SSR.';
+          keywords = 'angular material datepicker, ionic datepicker, reactive forms datepicker, angular signal forms';
         } else if (url.includes('examples')) {
-          pageTitle = 'Interactive Code Examples & Demos';
+          pageTitle = 'Interactive Code Examples & Selection Modes | NGXSMK DatePicker';
           desc =
-            'Explore date range selection, time selection, custom templates, and preset shortcuts with live code snippets.';
+            'Explore date range selection, time selection, custom templates, multiple dates, and preset shortcuts with live code snippets.';
+          keywords =
+            'angular datepicker examples, angular date range demo, angular timepicker example, multi date picker';
         } else if (url.includes('advanced')) {
-          pageTitle = 'Advanced Features, Timezones & Secondary Calendars';
+          pageTitle = 'Advanced Features (Signals, Holidays, Masking, Timezones) | NGXSMK DatePicker';
           desc =
-            'Discover timezone selection, Hijri/Jalali secondary calendars, availability metadata, and natural language date typing.';
+            'Discover timezone selection, Hijri/Jalali secondary calendars, holiday providers, async availability filtering, and natural language date typing.';
+          keywords =
+            'angular timezone picker, hijri jalali calendar angular, input mask datepicker, holiday provider angular';
         } else if (url.includes('theming')) {
-          pageTitle = 'Custom Theming & Design Tokens';
-          desc = 'Customize ngxsmk-datepicker visual themes, dark mode, and TokiForge design token integration.';
+          pageTitle = 'Custom CSS Theming & ThemeBuilderService | NGXSMK DatePicker';
+          desc =
+            'Customize ngxsmk-datepicker visual themes, CSS custom properties, glassmorphism, and ThemeBuilderService runtime themes.';
+          keywords = 'angular datepicker theme, custom css datepicker, dark mode datepicker, themebuilder service';
         } else if (url.includes('architecture')) {
-          pageTitle = 'Signal Architecture & Plugin System';
+          pageTitle = 'Signal Architecture & Plugin System | NGXSMK DatePicker';
           desc =
             'Deep dive into the Signal-driven reactive engine, performance optimizations, and plugin architecture of ngxsmk-datepicker.';
+          keywords = 'angular zoneless architecture, signal based ui component, angular high performance datepicker';
         } else if (url.includes('api')) {
-          pageTitle = 'API Reference & Component Inputs/Outputs';
+          pageTitle = 'API Reference & Component Specs | NGXSMK DatePicker';
           desc =
-            'Complete API documentation listing all inputs, outputs, types, interfaces, and methods of ngxsmk-datepicker.';
+            'Complete API documentation listing all inputs, outputs, types, interfaces, directives, and methods of ngxsmk-datepicker.';
+          keywords = 'ngxsmk-datepicker api, angular datepicker inputs, datepicker interface types';
         } else if (url.includes('playground')) {
-          pageTitle = 'Interactive Live Playground';
-          desc = 'Test all ngxsmk-datepicker configurations in real time with interactive property controls.';
+          pageTitle = 'Live Interactive Playground | NGXSMK DatePicker';
+          desc =
+            'Test and customize all ngxsmk-datepicker configurations in real time with interactive property controls.';
+          keywords = 'angular datepicker playground, live demo datepicker, online calendar preview';
         }
 
-        const fullTitle = `${pageTitle} | NGXSMK DatePicker`;
         const canonicalUrl = `https://ngxsmk.com${url === '/' ? '' : url}`;
 
-        this.title.setTitle(fullTitle);
+        this.title.setTitle(pageTitle);
         this.meta.updateTag({ name: 'description', content: desc });
-        this.meta.updateTag({ property: 'og:title', content: fullTitle });
+        this.meta.updateTag({ name: 'keywords', content: keywords });
+        this.meta.updateTag({ property: 'og:title', content: pageTitle });
         this.meta.updateTag({ property: 'og:description', content: desc });
         this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
-        this.meta.updateTag({ name: 'twitter:title', content: fullTitle });
+        this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
         this.meta.updateTag({ name: 'twitter:description', content: desc });
+        this.updateCanonicalUrl(canonicalUrl);
       });
+  }
+
+  private updateCanonicalUrl(url: string) {
+    if (typeof document === 'undefined') return;
+    let link: HTMLLinkElement | null = document.querySelector("link[rel='canonical']");
+    if (!link) {
+      link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      document.head.appendChild(link);
+    }
+    link.setAttribute('href', url);
   }
 
   private async fetchNpmDownloads() {
