@@ -52,13 +52,14 @@
   --space-3xl: clamp(3rem, 12vw, 4rem);
 
   /* Layout Dimensions */
-  --header-height: 64px;
-  --sidebar-width: 280px;
-  --max-content-width: 1200px;
+  --header-height: 60px;
+  --sidebar-width: 260px;
+  --max-content-width: 1280px;
 
-  @media (min-width: 1024px) {
-    --header-height: 72px;
-    --sidebar-width: 300px;
+  @media (min-width: 1440px) {
+    --header-height: 68px;
+    --sidebar-width: 280px;
+    --max-content-width: 1380px;
   }
 
   /* Typography */
@@ -221,12 +222,20 @@ body {
   flex: 1;
   min-height: 0;
   margin-left: var(--sidebar-width);
-  padding: var(--space-2xl) var(--space-3xl);
+  padding: 2rem 2.25rem;
   max-width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   transition: margin-left var(--transition-smooth);
   -webkit-overflow-scrolling: touch;
+
+  @media (min-width: 1440px) {
+    padding: var(--space-2xl) var(--space-3xl);
+  }
+
+  @media (max-width: 1200px) {
+    padding: 1.5rem 1.5rem;
+  }
 
   @media (max-width: 1024px) {
     margin-left: 0;
@@ -241,6 +250,7 @@ body {
 .content-container {
   max-width: var(--max-content-width);
   margin: 0 auto;
+  min-width: 0;
 }
 
 /* ============================================

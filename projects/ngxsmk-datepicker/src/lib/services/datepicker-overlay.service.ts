@@ -66,12 +66,14 @@ export class DatepickerOverlayService {
       left = anchorRect.left + scrollX + (anchorRect.width - popoverWidth) / 2;
     }
 
-    // Clamp horizontally within viewport
-    if (left + popoverWidth > viewportWidth + scrollX - 8) {
-      left = viewportWidth + scrollX - popoverWidth - 8;
-    }
-    if (left < scrollX + 8) {
-      left = scrollX + 8;
+    // Clamp horizontally within viewport if viewport is wide enough
+    if (viewportWidth >= popoverWidth + 16) {
+      if (left + popoverWidth > viewportWidth + scrollX - 8) {
+        left = viewportWidth + scrollX - popoverWidth - 8;
+      }
+      if (left < scrollX + 8) {
+        left = scrollX + 8;
+      }
     }
 
     return {

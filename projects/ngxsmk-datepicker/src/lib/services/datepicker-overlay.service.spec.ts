@@ -27,7 +27,7 @@ describe('DatepickerOverlayService', () => {
     } as DOMRect;
 
     const popover = { width: 300, height: 350 };
-    const pos = service.calculatePosition(anchorRect, popover);
+    const pos = service.calculatePosition(anchorRect, popover, { viewportWidth: 1024, viewportHeight: 768 });
 
     expect(pos.placement).toBe('bottom');
     expect(pos.top).toBeGreaterThanOrEqual(148);
@@ -45,7 +45,7 @@ describe('DatepickerOverlayService', () => {
     } as DOMRect;
 
     const popover = { width: 300, height: 350 };
-    const pos = service.calculatePosition(anchorRect, popover, { viewportHeight: 800 });
+    const pos = service.calculatePosition(anchorRect, popover, { viewportWidth: 1024, viewportHeight: 800 });
 
     expect(pos.placement).toBe('top');
     expect(pos.top).toBeLessThan(700);
@@ -63,10 +63,18 @@ describe('DatepickerOverlayService', () => {
 
     const popover = { width: 300, height: 350 };
 
-    const rightPos = service.calculatePosition(anchorRect, popover, { alignment: 'right' });
+    const rightPos = service.calculatePosition(anchorRect, popover, {
+      alignment: 'right',
+      viewportWidth: 1024,
+      viewportHeight: 768,
+    });
     expect(rightPos.left).toBe(100); // right (400) - popoverWidth (300) = 100
 
-    const centerPos = service.calculatePosition(anchorRect, popover, { alignment: 'center' });
+    const centerPos = service.calculatePosition(anchorRect, popover, {
+      alignment: 'center',
+      viewportWidth: 1024,
+      viewportHeight: 768,
+    });
     expect(centerPos.left).toBe(150); // left (200) + (200 - 300)/2 = 150
   });
 

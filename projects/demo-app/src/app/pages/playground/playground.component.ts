@@ -306,15 +306,22 @@ import { animate } from 'motion';
     `
       .playground-layout {
         display: grid;
-        grid-template-columns: 300px 1fr;
-        gap: 2rem;
+        grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+        gap: 1.5rem;
+        align-items: start;
       }
 
       .config-panel {
         padding: 1.25rem;
         position: sticky;
-        top: 100px;
-        height: fit-content;
+        top: calc(var(--header-height) + 16px);
+        max-height: calc(100vh - var(--header-height) - 32px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-bg-elevated) transparent;
+        @media (max-width: 1200px) {
+          padding: 1rem;
+        }
         @media (max-width: 900px) {
           padding: 1rem;
         }
@@ -393,11 +400,12 @@ import { animate } from 'motion';
 
       .preview-panel {
         min-height: 500px;
+        min-width: 0;
         padding: 0;
         display: flex;
         flex-direction: column;
         background: radial-gradient(circle at center, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
-        /* Remove overflow hidden to allow popover to bleed out */
+        overflow: visible;
       }
 
       .preview-header {
@@ -421,14 +429,19 @@ import { animate } from 'motion';
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem;
+        padding: 1rem 0.5rem;
         position: relative;
-        overflow: visible;
+        overflow-x: auto;
+        max-width: 100%;
+        min-width: 0;
         @media (min-width: 480px) {
           padding: 1.5rem 1rem;
         }
         @media (min-width: 768px) {
-          padding: 3rem;
+          padding: 2rem 1.5rem;
+        }
+        @media (min-width: 1440px) {
+          padding: 3rem 2rem;
         }
 
         ngxsmk-datepicker {
@@ -453,19 +466,18 @@ import { animate } from 'motion';
         }
         .playground-layout {
           grid-template-columns: 1fr;
-          gap: 1rem;
+          gap: 1.25rem;
         }
         .config-panel {
           position: static;
+          max-height: none;
           order: 2;
-          padding: 1rem;
+          padding: 1.25rem;
         }
         .preview-panel {
           order: 1;
           min-height: 400px;
-          border-radius: 0;
-          border-left: none;
-          border-right: none;
+          border-radius: var(--radius-md);
         }
       }
 
@@ -665,7 +677,7 @@ export class PlaygroundComponent implements AfterViewInit {
     this.invalidRangeDates = [];
   }
 
-  myCustomPresetFactory = (today: Date) => {
+  myCustomPresetFactory = (_today: Date) => {
     return [
       {
         id: 'factory-next-10',
