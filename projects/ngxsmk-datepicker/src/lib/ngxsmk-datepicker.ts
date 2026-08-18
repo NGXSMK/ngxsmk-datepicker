@@ -710,12 +710,10 @@ export class NgxsmkDatepickerComponent
    */
   @Input() inputMask: boolean | string = false;
 
-  // Feature 1: Natural Language Date Input
   @Input() enableNaturalLanguage = false;
   readonly naturalLanguagePreviewTemplate = input<TemplateRef<unknown>>();
   readonly naturalLanguageResolved = output<Date | { start: Date; end: Date }>();
 
-  // Feature 2: Multi-calendar view
   @Input() set calendars(value: number) {
     this.calendarCount = value;
   }
@@ -723,15 +721,12 @@ export class NgxsmkDatepickerComponent
     return this.calendarCount;
   }
 
-  // Feature 3: Custom Preset factory
   @Input() rangePresetFactory?: (
     today: Date
   ) => { id: string; name: string; calculate: (today: Date) => { start: Date; end: Date } }[];
 
-  // Feature 4: Disabled range blocking
   readonly invalidRange = output<{ start: Date; end: Date; disabledDatesInside: Date[] }>();
 
-  // Feature 5: Timezone Selector UI
   readonly showTimezoneSelector = input<boolean>(false);
   @Input() defaultTimezone = 'UTC';
   readonly timezoneChange = output<string>();

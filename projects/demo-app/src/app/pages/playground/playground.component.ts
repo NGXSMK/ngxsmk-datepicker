@@ -418,7 +418,7 @@ import { animate } from 'motion';
       }
 
       .value-chip {
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-sm);
         color: var(--color-text-muted);
         code {
           color: var(--color-primary-light);
@@ -489,7 +489,7 @@ import { animate } from 'motion';
           padding: 0.75rem;
         }
         .value-chip {
-          font-size: 0.65rem;
+          font-size: var(--font-size-xs);
         }
       }
 

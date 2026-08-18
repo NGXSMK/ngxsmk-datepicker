@@ -20,22 +20,27 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="google-site-verification" content="A5yVrT2S54aESSjpQexg5uJ8TcuMROMzqX_vnaJzbsE" />
     <meta name="theme-color" content="#7c3aed" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="NGXSMK DatePicker" />
     <link rel="canonical" href="https://ngxsmk.com/" />
 
-    <!-- Open Graph / Social Media (Viral Optimization) -->
+    <!-- Open Graph / Facebook / LinkedIn / Discord -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://ngxsmk.com/" />
     <meta property="og:title" content="NGXSMK: The Best Angular DatePicker for Performance & A11y" />
     <meta
       property="og:description"
-      content="Stop fighting heavy UI libraries. Switch to NGXSMK—the ultra-fast, Signal-powered, and 100% Zoneless datepicker built for the next generation of Angular apps."
+      content="Stop fighting heavy UI libraries. Switch to NGXSMK—the ultra-fast, Signal-powered, and 100% Zoneless datepicker built for modern Angular apps."
     />
     <meta property="og:image" content="https://ngxsmk.com/assets/og-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NGXSMK Angular DatePicker Preview" />
     <meta property="og:site_name" content="NGXSMK DatePicker" />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter / X -->
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ngxsmk" />
     <meta name="twitter:creator" content="@toozuuu" />
@@ -45,24 +50,37 @@
       content="Finally, a datepicker that doesn't bloat your Angular app. 100% Signal-based. 0% Zone.js. The #1 developer choice."
     />
     <meta name="twitter:image" content="https://ngxsmk.com/assets/og-preview.png" />
+    <meta name="twitter:image:alt" content="NGXSMK Angular DatePicker" />
 
-    <!-- Structured Data (JSON-LD) for Elite Rich Results -->
+    <!-- Structured Data (JSON-LD) for Rich Results & Google Knowledge Graph -->
     <script type="application/ld+json">
       [
         {
           "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "NGXSMK DatePicker",
+          "url": "https://ngxsmk.com/",
+          "description": "The premier Signal-based, Zoneless date and range picker library for Angular 17+.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://ngxsmk.com/api?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           "name": "NGXSMK DatePicker",
-          "operatingSystem": "Web",
+          "operatingSystem": "Web, iOS, Android",
           "applicationCategory": "DeveloperApplication",
           "offers": {
             "@type": "Offer",
             "price": "0",
             "priceCurrency": "USD"
           },
-          "description": "High-performance, Signal-based, and Zoneless datepicker library for Angular 17+ projects. Ranked #1 for speed and bundle size.",
+          "description": "High-performance, Signal-based, and Zoneless datepicker library for Angular 17+ projects. Ranked #1 for speed, bundle size, and accessibility.",
           "softwareVersion": "3.0.4",
-          "license": "MIT",
+          "license": "https://opensource.org/licenses/MIT",
           "sameAs": [
             "https://github.com/NGXSMK/ngxsmk-datepicker",
             "https://www.npmjs.com/package/ngxsmk-datepicker",
@@ -88,6 +106,52 @@
         },
         {
           "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I install ngxsmk-datepicker in an Angular project?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Run 'npm install ngxsmk-datepicker' or 'ng add ngxsmk-datepicker'. Then import NgxsmkDatepickerComponent directly into your standalone component imports array."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is NGXSMK DatePicker compatible with Angular Signals and Zoneless mode?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. NGXSMK DatePicker is built from the ground up with Angular Signals (input(), output(), signal(), computed()) and operates with 0% Zone.js overhead in zoneless applications."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NGXSMK support Angular Material and Ionic?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. NGXSMK provides full built-in support for Angular Material mat-form-field (via NgxsmkDatepickerMatFormFieldControlDirective) and native device picker integration for Ionic mobile apps."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What selection modes are supported by NGXSMK DatePicker?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "NGXSMK supports single date, date range, multiple dates, week selection, month selection, quarter selection, year selection, integrated time picker (12h/24h), and multi-calendar views."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does NGXSMK DatePicker support Server-Side Rendering (SSR)?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. NGXSMK DatePicker is 100% SSR-safe with platform guards (isPlatformBrowser) preventing any window or document hydration errors during Angular Universal/SSR rendering."
+              }
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           "itemListElement": [
             {
@@ -105,18 +169,24 @@
             {
               "@type": "ListItem",
               "position": 3,
-              "name": "Integrations",
-              "item": "https://ngxsmk.com/integrations"
-            },
-            {
-              "@type": "ListItem",
-              "position": 4,
               "name": "Examples",
               "item": "https://ngxsmk.com/examples"
             },
             {
               "@type": "ListItem",
+              "position": 4,
+              "name": "Playground",
+              "item": "https://ngxsmk.com/playground"
+            },
+            {
+              "@type": "ListItem",
               "position": 5,
+              "name": "Integrations",
+              "item": "https://ngxsmk.com/integrations"
+            },
+            {
+              "@type": "ListItem",
+              "position": 6,
               "name": "API",
               "item": "https://ngxsmk.com/api"
             }

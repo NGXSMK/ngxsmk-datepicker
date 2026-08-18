@@ -131,10 +131,10 @@ import { I18nService } from '../../i18n/i18n.service';
         background: rgba(6, 182, 212, 0.1);
         color: var(--color-secondary);
         border-radius: 99px;
-        font-size: 0.75rem;
+        font-size: var(--font-size-xs);
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         margin-bottom: 1rem;
       }
 
@@ -189,12 +189,12 @@ import { I18nService } from '../../i18n/i18n.service';
         padding: 6px 14px;
         @media (max-width: 480px) {
           padding: 4px 10px;
-          font-size: 0.75rem;
+          font-size: var(--font-size-xs);
         }
         background: linear-gradient(to right, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
         border: 1px solid rgba(124, 58, 237, 0.2);
         border-radius: 100px;
-        font-size: 0.85rem;
+        font-size: var(--font-size-sm);
         font-weight: 700;
         color: var(--color-primary-light);
         letter-spacing: 0.02em;

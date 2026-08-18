@@ -568,11 +568,11 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .badge {
-        font-size: 0.65rem;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         font-weight: 700;
-        letter-spacing: 0.05em;
-        padding: 2px 6px;
+        letter-spacing: 0.04em;
+        padding: 2px 8px;
         border-radius: 4px;
         background: rgba(255, 255, 255, 0.05);
         color: var(--color-text-dim);
@@ -585,9 +585,9 @@ import { I18nService } from '../../i18n/i18n.service';
         border: none;
         padding: 3px 8px;
         border-radius: 6px;
-        font-size: 0.7rem;
+        font-size: var(--font-size-xs);
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.03em;
         box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
       }
 

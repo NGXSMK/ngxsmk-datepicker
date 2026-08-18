@@ -233,18 +233,18 @@ import { I18nService } from '../../i18n/i18n.service';
         gap: 0.75rem;
       }
       .layer-label {
-        font-size: 0.7rem;
+        font-size: var(--font-size-xs);
         text-transform: uppercase;
         font-weight: 800;
         color: var(--color-text-dim);
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         margin-bottom: 0.5rem;
         text-align: center;
       }
       .box {
         padding: 1rem;
         border-radius: 12px;
-        font-size: 0.85rem;
+        font-size: var(--font-size-sm);
         font-weight: 600;
         text-align: center;
         border: 1px solid var(--color-border);
@@ -291,12 +291,12 @@ import { I18nService } from '../../i18n/i18n.service';
           text-align: center;
           .core-text {
             display: block;
-            font-size: 1.25rem;
+            font-size: var(--font-size-xl);
             font-weight: 900;
             letter-spacing: -0.02em;
           }
           .core-subtext {
-            font-size: 0.65rem;
+            font-size: var(--font-size-xs);
             text-transform: uppercase;
             font-weight: 700;
             opacity: 0.8;
@@ -329,7 +329,7 @@ import { I18nService } from '../../i18n/i18n.service';
           font-size: 1rem;
         }
         p {
-          font-size: 0.85rem;
+          font-size: var(--font-size-sm);
           margin: 0.5rem 0 0;
           color: var(--color-text-dim);
         }
@@ -357,12 +357,12 @@ import { I18nService } from '../../i18n/i18n.service';
         th {
           background: rgba(255, 255, 255, 0.03);
           color: var(--color-text-dim);
-          font-size: 0.75rem;
+          font-size: var(--font-size-xs);
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
         td {
-          font-size: 0.9rem;
+          font-size: var(--font-size-sm);
           color: var(--color-text-muted);
         }
         tr:last-child td {
