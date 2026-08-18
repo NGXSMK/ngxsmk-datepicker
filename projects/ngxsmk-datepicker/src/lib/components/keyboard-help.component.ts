@@ -118,4 +118,3 @@ export class NgxsmkDatepickerKeyboardHelpComponent {
   readonly backdropLabel = input<string>('Close overlay');
   readonly closeRequested = output<void>();
 }
-

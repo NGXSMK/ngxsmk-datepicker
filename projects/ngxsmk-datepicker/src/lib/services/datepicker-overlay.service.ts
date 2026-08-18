@@ -37,23 +37,16 @@ export class DatepickerOverlayService {
       return { top: 0, left: 0, placement: 'bottom' };
     }
 
-    const {
-      alignment = 'left',
-      offset = 8,
-      flipOnCollision = true,
-      minWidth = 320,
-    } = options;
+    const { alignment = 'left', offset = 8, flipOnCollision = true, minWidth = 320 } = options;
 
     const anchorRect = anchor instanceof HTMLElement ? anchor.getBoundingClientRect() : anchor;
-    const popoverWidth =
-      popover instanceof HTMLElement ? popover.offsetWidth || minWidth : popover.width || minWidth;
-    const popoverHeight =
-      popover instanceof HTMLElement ? popover.offsetHeight || 380 : popover.height || 380;
+    const popoverWidth = popover instanceof HTMLElement ? popover.offsetWidth || minWidth : popover.width || minWidth;
+    const popoverHeight = popover instanceof HTMLElement ? popover.offsetHeight || 380 : popover.height || 380;
 
     const viewportWidth = options.viewportWidth ?? (typeof window !== 'undefined' ? window.innerWidth : 1024);
     const viewportHeight = options.viewportHeight ?? (typeof window !== 'undefined' ? window.innerHeight : 768);
-    const scrollX = typeof window !== 'undefined' ? (window.scrollX || window.pageXOffset || 0) : 0;
-    const scrollY = typeof window !== 'undefined' ? (window.scrollY || window.pageYOffset || 0) : 0;
+    const scrollX = typeof window !== 'undefined' ? window.scrollX || window.pageXOffset || 0 : 0;
+    const scrollY = typeof window !== 'undefined' ? window.scrollY || window.pageYOffset || 0 : 0;
 
     const spaceBelow = viewportHeight - anchorRect.bottom;
     const spaceAbove = anchorRect.top;
@@ -92,11 +85,7 @@ export class DatepickerOverlayService {
   /**
    * Applies calculated position styles to a target popover element.
    */
-  applyPosition(
-    popover: HTMLElement,
-    position: CalculatedOverlayPosition,
-    appendToBody = false
-  ): void {
+  applyPosition(popover: HTMLElement, position: CalculatedOverlayPosition, appendToBody = false): void {
     if (!popover || !this.isBrowser) return;
 
     if (appendToBody) {

@@ -858,5 +858,3 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
     });
   });
 });
-
-

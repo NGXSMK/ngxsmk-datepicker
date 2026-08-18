@@ -195,9 +195,7 @@ export function ngxsmkDateRangeValidator(options: DateRangeValidatorOptions = {}
  * const control = new FormControl(null, ngxsmkBlockedDatesValidator([new Date(2026, 11, 25)]));
  * ```
  */
-export function ngxsmkBlockedDatesValidator(
-  blocked: (Date | string)[] | ((date: Date) => boolean)
-): ValidatorFn {
+export function ngxsmkBlockedDatesValidator(blocked: (Date | string)[] | ((date: Date) => boolean)): ValidatorFn {
   let isBlockedFn: (d: Date) => boolean;
 
   if (typeof blocked === 'function') {

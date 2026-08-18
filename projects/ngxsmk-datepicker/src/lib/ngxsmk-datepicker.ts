@@ -1826,11 +1826,15 @@ export class NgxsmkDatepickerComponent
       for (const r of this._disabledRanges) {
         const s =
           typeof r.start === 'string'
-            ? (this.parsingService ? this.parsingService.parseDateString(r.start) : normalizeDate(r.start))
+            ? this.parsingService
+              ? this.parsingService.parseDateString(r.start)
+              : normalizeDate(r.start)
             : getStartOfDay(r.start);
         const e =
           typeof r.end === 'string'
-            ? (this.parsingService ? this.parsingService.parseDateString(r.end) : normalizeDate(r.end))
+            ? this.parsingService
+              ? this.parsingService.parseDateString(r.end)
+              : normalizeDate(r.end)
             : getStartOfDay(r.end);
         if (s && e && !Number.isNaN(s.getTime()) && !Number.isNaN(e.getTime())) {
           ranges.push({

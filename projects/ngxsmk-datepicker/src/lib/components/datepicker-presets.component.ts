@@ -59,4 +59,3 @@ export class NgxsmkDatepickerPresetsComponent {
     return range.key;
   }
 }
-

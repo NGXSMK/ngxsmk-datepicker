@@ -110,7 +110,6 @@ export { HapticFeedbackService } from './lib/services/haptic-feedback.service';
 export { DatepickerOverlayService } from './lib/services/datepicker-overlay.service';
 export type { OverlayPositionOptions, CalculatedOverlayPosition } from './lib/services/datepicker-overlay.service';
 
-
 export { FieldSyncService } from './lib/services/field-sync.service';
 export type { SignalFormField, SignalFormFieldConfig } from './lib/services/field-sync.service';
 

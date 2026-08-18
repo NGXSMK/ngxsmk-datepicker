@@ -51,7 +51,6 @@ describe('DatepickerOverlayService', () => {
     expect(pos.top).toBeLessThan(700);
   });
 
-
   it('should handle alignment options (right, center)', () => {
     const anchorRect = {
       top: 100,
