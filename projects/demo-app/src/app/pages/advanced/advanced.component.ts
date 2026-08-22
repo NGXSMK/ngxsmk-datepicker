@@ -184,6 +184,26 @@ import { ThemeService } from '@tokiforge/angular';
           </button>
         </ng-template>
       </div>
+
+      <h2>{{ i18n.t().advanced.whatsNew.aiAssistantTitle }}</h2>
+      <p>{{ i18n.t().advanced.whatsNew.aiAssistantLead }}</p>
+      <div class="card bg-sidebar overflow-visible">
+        <ngxsmk-datepicker
+          [(ngModel)]="aiSelectedDate"
+          [enableAi]="true"
+          [showAiSuggestions]="true"
+          [aiSuggestions]="demoAiSuggestions"
+          aiPlaceholder="Ask AI (e.g. 'next Friday', 'tomorrow')..."
+          [inline]="true"
+          [theme]="themeService.theme() === 'dark' ? 'dark' : 'light'"
+        >
+        </ngxsmk-datepicker>
+        @if (aiSelectedDate) {
+          <div class="tip mt-md">
+            AI Selected Date: <code class="text-secondary">{{ aiSelectedDate | date: 'fullDate' }}</code>
+          </div>
+        }
+      </div>
     </div>
   `,
   styles: [
@@ -331,6 +351,9 @@ export class AdvancedFeaturesComponent {
     hasError: signal(false),
     required: signal(false),
   };
+
+  aiSelectedDate: Date | null = new Date();
+  demoAiSuggestions = ['Tomorrow', 'Next Friday', 'In 3 days', 'Next month'];
 
   isWeekend = (date: Date): boolean => {
     const day = date.getDay();

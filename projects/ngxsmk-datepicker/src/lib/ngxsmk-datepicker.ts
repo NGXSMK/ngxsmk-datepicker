@@ -82,7 +82,7 @@ import { DatepickerParsingService } from './services/datepicker-parsing.service'
 import { TouchGestureHandlerService, TouchGestureState } from './services/touch-gesture-handler.service';
 import { PopoverPositioningService } from './services/popover-positioning.service';
 import { CustomDateFormatService } from './services/custom-date-format.service';
-import { Subject } from 'rxjs';
+import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
 
@@ -133,6 +133,12 @@ interface MetadataProviderEntry {
 interface DecoratorMetadataConfig {
   providers?: unknown[];
 }
+
+export type AiDateResolver = (
+  prompt: string
+) =>
+  | Promise<Date | { start: Date; end: Date } | null | undefined>
+  | Observable<Date | { start: Date; end: Date } | null | undefined>;
 
 @Component({
   selector: 'ngxsmk-datepicker',
@@ -318,6 +324,12 @@ interface DecoratorMetadataConfig {
           [boundGetDayMetadata]="boundGetDayMetadata"
           [calendarHeaderTemplate]="calendarHeaderTemplate"
           [calendarFooterTemplate]="calendarFooterTemplate"
+          [enableAi]="enableAi"
+          [aiPlaceholder]="aiPlaceholder"
+          [aiSuggestions]="aiSuggestions"
+          [showAiSuggestions]="showAiSuggestions"
+          [isAiResolving]="isAiResolving"
+          (aiPromptSubmitted)="onAiPromptSubmitted($event)"
           [boundIsSameDay]="boundIsSameDay"
           [boundIsHoliday]="boundIsHoliday"
           [boundIsMultipleSelected]="boundIsMultipleSelected"
@@ -334,6 +346,7 @@ interface DecoratorMetadataConfig {
           [formatTimeSliderValue]="boundFormatTimeSliderValue"
           (backdropClick)="onBackdropInteract($event)"
           (escapeKey)="onPopoverEscape($event)"
+          (containerKeyDown)="onKeyDown($event)"
           (touchStartContainer)="onBottomSheetTouchStart($event)"
           (touchMoveContainer)="onBottomSheetTouchMove($event)"
           (touchEndContainer)="onBottomSheetTouchEnd($event)"
@@ -713,6 +726,14 @@ export class NgxsmkDatepickerComponent
   @Input() enableNaturalLanguage = false;
   readonly naturalLanguagePreviewTemplate = input<TemplateRef<unknown>>();
   readonly naturalLanguageResolved = output<Date | { start: Date; end: Date }>();
+
+  @Input() enableAi = false;
+  @Input() aiPlaceholder = 'Ask AI (e.g. "next Friday", "last 7 days")...';
+  @Input() aiSuggestions: string[] = ['Tomorrow', 'Next Friday', 'In 3 days', 'Next month'];
+  @Input() showAiSuggestions = true;
+  @Input() aiResolver?: AiDateResolver;
+  readonly aiPromptSubmitted = output<string>();
+  public isAiResolving = false;
 
   @Input() set calendars(value: number) {
     this.calendarCount = value;
@@ -2859,18 +2880,35 @@ export class NgxsmkDatepickerComponent
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    if (!this.isCalendarVisible || this.disabled) return;
+    if (!this.isCalendarVisible || this.disabled || event.defaultPrevented) return;
 
     const target = event.target as HTMLElement;
-    const isCalendarFocused = target?.closest('.ngxsmk-days-grid') !== null;
+    const isInsideCalendar = this.isElementInsideCalendar(target);
 
-    if (isCalendarFocused || event.key === 'Escape') {
+    if (isInsideCalendar || event.key === 'Escape') {
       const handled = this.handleKeyboardNavigation(event);
       if (handled) {
         event.preventDefault();
         event.stopPropagation();
       }
     }
+  }
+
+  private isElementInsideCalendar(target: HTMLElement | null): boolean {
+    if (!target) return true;
+    const isInputOrControl =
+      (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT') &&
+      !target.classList.contains('ngxsmk-day-cell');
+    if (isInputOrControl) return false;
+
+    return (
+      target.closest('.ngxsmk-days-grid') !== null ||
+      target.closest('.ngxsmk-popover-container') !== null ||
+      target.closest('.ngxsmk-calendar-container') !== null ||
+      target.closest('.ngxsmk-datepicker-container') !== null ||
+      target.classList.contains('ngxsmk-day-cell') ||
+      target.closest('.ngxsmk-datepicker-wrapper') !== null
+    );
   }
 
   private handleKeyboardNavigation(event: KeyboardEvent): boolean {
@@ -2959,13 +2997,13 @@ export class NgxsmkDatepickerComponent
 
   private handleShortcutPageHomeEndKeys(key: string, event: KeyboardEvent): boolean | null {
     if (key === 'PageUp') {
-      if (event.shiftKey) this.currentYear = this.currentYear - 1;
-      else this.changeMonth(-1);
+      if (event.shiftKey) this.navigateYear(-1);
+      else this.navigateMonth(-1);
       return true;
     }
     if (key === 'PageDown') {
-      if (event.shiftKey) this.currentYear = this.currentYear + 1;
-      else this.changeMonth(1);
+      if (event.shiftKey) this.navigateYear(1);
+      else this.navigateMonth(1);
       return true;
     }
     if (key === 'Home') {
@@ -3001,6 +3039,10 @@ export class NgxsmkDatepickerComponent
       this.toggleKeyboardHelp();
       return true;
     }
+    if (key === '/' && noMod && this.enableAi) {
+      this.datepickerContent?.focusAiInput();
+      return true;
+    }
     return false;
   }
 
@@ -3023,36 +3065,175 @@ export class NgxsmkDatepickerComponent
 
   public focusedDate: Date | null = null;
 
+  public focusDateCell(date: Date): void {
+    this.focusedDate = date;
+    this.scheduleChangeDetection();
+
+    if (!this.isBrowser) return;
+
+    this.trackedRequestAnimationFrame(() => {
+      const popover = this.getActualPopoverContainer() || this.elementRef?.nativeElement;
+      if (!popover) return;
+
+      const dateTimestamp = date.getTime();
+      let cell = popover.querySelector(`.ngxsmk-day-cell[data-date="${dateTimestamp}"]`) as HTMLElement | null;
+      if (!cell) {
+        const cells = Array.from(popover.querySelectorAll('.ngxsmk-day-cell')) as HTMLElement[];
+        for (const c of cells) {
+          const attr = c.getAttribute('data-date');
+          if (attr) {
+            const cellDate = new Date(Number(attr));
+            if (
+              cellDate.getFullYear() === date.getFullYear() &&
+              cellDate.getMonth() === date.getMonth() &&
+              cellDate.getDate() === date.getDate()
+            ) {
+              cell = c;
+              break;
+            }
+          }
+        }
+      }
+      if (!cell) {
+        cell = popover.querySelector('.ngxsmk-day-cell.focused') as HTMLElement | null;
+      }
+      if (!cell) {
+        cell = popover.querySelector(
+          '.ngxsmk-day-cell:not(.empty):not(.disabled):not(.ngxsmk-other-month)'
+        ) as HTMLElement | null;
+      }
+
+      if (cell && typeof cell.focus === 'function') {
+        try {
+          cell.focus();
+        } catch {
+          // Ignore focus errors
+        }
+      }
+    });
+  }
+
+  private findFirstValidDateInMonth(year: number, month: number): Date | null {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const candidate = new Date(year, month, day);
+      if (this.isDateValid(candidate)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  private findLastValidDateInMonth(year: number, month: number): Date | null {
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let day = daysInMonth; day >= 1; day--) {
+      const candidate = new Date(year, month, day);
+      if (this.isDateValid(candidate)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  private navigateMonth(delta: number): void {
+    if (delta < 0 && this.isBackArrowDisabled) return;
+
+    const baseDate = this.focusedDate || this.selectedDate || this.currentDate || new Date();
+    const targetMonthDate = addMonths(new Date(baseDate.getFullYear(), baseDate.getMonth(), 1), delta);
+    const targetYear = targetMonthDate.getFullYear();
+    const targetMonth = targetMonthDate.getMonth();
+    const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+    const clampedDay = Math.min(baseDate.getDate(), lastDayOfTargetMonth);
+
+    let targetDate = new Date(targetYear, targetMonth, clampedDay);
+    if (!this.isDateValid(targetDate)) {
+      targetDate = this.findFirstValidDateInMonth(targetYear, targetMonth) ?? targetDate;
+    }
+
+    this.focusedDate = targetDate;
+    this.currentDate = new Date(targetYear, targetMonth, 1);
+    this._currentMonth = targetMonth;
+    this._currentYear = targetYear;
+    this._currentDecade = Math.floor(targetYear / 10) * 10;
+    this._currentMonthSignal.set(this._currentMonth);
+    this._currentYearSignal.set(this._currentYear);
+    this._invalidateMemoCache();
+    this.generateCalendar();
+    this.focusDateCell(targetDate);
+  }
+
+  private navigateYear(delta: number): void {
+    const baseDate = this.focusedDate || this.selectedDate || this.currentDate || new Date();
+    const targetYear = baseDate.getFullYear() + delta;
+    const targetMonth = baseDate.getMonth();
+    const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+    const clampedDay = Math.min(baseDate.getDate(), lastDayOfTargetMonth);
+
+    let targetDate = new Date(targetYear, targetMonth, clampedDay);
+    if (!this.isDateValid(targetDate)) {
+      targetDate = this.findFirstValidDateInMonth(targetYear, targetMonth) ?? targetDate;
+    }
+
+    this.focusedDate = targetDate;
+    this.currentDate = new Date(targetYear, targetMonth, 1);
+    this._currentMonth = targetMonth;
+    this._currentYear = targetYear;
+    this._currentDecade = Math.floor(targetYear / 10) * 10;
+    this._currentMonthSignal.set(this._currentMonth);
+    this._currentYearSignal.set(this._currentYear);
+    this._invalidateMemoCache();
+    this.generateCalendar();
+    this.focusDateCell(targetDate);
+  }
+
   private navigateDate(days: number, weeks: number): void {
-    const baseDate = this.focusedDate || this.currentDate || new Date();
+    const baseDate = this.focusedDate || this.selectedDate || this.currentDate || new Date();
     const newDate = new Date(baseDate);
     newDate.setDate(newDate.getDate() + days + weeks * 7);
 
     if (this.isDateValid(newDate)) {
       this.focusedDate = newDate;
-      this.currentDate = new Date(newDate);
-      this.currentDate.setDate(1);
+      const monthChanged =
+        this._currentMonth !== newDate.getMonth() || this._currentYear !== newDate.getFullYear();
+      if (monthChanged) {
+        this.currentDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1);
+        this._currentMonth = newDate.getMonth();
+        this._currentYear = newDate.getFullYear();
+        this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+        this._currentMonthSignal.set(this._currentMonth);
+        this._currentYearSignal.set(this._currentYear);
+        this._invalidateMemoCache();
+      }
       this.generateCalendar();
+      this.focusDateCell(newDate);
     }
   }
 
   private navigateToFirstDay(): void {
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
+    let firstDay = new Date(year, month, 1);
+    if (!this.isDateValid(firstDay)) {
+      firstDay = this.findFirstValidDateInMonth(year, month) ?? firstDay;
+    }
     if (this.isDateValid(firstDay)) {
       this.focusedDate = firstDay;
       this.generateCalendar();
+      this.focusDateCell(firstDay);
     }
   }
 
   private navigateToLastDay(): void {
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    const lastDay = new Date(year, month + 1, 0);
+    let lastDay = new Date(year, month + 1, 0);
+    if (!this.isDateValid(lastDay)) {
+      lastDay = this.findLastValidDateInMonth(year, month) ?? lastDay;
+    }
     if (this.isDateValid(lastDay)) {
       this.focusedDate = lastDay;
       this.generateCalendar();
+      this.focusDateCell(lastDay);
     }
   }
 
@@ -3060,7 +3241,16 @@ export class NgxsmkDatepickerComponent
     const today = this.today;
     if (this.isDateValid(today)) {
       this.focusedDate = today;
+      this.currentDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      this._currentMonth = today.getMonth();
+      this._currentYear = today.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
+      this._invalidateMemoCache();
+      this.generateCalendar();
       this.onDateClick(today);
+      this.focusDateCell(today);
     }
   }
 
@@ -3070,7 +3260,16 @@ export class NgxsmkDatepickerComponent
     yesterday.setHours(0, 0, 0, 0);
     if (this.isDateValid(yesterday)) {
       this.focusedDate = yesterday;
+      this.currentDate = new Date(yesterday.getFullYear(), yesterday.getMonth(), 1);
+      this._currentMonth = yesterday.getMonth();
+      this._currentYear = yesterday.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
+      this._invalidateMemoCache();
+      this.generateCalendar();
       this.onDateClick(yesterday);
+      this.focusDateCell(yesterday);
     }
   }
 
@@ -3080,7 +3279,16 @@ export class NgxsmkDatepickerComponent
     tomorrow.setHours(0, 0, 0, 0);
     if (this.isDateValid(tomorrow)) {
       this.focusedDate = tomorrow;
+      this.currentDate = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), 1);
+      this._currentMonth = tomorrow.getMonth();
+      this._currentYear = tomorrow.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
+      this._invalidateMemoCache();
+      this.generateCalendar();
       this.onDateClick(tomorrow);
+      this.focusDateCell(tomorrow);
     }
   }
 
@@ -3090,10 +3298,16 @@ export class NgxsmkDatepickerComponent
     nextWeek.setHours(0, 0, 0, 0);
     if (this.isDateValid(nextWeek)) {
       this.focusedDate = nextWeek;
-      this.currentDate = new Date(nextWeek);
-      this.currentDate.setDate(1);
+      this.currentDate = new Date(nextWeek.getFullYear(), nextWeek.getMonth(), 1);
+      this._currentMonth = nextWeek.getMonth();
+      this._currentYear = nextWeek.getFullYear();
+      this._currentDecade = Math.floor(this._currentYear / 10) * 10;
+      this._currentMonthSignal.set(this._currentMonth);
+      this._currentYearSignal.set(this._currentYear);
+      this._invalidateMemoCache();
       this.generateCalendar();
       this.onDateClick(nextWeek);
+      this.focusDateCell(nextWeek);
     }
   }
 
@@ -3773,6 +3987,15 @@ export class NgxsmkDatepickerComponent
       this._currentYearSignal.set(year);
       // Fix: Normalize to 1st of month to prevent Date overflow (e.g., Feb 29 -> non-leap year)
       this.currentDate = new Date(year, this.currentDate.getMonth(), 1);
+      if (this.focusedDate) {
+        const lastDayOfNewMonth = new Date(year, this.currentDate.getMonth() + 1, 0).getDate();
+        const clampedDay = Math.min(this.focusedDate.getDate(), lastDayOfNewMonth);
+        let targetFocused = new Date(year, this.currentDate.getMonth(), clampedDay);
+        if (!this.isDateValid(targetFocused)) {
+          targetFocused = this.findFirstValidDateInMonth(year, this.currentDate.getMonth()) ?? targetFocused;
+        }
+        this.focusedDate = targetFocused;
+      }
       this.adjustDisplayedDateToRange();
       this._invalidateMemoCache();
       this.generateCalendar();
@@ -5174,6 +5397,86 @@ export class NgxsmkDatepickerComponent
     }
   }
 
+  public async onAiPromptSubmitted(prompt: string): Promise<void> {
+    if (!prompt || this.disabled || this.isAiResolving) return;
+    this.aiPromptSubmitted.emit(prompt);
+    this.isAiResolving = true;
+    this.scheduleChangeDetection();
+
+    try {
+      let resolved: Date | { start: Date; end: Date } | null | undefined = null;
+
+      if (this.aiResolver) {
+        try {
+          const res = this.aiResolver(prompt);
+          if (isObservable(res)) {
+            resolved = await firstValueFrom(res);
+          } else {
+            resolved = await res;
+          }
+        } catch (err) {
+          if (isDevMode()) {
+            console.warn('[ngxsmk-datepicker] aiResolver error:', err);
+          }
+        }
+      }
+
+      if (!resolved) {
+        resolved = this.naturalLanguageParserService.parse(prompt);
+      }
+
+      if (resolved) {
+        if (resolved instanceof Date) {
+          if (this.mode === 'range') {
+            this.startDate = new Date(resolved);
+            this.endDate = new Date(resolved);
+            this.emitValue({ start: this.startDate, end: this.endDate });
+          } else if (this.mode === 'multiple') {
+            if (!this.selectedDates.some((d) => this.isSameDay(d, resolved))) {
+              this.selectedDates.push(new Date(resolved));
+              this.selectedDates.sort((a, b) => a.getTime() - b.getTime());
+              this.emitValue([...this.selectedDates]);
+            }
+          } else {
+            this.selectedDate = new Date(resolved);
+            this.emitValue(this.selectedDate);
+          }
+
+          this.currentMonth = resolved.getMonth();
+          this.currentYear = resolved.getFullYear();
+          this.currentDate = new Date(resolved);
+          this.focusedDate = new Date(resolved);
+          this.generateCalendar();
+          this.focusDateCell(resolved);
+          this.ariaLiveService.announce(
+            `AI selected: ${resolved.toLocaleDateString(this.locale || undefined)}`,
+            'polite'
+          );
+        } else if (resolved && typeof resolved === 'object' && 'start' in resolved && 'end' in resolved) {
+          this.startDate = new Date(resolved.start);
+          this.endDate = new Date(resolved.end);
+          this.emitValue({ start: this.startDate, end: this.endDate });
+
+          this.currentMonth = this.startDate.getMonth();
+          this.currentYear = this.startDate.getFullYear();
+          this.currentDate = new Date(this.startDate);
+          this.focusedDate = new Date(this.startDate);
+          this.generateCalendar();
+          this.focusDateCell(this.startDate);
+          this.ariaLiveService.announce(
+            `AI selected range: ${this.startDate.toLocaleDateString(this.locale || undefined)} to ${this.endDate.toLocaleDateString(this.locale || undefined)}`,
+            'polite'
+          );
+        }
+      } else {
+        this.ariaLiveService.announce(`Could not resolve date for prompt: ${prompt}`, 'polite');
+      }
+    } finally {
+      this.isAiResolving = false;
+      this.scheduleChangeDetection();
+    }
+  }
+
   public selectRange(range: [Date, Date]): void {
     if (this.disabled) return;
     this.startDate = new Date(range[0]);
@@ -6295,6 +6598,17 @@ export class NgxsmkDatepickerComponent
     this._currentMonthSignal.set(this._currentMonth);
     this._currentYearSignal.set(this._currentYear);
     this._invalidateMemoCache();
+
+    if (this.focusedDate) {
+      const lastDayOfNewMonth = new Date(this._currentYear, this._currentMonth + 1, 0).getDate();
+      const clampedDay = Math.min(this.focusedDate.getDate(), lastDayOfNewMonth);
+      let targetFocused = new Date(this._currentYear, this._currentMonth, clampedDay);
+      if (!this.isDateValid(targetFocused)) {
+        targetFocused = this.findFirstValidDateInMonth(this._currentYear, this._currentMonth) ?? targetFocused;
+      }
+      this.focusedDate = targetFocused;
+    }
+
     this.generateCalendar();
 
     if (this.isBrowser && this.isCalendarOpen) {

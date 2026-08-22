@@ -8057,4 +8057,149 @@ body.ngxsmk-scroll-locked {
   color: var(--datepicker-subtle-text-color);
 }
 
+/* AI Assistant Prompt Bar */
+.ngxsmk-ai-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: var(--datepicker-spacing-xs, 6px) var(--datepicker-spacing-sm, 10px) var(--datepicker-spacing-xs, 6px);
+}
+
+.ngxsmk-ai-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--datepicker-spacing-xs, 6px);
+  padding: 4px 8px;
+  background: var(--datepicker-bg-color, #ffffff);
+  border: 1px solid var(--datepicker-border-color, #e2e8f0);
+  border-radius: var(--datepicker-border-radius, 8px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ngxsmk-popover-container.dark-theme .ngxsmk-ai-bar,
+.dark-theme .ngxsmk-ai-bar {
+  background: var(--datepicker-bg-color, #1e293b);
+  border-color: var(--datepicker-border-color, #334155);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.ngxsmk-ai-bar:focus-within {
+  border-color: var(--datepicker-primary-color, #3b82f6);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.ngxsmk-ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--datepicker-primary-color, #3b82f6);
+  flex-shrink: 0;
+}
+
+.ngxsmk-ai-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: var(--datepicker-font-size-sm, 13px);
+  font-family: inherit;
+  color: var(--datepicker-text-color, #1e293b);
+  padding: 4px 2px;
+}
+
+.ngxsmk-popover-container.dark-theme .ngxsmk-ai-input,
+.dark-theme .ngxsmk-ai-input {
+  color: var(--datepicker-text-color, #f8fafc);
+}
+
+.ngxsmk-ai-input::placeholder {
+  color: var(--datepicker-subtle-text-color, #94a3b8);
+}
+
+.ngxsmk-ai-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: var(--datepicker-primary-color, #3b82f6);
+  color: #ffffff;
+  border: none;
+  border-radius: calc(var(--datepicker-border-radius, 8px) - 2px);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.ngxsmk-ai-submit:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.03);
+}
+
+.ngxsmk-ai-submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.ngxsmk-ai-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ngxsmk-ai-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: ngxsmk-ai-spin 0.6s linear infinite;
+}
+
+@keyframes ngxsmk-ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ngxsmk-ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 2px;
+}
+
+.ngxsmk-ai-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-family: inherit;
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--datepicker-primary-color, #3b82f6);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ngxsmk-popover-container.dark-theme .ngxsmk-ai-chip,
+.dark-theme .ngxsmk-ai-chip {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+.ngxsmk-ai-chip:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: var(--datepicker-primary-color, #3b82f6);
+}
+
+.ngxsmk-ai-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 

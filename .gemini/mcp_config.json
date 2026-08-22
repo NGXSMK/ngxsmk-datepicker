@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ngxsmk-datepicker": {
+      "command": "node",
+      "args": ["./mcp-server/dist/index.js"],
+      "description": "Date, calendar, holiday, and timezone intelligence tools for ngxsmk-datepicker"
+    }
+  }
+}

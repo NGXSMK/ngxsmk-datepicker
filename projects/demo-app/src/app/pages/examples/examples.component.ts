@@ -283,7 +283,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Adjacent Month Grid</h3>
-                <span class="badge badge-new">NEW v3.0.4</span>
+                <span class="badge badge-new">NEW v3.0.5</span>
               </div>
               <p class="card-desc">
                 Displays trailing and leading days from adjacent months in the 6-row calendar grid.
@@ -301,7 +301,7 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Fixed Container Mode</h3>
-                <span class="badge badge-new">NEW v3.0.4</span>
+                <span class="badge badge-new">NEW v3.0.5</span>
               </div>
               <p class="card-desc">
                 Disables viewport max-width overrides for fixed-width embedded or sidebar layouts (#299).

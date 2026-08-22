@@ -29,7 +29,7 @@ export const translations = {
       dateSchedule: 'Date Schedule Planner',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v3.0.4',
+      heroBadge: 'The #1 Angular DatePicker v3.0.5',
       heroTitle: 'The Premier Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -357,6 +357,8 @@ export const translations = {
         headerSlotText: 'Pick a delivery date',
         actionReset: 'Reset',
         actionDone: 'Done',
+        aiAssistantTitle: 'AI Assistant & MCP Integration',
+        aiAssistantLead: 'Interact with the calendar using embedded natural language AI prompts or external Model Context Protocol tools.',
       },
     },
     architecture: {
@@ -481,7 +483,7 @@ export const translations = {
       dateSchedule: 'Terminplaner',
     },
     home: {
-      heroBadge: 'Neu v3.0.4 Stabilität',
+      heroBadge: 'Neu v3.0.5 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -813,6 +815,8 @@ export const translations = {
         headerSlotText: 'Lieferdatum wählen',
         actionReset: 'Zurücksetzen',
         actionDone: 'Fertig',
+        aiAssistantTitle: 'KI-Assistent & MCP-Integration',
+        aiAssistantLead: 'Interagieren Sie mit dem Kalender über natürliche KI-Eingaben oder externe Model Context Protocol-Tools.',
       },
     },
     architecture: {
@@ -939,7 +943,7 @@ export const translations = {
       dateSchedule: 'Agenda de Citas',
     },
     home: {
-      heroBadge: 'Nuevo v3.0.4 Estabilidad',
+      heroBadge: 'Nuevo v3.0.5 Estabilidad',
       heroTitle: 'El mejor Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -1271,6 +1275,8 @@ export const translations = {
         headerSlotText: 'Elija una fecha de entrega',
         actionReset: 'Restablecer',
         actionDone: 'Listo',
+        aiAssistantTitle: 'Asistente de IA e Integración MCP',
+        aiAssistantLead: 'Interactúe con el calendario mediante indicaciones de IA en lenguaje natural o herramientas de Model Context Protocol.',
       },
     },
     architecture: {
@@ -1396,7 +1402,7 @@ export const translations = {
       dateSchedule: 'Tidsplanering',
     },
     home: {
-      heroBadge: 'Ny v3.0.4 stabilitet',
+      heroBadge: 'Ny v3.0.5 stabilitet',
       heroTitle: 'Den bästa open-source',
       heroSubtitle: 'Angular datumväljare',
       heroLead:
@@ -1718,6 +1724,8 @@ export const translations = {
         headerSlotText: 'Välj leveransdatum',
         actionReset: 'Återställ',
         actionDone: 'Klar',
+        aiAssistantTitle: 'AI-assistent och MCP-integration',
+        aiAssistantLead: 'Interagera med kalendern med hjälp av inbäddade naturliga språkfrågor eller externa Model Context Protocol-verktyg.',
       },
     },
     architecture: {
@@ -1844,7 +1852,7 @@ export const translations = {
       dateSchedule: '일정 플래너',
     },
     home: {
-      heroBadge: '새로운 v3.0.4 안정성',
+      heroBadge: '새로운 v3.0.5 안정성',
       heroTitle: '최고의 오픈 소스',
       heroSubtitle: 'Angular 데이트피커',
       heroLead:
@@ -2159,6 +2167,8 @@ export const translations = {
         headerSlotText: '배송 날짜를 선택하세요',
         actionReset: '초기화',
         actionDone: '완료',
+        aiAssistantTitle: 'AI 어시스턴트 및 MCP 통합',
+        aiAssistantLead: '내장된 자연어 AI 프롬프트 또는 외부 Model Context Protocol 도구를 사용하여 캘린더와 상호작용하세요.',
       },
     },
     architecture: {
@@ -2278,7 +2288,7 @@ export const translations = {
       dateSchedule: '日程计划器',
     },
     home: {
-      heroBadge: '全新 v3.0.4 稳定性',
+      heroBadge: '全新 v3.0.5 稳定性',
       heroTitle: '最佳开源',
       heroSubtitle: 'Angular 日期选择器',
       heroLead:
@@ -2585,6 +2595,8 @@ export const translations = {
         headerSlotText: '选择配送日期',
         actionReset: '重置',
         actionDone: '完成',
+        aiAssistantTitle: 'AI 助手与 MCP 集成',
+        aiAssistantLead: '使用嵌入式自然语言 AI 提示或外部 Model Context Protocol 工具与日历进行交互。',
       },
     },
     architecture: {
@@ -2699,7 +2711,7 @@ export const translations = {
       dateSchedule: 'スケジュール帳',
     },
     home: {
-      heroBadge: '新しい v3.0.4 の安定性',
+      heroBadge: '新しい v3.0.5 の安定性',
       heroTitle: '最高のオープンソース',
       heroSubtitle: 'Angular デートピッカー',
       heroLead:
@@ -3019,6 +3031,8 @@ export const translations = {
         headerSlotText: 'お届け日を選択してください',
         actionReset: 'リセット',
         actionDone: '完了',
+        aiAssistantTitle: 'AI アシスタントと MCP 統合',
+        aiAssistantLead: '埋め込みの自然言語 AI プロンプトまたは外部の Model Context Protocol ツールを使用してカレンダーを操作します。',
       },
     },
     architecture: {
@@ -3139,7 +3153,7 @@ export const translations = {
       dateSchedule: 'Planificateur de dates',
     },
     home: {
-      heroBadge: 'Nouvelle stabilité v3.0.4',
+      heroBadge: 'Nouvelle stabilité v3.0.5',
       heroTitle: 'Le meilleur Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -3471,6 +3485,8 @@ export const translations = {
         headerSlotText: 'Choisissez une date de livraison',
         actionReset: 'Réinitialiser',
         actionDone: 'Terminé',
+        aiAssistantTitle: "Assistant IA et intégration MCP",
+        aiAssistantLead: "Interagissez avec le calendrier à l'aide d'invites IA en langage naturel ou d'outils Model Context Protocol.",
       },
     },
     architecture: {

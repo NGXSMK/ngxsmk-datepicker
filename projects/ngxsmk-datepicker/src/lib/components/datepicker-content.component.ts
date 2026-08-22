@@ -10,6 +10,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { NgClass, NgTemplateOutlet, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CalendarHeaderComponent } from './calendar-header.component';
 import { CalendarMonthViewComponent } from './calendar-month-view.component';
 import { CalendarYearViewComponent } from './calendar-year-view.component';
@@ -28,6 +29,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
     NgClass,
     NgTemplateOutlet,
     DatePipe,
+    FormsModule,
     CalendarHeaderComponent,
     CalendarMonthViewComponent,
     CalendarYearViewComponent,
@@ -65,6 +67,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         [class.ngxsmk-align-right]="align === 'right'"
         [class.ngxsmk-align-center]="align === 'center'"
         [ngClass]="classes?.popover"
+        tabindex="-1"
         role="dialog"
         [attr.aria-label]="ariaLabel"
         [attr.aria-modal]="!isInlineMode"
@@ -72,6 +75,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         (touchmove)="touchMoveContainer.emit($event)"
         (touchend)="touchEndContainer.emit($event)"
         (mousedown)="$event.stopPropagation()"
+        (keydown)="containerKeyDown.emit($event)"
         (keydown.escape)="onPopoverEscape($event)"
       >
         <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
@@ -79,6 +83,58 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
             <div class="ngxsmk-calendar-loading" role="status" aria-live="polite" [attr.aria-label]="loadingMessage">
               <div class="ngxsmk-calendar-loading-spinner"></div>
               <span class="ngxsmk-calendar-loading-text">{{ loadingMessage }}</span>
+            </div>
+          }
+          @if (enableAi) {
+            <div class="ngxsmk-ai-container">
+              <div class="ngxsmk-ai-bar" role="search">
+                <div class="ngxsmk-ai-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>
+                  </svg>
+                </div>
+                <input
+                  #aiInputElement
+                  type="text"
+                  class="ngxsmk-ai-input"
+                  [placeholder]="aiPlaceholder"
+                  [(ngModel)]="aiPromptText"
+                  [disabled]="isAiResolving"
+                  (keydown.enter)="onAiSubmit()"
+                  (keydown)="$event.stopPropagation()"
+                  [attr.aria-label]="aiPlaceholder"
+                />
+                <button
+                  type="button"
+                  class="ngxsmk-ai-submit"
+                  [class.is-loading]="isAiResolving"
+                  (click)="onAiSubmit()"
+                  [disabled]="isAiResolving || !aiPromptText || !aiPromptText.trim()"
+                  aria-label="Submit AI prompt"
+                >
+                  @if (isAiResolving) {
+                    <span class="ngxsmk-ai-spinner" aria-hidden="true"></span>
+                  } @else {
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  }
+                </button>
+              </div>
+              @if (showAiSuggestions && aiSuggestions.length > 0) {
+                <div class="ngxsmk-ai-chips">
+                  @for (chip of aiSuggestions; track chip) {
+                    <button
+                      type="button"
+                      class="ngxsmk-ai-chip"
+                      (click)="onAiChipClick(chip)"
+                      [disabled]="isAiResolving"
+                    >
+                      {{ chip }}
+                    </button>
+                  }
+                </div>
+              }
             </div>
           }
           @if (calendarHeaderTemplate) {
@@ -618,6 +674,7 @@ export class NgxsmkDatepickerContentComponent {
   @Output() clearValue = new EventEmitter<MouseEvent>();
   @Output() closeCalendar = new EventEmitter<void>();
   @Output() escapeKey = new EventEmitter<Event>();
+  @Output() containerKeyDown = new EventEmitter<KeyboardEvent>();
 
   @ViewChild(CalendarHeaderComponent) header?: CalendarHeaderComponent;
   @ViewChild('popoverContainer') popoverContainer?: ElementRef<HTMLElement>;
@@ -651,6 +708,32 @@ export class NgxsmkDatepickerContentComponent {
     if (!this.isInlineMode) {
       this.closeCalendar.emit();
     }
+  }
+
+  @ViewChild('aiInputElement') aiInputElement?: ElementRef<HTMLInputElement>;
+  @Input() enableAi: boolean = false;
+  @Input() aiPlaceholder: string = 'Ask AI (e.g. "next Friday", "last 7 days")...';
+  @Input() aiSuggestions: string[] = [];
+  @Input() showAiSuggestions: boolean = true;
+  @Input() isAiResolving: boolean = false;
+  @Output() aiPromptSubmitted = new EventEmitter<string>();
+  aiPromptText: string = '';
+
+  onAiSubmit(): void {
+    const text = this.aiPromptText?.trim();
+    if (text && !this.isAiResolving) {
+      this.aiPromptSubmitted.emit(text);
+      this.aiPromptText = '';
+    }
+  }
+
+  onAiChipClick(chip: string): void {
+    if (this.isAiResolving || !chip?.trim()) return;
+    this.aiPromptSubmitted.emit(chip.trim());
+  }
+
+  focusAiInput(): void {
+    this.aiInputElement?.nativeElement?.focus();
   }
 
   onTimezoneChange(val: unknown): void {
