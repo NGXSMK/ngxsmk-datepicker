@@ -2,10 +2,11 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
+**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
 
-## ✅ Recently Shipped (unreleased, on `main`)
-
+- **Model Context Protocol (MCP) Suite** — Standalone `@ngxsmk/datepicker-mcp` server with standardized tools, prompts, resources, and multi-LLM exports (Claude, Gemini, OpenAI).
+- **Datepicker UI AI Assistant Widget** — `[enableAi]`, `[aiPlaceholder]`, `[aiSuggestions]`, `[showAiSuggestions]`, and `[aiResolver]` (Promise/Observable) inputs with micro-spinner and `/` keyboard shortcut.
+- **Focus retention on shortcut navigation** — Automatic DOM focus restoration on keyboard navigation (Issue #313).
 - **`ng add` schematic** — one-command install with peer-dependency setup.
 - **ISO week numbers** — `[showWeekNumbers]` / `[weekNumberLabel]`.
 - **Guided input masking** — `[inputMask]` for typed input (also fixes zero-padding bug in the old `displayFormat` mask).
