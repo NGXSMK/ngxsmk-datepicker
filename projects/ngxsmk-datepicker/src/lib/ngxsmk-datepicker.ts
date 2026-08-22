@@ -3193,8 +3193,7 @@ export class NgxsmkDatepickerComponent
 
     if (this.isDateValid(newDate)) {
       this.focusedDate = newDate;
-      const monthChanged =
-        this._currentMonth !== newDate.getMonth() || this._currentYear !== newDate.getFullYear();
+      const monthChanged = this._currentMonth !== newDate.getMonth() || this._currentYear !== newDate.getFullYear();
       if (monthChanged) {
         this.currentDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1);
         this._currentMonth = newDate.getMonth();

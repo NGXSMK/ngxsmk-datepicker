@@ -358,7 +358,8 @@ export const translations = {
         actionReset: 'Reset',
         actionDone: 'Done',
         aiAssistantTitle: 'AI Assistant & MCP Integration',
-        aiAssistantLead: 'Interact with the calendar using embedded natural language AI prompts or external Model Context Protocol tools.',
+        aiAssistantLead:
+          'Interact with the calendar using embedded natural language AI prompts or external Model Context Protocol tools.',
       },
     },
     architecture: {
@@ -816,7 +817,8 @@ export const translations = {
         actionReset: 'Zurücksetzen',
         actionDone: 'Fertig',
         aiAssistantTitle: 'KI-Assistent & MCP-Integration',
-        aiAssistantLead: 'Interagieren Sie mit dem Kalender über natürliche KI-Eingaben oder externe Model Context Protocol-Tools.',
+        aiAssistantLead:
+          'Interagieren Sie mit dem Kalender über natürliche KI-Eingaben oder externe Model Context Protocol-Tools.',
       },
     },
     architecture: {
@@ -1276,7 +1278,8 @@ export const translations = {
         actionReset: 'Restablecer',
         actionDone: 'Listo',
         aiAssistantTitle: 'Asistente de IA e Integración MCP',
-        aiAssistantLead: 'Interactúe con el calendario mediante indicaciones de IA en lenguaje natural o herramientas de Model Context Protocol.',
+        aiAssistantLead:
+          'Interactúe con el calendario mediante indicaciones de IA en lenguaje natural o herramientas de Model Context Protocol.',
       },
     },
     architecture: {
@@ -1725,7 +1728,8 @@ export const translations = {
         actionReset: 'Återställ',
         actionDone: 'Klar',
         aiAssistantTitle: 'AI-assistent och MCP-integration',
-        aiAssistantLead: 'Interagera med kalendern med hjälp av inbäddade naturliga språkfrågor eller externa Model Context Protocol-verktyg.',
+        aiAssistantLead:
+          'Interagera med kalendern med hjälp av inbäddade naturliga språkfrågor eller externa Model Context Protocol-verktyg.',
       },
     },
     architecture: {
@@ -2168,7 +2172,8 @@ export const translations = {
         actionReset: '초기화',
         actionDone: '완료',
         aiAssistantTitle: 'AI 어시스턴트 및 MCP 통합',
-        aiAssistantLead: '내장된 자연어 AI 프롬프트 또는 외부 Model Context Protocol 도구를 사용하여 캘린더와 상호작용하세요.',
+        aiAssistantLead:
+          '내장된 자연어 AI 프롬프트 또는 외부 Model Context Protocol 도구를 사용하여 캘린더와 상호작용하세요.',
       },
     },
     architecture: {
@@ -3032,7 +3037,8 @@ export const translations = {
         actionReset: 'リセット',
         actionDone: '完了',
         aiAssistantTitle: 'AI アシスタントと MCP 統合',
-        aiAssistantLead: '埋め込みの自然言語 AI プロンプトまたは外部の Model Context Protocol ツールを使用してカレンダーを操作します。',
+        aiAssistantLead:
+          '埋め込みの自然言語 AI プロンプトまたは外部の Model Context Protocol ツールを使用してカレンダーを操作します。',
       },
     },
     architecture: {
@@ -3485,8 +3491,9 @@ export const translations = {
         headerSlotText: 'Choisissez une date de livraison',
         actionReset: 'Réinitialiser',
         actionDone: 'Terminé',
-        aiAssistantTitle: "Assistant IA et intégration MCP",
-        aiAssistantLead: "Interagissez avec le calendrier à l'aide d'invites IA en langage naturel ou d'outils Model Context Protocol.",
+        aiAssistantTitle: 'Assistant IA et intégration MCP',
+        aiAssistantLead:
+          "Interagissez avec le calendrier à l'aide d'invites IA en langage naturel ou d'outils Model Context Protocol.",
       },
     },
     architecture: {
