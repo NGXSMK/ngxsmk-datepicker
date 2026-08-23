@@ -1,8 +1,8 @@
-﻿# Ionic Framework Integration Guide
+# Ionic Framework Integration Guide
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
 
-This guide provides step-by-step instructions for integrating ngxsmk-datepicker with Ionic Angular applications.
+This guide provides step-by-step instructions for integrating `ngxsmk-datepicker` with modern **Ionic 7, 8, & 9+** and **Angular 17–21+** applications.
 
 ## Quick Start
 
@@ -26,55 +26,64 @@ Or import directly in your component:
 import 'ngxsmk-datepicker/styles/ionic-integration.css';
 ```
 
-### 3. Use Inline Mode (Recommended)
+### 3. Use with Modern Standalone Ionic + Angular Signals
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { IonContent, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { IonContent, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-datepicker',
   standalone: true,
-  imports: [NgxsmkDatepickerComponent, IonContent, IonItem, IonLabel],
+  imports: [NgxsmkDatepickerComponent, IonContent, IonItem, IonLabel, IonList],
   template: `
-    <ion-content>
-      <ion-item>
-        <ion-label>Select Date</ion-label>
-        <ngxsmk-datepicker
-          [inline]="true"
-          mode="single"
-          [locale]="'en-US'">
-        </ngxsmk-datepicker>
-      </ion-item>
+    <ion-content [fullscreen]="true">
+      <ion-list [inset]="true">
+        <ion-item>
+          <ion-label position="stacked">Booking Date</ion-label>
+          <ngxsmk-datepicker
+            [(ngModel)]="selectedDate"
+            [inline]="true"
+            mode="single"
+            [locale]="'en-US'"
+            [enableAi]="true"
+            [showAiSuggestions]="true"
+          >
+          </ngxsmk-datepicker>
+        </ion-item>
+      </ion-list>
     </ion-content>
   `
 })
-export class DatepickerPage {}
+export class DatepickerPage {
+  selectedDate = signal<Date | null>(new Date());
+}
 ```
 
-## Configuration Options
+## Configuration & Mobile Best Practices
 
 ### Disable Focus Trap (for Ionic Modals)
 
-When using datepicker inside `ion-modal`, disable focus trapping to avoid conflicts:
+When using datepicker inside `ion-modal`, disable focus trapping to prevent focus loops:
 
-```typescript
+```html
 <ngxsmk-datepicker
   [inline]="true"
   [disableFocusTrap]="true"
-  mode="single">
-</ngxsmk-datepicker>
+  mode="single"
+></ngxsmk-datepicker>
 ```
 
-### Ionic Theme Integration
+### Ionic 8 Dark Mode (`.ion-palette-dark`)
 
-The integration styles automatically map Ionic theme variables:
+The integration stylesheet automatically detects Ionic 8's `.ion-palette-dark` and legacy `.ion-theme-dark`:
 
 - `--ion-color-primary` → `--datepicker-primary-color`
 - `--ion-background-color` → `--datepicker-background`
 - `--ion-text-color` → `--datepicker-text-color`
 - `--ion-border-color` → `--datepicker-border-color`
+- `--ion-font-family` → `--datepicker-font-family`
 
 ## Usage Patterns
 

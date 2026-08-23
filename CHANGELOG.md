@@ -2,12 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
+**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.0.5] - 2026-08-22
+
+### Added
+
+- **Model Context Protocol (MCP) Server (`@ngxsmk/datepicker-mcp`)**: Standalone MCP server in `mcp-server/` with standardized date intelligence tools (`parse_date`, `calculate_date_range`, `convert_timezone`, `get_holidays`, `validate_date_selection`) and resource endpoints (`datepicker://docs/api`, `datepicker://timezones`) over standard I/O (stdio).
+- **Datepicker UI AI Assistant Widget**: Added `[enableAi]`, `[aiPlaceholder]`, and `[aiResolver]` inputs with `(aiPromptSubmitted)` output on `<ngxsmk-datepicker>` allowing natural language prompt-based date selection with custom asynchronous backend support and automatic fallback parsing.
+- **Developer Workspace Configurations**: Integrated `.vscode/mcp.json` (Cursor IDE), `.gemini/mcp_config.json` (Antigravity/Gemini CLI), and complete documentation in `docs/MCP_INTEGRATION.md`.
+
+### Fixed
+
+- **Focus Loss on Keyboard Navigation via Shortcuts (Issue #313)**: Fixed issue where keyboard shortcut navigation (`PageUp`, `PageDown`, `Shift+PageUp`, `Shift+PageDown`, `Home`, `End`, cross-month arrow navigation, and letter shortcuts) caused focus loss due to calendar grid re-rendering without restoring DOM focus. Now automatically refocuses the target date cell, updates `focusedDate` with day-clamping and validity fallback, and forwards body-appended popover keydown events seamlessly ([#313](https://github.com/NGXSMK/ngxsmk-datepicker/issues/313)).
 
 ## [3.0.4] - 2026-08-18
 

@@ -1,6 +1,6 @@
 # 🧠 Natural Language Relative Date Parsing
 
-**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
+**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
 
 This document describes the Natural Language date entry and relative date parsing engine implemented in `ngxsmk-datepicker`.
 

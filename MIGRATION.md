@@ -2,10 +2,11 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** August 18, 2026 - **Current stable:** v3.0.4
+**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
 
 ## Table of Contents
 
+- [v3.0.4 → v3.0.5](#v304---v305)
 - [v3.0.3 → v3.0.4](#v303---v304)
 - [v2.4.0 → v3.0.3](#v240---v303)
 - [v2.2.15 → v2.3.1](#v2215---v231)
@@ -60,6 +61,17 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v1.9.1](#v190---v191)
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## v3.0.4 → v3.0.5
+
+### Changes
+
+This release includes major AI & Model Context Protocol (MCP) integrations alongside bugfixes:
+
+- **Model Context Protocol (MCP) Server (`@ngxsmk/datepicker-mcp`)**: Standalone MCP server in `mcp-server/` with standardized date intelligence tools (`parse_date`, `calculate_date_range`, `convert_timezone`, `get_holidays`, `validate_date_selection`), prompts (`schedule_meeting`, `plan_time_off`), and resources (`datepicker://docs/api`, `datepicker://timezones`).
+- **Multi-LLM Native Adapters**: Native support for **Claude** (`--export-claude`), **Google Gemini** (`--export-gemini`), **OpenAI** (`--export-openai`), and **Cursor/Windsurf** (Stdio MCP).
+- **Datepicker UI AI Assistant Widget**: Added `[enableAi]`, `[aiPlaceholder]`, `[aiSuggestions]`, `[showAiSuggestions]`, and `[aiResolver]` (Promise/Observable) inputs with `(aiPromptSubmitted)` output, async resolving micro-spinner (`isAiResolving`), screen reader announcements, and a `/` keyboard shortcut to focus the prompt bar.
+- **Focus Retention on Keyboard Navigation (Issue #313)**: Fixed issue where keyboard shortcut navigation (`PageUp`, `PageDown`, `Shift+PageUp`, `Shift+PageDown`, `Home`, `End`, cross-month arrow navigation, and letter shortcuts) caused focus loss due to calendar grid re-rendering without restoring DOM focus. Now automatically refocuses the target date cell, updates `focusedDate` with day-clamping and validity fallback, and forwards body-appended popover keydown events.
 
 ## v3.0.3 → v3.0.4
 

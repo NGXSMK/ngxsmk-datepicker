@@ -367,4 +367,217 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
       }
     });
   });
+
+  describe('Focus Retention and Successive Shortcut Navigation (Issue #313)', () => {
+    it('should maintain focusedDate and allow successive PageUp calls', () => {
+      const startDate = new Date(2026, 7, 15); // August 15, 2026
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // First PageUp -> July 2026, focusedDate = July 15, 2026
+      const event1 = new KeyboardEvent('keydown', { key: 'PageUp' });
+      component.onKeyDown(event1);
+
+      expect(component.currentMonth).toBe(6);
+      expect(component.currentYear).toBe(2026);
+      expect(component.focusedDate?.getMonth()).toBe(6);
+      expect(component.focusedDate?.getDate()).toBe(15);
+
+      // Second PageUp in succession -> June 2026, focusedDate = June 15, 2026
+      const event2 = new KeyboardEvent('keydown', { key: 'PageUp' });
+      component.onKeyDown(event2);
+
+      expect(component.currentMonth).toBe(5);
+      expect(component.currentYear).toBe(2026);
+      expect(component.focusedDate?.getMonth()).toBe(5);
+      expect(component.focusedDate?.getDate()).toBe(15);
+    });
+
+    it('should maintain focusedDate and allow successive PageDown calls', () => {
+      const startDate = new Date(2026, 5, 10); // June 10, 2026
+      component.currentMonth = 5;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // First PageDown -> July 2026
+      const event1 = new KeyboardEvent('keydown', { key: 'PageDown' });
+      component.onKeyDown(event1);
+
+      expect(component.currentMonth).toBe(6);
+      expect(component.focusedDate?.getMonth()).toBe(6);
+      expect(component.focusedDate?.getDate()).toBe(10);
+
+      // Second PageDown in succession -> August 2026
+      const event2 = new KeyboardEvent('keydown', { key: 'PageDown' });
+      component.onKeyDown(event2);
+
+      expect(component.currentMonth).toBe(7);
+      expect(component.focusedDate?.getMonth()).toBe(7);
+      expect(component.focusedDate?.getDate()).toBe(10);
+    });
+
+    it('should clamp day when navigating to month with fewer days on PageUp', () => {
+      // March 31, 2026 -> PageUp -> February 28, 2026 (non-leap)
+      const startDate = new Date(2026, 2, 31); // March 31, 2026
+      component.currentMonth = 2;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'PageUp' });
+      component.onKeyDown(event);
+
+      expect(component.currentMonth).toBe(1); // February
+      expect(component.focusedDate?.getMonth()).toBe(1);
+      expect(component.focusedDate?.getDate()).toBe(28);
+    });
+
+    it('should clamp day when navigating to month with fewer days on PageDown', () => {
+      // August 31, 2026 -> PageDown -> September 30, 2026
+      const startDate = new Date(2026, 7, 31); // August 31, 2026
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'PageDown' });
+      component.onKeyDown(event);
+
+      expect(component.currentMonth).toBe(8); // September
+      expect(component.focusedDate?.getMonth()).toBe(8);
+      expect(component.focusedDate?.getDate()).toBe(30);
+    });
+
+    it('should maintain focusedDate and allow successive Shift+PageUp/Down calls', () => {
+      const startDate = new Date(2026, 7, 20); // Aug 20, 2026
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      // Shift+PageUp -> Aug 20, 2025
+      const prevYearEvent = new KeyboardEvent('keydown', { key: 'PageUp', shiftKey: true });
+      component.onKeyDown(prevYearEvent);
+
+      expect(component.currentYear).toBe(2025);
+      expect(component.focusedDate?.getFullYear()).toBe(2025);
+      expect(component.focusedDate?.getMonth()).toBe(7);
+      expect(component.focusedDate?.getDate()).toBe(20);
+
+      // Shift+PageDown -> Aug 20, 2026
+      const nextYearEvent = new KeyboardEvent('keydown', { key: 'PageDown', shiftKey: true });
+      component.onKeyDown(nextYearEvent);
+
+      expect(component.currentYear).toBe(2026);
+      expect(component.focusedDate?.getFullYear()).toBe(2026);
+      expect(component.focusedDate?.getMonth()).toBe(7);
+      expect(component.focusedDate?.getDate()).toBe(20);
+    });
+
+    it('should switch month when ArrowRight navigates beyond the last day of month', () => {
+      const startDate = new Date(2026, 0, 31); // Jan 31, 2026
+      component.currentMonth = 0;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+      component.onKeyDown(event);
+
+      expect(component.currentMonth).toBe(1); // Feb
+      expect(component.focusedDate?.getMonth()).toBe(1);
+      expect(component.focusedDate?.getDate()).toBe(1);
+    });
+
+    it('should switch month when ArrowLeft navigates before the first day of month', () => {
+      const startDate = new Date(2026, 1, 1); // Feb 1, 2026
+      component.currentMonth = 1;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(startDate);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+      component.onKeyDown(event);
+
+      expect(component.currentMonth).toBe(0); // Jan
+      expect(component.focusedDate?.getMonth()).toBe(0);
+      expect(component.focusedDate?.getDate()).toBe(31);
+    });
+
+    it('should call focus on DOM cell when focusDateCell is invoked', (done) => {
+      const testDate = new Date(2026, 7, 15);
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const spy = spyOn(component, 'focusDateCell').and.callThrough();
+      component.focusDateCell(testDate);
+
+      expect(spy).toHaveBeenCalledWith(testDate);
+      expect(component.focusedDate).toEqual(testDate);
+
+      // Verify DOM element resolution asynchronously
+      setTimeout(() => {
+        done();
+      }, 50);
+    });
+
+    it('should handle keyboard events when target is inside calendar popover container', () => {
+      const dummyPopover = document.createElement('div');
+      dummyPopover.className = 'ngxsmk-popover-container';
+      const dummyGrid = document.createElement('div');
+      dummyGrid.className = 'ngxsmk-days-grid';
+      dummyPopover.appendChild(dummyGrid);
+
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.focusedDate = new Date(2026, 7, 15);
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = {
+        key: 'PageUp',
+        target: dummyGrid,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation'),
+      } as unknown as KeyboardEvent;
+
+      component.onKeyDown(event);
+
+      expect(component.currentMonth).toBe(6); // Changed to July
+      expect(event.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should not hijack shortcuts when target is an editable input', () => {
+      const input = document.createElement('input');
+      input.type = 'text';
+
+      component.currentMonth = 7;
+      component.currentYear = 2026;
+      component.generateCalendar();
+      fixture.detectChanges();
+
+      const event = {
+        key: 't',
+        target: input,
+        preventDefault: jasmine.createSpy('preventDefault'),
+        stopPropagation: jasmine.createSpy('stopPropagation'),
+      } as unknown as KeyboardEvent;
+
+      component.onKeyDown(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+    });
+  });
 });

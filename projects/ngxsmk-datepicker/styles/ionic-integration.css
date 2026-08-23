@@ -99,14 +99,37 @@ ion-app ngxsmk-datepicker {
   --datepicker-range-background: var(--ion-color-primary-tint, #f5f3ff);
 }
 
-/* Dark theme mapping */
-ion-app.ion-theme-dark ngxsmk-datepicker {
+/* Dark theme mapping (Supports Ionic 7, 8, and 9+ .ion-palette-dark) */
+ion-app.ion-theme-dark ngxsmk-datepicker,
+ion-app.ion-palette-dark ngxsmk-datepicker,
+html.ion-palette-dark ngxsmk-datepicker,
+.ion-palette-dark ngxsmk-datepicker {
   --datepicker-background: var(--ion-background-color, #1f2937);
   --datepicker-text-color: var(--ion-text-color, #f3f4f6);
   --datepicker-subtle-text-color: var(--ion-text-color-step-400, #9ca3af);
   --datepicker-border-color: var(--ion-border-color, #374151);
   --datepicker-hover-background: var(--ion-color-step-100, #374151);
-  --datepicker-range-background: rgba(var(--ion-color-primary-rgb), 0.15);
+  --datepicker-range-background: rgba(var(--ion-color-primary-rgb, 109, 40, 217), 0.15);
+}
+
+/* Ionic High Contrast Palette (Ionic 8/9+) */
+ion-app.ion-palette-high-contrast ngxsmk-datepicker,
+html.ion-palette-high-contrast ngxsmk-datepicker,
+.ion-palette-high-contrast ngxsmk-datepicker {
+  --datepicker-border-color: var(--ion-text-color, #000000);
+  --datepicker-text-color: var(--ion-text-color, #000000);
+  --datepicker-background: var(--ion-background-color, #ffffff);
+}
+
+/* System Dark Theme Auto Detection (Ionic 8/9+) */
+@media (prefers-color-scheme: dark) {
+  ion-app:not(.ion-palette-light) ngxsmk-datepicker {
+    --datepicker-background: var(--ion-background-color, #121212);
+    --datepicker-text-color: var(--ion-text-color, #ffffff);
+    --datepicker-subtle-text-color: var(--ion-text-color-step-400, #a0a0a0);
+    --datepicker-border-color: var(--ion-border-color, #2a2a2a);
+    --datepicker-hover-background: var(--ion-color-step-100, #222222);
+  }
 }
 
 /* ============================================
@@ -217,4 +240,35 @@ ion-item ngxsmk-datepicker .ngxsmk-input-group {
   max-width: 100% !important;
   border-radius: 0 !important;
   margin: 0 !important;
+}
+
+/* ============================================
+   14. MOBILE TOUCH TARGET ENHANCEMENTS
+   ============================================ */
+
+ion-app ngxsmk-datepicker .ngxsmk-day-cell,
+ion-content ngxsmk-datepicker .ngxsmk-day-cell {
+  touch-action: manipulation;
+  min-height: 38px;
+  min-width: 38px;
+}
+
+@media (pointer: coarse) {
+  ion-app ngxsmk-datepicker .ngxsmk-nav-btn,
+  ion-content ngxsmk-datepicker .ngxsmk-nav-btn,
+  ion-app ngxsmk-datepicker .ngxsmk-year-nav-btn,
+  ion-content ngxsmk-datepicker .ngxsmk-year-nav-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ============================================
+   15. TYPOGRAPHY & SMOOTH RENDERING
+   ============================================ */
+
+ion-app ngxsmk-datepicker {
+  font-family: var(--ion-font-family, inherit);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

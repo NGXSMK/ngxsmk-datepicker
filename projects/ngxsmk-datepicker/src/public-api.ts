@@ -10,7 +10,7 @@
  * ```
  */
 
-export { NgxsmkDatepickerComponent } from './lib/ngxsmk-datepicker';
+export { NgxsmkDatepickerComponent, type AiDateResolver } from './lib/ngxsmk-datepicker';
 export { NgxsmkDatepickerModule } from './lib/ngxsmk-datepicker.module';
 
 export { CustomSelectComponent } from './lib/components/custom-select.component';
