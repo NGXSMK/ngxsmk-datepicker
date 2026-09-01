@@ -194,7 +194,7 @@
     "@angular/animations": "^21.2.11",
     "@angular/build": "^21.2.9",
     "@angular/cdk": "^21.2.9",
-    "@angular/cli": "^21.2.9",
+    "@angular/cli": "^21.2.22",
     "@angular/common": "^21.2.11",
     "@angular/compiler": "^21.2.11",
     "@angular/compiler-cli": "^21.2.11",
