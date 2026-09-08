@@ -122,6 +122,17 @@ export {
   type DateRangeValidatorOptions,
 } from './lib/validators/datepicker.validators';
 
+export {
+  Constraints,
+  buildConstraints,
+  EMPTY_CONSTRAINTS_SOURCES,
+  type ConstraintsSources,
+  type ConstraintsSnapshot,
+  type DayVerdict,
+  type ConstraintDenial,
+  type DayInterval,
+} from './lib/constraints/constraints';
+
 // Material (mat-form-field) integration is optional. The main bundle does not import @angular/material.
 // To use with mat-form-field: install @angular/material and @angular/cdk, then add the directive
 // from the repo or use the snippet in INTEGRATION.md § Angular Material.

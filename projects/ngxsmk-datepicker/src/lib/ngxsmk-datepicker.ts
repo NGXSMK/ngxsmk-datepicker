@@ -85,6 +85,11 @@ import { CustomDateFormatService } from './services/custom-date-format.service';
 import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
+import {
+  Constraints,
+  EMPTY_CONSTRAINTS_SOURCES,
+  type ConstraintsSnapshot,
+} from './constraints/constraints';
 
 /** Recurring date pattern configuration for disabled dates. */
 export type RecurringPatternInput = {
@@ -577,7 +582,6 @@ export class NgxsmkDatepickerComponent
   private _disabledDates: (string | Date)[] = [];
   @Input() set disabledDates(val: (string | Date)[] | null | undefined) {
     this._disabledDates = Array.isArray(val) ? val : [];
-    this._syncDisabledDatesCache();
     this._updateMemoSignals();
   }
   get disabledDates(): (string | Date)[] {
@@ -587,7 +591,6 @@ export class NgxsmkDatepickerComponent
   private _disabledRanges: Array<{ start: Date | string; end: Date | string }> = [];
   @Input() set disabledRanges(val: Array<{ start: Date | string; end: Date | string }> | null | undefined) {
     this._disabledRanges = Array.isArray(val) ? val : [];
-    this._syncDisabledDatesCache();
     this._updateMemoSignals();
   }
   get disabledRanges(): Array<{ start: Date | string; end: Date | string }> {
@@ -703,7 +706,7 @@ export class NgxsmkDatepickerComponent
   @Input() customShortcuts: {
     [key: string]: (context: KeyboardShortcutContext) => boolean;
   } | null = null;
-  readonly autoApplyClose = input<boolean>(false);
+  readonly autoApplyClose = input<boolean>(true);
   /**
    * Range mode only: allow a one-day range by clicking the same date twice, or by closing the popover
    * with only a start date selected (start and end will both be that day).
@@ -1724,6 +1727,7 @@ export class NgxsmkDatepickerComponent
           if (parsed) timestamps.add(getStartOfDay(parsed).getTime());
         }
         this._asyncDisabledTimestamps.set(timestamps);
+        this._rebuildConstraintsSnapshot();
         this.scheduleChangeDetection();
       })
       .catch((error) => {
@@ -1817,50 +1821,47 @@ export class NgxsmkDatepickerComponent
     };
   }
 
-  private _disabledDatesTimestamps = new Set<number>();
-  private _parsedDisabledRanges: Array<{ startTime: number; endTime: number }> = [];
+  /** Immutable Constraints Snapshot — rebuilt when Host constraint inputs change. */
+  private _constraintsSnap: ConstraintsSnapshot = Constraints.build(EMPTY_CONSTRAINTS_SOURCES);
 
-  private _syncDisabledDatesCache(): void {
-    const set = new Set<number>();
-    if (this._disabledDates && this._disabledDates.length > 0) {
-      for (const d of this._disabledDates) {
-        let parsed: Date | null = null;
-        if (typeof d === 'string') {
-          parsed = this.parsingService ? this.parsingService.parseDateString(d) : normalizeDate(d);
-        } else if (d instanceof Date) {
-          parsed = getStartOfDay(d);
-        }
-        if (parsed && !Number.isNaN(parsed.getTime())) {
-          set.add(getStartOfDay(parsed).getTime());
-        }
+  private _parseConstraintDate(value: Date | string): Date | null {
+    if (typeof value === 'string') {
+      return this.parsingService ? this.parsingService.parseDateString(value) : normalizeDate(value);
+    }
+    return value instanceof Date && !Number.isNaN(value.getTime()) ? getStartOfDay(value) : null;
+  }
+
+  private _rebuildConstraintsSnapshot(): void {
+    const disabledDates: Date[] = [];
+    for (const item of this._disabledDates ?? []) {
+      const parsed = this._parseConstraintDate(item);
+      if (parsed) disabledDates.push(getStartOfDay(parsed));
+    }
+
+    const disabledRanges: Array<{ start: Date; end: Date }> = [];
+    for (const range of this._disabledRanges ?? []) {
+      const start = this._parseConstraintDate(range.start);
+      const end = this._parseConstraintDate(range.end);
+      if (start && end) {
+        disabledRanges.push({ start: getStartOfDay(start), end: getStartOfDay(end) });
       }
     }
-    this._disabledDatesTimestamps = set;
 
-    const ranges: Array<{ startTime: number; endTime: number }> = [];
-    if (this._disabledRanges && this._disabledRanges.length > 0) {
-      for (const r of this._disabledRanges) {
-        const s =
-          typeof r.start === 'string'
-            ? this.parsingService
-              ? this.parsingService.parseDateString(r.start)
-              : normalizeDate(r.start)
-            : getStartOfDay(r.start);
-        const e =
-          typeof r.end === 'string'
-            ? this.parsingService
-              ? this.parsingService.parseDateString(r.end)
-              : normalizeDate(r.end)
-            : getStartOfDay(r.end);
-        if (s && e && !Number.isNaN(s.getTime()) && !Number.isNaN(e.getTime())) {
-          ranges.push({
-            startTime: getStartOfDay(s).getTime(),
-            endTime: getEndOfDay(e).getTime(),
-          });
-        }
-      }
-    }
-    this._parsedDisabledRanges = ranges;
+    const effectiveMin =
+      this._minDate || (this.globalConfig?.minDate ? this._normalizeDate(this.globalConfig.minDate) : null);
+    const effectiveMax =
+      this._maxDate || (this.globalConfig?.maxDate ? this._normalizeDate(this.globalConfig.maxDate) : null);
+
+    this._constraintsSnap = Constraints.build({
+      minDate: effectiveMin,
+      maxDate: effectiveMax,
+      disabledDates,
+      disabledRanges,
+      asyncDisabledDayTimes: this._asyncDisabledTimestamps(),
+      disableHolidays: this.disableHolidays,
+      holidayProvider: this.holidayProvider,
+      isInvalidDate: this.isInvalidDate ?? null,
+    });
   }
 
   private _updateMemoSignals(): void {
@@ -1873,7 +1874,7 @@ export class NgxsmkDatepickerComponent
       disabledDates: this.disabledDates.length > 0 ? this.disabledDates : null,
       disabledRanges: this.disabledRanges.length > 0 ? this.disabledRanges : null,
     });
-    this._syncDisabledDatesCache();
+    this._rebuildConstraintsSnapshot();
   }
 
   private passiveTouchListeners: Array<() => void> = [];
@@ -3521,10 +3522,8 @@ export class NgxsmkDatepickerComponent
       this.fieldSyncService.markAsTouched(this._field);
     }
 
-    if (!this.isInlineMode && val !== null && !this.timeOnly) {
-      if (this.mode === 'single' || (this.mode === 'range' && this.startDate && this.endDate)) {
-        this.isCalendarOpen = false;
-      }
+    if (this.shouldAutoClose()) {
+      this.closeCalendar();
     }
     this.stateChanges.next();
   }
@@ -4302,6 +4301,7 @@ export class NgxsmkDatepickerComponent
       } else {
         this._asyncFilterRequestId++; // invalidate in-flight requests
         this._asyncDisabledTimestamps.set(new Set<number>());
+        this._rebuildConstraintsSnapshot();
       }
     }
 
@@ -4420,7 +4420,10 @@ export class NgxsmkDatepickerComponent
       changes['holidayProvider'] ||
       changes['disableHolidays'] ||
       changes['disabledDates'] ||
-      changes['disabledRanges']
+      changes['disabledRanges'] ||
+      changes['isInvalidDate'] ||
+      changes['minDate'] ||
+      changes['maxDate']
     ) {
       this._updateMemoSignals();
       this.generateCalendar();
@@ -5252,10 +5255,6 @@ export class NgxsmkDatepickerComponent
     }
 
     this.scheduleChangeDetection();
-
-    if (this.shouldAutoClose()) {
-      this.closeCalendar();
-    }
   }
 
   private generateTimeOptions(): void {
@@ -5339,24 +5338,14 @@ export class NgxsmkDatepickerComponent
   }
 
   public checkAndEmitInvalidRange(start: Date, end: Date): boolean {
-    const disabledDatesInside: Date[] = [];
-    const current = new Date(start);
-    const limitDate = new Date(start);
-    limitDate.setDate(limitDate.getDate() + 365);
-    const endChecked = end < limitDate ? end : limitDate;
-
-    while (current <= endChecked) {
-      if (this.isDateDisabled(current)) {
-        disabledDatesInside.push(new Date(current));
-      }
-      current.setDate(current.getDate() + 1);
-    }
-
-    if (disabledDatesInside.length > 0) {
-      this.invalidRange.emit({ start, end, disabledDatesInside });
-      return true;
-    }
-    return false;
+    const hits = this._constraintsSnap.scan({ start, end });
+    if (hits.length === 0) return false;
+    this.invalidRange.emit({
+      start,
+      end,
+      disabledDatesInside: hits.map((h) => h.day),
+    });
+    return true;
   }
 
   public updateNaturalLanguagePreview(value: string): void {
@@ -5506,9 +5495,7 @@ export class NgxsmkDatepickerComponent
       },
     });
 
-    if (this.shouldAutoClose()) {
-      this.closeCalendar();
-    } else {
+    if (!this.shouldAutoClose()) {
       this.scheduleChangeDetection();
     }
   }
@@ -5545,58 +5532,7 @@ export class NgxsmkDatepickerComponent
    * For large constraint lists (>1000), consider optimizing with Set or DateRange tree.
    */
   public isDateDisabled(date: Date | null): boolean {
-    if (!date) return false;
-
-    const dateOnly = getStartOfDay(date);
-
-    if (this._isInDisabledDates(dateOnly)) return true;
-    if (this._isInDisabledRanges(dateOnly)) return true;
-    if (this._asyncDisabledTimestamps().has(dateOnly.getTime())) return true;
-
-    if (this.holidayProvider && this.disableHolidays && this.holidayProvider.isHoliday(dateOnly)) {
-      return true;
-    }
-
-    if (this._isOutOfMinMaxBounds(dateOnly)) return true;
-
-    return this.isInvalidDate(date);
-  }
-
-  private _isInDisabledDates(dateOnly: Date): boolean {
-    if (this._disabledDates.length === 0) return false;
-    if (this._disabledDatesTimestamps.size === 0) {
-      this._syncDisabledDatesCache();
-    }
-    return this._disabledDatesTimestamps.has(dateOnly.getTime());
-  }
-
-  private _isInDisabledRanges(dateOnly: Date): boolean {
-    if (this._disabledRanges.length === 0) return false;
-    if (this._parsedDisabledRanges.length === 0) {
-      this._syncDisabledDatesCache();
-    }
-    const dateTime = dateOnly.getTime();
-    for (const range of this._parsedDisabledRanges) {
-      if (dateTime >= range.startTime && dateTime <= range.endTime) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private _isOutOfMinMaxBounds(dateOnly: Date): boolean {
-    const effectiveMinDate =
-      this._minDate || (this.globalConfig?.minDate ? this._normalizeDate(this.globalConfig.minDate) : null);
-    const effectiveMaxDate =
-      this._maxDate || (this.globalConfig?.maxDate ? this._normalizeDate(this.globalConfig.maxDate) : null);
-
-    if (effectiveMinDate && dateOnly.getTime() < getStartOfDay(effectiveMinDate).getTime()) {
-      return true;
-    }
-    if (effectiveMaxDate && dateOnly.getTime() > getStartOfDay(effectiveMaxDate).getTime()) {
-      return true;
-    }
-    return false;
+    return !this._constraintsSnap.isAllowed(date);
   }
 
   /**
@@ -5769,9 +5705,7 @@ export class NgxsmkDatepickerComponent
       payload: { mode: this.mode, value: this._value, date: day },
     });
 
-    if (this.shouldAutoClose()) {
-      this.closeCalendar();
-    } else {
+    if (!this.shouldAutoClose()) {
       this.scheduleChangeDetection();
     }
   }
