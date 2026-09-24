@@ -1,6 +1,6 @@
-﻿# Locale Packs & i18n Contributor Guide
+# Locale Packs & i18n Contributor Guide
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 Guide for adding locale support and contributing translations to ngxsmk-datepicker.
 
@@ -185,7 +185,7 @@ Date formats vary by locale:
 - **US**: `MM/DD/YYYY` (e.g., 12/25/2025)
 - **Europe**: `DD/MM/YYYY` (e.g., 25/12/2025)
 - **ISO**: `YYYY-MM-DD` (e.g., 2025-12-25)
-- **Asia**: `YYYY年MM月DD日` (e.g., 2025年12月25日)
+- **Asia**: `YYYY?MM?DD?` (e.g., 2025?12?25?)
 
 The component uses `Intl.DateTimeFormat` which handles this automatically.
 

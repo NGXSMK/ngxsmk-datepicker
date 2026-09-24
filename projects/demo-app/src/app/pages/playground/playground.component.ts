@@ -375,7 +375,7 @@ import { animate } from 'motion';
           transition: var(--transition-base);
           &:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+            box-shadow: 0 0 0 2px rgba(15, 107, 92, 0.22);
           }
         }
       }

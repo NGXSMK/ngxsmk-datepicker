@@ -17,12 +17,12 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
   });
 
   it('should initialize with enableAi as false by default', () => {
-    expect(component.enableAi).toBe(false);
+    expect(component.enableAi()).toBe(false);
   });
 
   it('should emit aiPromptSubmitted event when prompt is submitted', async () => {
     spyOn(component.aiPromptSubmitted, 'emit');
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
 
     await component.onAiPromptSubmitted('tomorrow');
 
@@ -30,7 +30,7 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
   });
 
   it('should resolve natural language prompt using fallback parser when no custom resolver provided', async () => {
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
     component.mode = 'single';
 
     await component.onAiPromptSubmitted('today');
@@ -43,7 +43,7 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
 
   it('should support custom Promise-based aiResolver', async () => {
     const customDate = new Date(2026, 11, 25);
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
     component.aiResolver = async (prompt: string) => {
       if (prompt.includes('christmas')) {
         return customDate;
@@ -63,7 +63,7 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
       start: new Date(2026, 5, 1),
       end: new Date(2026, 5, 15),
     };
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
     component.mode = 'range';
     component.aiResolver = () => of(range);
 
@@ -77,11 +77,11 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
 
   it('should have default aiSuggestions array', () => {
     expect(component.aiSuggestions.length).toBeGreaterThan(0);
-    expect(component.showAiSuggestions).toBe(true);
+    expect(component.showAiSuggestions()).toBe(true);
   });
 
   it('should manage isAiResolving loading state during async AI prompt resolution', async () => {
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
     let resolverCalled = false;
     component.aiResolver = () =>
       new Promise((resolve) => {
@@ -99,7 +99,7 @@ describe('NgxsmkDatepickerComponent - AI Assistant Integration', () => {
   });
 
   it('should handle slash shortcut to focus AI input when enableAi is true', () => {
-    component.enableAi = true;
+    fixture.componentRef.setInput('enableAi', true);
     component.isCalendarOpen = true;
     const event = new KeyboardEvent('keydown', { key: '/' });
     spyOn(event, 'preventDefault');

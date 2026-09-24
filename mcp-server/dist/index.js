@@ -7,7 +7,7 @@ import { API_DOCS_RESOURCE, TIMEZONES_RESOURCE } from './resources/api-resources
 // Create MCP Server instance
 const server = new McpServer({
     name: 'ngxsmk-datepicker-mcp',
-    version: '3.0.5',
+    version: '3.0.6',
 });
 // Tool: parse_date
 server.registerTool('parse_date', {

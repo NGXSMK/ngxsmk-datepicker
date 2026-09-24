@@ -284,7 +284,7 @@ import { I18nService } from '../../i18n/i18n.service';
         align-items: center;
         justify-content: center;
         color: #fff;
-        box-shadow: 0 0 30px rgba(124, 58, 237, 0.3);
+        box-shadow: var(--shadow-md);
         margin-bottom: 0.75rem;
 
         .core-inner {

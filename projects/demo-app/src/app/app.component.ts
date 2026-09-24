@@ -56,10 +56,15 @@ export class AppComponent {
 
   constructor() {
     this.themeService.init(themeConfig, {
-      defaultTheme: 'dark',
+      defaultTheme: 'light',
       persist: true,
-      watchSystemTheme: true,
+      watchSystemTheme: false,
     });
+    // One-time migration onto schedule board (asphalt / signal yellow)
+    if (typeof localStorage !== 'undefined' && !localStorage.getItem('ngxsmk-demo-runway-v4')) {
+      this.themeService.setTheme('light');
+      localStorage.setItem('ngxsmk-demo-runway-v4', '1');
+    }
     // Sync data-theme attribute so CSS [data-theme="light"] overrides apply
     effect(() => {
       const theme = this.themeService.theme();

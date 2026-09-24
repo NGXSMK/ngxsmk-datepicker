@@ -3,6 +3,11 @@ import { getStartOfDay } from '../utils/date.utils';
 import { DatepickerValue } from '../utils/calendar.utils';
 import { generateRecurringDates } from '../utils/recurring-dates.utils';
 
+/**
+ * @internal Prototype only — not used by {@link NgxsmkDatepickerComponent}.
+ * Day Selection is implemented on the Datepicker Host. Do not import for app code;
+ * a future Selection module will supersede this file. Kept for unit-test reference.
+ */
 export interface DateSelectionState {
   selectedDate: Date | null;
   startDate: Date | null;
@@ -48,6 +53,7 @@ export interface DateSelectionCallbacks {
 }
 
 @Injectable()
+/** @internal See file-level note — not wired into the Datepicker Host. */
 export class DateSelectionService {
   selectDate(
     day: Date | null,

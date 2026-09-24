@@ -1,48 +1,69 @@
 /* ============================================
-   DESIGN SYSTEM - NGXSMK Advanced Docs
+   DESIGN SYSTEM — NGXSMK Schedule Board
+   Fog field · asphalt type · signal yellow · Oswald + Karla
    ============================================ */
 
 :root {
-  /* Core Colors */
-  --color-primary: hsl(262, 83%, 58%);
-  --color-primary-light: hsl(262, 83%, 68%);
-  --color-primary-dark: hsl(262, 83%, 48%);
-  --color-secondary: hsl(195, 100%, 50%);
-  --color-success: hsl(142, 70%, 50%);
-  --color-error: hsl(0, 84%, 60%);
+  --asphalt: #151920;
+  --asphalt-soft: #2a313c;
+  --fog: #ebeef3;
+  --chalk: #ffffff;
+  --rule: #d3d8e0;
+  --rule-strong: #b4bcc8;
+  --signal: #ffb703;
+  --signal-deep: #e09e00;
+  --signal-soft: #fff3cd;
+  --sky: #3d5a80;
+  --danger: #c1121f;
 
-  /* Backgrounds */
-  --color-bg-page: hsl(240, 10%, 4%);
-  --color-bg-sidebar: hsl(240, 10%, 6%);
-  --color-bg-secondary: hsl(240, 8%, 8%);
-  --color-bg-card: hsl(240, 8%, 10%);
-  --color-bg-elevated: hsl(240, 6%, 15%);
-  --color-bg-code: hsl(240, 8%, 2%);
-  --color-bg-header: hsla(240, 10%, 4%, 0.85);
+  /* Compat aliases for shell / older selectors */
+  --teal: var(--asphalt);
+  --teal-deep: var(--asphalt);
+  --teal-soft: var(--signal-soft);
+  --amber: var(--signal);
+  --cobalt: var(--asphalt);
+  --cobalt-deep: var(--asphalt-soft);
+  --cobalt-soft: var(--signal-soft);
+  --ember: var(--signal);
+  --ink: var(--asphalt);
+  --ink-soft: #3e4654;
+  --desk: var(--fog);
+  --surface: var(--chalk);
 
-  /* Text */
-  --color-text-main: hsl(0, 0%, 98%);
-  --color-text-muted: hsl(0, 0%, 75%);
-  --color-text-dim: hsl(0, 0%, 55%);
-  --color-text-tertiary: hsl(0, 0%, 40%);
+  --color-primary: var(--asphalt);
+  --color-primary-light: #3a4250;
+  --color-primary-dark: #0b0e12;
+  --color-secondary: var(--signal);
+  --color-success: #2a9d8f;
+  --color-error: var(--danger);
 
-  /* Syntax Highlighting (Dark - Primary) */
-  --code-text: #e0e6ed;
-  --code-keyword: #ff79c6;
-  --code-string: #f1fa8c;
-  --code-comment: #6272a4;
-  --code-function: #50fa7b;
-  --code-class: #8be9fd;
-  --code-operator: #ff79c6;
-  --code-number: #bd93f9;
-  --code-tag: #ff79c6;
-  --code-attr: #bd93f9;
+  --color-bg-page: var(--fog);
+  --color-bg-sidebar: #e4e8ef;
+  --color-bg-secondary: #dde2ea;
+  --color-bg-card: var(--chalk);
+  --color-bg-elevated: #f4f6f9;
+  --color-bg-code: #12161c;
+  --color-bg-header: #151920;
 
-  /* Borders */
-  --color-border: hsla(0, 0%, 100%, 0.08);
-  --color-border-light: hsla(0, 0%, 100%, 0.15);
+  --color-text-main: var(--asphalt);
+  --color-text-muted: #3e4654;
+  --color-text-dim: #6b7380;
+  --color-text-tertiary: #8b93a0;
 
-  /* Spacing System */
+  --code-text: #e8ecf1;
+  --code-keyword: #ffb703;
+  --code-string: #7eb8e8;
+  --code-comment: #7d8694;
+  --code-function: #d4e0f0;
+  --code-class: #ffd56a;
+  --code-operator: #ffb703;
+  --code-number: #7eb8e8;
+  --code-tag: #ffb703;
+  --code-attr: #ffd56a;
+
+  --color-border: var(--rule);
+  --color-border-light: var(--rule-strong);
+
   --space-xs: clamp(0.2rem, 1vw, 0.25rem);
   --space-sm: clamp(0.4rem, 2vw, 0.5rem);
   --space-md: clamp(0.75rem, 4vw, 1rem);
@@ -51,85 +72,113 @@
   --space-2xl: clamp(2rem, 10vw, 3rem);
   --space-3xl: clamp(3rem, 12vw, 4rem);
 
-  /* Layout Dimensions */
-  --header-height: 60px;
-  --sidebar-width: 260px;
-  --max-content-width: 1280px;
+  --header-height: 56px;
+  --sidebar-width: 236px;
+  --max-content-width: 1120px;
 
   @media (min-width: 1440px) {
-    --header-height: 68px;
-    --sidebar-width: 280px;
-    --max-content-width: 1380px;
+    --header-height: 60px;
+    --sidebar-width: 252px;
+    --max-content-width: 1200px;
   }
 
-  /* Typography - Clean, accessible, modern scale */
-  --font-size-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
-  --font-size-sm: clamp(0.84375rem, 0.8125rem + 0.2vw, 0.90625rem);
-  --font-size-base: clamp(0.9375rem, 0.9rem + 0.25vw, 1rem);
-  --font-size-lg: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem);
-  --font-size-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.4375rem);
-  --font-size-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.75rem);
-  --font-size-3xl: clamp(1.875rem, 1.65rem + 1vw, 2.25rem);
-  --font-size-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3rem);
+  --font-family-display: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --font-family-body: 'Karla', 'Segoe UI', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --font-size-xs: 0.78rem;
+  --font-size-sm: 0.92rem;
+  --font-size-base: 1.05rem;
+  --font-size-lg: 1.2rem;
+  --font-size-xl: 1.45rem;
+  --font-size-2xl: 1.85rem;
+  --font-size-3xl: 2.4rem;
+  --font-size-4xl: 3.1rem;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-weight-extrabold: 800;
+  --font-weight-extrabold: 700;
 
-  /* Shadows & Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+  --shadow-sm: none;
+  --shadow-md: 0 12px 28px -20px rgba(21, 25, 32, 0.45);
+  --shadow-lg: 0 24px 48px -24px rgba(21, 25, 32, 0.5);
 
-  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.14s ease;
+  --transition-smooth: 0.22s ease;
   --transition: var(--transition-base);
 }
 
-/* Light theme overrides (synced with theme.config.ts) */
+html[data-theme='dark'] {
+  --asphalt: #f2f4f7;
+  --asphalt-soft: #c8ced8;
+  --fog: #0e1116;
+  --chalk: #171b22;
+  --rule: #2a313c;
+  --rule-strong: #3d4656;
+  --signal: #ffc933;
+  --signal-deep: #ffb703;
+  --signal-soft: #3a3010;
+  --sky: #7a9bc4;
+
+  --teal: var(--signal);
+  --teal-deep: var(--signal-deep);
+  --teal-soft: var(--signal-soft);
+  --amber: var(--signal);
+  --cobalt: var(--signal);
+  --cobalt-deep: var(--signal-deep);
+  --cobalt-soft: var(--signal-soft);
+  --ember: var(--signal);
+  --ink: var(--asphalt);
+  --ink-soft: #c2c8d2;
+  --desk: var(--fog);
+  --surface: var(--chalk);
+
+  --color-primary: var(--signal);
+  --color-primary-light: #ffd56a;
+  --color-primary-dark: var(--signal-deep);
+  --color-secondary: var(--sky);
+
+  --color-bg-page: var(--fog);
+  --color-bg-sidebar: #0a0c10;
+  --color-bg-secondary: #171b22;
+  --color-bg-card: #171b22;
+  --color-bg-elevated: #1f2530;
+  --color-bg-code: #080a0d;
+  --color-bg-header: #0a0c10;
+
+  --color-text-main: var(--asphalt);
+  --color-text-muted: #c2c8d2;
+  --color-text-dim: #8b93a0;
+  --color-text-tertiary: #6b7380;
+
+  --color-border: var(--rule);
+  --color-border-light: var(--rule-strong);
+
+  --shadow-md: 0 12px 32px -16px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 24px 48px -20px rgba(0, 0, 0, 0.8);
+}
+
 html[data-theme='light'] {
-  /* Backgrounds */
-  --color-bg-page: hsl(240, 10%, 98%);
-  --color-bg-sidebar: hsl(240, 10%, 94%);
-  --color-bg-secondary: hsl(240, 8%, 92%);
-  --color-bg-card: hsl(0, 0%, 100%);
-  --color-bg-elevated: hsl(240, 6%, 88%);
-  --color-bg-code: hsl(240, 8%, 96%);
-  --color-bg-header: hsla(240, 10%, 98%, 0.85);
-
-  /* Text */
-  --color-text-main: hsl(240, 10%, 4%);
-  --color-text-muted: hsl(240, 10%, 25%);
-  --color-text-dim: hsl(240, 10%, 45%);
-  --color-text-tertiary: hsl(240, 10%, 60%);
-
-  /* Borders */
-  --color-border: hsla(0, 0%, 0%, 0.08);
-  --color-border-light: hsla(0, 0%, 0%, 0.15);
-
-  /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
-
-  /* Syntax Highlighting (Light) */
-  --code-text: hsl(240, 10%, 20%);
-  --code-keyword: #d32f2f;
-  --code-string: #2e7d32;
-  --code-comment: #757575;
-  --code-function: #7b1fa2;
-  --code-class: #ed6c02;
-  --code-operator: #c2185b;
-  --code-number: #1976d2;
-  --code-tag: #d32f2f;
-  --code-attr: #1976d2;
+  --color-bg-page: #ebeef3;
+  --color-bg-sidebar: #e4e8ef;
+  --color-bg-secondary: #dde2ea;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #f4f6f9;
+  --color-bg-code: #12161c;
+  --color-bg-header: #151920;
+  --color-text-main: #151920;
+  --color-text-muted: #3e4654;
+  --color-text-dim: #6b7380;
+  --color-text-tertiary: #8b93a0;
+  --color-border: #d3d8e0;
+  --color-border-light: #b4bcc8;
 }
 
 /* ============================================
@@ -152,16 +201,15 @@ html {
 body {
   background-color: var(--color-bg-page);
   color: var(--color-text-main);
-  font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    sans-serif;
+  font-family: var(--font-family-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in srgb, var(--cobalt) 8%, transparent), transparent 55%),
+    linear-gradient(180deg, var(--desk) 0%, color-mix(in srgb, var(--desk) 92%, #d8dde5) 100%);
 }
 
 /* ============================================
@@ -201,16 +249,17 @@ body {
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   z-index: 90;
   transition: transform var(--transition-smooth);
   scrollbar-width: thin;
   scrollbar-color: var(--color-bg-elevated) transparent;
+  background-image: none;
 
   @media (max-width: 1024px) {
     transform: translateX(-100%);
     z-index: 1000;
-    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-lg);
 
     &.open {
       transform: translateX(0);
@@ -228,6 +277,8 @@ body {
   overflow-x: hidden;
   transition: margin-left var(--transition-smooth);
   -webkit-overflow-scrolling: touch;
+  background: var(--color-bg-page);
+  background-image: none;
 
   @media (min-width: 1440px) {
     padding: var(--space-2xl) var(--space-3xl);
@@ -258,12 +309,14 @@ body {
    ============================================ */
 
 h1 {
+  font-family: var(--font-family-display);
   font-size: clamp(2.1rem, 1.75rem + 1.6vw, 2.85rem);
-  font-weight: var(--font-weight-extrabold);
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-md);
   color: var(--color-text-main);
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   overflow-wrap: break-word;
   word-break: break-word;
 
@@ -273,6 +326,7 @@ h1 {
 }
 
 h2 {
+  font-family: var(--font-family-display);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   margin: var(--space-xl) 0 var(--space-md);
@@ -293,6 +347,7 @@ h2 {
 }
 
 h3 {
+  font-family: var(--font-family-display);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   margin: var(--space-lg) 0 var(--space-sm);
@@ -326,13 +381,18 @@ p {
 }
 
 code {
-  font-family: 'JetBrains Mono', monospace;
-  background: var(--color-bg-code);
+  font-family: var(--font-family-mono);
+  background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
-  padding: 0.2rem 0.45rem;
+  padding: 0.15rem 0.4rem;
   border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  color: var(--color-secondary);
+  font-size: 0.875em;
+  color: var(--color-primary-dark);
+}
+
+html[data-theme='dark'] code {
+  color: var(--color-primary-light);
+  background: var(--color-bg-code);
 }
 
 /* Sidebar Navigation items continue below */
@@ -342,45 +402,52 @@ code {
 }
 
 .nav-label {
-  padding: 0 1.5rem 0.75rem;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-extrabold);
-  text-transform: uppercase;
+  padding: 0 1.5rem 0.5rem;
+  font-family: var(--font-family-display);
+  font-size: 0.78rem;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-dim);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 
   @media (min-width: 768px) {
-    padding: 0 2rem 0.75rem;
+    padding: 0 1.75rem 0.5rem;
   }
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 0.65rem 1.5rem;
+  padding: 0.55rem 1.5rem;
   color: var(--color-text-muted);
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  transition: var(--transition-base);
-  border-left: 3px solid transparent;
-  margin-bottom: 2px;
+  transition:
+    color var(--transition-base),
+    background var(--transition-base);
+  border-left: 2px solid transparent;
+  margin-bottom: 1px;
 
   @media (min-width: 768px) {
-    padding: 0.65rem 2rem;
+    padding: 0.55rem 1.75rem;
   }
 
   &:hover {
     color: var(--color-text-main);
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.04), transparent);
+    background: color-mix(in srgb, var(--teal) 6%, transparent);
   }
 
   &.active {
-    color: var(--color-primary-light);
-    background: linear-gradient(to right, rgba(124, 58, 237, 0.1), transparent);
-    border-left-color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
+    color: var(--asphalt);
+    background: var(--signal-soft);
+    border-left-color: var(--signal);
+    font-weight: var(--font-weight-semibold);
   }
+}
+
+html[data-theme='dark'] .nav-link.active {
+  color: var(--color-primary-light);
 }
 
 /* ============================================
@@ -390,7 +457,7 @@ code {
 .card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   padding: 0;
 
   @media (min-width: 480px) {
@@ -398,42 +465,38 @@ code {
   }
 
   @media (min-width: 768px) {
-    padding: 2.5rem;
+    padding: 1.75rem;
   }
 
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition-base);
-
-  &:hover {
-    border-color: var(--color-border-light);
-    box-shadow: var(--shadow-lg);
-  }
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .tip {
-  border-left: 4px solid var(--color-primary);
-  background: linear-gradient(to right, rgba(139, 92, 246, 0.08), transparent);
+  border-left: 3px solid var(--teal);
+  background: var(--teal-soft);
   padding: 1rem;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   margin: 1.5rem 0;
   font-size: 0.95rem;
   line-height: 1.6;
 
   @media (min-width: 768px) {
-    padding: 1.5rem 2rem;
-    margin: 2.5rem 0;
-    font-size: 1rem;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
   }
 
   strong {
-    color: var(--color-primary-light);
+    color: var(--teal-deep);
     font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    letter-spacing: 0.01em;
     display: inline;
   }
+}
+
+html[data-theme='dark'] .tip strong {
+  color: var(--color-primary-light);
 }
 
 .btn {
@@ -441,30 +504,26 @@ code {
   min-height: 40px;
 
   @media (min-width: 480px) {
-    padding: 0.7rem 1.25rem;
-    min-height: 44px;
+    padding: 0.65rem 1.15rem;
+    min-height: 42px;
   }
 
-  @media (min-width: 768px) {
-    padding: 0.8rem 1.75rem;
-  }
-
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-display);
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition-base);
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
   border: none;
   font-size: var(--font-size-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  letter-spacing: 0.01em;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  letter-spacing: 0;
   user-select: none;
-  -webkit-appearance: none;
   appearance: none;
 
   @media (max-width: 480px) {
@@ -473,31 +532,32 @@ code {
   }
 
   &:active {
-    transform: scale(0.97);
+    transform: translateY(1px);
   }
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  color: white;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+  background: var(--teal);
+  color: #fff;
+  box-shadow: none;
 
   &:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    background: var(--teal-deep);
+    filter: none;
+    transform: none;
+    box-shadow: none;
   }
 }
 
 .btn-outline {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--color-border);
+  background: transparent;
+  border: 1px solid var(--color-border-light);
   color: var(--color-text-main);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--color-border-light);
-    transform: translateY(-2px);
+    background: var(--color-bg-elevated);
+    border-color: var(--teal);
+    transform: none;
   }
 }
 
@@ -843,17 +903,13 @@ a.link:hover {
    ============================================ */
 
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-light);
 }
 
 /* ============================================
@@ -965,8 +1021,42 @@ a.link:hover {
 }
 
 /* ============================================
-   DATEPICKER GLOBAL OVERRIDES
+   DATEPICKER — schedule board skin
    ============================================ */
+:root,
+html[data-theme='light'] {
+  --ngxsmk-color-primary: #151920;
+  --ngxsmk-color-on-primary: #ffffff;
+  --ngxsmk-color-range-bg: #fff3cd;
+  --datepicker-primary-color: #151920;
+  --datepicker-primary-contrast: #ffffff;
+  --datepicker-range-background: #fff3cd;
+  --datepicker-background: #ffffff;
+  --datepicker-hover-background: #f4f6f9;
+  --datepicker-text-color: #151920;
+  --datepicker-subtle-text-color: #6b7380;
+  --datepicker-border-color: #d3d8e0;
+  --datepicker-radius-md: 0;
+  --datepicker-radius-lg: 0;
+  --datepicker-border-radius: 0;
+  --datepicker-shadow-md: none;
+  --datepicker-shadow-lg: none;
+}
+
+html[data-theme='dark'] {
+  --ngxsmk-color-primary: #ffb703;
+  --ngxsmk-color-on-primary: #12161c;
+  --ngxsmk-color-range-bg: #3a3010;
+  --datepicker-primary-color: #ffb703;
+  --datepicker-primary-contrast: #12161c;
+  --datepicker-range-background: #3a3010;
+  --datepicker-background: #171b22;
+  --datepicker-hover-background: #1f2530;
+  --datepicker-text-color: #f2f4f7;
+  --datepicker-subtle-text-color: #8b93a0;
+  --datepicker-border-color: #2a313c;
+}
+
 ngxsmk-datepicker {
   width: 100%;
   max-width: 400px;
@@ -978,10 +1068,10 @@ ngxsmk-datepicker {
 .code-window {
   background: var(--color-bg-code);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   margin: var(--space-xl) 0;
   overflow: hidden;
-  box-shadow: var(--shadow-lg);
+  box-shadow: none;
 
   &.mt-0 {
     margin-top: 0;
@@ -992,38 +1082,23 @@ ngxsmk-datepicker {
   }
 
   .window-header {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.75rem 1.25rem;
+    background: transparent;
+    padding: 0.65rem 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
     .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-
-      &.red {
-        background: #ff5f56;
-      }
-
-      &.yellow {
-        background: #ffbd2e;
-      }
-
-      &.green {
-        background: #27c93f;
-      }
+      display: none;
     }
 
     .window-title {
-      margin-left: 0.5rem;
+      margin-left: 0;
       font-size: 0.7rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--color-text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-family: var(--font-family-mono);
+      color: #8a9690;
+      letter-spacing: 0.02em;
     }
   }
 
@@ -1031,9 +1106,9 @@ ngxsmk-datepicker {
     margin: 0;
     padding: var(--space-lg);
     overflow-x: auto;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    line-height: 1.7;
+    font-family: var(--font-family-mono);
+    font-size: 0.85rem;
+    line-height: 1.65;
 
     code {
       background: none !important;

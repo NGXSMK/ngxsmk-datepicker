@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 3.0.3+ (includes unreleased `main` additions) | **Last updated**: July 24, 2026
+**Version**: 3.0.6 | **Last updated**: September 8, 2026
 
 ## Stable vs experimental
 
@@ -84,7 +84,7 @@ import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
 | `hooks` | `DatepickerHooks \| null` | `null` | Stable | Extension points for customization | `[hooks]="customHooks"` |
 | `enableKeyboardShortcuts` | `boolean` | `true` | Stable | Enable/disable keyboard shortcuts. Press '?' for help. | `[enableKeyboardShortcuts]="false"` |
 | `customShortcuts` | `{ [key: string]: (context: KeyboardShortcutContext) => boolean } \| null` | `null` | Stable | Custom keyboard shortcuts map | `[customShortcuts]="myShortcuts"` |
-| `autoApplyClose` | `boolean` | `false` | Stable | Auto-close calendar after selection | `[autoApplyClose]="true"` |
+| `autoApplyClose` | `boolean` | `false` | Stable | Opt-in auto-close after a complete selection. Forced off when `showTime` / `timeOnly` / inline. | `[autoApplyClose]="true"` |
 | `clearLabel` | `string` | `'Clear'` | Stable | Custom label for clear button | `clearLabel="Reset"` |
 | `closeLabel` | `string` | `'Close'` | Stable | Custom label for close button | `closeLabel="Done"` |
 | `prevMonthAriaLabel` | `string` | `'Previous month'` | Stable | ARIA label for previous month button | `prevMonthAriaLabel="Go to previous month"` |
@@ -2343,6 +2343,34 @@ interface DatepickerClasses {
 
 ## Exported Utilities
 
+### Constraints Snapshot
+
+**Status**: Stable (v3.0.6+)
+
+Allowed-day truth for min/max, disabled dates/ranges, holidays, async disabled sets, and `isInvalidDate`. The Host rebuilds an immutable snapshot when constraint inputs change; forms validators map `ConstraintDenial` codes to public error keys. See `docs/adr/0001-hybrid-constraints-snapshot.md` and root `CONTEXT.md`.
+
+```typescript
+import {
+  Constraints,
+  buildConstraints,
+  EMPTY_CONSTRAINTS_SOURCES,
+  type ConstraintsSources,
+  type ConstraintsSnapshot,
+  type DayVerdict,
+  type ConstraintDenial,
+} from 'ngxsmk-datepicker';
+
+const snap = Constraints.build({
+  ...EMPTY_CONSTRAINTS_SOURCES,
+  minDate: new Date(2026, 0, 1),
+  maxDate: new Date(2026, 11, 31),
+  disabledDates: ['2026-01-15'],
+});
+
+snap.isAllowed(new Date(2026, 0, 15)); // false
+snap.evaluate(new Date(2026, 0, 15)); // { allowed: false, denial: { code: 'disabledDate', ... } }
+```
+
 ### Date Utilities
 
 **Status**: Stable
@@ -2362,6 +2390,24 @@ export function normalizeDate(date: DateInput | null): Date | null;
 export function getDaysInMonth(year: number, month: number): number;
 export function getFirstDayOfMonth(year: number, month: number): number;
 ```
+
+## Secondary entry points
+
+Optional packages stay out of the main FESM:
+
+| Import path | Contents | Notes |
+|-------------|----------|--------|
+| `ngxsmk-datepicker` | Component, validators, Constraints, utils, config | Main bundle |
+| `ngxsmk-datepicker/adapters` | `DateFnsAdapter`, `DayjsAdapter`, `LuxonAdapter` | Install the matching peer library |
+| `ngxsmk-datepicker/material` | `NgxsmkDatepickerMatFormFieldControlDirective`, `provideMaterialFormFieldControl` | Requires `@angular/material` + `@angular/cdk` |
+| `ngxsmk-datepicker/styles/*` | CSS assets | Styles only |
+
+```typescript
+import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters';
+import { NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker/material';
+```
+
+`NativeDateAdapter` / `DateAdapter` remain on the main entry.
 
 ## Virtual scrolling
 

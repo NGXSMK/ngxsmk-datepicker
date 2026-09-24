@@ -2,10 +2,12 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 24, 2026 - **Current stable:** v3.0.6
 
 ## Table of Contents
 
+- [Unreleased](#unreleased)
+- [v3.0.5 → v3.0.6](#v305---v306)
 - [v3.0.4 → v3.0.5](#v304---v305)
 - [v3.0.3 → v3.0.4](#v303---v304)
 - [v2.4.0 → v3.0.3](#v240---v303)
@@ -61,6 +63,38 @@ This document provides migration instructions for upgrading between major versio
 - [v1.9.0 → v1.9.1](#v190---v191)
 - [v1.8.0 → v1.9.0](#v180---v190)
 - [v1.7.0 → v1.8.0](#v170---v180)
+
+## Unreleased
+
+### Breaking (secondary entry only)
+
+- **`DateSelectionService` removed from `ngxsmk-datepicker/services`**. It was never used by `<ngxsmk-datepicker>`. Remove any `import { DateSelectionService } from 'ngxsmk-datepicker/services'` — Day Selection remains on the host component.
+
+### Behavior
+
+- **`autoApplyClose`**: `emitValue` now respects `shouldAutoClose()` (fixes [#325](https://github.com/NGXSMK/ngxsmk-datepicker/issues/325)). Default stays `false`. Apps that relied on the previous always-close-on-select bug should set `[autoApplyClose]="true"`.
+
+## v3.0.5 → v3.0.6
+
+### Changes
+
+Additive / opt-in — no breaking public API removals:
+
+- **Constraints Snapshot**: New exports (`Constraints`, `buildConstraints`, denial types) share one allowed-day path with the Host and built-in validators. Existing `[minDate]` / `[maxDate]` / `[disabledDates]` / holiday inputs behave the same.
+- **Secondary entries**: Prefer `ngxsmk-datepicker/material` for `NgxsmkDatepickerMatFormFieldControlDirective` (instead of copying a local directive file). Prefer `ngxsmk-datepicker/adapters` for `DateFnsAdapter` / `DayjsAdapter` / `LuxonAdapter` (instead of deep paths like `ngxsmk-datepicker/adapters/date-fns-adapter`).
+- **Calendar internals**: `buildCalendarMonths` moved to `CalendarGenerationService`; Host API unchanged.
+
+### Migration tips
+
+```typescript
+// Before (copy-paste / deep path)
+import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive';
+import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters/date-fns-adapter';
+
+// After
+import { NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker/material';
+import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters';
+```
 
 ## v3.0.4 → v3.0.5
 

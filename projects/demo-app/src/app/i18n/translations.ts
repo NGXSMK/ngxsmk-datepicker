@@ -3,12 +3,11 @@ export const translations = {
     common: {
       getStarted: 'Start Using NGXSMK',
       npmDownloads: 'downloads/month',
-      enterpriseReady: 'High Performance / Enterprise Ready',
-      readyToTransform: 'Ready to build with the best Angular DatePicker?',
-      installToday:
-        'Join thousands of developers using the most accessible and Signal-powered Angular DatePicker. Install today and boost your performance.',
-      releasedUnder: 'Open Source - MIT License',
-      poweredBy: 'The Premier Date Selection for',
+      enterpriseReady: 'Angular 17+',
+      readyToTransform: 'Add it to your project',
+      installToday: 'MIT licensed. Peer deps: Angular 17+ and luxon.',
+      releasedUnder: 'MIT License',
+      poweredBy: 'Docs powered with',
       lookingForRtl: 'Searching for RTL or Custom Date Providers?',
       checkAdvanced: 'Explore the Advanced Features documentation.',
     },
@@ -29,47 +28,47 @@ export const translations = {
       dateSchedule: 'Date Schedule Planner',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v3.0.5',
-      heroTitle: 'The Premier Open-Source',
+      heroBadge: 'v3.0.6',
+      heroTitle: 'Pick dates the way a schedule board clears flights.',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
-        'Experience the next-gen Angular DatePicker. Engineered with Signals and Zoneless architecture for maximum performance, multi-calendar support, and enterprise-grade accessibility.',
-      ctaBuild: 'Quick Start Guide',
-      ctaPro: 'Live Playground',
-      seoTitle: 'Why NGXSMK is the Top Choice for Angular Developers?',
+        'Signal-friendly Angular datepicker for forms and booking flows. Switch modes below, then install when you are ready.',
+      ctaBuild: 'Install',
+      ctaPro: 'Open playground',
+      seoTitle: 'What you get',
       seoText:
-        'NGXSMK is the most optimized Angular DatePicker components library. Designed for ultra-fast performance and seamless Signal integration, it scales from simple forms to complex enterprise dashboards.',
-      implementation: 'Fast Implementation',
-      signalOptimized: 'Native-Signal Optimized',
+        'Signal-friendly state, optional zoneless apps, multi-month layouts, keyboard and screen-reader support, and CSS variables for theming. Built for Angular 17+.',
+      implementation: 'Snippet',
+      signalOptimized: 'Signals',
       demoMode: {
-        single: 'Single Choice',
-        range: 'Range Selection',
-        multiple: 'Multi-Select',
+        single: 'Single',
+        range: 'Range',
+        multiple: 'Multiple',
       },
       features: {
         signals: {
-          title: 'Signals Powered UI',
-          desc: 'Fully optimized for Angular Signals, ensuring the fastest reactive state management and minimal change detection overhead.',
+          title: 'Signals-friendly',
+          desc: 'Works with Angular Signals and reactive forms without fighting change detection.',
         },
         zoneless: {
-          title: '100% Zoneless Ready',
-          desc: 'Built for the future of Angular (v18+). Operates flawlessly without zone.js for peak runtime performance and smaller bundles.',
+          title: 'Zoneless-ready',
+          desc: 'Runs cleanly without zone.js when your app is configured for it.',
         },
         multiCalendar: {
-          title: 'Multi-Calendar Systems',
-          desc: 'Display up to 12 synchronized calendars with horizontal or vertical layouts. Perfect for complex booking systems.',
+          title: 'Multi-month layouts',
+          desc: 'Show several synchronized calendars for booking and planning UIs.',
         },
         a11y: {
-          title: 'Enterprise Accessibility',
-          desc: 'Full WAI-ARIA compliance and keyboard navigation support. The most inclusive datepicker for all users.',
+          title: 'Keyboard & ARIA',
+          desc: 'Focus management, shortcuts, and live announcements for assistive tech.',
         },
         mobile: {
-          title: 'Mobile-First Experience',
-          desc: 'Responsive design with intuitive touch controls and native mobile picker integration for iOS and Android.',
+          title: 'Touch-friendly',
+          desc: 'Responsive popovers and optional native picker behavior on small screens.',
         },
         locales: {
-          title: 'i18n & RTL Support',
-          desc: 'Global-ready with built-in support for multiple locales, Right-to-Left (RTL) layouts, and custom date formatting.',
+          title: 'Locales & RTL',
+          desc: 'Locale strings, week start, and right-to-left layout support.',
         },
       },
     },
@@ -484,7 +483,7 @@ export const translations = {
       dateSchedule: 'Terminplaner',
     },
     home: {
-      heroBadge: 'Neu v3.0.5 Stabilität',
+      heroBadge: 'Neu v3.0.6 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -945,7 +944,7 @@ export const translations = {
       dateSchedule: 'Agenda de Citas',
     },
     home: {
-      heroBadge: 'Nuevo v3.0.5 Estabilidad',
+      heroBadge: 'Nuevo v3.0.6 Estabilidad',
       heroTitle: 'El mejor Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -1405,7 +1404,7 @@ export const translations = {
       dateSchedule: 'Tidsplanering',
     },
     home: {
-      heroBadge: 'Ny v3.0.5 stabilitet',
+      heroBadge: 'Ny v3.0.6 stabilitet',
       heroTitle: 'Den bästa open-source',
       heroSubtitle: 'Angular datumväljare',
       heroLead:
@@ -1856,7 +1855,7 @@ export const translations = {
       dateSchedule: '일정 플래너',
     },
     home: {
-      heroBadge: '새로운 v3.0.5 안정성',
+      heroBadge: '새로운 v3.0.6 안정성',
       heroTitle: '최고의 오픈 소스',
       heroSubtitle: 'Angular 데이트피커',
       heroLead:
@@ -2293,7 +2292,7 @@ export const translations = {
       dateSchedule: '日程计划器',
     },
     home: {
-      heroBadge: '全新 v3.0.5 稳定性',
+      heroBadge: '全新 v3.0.6 稳定性',
       heroTitle: '最佳开源',
       heroSubtitle: 'Angular 日期选择器',
       heroLead:
@@ -2716,7 +2715,7 @@ export const translations = {
       dateSchedule: 'スケジュール帳',
     },
     home: {
-      heroBadge: '新しい v3.0.5 の安定性',
+      heroBadge: '新しい v3.0.6 の安定性',
       heroTitle: '最高のオープンソース',
       heroSubtitle: 'Angular デートピッカー',
       heroLead:
@@ -3159,7 +3158,7 @@ export const translations = {
       dateSchedule: 'Planificateur de dates',
     },
     home: {
-      heroBadge: 'Nouvelle stabilité v3.0.5',
+      heroBadge: 'Nouvelle stabilité v3.0.6',
       heroTitle: 'Le meilleur Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:

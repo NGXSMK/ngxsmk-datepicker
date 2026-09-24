@@ -6,12 +6,10 @@
  */
 
 export { ValueManagementService } from './value-management.service';
-export { DateSelectionService } from './date-selection.service';
 export { ThemeBuilderService } from './theme-builder.service';
 export { DatePresetsService } from './date-presets.service';
 export type { DatepickerTheme } from './theme-builder.service';
 export type { DatePreset } from './date-presets.service';
-export type { DateSelectionState, DateSelectionConfig, DateSelectionCallbacks } from './date-selection.service';
 export { KeyboardNavigationService } from './keyboard-navigation.service';
 export type {
   KeyboardNavigationState,

@@ -1,6 +1,6 @@
-﻿# Timezone Support
+# Timezone Support
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ## Overview
 
@@ -147,7 +147,16 @@ const serverDate = new Date("2024-01-15T15:00:00Z");
 
 ## Optional Adapters (date-fns / Luxon)
 
-For advanced timezone operations, you may want to use specialized libraries:
+For advanced timezone operations, you may want to use specialized libraries. Built-in date adapters for the datepicker config live on the secondary entry:
+
+```typescript
+import { DateFnsAdapter, LuxonAdapter, DayjsAdapter } from 'ngxsmk-datepicker/adapters';
+import { provideDatepickerConfig } from 'ngxsmk-datepicker';
+
+provideDatepickerConfig({
+  dateAdapter: new LuxonAdapter(), // or DateFnsAdapter / DayjsAdapter
+});
+```
 
 ### date-fns-tz
 
@@ -218,10 +227,10 @@ export class MyComponent {
 **Solution**: Ensure you're setting the `timezone` property correctly:
 
 ```typescript
-// ✅ Correct
+// ? Correct
 <ngxsmk-datepicker [timezone]="'America/New_York'">
 
-// ❌ Incorrect (missing quotes)
+// ? Incorrect (missing quotes)
 <ngxsmk-datepicker [timezone]="America/New_York">
 ```
 
@@ -230,10 +239,10 @@ export class MyComponent {
 **Solution**: JavaScript Date objects are already UTC. Send them directly:
 
 ```typescript
-// ✅ Correct
+// ? Correct
 const utcString = date.toISOString(); // Send this to server
 
-// ❌ Incorrect (don't manually adjust)
+// ? Incorrect (don't manually adjust)
 const adjusted = new Date(date.getTime() - timezoneOffset); // Don't do this
 ```
 
@@ -242,10 +251,10 @@ const adjusted = new Date(date.getTime() - timezoneOffset); // Don't do this
 **Solution**: Create Date objects from ISO strings:
 
 ```typescript
-// ✅ Correct
+// ? Correct
 const date = new Date(serverResponse.dateString); // "2024-01-15T15:00:00Z"
 
-// ❌ Incorrect (may parse in wrong timezone)
+// ? Incorrect (may parse in wrong timezone)
 const date = new Date(serverResponse.dateString.replace('Z', '')); // Don't remove Z
 ```
 

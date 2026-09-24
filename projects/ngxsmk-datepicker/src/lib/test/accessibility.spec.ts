@@ -103,7 +103,7 @@ describe('Accessibility Tests', () => {
       fixture.detectChanges();
 
       // Component should support keyboard shortcuts
-      expect(component.enableKeyboardShortcuts).toBeDefined();
+      expect(component.enableKeyboardShortcuts()).toBeDefined();
 
       // Close manually to verify the component supports closing
       component.closeCalendarWithFocusRestore();
@@ -118,7 +118,7 @@ describe('Accessibility Tests', () => {
       fixture.detectChanges();
 
       // Component should handle keyboard navigation
-      expect(component.enableKeyboardShortcuts).toBeDefined();
+      expect(component.enableKeyboardShortcuts()).toBeDefined();
     }));
   });
 

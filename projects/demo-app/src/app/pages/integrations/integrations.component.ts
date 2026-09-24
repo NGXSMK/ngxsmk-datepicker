@@ -18,9 +18,10 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
 
       <h2>Angular Material</h2>
       <p>
-        The library provides built-in support for <code>MatFormField</code>. Add the
-        <code>ngxsmkMatFormFieldControl</code> directive to the datepicker so <code>mat-form-field</code> finds it. Use
-        the datepicker inside a standard Material field with floating labels, hints, and error states.
+        The library provides built-in support for <code>MatFormField</code> via the optional
+        <code>ngxsmk-datepicker/material</code> entry. Import
+        <code>NgxsmkDatepickerMatFormFieldControlDirective</code> and add <code>ngxsmkMatFormFieldControl</code> on the
+        datepicker so <code>mat-form-field</code> finds it.
       </p>
 
       <div class="code-window">
@@ -31,7 +32,7 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
           <div class="window-title">my.component.ts</div>
         </div>
         <pre><code class="text-main"><span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerComponent</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker'</span>;
-<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'./ngxsmk-mat-form-field.directive'</span>;
+<span class="token-keyword">import</span> {{ '{' }} <span class="token-class">NgxsmkDatepickerMatFormFieldControlDirective</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'ngxsmk-datepicker/material'</span>;
 <span class="token-keyword">import</span> {{ '{' }} <span class="token-class">MatFormFieldModule</span> {{ '}' }} <span class="token-keyword">from</span> <span class="token-string">'&#64;angular/material/form-field'</span>;
 
 <span class="token-keyword">&#64;Component</span>({{ '{' }}

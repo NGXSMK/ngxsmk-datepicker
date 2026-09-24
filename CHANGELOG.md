@@ -2,10 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 24, 2026 - **Current stable:** v3.0.6
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Fixed
+
+- **`autoApplyClose` ignored on emit (Issue #325)**: `emitValue()` now closes only via `shouldAutoClose()` (`autoApplyClose`, `showTime`, `timeOnly`, inline, and complete single/range/period selections). Default remains `false` (opt-in), matching API.md. With `showTime`, the popover stays open so time can be adjusted until Close. Also closes correctly for week/month/quarter/year when `autoApplyClose` is enabled ([#325](https://github.com/NGXSMK/ngxsmk-datepicker/issues/325)).
+- **Unified popover close pipeline**: Toggle, touch/pointer dismiss, outside click, and closing other open instances all go through `closeCalendarWithFocusRestore()` so `allowSameDay` finalize, focus restore, and touched state stay consistent.
+
+### Changed
+
+- **`DateSelectionService` no longer re-exported** from `ngxsmk-datepicker/services`. It was never used by the Datepicker Host (Day Selection stays on the host per CONTEXT.md); the prototype remains internal for tests only until a real Selection module lands.
+- **Signal inputs batch 3**: `showOtherMonths`, `enableKeyboardShortcuts`, `enableNaturalLanguage`, `enableAi`, `showAiSuggestions`, `enableVoiceInput`, `changeActiveMonthOnSelection`, `showWeekNumbers`, `weekNumberLabel`, `defaultMonthOffset` migrated to `input()` (consumer `[bindings]` unchanged).
+
+### Tests
+
+- Added `open-close-matrix.spec.ts` covering autoApplyClose × showTime × single/range/period dismiss paths.
+
+## [3.0.6] - 2026-09-08
+
+### Added
+
+- **Constraints Snapshot**: Unified allowed-day truth behind an immutable `Constraints.build` → `evaluate` / `isAllowed` / `scan` seam (ADR-0001). Host disabled checks, range scans, and reactive forms validators share one compiled path with structured Constraint Denials.
+- **Secondary entry points**: Optional `ngxsmk-datepicker/adapters` (~10 KB) and `ngxsmk-datepicker/material` (~4 KB) packages so date-library adapters and Material form-field integration stay out of the main FESM (~1.0 MB without source maps).
+
+### Changed
+
+- **Calendar generation**: Moved syncScroll-aware `buildCalendarMonths` into `CalendarGenerationService`; host `generateCalendar()` is a thin orchestrator (invalidate → assign months → CD / a11y).
+- **Docs**: README, API.md, INTEGRATION.md, MIGRATION.md, TIMEZONE.md, CONTRIBUTING.md, V3-ROADMAP, REFACTOR_PLAN, and Material example/demo snippets updated for Constraints exports and `ngxsmk-datepicker/adapters` / `ngxsmk-datepicker/material` imports.
 
 ## [3.0.5] - 2026-08-22
 

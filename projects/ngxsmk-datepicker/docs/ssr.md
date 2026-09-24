@@ -1,6 +1,6 @@
-﻿# Server-Side Rendering (SSR) Guide
+# Server-Side Rendering (SSR) Guide
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ngxsmk-datepicker is fully compatible with Angular Universal and server-side rendering. This guide covers SSR setup, best practices, and troubleshooting.
 
@@ -8,11 +8,11 @@ ngxsmk-datepicker is fully compatible with Angular Universal and server-side ren
 
 The datepicker is designed to work seamlessly in both server and browser environments:
 
-- ✅ All browser-only APIs are guarded with platform checks
-- ✅ No direct `window` or `document` access during initialization
-- ✅ Event listeners only attach in browser environment
-- ✅ Compatible with Angular Universal
-- ✅ Supports partial hydration
+- ? All browser-only APIs are guarded with platform checks
+- ? No direct `window` or `document` access during initialization
+- ? Event listeners only attach in browser environment
+- ? Compatible with Angular Universal
+- ? Supports partial hydration
 
 ## Basic SSR Setup
 
@@ -167,10 +167,10 @@ npm run serve:ssr
 **Solution**: Ensure date values are properly serialized/deserialized. Use `Date` objects, not strings, when possible:
 
 ```typescript
-// ❌ Bad - may cause issues
+// ? Bad - may cause issues
 date: "2024-01-15"
 
-// ✅ Good
+// ? Good
 date: new Date("2024-01-15")
 ```
 
@@ -231,8 +231,8 @@ Browser-only features are lazily initialized:
 
 The datepicker works with or without Zone.js:
 
-- ✅ Works with Zone.js (default)
-- ✅ Works without Zone.js (zoneless)
+- ? Works with Zone.js (default)
+- ? Works without Zone.js (zoneless)
 - Uses `ChangeDetectorRef.markForCheck()` for manual change detection
 - Compatible with Angular's zoneless mode
 

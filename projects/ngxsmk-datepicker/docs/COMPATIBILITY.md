@@ -1,57 +1,57 @@
-﻿# Version Compatibility Matrix
+# Version Compatibility Matrix
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 This document provides comprehensive compatibility information for `ngxsmk-datepicker` across different Angular versions, Zone.js configurations, and SSR/CSR setups.
 
-## 📋 Angular Version Compatibility
+## ?? Angular Version Compatibility
 
 ### Compatibility Matrix
 
 | Angular Version | Status | Core Features | Signal Features | Signal Forms | SSR Support | Notes |
 |----------------|--------|--------------|----------------|--------------|-------------|-------|
-| **Angular 17** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed | ❌ Not Available | ✅ Full | Minimum supported version |
-| **Angular 18** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Enhanced signal support |
-| **Angular 19** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Optimized performance |
-| **Angular 20** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ❌ Not Available | ✅ Full | Fully supported |
-| **Angular 21** | ✅ Fully Supported | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | **Officially released - Current development target**<br/>✅ Signal Forms (experimental)<br/>✅ Zoneless by default<br/>✅ Compatible with Vitest-based apps<br/>✅ Angular Aria compatible |
-| **Angular 22+** | 🔄 Future Support | ✅ All | ✅ Signals, Computed, Effects | ✅ Signal Forms `[field]` | ✅ Full | Peer dependency: `<24.0.0` |
+| **Angular 17** | ? Fully Supported | ? All | ? Signals, Computed | ? Not Available | ? Full | Minimum supported version |
+| **Angular 18** | ? Fully Supported | ? All | ? Signals, Computed, Effects | ? Not Available | ? Full | Enhanced signal support |
+| **Angular 19** | ? Fully Supported | ? All | ? Signals, Computed, Effects | ? Not Available | ? Full | Optimized performance |
+| **Angular 20** | ? Fully Supported | ? All | ? Signals, Computed, Effects | ? Not Available | ? Full | Fully supported |
+| **Angular 21** | ? Fully Supported | ? All | ? Signals, Computed, Effects | ? Signal Forms `[field]` | ? Full | **Officially released - Current development target**<br/>? Signal Forms (experimental)<br/>? Zoneless by default<br/>? Compatible with Vitest-based apps<br/>? Angular Aria compatible |
+| **Angular 22+** | ?? Future Support | ? All | ? Signals, Computed, Effects | ? Signal Forms `[field]` | ? Full | Peer dependency: `<24.0.0` |
 
 ### Feature Availability by Angular Version
 
 #### Core Features (Available in all versions)
-- ✅ Date selection (single, range, multiple)
-- ✅ Time selection
-- ✅ Calendar views (month, year, decade, timeline, time-slider)
-- ✅ Keyboard navigation
-- ✅ Touch gestures
-- ✅ RTL support
-- ✅ Timezone support
-- ✅ Custom formatting
-- ✅ Holiday provider integration
-- ✅ Custom hooks and extensions
-- ✅ Accessibility (ARIA, keyboard)
-- ✅ Theming (light/dark)
-- ✅ Translations/i18n
+- ? Date selection (single, range, multiple)
+- ? Time selection
+- ? Calendar views (month, year, decade, timeline, time-slider)
+- ? Keyboard navigation
+- ? Touch gestures
+- ? RTL support
+- ? Timezone support
+- ? Custom formatting
+- ? Holiday provider integration
+- ? Custom hooks and extensions
+- ? Accessibility (ARIA, keyboard)
+- ? Theming (light/dark)
+- ? Translations/i18n
 
 #### Signal Features (Angular 17+)
-- ✅ `signal()` - Reactive state management
-- ✅ `computed()` - Derived reactive values
-- ✅ `effect()` - Side effects (Angular 18+)
-- ✅ `inject()` - Dependency injection
+- ? `signal()` - Reactive state management
+- ? `computed()` - Derived reactive values
+- ? `effect()` - Side effects (Angular 18+)
+- ? `inject()` - Dependency injection
 
 #### Signal Forms (Angular 21+)
-- ✅ `[field]` input binding (experimental Angular 21 feature)
-- ✅ Automatic field synchronization
-- ✅ Reactive form field updates
-- ✅ Signal-based value management
-- ✅ Works with `form()`, `objectSchema()`, and `validators`
-- ✅ Compatible with `httpResource` and `linkedSignal` patterns
+- ? `[field]` input binding (experimental Angular 21 feature)
+- ? Automatic field synchronization
+- ? Reactive form field updates
+- ? Signal-based value management
+- ? Works with `form()`, `objectSchema()`, and `validators`
+- ? Compatible with `httpResource` and `linkedSignal` patterns
 
 #### Angular 21 New Features Compatibility
-- ✅ **Zoneless by Default**: Fully compatible with Angular 21 apps that don't include Zone.js
-- ✅ **Vitest Test Runner**: Library works in apps using Vitest-based setups
-- ✅ **Angular Aria**: Compatible with Angular Aria components; uses custom ARIA implementation for screen reader support
+- ? **Zoneless by Default**: Fully compatible with Angular 21 apps that don't include Zone.js
+- ? **Vitest Test Runner**: Library works in apps using Vitest-based setups
+- ? **Angular Aria**: Compatible with Angular Aria components; uses custom ARIA implementation for screen reader support
 
 ### Peer Dependencies
 
@@ -65,7 +65,7 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 
 **Zone.js**: Optional (declared in `peerDependenciesMeta`)
 
-## 🔄 Zone.js vs Zoneless Compatibility
+## ?? Zone.js vs Zoneless Compatibility
 
 ### Overview
 
@@ -75,12 +75,12 @@ This document provides comprehensive compatibility information for `ngxsmk-datep
 
 | Feature | With Zone.js | Without Zone.js | Notes |
 |---------|--------------|-----------------|-------|
-| **Change Detection** | ✅ Automatic | ✅ Manual (OnPush) | Component uses `OnPush` strategy |
-| **Form Integration** | ✅ Works | ✅ Works | Uses `ControlValueAccessor` |
-| **Event Handling** | ✅ Works | ✅ Works | Native event listeners |
-| **Signal Updates** | ✅ Works | ✅ Works | Signals trigger change detection |
-| **Reactive Forms** | ✅ Works | ✅ Works | FormControl integration |
-| **Signal Forms** | ✅ Works | ✅ Works | Angular 21+ signal forms |
+| **Change Detection** | ? Automatic | ? Manual (OnPush) | Component uses `OnPush` strategy |
+| **Form Integration** | ? Works | ? Works | Uses `ControlValueAccessor` |
+| **Event Handling** | ? Works | ? Works | Native event listeners |
+| **Signal Updates** | ? Works | ? Works | Signals trigger change detection |
+| **Reactive Forms** | ? Works | ? Works | FormControl integration |
+| **Signal Forms** | ? Works | ? Works | Angular 21+ signal forms |
 
 ### Zoneless Setup
 
@@ -89,7 +89,7 @@ The component uses **OnPush change detection strategy** and **signals** for reac
 ```typescript
 @Component({
   selector: 'ngxsmk-datepicker',
-  changeDetection: ChangeDetectionStrategy.OnPush, // ✅ Zoneless compatible
+  changeDetection: ChangeDetectionStrategy.OnPush, // ? Zoneless compatible
   // ...
 })
 ```
@@ -155,14 +155,14 @@ bootstrapApplication(AppComponent, {
 });
 ```
 
-### Migration Guide: Zone.js → Zoneless
+### Migration Guide: Zone.js ? Zoneless
 
 1. **Remove Zone.js dependency** (if desired)
 2. **Ensure OnPush strategy** (already used by component)
 3. **Use signals for state** (component already uses signals)
 4. **No code changes needed** - component is zoneless-ready
 
-## 🌐 SSR vs CSR Compatibility
+## ?? SSR vs CSR Compatibility
 
 ### Server-Side Rendering (SSR)
 
@@ -172,12 +172,12 @@ The component is **fully compatible** with Angular Universal and SSR.
 
 | Feature | SSR Support | Implementation |
 |---------|-------------|----------------|
-| **Platform Detection** | ✅ Safe | Uses `isPlatformBrowser()` and `PLATFORM_ID` |
-| **DOM Access** | ✅ Safe | Guarded with `isBrowser` checks |
-| **Event Listeners** | ✅ Safe | Only attached in browser |
-| **Date Formatting** | ✅ Safe | Uses `Intl` API (available in Node.js) |
-| **Local Storage** | ✅ Safe | Not used |
-| **Window/Document** | ✅ Safe | Guarded with platform checks |
+| **Platform Detection** | ? Safe | Uses `isPlatformBrowser()` and `PLATFORM_ID` |
+| **DOM Access** | ? Safe | Guarded with `isBrowser` checks |
+| **Event Listeners** | ? Safe | Only attached in browser |
+| **Date Formatting** | ? Safe | Uses `Intl` API (available in Node.js) |
+| **Local Storage** | ? Safe | Not used |
+| **Window/Document** | ? Safe | Guarded with platform checks |
 
 #### SSR Implementation Details
 
@@ -214,11 +214,11 @@ All features work identically in CSR mode. No special configuration needed.
 | Aspect | SSR | CSR | Notes |
 |--------|-----|-----|-------|
 | **Initial Render** | Server | Browser | Component renders on both |
-| **DOM Access** | ❌ Not Available | ✅ Available | Guarded with `isPlatformBrowser()` |
-| **Event Listeners** | ❌ Not Attached | ✅ Attached | Only in browser |
-| **Date Formatting** | ✅ Works | ✅ Works | Uses `Intl` API |
-| **Locale Detection** | ⚠️ Limited | ✅ Full | Server uses default, browser detects |
-| **Performance** | ✅ Fast Initial Load | ✅ Interactive | SSR improves SEO and initial load |
+| **DOM Access** | ? Not Available | ? Available | Guarded with `isPlatformBrowser()` |
+| **Event Listeners** | ? Not Attached | ? Attached | Only in browser |
+| **Date Formatting** | ? Works | ? Works | Uses `Intl` API |
+| **Locale Detection** | ?? Limited | ? Full | Server uses default, browser detects |
+| **Performance** | ? Fast Initial Load | ? Interactive | SSR improves SEO and initial load |
 
 ### SSR Setup Example
 
@@ -250,7 +250,7 @@ export class MyComponent {
 }
 ```
 
-## 🧩 Shadow DOM & Web Components Compatibility
+## ?? Shadow DOM & Web Components Compatibility
 
 `ngxsmk-datepicker` is fully compatible with **Shadow DOM encapsulation** (`ViewEncapsulation.ShadowDom`) and deployment as an **Angular Element (Custom Web Component)** inside other frameworks (React, Vue, etc.).
 
@@ -262,39 +262,39 @@ When components are loaded inside a Shadow root, the browser retargets event tar
 * Falls back to standard light DOM `.contains(target)` when composed paths are not supported by the environment.
 * Supported across both the primary Datepicker component and Custom Select dropdown components.
 
-## 🔧 Feature Compatibility Matrix
+## ?? Feature Compatibility Matrix
 
 ### By Angular Version
 
 | Feature | Angular 17 | Angular 18 | Angular 19 | Angular 20 | Angular 21+ |
 |---------|------------|-----------|------------|------------|-------------|
-| **Standalone Component** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Signals** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Shadow DOM Support** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Computed Signals** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Effects** | ⚠️ Limited | ✅ | ✅ | ✅ | ✅ |
-| **Signal Forms** | ❌ | ❌ | ❌ | ❌ | ✅ |
-| **ControlValueAccessor** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Reactive Forms** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **OnPush Strategy** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **SSR Support** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Zoneless Support** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Translations/i18n** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Locale Registry** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Standalone Component** | ? | ? | ? | ? | ? |
+| **Signals** | ? | ? | ? | ? | ? |
+| **Shadow DOM Support** | ? | ? | ? | ? | ? |
+| **Computed Signals** | ? | ? | ? | ? | ? |
+| **Effects** | ?? Limited | ? | ? | ? | ? |
+| **Signal Forms** | ? | ? | ? | ? | ? |
+| **ControlValueAccessor** | ? | ? | ? | ? | ? |
+| **Reactive Forms** | ? | ? | ? | ? | ? |
+| **OnPush Strategy** | ? | ? | ? | ? | ? |
+| **SSR Support** | ? | ? | ? | ? | ? |
+| **Zoneless Support** | ? | ? | ? | ? | ? |
+| **Translations/i18n** | ? | ? | ? | ? | ? |
+| **Locale Registry** | ? | ? | ? | ? | ? |
 
 ### By Configuration
 
 | Configuration | Zone.js | Zoneless | SSR | CSR |
 |---------------|---------|----------|-----|-----|
-| **Change Detection** | ✅ Auto | ✅ Manual | ✅ Works | ✅ Works |
-| **Form Integration** | ✅ Works | ✅ Works | ✅ Works | ✅ Works |
-| **Event Handling** | ✅ Works | ✅ Works | ⚠️ Browser Only | ✅ Works |
-| **Signal Updates** | ✅ Works | ✅ Works | ✅ Works | ✅ Works |
-| **Date Formatting** | ✅ Works | ✅ Works | ✅ Works | ✅ Works |
-| **Keyboard Navigation** | ✅ Works | ✅ Works | ⚠️ Browser Only | ✅ Works |
-| **Touch Gestures** | ✅ Works | ✅ Works | ⚠️ Browser Only | ✅ Works |
+| **Change Detection** | ? Auto | ? Manual | ? Works | ? Works |
+| **Form Integration** | ? Works | ? Works | ? Works | ? Works |
+| **Event Handling** | ? Works | ? Works | ?? Browser Only | ? Works |
+| **Signal Updates** | ? Works | ? Works | ? Works | ? Works |
+| **Date Formatting** | ? Works | ? Works | ? Works | ? Works |
+| **Keyboard Navigation** | ? Works | ? Works | ?? Browser Only | ? Works |
+| **Touch Gestures** | ? Works | ? Works | ?? Browser Only | ? Works |
 
-## 📝 Migration Guides
+## ?? Migration Guides
 
 ### Upgrading from Angular 17 to 21
 
@@ -356,7 +356,7 @@ When components are loaded inside a Shadow root, the browser retargets event tar
 
 3. **No component changes needed** - component is SSR-safe
 
-## ⚠️ Known Limitations
+## ?? Known Limitations
 
 ### Angular 17
 - Effects support is limited (use signals/computed instead)
@@ -370,43 +370,43 @@ When components are loaded inside a Shadow root, the browser retargets event tar
 - Requires manual change detection (handled automatically by component)
 - Form integration works the same as with Zone.js
 
-## 🧪 Testing Compatibility
+## ?? Testing Compatibility
 
 The component is tested against:
-- ✅ Angular 17, 18, 19, 20, 21
-- ✅ With and without Zone.js
-- ✅ SSR and CSR modes
-- ✅ Various browser environments
-- ✅ **Vitest Compatible**: Works in Angular 21 applications using Vitest-based test setups
+- ? Angular 17, 18, 19, 20, 21
+- ? With and without Zone.js
+- ? SSR and CSR modes
+- ? Various browser environments
+- ? **Vitest Compatible**: Works in Angular 21 applications using Vitest-based test setups
   - Library tests use Karma/Jasmine, but the library itself is fully compatible with Vitest-based apps
   - No changes needed when using Vitest in your Angular 21 application
 
-## 🆕 Angular 21 New Features Support
+## ?? Angular 21 New Features Support
 
 ### Signal Forms (Experimental)
-- ✅ **Full Support**: `[field]` input binding for direct Signal Forms integration
-- ✅ **Automatic Sync**: Two-way binding with signal form fields
-- ✅ **Validation**: Respects field validation and disabled state
-- ✅ **Server Integration**: Works with `httpResource` and `linkedSignal` patterns
+- ? **Full Support**: `[field]` input binding for direct Signal Forms integration
+- ? **Automatic Sync**: Two-way binding with signal form fields
+- ? **Validation**: Respects field validation and disabled state
+- ? **Server Integration**: Works with `httpResource` and `linkedSignal` patterns
 
 ### Zoneless by Default
-- ✅ **Fully Compatible**: Works in Angular 21 apps without Zone.js
-- ✅ **OnPush Strategy**: Uses OnPush change detection for optimal performance
-- ✅ **Signal-Based**: Leverages signals for reactive updates
-- ✅ **No Changes Needed**: Existing code works without modification
+- ? **Fully Compatible**: Works in Angular 21 apps without Zone.js
+- ? **OnPush Strategy**: Uses OnPush change detection for optimal performance
+- ? **Signal-Based**: Leverages signals for reactive updates
+- ? **No Changes Needed**: Existing code works without modification
 
 ### Vitest Test Runner
-- ✅ **Compatible**: Library works in apps using Vitest-based setups
-- ✅ **No Migration Required**: Use the library as-is in Vitest-based projects
-- ✅ **Test Suite**: Library tests use Karma/Jasmine but library is Vitest-compatible
+- ? **Compatible**: Library works in apps using Vitest-based setups
+- ? **No Migration Required**: Use the library as-is in Vitest-based projects
+- ? **Test Suite**: Library tests use Karma/Jasmine but library is Vitest-compatible
 
 ### Angular Aria Compatibility
-- ✅ **ARIA Support**: Built-in ARIA attributes and screen reader support
-- ✅ **AriaLiveService**: Custom service for live region announcements
-- ✅ **Compatible**: Works alongside Angular Aria components
-- ✅ **Accessibility First**: All interactive elements have proper ARIA labels
+- ? **ARIA Support**: Built-in ARIA attributes and screen reader support
+- ? **AriaLiveService**: Custom service for live region announcements
+- ? **Compatible**: Works alongside Angular Aria components
+- ? **Accessibility First**: All interactive elements have proper ARIA labels
 
-## 📚 Additional Resources
+## ?? Additional Resources
 
 - [Angular Signals Documentation](https://angular.dev/guide/signals)
 - [Angular SSR Guide](https://angular.dev/guide/ssr)
@@ -415,7 +415,7 @@ The component is tested against:
 - [Vitest Documentation](https://vitest.dev/)
 - [Angular Aria Documentation](https://angular.dev/guide/accessibility/angular-aria)
 
-## 🔍 Version Detection
+## ?? Version Detection
 
 To check your Angular version:
 
@@ -429,7 +429,7 @@ To verify compatibility:
 npm list @angular/core @angular/common @angular/forms
 ```
 
-## 💡 Best Practices
+## ?? Best Practices
 
 1. **Use Signal Forms** (Angular 21+): Prefer `[field]` input for better integration
 2. **Enable SSR**: Improves SEO and initial load performance
@@ -437,7 +437,7 @@ npm list @angular/core @angular/common @angular/forms
 4. **Use OnPush**: Already enabled, ensures optimal change detection
 5. **Platform Checks**: Component handles SSR/CSR automatically
 
-## 🆘 Troubleshooting
+## ?? Troubleshooting
 
 ### Issue: Component not updating in zoneless app
 **Solution**: Component uses `markForCheck()` internally. Ensure you're using signals for reactive updates.
@@ -463,9 +463,9 @@ Recommended validation before tagging a release:
 | Lint | `npm run lint` | ESLint across workspace |
 | E2E (optional CI) | `npm run e2e` with `BASE_URL` pointing at served demo | Playwright; set `CI=1` and start demo separately in pipelines |
 
-**Angular minors**: Keep `@angular/*` on the same minor within the workspace (`package.json`). Bump peers in library `projects/ngxsmk-datepicker/package.json` when raising supported ceiling; update this doc’s matrix table and peer JSON block together.
+**Angular minors**: Keep `@angular/*` on the same minor within the workspace (`package.json`). Bump peers in library `projects/ngxsmk-datepicker/package.json` when raising supported ceiling; update this doc�s matrix table and peer JSON block together.
 
-**Ionic/Capacitor sample**: The `examples/ionic-test-app` project may require `npm install --legacy-peer-deps` when Ionic’s peers lag Angular—see [examples/ionic-test-app/README.md](../../../examples/ionic-test-app/README.md).
+**Ionic/Capacitor sample**: The `examples/ionic-test-app` project may require `npm install --legacy-peer-deps` when Ionic�s peers lag Angular�see [examples/ionic-test-app/README.md](../../../examples/ionic-test-app/README.md).
 
 
 

@@ -1,6 +1,6 @@
-﻿# Integration Guides
+# Integration Guides
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 This document provides integration examples for using ngxsmk-datepicker with popular frameworks and libraries.
 
@@ -28,7 +28,7 @@ Do not pass a theme object to the `[theme]` input; use `ThemeBuilderService` for
 
 ## Accessibility
 
-The datepicker is built with **accessibility in mind**: keyboard navigation (arrows, Enter, Escape, T/Y/N/W, etc.), ARIA roles and labels on interactive elements, and live regions for screen reader announcements. For keyboard shortcuts and ARIA options see [API.md – Keyboard Support](API.md#keyboard-support) and the ARIA-related inputs in the API reference.
+The datepicker is built with **accessibility in mind**: keyboard navigation (arrows, Enter, Escape, T/Y/N/W, etc.), ARIA roles and labels on interactive elements, and live regions for screen reader announcements. For keyboard shortcuts and ARIA options see [API.md � Keyboard Support](API.md#keyboard-support) and the ARIA-related inputs in the API reference.
 
 ## Input sanitization and CSP
 
@@ -37,7 +37,7 @@ The datepicker is built with **accessibility in mind**: keyboard navigation (arr
 
 ## Angular Material
 
-The main `ngxsmk-datepicker` bundle does **not** import `@angular/material`, so non-Material apps are not forced to install it. If you use `mat-form-field`, install Material and add the directive as below.
+The main `ngxsmk-datepicker` bundle does **not** import `@angular/material`, so non-Material apps are not forced to install it. If you use `mat-form-field`, install Material and import from the optional **`ngxsmk-datepicker/material`** entry as below.
 
 ### Installation
 
@@ -47,33 +47,15 @@ npm install @angular/material @angular/cdk ngxsmk-datepicker
 
 ### Basic Integration (Standalone Components)
 
-**Recommended:** Use the **`ngxsmkMatFormFieldControl`** directive on the datepicker so `mat-form-field` finds it. Add this directive file to your project (e.g. `ngxsmk-mat-form-field.directive.ts`) so only Material apps pull in `@angular/material`:
-
-```typescript
-// ngxsmk-mat-form-field.directive.ts
-import { Directive, forwardRef } from '@angular/core';
-import { MatFormFieldControl } from '@angular/material/form-field';
-import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-
-@Directive({
-  selector: 'ngxsmk-datepicker[ngxsmkMatFormFieldControl]',
-  standalone: true,
-  providers: [
-    { provide: MatFormFieldControl, useExisting: forwardRef(() => NgxsmkDatepickerComponent) },
-  ],
-})
-export class NgxsmkDatepickerMatFormFieldControlDirective {}
-```
-
-Then in your component:
+**Recommended:** Import the **`ngxsmkMatFormFieldControl`** directive from the optional `ngxsmk-datepicker/material` entry so only Material apps pull in `@angular/material`:
 
 ```typescript
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // your local file
+import { NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  imports: [MatFormFieldModule, NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective, ...],
+  imports: [MatFormFieldModule, NgxsmkDatepickerComponent, NgxsmkDatepickerMatFormFieldControlDirective],
   template: `
     <mat-form-field appearance="outline">
       <mat-label>Select Date</mat-label>
@@ -133,16 +115,16 @@ export class DatepickerComponent {
 }
 ```
 
-**If you see "mat-form-field must contain a MatFormFieldControl":** Add the **`ngxsmkMatFormFieldControl`** directive to the datepicker (Option A above). Do not use `MAT_FORM_FIELD` or pass the wrong token; the directive is the supported path.
+**If you see "mat-form-field must contain a MatFormFieldControl":** Add the **`ngxsmkMatFormFieldControl`** directive from `ngxsmk-datepicker/material` to the datepicker. Do not use `MAT_FORM_FIELD` or pass the wrong token; the directive is the supported path.
 
 ### Integration with Non-Standalone Components (NgModules)
 
-Add the same directive file (see snippet above) to your project, then import it in your NgModule:
+Import the Material entry in your NgModule:
 
 ```typescript
 import { NgModule } from '@angular/core';
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // your local file
+import { NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';

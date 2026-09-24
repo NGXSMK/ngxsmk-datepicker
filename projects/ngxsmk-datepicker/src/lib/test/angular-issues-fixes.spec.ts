@@ -39,6 +39,6 @@ describe('Angular Issues Fixes Suite', () => {
     host.showOtherMonths = true;
     fixture.detectChanges();
     const datepickerComponent = fixture.debugElement.children[0].componentInstance as NgxsmkDatepickerComponent;
-    expect(datepickerComponent.showOtherMonths).toBeTrue();
+    expect(datepickerComponent.showOtherMonths()).toBeTrue();
   });
 });

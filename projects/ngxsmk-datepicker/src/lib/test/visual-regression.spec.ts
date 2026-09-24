@@ -215,11 +215,11 @@ describe('NgxsmkDatepicker - Visual Regression Tests', () => {
     });
 
     it('should capture calendar with week numbers', async () => {
-      (component as unknown as { showWeekNumbers: boolean }).showWeekNumbers = true;
+      fixture.componentRef.setInput('showWeekNumbers', true);
       fixture.detectChanges();
 
       await prepareElementForScreenshot(nativeElement);
-      expect((component as unknown as { showWeekNumbers: boolean }).showWeekNumbers).toBe(true);
+      expect(component.showWeekNumbers()).toBe(true);
     });
   });
 

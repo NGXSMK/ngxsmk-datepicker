@@ -1,6 +1,6 @@
 # Angular Signal Forms Validation Support
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ## Overview
 

@@ -1,6 +1,6 @@
-﻿# Signal Forms Integration
+# Signal Forms Integration
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 This guide covers using ngxsmk-datepicker with Angular 21+ Signal Forms API.
 
@@ -193,8 +193,8 @@ export class FormComponent {
 1. **Use `[field]` binding for automatic dirty tracking**: The datepicker uses the field's `setValue()` or `updateValue()` methods when available, which properly track dirty state in Angular Signal Forms.
 
 2. **Avoid mixing `[field]` with manual `(valueChange)` handlers**: If you use both `[field]` and `(valueChange)="dateField.set($event)"`, the manual handler bypasses the form API and may prevent dirty state tracking. Use one or the other:
-   - ✅ **Recommended**: Use only `[field]="myForm.dateField"` for automatic dirty tracking
-   - ⚠️ **Alternative**: Use `[value]` and `(valueChange)` with proper form API methods if you need manual control
+   - ? **Recommended**: Use only `[field]="myForm.dateField"` for automatic dirty tracking
+   - ?? **Alternative**: Use `[value]` and `(valueChange)` with proper form API methods if you need manual control
 
 3. **Manual binding pattern**: If you must use manual binding (e.g., for stability issues), ensure you update the form using the field's API methods:
    ```typescript
@@ -295,7 +295,7 @@ export class StableFormComponent {
 
 **Note:** The `$any($event)` cast may be needed if there's a type mismatch between `DatepickerValue` and your expected `Date` type.
 
-**⚠️ Warning**: Direct mutation (`this.myForm.value().myDate = newDate`) bypasses Angular's dirty tracking mechanism. Always prefer using `setValue()` or `updateValue()` when available.
+**?? Warning**: Direct mutation (`this.myForm.value().myDate = newDate`) bypasses Angular's dirty tracking mechanism. Always prefer using `setValue()` or `updateValue()` when available.
 
 ## Validation
 
@@ -569,13 +569,13 @@ If `form().dirty()` returns `false` after selecting a date:
 
 1. **Ensure you're using `[field]` binding**: The `[field]` input automatically uses the form's API methods to track dirty state.
    ```html
-   <!-- ✅ Correct - uses [field] binding -->
+   <!-- ? Correct - uses [field] binding -->
    <ngxsmk-datepicker [field]="myForm.dateField" mode="single"></ngxsmk-datepicker>
    ```
 
 2. **Avoid mixing `[field]` with manual `(valueChange)`**: Don't use both together, as the manual handler may bypass form tracking:
    ```html
-   <!-- ❌ Incorrect - manual handler bypasses form API -->
+   <!-- ? Incorrect - manual handler bypasses form API -->
    <ngxsmk-datepicker 
      [field]="myForm.dateField"
      (valueChange)="dateField.set($event)"
@@ -586,10 +586,10 @@ If `form().dirty()` returns `false` after selecting a date:
 3. **Use form API methods in manual handlers**: If you must use manual binding, use `setValue()` or `updateValue()`:
    ```typescript
    onDateChange(newDate: Date): void {
-     // ✅ Correct - uses form API
+     // ? Correct - uses form API
      this.myForm.dateField.setValue(newDate);
      
-     // ❌ Incorrect - bypasses dirty tracking
+     // ? Incorrect - bypasses dirty tracking
      // this.dateField.set(newDate);
    }
    ```

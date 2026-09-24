@@ -97,7 +97,7 @@ describe('NgxsmkDatepickerComponent changeActiveMonthOnSelection', () => {
   });
 
   it('keeps the visible month fixed when disabled, even for dates outside the first calendar', () => {
-    component.changeActiveMonthOnSelection = false;
+    fixture.componentRef.setInput('changeActiveMonthOnSelection', false);
     fixture.detectChanges();
 
     expect(component.currentDate.getMonth()).toBe(0); // Jan

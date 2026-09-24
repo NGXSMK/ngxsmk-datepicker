@@ -1,10 +1,10 @@
-﻿# Extension Points and Hooks
+# Extension Points and Hooks
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ngxsmk-datepicker provides comprehensive extension points through the `hooks` input, allowing you to customize rendering, validation, keyboard shortcuts, formatting, and event handling.
 
-> **📚 For a complete understanding of the plugin architecture, see the [Plugin Architecture Guide](./PLUGIN-ARCHITECTURE.md)** which covers architecture principles, plugin patterns, lifecycle, and advanced use cases.
+> **?? For a complete understanding of the plugin architecture, see the [Plugin Architecture Guide](./PLUGIN-ARCHITECTURE.md)** which covers architecture principles, plugin patterns, lifecycle, and advanced use cases.
 
 ## Overview
 
@@ -248,7 +248,7 @@ myHooks: DatepickerHooks = {
     
     if (mode === 'range' && typeof value === 'object' && 'start' in value) {
       const range = value as { start: Date; end: Date };
-      return `${range.start.toLocaleDateString()} → ${range.end.toLocaleDateString()}`;
+      return `${range.start.toLocaleDateString()} ? ${range.end.toLocaleDateString()}`;
     }
     
     return ''; // Use default
@@ -373,7 +373,7 @@ The datepicker includes these built-in shortcuts:
 
 | Key | Action |
 |-----|--------|
-| `←` `→` `↑` `↓` | Navigate dates |
+| `?` `?` `?` `?` | Navigate dates |
 | `Page Up` | Previous month |
 | `Page Down` | Next month |
 | `Shift + Page Up` | Previous year |

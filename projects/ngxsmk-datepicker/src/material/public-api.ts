@@ -8,5 +8,5 @@
  * ```
  */
 
-export { provideMaterialFormFieldControl } from '../lib/material-form-field.helper';
-export { NgxsmkDatepickerMatFormFieldControlDirective } from '../lib/material-form-field.directive';
+export { provideMaterialFormFieldControl } from './material-form-field.helper';
+export { NgxsmkDatepickerMatFormFieldControlDirective } from './material-form-field.directive';

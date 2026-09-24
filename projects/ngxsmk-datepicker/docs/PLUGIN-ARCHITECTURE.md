@@ -1,6 +1,6 @@
-﻿# Plugin Architecture
+# Plugin Architecture
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ngxsmk-datepicker features a powerful **plugin architecture** that allows you to extend and customize the component's behavior without modifying its core code. This architecture is built on a **hook-based system** that provides extension points throughout the component's lifecycle.
 
@@ -27,35 +27,35 @@ The plugin architecture in ngxsmk-datepicker is designed around the concept of *
 ### Key Concepts
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Datepicker Component                      │
-│                                                              │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              Core Component Logic                     │  │
-│  │                                                       │  │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐          │  │
-│  │  │  Render  │  │ Validate │  │  Events  │          │  │
-│  │  │  Hooks   │  │  Hooks   │  │  Hooks   │          │  │
-│  │  └────┬─────┘  └────┬─────┘  └────┬─────┘          │  │
-│  │       │             │             │                 │  │
-│  │       └─────────────┼─────────────┘                 │  │
-│  │                     │                               │  │
-│  │              ┌──────▼──────┐                        │  │
-│  │              │   Plugin    │                        │  │
-│  │              │   Registry  │                        │  │
-│  │              └──────┬──────┘                        │  │
-│  │                     │                               │  │
-│  └─────────────────────┼───────────────────────────────┘  │
-│                        │                                   │
-└────────────────────────┼───────────────────────────────────┘
-                         │
-                         │
-         ┌───────────────┼───────────────┐
-         │               │               │
-    ┌────▼────┐    ┌────▼────┐    ┌────▼────┐
-    │ Plugin  │    │ Plugin  │    │ Plugin  │
-    │    A    │    │    B    │    │    C    │
-    └─────────┘    └─────────┘    └─────────┘
++-------------------------------------------------------------+
+�                    Datepicker Component                      �
+�                                                              �
+�  +------------------------------------------------------+  �
+�  �              Core Component Logic                     �  �
+�  �                                                       �  �
+�  �  +----------+  +----------+  +----------+          �  �
+�  �  �  Render  �  � Validate �  �  Events  �          �  �
+�  �  �  Hooks   �  �  Hooks   �  �  Hooks   �          �  �
+�  �  +----------+  +----------+  +----------+          �  �
+�  �       �             �             �                 �  �
+�  �       +-------------+-------------+                 �  �
+�  �                     �                               �  �
+�  �              +------?------+                        �  �
+�  �              �   Plugin    �                        �  �
+�  �              �   Registry  �                        �  �
+�  �              +-------------+                        �  �
+�  �                     �                               �  �
+�  +---------------------+-------------------------------+  �
+�                        �                                   �
++------------------------+-----------------------------------+
+                         �
+                         �
+         +---------------+---------------+
+         �               �               �
+    +----?----+    +----?----+    +----?----+
+    � Plugin  �    � Plugin  �    � Plugin  �
+    �    A    �    �    B    �    �    C    �
+    +---------+    +---------+    +---------+
 ```
 
 ## Architecture Principles
@@ -65,12 +65,12 @@ The plugin architecture in ngxsmk-datepicker is designed around the concept of *
 Plugins extend functionality without modifying core code:
 
 ```typescript
-// ✅ Good: Plugin extends behavior
+// ? Good: Plugin extends behavior
 const myPlugin: DatepickerHooks = {
   validateDate: (date) => date.getDay() !== 0 // Disable Sundays
 };
 
-// ❌ Bad: Modifying core component (not possible, but conceptually wrong)
+// ? Bad: Modifying core component (not possible, but conceptually wrong)
 // Don't try to override internal methods
 ```
 
@@ -170,7 +170,7 @@ const stylingPlugin: DatepickerHooks = {
   
   getDayCellTooltip: (date, holidayLabel) => {
     if (holidayLabel) {
-      return `🎉 ${holidayLabel}`;
+      return `?? ${holidayLabel}`;
     }
     return `Date: ${date.toLocaleDateString()}`;
   }
@@ -309,7 +309,7 @@ const formattingPlugin: DatepickerHooks = {
     
     if (mode === 'range' && typeof value === 'object' && 'start' in value) {
       const range = value as { start: Date; end: Date };
-      return `${range.start.toLocaleDateString()} → ${range.end.toLocaleDateString()}`;
+      return `${range.start.toLocaleDateString()} ? ${range.end.toLocaleDateString()}`;
     }
     
     return ''; // Use default
@@ -529,20 +529,20 @@ Understanding when hooks are called helps you write effective plugins:
 ### 1. **Initialization Phase**
 
 ```
-Component Init → Calendar Generation → Hook: getDayCellClasses (for each date)
+Component Init ? Calendar Generation ? Hook: getDayCellClasses (for each date)
 ```
 
 ### 2. **User Interaction Phase**
 
 ```
 User Clicks Date
-  ↓
+  ?
 Hook: beforeDateSelect (can prevent selection)
-  ↓
+  ?
 Hook: validateDate (can prevent selection)
-  ↓
+  ?
 Date Selected (if allowed)
-  ↓
+  ?
 Hook: afterDateSelect
 ```
 
@@ -550,7 +550,7 @@ Hook: afterDateSelect
 
 ```
 Calendar Render
-  ↓
+  ?
 For each date:
   - Hook: getDayCellClasses
   - Hook: getDayCellTooltip
@@ -561,9 +561,9 @@ For each date:
 
 ```
 Key Press
-  ↓
+  ?
 Hook: handleShortcut (can handle custom shortcuts)
-  ↓
+  ?
 Default Shortcut Handling (if not handled)
 ```
 
@@ -571,9 +571,9 @@ Default Shortcut Handling (if not handled)
 
 ```
 Value Change
-  ↓
+  ?
 Hook: formatDisplayValue (for input display)
-  ↓
+  ?
 Display Updated
 ```
 
@@ -698,12 +698,12 @@ const validationPlugin = createValidationMiddleware(
 Each plugin should have a single responsibility:
 
 ```typescript
-// ✅ Good: Focused plugin
+// ? Good: Focused plugin
 const weekendBlocker: DatepickerHooks = {
   validateDate: (date) => date.getDay() !== 0 && date.getDay() !== 6
 };
 
-// ❌ Bad: Too many responsibilities
+// ? Bad: Too many responsibilities
 const megaPlugin: DatepickerHooks = {
   validateDate: (date) => { /* ... */ },
   getDayCellClasses: (date) => { /* ... */ },
@@ -718,14 +718,14 @@ const megaPlugin: DatepickerHooks = {
 Design plugins to be reusable across projects:
 
 ```typescript
-// ✅ Good: Configurable and reusable
+// ? Good: Configurable and reusable
 export function createBusinessDaysPlugin(config: BusinessDaysConfig): DatepickerHooks {
   return {
     validateDate: (date) => config.allowedDays.includes(date.getDay())
   };
 }
 
-// ❌ Bad: Hard-coded and not reusable
+// ? Bad: Hard-coded and not reusable
 const myBusinessDays: DatepickerHooks = {
   validateDate: (date) => [1, 2, 3, 4, 5].includes(date.getDay())
 };
@@ -736,7 +736,7 @@ const myBusinessDays: DatepickerHooks = {
 Keep hook functions lightweight:
 
 ```typescript
-// ✅ Good: Lightweight and memoized
+// ? Good: Lightweight and memoized
 const memoizedValidation = new Map<string, boolean>();
 
 const optimizedPlugin: DatepickerHooks = {
@@ -751,7 +751,7 @@ const optimizedPlugin: DatepickerHooks = {
   }
 };
 
-// ❌ Bad: Expensive operation on every call
+// ? Bad: Expensive operation on every call
 const slowPlugin: DatepickerHooks = {
   validateDate: (date) => {
     // Expensive API call on every validation
@@ -765,7 +765,7 @@ const slowPlugin: DatepickerHooks = {
 Use `getValidationError` for user-friendly messages:
 
 ```typescript
-// ✅ Good: Clear error messages
+// ? Good: Clear error messages
 const userFriendlyPlugin: DatepickerHooks = {
   validateDate: (date) => {
     const today = new Date();
@@ -917,12 +917,12 @@ export class BookingComponent {
 
 The plugin architecture in ngxsmk-datepicker provides:
 
-- ✅ **Non-invasive extension** - Extend without modifying core code
-- ✅ **Type safety** - Full TypeScript support
-- ✅ **Composability** - Combine multiple plugins
-- ✅ **Flexibility** - Optional and configurable
-- ✅ **Performance** - Lightweight hook system
-- ✅ **Maintainability** - Clear separation of concerns
+- ? **Non-invasive extension** - Extend without modifying core code
+- ? **Type safety** - Full TypeScript support
+- ? **Composability** - Combine multiple plugins
+- ? **Flexibility** - Optional and configurable
+- ? **Performance** - Lightweight hook system
+- ? **Maintainability** - Clear separation of concerns
 
 For more examples and detailed hook documentation, see [Extension Points Guide](./extension-points.md).
 
