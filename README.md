@@ -14,7 +14,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/ngxsmk-datepicker.svg?style=flat-square)](https://www.npmjs.com/package/ngxsmk-datepicker)
 [![CI](https://img.shields.io/github/actions/workflow/status/NGXSMK/ngxsmk-datepicker/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/actions/workflows/ci.yml)
 [![Angular](https://img.shields.io/badge/Angular-17%2B-DD0031.svg?style=flat-square&logo=angular)](https://angular.io/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/github/license/NGXSMK/ngxsmk-datepicker?style=flat-square&color=blue)](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/LICENSE)
 [![WhatsApp Channel](https://img.shields.io/badge/WhatsApp-Channel-25D366?style=flat-square&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029Vb8PWpz1XquUOnGPUM2p)
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-toozuuu-orange?style=flat-square&logo=buy-me-a-coffee)](https://buymeacoffee.com/toozuuu)
 [![Bundle Size](https://img.shields.io/badge/bundle-~127KB-success.svg?style=flat-square)](https://bundlephobia.com/package/ngxsmk-datepicker)
