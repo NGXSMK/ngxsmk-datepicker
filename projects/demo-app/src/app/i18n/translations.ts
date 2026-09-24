@@ -29,7 +29,7 @@ export const translations = {
       dateSchedule: 'Date Schedule Planner',
     },
     home: {
-      heroBadge: 'The #1 Angular DatePicker v3.0.5',
+      heroBadge: 'The #1 Angular DatePicker v3.0.6',
       heroTitle: 'The Premier Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -484,7 +484,7 @@ export const translations = {
       dateSchedule: 'Terminplaner',
     },
     home: {
-      heroBadge: 'Neu v3.0.5 Stabilität',
+      heroBadge: 'Neu v3.0.6 Stabilität',
       heroTitle: 'Der beste Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -945,7 +945,7 @@ export const translations = {
       dateSchedule: 'Agenda de Citas',
     },
     home: {
-      heroBadge: 'Nuevo v3.0.5 Estabilidad',
+      heroBadge: 'Nuevo v3.0.6 Estabilidad',
       heroTitle: 'El mejor Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
@@ -1405,7 +1405,7 @@ export const translations = {
       dateSchedule: 'Tidsplanering',
     },
     home: {
-      heroBadge: 'Ny v3.0.5 stabilitet',
+      heroBadge: 'Ny v3.0.6 stabilitet',
       heroTitle: 'Den bästa open-source',
       heroSubtitle: 'Angular datumväljare',
       heroLead:
@@ -1856,7 +1856,7 @@ export const translations = {
       dateSchedule: '일정 플래너',
     },
     home: {
-      heroBadge: '새로운 v3.0.5 안정성',
+      heroBadge: '새로운 v3.0.6 안정성',
       heroTitle: '최고의 오픈 소스',
       heroSubtitle: 'Angular 데이트피커',
       heroLead:
@@ -2293,7 +2293,7 @@ export const translations = {
       dateSchedule: '日程计划器',
     },
     home: {
-      heroBadge: '全新 v3.0.5 稳定性',
+      heroBadge: '全新 v3.0.6 稳定性',
       heroTitle: '最佳开源',
       heroSubtitle: 'Angular 日期选择器',
       heroLead:
@@ -2716,7 +2716,7 @@ export const translations = {
       dateSchedule: 'スケジュール帳',
     },
     home: {
-      heroBadge: '新しい v3.0.5 の安定性',
+      heroBadge: '新しい v3.0.6 の安定性',
       heroTitle: '最高のオープンソース',
       heroSubtitle: 'Angular デートピッカー',
       heroLead:
@@ -3159,7 +3159,7 @@ export const translations = {
       dateSchedule: 'Planificateur de dates',
     },
     home: {
-      heroBadge: 'Nouvelle stabilité v3.0.5',
+      heroBadge: 'Nouvelle stabilité v3.0.6',
       heroTitle: 'Le meilleur Open-Source',
       heroSubtitle: 'Angular DatePicker',
       heroLead:

@@ -7,7 +7,7 @@
  * Then provide it in your app config:
  * ```typescript
  * import { provideDatepickerConfig } from 'ngxsmk-datepicker';
- * import { LuxonAdapter } from 'ngxsmk-datepicker/adapters/luxon-adapter';
+ * import { LuxonAdapter } from 'ngxsmk-datepicker/adapters';
  *
  * provideDatepickerConfig({
  *   dateAdapter: new LuxonAdapter()
@@ -17,22 +17,13 @@
 
 import { DateAdapter } from './date-adapter.interface';
 
-declare const require: (module: string) => unknown;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const require: (module: string) => any;
 
 export class LuxonAdapter implements DateAdapter {
-  private DateTime: {
-    fromJSDate: (date: Date) => {
-      isValid: boolean;
-      toJSDate: () => Date;
-      startOf: (unit: string) => { toJSDate: () => Date };
-      endOf: (unit: string) => { toJSDate: () => Date };
-      plus: (options: Record<string, number>) => { toJSDate: () => Date };
-      hasSame: (other: unknown, unit: string) => boolean;
-      toFormat: (format: string, options?: Record<string, unknown>) => string;
-    };
-    fromISO: (value: string | unknown) => { isValid: boolean; toJSDate: () => Date };
-    fromFormat: (value: string | unknown, format: string) => { isValid: boolean; toJSDate: () => Date };
-  };
+  // Optional peer dep — typed loosely for dynamic require.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private DateTime: any;
 
   constructor() {
     try {
@@ -61,7 +52,7 @@ export class LuxonAdapter implements DateAdapter {
           onError?.(new Error(`Invalid date string: "${value}"`));
           return null;
         }
-        return parsed.toJSDate();
+        return parsed.toJSDate() as Date;
       }
     } catch (error) {
       onError?.(error instanceof Error ? error : new Error(String(error)));
@@ -80,10 +71,10 @@ export class LuxonAdapter implements DateAdapter {
 
       const options: Record<string, unknown> = {};
       if (locale) {
-        options.locale = locale;
+        options['locale'] = locale;
       }
 
-      return dt.toFormat(formatStr, options);
+      return dt.toFormat(formatStr, options) as string;
     } catch {
       return '';
     }
@@ -91,34 +82,35 @@ export class LuxonAdapter implements DateAdapter {
 
   isValid(value: string | Date | number | unknown): boolean {
     if (value instanceof Date) {
-      return this.DateTime.fromJSDate(value).isValid;
+      return this.DateTime.fromJSDate(value).isValid as boolean;
     }
     if (typeof value === 'string') {
-      return this.DateTime.fromISO(value).isValid || this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid;
+      return (this.DateTime.fromISO(value).isValid ||
+        this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid) as boolean;
     }
     return false;
   }
 
   startOfDay(date: Date): Date {
-    return this.DateTime.fromJSDate(date).startOf('day').toJSDate();
+    return this.DateTime.fromJSDate(date).startOf('day').toJSDate() as Date;
   }
 
   endOfDay(date: Date): Date {
-    return this.DateTime.fromJSDate(date).endOf('day').toJSDate();
+    return this.DateTime.fromJSDate(date).endOf('day').toJSDate() as Date;
   }
 
   addMonths(date: Date, months: number): Date {
-    return this.DateTime.fromJSDate(date).plus({ months }).toJSDate();
+    return this.DateTime.fromJSDate(date).plus({ months }).toJSDate() as Date;
   }
 
   addDays(date: Date, days: number): Date {
-    return this.DateTime.fromJSDate(date).plus({ days }).toJSDate();
+    return this.DateTime.fromJSDate(date).plus({ days }).toJSDate() as Date;
   }
 
   isSameDay(date1: Date | null, date2: Date | null): boolean {
     if (!date1 || !date2) return false;
     const dt1 = this.DateTime.fromJSDate(date1);
     const dt2 = this.DateTime.fromJSDate(date2);
-    return dt1.hasSame(dt2, 'day');
+    return dt1.hasSame(dt2, 'day') as boolean;
   }
 }

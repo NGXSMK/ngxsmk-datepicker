@@ -229,7 +229,7 @@ describe('NgxsmkDatepickerComponent', () => {
 
   describe('New Features Integration', () => {
     it('should support natural language input fallback on blur', () => {
-      component.enableNaturalLanguage = true;
+      fixture.componentRef.setInput('enableNaturalLanguage', true);
       component.allowTyping = true;
       spyOn(component.naturalLanguageResolved, 'emit');
       fixture.detectChanges();

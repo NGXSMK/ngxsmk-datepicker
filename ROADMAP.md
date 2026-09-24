@@ -2,7 +2,7 @@
 
 This roadmap outlines the planned features, improvements, and enhancements for ngxsmk-datepicker. We welcome community input and contributions!
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 - **Model Context Protocol (MCP) Suite** — Standalone `@ngxsmk/datepicker-mcp` server with standardized tools, prompts, resources, and multi-LLM exports (Claude, Gemini, OpenAI).
 - **Datepicker UI AI Assistant Widget** — `[enableAi]`, `[aiPlaceholder]`, `[aiSuggestions]`, `[showAiSuggestions]`, and `[aiResolver]` (Promise/Observable) inputs with micro-spinner and `/` keyboard shortcut.

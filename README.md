@@ -30,15 +30,15 @@
 
 ---
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.5` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.6` is the current stable release with compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.5** on npm.
+> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.6** on npm.
 
 ---
 
@@ -189,7 +189,7 @@ ng add ngxsmk-datepicker
 The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
 
 ```bash
-npm install ngxsmk-datepicker@3.0.5
+npm install ngxsmk-datepicker@3.0.6
 ```
 
 ### Alternative installation
@@ -198,12 +198,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@3.0.5` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.5` |
-| **Bun** | `bun add ngxsmk-datepicker@3.0.5` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.5` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@3.0.6` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.6` |
+| **Bun** | `bun add ngxsmk-datepicker@3.0.6` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.6` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.5/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.5/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.6/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.6/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -360,7 +360,7 @@ class MyHolidayProvider implements HolidayProvider {
 
 ### **Angular Material Form Fields**
 
-Integrate with Angular Material's form field components for a seamless Material Design experience. Works with both standalone and non-standalone components:
+Integrate with Angular Material's form field components for a seamless Material Design experience. Import the optional **`ngxsmk-datepicker/material`** entry (keeps `@angular/material` out of the main bundle):
 
 **Standalone Components:**
 
@@ -370,16 +370,28 @@ import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { NgxsmkDatepickerComponent } from "ngxsmk-datepicker";
+import { NgxsmkDatepickerMatFormFieldControlDirective } from "ngxsmk-datepicker/material";
 
 @Component({
   selector: "app-material-form",
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, NgxsmkDatepickerComponent],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgxsmkDatepickerComponent,
+    NgxsmkDatepickerMatFormFieldControlDirective,
+  ],
   template: `
     <form [formGroup]="myForm">
       <mat-form-field appearance="outline">
         <mat-label>Select Date</mat-label>
-        <ngxsmk-datepicker mode="single" formControlName="date" placeholder="Choose a date"> </ngxsmk-datepicker>
+        <ngxsmk-datepicker
+          ngxsmkMatFormFieldControl
+          mode="single"
+          formControlName="date"
+          placeholder="Choose a date"
+        ></ngxsmk-datepicker>
       </mat-form-field>
     </form>
   `,
@@ -391,17 +403,18 @@ export class MaterialFormComponent {
 }
 ```
 
-**Non-Standalone (NgModules):** Add the directive file from [INTEGRATION.md § Angular Material](projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material), then add it to your module `imports` (with `NgxsmkDatepickerComponent`, `MatFormFieldModule`, etc.) and use `ngxsmkMatFormFieldControl` on the datepicker in templates.
+**Non-Standalone (NgModules):** Import `NgxsmkDatepickerMatFormFieldControlDirective` from `ngxsmk-datepicker/material` into your module `imports` (with `NgxsmkDatepickerComponent`, `MatFormFieldModule`, etc.) and put `ngxsmkMatFormFieldControl` on the datepicker. See [INTEGRATION.md § Angular Material](projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material).
 
 **With Date Range:**
 
 ```html
 <mat-form-field appearance="fill">
   <mat-label>Date Range</mat-label>
-  <ngxsmk-datepicker mode="range" [showTime]="true" formControlName="dateRange"> </ngxsmk-datepicker>
+  <ngxsmk-datepicker ngxsmkMatFormFieldControl mode="range" [showTime]="true" formControlName="dateRange"></ngxsmk-datepicker>
 </mat-form-field>
 ```
 
+**Optional date adapters** (date-fns / Day.js / Luxon) live on a separate entry: `import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters'`.
 ### **Ionic Components**
 
 For best integration with Ionic, import the integration styles in your global CSS/SCSS file:
@@ -884,7 +897,8 @@ npm run build:analyze
 
 **Build Output:**
 
-- Main bundle: `dist/ngxsmk-datepicker/fesm2022/ngxsmk-datepicker.mjs` (~127KB)
+- Main bundle: `dist/ngxsmk-datepicker/fesm2022/ngxsmk-datepicker.mjs` (~127KB gzipped / published target; raw FESM is larger)
+- Optional: `ngxsmk-datepicker-adapters.mjs`, `ngxsmk-datepicker-material.mjs` (secondary entries)
 - Type definitions: `dist/ngxsmk-datepicker/index.d.ts`
 - Source maps: Automatically removed from production builds
 
@@ -964,7 +978,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v3.0.5** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.5**.
+**Recent:** Use **v3.0.6** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.6**.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

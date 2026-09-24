@@ -80,6 +80,47 @@ describe('NgxsmkDatepickerComponent — allowSameDay range (issue #231)', () => 
     expect(last.start.getTime()).toBe(last.end.getTime());
   });
 
+  it('should finalize same-day range when toggle-closing the popover', () => {
+    component.inline = false;
+    component.isCalendarOpen = true;
+    const day = new Date(2026, 2, 22);
+    component.onDateClick(day);
+    fixture.detectChanges();
+    emitted.length = 0;
+
+    component.toggleCalendar();
+    fixture.detectChanges();
+
+    expect(component.isCalendarOpen).toBe(false);
+    expect(component.startDate).not.toBeNull();
+    expect(component.endDate).not.toBeNull();
+    expect(component.startDate!.getTime()).toBe(component.endDate!.getTime());
+    expect(emitted.length).toBeGreaterThan(0);
+  });
+
+  it('should finalize same-day range on outside document click close', () => {
+    component.inline = false;
+    component.isCalendarOpen = true;
+    (component as unknown as { lastToggleTime: number }).lastToggleTime = 0;
+    const day = new Date(2026, 2, 25);
+    component.onDateClick(day);
+    fixture.detectChanges();
+    emitted.length = 0;
+
+    const outside = document.createElement('div');
+    document.body.appendChild(outside);
+    const event = new MouseEvent('click', { bubbles: true });
+    Object.defineProperty(event, 'target', { value: outside });
+    component.onDocumentClick(event);
+    fixture.detectChanges();
+    document.body.removeChild(outside);
+
+    expect(component.isCalendarOpen).toBe(false);
+    expect(component.endDate).not.toBeNull();
+    expect(component.startDate!.getTime()).toBe(component.endDate!.getTime());
+    expect(emitted.length).toBeGreaterThan(0);
+  });
+
   it('should not finalize on close when inline (no popover close semantics)', () => {
     component.inline = true;
     fixture.detectChanges();

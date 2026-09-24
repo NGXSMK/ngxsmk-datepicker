@@ -267,7 +267,7 @@ describe('Integration Flows', () => {
 
       // Component should support keyboard navigation
       // Escape key handling may be implemented differently
-      expect(component.enableKeyboardShortcuts).toBeDefined();
+      expect(component.enableKeyboardShortcuts()).toBeDefined();
 
       // Close manually to verify state
       component.closeCalendarWithFocusRestore();

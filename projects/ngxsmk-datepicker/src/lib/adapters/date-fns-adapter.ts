@@ -7,7 +7,7 @@
  * Then provide it in your app config:
  * ```typescript
  * import { provideDatepickerConfig } from 'ngxsmk-datepicker';
- * import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters/date-fns-adapter';
+ * import { DateFnsAdapter } from 'ngxsmk-datepicker/adapters';
  *
  * provideDatepickerConfig({
  *   dateAdapter: new DateFnsAdapter()
@@ -17,10 +17,13 @@
 
 import { DateAdapter } from './date-adapter.interface';
 
-declare const require: (module: string) => unknown;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const require: (module: string) => any;
 
 export class DateFnsAdapter implements DateAdapter {
-  private dateFns: Record<string, unknown>;
+  // Optional peer dep — typed loosely for dynamic require.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private dateFns: any;
 
   constructor() {
     try {
@@ -48,7 +51,7 @@ export class DateFnsAdapter implements DateAdapter {
           onError?.(new Error(`Invalid date string: "${value}"`));
           return null;
         }
-        return parsed;
+        return parsed as Date;
       }
     } catch (error) {
       onError?.(error instanceof Error ? error : new Error(String(error)));
@@ -63,35 +66,35 @@ export class DateFnsAdapter implements DateAdapter {
 
     try {
       const localeObj = locale && locale.length > 0 ? this.getDateFnsLocale(locale) : undefined;
-      return this.dateFns.format(date, formatStr, { locale: localeObj });
+      return this.dateFns.format(date, formatStr, { locale: localeObj }) as string;
     } catch {
-      return this.dateFns.format(date, formatStr);
+      return this.dateFns.format(date, formatStr) as string;
     }
   }
 
   isValid(value: string | Date | number | unknown): boolean {
-    return this.dateFns.isValid(value);
+    return this.dateFns.isValid(value) as boolean;
   }
 
   startOfDay(date: Date): Date {
-    return this.dateFns.startOfDay(date);
+    return this.dateFns.startOfDay(date) as Date;
   }
 
   endOfDay(date: Date): Date {
-    return this.dateFns.endOfDay(date);
+    return this.dateFns.endOfDay(date) as Date;
   }
 
   addMonths(date: Date, months: number): Date {
-    return this.dateFns.addMonths(date, months);
+    return this.dateFns.addMonths(date, months) as Date;
   }
 
   addDays(date: Date, days: number): Date {
-    return this.dateFns.addDays(date, days);
+    return this.dateFns.addDays(date, days) as Date;
   }
 
   isSameDay(date1: Date | null, date2: Date | null): boolean {
     if (!date1 || !date2) return false;
-    return this.dateFns.isSameDay(date1, date2);
+    return this.dateFns.isSameDay(date1, date2) as boolean;
   }
 
   private getDateFnsLocale(locale: string): unknown {

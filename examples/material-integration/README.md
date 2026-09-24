@@ -1,24 +1,26 @@
 # Material Integration Example
 
-This project tests the fix for [Issue #187](https://github.com/NGXSMK/ngxsmk-datepicker/issues/187) — 
+This project tests the fix for [Issue #187](https://github.com/NGXSMK/ngxsmk-datepicker/issues/187) —
 `mat-form-field must contain a MatFormFieldControl`.
 
 ## Root Cause
 
 `mat-form-field` discovers its control via an Angular `@ContentChild(MatFormFieldControl)` query.
-This query looks for a component that is **provided as `MatFormFieldControl` in its own injector** — 
+This query looks for a component that is **provided as `MatFormFieldControl` in its own injector** —
 not in the parent component's injector.
 
-The old approach (`provideMaterialFormFieldControl` in the parent's `providers`) **does not work** 
+The old approach (`provideMaterialFormFieldControl` in the parent's `providers`) **does not work**
 because Angular's content-child resolution does not walk up to the parent's providers.
 
-## ✅ Recommended fix: directive
+## Recommended fix: `ngxsmk-datepicker/material`
 
-Add **`ngxsmkMatFormFieldControl`** on the datepicker and the directive. The directive is not in the main bundle; add the file from [INTEGRATION.md § Angular Material](../../projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material) to your project, or (in this example) use the local copy under `src/app/`.
+Import **`NgxsmkDatepickerMatFormFieldControlDirective`** from the optional secondary entry and put
+**`ngxsmkMatFormFieldControl`** on the datepicker. This keeps `@angular/material` out of the main
+library bundle. See [INTEGRATION.md § Angular Material](../../projects/ngxsmk-datepicker/docs/INTEGRATION.md#angular-material).
 
 ```typescript
 import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
-import { NgxsmkDatepickerMatFormFieldControlDirective } from './ngxsmk-mat-form-field.directive'; // local file
+import { NgxsmkDatepickerMatFormFieldControlDirective } from 'ngxsmk-datepicker/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
@@ -40,7 +42,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 
 No `main.ts` or `withMaterialSupport` needed.
 
-## ❌ Old (Broken) Approach
+## Old (Broken) Approach
 
 ```typescript
 // This does NOT work — the provider is on the parent, not the datepicker itself

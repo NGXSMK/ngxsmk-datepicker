@@ -1,5 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { getStartOfDay, getEndOfDay, normalizeDate } from '../utils/date.utils';
+import { getStartOfDay, normalizeDate } from '../utils/date.utils';
+import { Constraints, EMPTY_CONSTRAINTS_SOURCES } from '../constraints/constraints';
 
 export type DynamicDateInput = Date | string | null | undefined | (() => Date | string | null | undefined);
 
@@ -15,16 +16,38 @@ function isDateRangeObject(val: unknown): val is { start: Date | string | null; 
   return typeof val === 'object' && val !== null && ('start' in val || 'end' in val);
 }
 
+function daysInControlValue(value: unknown): Date[] {
+  if (value instanceof Date || typeof value === 'string') {
+    const parsed = normalizeDate(value);
+    return parsed && !Number.isNaN(parsed.getTime()) ? [parsed] : [];
+  }
+  if (isDateRangeObject(value)) {
+    const days: Date[] = [];
+    if (value.start) {
+      const start = normalizeDate(value.start);
+      if (start && !Number.isNaN(start.getTime())) days.push(start);
+    }
+    if (value.end) {
+      const end = normalizeDate(value.end);
+      if (end && !Number.isNaN(end.getTime())) days.push(end);
+    }
+    return days;
+  }
+  if (Array.isArray(value)) {
+    const days: Date[] = [];
+    for (const item of value) {
+      const parsed = normalizeDate(item);
+      if (parsed && !Number.isNaN(parsed.getTime())) days.push(parsed);
+    }
+    return days;
+  }
+  return [];
+}
+
 /**
  * Validates that the selected date or date range is on or after the specified minimum date.
  *
- * @param minDate - The minimum date bound, as a Date, string, or function returning a Date/string.
- * @returns An Angular ValidatorFn.
- *
- * @example
- * ```typescript
- * const control = new FormControl(new Date(), ngxsmkMinDateValidator(new Date(2025, 0, 1)));
- * ```
+ * Thin adapter over Constraints — public name and error keys unchanged.
  */
 export function ngxsmkMinDateValidator(minDate: DynamicDateInput): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -34,38 +57,29 @@ export function ngxsmkMinDateValidator(minDate: DynamicDateInput): ValidatorFn {
     const min = resolveDate(minDate);
     if (!min || Number.isNaN(min.getTime())) return null;
 
-    const minTime = getStartOfDay(min).getTime();
+    const snap = Constraints.build({
+      ...EMPTY_CONSTRAINTS_SOURCES,
+      minDate: min,
+    });
 
-    // Single Date
-    if (value instanceof Date || typeof value === 'string') {
-      const parsed = normalizeDate(value);
-      if (parsed && !Number.isNaN(parsed.getTime())) {
-        if (getStartOfDay(parsed).getTime() < minTime) {
-          return { ngxsmkMinDate: { min, actual: parsed } };
-        }
-      }
-    }
-
-    // Range Object
+    // Range: only start is checked against min (parity with prior validator)
     if (isDateRangeObject(value)) {
       const start = value.start ? normalizeDate(value.start) : null;
       if (start && !Number.isNaN(start.getTime())) {
-        if (getStartOfDay(start).getTime() < minTime) {
-          return { ngxsmkMinDate: { min, actual: start } };
+        const verdict = snap.evaluate(start);
+        if (!verdict.allowed && verdict.denial.code === 'min') {
+          return { ngxsmkMinDate: { min: verdict.denial.min, actual: start } };
         }
       }
+      return null;
     }
 
-    // Multiple Dates
-    if (Array.isArray(value)) {
-      for (const d of value) {
-        const parsed = normalizeDate(d);
-        if (parsed && !Number.isNaN(parsed.getTime()) && getStartOfDay(parsed).getTime() < minTime) {
-          return { ngxsmkMinDate: { min, actual: parsed } };
-        }
+    for (const day of daysInControlValue(value)) {
+      const verdict = snap.evaluate(day);
+      if (!verdict.allowed && verdict.denial.code === 'min') {
+        return { ngxsmkMinDate: { min: verdict.denial.min, actual: day } };
       }
     }
-
     return null;
   };
 }
@@ -73,13 +87,7 @@ export function ngxsmkMinDateValidator(minDate: DynamicDateInput): ValidatorFn {
 /**
  * Validates that the selected date or date range is on or before the specified maximum date.
  *
- * @param maxDate - The maximum date bound, as a Date, string, or function returning a Date/string.
- * @returns An Angular ValidatorFn.
- *
- * @example
- * ```typescript
- * const control = new FormControl(new Date(), ngxsmkMaxDateValidator(new Date(2026, 11, 31)));
- * ```
+ * Thin adapter over Constraints — public name and error keys unchanged.
  */
 export function ngxsmkMaxDateValidator(maxDate: DynamicDateInput): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -89,38 +97,29 @@ export function ngxsmkMaxDateValidator(maxDate: DynamicDateInput): ValidatorFn {
     const max = resolveDate(maxDate);
     if (!max || Number.isNaN(max.getTime())) return null;
 
-    const maxTime = getEndOfDay(max).getTime();
+    const snap = Constraints.build({
+      ...EMPTY_CONSTRAINTS_SOURCES,
+      maxDate: max,
+    });
 
-    // Single Date
-    if (value instanceof Date || typeof value === 'string') {
-      const parsed = normalizeDate(value);
-      if (parsed && !Number.isNaN(parsed.getTime())) {
-        if (getEndOfDay(parsed).getTime() > maxTime) {
-          return { ngxsmkMaxDate: { max, actual: parsed } };
-        }
-      }
-    }
-
-    // Range Object
+    // Range: only end is checked against max (parity with prior validator)
     if (isDateRangeObject(value)) {
       const end = value.end ? normalizeDate(value.end) : null;
       if (end && !Number.isNaN(end.getTime())) {
-        if (getEndOfDay(end).getTime() > maxTime) {
-          return { ngxsmkMaxDate: { max, actual: end } };
+        const verdict = snap.evaluate(end);
+        if (!verdict.allowed && verdict.denial.code === 'max') {
+          return { ngxsmkMaxDate: { max: verdict.denial.max, actual: end } };
         }
       }
+      return null;
     }
 
-    // Multiple Dates
-    if (Array.isArray(value)) {
-      for (const d of value) {
-        const parsed = normalizeDate(d);
-        if (parsed && !Number.isNaN(parsed.getTime()) && getEndOfDay(parsed).getTime() > maxTime) {
-          return { ngxsmkMaxDate: { max, actual: parsed } };
-        }
+    for (const day of daysInControlValue(value)) {
+      const verdict = snap.evaluate(day);
+      if (!verdict.allowed && verdict.denial.code === 'max') {
+        return { ngxsmkMaxDate: { max: verdict.denial.max, actual: day } };
       }
     }
-
     return null;
   };
 }
@@ -136,14 +135,7 @@ export interface DateRangeValidatorOptions {
 
 /**
  * Validates range constraints (minimum duration, maximum duration, and complete range requirements).
- *
- * @param options - Configuration options for range validation.
- * @returns An Angular ValidatorFn.
- *
- * @example
- * ```typescript
- * const control = new FormControl(null, ngxsmkDateRangeValidator({ minDays: 2, maxDays: 14, requireBoth: true }));
- * ```
+ * Not part of allowed-day Constraints — duration rules stay here.
  */
 export function ngxsmkDateRangeValidator(options: DateRangeValidatorOptions = {}): ValidatorFn {
   const { minDays, maxDays, requireBoth = false } = options;
@@ -187,73 +179,53 @@ export function ngxsmkDateRangeValidator(options: DateRangeValidatorOptions = {}
 /**
  * Validates that the selected date (or dates within a range/multiple selection) does not fall on a blocked or disabled date.
  *
- * @param blocked - Array of blocked dates/strings, or a predicate function returning true if date is blocked.
- * @returns An Angular ValidatorFn.
- *
- * @example
- * ```typescript
- * const control = new FormControl(null, ngxsmkBlockedDatesValidator([new Date(2026, 11, 25)]));
- * ```
+ * Thin adapter over Constraints — public name and error keys unchanged.
  */
 export function ngxsmkBlockedDatesValidator(blocked: (Date | string)[] | ((date: Date) => boolean)): ValidatorFn {
-  let isBlockedFn: (d: Date) => boolean;
-
-  if (typeof blocked === 'function') {
-    isBlockedFn = blocked;
-  } else {
-    const blockedSet = new Set<number>();
-    for (const item of blocked) {
-      const d = normalizeDate(item);
-      if (d && !Number.isNaN(d.getTime())) {
-        blockedSet.add(getStartOfDay(d).getTime());
-      }
-    }
-    isBlockedFn = (d: Date) => blockedSet.has(getStartOfDay(d).getTime());
-  }
-
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
     if (!value) return null;
 
-    // Single Date
+    const snap = Constraints.build({
+      ...EMPTY_CONSTRAINTS_SOURCES,
+      disabledDates: Array.isArray(blocked) ? blocked : [],
+      isInvalidDate: typeof blocked === 'function' ? blocked : null,
+    });
+
     if (value instanceof Date || typeof value === 'string') {
       const parsed = normalizeDate(value);
-      if (parsed && !Number.isNaN(parsed.getTime()) && isBlockedFn(parsed)) {
-        return { ngxsmkDateBlocked: { date: parsed } };
+      if (parsed && !Number.isNaN(parsed.getTime())) {
+        const verdict = snap.evaluate(parsed);
+        if (!verdict.allowed) {
+          return { ngxsmkDateBlocked: { date: parsed } };
+        }
       }
+      return null;
     }
 
-    // Range Object
     if (isDateRangeObject(value)) {
       const start = value.start ? normalizeDate(value.start) : null;
       const end = value.end ? normalizeDate(value.end) : null;
 
       if (start && end) {
-        const curr = new Date(getStartOfDay(start));
-        const endDay = getStartOfDay(end);
-        const blockedFound: Date[] = [];
-
-        while (curr.getTime() <= endDay.getTime()) {
-          if (isBlockedFn(curr)) {
-            blockedFound.push(new Date(curr));
-          }
-          curr.setDate(curr.getDate() + 1);
+        const hits = snap.scan({ start, end });
+        if (hits.length > 0) {
+          return { ngxsmkRangeContainsBlocked: { blockedDates: hits.map((h) => h.day) } };
         }
-
-        if (blockedFound.length > 0) {
-          return { ngxsmkRangeContainsBlocked: { blockedDates: blockedFound } };
+      } else if (start) {
+        const verdict = snap.evaluate(start);
+        if (!verdict.allowed) {
+          return { ngxsmkDateBlocked: { date: start } };
         }
-      } else if (start && isBlockedFn(start)) {
-        return { ngxsmkDateBlocked: { date: start } };
       }
+      return null;
     }
 
-    // Multiple Dates
     if (Array.isArray(value)) {
       const blockedFound: Date[] = [];
-      for (const d of value) {
-        const parsed = normalizeDate(d);
-        if (parsed && !Number.isNaN(parsed.getTime()) && isBlockedFn(parsed)) {
+      for (const item of value) {
+        const parsed = normalizeDate(item);
+        if (parsed && !Number.isNaN(parsed.getTime()) && !snap.isAllowed(parsed)) {
           blockedFound.push(parsed);
         }
       }

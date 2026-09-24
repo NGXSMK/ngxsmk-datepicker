@@ -24,7 +24,16 @@
     ],
     "paths": {
       "ngxsmk-datepicker": [
+        "./dist/ngxsmk-datepicker",
         "./projects/ngxsmk-datepicker/src/public-api.ts"
+      ],
+      "ngxsmk-datepicker/adapters": [
+        "./dist/ngxsmk-datepicker/adapters",
+        "./projects/ngxsmk-datepicker/src/adapters.ts"
+      ],
+      "ngxsmk-datepicker/material": [
+        "./dist/ngxsmk-datepicker/material",
+        "./projects/ngxsmk-datepicker/src/material/public-api.ts"
       ]
     }
   },

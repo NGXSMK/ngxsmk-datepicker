@@ -37,13 +37,16 @@ Migrate in three buckets:
    - ✅ **Batch 2 done & verified** (15/78 inputs now signals): `showRanges`, `showTimezoneSelector`,
      `timeRangeMode`, `appendToBody`, `autoApplyClose`, `allowSameDay`, `enableHapticFeedback`,
      `enablePullToRefresh`, `mobileTheme`, `disableFocusTrap`, `comparisonRange`.
+   - ✅ **Batch 3 done**: `showOtherMonths`, `enableKeyboardShortcuts`, `enableNaturalLanguage`,
+     `enableAi`, `showAiSuggestions`, `enableVoiceInput`, `changeActiveMonthOnSelection`,
+     `showWeekNumbers`, `weekNumberLabel`, `defaultMonthOffset`.
    - ⚠️⚠️ **Hazard (found the hard way):** the compiler does **NOT** flag `!this.x` or truthy uses
      (`this.x || …`) when `x` becomes a signal — `!fn`/`fn` are valid but always `false`/`true`.
      These are silent logic bugs. **After each batch, grep every `this.<input>\b` not followed by `(`**
      and fix, in addition to the compiler-flagged assignment/binding errors. (Caught 3 this way.)
    - ⚠️ **Gotcha:** inputs referenced in `ngOnChanges` (`changes['x']`) can't convert cleanly —
      signal inputs don't fire `ngOnChanges`. Those (`mode`, `align`, `theme`, `locale`, `minDate`,
-     `maxDate`, `showTime`, `calendarLayout`, …) need their reaction moved to an `effect()` first.
+     `maxDate`, `showTime`, `calendarLayout`, `autoDetectMobile`, `responsive`, …) need their reaction moved to an `effect()` first.
      Do this as a coordinated `ngOnChanges → effects` refactor, not piecemeal.
    - Remaining read-only, non-`ngOnChanges` inputs are safe to batch next the same way.
 2. **Two-way value → `model<DatepickerValue>()`** so `[(value)]` keeps working. Requires
@@ -67,7 +70,7 @@ visual-regression coverage — do not resurrect the old tree.
 ## Stage 4 — Cleanup & DX (3.0.3)
 - Remove deprecated inputs/aliases; publish a `MIGRATION.md` v2→v3 section + an `ng update` schematic.
 - Offer zoneless-by-default guidance; keep the `NgModule` compat shim (still needed for NG1010).
-- Consider secondary entry points once the core no longer imports optional features.
+- Secondary entry points for optional features: **shipped** as `ngxsmk-datepicker/adapters` and `ngxsmk-datepicker/material` (see CHANGELOG v3.0.6).
 
 ---
 

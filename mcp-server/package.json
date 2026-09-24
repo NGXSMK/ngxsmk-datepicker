@@ -1,6 +1,6 @@
 {
   "name": "@ngxsmk/datepicker-mcp",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "Model Context Protocol (MCP) server for ngxsmk-datepicker providing AI tools for natural language date parsing, calculations, holidays, and timezone conversions.",
   "type": "module",
   "main": "dist/index.js",

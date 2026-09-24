@@ -335,7 +335,7 @@ describe('NgxsmkDatepickerComponent - Keyboard Navigation', () => {
 
   describe('Disabled Keyboard Shortcuts', () => {
     it('should not handle keyboard shortcuts when enableKeyboardShortcuts is false', () => {
-      component.enableKeyboardShortcuts = false;
+      fixture.componentRef.setInput('enableKeyboardShortcuts', false);
       component.mode = 'single';
       const initialSelectedDate = component.selectedDate;
       fixture.detectChanges();

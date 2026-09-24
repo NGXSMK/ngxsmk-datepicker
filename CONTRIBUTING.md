@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to ngxsmk-datepicker! This document provides guidelines and instructions for contributing.
 
-**Last updated:** August 22, 2026 - **Current stable:** v3.0.5
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 ## Code of Conduct
 
@@ -119,13 +119,19 @@ docs: update README with SSR examples
 
 ```
 projects/ngxsmk-datepicker/
+├── adapters/               # Secondary entry: ngxsmk-datepicker/adapters
+├── material/               # Secondary entry: ngxsmk-datepicker/material
 ├── src/
 │   ├── lib/
 │   │   ├── components/     # Reusable components
+│   │   ├── constraints/    # Constraints Snapshot (allowed-day truth)
+│   │   ├── adapters/       # Optional date-fns / Day.js / Luxon adapters
 │   │   ├── utils/          # Utility functions
 │   │   ├── issues/         # Issue-specific tests
 │   │   └── styles/         # CSS files
-│   └── public-api.ts       # Public API exports
+│   ├── material/           # Material form-field directive sources
+│   ├── adapters.ts         # Adapters secondary public API
+│   └── public-api.ts       # Main public API exports
 ├── docs/                    # Documentation
 └── package.json
 ```

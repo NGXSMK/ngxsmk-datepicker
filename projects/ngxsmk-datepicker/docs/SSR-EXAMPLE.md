@@ -1,6 +1,6 @@
-﻿# Server-Side Rendering (SSR) Example
+# Server-Side Rendering (SSR) Example
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 Complete example demonstrating ngxsmk-datepicker with Angular Universal (SSR).
 
@@ -90,15 +90,15 @@ export class DatepickerDemoComponent {
 Always provide an explicit locale for SSR consistency:
 
 ```typescript
-// ❌ Bad - relies on browser API
+// ? Bad - relies on browser API
 locale = navigator.language;
 
-// ✅ Good - platform-checked
+// ? Good - platform-checked
 locale = isPlatformBrowser(this.platformId) 
   ? navigator.language || 'en-US'
   : 'en-US';
 
-// ✅ Better - use service or config
+// ? Better - use service or config
 locale = this.localeService.getLocale(); // Returns 'en-US' on server
 ```
 
@@ -107,7 +107,7 @@ locale = this.localeService.getLocale(); // Returns 'en-US' on server
 Dates work the same on server and client:
 
 ```typescript
-// ✅ Safe - Date works on both server and client
+// ? Safe - Date works on both server and client
 const today = new Date();
 const minDate = new Date(2025, 0, 1); // January 1, 2025
 ```
@@ -331,7 +331,7 @@ export class MyComponent implements AfterViewInit {
 **Solution**: Always provide explicit locale:
 
 ```typescript
-// ✅ Correct
+// ? Correct
 <ngxsmk-datepicker [locale]="'en-US'"></ngxsmk-datepicker>
 
 // Or use platform check
@@ -347,7 +347,7 @@ locale = isPlatformBrowser(this.platformId)
 **Solution**: Use consistent locale and timezone:
 
 ```typescript
-// ✅ Correct
+// ? Correct
 provideDatepickerConfig({
   locale: 'en-US',
   timezone: 'UTC' // Use UTC for consistency

@@ -69,20 +69,51 @@ describe('CalendarGenerationService', () => {
       const months = service.generateMultipleMonths(2025, 5, 3, 0, normalizeDate);
 
       expect(months.length).toBe(3);
-      expect(months[0].month).toBe(5);
-      expect(months[0].year).toBe(2025);
-      expect(months[1].month).toBe(6);
-      expect(months[1].year).toBe(2025);
+      expect(months[0]!.month).toBe(5);
+      expect(months[0]!.year).toBe(2025);
+      expect(months[1]!.month).toBe(6);
+      expect(months[1]!.year).toBe(2025);
     });
 
     it('should handle year rollover', () => {
       const months = service.generateMultipleMonths(2025, 11, 2, 0, normalizeDate);
 
       expect(months.length).toBe(2);
-      expect(months[0].month).toBe(11);
-      expect(months[0].year).toBe(2025);
-      expect(months[1].month).toBe(0);
-      expect(months[1].year).toBe(2026);
+      expect(months[0]!.month).toBe(11);
+      expect(months[0]!.year).toBe(2025);
+      expect(months[1]!.month).toBe(0);
+      expect(months[1]!.year).toBe(2026);
+    });
+  });
+
+  describe('buildCalendarMonths', () => {
+    it('should match consecutive months when syncScroll is off', () => {
+      const months = service.buildCalendarMonths(2025, 5, 3, 0, normalizeDate, { enabled: false });
+
+      expect(months.length).toBe(3);
+      expect(months.map((m) => m.month)).toEqual([5, 6, 7]);
+    });
+
+    it('should space months by monthGap when syncScroll is enabled', () => {
+      const months = service.buildCalendarMonths(2025, 0, 3, 0, normalizeDate, {
+        enabled: true,
+        monthGap: 2,
+      });
+
+      expect(months.length).toBe(3);
+      expect(months[0]).toEqual(jasmine.objectContaining({ month: 0, year: 2025 }));
+      expect(months[1]).toEqual(jasmine.objectContaining({ month: 2, year: 2025 }));
+      expect(months[2]).toEqual(jasmine.objectContaining({ month: 4, year: 2025 }));
+    });
+
+    it('should roll year when syncScroll gaps cross December', () => {
+      const months = service.buildCalendarMonths(2025, 11, 2, 0, normalizeDate, {
+        enabled: true,
+        monthGap: 1,
+      });
+
+      expect(months[0]).toEqual(jasmine.objectContaining({ month: 11, year: 2025 }));
+      expect(months[1]).toEqual(jasmine.objectContaining({ month: 0, year: 2026 }));
     });
   });
 

@@ -70,6 +70,43 @@ export class CalendarGenerationService {
   }
 
   /**
+   * Build calendar months for the host view.
+   * When syncScroll is enabled with count > 1, months are spaced by `monthGap`;
+   * otherwise months are consecutive via {@link generateMultipleMonths}.
+   */
+  buildCalendarMonths(
+    baseYear: number,
+    baseMonth: number,
+    count: number,
+    firstDayOfWeek: number,
+    normalizeDateFn: (date: DateInput | null) => Date | null,
+    syncScroll?: { enabled?: boolean; monthGap?: number } | null
+  ): CalendarMonth[] {
+    if (syncScroll?.enabled && count > 1) {
+      const monthGap = syncScroll.monthGap || 1;
+      const months: CalendarMonth[] = [];
+      for (let i = 0; i < count; i++) {
+        const offset = i * monthGap;
+        let targetMonth = baseMonth + offset;
+        let targetYear = baseYear;
+        while (targetMonth >= 12) {
+          targetMonth -= 12;
+          targetYear += 1;
+        }
+        while (targetMonth < 0) {
+          targetMonth += 12;
+          targetYear -= 1;
+        }
+        const days = this.generateMonthDays(targetYear, targetMonth, firstDayOfWeek, normalizeDateFn);
+        months.push({ month: targetMonth, year: targetYear, days });
+      }
+      return months;
+    }
+
+    return this.generateMultipleMonths(baseYear, baseMonth, count, firstDayOfWeek, normalizeDateFn);
+  }
+
+  /**
    * Preload adjacent months for smoother navigation
    */
   preloadAdjacentMonths(

@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { HolidayProvider } from '../utils/calendar.utils';
-import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
+import { Constraints, EMPTY_CONSTRAINTS_SOURCES } from '../constraints/constraints';
 
 export interface ValidationConstraints {
   minDate?: Date | null;
@@ -12,95 +12,37 @@ export interface ValidationConstraints {
   disableHolidays?: boolean;
 }
 
+/**
+ * @deprecated Use {@link Constraints.build} / Constraints Snapshot instead.
+ * Kept as a SemVer-stable façade that delegates to Constraints.
+ */
 @Injectable()
 export class DateValidationService {
   /**
    * Check if a date is valid according to all constraints
+   * @deprecated Prefer Constraints.build(...).isAllowed(date)
    */
   isDateValid(date: Date | null, constraints: ValidationConstraints): boolean {
     if (!date || isNaN(date.getTime())) {
       return false;
     }
-
-    const dayStart = getStartOfDay(date);
-
-    // Check min/max date constraints
-    if (constraints.minDate) {
-      const minStart = getStartOfDay(constraints.minDate);
-      if (dayStart < minStart) {
-        return false;
-      }
-    }
-
-    if (constraints.maxDate) {
-      const maxStart = getStartOfDay(constraints.maxDate);
-      if (dayStart > maxStart) {
-        return false;
-      }
-    }
-
-    // Check disabled dates
-    if (constraints.disabledDates && constraints.disabledDates.length > 0) {
-      const isDisabled = constraints.disabledDates.some((disabledDate) => {
-        const disabled = disabledDate instanceof Date ? disabledDate : new Date(disabledDate);
-        return this.isSameDay(dayStart, disabled);
-      });
-
-      if (isDisabled) {
-        return false;
-      }
-    }
-
-    // Check disabled ranges
-    if (constraints.disabledRanges && constraints.disabledRanges.length > 0) {
-      const isInDisabledRange = constraints.disabledRanges.some((range) => {
-        const start = range.start instanceof Date ? range.start : new Date(range.start);
-        const end = range.end instanceof Date ? range.end : new Date(range.end);
-        const rangeStart = getStartOfDay(start);
-        const rangeEnd = getEndOfDay(end);
-        return dayStart >= rangeStart && dayStart <= rangeEnd;
-      });
-
-      if (isInDisabledRange) {
-        return false;
-      }
-    }
-
-    // Check custom validation function
-    if (constraints.isInvalidDate && constraints.isInvalidDate(date)) {
-      return false;
-    }
-
-    // Check holidays
-    if (constraints.disableHolidays && constraints.holidayProvider) {
-      try {
-        if (constraints.holidayProvider.isHoliday(date)) {
-          return false;
-        }
-      } catch (error) {
-        if (isDevMode()) {
-          console.warn('[ngxsmk-datepicker] Error in holidayProvider.isHoliday:', error);
-        }
-        // On error, don't disable the date - allow it to be selectable
-      }
-    }
-
-    return true;
+    return this.snapshot(constraints).isAllowed(date);
   }
 
   /**
    * Check if a date is disabled
+   * @deprecated Prefer Constraints.build(...).isAllowed(date) (note: null is allowed/not disabled on the Host)
    */
   isDateDisabled(date: Date | null, constraints: ValidationConstraints): boolean {
     if (!date) {
       return true;
     }
-
-    return !this.isDateValid(date, constraints);
+    return !this.snapshot(constraints).isAllowed(date);
   }
 
   /**
    * Check if a date is a holiday
+   * @deprecated Call HolidayProvider directly or use Constraints denials
    */
   isHoliday(date: Date | null, holidayProvider?: HolidayProvider | null): boolean {
     if (!date || !holidayProvider) {
@@ -119,6 +61,7 @@ export class DateValidationService {
 
   /**
    * Get holiday label for a date
+   * @deprecated Call HolidayProvider.getHolidayLabel directly
    */
   getHolidayLabel(date: Date | null, holidayProvider?: HolidayProvider | null): string | null {
     if (!date || !holidayProvider || !holidayProvider.getHolidayLabel) {
@@ -135,10 +78,16 @@ export class DateValidationService {
     }
   }
 
-  /**
-   * Helper to check if two dates are the same day
-   */
-  private isSameDay(d1: Date, d2: Date): boolean {
-    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+  private snapshot(constraints: ValidationConstraints) {
+    return Constraints.build({
+      ...EMPTY_CONSTRAINTS_SOURCES,
+      minDate: constraints.minDate ?? null,
+      maxDate: constraints.maxDate ?? null,
+      disabledDates: constraints.disabledDates ?? [],
+      disabledRanges: constraints.disabledRanges ?? [],
+      disableHolidays: !!constraints.disableHolidays,
+      holidayProvider: constraints.holidayProvider ?? null,
+      isInvalidDate: constraints.isInvalidDate ?? null,
+    });
   }
 }

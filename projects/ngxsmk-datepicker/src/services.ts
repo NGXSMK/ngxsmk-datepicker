@@ -8,19 +8,15 @@
  * ```typescript
  * import { ValueManagementService } from 'ngxsmk-datepicker/services';
  * ```
+ *
+ * Note: Day Selection lives on the Datepicker Host today. A future Selection module will
+ * replace the unused `DateSelectionService` prototype (no longer re-exported from this entry).
  */
 
 export { ValueManagementService } from './lib/services/value-management.service';
-export { DateSelectionService } from './lib/services/date-selection.service';
 export { KeyboardNavigationService } from './lib/services/keyboard-navigation.service';
 export { TouchGestureHandlerService } from './lib/services/touch-gesture-handler.service';
 export { FieldSyncService } from './lib/services/field-sync.service';
-
-export type {
-  DateSelectionState,
-  DateSelectionConfig,
-  DateSelectionCallbacks,
-} from './lib/services/date-selection.service';
 
 export type {
   KeyboardNavigationState,

@@ -1,6 +1,6 @@
-﻿# Ionic Integration Testing Guide
+# Ionic Integration Testing Guide
 
-**Last updated:** July 29, 2026 - **Current stable:** v3.0.3
+**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
 
 This document provides comprehensive testing instructions for verifying ngxsmk-datepicker compatibility with Ionic Framework.
 
@@ -52,32 +52,32 @@ See `e2e/ionic-test-manual.md` for detailed manual testing instructions.
 
 ## Test Scenarios Summary
 
-### ✅ Focus Management
+### ? Focus Management
 - **Test**: Verify focus trapping doesn't conflict with Ionic
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (Focus Management section)
 
-### ✅ Keyboard Behavior
+### ? Keyboard Behavior
 - **Test**: Verify keyboard show/hide on iOS and Android
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (Keyboard Behavior section)
 
-### ✅ ion-modal Integration
+### ? ion-modal Integration
 - **Test**: Verify datepicker works inside Ionic modals
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (ion-modal Integration section)
 
-### ✅ ion-popover Integration
+### ? ion-popover Integration
 - **Test**: Verify datepicker works inside Ionic popovers
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (ion-popover Integration section)
 
-### ✅ Scroll Behavior
+### ? Scroll Behavior
 - **Test**: Verify scrolling works correctly in ion-content
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (Scroll Behavior section)
 
-### ✅ SSR Compatibility
+### ? SSR Compatibility
 - **Test**: Verify server-side rendering works with Ionic
 - **Status**: Automated + Manual testing required
 - **Files**: `e2e/ionic-integration.spec.ts` (SSR Compatibility section)
