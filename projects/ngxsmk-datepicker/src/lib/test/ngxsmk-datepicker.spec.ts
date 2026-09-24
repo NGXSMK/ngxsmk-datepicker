@@ -265,10 +265,7 @@ describe('NgxsmkDatepickerComponent', () => {
 
     it('should validate range selection and emit invalidRange if disabled date is inside', () => {
       component.mode = 'range';
-      component.isDateDisabled = (d: Date | null) => {
-        if (!d) return false;
-        return d.getDate() === 15; // Disable 15th
-      };
+      component.isInvalidDate = (d: Date) => d.getDate() === 15; // Disable 15th
       spyOn(component.invalidRange, 'emit');
 
       const start = new Date(2026, 5, 10);

@@ -20,8 +20,8 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
       <p>
         The library provides built-in support for <code>MatFormField</code> via the optional
         <code>ngxsmk-datepicker/material</code> entry. Import
-        <code>NgxsmkDatepickerMatFormFieldControlDirective</code> and add
-        <code>ngxsmkMatFormFieldControl</code> on the datepicker so <code>mat-form-field</code> finds it.
+        <code>NgxsmkDatepickerMatFormFieldControlDirective</code> and add <code>ngxsmkMatFormFieldControl</code> on the
+        datepicker so <code>mat-form-field</code> finds it.
       </p>
 
       <div class="code-window">

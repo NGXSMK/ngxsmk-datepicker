@@ -85,11 +85,7 @@ import { CustomDateFormatService } from './services/custom-date-format.service';
 import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
-import {
-  Constraints,
-  EMPTY_CONSTRAINTS_SOURCES,
-  type ConstraintsSnapshot,
-} from './constraints/constraints';
+import { Constraints, EMPTY_CONSTRAINTS_SOURCES, type ConstraintsSnapshot } from './constraints/constraints';
 
 /** Recurring date pattern configuration for disabled dates. */
 export type RecurringPatternInput = {
@@ -546,7 +542,14 @@ export class NgxsmkDatepickerComponent
   @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
 
   @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
-  @Input() isInvalidDate: (date: Date) => boolean = () => false;
+  private _isInvalidDate: (date: Date) => boolean = () => false;
+  @Input() set isInvalidDate(value: ((date: Date) => boolean) | null | undefined) {
+    this._isInvalidDate = value ?? (() => false);
+    this._updateMemoSignals();
+  }
+  get isInvalidDate(): (date: Date) => boolean {
+    return this._isInvalidDate;
+  }
   /**
    * Server-driven disabled dates. Called with the first and last visible day whenever
    * the visible month range changes; resolves to the dates that must be disabled.
@@ -577,8 +580,22 @@ export class NgxsmkDatepickerComponent
   @Input() use24Hour: boolean = false;
   @Input() secondInterval: number = 1;
   @Input() showSeconds: boolean = false;
-  @Input() holidayProvider: HolidayProvider | null = null;
-  @Input() disableHolidays: boolean = false;
+  private _holidayProvider: HolidayProvider | null = null;
+  @Input() set holidayProvider(value: HolidayProvider | null) {
+    this._holidayProvider = value ?? null;
+    this._updateMemoSignals();
+  }
+  get holidayProvider(): HolidayProvider | null {
+    return this._holidayProvider;
+  }
+  private _disableHolidays = false;
+  @Input() set disableHolidays(value: boolean) {
+    this._disableHolidays = !!value;
+    this._updateMemoSignals();
+  }
+  get disableHolidays(): boolean {
+    return this._disableHolidays;
+  }
   private _disabledDates: (string | Date)[] = [];
   @Input() set disabledDates(val: (string | Date)[] | null | undefined) {
     this._disabledDates = Array.isArray(val) ? val : [];
@@ -1859,9 +1876,9 @@ export class NgxsmkDatepickerComponent
       disabledDates,
       disabledRanges,
       asyncDisabledDayTimes: this._asyncDisabledTimestamps(),
-      disableHolidays: this.disableHolidays,
-      holidayProvider: this.holidayProvider,
-      isInvalidDate: this.isInvalidDate ?? null,
+      disableHolidays: this._disableHolidays,
+      holidayProvider: this._holidayProvider,
+      isInvalidDate: this._isInvalidDate ?? null,
     });
   }
 

@@ -426,7 +426,9 @@ html[data-theme='dark'] .lang-selector .lang-menu button.active {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-align: center;
-    transition: background var(--transition-base), color var(--transition-base);
+    transition:
+      background var(--transition-base),
+      color var(--transition-base);
 
     &:hover {
       background: var(--asphalt-soft);

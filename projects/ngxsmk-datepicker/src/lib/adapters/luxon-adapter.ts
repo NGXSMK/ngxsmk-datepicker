@@ -85,8 +85,7 @@ export class LuxonAdapter implements DateAdapter {
       return this.DateTime.fromJSDate(value).isValid as boolean;
     }
     if (typeof value === 'string') {
-      return (this.DateTime.fromISO(value).isValid ||
-        this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid) as boolean;
+      return (this.DateTime.fromISO(value).isValid || this.DateTime.fromFormat(value, 'yyyy-MM-dd').isValid) as boolean;
     }
     return false;
   }

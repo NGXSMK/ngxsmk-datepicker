@@ -82,9 +82,9 @@
     --max-content-width: 1200px;
   }
 
-  --font-family-display: "Oswald", "Arial Narrow", Impact, sans-serif;
-  --font-family-body: "Karla", "Segoe UI", system-ui, sans-serif;
-  --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-family-display: 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --font-family-body: 'Karla', 'Segoe UI', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --font-size-xs: 0.78rem;
   --font-size-sm: 0.92rem;
@@ -115,7 +115,7 @@
   --transition: var(--transition-base);
 }
 
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --asphalt: #f2f4f7;
   --asphalt-soft: #c8ced8;
   --fog: #0e1116;
@@ -165,7 +165,7 @@ html[data-theme="dark"] {
   --shadow-lg: 0 24px 48px -20px rgba(0, 0, 0, 0.8);
 }
 
-html[data-theme="light"] {
+html[data-theme='light'] {
   --color-bg-page: #ebeef3;
   --color-bg-sidebar: #e4e8ef;
   --color-bg-secondary: #dde2ea;
@@ -423,7 +423,9 @@ html[data-theme='dark'] code {
   text-decoration: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  transition: color var(--transition-base), background var(--transition-base);
+  transition:
+    color var(--transition-base),
+    background var(--transition-base);
   border-left: 2px solid transparent;
   margin-bottom: 1px;
 
@@ -510,7 +512,10 @@ html[data-theme='dark'] .tip strong {
   font-family: var(--font-family-display);
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base);
   border: none;
   font-size: var(--font-size-sm);
   display: inline-flex;
