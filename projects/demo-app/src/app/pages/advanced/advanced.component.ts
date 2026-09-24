@@ -270,7 +270,7 @@ import { ThemeService } from '@tokiforge/angular';
         flex-direction: column;
         align-items: center;
         padding: var(--space-2xl) var(--space-lg);
-        background: radial-gradient(circle at top, rgba(124, 58, 237, 0.05), transparent);
+        background: var(--color-bg-elevated);
       }
 
       ngxsmk-datepicker {
@@ -383,7 +383,7 @@ export class AdvancedFeaturesComponent {
     const price = 89 + (date.getDate() % 5) * 10;
     return {
       label: '$' + price,
-      indicatorColor: date.getDate() === 15 ? '#7c3aed' : undefined,
+      indicatorColor: date.getDate() === 15 ? '#ffb703' : undefined,
       tooltip: date.getDate() === 15 ? 'Promo day' : undefined,
     };
   };

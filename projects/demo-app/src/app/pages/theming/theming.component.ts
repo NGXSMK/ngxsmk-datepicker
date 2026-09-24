@@ -254,7 +254,7 @@ themeBuilder.<span class="token-function">applyTheme</span>(theme, datepickerEl)
       }
 
       .glass-example {
-        background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 182, 212, 0.1));
+        background: linear-gradient(135deg, rgba(15, 107, 92, 0.12), rgba(181, 110, 13, 0.1));
         border: 1px solid var(--color-border-light);
       }
       .flex-wrap {
