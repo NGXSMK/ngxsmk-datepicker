@@ -14,7 +14,9 @@
   display: flex;
   align-items: center;
   box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.06);
-  transition: background var(--transition-base), border-color var(--transition-base);
+  transition:
+    background var(--transition-base),
+    border-color var(--transition-base);
 
   &-inner {
     width: 100%;
@@ -39,7 +41,9 @@
   gap: 0.75rem;
   cursor: pointer;
   text-decoration: none;
-  transition: opacity var(--transition-base), transform var(--transition-base);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base);
 
   &:hover {
     opacity: 0.95;
@@ -137,7 +141,9 @@
     background: var(--color-bg-card);
     border: 1px solid var(--color-border);
     color: var(--color-text-dim);
-    transition: background var(--transition-base), color var(--transition-base);
+    transition:
+      background var(--transition-base),
+      color var(--transition-base);
 
     &.copied {
       background: var(--brand-emerald);
@@ -375,7 +381,10 @@
   border-left: 3px solid var(--brand-primary);
   background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
   box-shadow: var(--shadow-sm);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base), transform var(--transition-base);
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-base);
 
   &:hover {
     border-color: var(--brand-primary);
@@ -508,7 +517,9 @@
     letter-spacing: -0.01em;
     text-align: center;
     box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
 
     &:hover {
       box-shadow: 0 6px 20px rgba(99, 102, 241, 0.55);

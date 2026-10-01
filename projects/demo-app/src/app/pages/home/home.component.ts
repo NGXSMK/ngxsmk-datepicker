@@ -36,29 +36,77 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="hero-actions">
             <a class="btn btn-primary" routerLink="/installation">
               <span>{{ i18n.t().home.ctaBuild }}</span>
-              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                class="btn-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </a>
             <a class="btn btn-outline" routerLink="/playground">
-              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                class="btn-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <polygon points="5 3 19 12 5 21 5 3"></polygon>
               </svg>
               <span>{{ i18n.t().home.ctaPro }}</span>
             </a>
 
             <!-- Quick Copy Box -->
-            <div class="quick-install-box" (click)="copyInstallCommand()" role="button" tabindex="0" (keydown.enter)="copyInstallCommand()">
+            <div
+              class="quick-install-box"
+              (click)="copyInstallCommand()"
+              role="button"
+              tabindex="0"
+              (keydown.enter)="copyInstallCommand()"
+            >
               <span class="install-prompt">$</span>
               <code class="install-cmd">npm i ngxsmk-datepicker</code>
-              <button type="button" class="copy-trigger" [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy command'">
+              <button
+                type="button"
+                class="copy-trigger"
+                [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy command'"
+              >
                 @if (hasCopiedInstall()) {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#10b981"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
                 } @else {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
@@ -158,11 +206,24 @@ import { I18nService } from '../../i18n/i18n.service';
             </div>
             <div class="snippet-box" (click)="copySnippet()" role="button" tabindex="0" (keydown.enter)="copySnippet()">
               <code>&lt;ngxsmk-datepicker mode="{{ demoMode }}" /&gt;</code>
-              <button type="button" class="snippet-copy-btn" [attr.aria-label]="hasCopiedSnippet() ? 'Copied' : 'Copy snippet'">
+              <button
+                type="button"
+                class="snippet-copy-btn"
+                [attr.aria-label]="hasCopiedSnippet() ? 'Copied' : 'Copy snippet'"
+              >
                 @if (hasCopiedSnippet()) {
                   <span class="copied-badge">Copied!</span>
                 } @else {
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
@@ -188,18 +249,45 @@ import { I18nService } from '../../i18n/i18n.service';
                 <div class="card-icon" [attr.data-icon]="f.key">
                   @switch (f.key) {
                     @case ('signals') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                       </svg>
                     }
                     @case ('zoneless') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
                     }
                     @case ('multiCalendar') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
                         <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -207,7 +295,16 @@ import { I18nService } from '../../i18n/i18n.service';
                       </svg>
                     }
                     @case ('a11y') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <circle cx="12" cy="5" r="2"></circle>
                         <path d="m4 11 4-2 4 1 4-1 4 2"></path>
                         <path d="M10 15v6"></path>
@@ -215,16 +312,36 @@ import { I18nService } from '../../i18n/i18n.service';
                       </svg>
                     }
                     @case ('mobile') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                         <line x1="12" y1="18" x2="12.01" y2="18"></line>
                       </svg>
                     }
                     @case ('locales') {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        <path
+                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        ></path>
                       </svg>
                     }
                   }
@@ -301,15 +418,37 @@ import { I18nService } from '../../i18n/i18n.service';
           <p class="cta-lead">{{ i18n.t().common.installToday }}</p>
           <div class="cta-actions">
             <a class="btn btn-primary" routerLink="/installation">Get Started Now</a>
-            <a class="btn btn-outline" href="https://github.com/NGXSMK/ngxsmk-datepicker" target="_blank" rel="noopener noreferrer">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            <a
+              class="btn btn-outline"
+              href="https://github.com/NGXSMK/ngxsmk-datepicker"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                ></path>
               </svg>
               <span>GitHub</span>
             </a>
           </div>
         </div>
-        <div class="cta-terminal" (click)="copyInstallCommand()" role="button" tabindex="0" (keydown.enter)="copyInstallCommand()">
+        <div
+          class="cta-terminal"
+          (click)="copyInstallCommand()"
+          role="button"
+          tabindex="0"
+          (keydown.enter)="copyInstallCommand()"
+        >
           <div class="terminal-bar">
             <span class="term-dot red"></span>
             <span class="term-dot yellow"></span>
@@ -402,8 +541,15 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       @keyframes pulse-glow {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.6; transform: scale(0.9); }
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(0.9);
+        }
       }
 
       .hero-title {
@@ -464,7 +610,9 @@ import { I18nService } from '../../i18n/i18n.service';
         font-size: 0.82rem;
         color: #f8fafc;
         cursor: pointer;
-        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        transition:
+          border-color var(--transition-fast),
+          box-shadow var(--transition-fast);
         user-select: none;
 
         &:hover {
@@ -533,7 +681,9 @@ import { I18nService } from '../../i18n/i18n.service';
         box-shadow: var(--shadow-xl);
         overflow: hidden;
         backdrop-filter: blur(16px);
-        transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        transition:
+          transform var(--transition-normal),
+          box-shadow var(--transition-normal);
 
         &:hover {
           box-shadow: 0 24px 48px -12px rgba(99, 102, 241, 0.18);
@@ -559,9 +709,15 @@ import { I18nService } from '../../i18n/i18n.service';
           height: 10px;
           border-radius: 50%;
 
-          &.red { background: #ef4444; }
-          &.yellow { background: #f59e0b; }
-          &.green { background: #10b981; }
+          &.red {
+            background: #ef4444;
+          }
+          &.yellow {
+            background: #f59e0b;
+          }
+          &.green {
+            background: #10b981;
+          }
         }
       }
 
@@ -624,7 +780,8 @@ import { I18nService } from '../../i18n/i18n.service';
         justify-content: center;
         align-items: center;
         min-height: 370px;
-        background: radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.07) 0%, transparent 75%), var(--color-bg-card);
+        background:
+          radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.07) 0%, transparent 75%), var(--color-bg-card);
 
         ::ng-deep ngxsmk-datepicker {
           width: 100% !important;
@@ -779,7 +936,10 @@ import { I18nService } from '../../i18n/i18n.service';
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
-        transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
+        transition:
+          transform var(--transition-normal),
+          box-shadow var(--transition-normal),
+          border-color var(--transition-fast);
         box-shadow: var(--shadow-sm);
 
         &:hover {
@@ -881,7 +1041,8 @@ import { I18nService } from '../../i18n/i18n.service';
         text-align: left;
         font-size: var(--font-size-sm);
 
-        th, td {
+        th,
+        td {
           padding: 1.1rem 1.35rem;
           border-bottom: 1px solid var(--color-border);
           vertical-align: middle;
@@ -937,7 +1098,8 @@ import { I18nService } from '../../i18n/i18n.service';
         align-items: center;
         padding: 2.5rem;
         border-radius: var(--radius-xl);
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%), var(--color-bg-card);
+        background:
+          linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%), var(--color-bg-card);
         border: 1px solid var(--color-border);
         box-shadow: var(--shadow-xl);
         overflow: hidden;
@@ -987,7 +1149,9 @@ import { I18nService } from '../../i18n/i18n.service';
         overflow: hidden;
         box-shadow: var(--shadow-md);
         cursor: pointer;
-        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        transition:
+          border-color var(--transition-fast),
+          box-shadow var(--transition-fast);
 
         &:hover {
           border-color: #6366f1;
@@ -1008,9 +1172,15 @@ import { I18nService } from '../../i18n/i18n.service';
           height: 9px;
           border-radius: 50%;
 
-          &.red { background: #ef4444; }
-          &.yellow { background: #f59e0b; }
-          &.green { background: #10b981; }
+          &.red {
+            background: #ef4444;
+          }
+          &.yellow {
+            background: #f59e0b;
+          }
+          &.green {
+            background: #10b981;
+          }
         }
 
         .term-title {
