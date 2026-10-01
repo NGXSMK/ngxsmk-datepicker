@@ -4,7 +4,7 @@
 -->
 
 <div align="center">
-  <img src="projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
+  <img src="https://raw.githubusercontent.com/NGXSMK/ngxsmk-datepicker/main/projects/ngxsmk-datepicker/docs/header-banner.png" alt="ngxsmk-datepicker - Lightweight Angular Date Range Picker" width="100%" />
 
 # **ngxsmk-datepicker** – Modern Angular Date Picker & Range Picker
 
@@ -39,18 +39,36 @@
 
 ---
 
+## 🤔 Why ngxsmk-datepicker vs Other Angular Datepickers?
+
+Use **ngxsmk-datepicker** when you want an enterprise-grade **date / range picker** with strong **mobile**, **i18n**, **timezone**, **Ionic**, and **SSR** support on **Angular 17–22+**, without adopting a heavy Material UI stack or legacy Day.js dependencies.
+
+| Feature / Capability | ngxsmk-datepicker | Angular Material Datepicker | ngx-bootstrap | Flatpickr |
+| --- | --- | --- | --- | --- |
+| **Angular 17–22+ Signals Engine** | ⚡ Native Signals (0% Zone.js) | ⚠️ RxJS / Legacy ChangeDetector | ❌ Legacy ChangeDetection | ❌ Vanilla JS wrapper |
+| **Standalone Component & Zero CDK** | ✅ Yes (Lightweight ~127KB) | ❌ Requires `@angular/material` + `@angular/cdk` | ❌ Requires Bootstrap CSS | ⚠️ Requires manual wrappers |
+| **Date Range & Multi-Calendar** | ✅ Built-in (presets, 1-3 months) | ⚠️ Limited Range Picker | ⚠️ Basic range picker | ⚠️ Basic range plugin |
+| **Integrated 12h / 24h Time Picker** | ✅ Native time selection | ❌ No native time picker | ⚠️ Separate timepicker | ⚠️ Plugin-dependent |
+| **Mobile & Touch (Ionic 7/8+)** | 📱 Built-in Touch & Safe Area Insets | ⚠️ Mobile UI requires custom CSS | ❌ Desktop-first | ⚠️ Generic touch |
+| **Signal Forms Native (`[field]`)** | ✅ Built-in (Angular 21+) | ❌ Not supported | ❌ Not supported | ❌ Not supported |
+| **SSR / Hydration Safety** | ✅ 100% Guarded (`DOCUMENT`) | ⚠️ Requires CDK SSR overlays | ❌ Window access errors | ⚠️ Window guard needed |
+| **Model Context Protocol (MCP) AI** | 🤖 Built-in MCP Server & UI prompt | ❌ Not available | ❌ Not available | ❌ Not available |
+
+---
+
 ### **📌 Table of Contents**
 
-1. [📷 Screenshots](#-screenshots)
-2. [✨ Features](#-features)
-3. [📋 Compatibility](#-compatibility)
-4. [🌍 Localization (i18n)](#-localization-i18n)
-5. [📦 Installation](#-installation)
-6. [🚀 Quick Start](#-quick-start)
-7. [🔌 Framework Integration](#-framework-integration)
-8. [⚙️ API Reference](#-api-reference)
-9. [🎨 Theming](#-theming)
-10. [⌨️ Keyboard Navigation](#-keyboard-navigation)
+1. [🤔 Why ngxsmk-datepicker?](#-why-ngxsmk-datepicker-vs-other-angular-datepickers)
+2. [📷 Screenshots](#-screenshots)
+3. [✨ Features](#-features)
+4. [📋 Compatibility](#-compatibility)
+5. [🌍 Localization (i18n)](#-localization-i18n)
+6. [📦 Installation](#-installation)
+7. [🚀 Quick Start](#-quick-start)
+8. [🔌 Framework Integration](#-framework-integration)
+9. [⚙️ API Reference](#-api-reference)
+10. [🎨 Theming](#-theming)
+11. [⌨️ Keyboard Navigation](#-keyboard-navigation)
 
 ---
 

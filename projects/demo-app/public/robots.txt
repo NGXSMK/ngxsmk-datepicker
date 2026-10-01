@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ngxsmk.com/sitemap.xml
+Sitemap: https://ngxsmk.github.io/ngxsmk-datepicker/sitemap.xml
