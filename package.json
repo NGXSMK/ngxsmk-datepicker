@@ -215,7 +215,7 @@
     "@semantic-release/release-notes-generator": "^12.1.0",
     "@storybook/addon-actions": "^8.6.18",
     "@storybook/addon-controls": "^8.6.18",
-    "@storybook/addon-docs": "^8.6.18",
+    "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-essentials": "^8.6.18",
     "@storybook/addon-interactions": "^8.6.18",
     "@storybook/angular": "^8.6.18",
