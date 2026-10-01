@@ -59,7 +59,7 @@
     "@angular/elements": "^21.2.11",
     "@tokiforge/angular": "^2.0.0",
     "@tokiforge/core": "^2.0.0",
-    "motion": "^12.40.0",
+    "motion": "^13.4.4",
     "path-browserify": "^1.0.1",
     "tslib": "^2.3.0"
   },
