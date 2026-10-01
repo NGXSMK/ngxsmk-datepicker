@@ -456,32 +456,32 @@ import { I18nService } from '../../i18n/i18n.service';
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: var(--color-bg-code);
-        border: 1px solid var(--color-border);
+        background: #0f172a;
+        border: 1px solid #1e293b;
         border-radius: var(--radius-pill);
-        padding: 0.55rem 0.9rem;
+        padding: 0.55rem 0.95rem;
         font-family: var(--font-family-mono);
         font-size: 0.82rem;
-        color: var(--color-text-main);
+        color: #f8fafc;
         cursor: pointer;
         transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
         user-select: none;
 
         &:hover {
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px var(--color-primary-light);
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
         }
 
         .install-prompt {
-          color: var(--color-primary);
+          color: #818cf8;
           font-weight: 700;
         }
 
         .install-cmd {
-          background: none;
-          border: none;
-          padding: 0;
-          color: inherit;
+          background: none !important;
+          border: none !important;
+          padding: 0 !important;
+          color: #f8fafc !important;
         }
 
         .copy-trigger {
@@ -491,11 +491,11 @@ import { I18nService } from '../../i18n/i18n.service';
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--color-text-muted);
+          color: #94a3b8;
           cursor: pointer;
 
           &:hover {
-            color: var(--color-primary);
+            color: #ffffff;
           }
         }
 
@@ -567,7 +567,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
       .mode-tabs {
         display: flex;
-        background: var(--color-bg);
+        background: var(--color-bg-card);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-pill);
         padding: 2px;
@@ -667,8 +667,9 @@ import { I18nService } from '../../i18n/i18n.service';
         .output-val {
           font-family: var(--font-family-mono);
           font-weight: 600;
-          color: var(--color-primary);
-          background: var(--color-primary-light);
+          color: var(--brand-primary-dark);
+          background: rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(99, 102, 241, 0.2);
           padding: 0.15rem 0.5rem;
           border-radius: var(--radius-sm);
         }
@@ -678,13 +679,13 @@ import { I18nService } from '../../i18n/i18n.service';
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: var(--color-bg-code);
-        border: 1px solid var(--color-border);
+        background: #0b0f19;
+        border: 1px solid #1e293b;
         border-radius: var(--radius-md);
         padding: 0.35rem 0.65rem;
         font-family: var(--font-family-mono);
         font-size: 0.78rem;
-        color: var(--code-text);
+        color: #f1f5f9;
         cursor: pointer;
         transition: border-color var(--transition-fast);
 
@@ -693,10 +694,10 @@ import { I18nService } from '../../i18n/i18n.service';
         }
 
         code {
-          background: none;
-          border: none;
-          padding: 0;
-          color: inherit;
+          background: none !important;
+          border: none !important;
+          padding: 0 !important;
+          color: #f1f5f9 !important;
         }
 
         .snippet-copy-btn {
@@ -705,11 +706,11 @@ import { I18nService } from '../../i18n/i18n.service';
           padding: 0;
           display: flex;
           align-items: center;
-          color: var(--color-text-muted);
+          color: #94a3b8;
           cursor: pointer;
 
           &:hover {
-            color: var(--color-primary);
+            color: #ffffff;
           }
         }
 
@@ -901,7 +902,7 @@ import { I18nService } from '../../i18n/i18n.service';
         }
 
         .highlight-col {
-          background: var(--color-primary-light);
+          background: rgba(99, 102, 241, 0.05);
           font-weight: 600;
         }
 
@@ -912,13 +913,13 @@ import { I18nService } from '../../i18n/i18n.service';
         }
 
         .badge-yes {
-          color: #10b981;
+          color: #059669;
           font-weight: 600;
         }
 
         .badge-mid {
-          color: #f59e0b;
-          font-weight: 500;
+          color: #b45309;
+          font-weight: 600;
         }
 
         .badge-no {
@@ -980,8 +981,8 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .cta-terminal {
-        background: var(--color-bg-code);
-        border: 1px solid var(--color-border);
+        background: #0b0f19;
+        border: 1px solid #1e293b;
         border-radius: var(--radius-lg);
         overflow: hidden;
         box-shadow: var(--shadow-md);
@@ -989,8 +990,8 @@ import { I18nService } from '../../i18n/i18n.service';
         transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 
         &:hover {
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px var(--color-primary-light);
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
         }
       }
 
@@ -999,8 +1000,8 @@ import { I18nService } from '../../i18n/i18n.service';
         align-items: center;
         gap: 6px;
         padding: 0.65rem 0.95rem;
-        background: var(--color-bg-elevated);
-        border-bottom: 1px solid var(--color-border);
+        background: #111827;
+        border-bottom: 1px solid #1f2937;
 
         .term-dot {
           width: 9px;
@@ -1016,7 +1017,7 @@ import { I18nService } from '../../i18n/i18n.service';
           margin-left: 0.5rem;
           font-family: var(--font-family-mono);
           font-size: 0.72rem;
-          color: var(--color-text-dim);
+          color: #94a3b8;
         }
       }
 
@@ -1030,12 +1031,12 @@ import { I18nService } from '../../i18n/i18n.service';
         font-size: 0.85rem;
 
         .term-prompt {
-          color: var(--color-primary);
+          color: #818cf8;
           font-weight: 700;
         }
 
         .term-code {
-          color: var(--color-text-main);
+          color: #f8fafc !important;
           font-weight: 500;
         }
 
@@ -1045,11 +1046,11 @@ import { I18nService } from '../../i18n/i18n.service';
           padding: 0.2rem;
           display: flex;
           align-items: center;
-          color: var(--color-text-muted);
+          color: #94a3b8;
           cursor: pointer;
 
           &:hover {
-            color: var(--color-primary);
+            color: #ffffff;
           }
         }
 

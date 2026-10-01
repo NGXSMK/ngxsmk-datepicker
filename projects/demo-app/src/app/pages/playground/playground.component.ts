@@ -421,8 +421,13 @@ import { animate } from 'motion';
         font-size: var(--font-size-sm);
         color: var(--color-text-muted);
         code {
-          color: var(--color-primary-light);
+          color: var(--brand-primary-dark);
+          font-weight: 600;
         }
+      }
+
+      :host-context([data-theme='dark']) .value-chip code {
+        color: var(--brand-primary-light);
       }
 
       .preview-canvas {

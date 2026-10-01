@@ -58,9 +58,9 @@
   --color-bg-header: rgba(255, 255, 255, 0.85);
 
   --color-text-main: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-dim: #64748b;
-  --color-text-tertiary: #94a3b8;
+  --color-text-muted: #334155;
+  --color-text-dim: #475569;
+  --color-text-tertiary: #64748b;
 
   --code-text: #f1f5f9;
   --code-keyword: #c084fc;
@@ -199,11 +199,13 @@ html[data-theme='light'] {
   --color-bg-code: #0b0f19;
   --color-bg-header: rgba(255, 255, 255, 0.85);
   --color-text-main: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-dim: #64748b;
-  --color-text-tertiary: #94a3b8;
+  --color-text-muted: #334155;
+  --color-text-dim: #475569;
+  --color-text-tertiary: #64748b;
   --color-border: #e2e8f0;
   --color-border-light: #cbd5e1;
+  --color-secondary: #b45309;
+  --brand-accent: #b45309;
 }
 
 /* ============================================
@@ -465,7 +467,7 @@ html[data-theme='dark'] code {
   }
 
   &.active {
-    color: var(--brand-primary);
+    color: var(--brand-primary-dark);
     background: var(--teal-soft);
     font-weight: 600;
   }
@@ -613,16 +615,20 @@ html[data-theme='dark'] .tip strong {
 
 /* Content links (e.g. Installation page "See all options") */
 a.link {
-  color: var(--color-primary-light);
+  color: var(--brand-primary-dark);
   text-decoration: none;
   font-weight: var(--font-weight-semibold);
   transition: var(--transition-base);
   border-bottom: 1px solid transparent;
 }
 
+html[data-theme='dark'] a.link {
+  color: var(--brand-primary-light);
+}
+
 a.link:hover {
-  color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
+  color: var(--brand-primary);
+  border-bottom-color: var(--brand-primary);
 }
 
 .no-underline {
@@ -1160,7 +1166,7 @@ ngxsmk-datepicker {
       background: none !important;
       border: none !important;
       padding: 0 !important;
-      color: var(--code-text);
+      color: var(--code-text) !important;
 
       .token-keyword {
         color: var(--code-keyword);

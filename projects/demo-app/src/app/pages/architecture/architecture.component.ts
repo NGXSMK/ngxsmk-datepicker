@@ -251,22 +251,37 @@ import { I18nService } from '../../i18n/i18n.service';
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
         &.plugin {
-          background: rgba(6, 182, 212, 0.05);
-          color: var(--color-secondary);
+          background: rgba(6, 182, 212, 0.08);
+          color: #0e7490;
         }
         &.hook {
-          background: rgba(139, 92, 246, 0.05);
-          color: var(--color-primary-light);
+          background: rgba(99, 102, 241, 0.08);
+          color: #4338ca;
         }
         &.internal {
-          background: rgba(255, 255, 255, 0.03);
-          color: var(--color-text-dim);
+          background: var(--color-bg-elevated);
+          color: var(--color-text-main);
         }
 
         &:hover {
           transform: scale(1.02);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
           border-color: currentColor;
+        }
+      }
+
+      :host-context([data-theme='dark']) .flow-node {
+        &.plugin {
+          color: #22d3ee;
+          background: rgba(6, 182, 212, 0.12);
+        }
+        &.hook {
+          color: #a5b4fc;
+          background: rgba(139, 92, 246, 0.12);
+        }
+        &.internal {
+          color: #cbd5e1;
+          background: rgba(255, 255, 255, 0.05);
         }
       }
       .connector {

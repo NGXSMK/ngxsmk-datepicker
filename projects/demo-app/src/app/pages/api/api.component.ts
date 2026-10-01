@@ -164,9 +164,18 @@ import { I18nService } from '../../i18n/i18n.service';
         color: var(--color-text-muted);
       }
       code {
-        color: var(--color-secondary);
-        background: none;
-        padding: 0;
+        color: var(--brand-primary-dark);
+        background: var(--color-bg-elevated);
+        padding: 0.15rem 0.45rem;
+        border-radius: var(--radius-xs);
+        border: 1px solid var(--color-border);
+        font-weight: 500;
+      }
+
+      :host-context([data-theme='dark']) code {
+        color: var(--brand-accent);
+        background: var(--color-bg-code);
+        border-color: rgba(255, 255, 255, 0.08);
       }
       .text-xs {
         font-size: var(--font-size-xs);

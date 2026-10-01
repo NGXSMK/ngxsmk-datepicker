@@ -251,14 +251,15 @@ import { ThemeService } from '@tokiforge/angular';
       }
 
       kbd {
-        background: var(--color-bg-code);
+        background: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
         border-radius: 4px;
         padding: 2px 6px;
         font-size: 0.8em;
         font-family: 'JetBrains Mono', monospace;
         box-shadow: 0 2px 0 var(--color-border);
-        color: var(--color-secondary);
+        color: var(--brand-primary-dark);
+        font-weight: 600;
       }
 
       .p-lg {
@@ -298,17 +299,25 @@ import { ThemeService } from '@tokiforge/angular';
       }
 
       .system-button {
-        background: var(--color-bg-code);
+        background: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
         border-radius: 6px;
         padding: 4px 10px;
         font-size: var(--font-size-sm);
         cursor: pointer;
-        color: inherit;
+        color: var(--color-text-main);
         text-transform: capitalize;
+        transition: all var(--transition-fast);
+
+        &:hover {
+          background: var(--color-bg-card);
+        }
+
         &.active {
-          border-color: var(--color-secondary);
-          color: var(--color-secondary);
+          border-color: var(--brand-primary);
+          color: var(--brand-primary-dark);
+          background: var(--teal-soft);
+          font-weight: 600;
         }
       }
 
@@ -321,17 +330,56 @@ import { ThemeService } from '@tokiforge/angular';
       }
 
       .slot-button {
-        background: var(--color-bg-code);
+        background: var(--color-bg-elevated);
         border: 1px solid var(--color-border);
         border-radius: 6px;
         padding: 6px 14px;
         font-size: var(--font-size-sm);
         cursor: pointer;
-        color: inherit;
+        color: var(--color-text-main);
         margin: 0 4px;
+        transition: all var(--transition-fast);
+
+        &:hover {
+          background: var(--color-bg-card);
+        }
+
         &.slot-button-primary {
-          border-color: var(--color-secondary);
-          color: var(--color-secondary);
+          border-color: var(--brand-primary);
+          color: var(--brand-primary-dark);
+          background: var(--teal-soft);
+          font-weight: 600;
+        }
+      }
+
+      code.text-secondary {
+        color: var(--brand-primary-dark);
+        font-weight: 600;
+      }
+
+      :host-context([data-theme='dark']) {
+        kbd {
+          background: var(--color-bg-code);
+          color: var(--brand-accent);
+        }
+        .system-button {
+          background: var(--color-bg-elevated);
+          color: var(--color-text-main);
+          &.active {
+            color: var(--brand-primary-light);
+            border-color: var(--brand-primary);
+          }
+        }
+        .slot-button {
+          background: var(--color-bg-elevated);
+          color: var(--color-text-main);
+          &.slot-button-primary {
+            color: var(--brand-primary-light);
+            border-color: var(--brand-primary);
+          }
+        }
+        code.text-secondary {
+          color: var(--brand-accent);
         }
       }
 

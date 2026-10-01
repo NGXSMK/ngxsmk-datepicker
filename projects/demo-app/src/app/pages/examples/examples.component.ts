@@ -574,7 +574,7 @@ import { I18nService } from '../../i18n/i18n.service';
         letter-spacing: 0.04em;
         padding: 2px 8px;
         border-radius: 4px;
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--color-bg-elevated);
         color: var(--color-text-dim);
         border: 1px solid var(--color-border);
       }
@@ -601,17 +601,22 @@ import { I18nService } from '../../i18n/i18n.service';
       .selection-box {
         margin-top: 1rem;
         padding: 0.75rem;
-        background: rgba(0, 0, 0, 0.2);
+        background: var(--color-bg-elevated);
         border-radius: 6px;
         font-size: var(--font-size-sm);
         text-align: center;
         border: 1px dashed var(--color-border);
 
         code {
-          color: var(--color-secondary);
+          color: var(--brand-primary-dark);
           background: none;
           border: none;
+          font-weight: 600;
         }
+      }
+
+      :host-context([data-theme='dark']) .selection-box code {
+        color: var(--brand-accent);
       }
 
       ngxsmk-datepicker {
