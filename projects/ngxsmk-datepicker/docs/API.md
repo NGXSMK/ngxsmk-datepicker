@@ -2347,7 +2347,7 @@ interface DatepickerClasses {
 
 **Status**: Stable (v3.0.6+)
 
-Allowed-day truth for min/max, disabled dates/ranges, holidays, async disabled sets, and `isInvalidDate`. The Host rebuilds an immutable snapshot when constraint inputs change; forms validators map `ConstraintDenial` codes to public error keys. See `docs/adr/0001-hybrid-constraints-snapshot.md` and root `CONTEXT.md`.
+Allowed-day truth for min/max, disabled dates/ranges, holidays, async disabled sets, and `isInvalidDate`. The Host rebuilds an immutable snapshot when constraint inputs change; forms validators map `ConstraintDenial` codes to public error keys.
 
 ```typescript
 import {

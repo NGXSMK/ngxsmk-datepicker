@@ -172,4 +172,4 @@ Production source maps policy for the library package. **Effort: S**
 
 ---
 
-For narrative roadmap priorities and timelines, see [ROADMAP.md](ROADMAP.md). For refactor sequencing, see [projects/ngxsmk-datepicker/docs/REFACTOR_PLAN.md](projects/ngxsmk-datepicker/docs/REFACTOR_PLAN.md). For upcoming **localization and time** APIs, see [projects/ngxsmk-datepicker/docs/FEATURE_SCOPING.md](projects/ngxsmk-datepicker/docs/FEATURE_SCOPING.md).
+For narrative roadmap priorities and timelines, see [ROADMAP.md](ROADMAP.md).

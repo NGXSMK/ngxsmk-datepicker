@@ -187,7 +187,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Documentation**: Added [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md) as the maintained anchor index for roadmap-linked improvements; added [FEATURE_SCOPING.md](projects/ngxsmk-datepicker/docs/FEATURE_SCOPING.md) and [REFACTOR_PLAN.md](projects/ngxsmk-datepicker/docs/REFACTOR_PLAN.md).
+- **Documentation**: Added [IMPROVEMENT_REPORT.md](IMPROVEMENT_REPORT.md) as the maintained anchor index for roadmap-linked improvements.
 - **Demo**: Playground **Advanced** controls (`syncScroll`, `appendToBody`, `disabledState`, `mobileModalStyle`) and stable `id`s for E2E.
 - **E2E**: [e2e/playground.spec.ts](e2e/playground.spec.ts) — RTL, multi-calendar inline, range quick picks; smoke tests target `.ngxsmk-popover-open` so inline `role="dialog"` calendars on `/examples` do not break strict locators.
 - **Storybook**: `MultiCalendarInline` and `RangeWithQuickPicks` stories.
