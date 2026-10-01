@@ -37,8 +37,11 @@ CONTRIBUTING.md
 # Scripts
 scripts/
 
-# GitHub
+# GitHub & Agents
 .github/
+.agents/
+.gemini/
+skills-lock.json
 
 # Only include the built library from dist/ngxsmk-datepicker
 # This will be handled by the files field in package.json
