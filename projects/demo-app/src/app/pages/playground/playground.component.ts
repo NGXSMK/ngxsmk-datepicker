@@ -1,7 +1,8 @@
-import { Component, inject, AfterViewInit } from '@angular/core';
+import { Component, inject, AfterViewInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
+import { ThemeService } from '@tokiforge/angular';
 import { I18nService } from '../../i18n/i18n.service';
 import { animate } from 'motion';
 
@@ -411,7 +412,7 @@ import { animate } from 'motion';
       .preview-header {
         padding: 1rem;
         border-bottom: 1px solid var(--color-border);
-        background: rgba(0, 0, 0, 0.1);
+        background: var(--color-bg-sidebar);
         display: flex;
         justify-content: center;
         z-index: 10;
@@ -432,25 +433,29 @@ import { animate } from 'motion';
 
       .preview-canvas {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 1rem 0.5rem;
+        padding: 2.5rem 1rem;
         position: relative;
-        overflow-x: auto;
+        overflow: visible;
+        min-height: 480px;
+        width: 100%;
         max-width: 100%;
         min-width: 0;
         @media (min-width: 480px) {
-          padding: 1.5rem 1rem;
+          padding: 2.5rem 1.5rem;
         }
         @media (min-width: 768px) {
-          padding: 2rem 1.5rem;
+          padding: 3rem 2rem;
         }
         @media (min-width: 1440px) {
-          padding: 3rem 2rem;
+          padding: 3.5rem 2rem;
         }
 
         ngxsmk-datepicker {
           display: block;
+          width: 100%;
+          max-width: 380px;
 
           &.ngxsmk-inline {
             width: fit-content;
@@ -540,6 +545,14 @@ import { animate } from 'motion';
 })
 export class PlaygroundComponent implements AfterViewInit {
   i18n = inject(I18nService);
+  themeService = inject(ThemeService);
+
+  constructor() {
+    effect(() => {
+      const active = this.themeService.theme();
+      this.theme = active === 'dark' ? 'dark' : 'light';
+    });
+  }
 
   ngAfterViewInit() {
     animate('.playground-hero h1' as any, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, ease: 'easeOut' });
@@ -559,7 +572,7 @@ export class PlaygroundComponent implements AfterViewInit {
   use24Hour = false;
   showSeconds = false;
   minuteInterval = 1;
-  theme: 'light' | 'dark' = 'dark';
+  theme: 'light' | 'dark' = this.themeService.theme() === 'dark' ? 'dark' : 'light';
   showOtherMonths = false;
   allowTyping = false;
   showCalendarButton = true;
@@ -657,7 +670,7 @@ export class PlaygroundComponent implements AfterViewInit {
     this.use24Hour = false;
     this.showSeconds = false;
     this.minuteInterval = 1;
-    this.theme = 'dark';
+    this.theme = this.themeService.theme() === 'dark' ? 'dark' : 'light';
     this.allowTyping = false;
     this.showCalendarButton = true;
     this.calendarCount = 1;
