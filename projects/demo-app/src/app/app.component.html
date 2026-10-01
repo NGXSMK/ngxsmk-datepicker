@@ -12,8 +12,8 @@
         </button>
         <div class="logo flex items-center gap-sm" routerLink="/">
           <div class="logo-icon-wrapper">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="4" width="18" height="18" rx="4" ry="4"></rect>
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -23,18 +23,33 @@
         </div>
       </div>
 
-      <div class="header-actions flex items-center gap-md sm:gap-lg">
+      <div class="header-actions flex items-center gap-sm sm:gap-md">
+        <!-- Quick Install Pill -->
+        <button
+          type="button"
+          class="install-pill-btn flex items-center gap-xs"
+          (click)="copyInstallCommand()"
+          [title]="'Copy npm install command'"
+        >
+          <span class="pill-prefix">$</span>
+          <span class="pill-cmd">npm i ngxsmk-datepicker</span>
+          <span class="pill-badge" [class.copied]="hasCopiedInstall()">
+            {{ hasCopiedInstall() ? 'Copied! ✓' : 'Copy' }}
+          </span>
+        </button>
+
         <a
           href="https://www.npmjs.com/package/ngxsmk-datepicker"
           target="_blank"
           class="npm-badge flex items-center gap-xs no-underline"
+          title="View on npm"
         >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
             <path
               d="M0 7.334v8h6.666v1.332H12V15.334h12V7.334H0zm6.666 6.666H5.334v-4H4v4H1.334v-5.332h5.332v5.332zm6.666 0h-1.332v-4h-1.334v4H9.334v-5.332h4v5.332zm6.668 0h-1.334v-4h-1.334v4H16V7.334h5.334v6.666z"
             />
           </svg>
-          <span class="count">{{ npmDownloads() }} {{ i18n.t().common.npmDownloads }}</span>
+          <span class="count">{{ npmDownloads() }}</span>
         </a>
 
         <button

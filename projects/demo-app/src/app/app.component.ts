@@ -50,6 +50,15 @@ export class AppComponent {
   }
 
   npmDownloads = signal<string>('...');
+  hasCopiedInstall = signal(false);
+
+  copyInstallCommand() {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('npm install ngxsmk-datepicker');
+      this.hasCopiedInstall.set(true);
+      setTimeout(() => this.hasCopiedInstall.set(false), 2000);
+    }
+  }
 
   public themeService = inject(ThemeService);
   public i18n = inject(I18nService);
@@ -153,7 +162,7 @@ export class AppComponent {
           keywords = 'angular datepicker playground, live demo datepicker, online calendar preview';
         }
 
-        const canonicalUrl = `https://ngxsmk.com${url === '/' ? '' : url}`;
+        const canonicalUrl = `https://ngxsmk.github.io/ngxsmk-datepicker${url === '/' ? '' : url}`;
 
         this.title.setTitle(pageTitle);
         this.meta.updateTag({ name: 'description', content: desc });
