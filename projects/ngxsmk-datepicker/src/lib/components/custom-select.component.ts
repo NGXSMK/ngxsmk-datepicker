@@ -76,7 +76,17 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @Input() options: { label: string; value: unknown; disabled?: boolean }[] = [];
   @Input() value: unknown;
-  @Input() disabled: boolean = false;
+  private isDisabled = false;
+  @Input()
+  set disabled(value: boolean) {
+    this.isDisabled = value;
+    if (value) {
+      this.isOpen = false;
+    }
+  }
+  get disabled(): boolean {
+    return this.isDisabled;
+  }
   @Output() valueChange = new EventEmitter<unknown>();
   @ViewChild('container', { static: false }) container!: ElementRef<HTMLDivElement>;
   @ViewChild('button', { static: false }) button!: ElementRef<HTMLButtonElement>;
@@ -201,6 +211,8 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   }
 
   selectOption(option: { label: string; value: unknown }): void {
+    if (this.disabled) return;
+
     this.value = option.value;
     this.valueChange.emit(this.value);
     this.isOpen = false;
