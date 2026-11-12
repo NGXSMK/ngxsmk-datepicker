@@ -783,24 +783,66 @@ import { I18nService } from '../../i18n/i18n.service';
         padding: 1.75rem 1rem;
         display: flex;
         justify-content: center;
-        align-items: center;
-        min-height: 370px;
+        align-items: flex-start;
+        min-height: 0;
         background:
           radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.07) 0%, transparent 75%), var(--color-bg-card);
 
-        ::ng-deep ngxsmk-datepicker {
+        ngxsmk-datepicker {
           width: 100% !important;
           max-width: 380px;
           margin: 0 auto;
           --datepicker-radius-md: 12px;
           --datepicker-radius-lg: 16px;
+        }
 
-          .ngxsmk-popover-container.ngxsmk-inline-container,
-          .ngxsmk-calendar-container {
-            border: none !important;
-            box-shadow: none !important;
-            background: transparent !important;
-          }
+        :host ::ng-deep .showcase-stage .ngxsmk-popover-container.ngxsmk-inline-container,
+        :host ::ng-deep .showcase-stage .ngxsmk-calendar-container {
+          border: none !important;
+          box-shadow: none !important;
+          background: transparent !important;
+          overflow: visible !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        :host ::ng-deep .showcase-stage .ngxsmk-datepicker-container {
+          overflow: visible !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        :host ::ng-deep .showcase-stage .ngxsmk-days-grid {
+          margin: 0 !important;
+          width: 100% !important;
+          gap: 8px 4px !important;
+          grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        }
+
+        :host ::ng-deep .showcase-stage .ngxsmk-days-grid > *,
+        :host ::ng-deep .showcase-stage .ngxsmk-day-cell {
+          margin: 0 !important;
+          min-width: 0 !important;
+        }
+
+        :host ::ng-deep .showcase-stage .ngxsmk-day-cell {
+          overflow: hidden !important;
+          width: 100% !important;
+          height: auto !important;
+          max-width: none !important;
+          max-height: none !important;
+          min-height: 0 !important;
+          aspect-ratio: 1 !important;
+        }
+
+        :host ::ng-deep .showcase-stage .ngxsmk-day-number {
+          width: 82% !important;
+          height: 82% !important;
+          min-width: 0 !important;
+          min-height: 0 !important;
+          max-width: none !important;
+          max-height: none !important;
+          border-radius: 50% !important;
         }
       }
 

@@ -10,7 +10,8 @@
   },
   "scripts": {
     "ng": "npx ng",
-    "start": "npx ng serve demo-app",
+    "start": "npx ng build ngxsmk-datepicker --configuration=development && npx ng serve demo-app",
+    "start:demo": "npx ng serve demo-app",
     "build": "npx ng build",
     "build:demo": "npx ng build demo-app --configuration production",
     "build:optimized": "npx ng build ngxsmk-datepicker --configuration production && node scripts/remove-sourcemaps.js && npm run build:schematics",
