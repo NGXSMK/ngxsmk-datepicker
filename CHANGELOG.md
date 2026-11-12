@@ -28,6 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Demo home hero: top-aligned layout; compact inline showcase (`calendarCount=1`, range summary/presets off).
 - Docs: `MIGRATION.md` + README updated for 3.0.7 UX defaults.
 
+### Improved (iOS / Android)
+
+- Mobile detection uses coarse-pointer + iPadOS (MacIntel + touch) / Android capability checks.
+- iOS-safe body scroll lock (`position: fixed` + restore scrollY) when the sheet opens.
+- Bottom-sheet dismiss drag only from handle / top chrome (won't fight content scroll).
+- `visualViewport` resize keeps the sheet above the on-screen keyboard.
+- Safe-area padding (left/right/bottom), `overscroll-behavior: contain`, 16px input font (no iOS focus zoom).
+- Sheet drag handle; selection haptics default on (`enableHapticFeedback`); `enterkeyhint` / spellcheck off for typed entry.
+
 ## [3.0.7] - 2026-11-13
 
 ### Fixed

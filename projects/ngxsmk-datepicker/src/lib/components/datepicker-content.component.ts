@@ -83,6 +83,11 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         (keydown.escape)="onPopoverEscape($event)"
       >
         <div class="ngxsmk-datepicker-container" [ngClass]="classes?.container">
+          @if (isMobile && mobileModalStyle === 'bottom-sheet' && !isInlineMode) {
+            <div class="ngxsmk-sheet-handle" aria-hidden="true">
+              <span class="ngxsmk-sheet-handle-bar"></span>
+            </div>
+          }
           @if (isCalendarOpening) {
             <div class="ngxsmk-calendar-loading" role="status" aria-live="polite" [attr.aria-label]="loadingMessage">
               <div class="ngxsmk-calendar-loading-spinner"></div>

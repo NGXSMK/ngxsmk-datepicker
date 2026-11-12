@@ -123,6 +123,13 @@ ngxsmk-datepicker,
 ></ngxsmk-datepicker>
 ```
 
+### Mobile (iOS / Android)
+
+- Detection now treats **iPadOS** (desktop UA + touch) and coarse-pointer devices as mobile.
+- Background scroll is locked more aggressively on iOS while open; no app change required.
+- `[enableHapticFeedback]` defaults to **`true`** (Android vibration API). Opt out with `[enableHapticFeedback]="false"`.
+- Prefer `[mobileModalStyle]="'bottom-sheet'"` (now the default) on phones; use `'fullscreen'` for dense range + time UIs.
+
 ## v3.0.5 → v3.0.6
 
 ### Changes

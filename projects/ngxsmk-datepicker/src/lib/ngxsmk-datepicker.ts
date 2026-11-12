@@ -88,6 +88,7 @@ import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
 import { Constraints, EMPTY_CONSTRAINTS_SOURCES, type ConstraintsSnapshot } from './constraints/constraints';
+import { isIOSFamily, isMobileLikeDevice } from './utils/mobile-platform.utils';
 
 /** Recurring date pattern configuration for disabled dates. */
 export type RecurringPatternInput = {
@@ -922,7 +923,8 @@ export class NgxsmkDatepickerComponent
   @Input() align: 'left' | 'right' | 'center' = 'left';
 
   @Input() useNativePicker: boolean = false;
-  readonly enableHapticFeedback = input<boolean>(false);
+  /** Light selection / confirmation vibration on supported Android (and some WebViews). Default on. */
+  readonly enableHapticFeedback = input<boolean>(true);
   /** Mobile presentation. Defaults to bottom-sheet for native-feeling mobile UX. */
   @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'bottom-sheet';
   @Input() mobileTimePickerStyle: 'wheel' | 'slider' | 'native' = 'slider';
@@ -1473,7 +1475,12 @@ export class NgxsmkDatepickerComponent
   private bottomSheetSwipeStartY: number = 0;
   private bottomSheetSwipeCurrentY: number = 0;
   private isBottomSheetSwiping: boolean = false;
+  private bottomSheetSwipeAllowed = false;
   private readonly bottomSheetSwipeThreshold: number = 100;
+  /** Saved scroll Y for iOS/Android body lock restore. */
+  private _scrollLockY = 0;
+  private _bodyScrollLocked = false;
+  private _visualViewportCleanup: (() => void) | null = null;
 
   // Note: isCalendarSwiping is now in touchState
   private readonly SWIPE_THRESHOLD = 50;
@@ -2007,32 +2014,14 @@ export class NgxsmkDatepickerComponent
     if (!this.autoDetectMobile) {
       return false;
     }
-    if (this.isBrowser) {
-      try {
-        const mediaQuery = globalThis.matchMedia('(max-width: 1024px)');
-        const isMobileWidth = mediaQuery?.matches ?? false;
-        const hasTouchSupport =
-          'ontouchstart' in globalThis ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0);
-        const hasPointerEvents = 'onpointerdown' in globalThis;
-        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-
-        return (
-          isMobileWidth ||
-          (hasTouchSupport && isMobileWidth) ||
-          (hasPointerEvents && isMobileWidth) ||
-          isMobileUserAgent
-        );
-      } catch {
-        return (
-          'ontouchstart' in globalThis ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0)
-        );
-      }
+    if (!this.isBrowser) {
+      return false;
     }
-    return false;
+    try {
+      return isMobileLikeDevice({ maxWidthPx: 1024 });
+    } catch {
+      return false;
+    }
   }
 
   public shouldUseNativePicker(): boolean {
@@ -2107,11 +2096,20 @@ export class NgxsmkDatepickerComponent
       return;
     }
     const touch = event.touches[0];
-    if (touch) {
-      this.bottomSheetSwipeStartY = touch.clientY;
-      this.bottomSheetSwipeCurrentY = touch.clientY;
-      this.isBottomSheetSwiping = false;
-    }
+    if (!touch) return;
+
+    const popoverContainer = this.getActualPopoverContainer();
+    // Only allow dismiss-drag from the handle / top chrome, or when sheet is scrolled to top.
+    // Prevents fighting content scroll on iOS/Android.
+    const target = event.target as HTMLElement | null;
+    const fromHandle =
+      !!target?.closest?.('.ngxsmk-sheet-handle, .ngxsmk-range-summary, .ngxsmk-header, .ngxsmk-showcase-bar') ||
+      (popoverContainer ? touch.clientY - popoverContainer.getBoundingClientRect().top < 56 : false);
+    const atScrollTop = !popoverContainer || popoverContainer.scrollTop <= 0;
+    this.bottomSheetSwipeAllowed = fromHandle || atScrollTop;
+    this.bottomSheetSwipeStartY = touch.clientY;
+    this.bottomSheetSwipeCurrentY = touch.clientY;
+    this.isBottomSheetSwiping = false;
   }
 
   public onBottomSheetTouchMove(event: TouchEvent): void {
@@ -2119,7 +2117,8 @@ export class NgxsmkDatepickerComponent
       !this.isMobileDevice() ||
       this.mobileModalStyle !== 'bottom-sheet' ||
       this.isInlineMode ||
-      !this.isCalendarOpen
+      !this.isCalendarOpen ||
+      !this.bottomSheetSwipeAllowed
     ) {
       return;
     }
@@ -2135,7 +2134,8 @@ export class NgxsmkDatepickerComponent
       if (this.isBottomSheetSwiping && deltaY > 0) {
         const popoverContainer = this.getActualPopoverContainer();
         if (popoverContainer) {
-          popoverContainer.style.transform = `translateY(${deltaY}px)`;
+          // Use translate3d for smoother compositing on iOS
+          popoverContainer.style.transform = `translate3d(0, ${deltaY}px, 0)`;
           const opacity = Math.max(0, 1 - deltaY / 300);
           popoverContainer.style.opacity = String(opacity);
         }
@@ -2143,17 +2143,17 @@ export class NgxsmkDatepickerComponent
     }
   }
 
-  public onBottomSheetTouchEnd(event: TouchEvent): void {
+  public onBottomSheetTouchEnd(_event: TouchEvent): void {
     if (
       !this.isMobileDevice() ||
       this.mobileModalStyle !== 'bottom-sheet' ||
       this.isInlineMode ||
       !this.isCalendarOpen
     ) {
+      this.bottomSheetSwipeAllowed = false;
       return;
     }
-    const touch = event.changedTouches[0];
-    if (touch && this.isBottomSheetSwiping) {
+    if (this.isBottomSheetSwiping) {
       const deltaY = this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
 
       if (deltaY > this.bottomSheetSwipeThreshold) {
@@ -2165,11 +2165,12 @@ export class NgxsmkDatepickerComponent
         popoverContainer.style.transform = '';
         popoverContainer.style.opacity = '';
       }
-
-      this.bottomSheetSwipeStartY = 0;
-      this.bottomSheetSwipeCurrentY = 0;
-      this.isBottomSheetSwiping = false;
     }
+
+    this.bottomSheetSwipeStartY = 0;
+    this.bottomSheetSwipeCurrentY = 0;
+    this.isBottomSheetSwiping = false;
+    this.bottomSheetSwipeAllowed = false;
   }
 
   // Bind methods for child components to preserve 'this' context
@@ -3876,6 +3877,8 @@ export class NgxsmkDatepickerComponent
     }
 
     this._isCalendarOpening.set(true);
+    // Always lock background scroll on mobile (not only when appendToBody).
+    this.lockBodyScroll();
 
     if (this._shouldAppendToBody) {
       this.renderInBody();
@@ -3910,6 +3913,8 @@ export class NgxsmkDatepickerComponent
 
     if (this.portalViewRef) {
       this.destroyBodyView();
+    } else {
+      this.unlockBodyScroll();
     }
 
     if (this.openCalendarTimeoutId) {
@@ -3946,15 +3951,89 @@ export class NgxsmkDatepickerComponent
   }
 
   private lockBodyScroll(): void {
-    if (!this.isBrowser || this.isInlineMode) return;
-    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
-      document.body.classList.add('ngxsmk-scroll-locked');
+    if (!this.isBrowser || this.isInlineMode || this._bodyScrollLocked) return;
+    if (!this.isMobileDevice()) return;
+
+    this._bodyScrollLocked = true;
+    this._scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.documentElement.classList.add('ngxsmk-scroll-locked');
+    document.body.classList.add('ngxsmk-scroll-locked');
+
+    // iOS Safari ignores overflow:hidden on body unless position:fixed is applied.
+    if (isIOSFamily()) {
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${this._scrollLockY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
     }
+
+    this.bindVisualViewportForMobileSheet();
   }
 
   private unlockBodyScroll(): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser || !this._bodyScrollLocked) {
+      this.unbindVisualViewportForMobileSheet();
+      return;
+    }
+    this._bodyScrollLocked = false;
+    document.documentElement.classList.remove('ngxsmk-scroll-locked');
     document.body.classList.remove('ngxsmk-scroll-locked');
+
+    if (isIOSFamily()) {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, this._scrollLockY);
+    }
+
+    this.unbindVisualViewportForMobileSheet();
+  }
+
+  /**
+   * Keep bottom-sheet / fullscreen popovers inside the visible viewport when the
+   * on-screen keyboard opens (iOS Safari + Android Chrome).
+   */
+  private bindVisualViewportForMobileSheet(): void {
+    if (!this.isBrowser || this._visualViewportCleanup) return;
+    const vv = window.visualViewport;
+    if (!vv || this.isInlineMode) return;
+
+    const apply = (): void => {
+      if (!this.isCalendarOpen || !this.isMobileDevice()) return;
+      const popover = this.getActualPopoverContainer();
+      if (!popover) return;
+      const offsetTop = vv.offsetTop || 0;
+      const height = vv.height || window.innerHeight;
+      popover.style.setProperty('--ngxsmk-vv-offset-top', `${offsetTop}px`);
+      popover.style.setProperty('--ngxsmk-vv-height', `${height}px`);
+      if (this.mobileModalStyle === 'fullscreen' || this.mobileModalStyle === 'bottom-sheet') {
+        popover.style.maxHeight = `min(90dvh, calc(${height}px - env(safe-area-inset-bottom, 0px)))`;
+      }
+    };
+
+    vv.addEventListener('resize', apply);
+    vv.addEventListener('scroll', apply);
+    apply();
+    this._visualViewportCleanup = () => {
+      vv.removeEventListener('resize', apply);
+      vv.removeEventListener('scroll', apply);
+      const popover = this.getActualPopoverContainer();
+      if (popover) {
+        popover.style.removeProperty('--ngxsmk-vv-offset-top');
+        popover.style.removeProperty('--ngxsmk-vv-height');
+        popover.style.maxHeight = '';
+      }
+      this._visualViewportCleanup = null;
+    };
+  }
+
+  private unbindVisualViewportForMobileSheet(): void {
+    if (this._visualViewportCleanup) {
+      this._visualViewportCleanup();
+    }
   }
 
   /** Hides the body-appended popover so loading/calendar are not visible at wrong position. */
@@ -5796,6 +5875,10 @@ export class NgxsmkDatepickerComponent
 
     this._syncTimeAfterDateClick();
 
+    if (this.enableHapticFeedback() && this.isMobileDevice()) {
+      this.hapticFeedbackService.selection();
+    }
+
     if (this.hooks?.afterDateSelect) {
       this.hooks.afterDateSelect(day, this._value);
     }
@@ -7027,6 +7110,7 @@ export class NgxsmkDatepickerComponent
       window.removeEventListener('resize', this.updatePositionOnScroll);
     }
     this.destroyBodyView();
+    this.unlockBodyScroll();
 
     if (this.lazyLoadingObserver) {
       this.lazyLoadingObserver.disconnect();

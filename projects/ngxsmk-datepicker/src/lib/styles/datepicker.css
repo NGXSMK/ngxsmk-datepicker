@@ -238,6 +238,23 @@ ngxsmk-datepicker:has(.ngxsmk-calendar-open) {
   -ms-tap-highlight-color: transparent;
 }
 
+/* iOS Safari zooms focused inputs under 16px — keep field readable without zoom */
+@media (max-width: 1023px) {
+  .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-display-input,
+  .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-native-input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-input-group {
+    min-height: 48px;
+  }
+
+  .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-cell:active:not(.disabled):not(.empty) .ngxsmk-day-number {
+    transform: scale(0.94);
+  }
+}
+
 .ngxsmk-display-input:disabled {
   cursor: not-allowed;
   opacity: 0.6;
@@ -2338,20 +2355,23 @@ ngxsmk-datepicker.ngxsmk-inline {
     left: 0;
     right: 0;
     bottom: 0;
-    -webkit-transform: translateY(0);
-    -moz-transform: translateY(0);
-    -ms-transform: translateY(0);
-    -o-transform: translateY(0);
-    transform: translateY(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
     width: 100%;
     max-width: 100%;
-    max-height: min(90dvh, 90dvh - env(safe-area-inset-bottom, 0px));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    border-radius: 16px 16px 0 0;
+    max-height: min(92dvh, var(--ngxsmk-vv-height, 92dvh));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    border-radius: 20px 20px 0 0;
     margin: 0;
     z-index: 2147483647;
     overflow-y: auto;
-    overflow-x: visible;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     display: block;
     visibility: visible;
@@ -8059,9 +8079,19 @@ ngxsmk-custom-select[data-open=true] {
   }
 }
 
+html.ngxsmk-scroll-locked,
 body.ngxsmk-scroll-locked {
   overflow: hidden !important;
+  overscroll-behavior: none;
   touch-action: none;
+  /* iOS: prevent rubber-band scroll behind the sheet */
+  height: 100%;
+  height: -webkit-fill-available;
+}
+
+body.ngxsmk-scroll-locked {
+  /* Companion to position:fixed set in lockBodyScroll() on iOS */
+  width: 100%;
 }
 
 .ngxsmk-day-cell.ngxsmk-other-month {
@@ -8383,16 +8413,24 @@ body.ngxsmk-scroll-locked {
     min-width: var(--datepicker-touch-min, 44px);
   }
 
-  .ngxsmk-popover-container.ngxsmk-bottom-sheet::before {
-    content: '';
-    display: block;
-    width: 36px;
-    height: 4px;
-    margin: 8px auto 4px;
-    border-radius: 999px;
-    background: var(--datepicker-border-color);
-    opacity: 0.9;
-  }
+}
+
+.ngxsmk-sheet-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0 6px;
+  touch-action: none;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.ngxsmk-sheet-handle-bar {
+  width: 40px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--datepicker-border-color);
+  opacity: 0.95;
 }
 
 @keyframes ngxsmk-day-select-pulse {
