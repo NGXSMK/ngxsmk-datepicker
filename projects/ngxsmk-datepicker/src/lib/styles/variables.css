@@ -6,10 +6,10 @@
 ngxsmk-datepicker,
 .ngxsmk-popover-container,
 .ngxsmk-backdrop {
-  /* Color Palette */
-  --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
+  /* Color Palette — neutral blue default (override via --datepicker-primary-color) */
+  --datepicker-primary-color: var(--ion-color-primary, #2563eb);
   --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
-  --datepicker-range-background: var(--ion-color-primary-tint, #f5f3ff);
+  --datepicker-range-background: var(--ion-color-primary-tint, #dbeafe);
   --datepicker-comparison-range-color: #f59e0b;
   --datepicker-background: var(--ion-background-color, #ffffff);
   --datepicker-text-color: var(--ion-text-color, #1f2937);
@@ -17,6 +17,12 @@ ngxsmk-datepicker,
   --datepicker-border-color: var(--ion-item-border-color, var(--ion-border-color, #e5e7eb));
   --datepicker-hover-background: #f3f4f6;
   --datepicker-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--datepicker-primary-color) 15%, transparent);
+  --datepicker-focus-outline: var(--datepicker-primary-color);
+
+  /* Density (overridden by .ngxsmk-density-*) */
+  --datepicker-day-size: 40px;
+  --datepicker-day-font-size: var(--datepicker-font-size-base);
+  --datepicker-touch-min: 44px;
 
   /* Bridge internal --ngxsmk-* from public --datepicker-* */
   --ngxsmk-color-primary: var(--datepicker-primary-color);
@@ -76,7 +82,7 @@ ngxsmk-datepicker,
 ngxsmk-datepicker.dark-theme,
 .ngxsmk-popover-container.dark-theme,
 .ngxsmk-backdrop.dark-theme {
-  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-range-background: rgba(37, 99, 235, 0.22);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
   --datepicker-subtle-text-color: #9ca3af;
@@ -89,12 +95,50 @@ ngxsmk-datepicker.dark-theme,
 
 /* Ensure dark theme variables cascade properly to child components */
 ngxsmk-datepicker.dark-theme * {
-  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-range-background: rgba(37, 99, 235, 0.22);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
   --datepicker-subtle-text-color: #9ca3af;
   --datepicker-border-color: #374151;
   --datepicker-hover-background: #374151;
+}
+
+/* Density presets */
+ngxsmk-datepicker.ngxsmk-density-compact,
+.ngxsmk-popover-container.ngxsmk-density-compact {
+  --datepicker-day-size: 36px;
+  --datepicker-day-font-size: 12px;
+  --datepicker-spacing-md: 8px;
+  --datepicker-spacing-lg: 12px;
+  --datepicker-font-size-base: 13px;
+}
+
+ngxsmk-datepicker.ngxsmk-density-comfortable,
+.ngxsmk-popover-container.ngxsmk-density-comfortable {
+  --datepicker-day-size: 40px;
+  --datepicker-day-font-size: 14px;
+}
+
+ngxsmk-datepicker.ngxsmk-density-spacious,
+.ngxsmk-popover-container.ngxsmk-density-spacious {
+  --datepicker-day-size: 48px;
+  --datepicker-day-font-size: 15px;
+  --datepicker-spacing-md: 14px;
+  --datepicker-spacing-lg: 18px;
+  --datepicker-font-size-base: 15px;
+}
+
+/* System color scheme when host opts into auto theme */
+@media (prefers-color-scheme: dark) {
+  ngxsmk-datepicker.ngxsmk-theme-auto:not(.dark-theme),
+  .ngxsmk-popover-container.ngxsmk-theme-auto:not(.dark-theme) {
+    --datepicker-range-background: rgba(37, 99, 235, 0.22);
+    --datepicker-background: #1f2937;
+    --datepicker-text-color: #f3f4f6;
+    --datepicker-subtle-text-color: #9ca3af;
+    --datepicker-border-color: #374151;
+    --datepicker-hover-background: #374151;
+  }
 }
 
 /* Glassmorphism UI */

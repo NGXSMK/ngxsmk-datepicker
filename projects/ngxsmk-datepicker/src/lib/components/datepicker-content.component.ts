@@ -66,6 +66,10 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         [class.ngxsmk-align-left]="align === 'left'"
         [class.ngxsmk-align-right]="align === 'right'"
         [class.ngxsmk-align-center]="align === 'center'"
+        [class.ngxsmk-density-compact]="density === 'compact'"
+        [class.ngxsmk-density-comfortable]="density === 'comfortable'"
+        [class.ngxsmk-density-spacious]="density === 'spacious'"
+        [class.ngxsmk-theme-auto]="themeAuto"
         [ngClass]="classes?.popover"
         tabindex="-1"
         role="dialog"
@@ -163,6 +167,31 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
             [class.ngxsmk-calendar-layout-auto]="calendarCount > 1 && calendarLayout === 'auto'"
             [ngClass]="classes?.calendar"
           >
+            @if (mode === 'range' && !timeOnly && showRangeSummary) {
+              <div class="ngxsmk-range-summary" role="status" aria-live="polite">
+                <div class="ngxsmk-range-summary-part" [class.is-active]="!startDate || (!!startDate && !endDate)">
+                  <span class="ngxsmk-range-summary-label">{{
+                    translations?.startLabel || translations?.from || 'Start'
+                  }}</span>
+                  <span class="ngxsmk-range-summary-value" [class.is-placeholder]="!startDate">{{
+                    startDate
+                      ? (startDate | date: rangeSummaryDateFormat)
+                      : translations?.selectStartDate || 'Select start date'
+                  }}</span>
+                </div>
+                <span class="ngxsmk-range-summary-arrow" aria-hidden="true">→</span>
+                <div class="ngxsmk-range-summary-part" [class.is-active]="!!startDate && !endDate">
+                  <span class="ngxsmk-range-summary-label">{{
+                    translations?.endLabel || translations?.to || 'End'
+                  }}</span>
+                  <span class="ngxsmk-range-summary-value" [class.is-placeholder]="!endDate">{{
+                    endDate
+                      ? (endDate | date: rangeSummaryDateFormat)
+                      : translations?.selectEndDate || 'Select end date'
+                  }}</span>
+                </div>
+              </div>
+            }
             @if (!timeOnly) {
               @if (calendarViewMode === 'month') {
                 <ngxsmk-calendar-header
@@ -595,6 +624,10 @@ export class NgxsmkDatepickerContentComponent {
   @Input() showTimezoneSelector: boolean = false;
   @Input() timezoneOptions: { label: string; value: string }[] = [];
   @Input() currentTimezone: string = 'UTC';
+  @Input() showRangeSummary: boolean = true;
+  @Input() rangeSummaryDateFormat: string = 'mediumDate';
+  @Input() density: 'compact' | 'comfortable' | 'spacious' = 'comfortable';
+  @Input() themeAuto: boolean = false;
 
   @Output() timezoneChange = new EventEmitter<string>();
 

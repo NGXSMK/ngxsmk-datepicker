@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (UI/UX)
+
+- **Format hint** under the field (`[showFormatHint]`, default on) with locale/format cue for typed entry.
+- **Range summary** Start → End bar in the popover (`[showRangeSummary]`).
+- **Density** tokens: `[density]="'compact' | 'comfortable' | 'spacious'"`.
+- **Theme mode** `[themeMode]="'light' | 'dark' | 'auto'"` (auto follows `prefers-color-scheme`).
+- **Disabled-day reasons** in tooltips and aria labels (min/max/holiday/blocked).
+- Storybook stories for typed entry, dual-month range, density, auto theme, and disabled reasons.
+
+### Changed (UI/UX)
+
+- Default primary color is neutral blue (`#2563eb`) instead of purple; override via `--datepicker-primary-*`.
+- Mobile popover defaults to **bottom-sheet** (was `center`).
+- Typing in the field defaults to **enabled** (`allowTyping: true`).
+- Range mode on desktop defaults to **two months** unless `[calendarCount]` is set explicitly.
+- Presets: side rail on desktop, horizontal chips on mobile; 44px touch targets; selection pulse + quieter open motion (respects reduced motion).
+
 ## [3.0.7] - 2026-11-13
 
 ### Fixed

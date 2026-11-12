@@ -9,6 +9,14 @@ export interface DatepickerTranslations {
   close: string;
   today: string;
   selectEndDate: string;
+  /** Optional: "Select start date" for range summary UX */
+  selectStartDate?: string;
+  /** Optional: short "Start" label in range summary */
+  startLabel?: string;
+  /** Optional: short "End" label in range summary */
+  endLabel?: string;
+  /** Optional: format hint, e.g. "Format: {{format}}" */
+  formatHint?: string;
   day: string;
   days: string;
 
@@ -68,6 +76,12 @@ export interface DatepickerTranslations {
   dateBeforeMin: string; // "Date must be on or after {minDate}."
   dateAfterMax: string; // "Date must be on or before {maxDate}."
   invalidDate: string; // "Invalid date."
+  /** Optional: unavailable day reasons for tooltips / aria */
+  dateUnavailable?: string;
+  dateUnavailableMin?: string;
+  dateUnavailableMax?: string;
+  dateUnavailableHoliday?: string;
+  dateUnavailableBlocked?: string;
   timezone?: string;
 }
 

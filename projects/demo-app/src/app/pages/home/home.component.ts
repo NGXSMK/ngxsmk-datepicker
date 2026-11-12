@@ -18,7 +18,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <!-- Release Badge -->
           <div class="version-badge">
             <span class="pulse-dot"></span>
-            <span class="badge-tag">v3.0.6</span>
+            <span class="badge-tag">v3.0.7</span>
             <span class="badge-divider">·</span>
             <span class="badge-text">Angular 17-19+ & Zoneless Native</span>
           </div>
@@ -479,7 +479,7 @@ import { I18nService } from '../../i18n/i18n.service';
         display: flex;
         flex-direction: column;
         gap: 4.5rem;
-        padding-top: 0.5rem;
+        padding-top: 0;
         padding-bottom: 3rem;
       }
 
@@ -488,7 +488,9 @@ import { I18nService } from '../../i18n/i18n.service';
         display: grid;
         grid-template-columns: 1.15fr 1fr;
         gap: 2.5rem;
-        align-items: center;
+        /* Top-align so a taller showcase (range summary, etc.) doesn't
+           vertically center the copy and leave empty space above the badge. */
+        align-items: start;
 
         @media (max-width: 1024px) {
           grid-template-columns: 1fr;

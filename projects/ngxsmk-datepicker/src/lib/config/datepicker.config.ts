@@ -14,7 +14,10 @@ export interface DatepickerConfig {
   dateAdapter?: DateAdapter;
   animations?: AnimationConfig;
   autoDetectMobile?: boolean;
+  /** Defaults to `bottom-sheet` when provided via host / global config. */
   mobileModalStyle?: 'bottom-sheet' | 'center' | 'fullscreen';
+  /** Visual density for day cells and spacing. */
+  density?: 'compact' | 'comfortable' | 'spacious';
   /**
    * When `false`, disables all viewport-based responsive/mobile layout overrides
    * (the `@media (max-width: …)` rules that force the mobile center-dialog presentation).

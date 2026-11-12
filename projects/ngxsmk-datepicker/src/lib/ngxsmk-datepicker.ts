@@ -166,6 +166,10 @@ export type AiDateResolver = (
   styleUrls: ['./styles/variables.css', './styles/datepicker.css'],
   host: {
     '[class.ngxsmk-inline]': 'isInlineMode',
+    '[class.ngxsmk-density-compact]': 'density() === "compact"',
+    '[class.ngxsmk-density-comfortable]': 'density() === "comfortable"',
+    '[class.ngxsmk-density-spacious]': 'density() === "spacious"',
+    '[class.ngxsmk-theme-auto]': 'themeMode() === "auto"',
   },
   template: `
     <div
@@ -195,7 +199,7 @@ export type AiDateResolver = (
             [minDateNative]="getMinDateForNativeInput()"
             [maxDateNative]="getMaxDateForNativeInput()"
             [ariaLabel]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
-            [ariaDescribedBy]="'datepicker-help-' + _uniqueId"
+            [ariaDescribedBy]="inputAriaDescribedBy"
             [errorState]="errorState"
             [clearAriaLabel]="_clearAriaLabel"
             [clearLabel]="_clearLabel"
@@ -206,6 +210,8 @@ export type AiDateResolver = (
             [showCalendarButton]="showCalendarButton"
             [calendarAriaLabel]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
             [validationErrorMessage]="validationErrorMessage"
+            [formatHint]="formatHintText"
+            [formatHintId]="'datepicker-format-' + _uniqueId"
             (nativeInputChange)="onNativeInputChange($event)"
             (inputBlur)="onInputBlur($event)"
             (clearValue)="clearValue($event)"
@@ -244,7 +250,9 @@ export type AiDateResolver = (
           [isCalendarOpen]="_isCalendarOpen()"
           [isInlineMode]="isInlineMode"
           [shouldAppendToBody]="_shouldAppendToBody"
-          [theme]="theme"
+          [theme]="resolvedTheme"
+          [themeAuto]="themeMode() === 'auto'"
+          [density]="density()"
           [popoverId]="popoverId"
           [classes]="classes()"
           [timeOnly]="timeOnly"
@@ -258,12 +266,13 @@ export type AiDateResolver = (
           [showRanges]="showRanges() || showPresets()"
           [rangesArray]="rangesArray"
           [selectedRange]="[startDate, endDate]"
+          [showRangeSummary]="showRangeSummary()"
           [showTimezoneSelector]="showTimezoneSelector()"
           [timezoneOptions]="getTimezoneOptions()"
           [currentTimezone]="timezone || defaultTimezone"
           [mode]="mode"
           [disabled]="disabled"
-          [calendarCount]="calendarCount"
+          [calendarCount]="effectiveCalendarCount"
           [calendarLayout]="calendarLayout"
           [syncScrollEnabled]="syncScroll().enabled ?? false"
           [calendarMonths]="renderedCalendars()"
@@ -734,7 +743,25 @@ export class NgxsmkDatepickerComponent
    */
   readonly allowSameDay = input<boolean>(false);
   @Input() displayFormat?: string;
-  @Input() allowTyping: boolean = false;
+  /**
+   * Allow typing dates into the field. Defaults to `true` for better UX
+   * (manual entry is often faster than calendar tapping for distant dates).
+   */
+  @Input() allowTyping: boolean = true;
+  /**
+   * Show a locale/format hint under the input (e.g. "Format: MM/DD/YYYY").
+   * Defaults to `true` when typing is allowed and the picker is not native.
+   */
+  readonly showFormatHint = input(true, { transform: booleanAttribute });
+  /** Show Start → End summary bar inside the range popover. Default `true`. */
+  readonly showRangeSummary = input(true, { transform: booleanAttribute });
+  /** Visual density for day cells and spacing. */
+  readonly density = input<'compact' | 'comfortable' | 'spacious'>('comfortable');
+  /**
+   * Color theme mode. `auto` follows `prefers-color-scheme` via CSS; `light`/`dark`
+   * force the corresponding theme (and still honor the legacy `[theme]` input).
+   */
+  readonly themeMode = input<'light' | 'dark' | 'auto'>('light');
   /**
    * Guided input masking while typing (requires `allowTyping`).
    *
@@ -798,7 +825,9 @@ export class NgxsmkDatepickerComponent
   }
 
   private _calendarCount: number = 1;
+  private _calendarCountExplicit = false;
   @Input() set calendarCount(value: number) {
+    this._calendarCountExplicit = true;
     const coerced = typeof value === 'string' ? Number.parseInt(value, 10) : Number(value);
     const n = Number.isFinite(coerced) ? coerced : Number.NaN;
     // Clamp calendarCount to valid range (1-12) for performance
@@ -820,6 +849,16 @@ export class NgxsmkDatepickerComponent
     }
   }
   get calendarCount(): number {
+    return this._calendarCount;
+  }
+  /**
+   * Effective month count: range mode on desktop defaults to 2 calendars unless
+   * `[calendarCount]` was set explicitly (or the device is mobile / time-only).
+   */
+  get effectiveCalendarCount(): number {
+    if (!this._calendarCountExplicit && this.mode === 'range' && !this.timeOnly && !this.isMobileDevice()) {
+      return Math.max(this._calendarCount, 2);
+    }
     return this._calendarCount;
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
@@ -884,7 +923,8 @@ export class NgxsmkDatepickerComponent
 
   @Input() useNativePicker: boolean = false;
   readonly enableHapticFeedback = input<boolean>(false);
-  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
+  /** Mobile presentation. Defaults to bottom-sheet for native-feeling mobile UX. */
+  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'bottom-sheet';
   @Input() mobileTimePickerStyle: 'wheel' | 'slider' | 'native' = 'slider';
   readonly enablePullToRefresh = input<boolean>(false);
   readonly mobileTheme = input<'compact' | 'comfortable' | 'spacious'>('comfortable');
@@ -1113,7 +1153,28 @@ export class NgxsmkDatepickerComponent
 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() {
-    return this.theme === 'dark';
+    return this.resolvedTheme === 'dark';
+  }
+  /** Theme passed to the popover (honors `themeMode` + legacy `theme`). */
+  get resolvedTheme(): 'light' | 'dark' {
+    if (this.themeMode() === 'dark') return 'dark';
+    if (this.themeMode() === 'auto') return this.theme;
+    return this.theme;
+  }
+  /** Visible format hint under the field, or null when hidden. */
+  get formatHintText(): string | null {
+    if (!this.showFormatHint() || this.shouldUseNativePicker() || this.timeOnly || this.isInlineMode) {
+      return null;
+    }
+    const format = this.displayFormat || this._dateFormatPattern || 'MM/DD/YYYY';
+    return this.getTranslation('formatHint', undefined, { format }) || `Format: ${format}`;
+  }
+  get inputAriaDescribedBy(): string {
+    const parts = [`datepicker-help-${this._uniqueId}`];
+    if (this.formatHintText) {
+      parts.push(`datepicker-format-${this._uniqueId}`);
+    }
+    return parts.join(' ');
   }
 
   private _dateFormatPattern: string | null = null;
@@ -1733,7 +1794,7 @@ export class NgxsmkDatepickerComponent
     const month = this._currentMonthSignal();
     const year = this._currentYearSignal();
     const visibleStart = new Date(year, month, 1);
-    const visibleEnd = getEndOfMonth(new Date(year, month + Math.max(this.calendarCount - 1, 0), 1));
+    const visibleEnd = getEndOfMonth(new Date(year, month + Math.max(this.effectiveCalendarCount - 1, 0), 1));
 
     const requestId = ++this._asyncFilterRequestId;
     this.asyncDateFilterLoading.emit(true);
@@ -3409,6 +3470,9 @@ export class NgxsmkDatepickerComponent
       if (customTooltip !== null) return customTooltip;
     }
 
+    const unavailable = this.getDisabledReason(day);
+    if (unavailable) return unavailable;
+
     return this.getDayMetadata(day)?.tooltip ?? holidayLabel;
   }
 
@@ -3441,12 +3505,53 @@ export class NgxsmkDatepickerComponent
       return this.hooks.formatAriaLabel(day);
     }
 
-    return day.toLocaleDateString(this._locale || 'en-US', {
+    const base = day.toLocaleDateString(this._locale || 'en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
+    const reason = this.getDisabledReason(day);
+    return reason ? `${base}, ${reason}` : base;
+  }
+
+  /** Human-readable reason a day is unavailable (min/max/holiday/blocked), or null. */
+  getDisabledReason(day: Date | null): string | null {
+    if (!day) return null;
+    const verdict = this._constraintsSnap.evaluate(day);
+    if (verdict.allowed) return null;
+    const denial = verdict.denial;
+    switch (denial.code) {
+      case 'min': {
+        const minFormatted = denial.min.toLocaleDateString(this._locale || 'en-US');
+        return (
+          this.getTranslation('dateUnavailableMin', undefined, { minDate: minFormatted }) ||
+          this.getTranslation('dateBeforeMin', undefined, { minDate: minFormatted }) ||
+          `Before minimum date (${minFormatted})`
+        );
+      }
+      case 'max': {
+        const maxFormatted = denial.max.toLocaleDateString(this._locale || 'en-US');
+        return (
+          this.getTranslation('dateUnavailableMax', undefined, { maxDate: maxFormatted }) ||
+          this.getTranslation('dateAfterMax', undefined, { maxDate: maxFormatted }) ||
+          `After maximum date (${maxFormatted})`
+        );
+      }
+      case 'holiday': {
+        const label = denial.label ? `: ${denial.label}` : '';
+        return (
+          this.getTranslation('dateUnavailableHoliday', undefined, { label }) ||
+          `${this.getTranslation('holiday') || 'Holiday'}${label}`
+        );
+      }
+      case 'disabledDate':
+      case 'disabledRange':
+      case 'asyncDisabled':
+      case 'invalidDate':
+      default:
+        return this.getTranslation('dateUnavailableBlocked') || this.getTranslation('dateUnavailable') || 'Unavailable';
+    }
   }
 
   /**
@@ -6121,7 +6226,7 @@ export class NgxsmkDatepickerComponent
     this.daysInMonth = [];
     this.multiCalendarMonths = [];
 
-    const count = Math.max(1, Math.min(this.calendarCount || 1, 12));
+    const count = Math.max(1, Math.min(this.effectiveCalendarCount || 1, 12));
     const baseYear = this.currentDate.getFullYear();
     const baseMonth = this.currentDate.getMonth();
     this._currentMonth = baseMonth;
@@ -6616,7 +6721,7 @@ export class NgxsmkDatepickerComponent
     if (this.autoDetectMobile === true && g.autoDetectMobile !== undefined) {
       this.autoDetectMobile = g.autoDetectMobile;
     }
-    if (this.mobileModalStyle === 'center' && g.mobileModalStyle !== undefined) {
+    if (this.mobileModalStyle === 'bottom-sheet' && g.mobileModalStyle !== undefined) {
       this.mobileModalStyle = g.mobileModalStyle;
     }
     if (this.responsive === true && g.responsive !== undefined) {
@@ -6725,7 +6830,7 @@ export class NgxsmkDatepickerComponent
    * in the viewport. Updates the visible indices signal to enable/disable rendering.
    */
   private setupLazyLoadingObserver(): void {
-    if (!this.isBrowser || this.calendarCount <= 1) {
+    if (!this.isBrowser || this.effectiveCalendarCount <= 1) {
       return;
     }
 

@@ -347,3 +347,91 @@ export const RangeWithQuickPicks: Story = {
     theme: 'light',
   },
 };
+
+/** Typed entry + format hint under the field. */
+export const TypedEntryWithFormatHint: Story = {
+  args: {
+    mode: 'single',
+    allowTyping: true,
+    showFormatHint: true,
+    displayFormat: 'MM/DD/YYYY',
+    placeholder: 'Type or pick a date',
+    theme: 'light',
+  },
+};
+
+/** Range with dual months, summary bar, and presets (desktop UX). */
+export const RangeDualMonthSummary: Story = {
+  args: {
+    mode: 'range',
+    showRanges: true,
+    showRangeSummary: true,
+    allowTyping: true,
+    showFormatHint: true,
+    displayFormat: 'MMM D, YYYY',
+    placeholder: 'Check-in → Check-out',
+    theme: 'light',
+  },
+  parameters: { layout: 'padded' },
+};
+
+/** Spacious density + bottom-sheet mobile style. */
+export const SpaciousDensity: Story = {
+  args: {
+    mode: 'single',
+    density: 'spacious',
+    mobileModalStyle: 'bottom-sheet',
+    placeholder: 'Spacious targets',
+    theme: 'light',
+  },
+};
+
+/** Compact density for dense forms. */
+export const CompactDensity: Story = {
+  args: {
+    mode: 'single',
+    density: 'compact',
+    placeholder: 'Compact',
+    theme: 'light',
+  },
+};
+
+/** Auto theme follows prefers-color-scheme via CSS. */
+export const ThemeAuto: Story = {
+  args: {
+    mode: 'single',
+    themeMode: 'auto',
+    placeholder: 'System theme',
+  },
+};
+
+/** Min/max with unavailable-day reasons in tooltips / aria. */
+export const DisabledDayReasons: Story = {
+  args: {
+    mode: 'single',
+    placeholder: 'Within the next 14 days',
+    theme: 'light',
+  },
+  render: (args) => {
+    const today = new Date();
+    const minDate = new Date(today);
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 14);
+    return {
+      props: { ...args, minDate, maxDate },
+      template: `
+        <div style="width: 320px;">
+          <ngxsmk-datepicker
+            [mode]="mode"
+            [placeholder]="placeholder"
+            [theme]="theme"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [allowTyping]="true"
+            [showFormatHint]="true">
+          </ngxsmk-datepicker>
+        </div>
+      `,
+    };
+  },
+};
