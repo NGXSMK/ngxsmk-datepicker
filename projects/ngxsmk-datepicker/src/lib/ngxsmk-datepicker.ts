@@ -88,7 +88,7 @@ import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
 import { Constraints, EMPTY_CONSTRAINTS_SOURCES, type ConstraintsSnapshot } from './constraints/constraints';
-import { isIOSFamily, isMobileLikeDevice } from './utils/mobile-platform.utils';
+import { isAndroid, isIOSFamily, isMobileLikeDevice } from './utils/mobile-platform.utils';
 
 /** Recurring date pattern configuration for disabled dates. */
 export type RecurringPatternInput = {
@@ -171,6 +171,8 @@ export type AiDateResolver = (
     '[class.ngxsmk-density-comfortable]': 'density() === "comfortable"',
     '[class.ngxsmk-density-spacious]': 'density() === "spacious"',
     '[class.ngxsmk-theme-auto]': 'themeMode() === "auto"',
+    '[class.ngxsmk-motion-ios]': 'motionPlatform === "ios"',
+    '[class.ngxsmk-motion-android]': 'motionPlatform === "android"',
   },
   template: `
     <div
@@ -254,6 +256,7 @@ export type AiDateResolver = (
           [theme]="resolvedTheme"
           [themeAuto]="themeMode() === 'auto'"
           [density]="density()"
+          [motionPlatform]="motionPlatform"
           [popoverId]="popoverId"
           [classes]="classes()"
           [timeOnly]="timeOnly"
@@ -2022,6 +2025,18 @@ export class NgxsmkDatepickerComponent
     } catch {
       return false;
     }
+  }
+
+  /** Native-feel motion preset for latest iOS / Android curves. */
+  get motionPlatform(): 'ios' | 'android' | 'default' {
+    if (!this.isBrowser) return 'default';
+    try {
+      if (isIOSFamily()) return 'ios';
+      if (isAndroid()) return 'android';
+    } catch {
+      /* ignore */
+    }
+    return 'default';
   }
 
   public shouldUseNativePicker(): boolean {
@@ -6839,7 +6854,8 @@ export class NgxsmkDatepickerComponent
       return;
     }
 
-    const duration = `${animationConfig.duration || DEFAULT_ANIMATION_CONFIG.duration}ms`;
+    const durationMs = animationConfig.duration || DEFAULT_ANIMATION_CONFIG.duration;
+    const duration = `${durationMs}ms`;
     const easing = animationConfig.easing || DEFAULT_ANIMATION_CONFIG.easing;
     const property = animationConfig.property || DEFAULT_ANIMATION_CONFIG.property;
 
@@ -6847,6 +6863,14 @@ export class NgxsmkDatepickerComponent
     nativeElement.style.setProperty('--datepicker-transition-easing', easing);
     nativeElement.style.setProperty('--datepicker-transition-property', property);
     nativeElement.style.setProperty('--datepicker-transition', `${property} ${duration} ${easing}`);
+
+    // Keep sheet / dialog motion proportional when hosts customize duration.
+    const sheetMs = Math.max(durationMs, Math.round(durationMs * 1.6));
+    nativeElement.style.setProperty('--datepicker-motion-sheet-duration', `${sheetMs}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-dialog-duration', `${Math.round(durationMs * 1.35)}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-tap-duration', `${Math.min(durationMs, 200)}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-sheet-easing', easing);
+    nativeElement.style.setProperty('--datepicker-motion-dialog-easing', easing);
   }
 
   /**

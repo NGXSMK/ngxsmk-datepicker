@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `visualViewport` resize keeps the sheet above the on-screen keyboard.
 - Safe-area padding (left/right/bottom), `overscroll-behavior: contain`, 16px input font (no iOS focus zoom).
 - Sheet drag handle; selection haptics default on (`enableHapticFeedback`); `enterkeyhint` / spellcheck off for typed entry.
+- **Native-phone motion**: iOS sheet spring (`cubic-bezier(0.32, 0.72, 0, 1)`) and Material 3 emphasized curves; host classes `ngxsmk-motion-ios` / `ngxsmk-motion-android`; backdrop fade, sheet slide, tap spring, dialog present aligned to ~400ms system timings (respects `prefers-reduced-motion` + `[animationConfig]`).
 
 ## [3.0.7] - 2026-11-13
 

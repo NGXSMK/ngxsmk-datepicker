@@ -67,11 +67,29 @@ ngxsmk-datepicker,
   --datepicker-border-radius: var(--datepicker-radius-lg);
 
   /* Transitions - Can be customized via AnimationConfig */
-  --datepicker-transition-duration: 150ms;
-  --datepicker-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --datepicker-transition-duration: 220ms;
+  /* Material 3 emphasized decelerate — snappy UI chrome */
+  --datepicker-transition-easing: cubic-bezier(0.05, 0.7, 0.1, 1);
   --datepicker-transition-property: all;
   --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration)
     var(--datepicker-transition-easing);
+
+  /*
+   * Native-phone motion tokens (iOS 17+ sheet + Material 3 large component).
+   * Overridden by .ngxsmk-motion-ios / .ngxsmk-motion-android on host/popover.
+   */
+  --datepicker-motion-sheet-duration: 420ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.32, 0.72, 0, 1); /* iOS sheet spring-out */
+  --datepicker-motion-sheet-exit-duration: 280ms;
+  --datepicker-motion-sheet-exit-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-backdrop-duration: 280ms;
+  --datepicker-motion-backdrop-easing: cubic-bezier(0.2, 0, 0, 1); /* M3 emphasized */
+  --datepicker-motion-dialog-duration: 320ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --datepicker-motion-tap-duration: 180ms;
+  --datepicker-motion-tap-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-month-duration: 280ms;
+  --datepicker-motion-month-easing: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Z-index */
   --datepicker-z-index-base: 2147483647;
@@ -307,15 +325,50 @@ ngxsmk-datepicker.md3-theme {
   }
 }
 
+/* Platform motion presets (applied from host) */
+ngxsmk-datepicker.ngxsmk-motion-ios,
+.ngxsmk-popover-container.ngxsmk-motion-ios {
+  --datepicker-motion-sheet-duration: 440ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-sheet-exit-duration: 300ms;
+  --datepicker-motion-backdrop-duration: 250ms;
+  --datepicker-motion-dialog-duration: 360ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-tap-duration: 160ms;
+  --datepicker-transition-easing: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+ngxsmk-datepicker.ngxsmk-motion-android,
+.ngxsmk-popover-container.ngxsmk-motion-android {
+  --datepicker-motion-sheet-duration: 400ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.05, 0.7, 0.1, 1); /* M3 emphasized decelerate */
+  --datepicker-motion-sheet-exit-duration: 250ms;
+  --datepicker-motion-sheet-exit-easing: cubic-bezier(0.3, 0, 0.8, 0.15); /* M3 emphasized accelerate */
+  --datepicker-motion-backdrop-duration: 300ms;
+  --datepicker-motion-backdrop-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-dialog-duration: 300ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-tap-duration: 200ms;
+  --datepicker-transition-easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   ngxsmk-datepicker {
     --datepicker-transition: none;
+    --datepicker-motion-sheet-duration: 0.01ms;
+    --datepicker-motion-backdrop-duration: 0.01ms;
+    --datepicker-motion-dialog-duration: 0.01ms;
+    --datepicker-motion-tap-duration: 0.01ms;
+    --datepicker-motion-month-duration: 0.01ms;
   }
 
   ngxsmk-datepicker *,
   ngxsmk-datepicker *::before,
-  ngxsmk-datepicker *::after {
+  ngxsmk-datepicker *::after,
+  .ngxsmk-popover-container *,
+  .ngxsmk-popover-container *::before,
+  .ngxsmk-popover-container *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

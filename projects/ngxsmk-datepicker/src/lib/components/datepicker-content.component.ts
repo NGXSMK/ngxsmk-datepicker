@@ -70,6 +70,8 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
         [class.ngxsmk-density-comfortable]="density === 'comfortable'"
         [class.ngxsmk-density-spacious]="density === 'spacious'"
         [class.ngxsmk-theme-auto]="themeAuto"
+        [class.ngxsmk-motion-ios]="motionPlatform === 'ios'"
+        [class.ngxsmk-motion-android]="motionPlatform === 'android'"
         [ngClass]="classes?.popover"
         tabindex="-1"
         role="dialog"
@@ -633,6 +635,7 @@ export class NgxsmkDatepickerContentComponent {
   @Input() rangeSummaryDateFormat: string = 'mediumDate';
   @Input() density: 'compact' | 'comfortable' | 'spacious' = 'comfortable';
   @Input() themeAuto: boolean = false;
+  @Input() motionPlatform: 'ios' | 'android' | 'default' = 'default';
 
   @Output() timezoneChange = new EventEmitter<string>();
 

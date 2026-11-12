@@ -129,6 +129,7 @@ ngxsmk-datepicker,
 - Background scroll is locked more aggressively on iOS while open; no app change required.
 - `[enableHapticFeedback]` defaults to **`true`** (Android vibration API). Opt out with `[enableHapticFeedback]="false"`.
 - Prefer `[mobileModalStyle]="'bottom-sheet'"` (now the default) on phones; use `'fullscreen'` for dense range + time UIs.
+- Animations follow latest phone curves (iOS sheet spring / Material 3 emphasized). Customize with `[animationConfig]` or CSS vars `--datepicker-motion-sheet-*` / `--datepicker-motion-dialog-*`. Disable via `[animationConfig]="{ enabled: false }"` or `prefers-reduced-motion`.
 
 ## v3.0.5 → v3.0.6
 
