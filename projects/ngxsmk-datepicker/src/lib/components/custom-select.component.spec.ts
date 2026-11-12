@@ -71,6 +71,29 @@ describe('CustomSelectComponent', () => {
     expect(component.isOpen).toBe(false);
   });
 
+  it('should close an open dropdown and prevent selection when disabled', async () => {
+    fixture.componentRef.setInput('options', [
+      { label: 'Draft', value: 'draft' },
+      { label: 'Confirmed', value: 'confirmed' },
+    ]);
+    fixture.componentRef.setInput('value', 'draft');
+    const selection = spyOn(component.valueChange, 'emit');
+    component.toggleDropdown();
+    fixture.detectChanges();
+
+    const option = fixture.nativeElement.querySelectorAll('[role="option"]')[1];
+    expect(option).toBeTruthy();
+
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+    option.click();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelector('.ngxsmk-options-panel')).toBeNull();
+    expect(component.value).toBe('draft');
+    expect(selection).not.toHaveBeenCalled();
+  });
+
   it('should toggle dropdown on Enter key', () => {
     component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
