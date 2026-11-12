@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { KeyboardShortcutContext } from '../interfaces/datepicker-hooks.interface';
 import { DatepickerHooks } from '../interfaces/datepicker-hooks.interface';
 
+/**
+ * @internal Prototype only — keyboard handling lives on {@link NgxsmkDatepickerComponent}.
+ * Do not import for app code; kept for unit-test / future Selection module reference.
+ */
 export interface KeyboardNavigationState {
   currentDate: Date;
   selectedDate: Date | null;
@@ -37,6 +41,9 @@ export interface KeyboardNavigationConfig {
   isInlineMode: boolean;
 }
 
+/**
+ * @internal Prototype only — not wired into the host. Prefer the datepicker's own keyboard handlers.
+ */
 @Injectable()
 export class KeyboardNavigationService {
   handleKeyboardNavigation(

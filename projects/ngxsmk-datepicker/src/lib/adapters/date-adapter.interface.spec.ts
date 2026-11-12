@@ -212,6 +212,14 @@ describe('NativeDateAdapter', () => {
       expect(result.getFullYear()).toBe(2024);
       expect(result.getMonth()).toBe(0); // January
     });
+
+    it('should clamp day overflow when target month is shorter', () => {
+      const date = new Date(2024, 0, 31); // Jan 31
+      const result = adapter.addMonths(date, 1);
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(1); // February
+      expect(result.getDate()).toBe(29); // 2024 leap year
+    });
   });
 
   describe('addDays', () => {

@@ -126,6 +126,7 @@ export {
   Constraints,
   buildConstraints,
   EMPTY_CONSTRAINTS_SOURCES,
+  CONSTRAINTS_SCAN_DAY_CAP,
   type ConstraintsSources,
   type ConstraintsSnapshot,
   type DayVerdict,

@@ -98,9 +98,9 @@ describe('CustomSelectComponent', () => {
     component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
-    const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
-    const event = new KeyboardEvent('keydown', { key: 'Enter' });
-    container.dispatchEvent(event);
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    const event = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
+    button.dispatchEvent(event);
     fixture.detectChanges();
 
     expect(component.isOpen).toBe(true);
@@ -110,14 +110,27 @@ describe('CustomSelectComponent', () => {
     component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
-    const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
-    const event = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    const event = new KeyboardEvent('keydown', { key: ' ', cancelable: true, bubbles: true });
     const preventDefaultSpy = spyOn(event, 'preventDefault');
-    container.dispatchEvent(event);
+    button.dispatchEvent(event);
     fixture.detectChanges();
 
     expect(component.isOpen).toBe(true);
     expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+
+  it('should expose listbox semantics when open', () => {
+    component.options = [{ label: 'Option 1', value: 1 }];
+    component.toggleDropdown();
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    const listbox = fixture.nativeElement.querySelector('[role="listbox"]');
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(button.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(listbox).toBeTruthy();
+    expect(button.getAttribute('aria-controls')).toBe(listbox.id);
   });
 
   it('should select option and emit valueChange', async () => {
@@ -196,8 +209,8 @@ describe('CustomSelectComponent', () => {
     fixture.componentRef.setInput('options', []);
     await fixture.whenStable();
 
-    const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
-    expect(container.getAttribute('aria-expanded')).toBe('true');
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    expect(button.getAttribute('aria-expanded')).toBe('true');
   });
 
   it('should set aria-selected on options', async () => {
@@ -395,13 +408,12 @@ describe('CustomSelectComponent', () => {
       }
     });
 
-    it('should remove scroll listener on destroy', () => {
-      component.ngAfterViewInit();
-      const removeEventListenerSpy = spyOn(window, 'removeEventListener');
+    it('should clear pending open timeout on destroy', () => {
+      component.options = [{ label: 'Option 1', value: 1 }];
+      component.toggleDropdown();
+      const clearSpy = spyOn(window, 'clearTimeout').and.callThrough();
       component.ngOnDestroy();
-
-      // Should attempt to remove scroll listener
-      expect(removeEventListenerSpy).toHaveBeenCalled();
+      expect(clearSpy).toHaveBeenCalled();
     });
   });
 });

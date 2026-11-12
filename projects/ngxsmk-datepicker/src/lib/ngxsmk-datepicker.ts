@@ -284,6 +284,7 @@ export type AiDateResolver = (
           [yearOptions]="yearOptions()"
           [currentYear]="_currentYearSignal()"
           [isBackArrowDisabled]="isBackArrowDisabled"
+          [isNextArrowDisabled]="isNextArrowDisabled"
           [prevMonthAriaLabel]="_prevMonthAriaLabel"
           [nextMonthAriaLabel]="_nextMonthAriaLabel"
           [yearGrid]="yearGrid"
@@ -2336,6 +2337,12 @@ export class NgxsmkDatepickerComponent
     const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
     return firstDayOfCurrentMonth <= this._minDate;
   }
+
+  get isNextArrowDisabled(): boolean {
+    if (!this._maxDate) return false;
+    const lastDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+    return lastDayOfCurrentMonth >= this._maxDate;
+  }
   private adjustDisplayedDateToRange(): void {
     let yearChanged = false;
     let monthChanged = false;
@@ -3151,6 +3158,7 @@ export class NgxsmkDatepickerComponent
 
   private navigateMonth(delta: number): void {
     if (delta < 0 && this.isBackArrowDisabled) return;
+    if (delta > 0 && this.isNextArrowDisabled) return;
 
     const baseDate = this.focusedDate || this.selectedDate || this.currentDate || new Date();
     const targetMonthDate = addMonths(new Date(baseDate.getFullYear(), baseDate.getMonth(), 1), delta);
@@ -3431,7 +3439,7 @@ export class NgxsmkDatepickerComponent
       return this.hooks.formatAriaLabel(day);
     }
 
-    return day.toLocaleDateString('en-US', {
+    return day.toLocaleDateString(this._locale || 'en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -3495,6 +3503,9 @@ export class NgxsmkDatepickerComponent
   setDisabledState(isDisabled: boolean): void {
     if (this.disabled !== isDisabled) {
       this.disabled = isDisabled;
+      if (isDisabled && this.isCalendarOpen) {
+        this.closeCalendar();
+      }
       this.stateChanges.next();
     }
   }
@@ -4866,6 +4877,12 @@ export class NgxsmkDatepickerComponent
    * Uses the dateComparator utility for efficient date comparisons that
    * normalize times to start of day for accurate day-level equality.
    */
+  private isNullableDateEqual(a: Date | null | undefined, b: Date | null | undefined): boolean {
+    if (a === b) return true;
+    if (!a || !b) return false;
+    return a.getTime() === b.getTime();
+  }
+
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
     if (val1 === val2) return true;
     if (val1 === null || val2 === null) return val1 === val2;
@@ -4882,9 +4899,9 @@ export class NgxsmkDatepickerComponent
       'start' in val2 &&
       'end' in val2
     ) {
-      const r1 = val1 as { start: Date; end: Date };
-      const r2 = val2 as { start: Date; end: Date };
-      return r1.start.getTime() === r2.start.getTime() && r1.end.getTime() === r2.end.getTime();
+      const r1 = val1 as { start: Date | null; end: Date | null };
+      const r2 = val2 as { start: Date | null; end: Date | null };
+      return this.isNullableDateEqual(r1.start, r2.start) && this.isNullableDateEqual(r1.end, r2.end);
     }
 
     if (Array.isArray(val1) && Array.isArray(val2)) {
@@ -6395,12 +6412,21 @@ export class NgxsmkDatepickerComponent
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (this.startDate) {
-      this.startDate.setHours(hours, mins, 0, 0);
-      if (this.endDate && this.startDate > this.endDate) {
-        this.endDate.setHours(hours, mins, 0, 0);
+      const nextStart = new Date(this.startDate.getTime());
+      nextStart.setHours(hours, mins, 0, 0);
+      this.startDate = nextStart;
+
+      if (this.endDate && nextStart > this.endDate) {
+        const nextEnd = new Date(this.endDate.getTime());
+        nextEnd.setHours(hours, mins, 0, 0);
+        this.endDate = nextEnd;
       }
+
       if (this.startDate && this.endDate) {
-        this.emitValue({ start: this.startDate, end: this.endDate });
+        this.emitValue({
+          start: new Date(this.startDate.getTime()),
+          end: new Date(this.endDate.getTime()),
+        });
       }
     }
     this.cdr.markForCheck();
@@ -6411,12 +6437,21 @@ export class NgxsmkDatepickerComponent
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (this.endDate) {
-      this.endDate.setHours(hours, mins, 0, 0);
-      if (this.startDate && this.endDate < this.startDate) {
-        this.startDate.setHours(hours, mins, 0, 0);
+      const nextEnd = new Date(this.endDate.getTime());
+      nextEnd.setHours(hours, mins, 0, 0);
+      this.endDate = nextEnd;
+
+      if (this.startDate && nextEnd < this.startDate) {
+        const nextStart = new Date(this.startDate.getTime());
+        nextStart.setHours(hours, mins, 0, 0);
+        this.startDate = nextStart;
       }
+
       if (this.startDate && this.endDate) {
-        this.emitValue({ start: this.startDate, end: this.endDate });
+        this.emitValue({
+          start: new Date(this.startDate.getTime()),
+          end: new Date(this.endDate.getTime()),
+        });
       }
     }
     this.cdr.markForCheck();
@@ -6444,7 +6479,7 @@ export class NgxsmkDatepickerComponent
         isDateDisabled: (d) => this.isDateDisabled(d),
         onDateClick: (_) => {},
         changeMonth: (delta) => {
-          if (!this.isBackArrowDisabled || delta > 0) {
+          if ((delta < 0 && !this.isBackArrowDisabled) || (delta > 0 && !this.isNextArrowDisabled)) {
             this.changeMonth(delta);
           }
         },
@@ -6463,6 +6498,7 @@ export class NgxsmkDatepickerComponent
     if (this.disabled) return;
 
     if (delta < 0 && this.isBackArrowDisabled) return;
+    if (delta > 0 && this.isNextArrowDisabled) return;
 
     this.clearTouchHandledFlag();
     this.touchState.isDateCellTouching = false;

@@ -85,6 +85,18 @@ describe('CalendarHeaderComponent', () => {
     expect(prevButton.hasAttribute('disabled')).toBe(true);
   });
 
+  it('should disable next button when isNextArrowDisabled is true', () => {
+    component.isNextArrowDisabled = true;
+    const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
+    cdr.markForCheck();
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button.ngxsmk-nav-button');
+    expect(buttons.length).toBeGreaterThan(1);
+    const nextButton = buttons[1] as HTMLButtonElement;
+    expect(nextButton.hasAttribute('disabled')).toBe(true);
+  });
+
   it('should apply headerClass when provided', () => {
     component.headerClass = 'custom-header';
     // Force change detection for OnPush component

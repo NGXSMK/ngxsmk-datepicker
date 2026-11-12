@@ -23,18 +23,18 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
     '[attr.data-open]': 'isOpen',
   },
   template: `
-    <div
-      class="ngxsmk-select-container"
-      [class.is-open]="isOpen"
-      (click)="toggleDropdown()"
-      (keydown.enter)="toggleDropdown()"
-      (keydown.space)="toggleDropdown(); $event.preventDefault()"
-      tabindex="0"
-      role="button"
-      [attr.aria-expanded]="isOpen"
-      #container
-    >
-      <button type="button" class="ngxsmk-select-display" [disabled]="disabled" #button>
+    <div class="ngxsmk-select-container" [class.is-open]="isOpen" (click)="toggleDropdown()" #container>
+      <button
+        type="button"
+        class="ngxsmk-select-display"
+        [disabled]="disabled"
+        [attr.aria-expanded]="isOpen"
+        [attr.aria-haspopup]="'listbox'"
+        [attr.aria-controls]="isOpen ? listboxId : null"
+        (keydown.enter)="toggleDropdown(); $event.preventDefault()"
+        (keydown.space)="toggleDropdown(); $event.preventDefault()"
+        #button
+      >
         <span>{{ displayValue }}</span>
         <svg class="ngxsmk-arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path
@@ -48,8 +48,8 @@ import { isPlatformBrowser, DOCUMENT } from '@angular/common';
         </svg>
       </button>
       @if (isOpen) {
-        <div class="ngxsmk-options-panel" #panel>
-          <ul>
+        <div class="ngxsmk-options-panel" role="listbox" [id]="listboxId" #panel>
+          <ul role="presentation">
             @for (option of options; track option.value) {
               <li
                 [class.selected]="option.value === value"
@@ -93,18 +93,18 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
   @ViewChild('panel', { static: false }) panel!: ElementRef<HTMLDivElement>;
 
   public isOpen = false;
+  readonly listboxId = `ngxsmk-select-${Math.random().toString(36).slice(2, 10)}`;
 
   private readonly elementRef: ElementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private resizeObserver: ResizeObserver | null = null;
-  private scrollListener: (() => void) | null = null;
+  private openTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   ngAfterViewInit(): void {
     if (this.isBrowser) {
       this.setupResizeObserver();
-      this.setupScrollListener();
     }
   }
 
@@ -112,38 +112,21 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    if (this.scrollListener && this.isBrowser) {
-      window.removeEventListener('scroll', this.scrollListener, true);
+    if (this.openTimeoutId !== null) {
+      clearTimeout(this.openTimeoutId);
+      this.openTimeoutId = null;
     }
   }
 
   private setupResizeObserver(): void {
     if (this.isBrowser && typeof ResizeObserver !== 'undefined') {
       this.resizeObserver = new ResizeObserver(() => {
-        if (this.isOpen) {
-          this.updatePanelPosition();
-        }
+        // Panel uses relative CSS positioning; observer kept for future fixed overlays.
       });
       if (this.container?.nativeElement) {
         this.resizeObserver.observe(this.container.nativeElement);
       }
     }
-  }
-
-  private setupScrollListener(): void {
-    if (this.isBrowser) {
-      this.scrollListener = () => {
-        if (this.isOpen) {
-          // Absolute positioning doesn't need updates on scroll
-        }
-      };
-      window.addEventListener('scroll', this.scrollListener, { passive: true, capture: true });
-    }
-  }
-
-  private updatePanelPosition(): void {
-    // No special positioning needed for standard dropdowns
-    // CSS handles top: 100% + 4px
   }
 
   @HostListener('document:click', ['$event'])
@@ -194,8 +177,11 @@ export class CustomSelectComponent implements AfterViewInit, OnDestroy {
     if (this.disabled) return;
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      setTimeout(() => {
-        this.updatePanelPosition();
+      if (this.openTimeoutId !== null) {
+        clearTimeout(this.openTimeoutId);
+      }
+      this.openTimeoutId = setTimeout(() => {
+        this.openTimeoutId = null;
         this.scrollToSelected();
       }, 0);
     }

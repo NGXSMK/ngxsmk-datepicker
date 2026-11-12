@@ -11,6 +11,8 @@ export class AriaLiveService implements OnDestroy {
   private assertiveRegion: HTMLElement | null = null;
   private politeClearTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private assertiveClearTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private politeAnnounceTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private assertiveAnnounceTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private debounceTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private announcementQueue: Array<{ message: string; priority: 'polite' | 'assertive'; timestamp: number }> = [];
   private readonly DEBOUNCE_DELAY = 100;
@@ -105,14 +107,26 @@ export class AriaLiveService implements OnDestroy {
     // Clear and set new content to ensure screen readers detect the change
     region.textContent = '';
 
+    const existingAnnounceTimeout =
+      priority === 'polite' ? this.politeAnnounceTimeoutId : this.assertiveAnnounceTimeoutId;
+    if (existingAnnounceTimeout !== null) {
+      clearTimeout(existingAnnounceTimeout);
+    }
+
     // Use setTimeout to ensure the clear-then-set pattern is detected by screen readers.
     // A small delay (16ms ~ 1 frame) is used to ensure the DOM update of clearing is processed.
-    setTimeout(() => {
-      if (!region) return;
+    const announceTimeoutId = setTimeout(() => {
+      if (priority === 'polite') {
+        this.politeAnnounceTimeoutId = null;
+      } else {
+        this.assertiveAnnounceTimeoutId = null;
+      }
+
+      if (!region.isConnected) return;
       region.textContent = message;
 
       const timeoutId = setTimeout(() => {
-        if (region) {
+        if (region.isConnected) {
           region.textContent = '';
         }
         if (priority === 'polite') {
@@ -128,6 +142,12 @@ export class AriaLiveService implements OnDestroy {
         this.assertiveClearTimeoutId = timeoutId;
       }
     }, 16);
+
+    if (priority === 'polite') {
+      this.politeAnnounceTimeoutId = announceTimeoutId;
+    } else {
+      this.assertiveAnnounceTimeoutId = announceTimeoutId;
+    }
   }
 
   /**
@@ -173,6 +193,16 @@ export class AriaLiveService implements OnDestroy {
     if (this.assertiveClearTimeoutId !== null) {
       clearTimeout(this.assertiveClearTimeoutId);
       this.assertiveClearTimeoutId = null;
+    }
+
+    if (this.politeAnnounceTimeoutId !== null) {
+      clearTimeout(this.politeAnnounceTimeoutId);
+      this.politeAnnounceTimeoutId = null;
+    }
+
+    if (this.assertiveAnnounceTimeoutId !== null) {
+      clearTimeout(this.assertiveAnnounceTimeoutId);
+      this.assertiveAnnounceTimeoutId = null;
     }
 
     if (this.debounceTimeoutId !== null) {

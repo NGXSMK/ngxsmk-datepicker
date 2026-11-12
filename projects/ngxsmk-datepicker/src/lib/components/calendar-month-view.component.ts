@@ -52,9 +52,10 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
             [class.in-comparison-range]="isInComparisonRange(day)"
             [class.preview-range]="isPreviewInRange(day)"
             [class.focused]="day && focusedDate && isSameDay(day, focusedDate)"
-            [attr.tabindex]="day && !isDateDisabled(day) ? 0 : -1"
+            [attr.tabindex]="getDayTabIndex(day)"
             [attr.role]="day ? 'gridcell' : null"
-            [attr.aria-selected]="day && mode === 'single' && isSameDay(day, selectedDate) ? 'true' : null"
+            [attr.aria-selected]="day ? isDaySelected(day) : null"
+            [attr.aria-disabled]="day && isDateDisabled(day) ? true : null"
             [attr.aria-label]="day ? getAriaLabel(day) : null"
             [ngClass]="getDayCellCustomClasses(day)"
             [attr.title]="day ? getDayCellTooltip(day) : null"
@@ -212,6 +213,30 @@ export class CalendarMonthViewComponent {
 
   isRangeType(): boolean {
     return ['range', 'week', 'month', 'quarter', 'year', 'timeRange'].includes(this.mode);
+  }
+
+  isDaySelected(day: Date | null): boolean {
+    if (!day) return false;
+    if (this.mode === 'single') {
+      return this.isSameDay(day, this.selectedDate);
+    }
+    if (this.mode === 'multiple') {
+      return this.isMultipleSelected(day);
+    }
+    if (this.isRangeType()) {
+      return this.isSameDay(day, this.startDate) || this.isSameDay(day, this.endDate);
+    }
+    return false;
+  }
+
+  /** Roving tabindex: only the focused (or first enabled) day is in the tab order. */
+  getDayTabIndex(day: Date | null): number {
+    if (!day || this.isDateDisabled(day)) return -1;
+    if (this.focusedDate) {
+      return this.isSameDay(day, this.focusedDate) ? 0 : -1;
+    }
+    const firstEnabled = this.days.find((d) => !!d && !this.isDateDisabled(d));
+    return firstEnabled && this.isSameDay(day, firstEnabled) ? 0 : -1;
   }
 
   trackByDay(index: number, day: Date | null): number {

@@ -1,3 +1,4 @@
+import { isDevMode } from '@angular/core';
 import { HolidayProvider } from '../utils/calendar.utils';
 import { getEndOfDay, getStartOfDay, normalizeDate } from '../utils/date.utils';
 
@@ -32,6 +33,8 @@ export interface ConstraintsSources {
 export interface ConstraintsSnapshot {
   evaluate(day: Day | null): DayVerdict;
   isAllowed(day: Day | null): boolean;
+  /** Inclusive day cap applied by {@link ConstraintsSnapshot.scan}. */
+  readonly scanDayCap: number;
   scan(interval: DayInterval): ReadonlyArray<{ day: Date; denial: ConstraintDenial }>;
 }
 
@@ -48,7 +51,9 @@ export const EMPTY_CONSTRAINTS_SOURCES: ConstraintsSources = {
   isInvalidDate: null,
 };
 
-const SCAN_DAY_CAP = 365;
+/** Inclusive maximum number of days {@link ConstraintsSnapshot.scan} will walk. */
+export const CONSTRAINTS_SCAN_DAY_CAP = 365;
+const SCAN_DAY_CAP = CONSTRAINTS_SCAN_DAY_CAP;
 
 function toDay(value: Date | string | null | undefined): Date | null {
   if (value == null) return null;
@@ -140,7 +145,8 @@ function evaluateCompiled(compiled: CompiledConstraints, day: Day | null): DayVe
         return { allowed: false, denial: { code: 'holiday', date: dateOnly, label } };
       }
     } catch {
-      // fail open for holidays (parity with Host / DateValidationService)
+      // Fail closed — same posture as isInvalidDate when a provider throws.
+      return { allowed: false, denial: { code: 'holiday', date: dateOnly, label: null } };
     }
   }
 
@@ -167,6 +173,7 @@ function evaluateCompiled(compiled: CompiledConstraints, day: Day | null): DayVe
 
 function createSnapshot(compiled: CompiledConstraints): ConstraintsSnapshot {
   return {
+    scanDayCap: SCAN_DAY_CAP,
     evaluate(day: Day | null): DayVerdict {
       return evaluateCompiled(compiled, day);
     },
@@ -182,7 +189,15 @@ function createSnapshot(compiled: CompiledConstraints): ConstraintsSnapshot {
       const current = new Date(start);
       const limit = new Date(start);
       limit.setDate(limit.getDate() + SCAN_DAY_CAP);
-      const endChecked = end.getTime() < limit.getTime() ? end : getStartOfDay(limit);
+      const truncated = end.getTime() > limit.getTime();
+      const endChecked = truncated ? getStartOfDay(limit) : end;
+
+      if (truncated && isDevMode()) {
+        console.warn(
+          `[ngxsmk-datepicker] Constraints.scan truncated to ${SCAN_DAY_CAP} days. ` +
+            `Use smaller intervals or raise CONSTRAINTS_SCAN_DAY_CAP consciously.`
+        );
+      }
 
       while (current.getTime() <= endChecked.getTime()) {
         const verdict = evaluateCompiled(compiled, current);

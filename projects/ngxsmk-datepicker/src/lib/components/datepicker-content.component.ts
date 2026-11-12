@@ -175,6 +175,7 @@ import type { DayMetadata } from '../interfaces/day-metadata.interface';
                   [currentYear]="currentYear"
                   [disabled]="disabled"
                   [isBackArrowDisabled]="isBackArrowDisabled"
+                  [isNextArrowDisabled]="isNextArrowDisabled"
                   [prevMonthAriaLabel]="prevMonthAriaLabel"
                   [nextMonthAriaLabel]="nextMonthAriaLabel"
                   (previousMonth)="previousMonth.emit()"
@@ -554,6 +555,7 @@ export class NgxsmkDatepickerContentComponent {
   @Input() yearOptions: { label: string; value: number }[] = [];
   @Input() currentYear: number = new Date().getFullYear();
   @Input() isBackArrowDisabled: boolean = false;
+  @Input() isNextArrowDisabled: boolean = false;
   @Input() prevMonthAriaLabel: string = '';
   @Input() nextMonthAriaLabel: string = '';
   @Input() yearGrid: number[] = [];

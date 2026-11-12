@@ -139,7 +139,12 @@ export class NativeDateAdapter implements DateAdapter {
 
   addMonths(date: Date, months: number): Date {
     const newDate = new Date(date);
+    const originalDay = date.getDate();
     newDate.setMonth(date.getMonth() + months);
+    // Clamp overflow (e.g. Jan 31 + 1 month should be Feb 28/29, not March).
+    if (newDate.getDate() !== originalDay) {
+      newDate.setDate(0);
+    }
     return newDate;
   }
 

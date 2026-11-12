@@ -6,19 +6,10 @@ import {
   runInInjectionContext,
   inject,
   Signal,
+  isSignal,
   isDevMode,
 } from '@angular/core';
 import { DatepickerValue } from '../utils/calendar.utils';
-
-interface AngularCoreModule {
-  isSignal?: (value: unknown) => boolean;
-}
-
-interface AngularGlobal {
-  ng?: {
-    core?: AngularCoreModule;
-  };
-}
 
 interface WritableSignal<T> extends Signal<T> {
   set(value: T): void;
@@ -30,24 +21,10 @@ function safeIsSignal(value: unknown): value is Signal<unknown> {
   }
 
   try {
-    const ngCore = (globalThis as AngularGlobal).ng?.core;
-    if (ngCore?.isSignal && typeof ngCore.isSignal === 'function') {
-      return ngCore.isSignal(value);
-    }
-  } catch {}
-
-  if (typeof value === 'function') {
-    const fn = value as () => unknown;
-    try {
-      if (fn.length === 0 || fn.length === undefined) {
-        return true;
-      }
-    } catch {
-      return false;
-    }
+    return isSignal(value);
+  } catch {
+    return false;
   }
-
-  return false;
 }
 
 export interface ValidationError {

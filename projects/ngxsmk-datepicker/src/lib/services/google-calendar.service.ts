@@ -29,39 +29,53 @@ export class GoogleCalendarService {
 
   private tokenClient: { requestAccessToken: (options: { prompt: string }) => void } | null = null;
   private accessToken: string | null = null;
+  private scriptsLoading: Promise<void> | null = null;
 
-  constructor() {
-    if (this.isBrowser) {
-      this.loadScripts();
+  private loadScripts(): Promise<void> {
+    if (!this.isBrowser) {
+      return Promise.resolve();
     }
-  }
+    if (this.scriptsLoading) {
+      return this.scriptsLoading;
+    }
 
-  private loadScripts() {
-    // Load GSI Library
-    const gsiScript = document.createElement('script');
-    gsiScript.src = 'https://accounts.google.com/gsi/client';
-    gsiScript.async = true;
-    gsiScript.defer = true;
-    document.head.appendChild(gsiScript);
+    this.scriptsLoading = new Promise<void>((resolve) => {
+      const ensureScript = (src: string, onload?: () => void) => {
+        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement | null;
+        if (existing) {
+          onload?.();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.defer = true;
+        if (onload) {
+          script.onload = onload;
+        }
+        document.head.appendChild(script);
+      };
 
-    // Load GAPI Library
-    const gapiScript = document.createElement('script');
-    gapiScript.src = 'https://apis.google.com/js/api.js';
-    gapiScript.async = true;
-    gapiScript.defer = true;
-    gapiScript.onload = () => {
-      gapi.load('client', async () => {
-        await gapi.client.init({
-          // We don't strictly need apiKey here for OAuth2 flow if we use access tokens
+      ensureScript('https://accounts.google.com/gsi/client');
+      ensureScript('https://apis.google.com/js/api.js', () => {
+        gapi.load('client', async () => {
+          await gapi.client.init({
+            // We don't strictly need apiKey here for OAuth2 flow if we use access tokens
+          });
+          await gapi.client.load('calendar', 'v3');
+          resolve();
         });
-        await gapi.client.load('calendar', 'v3');
       });
-    };
-    document.head.appendChild(gapiScript);
+    });
+
+    return this.scriptsLoading;
   }
 
-  public initialize(clientId: string) {
-    if (!this.isBrowser || !google) return;
+  public async initialize(clientId: string) {
+    if (!this.isBrowser) return;
+
+    await this.loadScripts();
+    if (typeof google === 'undefined') return;
 
     this.tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: clientId,

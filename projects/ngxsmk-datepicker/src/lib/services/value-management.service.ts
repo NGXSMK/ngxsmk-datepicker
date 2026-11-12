@@ -63,6 +63,12 @@ export class ValueManagementService {
     }
   }
 
+  private isNullableDateEqual(a: Date | null | undefined, b: Date | null | undefined): boolean {
+    if (a === b) return true;
+    if (!a || !b) return false;
+    return a.getTime() === b.getTime();
+  }
+
   isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
     if (val1 === val2) return true;
     if (val1 === null || val2 === null) return val1 === val2;
@@ -81,9 +87,11 @@ export class ValueManagementService {
       'start' in val2 &&
       'end' in val2
     ) {
-      const range1 = val1 as { start: Date; end: Date };
-      const range2 = val2 as { start: Date; end: Date };
-      return range1.start.getTime() === range2.start.getTime() && range1.end.getTime() === range2.end.getTime();
+      const range1 = val1 as { start: Date | null; end: Date | null };
+      const range2 = val2 as { start: Date | null; end: Date | null };
+      return (
+        this.isNullableDateEqual(range1.start, range2.start) && this.isNullableDateEqual(range1.end, range2.end)
+      );
     }
 
     if (Array.isArray(val1) && Array.isArray(val2)) {

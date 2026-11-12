@@ -23,6 +23,7 @@ class CalendarHeaderStubComponent {
   @Input() yearOptions: unknown;
   @Input() disabled: unknown;
   @Input() isBackArrowDisabled: unknown;
+  @Input() isNextArrowDisabled: unknown;
   @Input() headerClass: unknown;
   @Input() navPrevClass: unknown;
   @Input() navNextClass: unknown;
