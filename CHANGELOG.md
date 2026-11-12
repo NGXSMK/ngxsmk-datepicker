@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Typing in the field defaults to **enabled** (`allowTyping: true`).
 - Range mode on desktop defaults to **two months** unless `[calendarCount]` is set explicitly.
 - Presets: side rail on desktop, horizontal chips on mobile; 44px touch targets; selection pulse + quieter open motion (respects reduced motion).
+- Demo home hero: top-aligned layout; compact inline showcase (`calendarCount=1`, range summary/presets off).
+- Docs: `MIGRATION.md` + README updated for 3.0.7 UX defaults.
 
 ## [3.0.7] - 2026-11-13
 

@@ -192,6 +192,9 @@ import { I18nService } from '../../i18n/i18n.service';
               [(ngModel)]="demoValue"
               [mode]="demoMode"
               [inline]="true"
+              [calendarCount]="1"
+              [showRangeSummary]="false"
+              [showRanges]="false"
               [autoApplyClose]="false"
               [theme]="currentTheme"
             >
