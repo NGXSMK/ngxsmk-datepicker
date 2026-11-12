@@ -43,6 +43,7 @@ export {
 } from './lib/utils/calendar.utils';
 
 export type { HolidayProvider, DateRange, DatepickerValue } from './lib/utils/calendar.utils';
+export type { DatepickerMode, DatepickerModeExtended } from './lib/types/datepicker-mode';
 
 export {
   exportToJson,
@@ -63,6 +64,8 @@ export {
   getTimezoneOffset,
   isValidTimezone,
 } from './lib/utils/timezone.utils';
+
+export { isDatepickerValueEqual, isNullableDateEqual } from './lib/utils/value-equality.utils';
 
 export type { DayMetadata, DayMetadataProvider } from './lib/interfaces/day-metadata.interface';
 

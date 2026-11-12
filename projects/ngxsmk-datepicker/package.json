@@ -1,6 +1,6 @@
 {
   "name": "ngxsmk-datepicker",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Lightweight, accessible date and range picker for Angular 17-21+. Standalone component, 100% Signals, SSR and zoneless-ready, time picker, Luxon i18n, and Angular Material alternative.",
   "author": {
     "name": "Sachin Dilshan",

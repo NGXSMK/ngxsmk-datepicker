@@ -7676,6 +7676,8 @@ ngxsmk-custom-select[data-open=true] {
   appearance: none;
   -webkit-appearance: none;
   gap: var(--ngxsmk-space-sm);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ngxsmk-select-display:focus-within {
@@ -7758,10 +7760,20 @@ ngxsmk-custom-select[data-open=true] {
   background-color: var(--ngxsmk-color-surface-hover);
 }
 
+.ngxsmk-options-panel li.active:not(.selected) {
+  background-color: var(--ngxsmk-color-surface-hover);
+  outline: 2px solid var(--datepicker-primary-color, var(--ngxsmk-color-primary));
+  outline-offset: -2px;
+}
+
 .ngxsmk-options-panel li.selected {
   background-color: var(--datepicker-primary-color, var(--ngxsmk-color-primary));
   color: var(--datepicker-primary-contrast, var(--ngxsmk-color-on-primary)) !important;
   font-weight: 600;
+}
+
+.ngxsmk-options-panel li.selected.active {
+  box-shadow: inset 0 0 0 2px var(--datepicker-primary-contrast, var(--ngxsmk-color-on-primary));
 }
 
 @media (max-width: 768px) {

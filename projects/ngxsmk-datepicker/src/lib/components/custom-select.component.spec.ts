@@ -52,8 +52,8 @@ describe('CustomSelectComponent', () => {
     component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
-    const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
-    container.click();
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    button.click();
     fixture.detectChanges();
 
     expect(component.isOpen).toBe(true);
@@ -64,8 +64,8 @@ describe('CustomSelectComponent', () => {
     component.options = [{ label: 'Option 1', value: 1 }];
     fixture.detectChanges();
 
-    const container = fixture.nativeElement.querySelector('.ngxsmk-select-container');
-    container.click();
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    button.click();
     fixture.detectChanges();
 
     expect(component.isOpen).toBe(false);
@@ -127,10 +127,48 @@ describe('CustomSelectComponent', () => {
 
     const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
     const listbox = fixture.nativeElement.querySelector('[role="listbox"]');
+    expect(button.getAttribute('role')).toBe('combobox');
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(button.getAttribute('aria-haspopup')).toBe('listbox');
     expect(listbox).toBeTruthy();
     expect(button.getAttribute('aria-controls')).toBe(listbox.id);
+  });
+
+  it('should navigate options with arrow keys and select with Enter', () => {
+    component.options = [
+      { label: 'Alpha', value: 'a' },
+      { label: 'Bravo', value: 'b' },
+      { label: 'Charlie', value: 'c' },
+    ];
+    fixture.detectChanges();
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+    const selection = spyOn(component.valueChange, 'emit');
+
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.isOpen).toBe(true);
+    expect(component.activeIndex).toBe(0);
+
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.activeIndex).toBe(1);
+
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.value).toBe('b');
+    expect(selection).toHaveBeenCalledWith('b');
+    expect(component.isOpen).toBe(false);
+  });
+
+  it('should close on Escape', () => {
+    component.options = [{ label: 'Alpha', value: 'a' }];
+    component.toggleDropdown();
+    fixture.detectChanges();
+    const button = fixture.nativeElement.querySelector('.ngxsmk-select-display');
+
+    button.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(component.isOpen).toBe(false);
   });
 
   it('should select option and emit valueChange', async () => {

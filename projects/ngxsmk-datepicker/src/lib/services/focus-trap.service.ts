@@ -89,11 +89,7 @@ export class FocusTrapService implements OnDestroy {
 
     state.element.removeEventListener('keydown', state.handleKeyDown);
 
-    if (
-      this.isBrowser &&
-      state.previousActiveElement &&
-      this.document.body.contains(state.previousActiveElement)
-    ) {
+    if (this.isBrowser && state.previousActiveElement && this.document.body.contains(state.previousActiveElement)) {
       requestAnimationFrame(() => {
         try {
           state.previousActiveElement?.focus();

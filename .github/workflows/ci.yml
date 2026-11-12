@@ -66,3 +66,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build:optimized
+      - name: Bundle size budget
+        run: npm run check:bundle-budget
+        env:
+          NGXSMK_BUNDLE_BUDGET_KB: '1100'

@@ -95,20 +95,21 @@ function wallTimeInTimezoneToUtc(parts: ZonedDateParts, timeZone: string): Date 
 function parseWallClockString(dateString: string): ZonedDateParts | null {
   const match = dateString
     .trim()
-    .match(
-      /^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.(\d{1,3}))?)?(?:Z|[+-]\d{2}:?\d{2})?$/
-    );
+    .match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.(\d{1,3}))?)?(?:Z|[+-]\d{2}:?\d{2})?$/);
 
   if (!match) return null;
 
+  const [, year, month, day, hour, minute, second, millisecond] = match;
+  if (!year || !month || !day) return null;
+
   return {
-    year: parseInt(match[1], 10),
-    month: parseInt(match[2], 10) - 1,
-    day: parseInt(match[3], 10),
-    hour: parseInt(match[4] || '0', 10),
-    minute: parseInt(match[5] || '0', 10),
-    second: parseInt(match[6] || '0', 10),
-    millisecond: parseInt((match[7] || '0').padEnd(3, '0'), 10),
+    year: parseInt(year, 10),
+    month: parseInt(month, 10) - 1,
+    day: parseInt(day, 10),
+    hour: parseInt(hour || '0', 10),
+    minute: parseInt(minute || '0', 10),
+    second: parseInt(second || '0', 10),
+    millisecond: parseInt((millisecond || '0').padEnd(3, '0'), 10),
   };
 }
 
@@ -151,16 +152,26 @@ export function parseDateWithTimezone(dateString: string, timezone?: string): Da
   return isNaN(date.getTime()) ? null : date;
 }
 
+function resolveTimezone(timezone: string | undefined | null, fallback: string): string {
+  if (timezone && isValidTimezone(timezone)) {
+    return timezone;
+  }
+  return fallback;
+}
+
 /**
  * Convert a date from one timezone to another by preserving wall-clock time.
  * @param date The date to convert
  * @param fromTimezone Source timezone (IANA name)
- * @param toTimezone Target timezone (IANA name)
+ * @param toTimezone Target timezone (IANA name). Empty/invalid falls back to the runtime local zone.
  * @returns New Date whose instant displays the same wall-clock in `toTimezone`
  */
 export function convertTimezone(date: Date, fromTimezone: string, toTimezone: string): Date {
-  const fromParts = getZonedParts(date, fromTimezone);
-  return wallTimeInTimezoneToUtc(fromParts, toTimezone);
+  const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  const fromZone = resolveTimezone(fromTimezone, localZone);
+  const toZone = resolveTimezone(toTimezone, localZone);
+  const fromParts = getZonedParts(date, fromZone);
+  return wallTimeInTimezoneToUtc(fromParts, toZone);
 }
 
 /**

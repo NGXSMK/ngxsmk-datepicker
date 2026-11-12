@@ -1,5 +1,6 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { getStartOfDay } from '../utils/date.utils';
+import type { DatepickerMode } from '../types/datepicker-mode';
 
 export interface TouchGestureState {
   touchStartTime: number;
@@ -20,7 +21,7 @@ export interface TouchGestureState {
 
 export interface TouchGestureConfig {
   disabled: boolean;
-  mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' | 'schedule';
+  mode: DatepickerMode;
   swipeThreshold: number;
   swipeTimeThreshold: number;
 }
