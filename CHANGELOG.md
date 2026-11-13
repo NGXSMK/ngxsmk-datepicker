@@ -64,7 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Constraints.scan**: Exposes `scanDayCap` / `CONSTRAINTS_SCAN_DAY_CAP` and warns in dev when truncated.
 - **Services entry**: Stopped re-exporting unused `KeyboardNavigationService` prototype (tests may still import the file directly).
 - **Shared `DatepickerMode` type** + `isDatepickerValueEqual` helpers extracted for host/services reuse.
-- **CI**: Bundle size budget check (`npm run check:bundle-budget`) after production build.
+- **CI**: Bundle size budget check (`npm run check:bundle-budget`) after production build (raw FESM budget raised to **1150 KB** for 3.0.7 mobile/motion CSS).
 - **Docs**: TIMEZONE.md updated for wall-clock parse/convert behavior (v3.0.7).
 
 ### Tests

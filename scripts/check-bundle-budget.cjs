@@ -7,7 +7,8 @@ const fs = require('fs');
 const path = require('path');
 
 const DIST = path.join(__dirname, '../dist/ngxsmk-datepicker');
-const BUDGET_KB = Number(process.env.NGXSMK_BUNDLE_BUDGET_KB || 1100);
+// 3.0.7 mobile/iOS–Android + motion CSS landed ~30 KB over the prior 1100 KB cap.
+const BUDGET_KB = Number(process.env.NGXSMK_BUNDLE_BUDGET_KB || 1150);
 const FESM_DIR = path.join(DIST, 'fesm2022');
 
 function findMainFesm() {

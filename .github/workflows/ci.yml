@@ -69,4 +69,4 @@ jobs:
       - name: Bundle size budget
         run: npm run check:bundle-budget
         env:
-          NGXSMK_BUNDLE_BUDGET_KB: '1100'
+          NGXSMK_BUNDLE_BUDGET_KB: '1150'
