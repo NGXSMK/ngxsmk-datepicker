@@ -238,5 +238,30 @@ describe('NgxsmkDatepickerComponent - Calendar Views', () => {
       expect(component.endDate!.getHours()).toBe(17);
       expect(component.endDate!.getMinutes()).toBe(0);
     });
+
+    it('should clone dates when emitting time slider changes', () => {
+      const originalStart = getStartOfDay(new Date(2025, 5, 15));
+      const originalEnd = getEndOfDay(new Date(2025, 5, 15));
+      const startBefore = originalStart.getTime();
+      const endBefore = originalEnd.getTime();
+
+      component.startDate = originalStart;
+      component.endDate = originalEnd;
+      spyOn(component.valueChange, 'emit');
+
+      component.onStartTimeSliderChange(600);
+      fixture.detectChanges();
+
+      expect(originalStart.getTime()).toBe(startBefore);
+      expect(originalEnd.getTime()).toBe(endBefore);
+      expect(component.startDate).not.toBe(originalStart);
+      expect(component.valueChange.emit).toHaveBeenCalled();
+      const emitted = (component.valueChange.emit as jasmine.Spy).calls.mostRecent().args[0] as {
+        start: Date;
+        end: Date;
+      };
+      expect(emitted.start).not.toBe(component.startDate);
+      expect(emitted.end).not.toBe(component.endDate);
+    });
   });
 });

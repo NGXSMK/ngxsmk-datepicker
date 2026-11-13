@@ -712,6 +712,20 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
 
       expect(component.isBackArrowDisabled).toBe(true);
     });
+
+    it('should disable next arrow when maxDate prevents navigation', () => {
+      const today = new Date();
+      const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      component.maxDate = lastDayOfMonth;
+      fixture.detectChanges();
+
+      expect(component.isNextArrowDisabled).toBe(true);
+
+      const initialMonth = component.currentMonth;
+      component.changeMonth(1);
+      fixture.detectChanges();
+      expect(component.currentMonth).toBe(initialMonth);
+    });
   });
 
   describe('Range Selection with Predefined Ranges', () => {

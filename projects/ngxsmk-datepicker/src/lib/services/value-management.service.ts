@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DateInput, normalizeDate } from '../utils/date.utils';
 import { DatepickerValue } from '../utils/calendar.utils';
+import { isDatepickerValueEqual, isNullableDateEqual } from '../utils/value-equality.utils';
 
 @Injectable()
 export class ValueManagementService {
@@ -64,35 +65,13 @@ export class ValueManagementService {
   }
 
   isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
-    if (val1 === val2) return true;
-    if (val1 === null || val2 === null) return val1 === val2;
-
-    if (val1 instanceof Date && val2 instanceof Date) {
-      return val1.getTime() === val2.getTime();
-    }
-
-    if (
-      typeof val1 === 'object' &&
-      val1 !== null &&
-      typeof val2 === 'object' &&
-      val2 !== null &&
-      'start' in val1 &&
-      'end' in val1 &&
-      'start' in val2 &&
-      'end' in val2
-    ) {
-      const range1 = val1 as { start: Date; end: Date };
-      const range2 = val2 as { start: Date; end: Date };
-      return range1.start.getTime() === range2.start.getTime() && range1.end.getTime() === range2.end.getTime();
-    }
-
     if (Array.isArray(val1) && Array.isArray(val2)) {
       if (val1.length !== val2.length) return false;
       const sorted1 = [...val1].sort((a, b) => a.getTime() - b.getTime());
       const sorted2 = [...val2].sort((a, b) => a.getTime() - b.getTime());
-      return sorted1.every((d, i) => d.getTime() === sorted2[i]!.getTime());
+      return sorted1.every((d, i) => isNullableDateEqual(d, sorted2[i]));
     }
 
-    return false;
+    return isDatepickerValueEqual(val1, val2);
   }
 }

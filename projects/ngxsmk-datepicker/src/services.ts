@@ -14,15 +14,8 @@
  */
 
 export { ValueManagementService } from './lib/services/value-management.service';
-export { KeyboardNavigationService } from './lib/services/keyboard-navigation.service';
 export { TouchGestureHandlerService } from './lib/services/touch-gesture-handler.service';
 export { FieldSyncService } from './lib/services/field-sync.service';
-
-export type {
-  KeyboardNavigationState,
-  KeyboardNavigationCallbacks,
-  KeyboardNavigationConfig,
-} from './lib/services/keyboard-navigation.service';
 
 export type {
   TouchGestureState,

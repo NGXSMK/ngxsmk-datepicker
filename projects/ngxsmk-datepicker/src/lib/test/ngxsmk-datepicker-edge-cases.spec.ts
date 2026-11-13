@@ -110,6 +110,17 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
       expect(component['isValueEqual'](range1, range2)).toBe(true);
     });
 
+    it('should compare partial ranges with null end without throwing', () => {
+      const start = getStartOfDay(new Date(2025, 5, 10));
+      const range1 = { start, end: null };
+      const range2 = { start, end: null };
+      const range3 = { start, end: getEndOfDay(new Date(2025, 5, 15)) };
+
+      expect(() => component['isValueEqual'](range1, range2)).not.toThrow();
+      expect(component['isValueEqual'](range1, range2)).toBe(true);
+      expect(component['isValueEqual'](range1, range3)).toBe(false);
+    });
+
     it('should compare multiple date arrays', () => {
       const dates1 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
       const dates2 = [getStartOfDay(new Date(2025, 5, 10)), getStartOfDay(new Date(2025, 5, 15))];
@@ -402,6 +413,18 @@ xdescribe('NgxsmkDatepickerComponent - Edge Cases & Comprehensive Coverage', () 
 
       component.setDisabledState(false);
       expect(component.disabled).toBe(false);
+    });
+
+    it('should close an open calendar when disabled', () => {
+      component.inline = false;
+      component.isCalendarOpen = true;
+      fixture.detectChanges();
+
+      component.setDisabledState(true);
+      fixture.detectChanges();
+
+      expect(component.disabled).toBe(true);
+      expect(component.isCalendarOpen).toBe(false);
     });
   });
 

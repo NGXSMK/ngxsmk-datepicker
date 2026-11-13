@@ -1,4 +1,5 @@
-import { Injectable, ElementRef, OnDestroy } from '@angular/core';
+import { Injectable, ElementRef, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 
 interface FocusTrapState {
   element: HTMLElement;
@@ -10,6 +11,9 @@ interface FocusTrapState {
   providedIn: 'root',
 })
 export class FocusTrapService implements OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly document = inject(DOCUMENT);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private activeTraps = new Map<ElementRef<HTMLElement>, FocusTrapState>();
   private focusableSelectors = [
     'a[href]',
@@ -24,52 +28,46 @@ export class FocusTrapService implements OnDestroy {
    * Trap focus within an element and restore focus on cleanup
    */
   trapFocus(elementRef: ElementRef<HTMLElement>): () => void {
-    if (!elementRef?.nativeElement) {
+    if (!this.isBrowser || !elementRef?.nativeElement) {
       return () => {};
     }
 
     const element = elementRef.nativeElement;
-    const previousActiveElement = document.activeElement as HTMLElement | null;
-    const firstFocusable = this.getFirstFocusable(element);
-    const lastFocusable = this.getLastFocusable(element);
+    const previousActiveElement = this.document.activeElement as HTMLElement | null;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') {
         return;
       }
 
-      // Handle Tab key navigation
+      // Re-query focusables on each Tab so month navigation stays correct.
+      const firstFocusable = this.getFirstFocusable(element);
+      const lastFocusable = this.getLastFocusable(element);
+      if (!firstFocusable || !lastFocusable) {
+        return;
+      }
+
       if (event.shiftKey) {
-        // Shift+Tab: move backwards
-        if (document.activeElement === firstFocusable) {
+        if (this.document.activeElement === firstFocusable) {
           event.preventDefault();
-          if (lastFocusable) {
-            lastFocusable.focus();
-          }
+          lastFocusable.focus();
         }
-      } else {
-        // Tab: move forwards
-        if (document.activeElement === lastFocusable) {
-          event.preventDefault();
-          if (firstFocusable) {
-            firstFocusable.focus();
-          }
-        }
+      } else if (this.document.activeElement === lastFocusable) {
+        event.preventDefault();
+        firstFocusable.focus();
       }
     };
 
     element.addEventListener('keydown', handleKeyDown);
 
-    // Store state for cleanup
     this.activeTraps.set(elementRef, {
       element,
       handleKeyDown,
       previousActiveElement,
     });
 
-    // Focus first focusable element after a short delay to ensure DOM is ready
+    const firstFocusable = this.getFirstFocusable(element);
     if (firstFocusable) {
-      // Use requestAnimationFrame to ensure focus happens after render
       requestAnimationFrame(() => {
         firstFocusable.focus();
       });
@@ -91,9 +89,7 @@ export class FocusTrapService implements OnDestroy {
 
     state.element.removeEventListener('keydown', state.handleKeyDown);
 
-    // Restore focus to previous element if it still exists in the DOM
-    if (state.previousActiveElement && document.body.contains(state.previousActiveElement)) {
-      // Use requestAnimationFrame to ensure focus restoration happens after trap removal
+    if (this.isBrowser && state.previousActiveElement && this.document.body.contains(state.previousActiveElement)) {
       requestAnimationFrame(() => {
         try {
           state.previousActiveElement?.focus();
@@ -106,32 +102,26 @@ export class FocusTrapService implements OnDestroy {
     this.activeTraps.delete(elementRef);
   }
 
-  private getFirstFocusable(element: HTMLElement): HTMLElement | null {
-    const focusableElements = Array.from(element.querySelectorAll(this.focusableSelectors)) as HTMLElement[];
+  private getFocusableElements(element: HTMLElement): HTMLElement[] {
+    if (!this.isBrowser) return [];
 
-    return (
-      focusableElements.find((el) => {
-        const style = window.getComputedStyle(el);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-      }) || null
-    );
+    return Array.from(element.querySelectorAll(this.focusableSelectors) as NodeListOf<HTMLElement>).filter((el) => {
+      const style = this.document.defaultView?.getComputedStyle(el);
+      if (!style) return false;
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+  }
+
+  private getFirstFocusable(element: HTMLElement): HTMLElement | null {
+    return this.getFocusableElements(element)[0] || null;
   }
 
   private getLastFocusable(element: HTMLElement): HTMLElement | null {
-    const focusableElements = Array.from(element.querySelectorAll(this.focusableSelectors)) as HTMLElement[];
-
-    return (
-      focusableElements
-        .filter((el) => {
-          const style = window.getComputedStyle(el);
-          return style.display !== 'none' && style.visibility !== 'hidden';
-        })
-        .pop() || null
-    );
+    const focusableElements = this.getFocusableElements(element);
+    return focusableElements[focusableElements.length - 1] || null;
   }
 
   ngOnDestroy(): void {
-    // Clean up all active traps
     for (const [elementRef] of this.activeTraps) {
       this.removeFocusTrap(elementRef);
     }

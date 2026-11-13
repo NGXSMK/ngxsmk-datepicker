@@ -1,6 +1,6 @@
 # Timezone Support
 
-**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
 
 ## Overview
 
@@ -144,6 +144,39 @@ const serverDate = new Date("2024-01-15T15:00:00Z");
   [timezone]="userTimezone">
 </ngxsmk-datepicker>
 ```
+
+## Utility Helpers (`parseDateWithTimezone` / `convertTimezone`)
+
+As of **v3.0.7**, the public timezone helpers honor IANA zones for wall-clock work:
+
+```typescript
+import {
+  parseDateWithTimezone,
+  convertTimezone,
+  formatDateWithTimezone,
+  isValidTimezone,
+} from 'ngxsmk-datepicker';
+
+// Interpret "12:00" as America/New_York wall time → UTC Date
+const noonEt = parseDateWithTimezone('2025-06-15T12:00:00', 'America/New_York');
+
+// Keep the same wall clock when moving UTC → New York representation
+const shifted = convertTimezone(new Date('2025-06-15T12:00:00Z'), 'UTC', 'America/New_York');
+
+// Display
+formatDateWithTimezone(shifted, 'en-US', { dateStyle: 'medium', timeStyle: 'short' }, 'America/New_York');
+
+isValidTimezone('Asia/Colombo'); // true
+```
+
+**Supported parse shapes with a timezone argument**
+
+- `YYYY-MM-DD`
+- `YYYY-MM-DDTHH:mm`
+- `YYYY-MM-DDTHH:mm:ss`
+- Optional fractional seconds / offset suffix (offset is ignored when `timezone` is provided; the wall clock is taken from the numeric parts)
+
+Always validate user/config timezones with `isValidTimezone` before binding `[timezone]`.
 
 ## Optional Adapters (date-fns / Luxon)
 

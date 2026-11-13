@@ -22,43 +22,19 @@ export function formatDateWithTimezone(
   return date.toLocaleString(locale, options);
 }
 
-/**
- * Parse a date string with timezone awareness
- * @param dateString The date string to parse
- * @param timezone Optional timezone for parsing (IANA timezone name)
- * @returns Date object (always in UTC internally)
- */
-export function parseDateWithTimezone(dateString: string, timezone?: string): Date | null {
-  if (!dateString) return null;
-
-  if (timezone) {
-    try {
-      const date = new Date(dateString);
-
-      if (isNaN(date.getTime())) {
-        return null;
-      }
-
-      return date;
-    } catch {
-      return null;
-    }
-  }
-
-  const date = new Date(dateString);
-  return isNaN(date.getTime()) ? null : date;
+interface ZonedDateParts {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+  millisecond: number;
 }
 
-/**
- * Convert a date from one timezone to another
- * @param date The date to convert
- * @param fromTimezone Source timezone (IANA name)
- * @param _toTimezone Target timezone (IANA name) - currently unused in simplified implementation
- * @returns New Date object (still UTC internally, but represents the time in target timezone)
- */
-export function convertTimezone(date: Date, fromTimezone: string, _toTimezone: string): Date {
-  const fromFormatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: fromTimezone,
+function getZonedParts(date: Date, timeZone: string): ZonedDateParts {
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -68,18 +44,134 @@ export function convertTimezone(date: Date, fromTimezone: string, _toTimezone: s
     hour12: false,
   });
 
-  const parts = fromFormatter.formatToParts(date);
-  const year = parseInt(parts.find((p) => p.type === 'year')?.value || '0');
-  const month = parseInt(parts.find((p) => p.type === 'month')?.value || '0') - 1;
-  const day = parseInt(parts.find((p) => p.type === 'day')?.value || '0');
-  const hour = parseInt(parts.find((p) => p.type === 'hour')?.value || '0');
-  const minute = parseInt(parts.find((p) => p.type === 'minute')?.value || '0');
-  const second = parseInt(parts.find((p) => p.type === 'second')?.value || '0');
+  const parts = formatter.formatToParts(date);
+  const read = (type: Intl.DateTimeFormatPartTypes): number =>
+    parseInt(parts.find((p) => p.type === type)?.value || '0', 10);
 
-  const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:${String(second).padStart(2, '0')}`;
-  const result = new Date(dateString);
-  result.setMilliseconds(date.getMilliseconds());
-  return result;
+  // Intl may emit hour "24" for midnight in some engines
+  let hour = read('hour');
+  if (hour === 24) hour = 0;
+
+  return {
+    year: read('year'),
+    month: read('month') - 1,
+    day: read('day'),
+    hour,
+    minute: read('minute'),
+    second: read('second'),
+    millisecond: date.getMilliseconds(),
+  };
+}
+
+/**
+ * Build a Date for the given wall-clock time as observed in `timeZone`.
+ */
+function wallTimeInTimezoneToUtc(parts: ZonedDateParts, timeZone: string): Date {
+  const utcGuess = Date.UTC(
+    parts.year,
+    parts.month,
+    parts.day,
+    parts.hour,
+    parts.minute,
+    parts.second,
+    parts.millisecond
+  );
+
+  // Refine once using the timezone offset at the guessed instant.
+  const asInZone = getZonedParts(new Date(utcGuess), timeZone);
+  const asInZoneAsUtc = Date.UTC(
+    asInZone.year,
+    asInZone.month,
+    asInZone.day,
+    asInZone.hour,
+    asInZone.minute,
+    asInZone.second,
+    asInZone.millisecond
+  );
+  const offset = asInZoneAsUtc - utcGuess;
+  return new Date(utcGuess - offset);
+}
+
+function parseWallClockString(dateString: string): ZonedDateParts | null {
+  const match = dateString
+    .trim()
+    .match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s](\d{2}):(\d{2})(?::(\d{2}))?(?:\.(\d{1,3}))?)?(?:Z|[+-]\d{2}:?\d{2})?$/);
+
+  if (!match) return null;
+
+  const [, year, month, day, hour, minute, second, millisecond] = match;
+  if (!year || !month || !day) return null;
+
+  return {
+    year: parseInt(year, 10),
+    month: parseInt(month, 10) - 1,
+    day: parseInt(day, 10),
+    hour: parseInt(hour || '0', 10),
+    minute: parseInt(minute || '0', 10),
+    second: parseInt(second || '0', 10),
+    millisecond: parseInt((millisecond || '0').padEnd(3, '0'), 10),
+  };
+}
+
+/**
+ * Parse a date string with timezone awareness
+ * @param dateString The date string to parse
+ * @param timezone Optional timezone for parsing (IANA timezone name)
+ * @returns Date object (UTC instant corresponding to the wall time in `timezone` when provided)
+ */
+export function parseDateWithTimezone(dateString: string, timezone?: string): Date | null {
+  if (!dateString) return null;
+
+  if (timezone) {
+    try {
+      const wall = parseWallClockString(dateString);
+      if (wall) {
+        const result = wallTimeInTimezoneToUtc(wall, timezone);
+        return isNaN(result.getTime()) ? null : result;
+      }
+
+      // Fallback for free-form strings: parse then shift wall-clock into timezone.
+      const parsed = new Date(dateString);
+      if (isNaN(parsed.getTime())) return null;
+      const localAsWall: ZonedDateParts = {
+        year: parsed.getFullYear(),
+        month: parsed.getMonth(),
+        day: parsed.getDate(),
+        hour: parsed.getHours(),
+        minute: parsed.getMinutes(),
+        second: parsed.getSeconds(),
+        millisecond: parsed.getMilliseconds(),
+      };
+      return wallTimeInTimezoneToUtc(localAsWall, timezone);
+    } catch {
+      return null;
+    }
+  }
+
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function resolveTimezone(timezone: string | undefined | null, fallback: string): string {
+  if (timezone && isValidTimezone(timezone)) {
+    return timezone;
+  }
+  return fallback;
+}
+
+/**
+ * Convert a date from one timezone to another by preserving wall-clock time.
+ * @param date The date to convert
+ * @param fromTimezone Source timezone (IANA name)
+ * @param toTimezone Target timezone (IANA name). Empty/invalid falls back to the runtime local zone.
+ * @returns New Date whose instant displays the same wall-clock in `toTimezone`
+ */
+export function convertTimezone(date: Date, fromTimezone: string, toTimezone: string): Date {
+  const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  const fromZone = resolveTimezone(fromTimezone, localZone);
+  const toZone = resolveTimezone(toTimezone, localZone);
+  const fromParts = getZonedParts(date, fromZone);
+  return wallTimeInTimezoneToUtc(fromParts, toZone);
 }
 
 /**
@@ -100,8 +192,9 @@ export function getTimezoneOffset(timezone: string, date: Date = new Date()): nu
 
     if (offsetPart) {
       const offsetStr = offsetPart.value.replace('GMT', '').trim();
+      if (!offsetStr || offsetStr === 'GMT') return 0;
       const sign = offsetStr[0] === '-' ? -1 : 1;
-      const [hours = 0, minutes = 0] = offsetStr.slice(1).split(':').map(Number);
+      const [hours = 0, minutes = 0] = offsetStr.replace(/^[+-]/, '').split(':').map(Number);
       return sign * (hours * 60 + minutes);
     }
   } catch {}

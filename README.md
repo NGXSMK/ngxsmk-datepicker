@@ -30,13 +30,13 @@
 
 ---
 
-**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.6` is the current stable release with compiled `fesm2022` output and type declarations.
+> **Stable Release**: `v3.0.7` is the current stable release with compiled `fesm2022` output and type declarations.
 >
 > **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.6** on npm.
 
@@ -547,7 +547,7 @@ By default, the datepicker input is `readonly` to prevent invalid date strings a
 **Solutions:**
 
 1. **Enable Typing (Recommended for Native Validation):**
-   Set `[allowTyping]="true"` to make the input standard editable field. This enables native browser validation tooltips and submit-blocking.
+   Typing is enabled by default (`allowTyping`). Use `[allowTyping]="false"` for click-only. With typing on, native browser validation tooltips and submit-blocking work as expected.
 
    ```html
    <ngxsmk-datepicker [allowTyping]="true" required ...></ngxsmk-datepicker>
@@ -608,7 +608,11 @@ const form = new FormGroup({
 | showTime           | boolean | false | Enables the hour/minute/AM/PM selection section. |
 | timeOnly           | boolean | false | Display time picker only (no calendar). Automatically enables `showTime`. |
 | use24Hour          | boolean | false | Enable 24-hour time format (00-23) and hide AM/PM selector. |
-| allowTyping        | boolean | false | Enable manual typing in the input field. Required for native validation. |
+| allowTyping        | boolean | true | Enable manual typing in the input field (default on in 3.0.7). Set `false` for click-only. |
+| showFormatHint     | boolean | true | Show format cue under the field (e.g. Format: MM/DD/YYYY). |
+| showRangeSummary   | boolean | true | Show Start → End summary bar in range popovers. |
+| density            | `'compact' \| 'comfortable' \| 'spacious'` | comfortable | Day-cell / spacing density. |
+| themeMode          | `'light' \| 'dark' \| 'auto'` | light | `auto` follows `prefers-color-scheme`. |
 | displayFormat      | string | null | Custom date format string (e.g., 'MM/DD/YYYY'). |
 | showCalendarButton | boolean | false | Show/hide the calendar icon button. |
 | value              | DatepickerValue | null | Programmatic value setting from code. |

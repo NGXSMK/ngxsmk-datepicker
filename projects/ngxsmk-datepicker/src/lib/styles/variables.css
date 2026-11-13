@@ -6,10 +6,10 @@
 ngxsmk-datepicker,
 .ngxsmk-popover-container,
 .ngxsmk-backdrop {
-  /* Color Palette */
-  --datepicker-primary-color: var(--ion-color-primary, #6d28d9);
+  /* Color Palette — neutral blue default (override via --datepicker-primary-color) */
+  --datepicker-primary-color: var(--ion-color-primary, #2563eb);
   --datepicker-primary-contrast: var(--ion-color-primary-contrast, #ffffff);
-  --datepicker-range-background: var(--ion-color-primary-tint, #f5f3ff);
+  --datepicker-range-background: var(--ion-color-primary-tint, #dbeafe);
   --datepicker-comparison-range-color: #f59e0b;
   --datepicker-background: var(--ion-background-color, #ffffff);
   --datepicker-text-color: var(--ion-text-color, #1f2937);
@@ -17,6 +17,12 @@ ngxsmk-datepicker,
   --datepicker-border-color: var(--ion-item-border-color, var(--ion-border-color, #e5e7eb));
   --datepicker-hover-background: #f3f4f6;
   --datepicker-shadow-focus: 0 0 0 3px color-mix(in srgb, var(--datepicker-primary-color) 15%, transparent);
+  --datepicker-focus-outline: var(--datepicker-primary-color);
+
+  /* Density (overridden by .ngxsmk-density-*) */
+  --datepicker-day-size: 40px;
+  --datepicker-day-font-size: var(--datepicker-font-size-base);
+  --datepicker-touch-min: 44px;
 
   /* Bridge internal --ngxsmk-* from public --datepicker-* */
   --ngxsmk-color-primary: var(--datepicker-primary-color);
@@ -61,11 +67,29 @@ ngxsmk-datepicker,
   --datepicker-border-radius: var(--datepicker-radius-lg);
 
   /* Transitions - Can be customized via AnimationConfig */
-  --datepicker-transition-duration: 150ms;
-  --datepicker-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --datepicker-transition-duration: 220ms;
+  /* Material 3 emphasized decelerate — snappy UI chrome */
+  --datepicker-transition-easing: cubic-bezier(0.05, 0.7, 0.1, 1);
   --datepicker-transition-property: all;
   --datepicker-transition: var(--datepicker-transition-property) var(--datepicker-transition-duration)
     var(--datepicker-transition-easing);
+
+  /*
+   * Native-phone motion tokens (iOS 17+ sheet + Material 3 large component).
+   * Overridden by .ngxsmk-motion-ios / .ngxsmk-motion-android on host/popover.
+   */
+  --datepicker-motion-sheet-duration: 420ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.32, 0.72, 0, 1); /* iOS sheet spring-out */
+  --datepicker-motion-sheet-exit-duration: 280ms;
+  --datepicker-motion-sheet-exit-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-backdrop-duration: 280ms;
+  --datepicker-motion-backdrop-easing: cubic-bezier(0.2, 0, 0, 1); /* M3 emphasized */
+  --datepicker-motion-dialog-duration: 320ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --datepicker-motion-tap-duration: 180ms;
+  --datepicker-motion-tap-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-month-duration: 280ms;
+  --datepicker-motion-month-easing: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Z-index */
   --datepicker-z-index-base: 2147483647;
@@ -76,7 +100,7 @@ ngxsmk-datepicker,
 ngxsmk-datepicker.dark-theme,
 .ngxsmk-popover-container.dark-theme,
 .ngxsmk-backdrop.dark-theme {
-  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-range-background: rgba(37, 99, 235, 0.22);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
   --datepicker-subtle-text-color: #9ca3af;
@@ -89,12 +113,50 @@ ngxsmk-datepicker.dark-theme,
 
 /* Ensure dark theme variables cascade properly to child components */
 ngxsmk-datepicker.dark-theme * {
-  --datepicker-range-background: rgba(139, 92, 246, 0.15);
+  --datepicker-range-background: rgba(37, 99, 235, 0.22);
   --datepicker-background: #1f2937;
   --datepicker-text-color: #f3f4f6;
   --datepicker-subtle-text-color: #9ca3af;
   --datepicker-border-color: #374151;
   --datepicker-hover-background: #374151;
+}
+
+/* Density presets */
+ngxsmk-datepicker.ngxsmk-density-compact,
+.ngxsmk-popover-container.ngxsmk-density-compact {
+  --datepicker-day-size: 36px;
+  --datepicker-day-font-size: 12px;
+  --datepicker-spacing-md: 8px;
+  --datepicker-spacing-lg: 12px;
+  --datepicker-font-size-base: 13px;
+}
+
+ngxsmk-datepicker.ngxsmk-density-comfortable,
+.ngxsmk-popover-container.ngxsmk-density-comfortable {
+  --datepicker-day-size: 40px;
+  --datepicker-day-font-size: 14px;
+}
+
+ngxsmk-datepicker.ngxsmk-density-spacious,
+.ngxsmk-popover-container.ngxsmk-density-spacious {
+  --datepicker-day-size: 48px;
+  --datepicker-day-font-size: 15px;
+  --datepicker-spacing-md: 14px;
+  --datepicker-spacing-lg: 18px;
+  --datepicker-font-size-base: 15px;
+}
+
+/* System color scheme when host opts into auto theme */
+@media (prefers-color-scheme: dark) {
+  ngxsmk-datepicker.ngxsmk-theme-auto:not(.dark-theme),
+  .ngxsmk-popover-container.ngxsmk-theme-auto:not(.dark-theme) {
+    --datepicker-range-background: rgba(37, 99, 235, 0.22);
+    --datepicker-background: #1f2937;
+    --datepicker-text-color: #f3f4f6;
+    --datepicker-subtle-text-color: #9ca3af;
+    --datepicker-border-color: #374151;
+    --datepicker-hover-background: #374151;
+  }
 }
 
 /* Glassmorphism UI */
@@ -263,15 +325,50 @@ ngxsmk-datepicker.md3-theme {
   }
 }
 
+/* Platform motion presets (applied from host) */
+ngxsmk-datepicker.ngxsmk-motion-ios,
+.ngxsmk-popover-container.ngxsmk-motion-ios {
+  --datepicker-motion-sheet-duration: 440ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-sheet-exit-duration: 300ms;
+  --datepicker-motion-backdrop-duration: 250ms;
+  --datepicker-motion-dialog-duration: 360ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.32, 0.72, 0, 1);
+  --datepicker-motion-tap-duration: 160ms;
+  --datepicker-transition-easing: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+ngxsmk-datepicker.ngxsmk-motion-android,
+.ngxsmk-popover-container.ngxsmk-motion-android {
+  --datepicker-motion-sheet-duration: 400ms;
+  --datepicker-motion-sheet-easing: cubic-bezier(0.05, 0.7, 0.1, 1); /* M3 emphasized decelerate */
+  --datepicker-motion-sheet-exit-duration: 250ms;
+  --datepicker-motion-sheet-exit-easing: cubic-bezier(0.3, 0, 0.8, 0.15); /* M3 emphasized accelerate */
+  --datepicker-motion-backdrop-duration: 300ms;
+  --datepicker-motion-backdrop-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-dialog-duration: 300ms;
+  --datepicker-motion-dialog-easing: cubic-bezier(0.2, 0, 0, 1);
+  --datepicker-motion-tap-duration: 200ms;
+  --datepicker-transition-easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   ngxsmk-datepicker {
     --datepicker-transition: none;
+    --datepicker-motion-sheet-duration: 0.01ms;
+    --datepicker-motion-backdrop-duration: 0.01ms;
+    --datepicker-motion-dialog-duration: 0.01ms;
+    --datepicker-motion-tap-duration: 0.01ms;
+    --datepicker-motion-month-duration: 0.01ms;
   }
 
   ngxsmk-datepicker *,
   ngxsmk-datepicker *::before,
-  ngxsmk-datepicker *::after {
+  ngxsmk-datepicker *::after,
+  .ngxsmk-popover-container *,
+  .ngxsmk-popover-container *::before,
+  .ngxsmk-popover-container *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

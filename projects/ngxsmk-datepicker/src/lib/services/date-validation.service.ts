@@ -55,7 +55,8 @@ export class DateValidationService {
       if (isDevMode()) {
         console.warn('[ngxsmk-datepicker] Error in holidayProvider.isHoliday:', error);
       }
-      return false;
+      // Fail closed — treat provider failures as holidays when disableHolidays is in play.
+      return true;
     }
   }
 

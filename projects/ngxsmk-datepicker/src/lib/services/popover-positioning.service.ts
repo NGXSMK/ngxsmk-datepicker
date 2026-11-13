@@ -1,4 +1,5 @@
-import { Injectable, isDevMode } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, isDevMode } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface PopoverPositioningOptions {
   isInlineMode: boolean;
@@ -14,6 +15,9 @@ export interface PopoverPositioningOptions {
 
 @Injectable()
 export class PopoverPositioningService {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+
   /**
    * Positions the popover relative to the input element dynamically.
    * - Prioritizes layout below the input.
@@ -29,7 +33,7 @@ export class PopoverPositioningService {
     inputGroup: HTMLElement | null,
     options: PopoverPositioningOptions
   ): void {
-    if (!popover || !inputGroup || options.isInlineMode) {
+    if (!this.isBrowser || !popover || !inputGroup || options.isInlineMode) {
       return;
     }
 

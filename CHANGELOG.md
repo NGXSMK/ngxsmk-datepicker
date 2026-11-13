@@ -2,26 +2,74 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** September 24, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added (UI/UX)
+
+- **Format hint** under the field (`[showFormatHint]`, default on) with locale/format cue for typed entry.
+- **Range summary** Start → End bar in the popover (`[showRangeSummary]`).
+- **Density** tokens: `[density]="'compact' | 'comfortable' | 'spacious'"`.
+- **Theme mode** `[themeMode]="'light' | 'dark' | 'auto'"` (auto follows `prefers-color-scheme`).
+- **Disabled-day reasons** in tooltips and aria labels (min/max/holiday/blocked).
+- Storybook stories for typed entry, dual-month range, density, auto theme, and disabled reasons.
+
+### Changed (UI/UX)
+
+- Default primary color is neutral blue (`#2563eb`) instead of purple; override via `--datepicker-primary-*`.
+- Mobile popover defaults to **bottom-sheet** (was `center`).
+- Typing in the field defaults to **enabled** (`allowTyping: true`).
+- Range mode on desktop defaults to **two months** unless `[calendarCount]` is set explicitly.
+- Presets: side rail on desktop, horizontal chips on mobile; 44px touch targets; selection pulse + quieter open motion (respects reduced motion).
+- Demo home hero: top-aligned layout; compact inline showcase (`calendarCount=1`, range summary/presets off).
+- Docs: `MIGRATION.md` + README updated for 3.0.7 UX defaults.
+
+### Improved (iOS / Android)
+
+- Mobile detection uses coarse-pointer + iPadOS (MacIntel + touch) / Android capability checks.
+- iOS-safe body scroll lock (`position: fixed` + restore scrollY) when the sheet opens.
+- Bottom-sheet dismiss drag only from handle / top chrome (won't fight content scroll).
+- `visualViewport` resize keeps the sheet above the on-screen keyboard.
+- Safe-area padding (left/right/bottom), `overscroll-behavior: contain`, 16px input font (no iOS focus zoom).
+- Sheet drag handle; selection haptics default on (`enableHapticFeedback`); `enterkeyhint` / spellcheck off for typed entry.
+- **Native-phone motion**: iOS sheet spring (`cubic-bezier(0.32, 0.72, 0, 1)`) and Material 3 emphasized curves; host classes `ngxsmk-motion-ios` / `ngxsmk-motion-android`; backdrop fade, sheet slide, tap spring, dialog present aligned to ~400ms system timings (respects `prefers-reduced-motion` + `[animationConfig]`).
+
+## [3.0.7] - 2026-11-13
+
 ### Fixed
 
-- **`autoApplyClose` ignored on emit (Issue #325)**: `emitValue()` now closes only via `shouldAutoClose()` (`autoApplyClose`, `showTime`, `timeOnly`, inline, and complete single/range/period selections). Default remains `false` (opt-in), matching API.md. With `showTime`, the popover stays open so time can be adjusted until Close. Also closes correctly for week/month/quarter/year when `autoApplyClose` is enabled ([#325](https://github.com/NGXSMK/ngxsmk-datepicker/issues/325)).
-- **Unified popover close pipeline**: Toggle, touch/pointer dismiss, outside click, and closing other open instances all go through `closeCalendarWithFocusRestore()` so `allowSameDay` finalize, focus restore, and touched state stay consistent.
+- **CustomSelect stays interactive while disabled (Issue #348)**: Disabling an open custom select closes the panel and blocks `selectOption` / `valueChange` ([#348](https://github.com/NGXSMK/ngxsmk-datepicker/issues/348), [#349](https://github.com/NGXSMK/ngxsmk-datepicker/pull/349)).
+- **Partial range equality crash**: `isValueEqual` no longer throws when comparing `{ start, end: null }` mid-range selection (host + `ValueManagementService`).
+- **Time slider Date mutation**: Start/end slider handlers clone dates before `setHours` and emit fresh instances.
+- **Disabled form control leaves calendar open**: `setDisabledState(true)` closes an open popover.
+- **Next-month not capped by `maxDate`**: Added `isNextArrowDisabled` (mirrors `isBackArrowDisabled` / `minDate`) across header, keyboard, and swipe navigation.
+- **Timezone helpers incomplete**: `parseDateWithTimezone` and `convertTimezone` now honor the target/source IANA zone for wall-clock conversion.
+- **Aria day labels ignored locale**: `getAriaLabel` uses the component `locale`.
+- **Holiday provider throw fail-open**: Constraints + deprecated `DateValidationService` now fail closed when a holiday provider throws.
+- **Focus trap stale after month change**: Focusables are re-queried on each Tab; browser/SSR guarded.
+- **Aria-live timer leaks**: Announce timeouts are tracked and cleared on destroy.
+- **NativeDateAdapter month overflow**: `addMonths` clamps Jan 31 → Feb (not March).
+- **Field sync false signal detection**: Uses Angular `isSignal` instead of treating any 0-arity function as a signal.
+- **Popover positioning SSR**: `PopoverPositioningService` no-ops outside the browser.
 
 ### Changed
 
-- **`DateSelectionService` no longer re-exported** from `ngxsmk-datepicker/services`. It was never used by the Datepicker Host (Day Selection stays on the host per CONTEXT.md); the prototype remains internal for tests only until a real Selection module lands.
-- **Signal inputs batch 3**: `showOtherMonths`, `enableKeyboardShortcuts`, `enableNaturalLanguage`, `enableAi`, `showAiSuggestions`, `enableVoiceInput`, `changeActiveMonthOnSelection`, `showWeekNumbers`, `weekNumberLabel`, `defaultMonthOffset` migrated to `input()` (consumer `[bindings]` unchanged).
+- **Calendar grid a11y**: `aria-selected` for single/range/multiple, `aria-disabled` on disabled days, roving `tabindex` tied to `focusedDate`.
+- **CustomSelect combobox**: `role="combobox"` trigger with Arrow/Home/End/typeahead/Escape, `aria-activedescendant`, and listbox options; dead scroll listener removed.
+- **Google Calendar scripts**: Loaded lazily on `initialize()`, not in the service constructor.
+- **Constraints.scan**: Exposes `scanDayCap` / `CONSTRAINTS_SCAN_DAY_CAP` and warns in dev when truncated.
+- **Services entry**: Stopped re-exporting unused `KeyboardNavigationService` prototype (tests may still import the file directly).
+- **Shared `DatepickerMode` type** + `isDatepickerValueEqual` helpers extracted for host/services reuse.
+- **CI**: Bundle size budget check (`npm run check:bundle-budget`) after production build (raw FESM budget raised to **1150 KB** for 3.0.7 mobile/motion CSS).
+- **Docs**: TIMEZONE.md updated for wall-clock parse/convert behavior (v3.0.7).
 
 ### Tests
 
-- Added `open-close-matrix.spec.ts` covering autoApplyClose × showTime × single/range/period dismiss paths.
+- Regression coverage for partial-range equality, disable-closes-calendar, maxDate next-arrow, time-slider clone-on-emit, timezone wall-clock convert/parse, CustomSelect combobox keyboard, holiday fail-closed, plus e2e smoke for combobox/listbox and next-month control.
 
 ## [3.0.6] - 2026-09-08
 

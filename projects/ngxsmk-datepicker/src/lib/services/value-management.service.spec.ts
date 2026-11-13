@@ -196,6 +196,17 @@ describe('ValueManagementService', () => {
       expect(service.isValueEqual(range1, range3)).toBe(false);
     });
 
+    it('should compare partial ranges with null end without throwing', () => {
+      const start = new Date('2024-01-15');
+      const range1: DatepickerValue = { start, end: null };
+      const range2: DatepickerValue = { start, end: null };
+      const range3: DatepickerValue = { start, end: new Date('2024-01-20') };
+
+      expect(() => service.isValueEqual(range1, range2)).not.toThrow();
+      expect(service.isValueEqual(range1, range2)).toBe(true);
+      expect(service.isValueEqual(range1, range3)).toBe(false);
+    });
+
     it('should compare date arrays', () => {
       const dates1: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-20')];
       const dates2: DatepickerValue = [new Date('2024-01-15'), new Date('2024-02-20')];

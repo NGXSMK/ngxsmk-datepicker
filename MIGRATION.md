@@ -2,11 +2,12 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** September 24, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
 
 ## Table of Contents
 
 - [Unreleased](#unreleased)
+- [v3.0.6 → v3.0.7](#v306---v307)
 - [v3.0.5 → v3.0.6](#v305---v306)
 - [v3.0.4 → v3.0.5](#v304---v305)
 - [v3.0.3 → v3.0.4](#v303---v304)
@@ -73,6 +74,62 @@ This document provides migration instructions for upgrading between major versio
 ### Behavior
 
 - **`autoApplyClose`**: `emitValue` now respects `shouldAutoClose()` (fixes [#325](https://github.com/NGXSMK/ngxsmk-datepicker/issues/325)). Default stays `false`. Apps that relied on the previous always-close-on-select bug should set `[autoApplyClose]="true"`.
+
+## v3.0.6 → v3.0.7
+
+Patch release with UX default changes. No public API removals; restore previous behavior with the inputs below if needed.
+
+### Default changes (opt out to keep old behavior)
+
+| Input / token | Before (3.0.6) | After (3.0.7) | Restore previous |
+| --- | --- | --- | --- |
+| `allowTyping` | `false` | `true` | `[allowTyping]="false"` |
+| `mobileModalStyle` | `'center'` | `'bottom-sheet'` | `[mobileModalStyle]="'center'"` |
+| Range `calendarCount` (desktop, unset) | `1` | `2` | `[calendarCount]="1"` |
+| `--datepicker-primary-color` | `#6d28d9` (purple) | `#2563eb` (blue) | Override CSS variable |
+
+### New opt-in / opt-out UX inputs
+
+- **`[showFormatHint]`** (default `true`) — format cue under the field. Hide with `[showFormatHint]="false"`.
+- **`[showRangeSummary]`** (default `true`) — Start → End bar in range popovers. Hide with `[showRangeSummary]="false"`.
+- **`[density]`** — `'compact' | 'comfortable' | 'spacious'` (default `'comfortable'`).
+- **`[themeMode]`** — `'light' | 'dark' | 'auto'` (default `'light'`; `auto` follows `prefers-color-scheme`). Legacy `[theme]` still works.
+
+### Visual / a11y (non-breaking)
+
+- Disabled days expose a reason in tooltip + aria (min/max/holiday/blocked).
+- Presets: side rail on desktop, horizontal chips on mobile; larger touch targets.
+- Quiet open / selection motion (respects `prefers-reduced-motion`).
+
+### Theme restore example
+
+```css
+ngxsmk-datepicker,
+.ngxsmk-popover-container {
+  --datepicker-primary-color: #6d28d9;
+  --datepicker-range-background: #f5f3ff;
+}
+```
+
+### Compact inline / marketing embed tip
+
+```html
+<ngxsmk-datepicker
+  mode="range"
+  [inline]="true"
+  [calendarCount]="1"
+  [showRangeSummary]="false"
+  [showRanges]="false"
+></ngxsmk-datepicker>
+```
+
+### Mobile (iOS / Android)
+
+- Detection now treats **iPadOS** (desktop UA + touch) and coarse-pointer devices as mobile.
+- Background scroll is locked more aggressively on iOS while open; no app change required.
+- `[enableHapticFeedback]` defaults to **`true`** (Android vibration API). Opt out with `[enableHapticFeedback]="false"`.
+- Prefer `[mobileModalStyle]="'bottom-sheet'"` (now the default) on phones; use `'fullscreen'` for dense range + time UIs.
+- Animations follow latest phone curves (iOS sheet spring / Material 3 emphasized). Customize with `[animationConfig]` or CSS vars `--datepicker-motion-sheet-*` / `--datepicker-motion-dialog-*`. Disable via `[animationConfig]="{ enabled: false }"` or `prefers-reduced-motion`.
 
 ## v3.0.5 → v3.0.6
 

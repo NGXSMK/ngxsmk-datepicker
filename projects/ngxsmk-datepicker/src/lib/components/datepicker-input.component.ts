@@ -90,6 +90,11 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [attr.aria-required]="required"
             [attr.aria-invalid]="errorState"
             [attr.aria-describedby]="ariaDescribedBy"
+            [attr.inputmode]="allowTyping ? 'text' : null"
+            [attr.enterkeyhint]="allowTyping ? 'done' : null"
+            [attr.autocapitalize]="'off'"
+            [attr.autocorrect]="'off'"
+            [attr.spellcheck]="false"
             class="ngxsmk-display-input"
             [ngClass]="classes?.input"
             (keydown.enter)="onInputKeyDown($event)"
@@ -148,6 +153,11 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             </button>
           }
         </div>
+        @if (formatHint) {
+          <div class="ngxsmk-format-hint" [id]="formatHintId" [attr.aria-hidden]="false">
+            {{ formatHint }}
+          </div>
+        }
         @if (validationErrorMessage) {
           <div class="ngxsmk-validation-error" role="alert" [attr.aria-live]="'polite'">
             {{ validationErrorMessage }}
@@ -183,6 +193,9 @@ export class NgxsmkDatepickerInputComponent {
   @Input() showCalendarButton: boolean = false;
   @Input() calendarAriaLabel: string = '';
   @Input() validationErrorMessage: string | null = null;
+  /** Visible format cue under the field (e.g. "Format: MM/DD/YYYY"). */
+  @Input() formatHint: string | null = null;
+  @Input() formatHintId: string = '';
 
   @Output() nativeInputChange = new EventEmitter<Event>();
   @Output() inputBlur = new EventEmitter<FocusEvent>();

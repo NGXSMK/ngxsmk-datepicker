@@ -21,6 +21,21 @@ describe('Timezone Utils', () => {
 
       expect(result).toBeInstanceOf(Date);
     });
+
+    it('should interpret wall-clock strings in the provided timezone', () => {
+      const result = parseDateWithTimezone('2025-06-15T12:00:00', 'America/New_York');
+      expect(result).toBeInstanceOf(Date);
+
+      const nyFormatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+      const parts = nyFormatter.formatToParts(result!);
+      expect(parts.find((p) => p.type === 'hour')?.value).toBe('12');
+      expect(parts.find((p) => p.type === 'minute')?.value).toBe('00');
+    });
   });
 
   describe('convertTimezone', () => {
@@ -29,6 +44,24 @@ describe('Timezone Utils', () => {
       const result = convertTimezone(date, 'UTC', 'America/New_York');
 
       expect(result).toBeInstanceOf(Date);
+    });
+
+    it('should preserve wall-clock time in the target timezone', () => {
+      const date = new Date('2025-06-15T12:00:00Z');
+      const result = convertTimezone(date, 'UTC', 'America/New_York');
+
+      const nyFormatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+      const parts = nyFormatter.formatToParts(result);
+      const hour = parts.find((p) => p.type === 'hour')?.value;
+      const minute = parts.find((p) => p.type === 'minute')?.value;
+
+      expect(hour).toBe('12');
+      expect(minute).toBe('00');
     });
   });
 

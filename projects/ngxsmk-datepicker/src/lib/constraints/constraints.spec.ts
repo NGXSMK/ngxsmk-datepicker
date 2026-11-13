@@ -131,14 +131,19 @@ describe('Constraints Snapshot', () => {
     }
   });
 
-  it('fails open when holidayProvider throws', () => {
+  it('fails closed when holidayProvider throws', () => {
+    const day = d(2026, 0, 1);
     const snap = Constraints.build(
       sources({
         disableHolidays: true,
         holidayProvider: new TestHolidays({}, true),
       })
     );
-    expect(snap.isAllowed(d(2026, 0, 1))).toBe(true);
+    expect(snap.isAllowed(day)).toBe(false);
+    expect(snap.evaluate(day)).toEqual({
+      allowed: false,
+      denial: { code: 'holiday', date: day, label: null },
+    });
   });
 
   it('denies via isInvalidDate adapter and fails closed on throw', () => {

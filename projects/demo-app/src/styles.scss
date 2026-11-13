@@ -299,7 +299,7 @@ body {
   flex: 1;
   min-height: 0;
   margin-left: var(--sidebar-width);
-  padding: 2rem 2.25rem;
+  padding: 1.25rem 2.25rem 2rem;
   max-width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -309,20 +309,20 @@ body {
   background-image: none;
 
   @media (min-width: 1440px) {
-    padding: var(--space-2xl) var(--space-3xl);
+    padding: 1.5rem var(--space-3xl) var(--space-2xl);
   }
 
   @media (max-width: 1200px) {
-    padding: 1.5rem 1.5rem;
+    padding: 1.15rem 1.5rem 1.5rem;
   }
 
   @media (max-width: 1024px) {
     margin-left: 0;
-    padding: var(--space-md) var(--space-sm);
+    padding: var(--space-sm) var(--space-sm) var(--space-md);
   }
 
   @media (max-width: 320px) {
-    padding: var(--space-sm) var(--space-xs);
+    padding: var(--space-xs) var(--space-xs) var(--space-sm);
   }
 }
 

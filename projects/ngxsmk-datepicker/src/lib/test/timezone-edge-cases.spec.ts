@@ -353,9 +353,15 @@ describe('Timezone Utils - Edge Cases & Coverage', () => {
       const result = convertTimezone(date, 'UTC', 'America/New_York');
 
       expect(result).toBeInstanceOf(Date);
-      // Minutes, seconds, milliseconds should be preserved
-      expect(result.getMinutes()).toBe(30);
-      expect(result.getSeconds()).toBe(45);
+      // Assert wall-clock in the target zone (local getters depend on the runner TZ).
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/New_York',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      }).formatToParts(result);
+      expect(parts.find((p) => p.type === 'minute')?.value).toBe('30');
+      expect(parts.find((p) => p.type === 'second')?.value).toBe('45');
     });
 
     it('should handle leap day conversion', () => {

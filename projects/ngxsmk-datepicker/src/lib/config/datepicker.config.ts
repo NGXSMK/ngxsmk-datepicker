@@ -14,7 +14,10 @@ export interface DatepickerConfig {
   dateAdapter?: DateAdapter;
   animations?: AnimationConfig;
   autoDetectMobile?: boolean;
+  /** Defaults to `bottom-sheet` when provided via host / global config. */
   mobileModalStyle?: 'bottom-sheet' | 'center' | 'fullscreen';
+  /** Visual density for day cells and spacing. */
+  density?: 'compact' | 'comfortable' | 'spacious';
   /**
    * When `false`, disables all viewport-based responsive/mobile layout overrides
    * (the `@media (max-width: …)` rules that force the mobile center-dialog presentation).
@@ -47,8 +50,10 @@ export interface MobileConfig {
 
 export const DEFAULT_ANIMATION_CONFIG: Required<AnimationConfig> = {
   enabled: true,
-  duration: 150,
-  easing: 'ease-in-out',
+  /** Aligns with Material 3 / iOS interactive control timing. */
+  duration: 220,
+  /** Material 3 emphasized decelerate — matches modern phone UI chrome. */
+  easing: 'cubic-bezier(0.05, 0.7, 0.1, 1)',
   property: 'all',
   respectReducedMotion: true,
 };

@@ -61,6 +61,8 @@ import { NgxsmkDatepickerContentComponent } from './components/datepicker-conten
 import { NgxsmkDatepickerKeyboardHelpComponent } from './components/keyboard-help.component';
 import { createDateComparator } from './utils/performance.utils';
 import { DatepickerHooks, KeyboardShortcutContext } from './interfaces/datepicker-hooks.interface';
+import type { DatepickerMode } from './types/datepicker-mode';
+import { isDatepickerValueEqual } from './utils/value-equality.utils';
 import {
   DATEPICKER_CONFIG,
   DatepickerConfig,
@@ -86,6 +88,7 @@ import { Subject, Observable, isObservable, firstValueFrom } from 'rxjs';
 import { DatepickerClasses } from './interfaces/datepicker-classes.interface';
 import { NaturalLanguageParserService } from './services/natural-language-parser.service';
 import { Constraints, EMPTY_CONSTRAINTS_SOURCES, type ConstraintsSnapshot } from './constraints/constraints';
+import { isAndroid, isIOSFamily, isMobileLikeDevice } from './utils/mobile-platform.utils';
 
 /** Recurring date pattern configuration for disabled dates. */
 export type RecurringPatternInput = {
@@ -164,6 +167,12 @@ export type AiDateResolver = (
   styleUrls: ['./styles/variables.css', './styles/datepicker.css'],
   host: {
     '[class.ngxsmk-inline]': 'isInlineMode',
+    '[class.ngxsmk-density-compact]': 'density() === "compact"',
+    '[class.ngxsmk-density-comfortable]': 'density() === "comfortable"',
+    '[class.ngxsmk-density-spacious]': 'density() === "spacious"',
+    '[class.ngxsmk-theme-auto]': 'themeMode() === "auto"',
+    '[class.ngxsmk-motion-ios]': 'motionPlatform === "ios"',
+    '[class.ngxsmk-motion-android]': 'motionPlatform === "android"',
   },
   template: `
     <div
@@ -193,7 +202,7 @@ export type AiDateResolver = (
             [minDateNative]="getMinDateForNativeInput()"
             [maxDateNative]="getMaxDateForNativeInput()"
             [ariaLabel]="placeholder || getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
-            [ariaDescribedBy]="'datepicker-help-' + _uniqueId"
+            [ariaDescribedBy]="inputAriaDescribedBy"
             [errorState]="errorState"
             [clearAriaLabel]="_clearAriaLabel"
             [clearLabel]="_clearLabel"
@@ -204,6 +213,8 @@ export type AiDateResolver = (
             [showCalendarButton]="showCalendarButton"
             [calendarAriaLabel]="getTranslation(timeOnly ? 'selectTime' : 'selectDate')"
             [validationErrorMessage]="validationErrorMessage"
+            [formatHint]="formatHintText"
+            [formatHintId]="'datepicker-format-' + _uniqueId"
             (nativeInputChange)="onNativeInputChange($event)"
             (inputBlur)="onInputBlur($event)"
             (clearValue)="clearValue($event)"
@@ -242,7 +253,10 @@ export type AiDateResolver = (
           [isCalendarOpen]="_isCalendarOpen()"
           [isInlineMode]="isInlineMode"
           [shouldAppendToBody]="_shouldAppendToBody"
-          [theme]="theme"
+          [theme]="resolvedTheme"
+          [themeAuto]="themeMode() === 'auto'"
+          [density]="density()"
+          [motionPlatform]="motionPlatform"
           [popoverId]="popoverId"
           [classes]="classes()"
           [timeOnly]="timeOnly"
@@ -256,12 +270,13 @@ export type AiDateResolver = (
           [showRanges]="showRanges() || showPresets()"
           [rangesArray]="rangesArray"
           [selectedRange]="[startDate, endDate]"
+          [showRangeSummary]="showRangeSummary()"
           [showTimezoneSelector]="showTimezoneSelector()"
           [timezoneOptions]="getTimezoneOptions()"
           [currentTimezone]="timezone || defaultTimezone"
           [mode]="mode"
           [disabled]="disabled"
-          [calendarCount]="calendarCount"
+          [calendarCount]="effectiveCalendarCount"
           [calendarLayout]="calendarLayout"
           [syncScrollEnabled]="syncScroll().enabled ?? false"
           [calendarMonths]="renderedCalendars()"
@@ -284,6 +299,7 @@ export type AiDateResolver = (
           [yearOptions]="yearOptions()"
           [currentYear]="_currentYearSignal()"
           [isBackArrowDisabled]="isBackArrowDisabled"
+          [isNextArrowDisabled]="isNextArrowDisabled"
           [prevMonthAriaLabel]="_prevMonthAriaLabel"
           [nextMonthAriaLabel]="_nextMonthAriaLabel"
           [yearGrid]="yearGrid"
@@ -539,7 +555,7 @@ export class NgxsmkDatepickerComponent
 
   public _uniqueId = `ngxsmk-datepicker-${NgxsmkDatepickerComponent._idCounter++}`;
 
-  @Input() mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' | 'timeRange' = 'single';
+  @Input() mode: DatepickerMode = 'single';
 
   @Input() calendarViewMode: 'month' | 'year' | 'decade' | 'timeline' | 'time-slider' = 'month';
   private _isInvalidDate: (date: Date) => boolean = () => false;
@@ -731,7 +747,25 @@ export class NgxsmkDatepickerComponent
    */
   readonly allowSameDay = input<boolean>(false);
   @Input() displayFormat?: string;
-  @Input() allowTyping: boolean = false;
+  /**
+   * Allow typing dates into the field. Defaults to `true` for better UX
+   * (manual entry is often faster than calendar tapping for distant dates).
+   */
+  @Input() allowTyping: boolean = true;
+  /**
+   * Show a locale/format hint under the input (e.g. "Format: MM/DD/YYYY").
+   * Defaults to `true` when typing is allowed and the picker is not native.
+   */
+  readonly showFormatHint = input(true, { transform: booleanAttribute });
+  /** Show Start → End summary bar inside the range popover. Default `true`. */
+  readonly showRangeSummary = input(true, { transform: booleanAttribute });
+  /** Visual density for day cells and spacing. */
+  readonly density = input<'compact' | 'comfortable' | 'spacious'>('comfortable');
+  /**
+   * Color theme mode. `auto` follows `prefers-color-scheme` via CSS; `light`/`dark`
+   * force the corresponding theme (and still honor the legacy `[theme]` input).
+   */
+  readonly themeMode = input<'light' | 'dark' | 'auto'>('light');
   /**
    * Guided input masking while typing (requires `allowTyping`).
    *
@@ -795,7 +829,9 @@ export class NgxsmkDatepickerComponent
   }
 
   private _calendarCount: number = 1;
+  private _calendarCountExplicit = false;
   @Input() set calendarCount(value: number) {
+    this._calendarCountExplicit = true;
     const coerced = typeof value === 'string' ? Number.parseInt(value, 10) : Number(value);
     const n = Number.isFinite(coerced) ? coerced : Number.NaN;
     // Clamp calendarCount to valid range (1-12) for performance
@@ -817,6 +853,16 @@ export class NgxsmkDatepickerComponent
     }
   }
   get calendarCount(): number {
+    return this._calendarCount;
+  }
+  /**
+   * Effective month count: range mode on desktop defaults to 2 calendars unless
+   * `[calendarCount]` was set explicitly (or the device is mobile / time-only).
+   */
+  get effectiveCalendarCount(): number {
+    if (!this._calendarCountExplicit && this.mode === 'range' && !this.timeOnly && !this.isMobileDevice()) {
+      return Math.max(this._calendarCount, 2);
+    }
     return this._calendarCount;
   }
   @Input() calendarLayout: 'horizontal' | 'vertical' | 'auto' = 'auto';
@@ -880,8 +926,10 @@ export class NgxsmkDatepickerComponent
   @Input() align: 'left' | 'right' | 'center' = 'left';
 
   @Input() useNativePicker: boolean = false;
-  readonly enableHapticFeedback = input<boolean>(false);
-  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'center';
+  /** Light selection / confirmation vibration on supported Android (and some WebViews). Default on. */
+  readonly enableHapticFeedback = input<boolean>(true);
+  /** Mobile presentation. Defaults to bottom-sheet for native-feeling mobile UX. */
+  @Input() mobileModalStyle: 'bottom-sheet' | 'center' | 'fullscreen' = 'bottom-sheet';
   @Input() mobileTimePickerStyle: 'wheel' | 'slider' | 'native' = 'slider';
   readonly enablePullToRefresh = input<boolean>(false);
   readonly mobileTheme = input<'compact' | 'comfortable' | 'spacious'>('comfortable');
@@ -1110,7 +1158,28 @@ export class NgxsmkDatepickerComponent
 
   @Input() theme: 'light' | 'dark' = 'light';
   @HostBinding('class.dark-theme') get isDarkMode() {
-    return this.theme === 'dark';
+    return this.resolvedTheme === 'dark';
+  }
+  /** Theme passed to the popover (honors `themeMode` + legacy `theme`). */
+  get resolvedTheme(): 'light' | 'dark' {
+    if (this.themeMode() === 'dark') return 'dark';
+    if (this.themeMode() === 'auto') return this.theme;
+    return this.theme;
+  }
+  /** Visible format hint under the field, or null when hidden. */
+  get formatHintText(): string | null {
+    if (!this.showFormatHint() || this.shouldUseNativePicker() || this.timeOnly || this.isInlineMode) {
+      return null;
+    }
+    const format = this.displayFormat || this._dateFormatPattern || 'MM/DD/YYYY';
+    return this.getTranslation('formatHint', undefined, { format }) || `Format: ${format}`;
+  }
+  get inputAriaDescribedBy(): string {
+    const parts = [`datepicker-help-${this._uniqueId}`];
+    if (this.formatHintText) {
+      parts.push(`datepicker-format-${this._uniqueId}`);
+    }
+    return parts.join(' ');
   }
 
   private _dateFormatPattern: string | null = null;
@@ -1409,7 +1478,12 @@ export class NgxsmkDatepickerComponent
   private bottomSheetSwipeStartY: number = 0;
   private bottomSheetSwipeCurrentY: number = 0;
   private isBottomSheetSwiping: boolean = false;
+  private bottomSheetSwipeAllowed = false;
   private readonly bottomSheetSwipeThreshold: number = 100;
+  /** Saved scroll Y for iOS/Android body lock restore. */
+  private _scrollLockY = 0;
+  private _bodyScrollLocked = false;
+  private _visualViewportCleanup: (() => void) | null = null;
 
   // Note: isCalendarSwiping is now in touchState
   private readonly SWIPE_THRESHOLD = 50;
@@ -1730,7 +1804,7 @@ export class NgxsmkDatepickerComponent
     const month = this._currentMonthSignal();
     const year = this._currentYearSignal();
     const visibleStart = new Date(year, month, 1);
-    const visibleEnd = getEndOfMonth(new Date(year, month + Math.max(this.calendarCount - 1, 0), 1));
+    const visibleEnd = getEndOfMonth(new Date(year, month + Math.max(this.effectiveCalendarCount - 1, 0), 1));
 
     const requestId = ++this._asyncFilterRequestId;
     this.asyncDateFilterLoading.emit(true);
@@ -1943,32 +2017,26 @@ export class NgxsmkDatepickerComponent
     if (!this.autoDetectMobile) {
       return false;
     }
-    if (this.isBrowser) {
-      try {
-        const mediaQuery = globalThis.matchMedia('(max-width: 1024px)');
-        const isMobileWidth = mediaQuery?.matches ?? false;
-        const hasTouchSupport =
-          'ontouchstart' in globalThis ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0);
-        const hasPointerEvents = 'onpointerdown' in globalThis;
-        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        );
-
-        return (
-          isMobileWidth ||
-          (hasTouchSupport && isMobileWidth) ||
-          (hasPointerEvents && isMobileWidth) ||
-          isMobileUserAgent
-        );
-      } catch {
-        return (
-          'ontouchstart' in globalThis ||
-          ('maxTouchPoints' in navigator && (navigator as Navigator & { maxTouchPoints?: number }).maxTouchPoints > 0)
-        );
-      }
+    if (!this.isBrowser) {
+      return false;
     }
-    return false;
+    try {
+      return isMobileLikeDevice({ maxWidthPx: 1024 });
+    } catch {
+      return false;
+    }
+  }
+
+  /** Native-feel motion preset for latest iOS / Android curves. */
+  get motionPlatform(): 'ios' | 'android' | 'default' {
+    if (!this.isBrowser) return 'default';
+    try {
+      if (isIOSFamily()) return 'ios';
+      if (isAndroid()) return 'android';
+    } catch {
+      /* ignore */
+    }
+    return 'default';
   }
 
   public shouldUseNativePicker(): boolean {
@@ -2043,11 +2111,20 @@ export class NgxsmkDatepickerComponent
       return;
     }
     const touch = event.touches[0];
-    if (touch) {
-      this.bottomSheetSwipeStartY = touch.clientY;
-      this.bottomSheetSwipeCurrentY = touch.clientY;
-      this.isBottomSheetSwiping = false;
-    }
+    if (!touch) return;
+
+    const popoverContainer = this.getActualPopoverContainer();
+    // Only allow dismiss-drag from the handle / top chrome, or when sheet is scrolled to top.
+    // Prevents fighting content scroll on iOS/Android.
+    const target = event.target as HTMLElement | null;
+    const fromHandle =
+      !!target?.closest?.('.ngxsmk-sheet-handle, .ngxsmk-range-summary, .ngxsmk-header, .ngxsmk-showcase-bar') ||
+      (popoverContainer ? touch.clientY - popoverContainer.getBoundingClientRect().top < 56 : false);
+    const atScrollTop = !popoverContainer || popoverContainer.scrollTop <= 0;
+    this.bottomSheetSwipeAllowed = fromHandle || atScrollTop;
+    this.bottomSheetSwipeStartY = touch.clientY;
+    this.bottomSheetSwipeCurrentY = touch.clientY;
+    this.isBottomSheetSwiping = false;
   }
 
   public onBottomSheetTouchMove(event: TouchEvent): void {
@@ -2055,7 +2132,8 @@ export class NgxsmkDatepickerComponent
       !this.isMobileDevice() ||
       this.mobileModalStyle !== 'bottom-sheet' ||
       this.isInlineMode ||
-      !this.isCalendarOpen
+      !this.isCalendarOpen ||
+      !this.bottomSheetSwipeAllowed
     ) {
       return;
     }
@@ -2071,7 +2149,8 @@ export class NgxsmkDatepickerComponent
       if (this.isBottomSheetSwiping && deltaY > 0) {
         const popoverContainer = this.getActualPopoverContainer();
         if (popoverContainer) {
-          popoverContainer.style.transform = `translateY(${deltaY}px)`;
+          // Use translate3d for smoother compositing on iOS
+          popoverContainer.style.transform = `translate3d(0, ${deltaY}px, 0)`;
           const opacity = Math.max(0, 1 - deltaY / 300);
           popoverContainer.style.opacity = String(opacity);
         }
@@ -2079,17 +2158,17 @@ export class NgxsmkDatepickerComponent
     }
   }
 
-  public onBottomSheetTouchEnd(event: TouchEvent): void {
+  public onBottomSheetTouchEnd(_event: TouchEvent): void {
     if (
       !this.isMobileDevice() ||
       this.mobileModalStyle !== 'bottom-sheet' ||
       this.isInlineMode ||
       !this.isCalendarOpen
     ) {
+      this.bottomSheetSwipeAllowed = false;
       return;
     }
-    const touch = event.changedTouches[0];
-    if (touch && this.isBottomSheetSwiping) {
+    if (this.isBottomSheetSwiping) {
       const deltaY = this.bottomSheetSwipeCurrentY - this.bottomSheetSwipeStartY;
 
       if (deltaY > this.bottomSheetSwipeThreshold) {
@@ -2101,11 +2180,12 @@ export class NgxsmkDatepickerComponent
         popoverContainer.style.transform = '';
         popoverContainer.style.opacity = '';
       }
-
-      this.bottomSheetSwipeStartY = 0;
-      this.bottomSheetSwipeCurrentY = 0;
-      this.isBottomSheetSwiping = false;
     }
+
+    this.bottomSheetSwipeStartY = 0;
+    this.bottomSheetSwipeCurrentY = 0;
+    this.isBottomSheetSwiping = false;
+    this.bottomSheetSwipeAllowed = false;
   }
 
   // Bind methods for child components to preserve 'this' context
@@ -2335,6 +2415,12 @@ export class NgxsmkDatepickerComponent
     if (!this._minDate) return false;
     const firstDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth, 1);
     return firstDayOfCurrentMonth <= this._minDate;
+  }
+
+  get isNextArrowDisabled(): boolean {
+    if (!this._maxDate) return false;
+    const lastDayOfCurrentMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+    return lastDayOfCurrentMonth >= this._maxDate;
   }
   private adjustDisplayedDateToRange(): void {
     let yearChanged = false;
@@ -3151,6 +3237,7 @@ export class NgxsmkDatepickerComponent
 
   private navigateMonth(delta: number): void {
     if (delta < 0 && this.isBackArrowDisabled) return;
+    if (delta > 0 && this.isNextArrowDisabled) return;
 
     const baseDate = this.focusedDate || this.selectedDate || this.currentDate || new Date();
     const targetMonthDate = addMonths(new Date(baseDate.getFullYear(), baseDate.getMonth(), 1), delta);
@@ -3399,6 +3486,9 @@ export class NgxsmkDatepickerComponent
       if (customTooltip !== null) return customTooltip;
     }
 
+    const unavailable = this.getDisabledReason(day);
+    if (unavailable) return unavailable;
+
     return this.getDayMetadata(day)?.tooltip ?? holidayLabel;
   }
 
@@ -3431,12 +3521,53 @@ export class NgxsmkDatepickerComponent
       return this.hooks.formatAriaLabel(day);
     }
 
-    return day.toLocaleDateString('en-US', {
+    const base = day.toLocaleDateString(this._locale || 'en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
+    const reason = this.getDisabledReason(day);
+    return reason ? `${base}, ${reason}` : base;
+  }
+
+  /** Human-readable reason a day is unavailable (min/max/holiday/blocked), or null. */
+  getDisabledReason(day: Date | null): string | null {
+    if (!day) return null;
+    const verdict = this._constraintsSnap.evaluate(day);
+    if (verdict.allowed) return null;
+    const denial = verdict.denial;
+    switch (denial.code) {
+      case 'min': {
+        const minFormatted = denial.min.toLocaleDateString(this._locale || 'en-US');
+        return (
+          this.getTranslation('dateUnavailableMin', undefined, { minDate: minFormatted }) ||
+          this.getTranslation('dateBeforeMin', undefined, { minDate: minFormatted }) ||
+          `Before minimum date (${minFormatted})`
+        );
+      }
+      case 'max': {
+        const maxFormatted = denial.max.toLocaleDateString(this._locale || 'en-US');
+        return (
+          this.getTranslation('dateUnavailableMax', undefined, { maxDate: maxFormatted }) ||
+          this.getTranslation('dateAfterMax', undefined, { maxDate: maxFormatted }) ||
+          `After maximum date (${maxFormatted})`
+        );
+      }
+      case 'holiday': {
+        const label = denial.label ? `: ${denial.label}` : '';
+        return (
+          this.getTranslation('dateUnavailableHoliday', undefined, { label }) ||
+          `${this.getTranslation('holiday') || 'Holiday'}${label}`
+        );
+      }
+      case 'disabledDate':
+      case 'disabledRange':
+      case 'asyncDisabled':
+      case 'invalidDate':
+      default:
+        return this.getTranslation('dateUnavailableBlocked') || this.getTranslation('dateUnavailable') || 'Unavailable';
+    }
   }
 
   /**
@@ -3495,6 +3626,9 @@ export class NgxsmkDatepickerComponent
   setDisabledState(isDisabled: boolean): void {
     if (this.disabled !== isDisabled) {
       this.disabled = isDisabled;
+      if (isDisabled && this.isCalendarOpen) {
+        this.closeCalendar();
+      }
       this.stateChanges.next();
     }
   }
@@ -3758,6 +3892,8 @@ export class NgxsmkDatepickerComponent
     }
 
     this._isCalendarOpening.set(true);
+    // Always lock background scroll on mobile (not only when appendToBody).
+    this.lockBodyScroll();
 
     if (this._shouldAppendToBody) {
       this.renderInBody();
@@ -3792,6 +3928,8 @@ export class NgxsmkDatepickerComponent
 
     if (this.portalViewRef) {
       this.destroyBodyView();
+    } else {
+      this.unlockBodyScroll();
     }
 
     if (this.openCalendarTimeoutId) {
@@ -3828,15 +3966,89 @@ export class NgxsmkDatepickerComponent
   }
 
   private lockBodyScroll(): void {
-    if (!this.isBrowser || this.isInlineMode) return;
-    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
-      document.body.classList.add('ngxsmk-scroll-locked');
+    if (!this.isBrowser || this.isInlineMode || this._bodyScrollLocked) return;
+    if (!this.isMobileDevice()) return;
+
+    this._bodyScrollLocked = true;
+    this._scrollLockY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.documentElement.classList.add('ngxsmk-scroll-locked');
+    document.body.classList.add('ngxsmk-scroll-locked');
+
+    // iOS Safari ignores overflow:hidden on body unless position:fixed is applied.
+    if (isIOSFamily()) {
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${this._scrollLockY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
     }
+
+    this.bindVisualViewportForMobileSheet();
   }
 
   private unlockBodyScroll(): void {
-    if (!this.isBrowser) return;
+    if (!this.isBrowser || !this._bodyScrollLocked) {
+      this.unbindVisualViewportForMobileSheet();
+      return;
+    }
+    this._bodyScrollLocked = false;
+    document.documentElement.classList.remove('ngxsmk-scroll-locked');
     document.body.classList.remove('ngxsmk-scroll-locked');
+
+    if (isIOSFamily()) {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, this._scrollLockY);
+    }
+
+    this.unbindVisualViewportForMobileSheet();
+  }
+
+  /**
+   * Keep bottom-sheet / fullscreen popovers inside the visible viewport when the
+   * on-screen keyboard opens (iOS Safari + Android Chrome).
+   */
+  private bindVisualViewportForMobileSheet(): void {
+    if (!this.isBrowser || this._visualViewportCleanup) return;
+    const vv = window.visualViewport;
+    if (!vv || this.isInlineMode) return;
+
+    const apply = (): void => {
+      if (!this.isCalendarOpen || !this.isMobileDevice()) return;
+      const popover = this.getActualPopoverContainer();
+      if (!popover) return;
+      const offsetTop = vv.offsetTop || 0;
+      const height = vv.height || window.innerHeight;
+      popover.style.setProperty('--ngxsmk-vv-offset-top', `${offsetTop}px`);
+      popover.style.setProperty('--ngxsmk-vv-height', `${height}px`);
+      if (this.mobileModalStyle === 'fullscreen' || this.mobileModalStyle === 'bottom-sheet') {
+        popover.style.maxHeight = `min(90dvh, calc(${height}px - env(safe-area-inset-bottom, 0px)))`;
+      }
+    };
+
+    vv.addEventListener('resize', apply);
+    vv.addEventListener('scroll', apply);
+    apply();
+    this._visualViewportCleanup = () => {
+      vv.removeEventListener('resize', apply);
+      vv.removeEventListener('scroll', apply);
+      const popover = this.getActualPopoverContainer();
+      if (popover) {
+        popover.style.removeProperty('--ngxsmk-vv-offset-top');
+        popover.style.removeProperty('--ngxsmk-vv-height');
+        popover.style.maxHeight = '';
+      }
+      this._visualViewportCleanup = null;
+    };
+  }
+
+  private unbindVisualViewportForMobileSheet(): void {
+    if (this._visualViewportCleanup) {
+      this._visualViewportCleanup();
+    }
   }
 
   /** Hides the body-appended popover so loading/calendar are not visible at wrong position. */
@@ -4010,7 +4222,10 @@ export class NgxsmkDatepickerComponent
   private _updateToday(): void {
     let now = new Date();
     if (this.timezone && isValidTimezone(this.timezone)) {
-      now = convertTimezone(now, this.timezone, '');
+      // Map "now" wall-clock in the configured timezone into the runtime local zone
+      // so getStartOfDay() reflects that calendar day.
+      const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      now = convertTimezone(now, this.timezone, localZone);
     }
     this.today = getStartOfDay(now);
     this.updateRangesArray();
@@ -4867,35 +5082,7 @@ export class NgxsmkDatepickerComponent
    * normalize times to start of day for accurate day-level equality.
    */
   private isValueEqual(val1: DatepickerValue, val2: DatepickerValue): boolean {
-    if (val1 === val2) return true;
-    if (val1 === null || val2 === null) return val1 === val2;
-
-    if (val1 instanceof Date && val2 instanceof Date) {
-      return val1.getTime() === val2.getTime();
-    }
-
-    if (
-      typeof val1 === 'object' &&
-      typeof val2 === 'object' &&
-      'start' in val1 &&
-      'end' in val1 &&
-      'start' in val2 &&
-      'end' in val2
-    ) {
-      const r1 = val1 as { start: Date; end: Date };
-      const r2 = val2 as { start: Date; end: Date };
-      return r1.start.getTime() === r2.start.getTime() && r1.end.getTime() === r2.end.getTime();
-    }
-
-    if (Array.isArray(val1) && Array.isArray(val2)) {
-      if (val1.length !== val2.length) return false;
-      return val1.every((d1, i) => {
-        const d2 = val2[i];
-        return d1?.getTime() === d2?.getTime();
-      });
-    }
-
-    return false;
+    return isDatepickerValueEqual(val1, val2);
   }
 
   /**
@@ -5703,6 +5890,10 @@ export class NgxsmkDatepickerComponent
 
     this._syncTimeAfterDateClick();
 
+    if (this.enableHapticFeedback() && this.isMobileDevice()) {
+      this.hapticFeedbackService.selection();
+    }
+
     if (this.hooks?.afterDateSelect) {
       this.hooks.afterDateSelect(day, this._value);
     }
@@ -6030,7 +6221,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode as any,
+        mode: this.mode,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6066,7 +6257,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode as any,
+        mode: this.mode,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6091,7 +6282,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode as any,
+        mode: this.mode,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6133,7 +6324,7 @@ export class NgxsmkDatepickerComponent
     this.daysInMonth = [];
     this.multiCalendarMonths = [];
 
-    const count = Math.max(1, Math.min(this.calendarCount || 1, 12));
+    const count = Math.max(1, Math.min(this.effectiveCalendarCount || 1, 12));
     const baseYear = this.currentDate.getFullYear();
     const baseMonth = this.currentDate.getMonth();
     this._currentMonth = baseMonth;
@@ -6395,12 +6586,21 @@ export class NgxsmkDatepickerComponent
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (this.startDate) {
-      this.startDate.setHours(hours, mins, 0, 0);
-      if (this.endDate && this.startDate > this.endDate) {
-        this.endDate.setHours(hours, mins, 0, 0);
+      const nextStart = new Date(this.startDate.getTime());
+      nextStart.setHours(hours, mins, 0, 0);
+      this.startDate = nextStart;
+
+      if (this.endDate && nextStart > this.endDate) {
+        const nextEnd = new Date(this.endDate.getTime());
+        nextEnd.setHours(hours, mins, 0, 0);
+        this.endDate = nextEnd;
       }
+
       if (this.startDate && this.endDate) {
-        this.emitValue({ start: this.startDate, end: this.endDate });
+        this.emitValue({
+          start: new Date(this.startDate.getTime()),
+          end: new Date(this.endDate.getTime()),
+        });
       }
     }
     this.cdr.markForCheck();
@@ -6411,12 +6611,21 @@ export class NgxsmkDatepickerComponent
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     if (this.endDate) {
-      this.endDate.setHours(hours, mins, 0, 0);
-      if (this.startDate && this.endDate < this.startDate) {
-        this.startDate.setHours(hours, mins, 0, 0);
+      const nextEnd = new Date(this.endDate.getTime());
+      nextEnd.setHours(hours, mins, 0, 0);
+      this.endDate = nextEnd;
+
+      if (this.startDate && nextEnd < this.startDate) {
+        const nextStart = new Date(this.startDate.getTime());
+        nextStart.setHours(hours, mins, 0, 0);
+        this.startDate = nextStart;
       }
+
       if (this.startDate && this.endDate) {
-        this.emitValue({ start: this.startDate, end: this.endDate });
+        this.emitValue({
+          start: new Date(this.startDate.getTime()),
+          end: new Date(this.endDate.getTime()),
+        });
       }
     }
     this.cdr.markForCheck();
@@ -6436,7 +6645,7 @@ export class NgxsmkDatepickerComponent
       this.touchState,
       {
         disabled: this.disabled,
-        mode: this.mode as any,
+        mode: this.mode,
         swipeThreshold: this.SWIPE_THRESHOLD,
         swipeTimeThreshold: this.SWIPE_TIME_THRESHOLD,
       },
@@ -6444,7 +6653,7 @@ export class NgxsmkDatepickerComponent
         isDateDisabled: (d) => this.isDateDisabled(d),
         onDateClick: (_) => {},
         changeMonth: (delta) => {
-          if (!this.isBackArrowDisabled || delta > 0) {
+          if ((delta < 0 && !this.isBackArrowDisabled) || (delta > 0 && !this.isNextArrowDisabled)) {
             this.changeMonth(delta);
           }
         },
@@ -6463,6 +6672,7 @@ export class NgxsmkDatepickerComponent
     if (this.disabled) return;
 
     if (delta < 0 && this.isBackArrowDisabled) return;
+    if (delta > 0 && this.isNextArrowDisabled) return;
 
     this.clearTouchHandledFlag();
     this.touchState.isDateCellTouching = false;
@@ -6609,7 +6819,7 @@ export class NgxsmkDatepickerComponent
     if (this.autoDetectMobile === true && g.autoDetectMobile !== undefined) {
       this.autoDetectMobile = g.autoDetectMobile;
     }
-    if (this.mobileModalStyle === 'center' && g.mobileModalStyle !== undefined) {
+    if (this.mobileModalStyle === 'bottom-sheet' && g.mobileModalStyle !== undefined) {
       this.mobileModalStyle = g.mobileModalStyle;
     }
     if (this.responsive === true && g.responsive !== undefined) {
@@ -6644,7 +6854,8 @@ export class NgxsmkDatepickerComponent
       return;
     }
 
-    const duration = `${animationConfig.duration || DEFAULT_ANIMATION_CONFIG.duration}ms`;
+    const durationMs = animationConfig.duration || DEFAULT_ANIMATION_CONFIG.duration;
+    const duration = `${durationMs}ms`;
     const easing = animationConfig.easing || DEFAULT_ANIMATION_CONFIG.easing;
     const property = animationConfig.property || DEFAULT_ANIMATION_CONFIG.property;
 
@@ -6652,6 +6863,14 @@ export class NgxsmkDatepickerComponent
     nativeElement.style.setProperty('--datepicker-transition-easing', easing);
     nativeElement.style.setProperty('--datepicker-transition-property', property);
     nativeElement.style.setProperty('--datepicker-transition', `${property} ${duration} ${easing}`);
+
+    // Keep sheet / dialog motion proportional when hosts customize duration.
+    const sheetMs = Math.max(durationMs, Math.round(durationMs * 1.6));
+    nativeElement.style.setProperty('--datepicker-motion-sheet-duration', `${sheetMs}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-dialog-duration', `${Math.round(durationMs * 1.35)}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-tap-duration', `${Math.min(durationMs, 200)}ms`);
+    nativeElement.style.setProperty('--datepicker-motion-sheet-easing', easing);
+    nativeElement.style.setProperty('--datepicker-motion-dialog-easing', easing);
   }
 
   /**
@@ -6718,7 +6937,7 @@ export class NgxsmkDatepickerComponent
    * in the viewport. Updates the visible indices signal to enable/disable rendering.
    */
   private setupLazyLoadingObserver(): void {
-    if (!this.isBrowser || this.calendarCount <= 1) {
+    if (!this.isBrowser || this.effectiveCalendarCount <= 1) {
       return;
     }
 
@@ -6915,6 +7134,7 @@ export class NgxsmkDatepickerComponent
       window.removeEventListener('resize', this.updatePositionOnScroll);
     }
     this.destroyBodyView();
+    this.unlockBodyScroll();
 
     if (this.lazyLoadingObserver) {
       this.lazyLoadingObserver.disconnect();

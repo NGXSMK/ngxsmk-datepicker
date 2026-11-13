@@ -702,6 +702,10 @@ export class TranslationRegistryService {
       close: 'Close',
       today: 'Today',
       selectEndDate: 'Select end date',
+      selectStartDate: 'Select start date',
+      startLabel: 'Start',
+      endLabel: 'End',
+      formatHint: 'Format: {{format}}',
       day: 'Day',
       days: 'Days',
       previousMonth: 'Previous month',
@@ -745,6 +749,11 @@ export class TranslationRegistryService {
       dateBeforeMin: 'Date must be on or after {{minDate}}.',
       dateAfterMax: 'Date must be on or before {{maxDate}}.',
       invalidDate: 'Invalid date.',
+      dateUnavailable: 'Unavailable',
+      dateUnavailableMin: 'Before minimum date ({{minDate}})',
+      dateUnavailableMax: 'After maximum date ({{maxDate}})',
+      dateUnavailableHoliday: 'Holiday{{label}}',
+      dateUnavailableBlocked: 'Unavailable date',
     };
   }
 }

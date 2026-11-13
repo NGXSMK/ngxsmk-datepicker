@@ -63,7 +63,7 @@ import { CustomSelectComponent } from './custom-select.component';
           type="button"
           class="ngxsmk-nav-button"
           (click)="nextMonth.emit()"
-          [disabled]="disabled"
+          [disabled]="disabled || isNextArrowDisabled"
           [attr.aria-label]="nextMonthAriaLabel"
           [title]="nextMonthAriaLabel"
           [ngClass]="navNextClass"
@@ -101,6 +101,7 @@ export class CalendarHeaderComponent {
   @Input() currentYear: number = new Date().getFullYear();
   @Input() disabled: boolean = false;
   @Input() isBackArrowDisabled: boolean = false;
+  @Input() isNextArrowDisabled: boolean = false;
   @Input() prevMonthAriaLabel: string = '';
   @Input() nextMonthAriaLabel: string = '';
   @Input() headerClass?: string;

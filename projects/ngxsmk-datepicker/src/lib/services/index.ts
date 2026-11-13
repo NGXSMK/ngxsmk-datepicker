@@ -10,12 +10,6 @@ export { ThemeBuilderService } from './theme-builder.service';
 export { DatePresetsService } from './date-presets.service';
 export type { DatepickerTheme } from './theme-builder.service';
 export type { DatePreset } from './date-presets.service';
-export { KeyboardNavigationService } from './keyboard-navigation.service';
-export type {
-  KeyboardNavigationState,
-  KeyboardNavigationCallbacks,
-  KeyboardNavigationConfig,
-} from './keyboard-navigation.service';
 export { TouchGestureHandlerService } from './touch-gesture-handler.service';
 export type { TouchGestureState, TouchGestureConfig, TouchGestureCallbacks } from './touch-gesture-handler.service';
 export { FieldSyncService } from './field-sync.service';
@@ -38,7 +32,9 @@ export { CalendarGenerationService } from './calendar-generation.service';
 export type { CalendarMonth } from './calendar-generation.service';
 export { DisplayFormattingService } from './display-formatting.service';
 export type { FormattingOptions } from './display-formatting.service';
+/** @deprecated Prefer Constraints.build — kept for tests / migration only; not part of the stable public surface. */
 export { DateValidationService } from './date-validation.service';
+/** @deprecated Prefer Constraints.build */
 export type { ValidationConstraints } from './date-validation.service';
 export { HapticFeedbackService } from './haptic-feedback.service';
 export { DatepickerOverlayService } from './datepicker-overlay.service';

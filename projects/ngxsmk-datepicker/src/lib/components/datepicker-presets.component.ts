@@ -18,6 +18,7 @@ import { DatepickerClasses } from '../interfaces/datepicker-classes.interface';
             [attr.tabindex]="disabled() ? -1 : 0"
             role="button"
             [attr.aria-disabled]="disabled()"
+            [attr.aria-pressed]="isActive(range.value)"
           >
             {{ range.key }}
           </li>
