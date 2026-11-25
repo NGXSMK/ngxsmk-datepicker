@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -37,6 +37,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Safe-area padding (left/right/bottom), `overscroll-behavior: contain`, 16px input font (no iOS focus zoom).
 - Sheet drag handle; selection haptics default on (`enableHapticFeedback`); `enterkeyhint` / spellcheck off for typed entry.
 - **Native-phone motion**: iOS sheet spring (`cubic-bezier(0.32, 0.72, 0, 1)`) and Material 3 emphasized curves; host classes `ngxsmk-motion-ios` / `ngxsmk-motion-android`; backdrop fade, sheet slide, tap spring, dialog present aligned to ~400ms system timings (respects `prefers-reduced-motion` + `[animationConfig]`).
+
+## [3.0.8] - Pending npm publication
+
+### Fixed
+
+- Restored complete focus rings for selected and keyboard-focused dates on desktop and mobile ([#352](https://github.com/NGXSMK/ngxsmk-datepicker/issues/352)).
+- Fixed monthly recurrence at the end of the month and kept weekly, monthly, and yearly occurrences within the requested bounds.
+- Invalid recurrence dates return an empty result, and valid wall-clock times survive daylight-saving transitions.
+- Vertical calendar swipes now update the displayed year.
+
+### Changed
+
+- The demo includes a guided datepicker walkthrough, keyboard-accessible navigation, and reduced-motion support.
+- The GitHub Pages build prerenders nine demo pages and generates a sitemap from them.
+- CI verifies release-version consistency, runs the date tests in three time zones, and checks focus rings in Chrome.
 
 ## [3.0.7] - 2026-11-13
 

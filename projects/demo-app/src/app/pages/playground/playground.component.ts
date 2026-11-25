@@ -1,10 +1,9 @@
-import { Component, inject, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxsmkDatepickerComponent, type HolidayProvider } from 'ngxsmk-datepicker';
 import { ThemeService } from '@tokiforge/angular';
 import { I18nService } from '../../i18n/i18n.service';
-import { animate } from 'motion';
 
 @Component({
   selector: 'app-playground',
@@ -543,7 +542,7 @@ import { animate } from 'motion';
     `,
   ],
 })
-export class PlaygroundComponent implements AfterViewInit {
+export class PlaygroundComponent {
   i18n = inject(I18nService);
   themeService = inject(ThemeService);
 
@@ -552,17 +551,6 @@ export class PlaygroundComponent implements AfterViewInit {
       const active = this.themeService.theme();
       this.theme = active === 'dark' ? 'dark' : 'light';
     });
-  }
-
-  ngAfterViewInit() {
-    animate('.playground-hero h1' as any, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, ease: 'easeOut' });
-    animate(
-      '.playground-hero p' as any,
-      { opacity: [0, 1], y: [15, 0] },
-      { duration: 0.6, ease: 'easeOut', delay: 0.15 }
-    );
-    animate('.config-panel' as any, { opacity: [0, 1], x: [-30, 0] }, { duration: 0.5, ease: 'easeOut' });
-    animate('.preview-canvas' as any, { opacity: [0, 1], scale: [0.95, 1] }, { duration: 0.5, ease: 'easeOut' });
   }
 
   mode: 'single' | 'range' | 'multiple' | 'week' | 'month' | 'quarter' | 'year' = 'single';

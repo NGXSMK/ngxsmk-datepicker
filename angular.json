@@ -82,17 +82,7 @@
                 "glob": "**/*",
                 "input": "projects/demo-app/public"
               },
-              "projects/demo-app/src/_redirects",
-              {
-                "glob": "robots.txt",
-                "input": "projects/demo-app/public",
-                "output": "/"
-              },
-              {
-                "glob": "sitemap.xml",
-                "input": "projects/demo-app/public",
-                "output": "/"
-              }
+              "projects/demo-app/src/_redirects"
             ],
             "styles": [
               "projects/demo-app/src/styles.scss"
@@ -102,6 +92,8 @@
             "production": {
               "outputPath": "dist/demo-app",
               "baseHref": "/ngxsmk-datepicker/",
+              "server": "projects/demo-app/src/main.server.ts",
+              "outputMode": "static",
               "budgets": [
                 {
                   "type": "initial",

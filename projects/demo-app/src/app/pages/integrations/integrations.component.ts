@@ -355,7 +355,7 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
         inset: 0;
         background: rgba(0, 0, 0, 0.6);
         z-index: 9998;
-        animation: fadeIn 0.2s ease;
+        animation: demo-fade-in var(--transition-base);
       }
       .modal {
         position: fixed;
@@ -371,7 +371,7 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
         z-index: 9999;
         display: flex;
         flex-direction: column;
-        animation: fadeIn 0.2s ease;
+        animation: demo-fade-in var(--transition-base);
         /* Allow datepicker dropdown (appendToBody) to layer above modal via its own z-index */
         overflow: visible;
       }
@@ -415,14 +415,6 @@ import type { DatepickerValue } from 'ngxsmk-datepicker';
         display: flex;
         justify-content: flex-end;
         gap: var(--space-md);
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
       }
     `,
   ],

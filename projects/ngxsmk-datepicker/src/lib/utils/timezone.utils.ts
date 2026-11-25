@@ -63,33 +63,26 @@ function getZonedParts(date: Date, timeZone: string): ZonedDateParts {
   };
 }
 
+function wallTimeAsUtc(parts: ZonedDateParts): number {
+  return Date.UTC(parts.year, parts.month, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond);
+}
+
 /**
  * Build a Date for the given wall-clock time as observed in `timeZone`.
  */
 function wallTimeInTimezoneToUtc(parts: ZonedDateParts, timeZone: string): Date {
-  const utcGuess = Date.UTC(
-    parts.year,
-    parts.month,
-    parts.day,
-    parts.hour,
-    parts.minute,
-    parts.second,
-    parts.millisecond
-  );
+  const utcGuess = wallTimeAsUtc(parts);
+  const guessWallTime = wallTimeAsUtc(getZonedParts(new Date(utcGuess), timeZone));
+  const result = new Date(utcGuess - (guessWallTime - utcGuess));
+  const resultWallTime = wallTimeAsUtc(getZonedParts(result, timeZone));
+  if (resultWallTime === utcGuess) return result;
 
-  // Refine once using the timezone offset at the guessed instant.
-  const asInZone = getZonedParts(new Date(utcGuess), timeZone);
-  const asInZoneAsUtc = Date.UTC(
-    asInZone.year,
-    asInZone.month,
-    asInZone.day,
-    asInZone.hour,
-    asInZone.minute,
-    asInZone.second,
-    asInZone.millisecond
-  );
-  const offset = asInZoneAsUtc - utcGuess;
-  return new Date(utcGuess - offset);
+  // The guess and result can straddle a timezone transition.
+  const corrected = new Date(result.getTime() + (utcGuess - resultWallTime));
+  if (wallTimeAsUtc(getZonedParts(corrected, timeZone)) === utcGuess) return corrected;
+
+  // Preserve the existing adjustment for wall times in a gap.
+  return result;
 }
 
 function parseWallClockString(dateString: string): ZonedDateParts | null {

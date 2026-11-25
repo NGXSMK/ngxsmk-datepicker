@@ -6658,9 +6658,7 @@ export class NgxsmkDatepickerComponent
           }
         },
         changeYear: (delta) => {
-          this._currentYear += delta;
-          this._currentYearSignal.set(this._currentYear);
-          this.generateCalendar();
+          this.currentYear += delta;
         },
         onStateChanged: () => this.cdr.markForCheck(),
         onHoverChanged: (_) => {},

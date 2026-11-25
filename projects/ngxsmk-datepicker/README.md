@@ -27,15 +27,15 @@
 
 ---
 
-**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.6` is the current stable release with compiled `fesm2022` output and type declarations.
+> This documentation covers stable release `v3.0.8`. The npm package includes compiled `fesm2022` output and type declarations.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.6** on npm.
+> **Earlier releases**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or the version tagged `latest` on npm.
 
 ---
 
@@ -75,9 +75,19 @@ Use **ngxsmk-datepicker** when you want an enterprise-grade **date / range picke
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Standalone DatePicker Single Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Picker Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile Angular DatePicker Ionic Compatibility" width="30%" />
+  <img src="docs/demo-home.png" alt="Desktop demo showing a completed date range, selection instructions, and a copyable Angular snippet" width="100%" />
+</p>
+
+**Mobile demo** with multiple dates selected.
+
+<p align="center">
+  <img src="docs/demo-mobile.png" alt="Mobile datepicker with three selected dates and instructions for adding or removing dates" width="374" />
+</p>
+
+**Dark-mode playground** with configuration controls and a live inline datepicker.
+
+<p align="center">
+  <img src="docs/demo-playground.png" alt="Dark-mode playground showing an inline single-date picker beside its configuration controls" width="100%" />
 </p>
 
 ## **✨ Features**
@@ -933,9 +943,9 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 For a full list of changes, please refer to the [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md) file.
 
-### **v3.0.6** (Current Stable)
+### **v3.0.8**
 
-- **npm**: Published tarballs include compiled `fesm2022/` output and type declarations.
+- Restores complete date-cell focus rings and fixes recurrence bounds, month-end rollover, and daylight-saving conversion.
 
 ### **Earlier Versions**
 

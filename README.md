@@ -30,15 +30,15 @@
 
 ---
 
-**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 ### **Overview**
 
 **ngxsmk-datepicker** is a high-performance, enterprise-ready date and range picker engineered for the modern Angular ecosystem (v17+). Built from the ground up with **Angular Signals**, it delivers a seamless, zoneless-ready experience for both desktop and mobile (Ionic) applications.
 
-> **Stable Release**: `v3.0.7` is the current stable release with compiled `fesm2022` output and type declarations.
+> This branch prepares stable release `v3.0.8` with compiled `fesm2022` output and type declarations. Use `@latest` for the currently published npm release.
 >
-> **Stable line**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or current **v3.0.6** on npm.
+> **Earlier releases**: v2.3.x includes side-by-side **`calendars`**, **natural language input**, searchable **timezone selection dropdown UI**, dynamic range presets, and warning range highlighting. Versions **2.0.10** and **2.0.11** were broken and have been **unpublished**; use **v2.1.1+** or the version tagged `latest` on npm.
 
 ---
 
@@ -62,9 +62,19 @@
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Standalone DatePicker Single Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Picker Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile Angular DatePicker Ionic Compatibility" width="30%" />
+  <img src="projects/ngxsmk-datepicker/docs/demo-home.png" alt="Desktop demo showing a completed date range, selection instructions, and a copyable Angular snippet" width="100%" />
+</p>
+
+**Mobile demo** with multiple dates selected.
+
+<p align="center">
+  <img src="projects/ngxsmk-datepicker/docs/demo-mobile.png" alt="Mobile datepicker with three selected dates and instructions for adding or removing dates" width="374" />
+</p>
+
+**Dark-mode playground** with configuration controls and a live inline datepicker.
+
+<p align="center">
+  <img src="projects/ngxsmk-datepicker/docs/demo-playground.png" alt="Dark-mode playground showing an inline single-date picker beside its configuration controls" width="100%" />
 </p>
 
 ## **✨ Features**
@@ -186,10 +196,10 @@ For details, see [CONTRIBUTING.md](https://github.com/NGXSMK/ngxsmk-datepicker/b
 ng add ngxsmk-datepicker
 ```
 
-The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too:
+The `ng add` schematic installs the package, adds the `luxon` peer dependency if it is missing, and prints a getting-started snippet. Plain npm works too. To pin this release once published, use `ngxsmk-datepicker@3.0.8`:
 
 ```bash
-npm install ngxsmk-datepicker@3.0.6
+npm install ngxsmk-datepicker@latest
 ```
 
 ### Alternative installation
@@ -198,12 +208,12 @@ You can install without npm using any of these methods (peer dependencies must s
 
 | Method | Command |
 |--------|--------|
-| **Yarn** | `yarn add ngxsmk-datepicker@3.0.6` |
-| **pnpm** | `pnpm add ngxsmk-datepicker@3.0.6` |
-| **Bun** | `bun add ngxsmk-datepicker@3.0.6` |
-| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.6` (requires the repo to have built output or you build from source) |
+| **Yarn** | `yarn add ngxsmk-datepicker@latest` |
+| **pnpm** | `pnpm add ngxsmk-datepicker@latest` |
+| **Bun** | `bun add ngxsmk-datepicker@latest` |
+| **From Git** | `npm install github:NGXSMK/ngxsmk-datepicker#v3.0.8` (requires the repo to have built output or you build from source) |
 | **Local path** | Build the library in the repo (`npx ng build ngxsmk-datepicker`), then `npm install /path/to/ngxsmk-datepicker/dist/ngxsmk-datepicker` |
-| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@3.0.6/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@3.0.6/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
+| **CDN (ESM)** | Use [unpkg](https://unpkg.com/ngxsmk-datepicker@latest/) or [jsDelivr](https://cdn.jsdelivr.net/npm/ngxsmk-datepicker@latest/) in your bundler or import map; peer dependencies (Angular, etc.) must be installed in your app. |
 
 For all options and caveats, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -982,7 +992,7 @@ We welcome and appreciate contributions from the community! Whether it's reporti
 
 ## **📄 Changelog**
 
-**Recent:** Use **v3.0.6** on npm. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or **v3.0.6**.
+**Recent:** This documentation covers **v3.0.8**. The v2.3.x line adds side-by-side multi-calendar layouts, natural language typing, timezone selector UI dropdown, warning style selections, and strict TypeScript/AOT stability. Versions 2.0.10 and 2.0.11 are unpublished; use v2.1.1+ or the version tagged `latest` on npm.
 
 For the full list of changes, see [CHANGELOG.md](https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/CHANGELOG.md).
 

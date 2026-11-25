@@ -248,7 +248,7 @@ import { I18nService } from '../../i18n/i18n.service';
         font-weight: 600;
         text-align: center;
         border: 1px solid var(--color-border);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--transition-smooth);
 
         &.plugin {
           background: rgba(6, 182, 212, 0.08);
@@ -333,7 +333,7 @@ import { I18nService } from '../../i18n/i18n.service';
         padding: var(--space-lg);
         border: 1px solid var(--color-border);
         border-radius: var(--radius-md);
-        transition: transform 0.2s ease;
+        transition: transform var(--transition-base);
         &:hover {
           transform: translateY(-2px);
           background: rgba(255, 255, 255, 0.04);

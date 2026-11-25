@@ -14,7 +14,7 @@ export default defineConfig({
   },
   timeout: 45_000,
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
-  webServer: process.env.CI
+  webServer: process.env.BASE_URL
     ? undefined
     : {
         command: 'npx ng serve demo-app --port=4200',
