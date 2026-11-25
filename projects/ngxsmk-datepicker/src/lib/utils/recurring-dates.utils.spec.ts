@@ -4,11 +4,13 @@ import { getStartOfDay } from './date.utils';
 describe('Recurring Dates Utils', () => {
   describe('generateRecurringDates', () => {
     it('includes leap day in monthly recurrence when February has 29 days', () => {
-      expect(generateRecurringDates({
-        pattern: 'monthly',
-        startDate: new Date(2024, 0, 31),
-        occurrences: 3,
-      })).toEqual([new Date(2024, 0, 31), new Date(2024, 1, 29), new Date(2024, 2, 31)]);
+      expect(
+        generateRecurringDates({
+          pattern: 'monthly',
+          startDate: new Date(2024, 0, 31),
+          occurrences: 3,
+        })
+      ).toEqual([new Date(2024, 0, 31), new Date(2024, 1, 29), new Date(2024, 2, 31)]);
     });
 
     it('returns no dates for an invalid weekday or weekend recurrence start', () => {
@@ -18,38 +20,46 @@ describe('Recurring Dates Utils', () => {
     });
 
     it('keeps shorter months in a monthly recurrence starting on the 31st', () => {
-      expect(generateRecurringDates({
-        pattern: 'monthly',
-        startDate: new Date(2025, 0, 31),
-        occurrences: 3,
-      })).toEqual([new Date(2025, 0, 31), new Date(2025, 1, 28), new Date(2025, 2, 31)]);
+      expect(
+        generateRecurringDates({
+          pattern: 'monthly',
+          startDate: new Date(2025, 0, 31),
+          occurrences: 3,
+        })
+      ).toEqual([new Date(2025, 0, 31), new Date(2025, 1, 28), new Date(2025, 2, 31)]);
     });
 
     it('excludes weekly occurrences after the end date', () => {
-      expect(generateRecurringDates({
-        pattern: 'weekly',
-        startDate: new Date(2025, 0, 1),
-        endDate: new Date(2025, 0, 2),
-        dayOfWeek: 5,
-      })).toEqual([]);
+      expect(
+        generateRecurringDates({
+          pattern: 'weekly',
+          startDate: new Date(2025, 0, 1),
+          endDate: new Date(2025, 0, 2),
+          dayOfWeek: 5,
+        })
+      ).toEqual([]);
     });
 
     it('excludes monthly occurrences outside the bounds', () => {
-      expect(generateRecurringDates({
-        pattern: 'monthly',
-        startDate: new Date(2025, 0, 20),
-        endDate: new Date(2025, 2, 9),
-        dayOfMonth: 10,
-      })).toEqual([new Date(2025, 1, 10)]);
+      expect(
+        generateRecurringDates({
+          pattern: 'monthly',
+          startDate: new Date(2025, 0, 20),
+          endDate: new Date(2025, 2, 9),
+          dayOfMonth: 10,
+        })
+      ).toEqual([new Date(2025, 1, 10)]);
     });
 
     it('excludes yearly occurrences outside the bounds', () => {
-      expect(generateRecurringDates({
-        pattern: 'yearly',
-        startDate: new Date(2025, 0, 31),
-        endDate: new Date(2027, 0, 14),
-        monthAndDay: { month: 0, day: 15 },
-      })).toEqual([new Date(2026, 0, 15)]);
+      expect(
+        generateRecurringDates({
+          pattern: 'yearly',
+          startDate: new Date(2025, 0, 31),
+          endDate: new Date(2027, 0, 14),
+          monthAndDay: { month: 0, day: 15 },
+        })
+      ).toEqual([new Date(2026, 0, 15)]);
     });
 
     it('should generate daily dates', () => {

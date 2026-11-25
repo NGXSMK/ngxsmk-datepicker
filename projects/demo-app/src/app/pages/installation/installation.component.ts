@@ -42,7 +42,11 @@ import { version } from '../../../../../ngxsmk-datepicker/package.json';
 <span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">latest</span>
 <span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">latest</span></code></pre>
       </div>
-      <p>This documentation covers v{{ releaseVersion }}. To pin that release after it is on npm, use <code>ngxsmk-datepicker@{{ releaseVersion }}</code>.</p>
+      <p>
+        This documentation covers v{{ releaseVersion }}. To pin that release after it is on npm, use
+        <code>ngxsmk-datepicker@{{ releaseVersion }}</code
+        >.
+      </p>
       <p>
         <a
           href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md"

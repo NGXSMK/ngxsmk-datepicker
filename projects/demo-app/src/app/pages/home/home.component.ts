@@ -10,8 +10,15 @@ type DemoMode = 'single' | 'range' | 'multiple';
 
 const demoInstructions = {
   single: ['Choose a date.', 'Choose another date to replace your selection.'],
-  range: ['Choose a start date.', 'Choose an end date to complete the range.', 'Choose another date to start a new range.'],
-  multiple: ['Choose any day to start a list.', 'Choose more dates to add them. Select a highlighted date again to remove it.'],
+  range: [
+    'Choose a start date.',
+    'Choose an end date to complete the range.',
+    'Choose another date to start a new range.',
+  ],
+  multiple: [
+    'Choose any day to start a list.',
+    'Choose more dates to add them. Select a highlighted date again to remove it.',
+  ],
 };
 
 @Component({
@@ -182,7 +189,6 @@ const demoInstructions = {
                 {{ i18n.t().home.demoMode.multiple }}
               </button>
             </div>
-
           </div>
 
           <div
@@ -669,8 +675,7 @@ const demoInstructions = {
         box-shadow: var(--shadow-xl);
         overflow: hidden;
         backdrop-filter: blur(16px);
-        transition:
-          box-shadow var(--transition-base);
+        transition: box-shadow var(--transition-base);
 
         &:hover {
           box-shadow: 0 24px 48px -12px rgba(99, 102, 241, 0.18);
@@ -740,7 +745,9 @@ const demoInstructions = {
         font-size: var(--font-size-sm);
         line-height: 1.35;
 
-        p { margin: 0; }
+        p {
+          margin: 0;
+        }
       }
 
       .demo-reset {
@@ -1355,7 +1362,9 @@ export class HomeComponent {
     }
     event.preventDefault();
     this.setDemoMode(modes[next]);
-    (event.currentTarget as HTMLElement).parentElement?.querySelector<HTMLElement>('#demo-mode-' + modes[next])?.focus();
+    (event.currentTarget as HTMLElement).parentElement
+      ?.querySelector<HTMLElement>('#demo-mode-' + modes[next])
+      ?.focus();
   }
 
   get currentTheme(): 'light' | 'dark' {

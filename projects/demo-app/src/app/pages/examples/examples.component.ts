@@ -577,7 +577,6 @@ import { I18nService } from '../../i18n/i18n.service';
         border: 1px solid var(--color-border);
       }
 
-
       .card-desc {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);

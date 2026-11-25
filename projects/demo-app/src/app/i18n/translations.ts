@@ -30,8 +30,7 @@ export const translations = {
     home: {
       heroTitle: 'An Angular datepicker for forms and booking flows',
       heroSubtitle: 'Angular DatePicker',
-      heroLead:
-        'Try single dates, date ranges, and multiple selections in the live calendar.',
+      heroLead: 'Try single dates, date ranges, and multiple selections in the live calendar.',
       ctaBuild: 'Install',
       ctaPro: 'Open playground',
       seoTitle: 'What you get',

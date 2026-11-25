@@ -1,4 +1,14 @@
-import { afterNextRender, Component, ElementRef, HostListener, Injector, effect, inject, signal, viewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  ElementRef,
+  HostListener,
+  Injector,
+  effect,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '@tokiforge/angular';
 import { themeConfig } from './theme/theme.config';
@@ -50,7 +60,7 @@ export class AppComponent {
         const activeLink = navigation.querySelector<HTMLElement>('a[aria-current="page"]');
         (activeLink ?? navigation.querySelector<HTMLElement>('a'))?.focus();
       },
-      { injector: this.injector },
+      { injector: this.injector }
     );
   }
 

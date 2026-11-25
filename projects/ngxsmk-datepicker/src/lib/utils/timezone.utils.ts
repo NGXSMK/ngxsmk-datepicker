@@ -64,15 +64,7 @@ function getZonedParts(date: Date, timeZone: string): ZonedDateParts {
 }
 
 function wallTimeAsUtc(parts: ZonedDateParts): number {
-  return Date.UTC(
-    parts.year,
-    parts.month,
-    parts.day,
-    parts.hour,
-    parts.minute,
-    parts.second,
-    parts.millisecond
-  );
+  return Date.UTC(parts.year, parts.month, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond);
 }
 
 /**

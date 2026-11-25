@@ -70,8 +70,15 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
 
     case 'yearly': {
       const monthDay = config.monthAndDay || { month: startDate.getMonth(), day: startDate.getDate() };
-      if (!Number.isInteger(monthDay.month) || monthDay.month < 0 || monthDay.month > 11 ||
-          !Number.isInteger(monthDay.day) || monthDay.day < 1 || monthDay.day > 31) break;
+      if (
+        !Number.isInteger(monthDay.month) ||
+        monthDay.month < 0 ||
+        monthDay.month > 11 ||
+        !Number.isInteger(monthDay.day) ||
+        monthDay.day < 1 ||
+        monthDay.day > 31
+      )
+        break;
       for (let year = startDate.getFullYear(); count < maxOccurrences; year += interval) {
         currentDate.setFullYear(year, monthDay.month, monthDay.day);
         if (!Number.isFinite(currentDate.getTime()) || (endDate && currentDate > endDate)) break;
