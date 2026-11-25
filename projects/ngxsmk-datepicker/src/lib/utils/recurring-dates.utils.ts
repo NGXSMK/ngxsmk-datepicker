@@ -19,6 +19,9 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
   const startDate = getStartOfDay(config.startDate);
   const endDate = config.endDate ? getEndOfDay(config.endDate) : null;
 
+  if (!Number.isFinite(startDate.getTime()) || (endDate && !Number.isFinite(endDate.getTime()))) return dates;
+  if (!Number.isInteger(interval) || interval < 1) return dates;
+
   const currentDate = new Date(startDate);
   let count = 0;
   const maxOccurrences = config.occurrences || (endDate ? 365 : 10);
@@ -35,72 +38,53 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
     }
 
     case 'weekly': {
-      if (config.dayOfWeek === undefined) {
-        const targetDay = startDate.getDay();
-        while (count < maxOccurrences) {
-          if (endDate && currentDate > endDate) break;
-          const dayOfWeek = currentDate.getDay();
-          const daysUntilTarget = (targetDay - dayOfWeek + 7) % 7;
-          if (daysUntilTarget === 0 && count === 0) {
-            dates.push(new Date(currentDate));
-            count++;
-            currentDate.setDate(currentDate.getDate() + 7 * interval);
-          } else {
-            currentDate.setDate(currentDate.getDate() + daysUntilTarget);
-            dates.push(new Date(currentDate));
-            count++;
-            currentDate.setDate(currentDate.getDate() + 7 * interval);
-          }
-        }
-      } else {
-        while (count < maxOccurrences) {
-          if (endDate && currentDate > endDate) break;
-          const dayOfWeek = currentDate.getDay();
-          const daysUntilTarget = (config.dayOfWeek - dayOfWeek + 7) % 7;
-          if (daysUntilTarget === 0 && count === 0) {
-            dates.push(new Date(currentDate));
-            count++;
-            currentDate.setDate(currentDate.getDate() + 7 * interval);
-          } else {
-            currentDate.setDate(currentDate.getDate() + daysUntilTarget);
-            dates.push(new Date(currentDate));
-            count++;
-            currentDate.setDate(currentDate.getDate() + 7 * interval);
-          }
-        }
+      const targetDay = config.dayOfWeek ?? startDate.getDay();
+      if (!Number.isInteger(targetDay) || targetDay < 0 || targetDay > 6) break;
+      const daysUntilTarget = (targetDay - currentDate.getDay() + 7) % 7;
+      currentDate.setDate(currentDate.getDate() + daysUntilTarget);
+      while (count < maxOccurrences && Number.isFinite(currentDate.getTime())) {
+        if (endDate && currentDate > endDate) break;
+        dates.push(new Date(currentDate));
+        count++;
+        currentDate.setDate(currentDate.getDate() + 7 * interval);
       }
       break;
     }
 
     case 'monthly': {
       const targetDay = config.dayOfMonth || startDate.getDate();
-      while (count < maxOccurrences) {
-        if (endDate && currentDate > endDate) break;
+      if (!Number.isInteger(targetDay) || targetDay < 1 || targetDay > 31) break;
+      while (count < maxOccurrences && Number.isFinite(currentDate.getTime())) {
         const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
         const dayToSet = Math.min(targetDay, lastDayOfMonth);
         currentDate.setDate(dayToSet);
-        dates.push(new Date(currentDate));
-        count++;
-        currentDate.setMonth(currentDate.getMonth() + interval);
+        if (endDate && currentDate > endDate) break;
+        if (currentDate >= startDate && Number.isFinite(currentDate.getTime())) {
+          dates.push(new Date(currentDate));
+          count++;
+        }
+        currentDate.setMonth(currentDate.getMonth() + interval, 1);
       }
       break;
     }
 
     case 'yearly': {
       const monthDay = config.monthAndDay || { month: startDate.getMonth(), day: startDate.getDate() };
-      while (count < maxOccurrences) {
-        if (endDate && currentDate > endDate) break;
-        currentDate.setMonth(monthDay.month);
-        currentDate.setDate(monthDay.day);
-        dates.push(new Date(currentDate));
-        count++;
-        currentDate.setFullYear(currentDate.getFullYear() + interval);
+      if (!Number.isInteger(monthDay.month) || monthDay.month < 0 || monthDay.month > 11 ||
+          !Number.isInteger(monthDay.day) || monthDay.day < 1 || monthDay.day > 31) break;
+      for (let year = startDate.getFullYear(); count < maxOccurrences; year += interval) {
+        currentDate.setFullYear(year, monthDay.month, monthDay.day);
+        if (!Number.isFinite(currentDate.getTime()) || (endDate && currentDate > endDate)) break;
+        if (currentDate >= startDate) {
+          dates.push(new Date(currentDate));
+          count++;
+        }
       }
       break;
     }
 
     case 'weekdays':
-      while (count < maxOccurrences) {
+      while (count < maxOccurrences && Number.isFinite(currentDate.getTime())) {
         if (endDate && currentDate > endDate) break;
         const dayOfWeek = currentDate.getDay();
         if (dayOfWeek >= 1 && dayOfWeek <= 5) {
@@ -112,7 +96,7 @@ export function generateRecurringDates(config: RecurringDateConfig): Date[] {
       break;
 
     case 'weekends':
-      while (count < maxOccurrences) {
+      while (count < maxOccurrences && Number.isFinite(currentDate.getTime())) {
         if (endDate && currentDate > endDate) break;
         const dayOfWeek = currentDate.getDay();
         if (dayOfWeek === 0 || dayOfWeek === 6) {

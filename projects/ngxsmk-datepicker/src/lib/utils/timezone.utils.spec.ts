@@ -2,6 +2,13 @@ import { parseDateWithTimezone, convertTimezone, getTimezoneOffset, formatDateWi
 
 describe('Timezone Utils', () => {
   describe('parseDateWithTimezone', () => {
+    it('uses the offset on the correct side of a daylight-saving transition', () => {
+      expect(parseDateWithTimezone('2025-03-09T03:30', 'America/New_York')?.toISOString())
+        .toBe('2025-03-09T07:30:00.000Z');
+      expect(parseDateWithTimezone('2025-10-26T01:30', 'Europe/Paris')?.toISOString())
+        .toBe('2025-10-25T23:30:00.000Z');
+    });
+
     it('should parse date string', () => {
       const dateString = '2025-06-15';
       const result = parseDateWithTimezone(dateString);
