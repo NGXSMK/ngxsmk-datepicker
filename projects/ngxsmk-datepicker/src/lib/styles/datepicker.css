@@ -1904,6 +1904,11 @@ ngxsmk-datepicker.ngxsmk-inline {
   z-index: 10;
 }
 
+.ngxsmk-day-cell.focused,
+.ngxsmk-day-cell:focus-visible {
+  overflow: visible;
+}
+
 .ngxsmk-day-cell.focused .ngxsmk-day-number {
   outline: 2px solid var(--datepicker-primary-color);
   outline-offset: 2px;
@@ -2613,7 +2618,6 @@ ngxsmk-datepicker.ngxsmk-inline {
     -webkit-flex-shrink: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
-    overflow: hidden;
   }
 
   .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-number {
@@ -3182,7 +3186,6 @@ ngxsmk-datepicker.ngxsmk-inline {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     border-radius: 12px;
-    overflow: hidden;
   }
 
   .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-number {
@@ -5140,7 +5143,6 @@ ngxsmk-datepicker.ngxsmk-inline {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     border-radius: 10px;
-    overflow: hidden;
   }
 
   .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-number {
@@ -5623,7 +5625,6 @@ ngxsmk-datepicker.ngxsmk-inline {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     border-radius: 10px;
-    overflow: hidden;
   }
 
   .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-number {
@@ -6117,7 +6118,6 @@ ngxsmk-datepicker.ngxsmk-inline {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     border-radius: 8px;
-    overflow: hidden;
   }
 
   .ngxsmk-datepicker-wrapper:not(.ngxsmk-no-responsive) .ngxsmk-day-number {
@@ -8588,7 +8588,6 @@ body.ngxsmk-scroll-locked {
     max-height: none !important;
     aspect-ratio: 1 / 1 !important;
     margin: 0 !important;
-    overflow: hidden !important;
     box-sizing: border-box;
   }
 
