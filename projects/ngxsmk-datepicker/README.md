@@ -75,9 +75,19 @@ Use **ngxsmk-datepicker** when you want an enterprise-grade **date / range picke
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/1.png" alt="Angular Standalone DatePicker Single Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/2.png" alt="Angular Date Range Picker Selection Mode" width="30%" />
-  <img src="https://github.com/NGXSMK/ngxsmk-datepicker/raw/main/projects/ngxsmk-datepicker/docs/3.png" alt="Mobile Angular DatePicker Ionic Compatibility" width="30%" />
+  <img src="docs/demo-home.png" alt="Desktop demo showing a completed date range, selection instructions, and a copyable Angular snippet" width="100%" />
+</p>
+
+**Mobile demo** with multiple dates selected.
+
+<p align="center">
+  <img src="docs/demo-mobile.png" alt="Mobile datepicker with three selected dates and instructions for adding or removing dates" width="374" />
+</p>
+
+**Dark-mode playground** with configuration controls and a live inline datepicker.
+
+<p align="center">
+  <img src="docs/demo-playground.png" alt="Dark-mode playground showing an inline single-date picker beside its configuration controls" width="100%" />
 </p>
 
 ## **✨ Features**
