@@ -2,11 +2,12 @@
 
 This document provides migration instructions for upgrading between major versions of ngxsmk-datepicker.
 
-**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 ## Table of Contents
 
 - [Unreleased](#unreleased)
+- [v3.0.7 → v3.0.8](#v307---v308)
 - [v3.0.6 → v3.0.7](#v306---v307)
 - [v3.0.5 → v3.0.6](#v305---v306)
 - [v3.0.4 → v3.0.5](#v304---v305)
@@ -74,6 +75,10 @@ This document provides migration instructions for upgrading between major versio
 ### Behavior
 
 - **`autoApplyClose`**: `emitValue` now respects `shouldAutoClose()` (fixes [#325](https://github.com/NGXSMK/ngxsmk-datepicker/issues/325)). Default stays `false`. Apps that relied on the previous always-close-on-select bug should set `[autoApplyClose]="true"`.
+
+## v3.0.7 → v3.0.8
+
+No configuration changes are required. If your application consumes recurrence results, monthly schedules that start on the 31st now include shorter months, and occurrences outside the configured bounds are excluded. Timezone helpers now preserve valid wall-clock times when the offset changes.
 
 ## v3.0.6 → v3.0.7
 

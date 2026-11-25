@@ -2,7 +2,7 @@
 
 This document describes the stable public API of ngxsmk-datepicker with comprehensive real-world examples. APIs marked as **stable** are guaranteed to remain backward-compatible within the same major version. APIs marked as **experimental** may change in future releases.
 
-**Version**: 3.0.6 | **Last updated**: September 8, 2026
+**Version**: 3.0.8 | **Last updated**: November 25, 2026
 
 ## Stable vs experimental
 

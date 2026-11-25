@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { I18nService } from '../../i18n/i18n.service';
+import { version } from '../../../../../ngxsmk-datepicker/package.json';
 
 @Component({
   selector: 'app-installation',
@@ -21,7 +22,7 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">3.0.6</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">npm install</span> ngxsmk-datepicker@<span class="token-number">latest</span></code></pre>
       </div>
 
       <div class="tip">
@@ -37,10 +38,11 @@ import { I18nService } from '../../i18n/i18n.service';
           <div class="dot green"></div>
           <div class="window-title">bash</div>
         </div>
-        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">3.0.6</span>
-<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">3.0.6</span>
-<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">3.0.6</span></code></pre>
+        <pre><code class="text-main"><span class="token-function">yarn add</span> ngxsmk-datepicker@<span class="token-number">latest</span>
+<span class="token-function">pnpm add</span> ngxsmk-datepicker@<span class="token-number">latest</span>
+<span class="token-function">bun add</span> ngxsmk-datepicker@<span class="token-number">latest</span></code></pre>
       </div>
+      <p>This documentation covers v{{ releaseVersion }}. To pin that release after it is on npm, use <code>ngxsmk-datepicker@{{ releaseVersion }}</code>.</p>
       <p>
         <a
           href="https://github.com/NGXSMK/ngxsmk-datepicker/blob/main/docs/INSTALLATION.md"
@@ -109,5 +111,6 @@ import { I18nService } from '../../i18n/i18n.service';
   ],
 })
 export class InstallationComponent {
+  protected readonly releaseVersion = version;
   i18n = inject(I18nService);
 }

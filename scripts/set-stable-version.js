@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Sets a stable (production) version in both root and library package.json.
+ * Sets a stable (production) version in the release manifests and lockfile.
  * Use after beta testing, before publishing the production release.
  *
  * Usage:
@@ -19,5 +19,5 @@ if (!arg || !/^\d+\.\d+\.\d+$/.test(arg)) {
 
 const newVersion = arg;
 writeReleaseVersion(newVersion);
-console.log('Version set to', newVersion, 'in both manifests and the lockfile');
+console.log('Version set to', newVersion, 'in the release manifests and lockfile');
 console.log('Run: npm run publish:patch');

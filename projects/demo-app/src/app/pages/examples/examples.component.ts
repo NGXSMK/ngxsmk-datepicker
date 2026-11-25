@@ -283,7 +283,6 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Adjacent Month Grid</h3>
-                <span class="badge badge-new">NEW v3.0.6</span>
               </div>
               <p class="card-desc">
                 Displays trailing and leading days from adjacent months in the 6-row calendar grid.
@@ -301,7 +300,6 @@ import { I18nService } from '../../i18n/i18n.service';
             <div class="card demo-card">
               <div class="card-header">
                 <h3>Fixed Container Mode</h3>
-                <span class="badge badge-new">NEW v3.0.6</span>
               </div>
               <p class="card-desc">
                 Disables viewport max-width overrides for fixed-width embedded or sidebar layouts (#299).
@@ -579,17 +577,6 @@ import { I18nService } from '../../i18n/i18n.service';
         border: 1px solid var(--color-border);
       }
 
-      .badge-new {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: #ffffff !important;
-        border: none;
-        padding: 3px 8px;
-        border-radius: 6px;
-        font-size: var(--font-size-xs);
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-      }
 
       .card-desc {
         color: var(--color-text-muted);

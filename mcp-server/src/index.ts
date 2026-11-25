@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createRequire } from 'node:module';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -12,10 +13,11 @@ import {
 } from './tools/date-tools.js';
 import { API_DOCS_RESOURCE, TIMEZONES_RESOURCE } from './resources/api-resources.js';
 
-// Create MCP Server instance
+const { version } = createRequire(import.meta.url)('../package.json') as { version: string };
+
 const server = new McpServer({
   name: 'ngxsmk-datepicker-mcp',
-  version: '3.0.6',
+  version,
 });
 
 // Tool: parse_date

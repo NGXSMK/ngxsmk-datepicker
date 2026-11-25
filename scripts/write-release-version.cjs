@@ -3,7 +3,7 @@ const path = require('node:path');
 
 module.exports = function writeReleaseVersion(version) {
   const workspace = path.resolve(__dirname, '..');
-  for (const relativePath of ['package.json', 'projects/ngxsmk-datepicker/package.json', 'package-lock.json']) {
+  for (const relativePath of ['package.json', 'projects/ngxsmk-datepicker/package.json', 'mcp-server/package.json', 'package-lock.json']) {
     const filePath = path.join(workspace, relativePath);
     const original = fs.readFileSync(filePath, 'utf8');
     const data = JSON.parse(original);

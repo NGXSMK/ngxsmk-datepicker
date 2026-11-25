@@ -1,6 +1,6 @@
 # Timezone Support
 
-**Last updated:** November 13, 2026 - **Current stable:** v3.0.7
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 ## Overview
 

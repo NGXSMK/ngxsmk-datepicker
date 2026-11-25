@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Sets a beta (prerelease) version in both root and library package.json.
+ * Sets a beta (prerelease) version in the release manifests and lockfile.
  * Use before publishing a beta so production release can follow later.
  *
  * Usage:
@@ -44,5 +44,5 @@ if (arg && /^\d+\.\d+\.\d+-beta\.\d+$/.test(arg)) {
 }
 
 writeReleaseVersion(newVersion);
-console.log('Version set to', newVersion, 'in both manifests and the lockfile');
+console.log('Version set to', newVersion, 'in the release manifests and lockfile');
 console.log('Run: npm run publish:beta');

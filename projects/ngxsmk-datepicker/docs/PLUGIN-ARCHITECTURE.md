@@ -1,6 +1,6 @@
 # Plugin Architecture
 
-**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 ngxsmk-datepicker features a powerful **plugin architecture** that allows you to extend and customize the component's behavior without modifying its core code. This architecture is built on a **hook-based system** that provides extension points throughout the component's lifecycle.
 

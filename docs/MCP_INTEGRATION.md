@@ -1,6 +1,6 @@
 # 🤖 Model Context Protocol (MCP) & Multi-LLM AI Integration
 
-**Last updated:** September 8, 2026 - **Current stable:** v3.0.6
+**Last updated:** November 25, 2026 - **Release version:** v3.0.8
 
 `ngxsmk-datepicker` provides comprehensive, standardized integration with all major AI ecosystems:
 - **Claude** (Anthropic Claude Desktop, Claude Code, Claude 3.5 Sonnet Tool Use)
