@@ -147,6 +147,8 @@ const serverDate = new Date("2024-01-15T15:00:00Z");
 
 ## Utility Helpers (`parseDateWithTimezone` / `convertTimezone`)
 
+For an unambiguous local time, both helpers preserve the requested wall-clock time in the target zone. During a fall-back overlap, the helpers choose the occurrence that matches the zone offset at the initial UTC guess. During a spring-forward gap, they apply that initial offset, so the resulting instant displays a different local time. For example, `02:30` on March 9, 2025 in New York resolves to `03:30` in that zone.
+
 As of **v3.0.7**, the public timezone helpers honor IANA zones for wall-clock work:
 
 ```typescript

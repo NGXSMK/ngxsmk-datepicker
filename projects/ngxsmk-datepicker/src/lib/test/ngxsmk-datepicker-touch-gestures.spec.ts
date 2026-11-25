@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { DatePipe } from '@angular/common';
 
-/**
- * SKIPPED: Tests depend on non-existent component properties like calendarSwipeStartX
- */
-xdescribe('NgxsmkDatepickerComponent - Touch Gestures', () => {
-  let component: any;
+describe('NgxsmkDatepickerComponent - Touch Gestures', () => {
+  let component: NgxsmkDatepickerComponent;
   let fixture: ComponentFixture<NgxsmkDatepickerComponent>;
 
   beforeEach(async () => {
@@ -19,152 +15,44 @@ xdescribe('NgxsmkDatepickerComponent - Touch Gestures', () => {
     fixture = TestBed.createComponent(NgxsmkDatepickerComponent);
     component = fixture.componentInstance;
     component.inline = true;
+    component.writeValue(new Date(2025, 5, 15));
     fixture.detectChanges();
   });
 
-  describe('Swipe Gestures', () => {
-    function createTouchEvent(type: string, clientX: number, clientY: number): TouchEvent {
-      const touch = {
-        clientX,
-        clientY,
-        identifier: 0,
-        screenX: clientX,
-        screenY: clientY,
-        pageX: clientX,
-        pageY: clientY,
-        target: document.body,
-        radiusX: 0,
-        radiusY: 0,
-        rotationAngle: 0,
-        force: 0,
-      } as Touch;
+  function swipe(endX: number, endY: number): void {
+    const target = fixture.nativeElement as HTMLElement;
+    const start = new Touch({ identifier: 0, target, clientX: 200, clientY: 200 });
+    const end = new Touch({ identifier: 0, target, clientX: endX, clientY: endY });
+    component.onCalendarSwipeStart(new TouchEvent('touchstart', { touches: [start] }));
+    component.onCalendarSwipeMove(new TouchEvent('touchmove', { touches: [end], cancelable: true }));
+    component.onCalendarSwipeEnd(new TouchEvent('touchend', { changedTouches: [end] }));
+  }
 
-      const touches = type === 'touchend' ? [] : [touch];
-      const changedTouches = type === 'touchend' ? [touch] : [touch];
+  it('navigates to the next month on a left swipe', () => {
+    const initialMonth = component.currentMonth;
+    swipe(50, 200);
+    expect(component.currentMonth).toBe((initialMonth + 1) % 12);
+  });
 
-      // Create array-like TouchList that supports both item() and array indexing
-      const createTouchList = (touchArray: Touch[]): TouchList => {
-        // Create a proper array-like object that supports [0] indexing
-        const list = Object.assign([...touchArray], {
-          length: touchArray.length,
-          item: (index: number) => touchArray[index] || null,
-          [Symbol.iterator]: function* () {
-            for (const t of touchArray) yield t;
-          },
-        });
-        return list as unknown as TouchList;
-      };
+  it('navigates to the previous month on a right swipe', () => {
+    const initialMonth = component.currentMonth;
+    swipe(350, 200);
+    expect(component.currentMonth).toBe((initialMonth + 11) % 12);
+  });
 
-      return {
-        type,
-        touches: createTouchList(touches),
-        changedTouches: createTouchList(changedTouches),
-        targetTouches: createTouchList([]),
-        preventDefault: () => {},
-        stopPropagation: () => {},
-        bubbles: true,
-        cancelable: true,
-        defaultPrevented: false,
-        eventPhase: 0,
-        timeStamp: Date.now(),
-        isTrusted: true,
-        currentTarget: null,
-        composed: false,
-        cancelBubble: false,
-        returnValue: true,
-        srcElement: null,
-        stopImmediatePropagation: () => {},
-        initEvent: () => {},
-        AT_TARGET: 0,
-        BUBBLING_PHASE: 0,
-        CAPTURING_PHASE: 0,
-        NONE: 0,
-      } as unknown as TouchEvent;
-    }
+  it('changes the year without changing the month on a vertical swipe', () => {
+    const initialMonth = component.currentMonth;
+    const initialYear = component.currentYear;
+    swipe(200, 50);
+    expect(component.currentMonth).toBe(initialMonth);
+    expect(component.currentYear).toBe(initialYear + 1);
+  });
 
-    it('should initialize swipe state', () => {
-      expect(component['calendarSwipeStartX']).toBe(0);
-      expect(component['calendarSwipeStartY']).toBe(0);
-      expect(component['calendarSwipeStartTime']).toBe(0);
-    });
-
-    it('should record swipe start position and time', () => {
-      const touchEvent = createTouchEvent('touchstart', 100, 200);
-      component.onCalendarSwipeStart(touchEvent);
-
-      // The method accesses event.touches[0], which should be available in our mock
-      expect(component['calendarSwipeStartX']).toBe(100);
-      expect(component['calendarSwipeStartY']).toBe(200);
-      expect(component['calendarSwipeStartTime']).toBeGreaterThan(0);
-    });
-
-    it('should handle swipe move', () => {
-      const startEvent = createTouchEvent('touchstart', 100, 200);
-      component.onCalendarSwipeStart(startEvent);
-      fixture.detectChanges();
-
-      const moveEvent = createTouchEvent('touchmove', 150, 210);
-      component.onCalendarSwipeMove(moveEvent);
-      fixture.detectChanges();
-
-      // calendarSwipeStartX should remain unchanged (it's the start position)
-      expect(component['calendarSwipeStartX']).toBe(100);
-    });
-
-    it('should navigate to next month on left swipe', () => {
-      const initialMonth = component.currentMonth;
-      const startEvent = createTouchEvent('touchstart', 200, 100);
-      component.onCalendarSwipeStart(startEvent);
-
-      const moveEvent = createTouchEvent('touchmove', 50, 100);
-      component.onCalendarSwipeMove(moveEvent);
-
-      const endEvent = createTouchEvent('touchend', 50, 100);
-      component.onCalendarSwipeEnd(endEvent);
-
-      const expectedMonth = (initialMonth + 1) % 12;
-      expect(component.currentMonth).toBe(expectedMonth);
-    });
-
-    it('should navigate to previous month on right swipe', () => {
-      const initialMonth = component.currentMonth;
-      const startEvent = createTouchEvent('touchstart', 50, 100);
-      component.onCalendarSwipeStart(startEvent);
-
-      const moveEvent = createTouchEvent('touchmove', 200, 100);
-      component.onCalendarSwipeMove(moveEvent);
-
-      const endEvent = createTouchEvent('touchend', 200, 100);
-      component.onCalendarSwipeEnd(endEvent);
-
-      const expectedMonth = initialMonth === 0 ? 11 : initialMonth - 1;
-      expect(component.currentMonth).toBe(expectedMonth);
-    });
-
-    it('should not navigate on vertical swipe', () => {
-      const initialMonth = component.currentMonth;
-      const startEvent = createTouchEvent('touchstart', 100, 100);
-      component.onCalendarSwipeStart(startEvent);
-
-      const moveEvent = createTouchEvent('touchmove', 100, 200);
-      component.onCalendarSwipeMove(moveEvent);
-
-      const endEvent = createTouchEvent('touchend', 100, 200);
-      component.onCalendarSwipeEnd(endEvent);
-
-      expect(component.currentMonth).toBe(initialMonth);
-    });
-
-    it('should reset swipe state after swipe end', () => {
-      const startEvent = createTouchEvent('touchstart', 100, 200);
-      component.onCalendarSwipeStart(startEvent);
-
-      const endEvent = createTouchEvent('touchend', 50, 100);
-      component.onCalendarSwipeEnd(endEvent);
-
-      expect(component['calendarSwipeStartX']).toBe(0);
-      expect(component['calendarSwipeStartY']).toBe(0);
-      expect(component['calendarSwipeStartTime']).toBe(0);
-    });
+  it('ignores an extra touchend after a completed swipe', () => {
+    swipe(50, 200);
+    const monthAfterSwipe = component.currentMonth;
+    const touch = new Touch({ identifier: 0, target: fixture.nativeElement, clientX: 50, clientY: 200 });
+    component.onCalendarSwipeEnd(new TouchEvent('touchend', { changedTouches: [touch] }));
+    expect(component.currentMonth).toBe(monthAfterSwipe);
   });
 });

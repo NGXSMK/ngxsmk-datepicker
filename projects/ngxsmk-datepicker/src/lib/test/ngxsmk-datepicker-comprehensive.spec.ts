@@ -2,13 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { form } from '@angular/forms/signals';
 import { NgxsmkDatepickerComponent } from '../ngxsmk-datepicker';
 import { getStartOfDay, getEndOfDay } from '../utils/date.utils';
 import { HolidayProvider, DatepickerValue } from '../utils/calendar.utils';
 import { DatePipe } from '@angular/common';
-
-const form: any = undefined;
-const objectSchema: any = undefined;
 
 class TestHolidayProvider implements HolidayProvider {
   private readonly holidays: { [key: string]: string } = {
@@ -491,83 +489,31 @@ describe('NgxsmkDatepickerComponent - Comprehensive Feature Tests', () => {
     });
   });
 
-  describe('Signal Forms Integration (Angular 21+)', () => {
-    it('should mark Signal Form as dirty when date is selected via [field] binding', () => {
-      if (typeof form !== 'function' || typeof objectSchema !== 'function') {
-        pending('Signal Forms API not available - requires Angular 21+');
-        return;
-      }
-
+  describe('Signal Forms Integration', () => {
+    it('updates the model and marks the form dirty when a date is selected', () => {
       @Component({
         standalone: true,
         imports: [NgxsmkDatepickerComponent],
-        template: ` <ngxsmk-datepicker [field]="myForm.dateField" mode="single" [inline]="true"> </ngxsmk-datepicker> `,
+        template: `<ngxsmk-datepicker [field]="myForm.dateField" mode="single" [inline]="true" />`,
       })
       class TestSignalFormComponent {
-        localObject = signal({ dateField: new Date(2025, 0, 1) });
-        myForm = form(
-          this.localObject,
-          objectSchema({
-            dateField: (objectSchema as (...args: unknown[]) => unknown)(),
-          })
-        );
+        model = signal({ dateField: new Date(2025, 0, 1) });
+        myForm = form(this.model);
       }
 
       const testFixture = TestBed.createComponent(TestSignalFormComponent);
       testFixture.detectChanges();
-
-      const testComponent = testFixture.componentInstance;
-      const datepickerComponent = testFixture.debugElement.query(By.directive(NgxsmkDatepickerComponent))
+      const host = testFixture.componentInstance;
+      const datepicker = testFixture.debugElement.query(By.directive(NgxsmkDatepickerComponent))
         .componentInstance as NgxsmkDatepickerComponent;
 
-      expect(testComponent.myForm().dirty()).toBe(false);
-
-      const newDate = getStartOfDay(new Date(2025, 5, 15));
-      datepickerComponent.onDateClick(newDate);
+      expect(host.myForm().dirty()).toBe(false);
+      const selectedDate = new Date(2025, 5, 15);
+      datepicker.onDateClick(selectedDate);
       testFixture.detectChanges();
 
-      expect(testComponent.myForm().dirty()).toBe(true);
-    });
-
-    it('should use setValue or updateValue when available to track dirty state', () => {
-      if (typeof form !== 'function' || typeof objectSchema !== 'function') {
-        pending('Signal Forms API not available - requires Angular 21+');
-        return;
-      }
-
-      @Component({
-        standalone: true,
-        imports: [NgxsmkDatepickerComponent],
-        template: ` <ngxsmk-datepicker [field]="myForm.dateField" mode="single" [inline]="true"> </ngxsmk-datepicker> `,
-      })
-      class TestSignalFormComponent {
-        localObject = signal({ dateField: new Date(2025, 0, 1) });
-        myForm = form(
-          this.localObject,
-          objectSchema({
-            dateField: (objectSchema as (...args: unknown[]) => unknown)(),
-          })
-        );
-      }
-
-      const testFixture = TestBed.createComponent(TestSignalFormComponent);
-      testFixture.detectChanges();
-
-      const testComponent = testFixture.componentInstance;
-      const datepickerComponent = testFixture.debugElement.query(By.directive(NgxsmkDatepickerComponent))
-        .componentInstance as NgxsmkDatepickerComponent;
-
-      const field = testComponent.myForm.dateField;
-      const hasSetValue = typeof (field as unknown as { setValue: unknown }).setValue === 'function';
-      const hasUpdateValue = typeof (field as unknown as { updateValue: unknown }).updateValue === 'function';
-
-      expect(hasSetValue || hasUpdateValue).toBe(true);
-
-      const newDate = getStartOfDay(new Date(2025, 5, 15));
-      datepickerComponent.onDateClick(newDate);
-      testFixture.detectChanges();
-
-      expect(testComponent.myForm().dirty()).toBe(true);
+      expect(host.model().dateField).toEqual(selectedDate);
+      expect(host.myForm().dirty()).toBe(true);
     });
   });
 

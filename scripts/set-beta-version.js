@@ -10,14 +10,8 @@
  *   node scripts/set-beta-version.js stable 2.2.0   # specific stable (e.g. 2.2.0);
  */
 
-const fs = require('fs');
-const path = require('path');
-
-const rootPath = path.join(__dirname, '..', 'package.json');
-const libPath = path.join(__dirname, '..', 'projects', 'ngxsmk-datepicker', 'package.json');
-
-const root = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
-const lib = JSON.parse(fs.readFileSync(libPath, 'utf8'));
+const root = require('../package.json');
+const writeReleaseVersion = require('./write-release-version.cjs');
 
 const current = root.version;
 const arg = process.argv[2];
@@ -49,9 +43,6 @@ if (arg && /^\d+\.\d+\.\d+-beta\.\d+$/.test(arg)) {
   process.exit(1);
 }
 
-root.version = newVersion;
-lib.version = newVersion;
-fs.writeFileSync(rootPath, JSON.stringify(root, null, 2) + '\n');
-fs.writeFileSync(libPath, JSON.stringify(lib, null, 2) + '\n');
-console.log('Version set to', newVersion, 'in root and library package.json');
+writeReleaseVersion(newVersion);
+console.log('Version set to', newVersion, 'in both manifests and the lockfile');
 console.log('Run: npm run publish:beta');

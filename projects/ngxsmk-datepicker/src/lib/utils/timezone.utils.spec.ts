@@ -2,6 +2,21 @@ import { parseDateWithTimezone, convertTimezone, getTimezoneOffset, formatDateWi
 
 describe('Timezone Utils', () => {
   describe('parseDateWithTimezone', () => {
+    it('resolves spring-forward gaps using the initial UTC offset', () => {
+      expect(parseDateWithTimezone('2025-03-09T02:30', 'America/New_York')?.toISOString()).toBe(
+        '2025-03-09T07:30:00.000Z',
+      );
+    });
+
+    it('uses the initial UTC offset to choose an occurrence in a fall-back overlap', () => {
+      expect(parseDateWithTimezone('2025-11-02T01:30', 'America/New_York')?.toISOString()).toBe(
+        '2025-11-02T05:30:00.000Z',
+      );
+      expect(parseDateWithTimezone('2025-10-26T02:30', 'Europe/Paris')?.toISOString()).toBe(
+        '2025-10-26T01:30:00.000Z',
+      );
+    });
+
     it('uses the offset on the correct side of a daylight-saving transition', () => {
       expect(parseDateWithTimezone('2025-03-09T03:30', 'America/New_York')?.toISOString())
         .toBe('2025-03-09T07:30:00.000Z');

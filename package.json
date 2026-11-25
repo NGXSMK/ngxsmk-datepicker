@@ -35,6 +35,7 @@
     "unpublish:version": "node scripts/unpublish-version.js",
     "version:beta": "node scripts/set-beta-version.js next",
     "version:stable": "node scripts/set-stable-version.js",
+    "check:release-version": "node scripts/check-release-version.cjs",
     "verify:dist-tarball": "node scripts/verify-dist-tarball.cjs",
     "publish:beta": "npm run build:optimized && npm run prepublish:copy-assets && npm run verify:dist-tarball && cd dist/ngxsmk-datepicker && npm publish --tag beta",
     "publish:patch": "npm run build:optimized && npm run prepublish:copy-assets && npm run verify:dist-tarball && cd dist/ngxsmk-datepicker && npm publish --tag latest",

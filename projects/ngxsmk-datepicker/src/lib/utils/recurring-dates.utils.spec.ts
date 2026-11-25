@@ -3,6 +3,14 @@ import { getStartOfDay } from './date.utils';
 
 describe('Recurring Dates Utils', () => {
   describe('generateRecurringDates', () => {
+    it('includes leap day in monthly recurrence when February has 29 days', () => {
+      expect(generateRecurringDates({
+        pattern: 'monthly',
+        startDate: new Date(2024, 0, 31),
+        occurrences: 3,
+      })).toEqual([new Date(2024, 0, 31), new Date(2024, 1, 29), new Date(2024, 2, 31)]);
+    });
+
     it('returns no dates for an invalid weekday or weekend recurrence start', () => {
       const startDate = new Date(NaN);
       expect(generateRecurringDates({ pattern: 'weekdays', startDate })).toEqual([]);
