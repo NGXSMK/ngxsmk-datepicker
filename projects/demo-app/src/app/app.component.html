@@ -2,15 +2,23 @@
   <!-- Header -->
   <header class="header">
     <div class="header-inner flex items-center justify-between">
-      <div class="flex items-center gap-md sm:gap-lg">
-        <button class="mobile-menu-toggle" (click)="toggleSidebar()">
+      <div class="header-brand flex items-center gap-md sm:gap-lg">
+        <button
+          #menuToggle
+          type="button"
+          class="mobile-menu-toggle"
+          aria-controls="demo-sidebar"
+          [attr.aria-label]="isSidebarOpen ? 'Close navigation' : 'Open navigation'"
+          [attr.aria-expanded]="isSidebarOpen"
+          (click)="toggleSidebar()"
+        >
           <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
             <line x1="3" y1="12" x2="21" y2="12"></line>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <line x1="3" y1="18" x2="21" y2="18"></line>
           </svg>
         </button>
-        <div class="logo flex items-center gap-sm" routerLink="/">
+        <a class="logo flex items-center gap-sm" routerLink="/" aria-label="NGXSMK DatePicker home">
           <div class="logo-icon-wrapper">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
               <rect x="3" y="4" width="18" height="18" rx="4" ry="4"></rect>
@@ -20,7 +28,7 @@
             </svg>
           </div>
           <span class="logo-text">NGXSMK <span class="highlight">DatePicker</span></span>
-        </div>
+        </a>
       </div>
 
       <div class="header-actions flex items-center gap-sm sm:gap-md">
@@ -134,37 +142,58 @@
 
   <div class="main-wrapper">
     <!-- Sidebar -->
-    <aside class="sidebar" [class.open]="isSidebarOpen">
-      @for (section of navSections; track section.label) {
-        <div class="nav-section">
-          <div class="nav-label">{{ section.label }}</div>
-          @for (link of section.links; track link.path) {
-            <a
-              [routerLink]="link.path"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: link.path === '/' }"
-              class="nav-link"
-              (click)="closeSidebar()"
-            >
-              {{ link.label }}
-            </a>
-          }
-        </div>
-      }
+    <aside id="demo-sidebar" class="sidebar" [class.open]="isSidebarOpen" [inert]="isMobileLayout() && !isSidebarOpen">
+      <nav #sidebarNav aria-label="Documentation">
+        @for (section of navSections; track section.label) {
+          <div class="nav-section">
+            <div class="nav-label">{{ section.label }}</div>
+            @for (link of section.links; track link.path) {
+              <a
+                [routerLink]="link.path"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+                ariaCurrentWhenActive="page"
+                class="nav-link"
+                (click)="closeSidebar()"
+              >
+                {{ link.label }}
+              </a>
+            }
+          </div>
+        }
 
-      <a
-        href="https://github.com/NGXSMK/ngxsmk-ui-kit"
-        target="_blank"
-        rel="noopener"
-        class="sidebar-promo no-underline"
-      >
-        <span class="sidebar-promo-badge">Also from NGXSMK</span>
-        <span class="sidebar-promo-title">ngxsmk-ui-kit</span>
-        <p class="sidebar-promo-desc">
-          200+ standalone Angular components — dashboards, data grids, kanban boards, design tokens &amp; more.
-        </p>
-        <span class="sidebar-promo-cta">Explore the kit</span>
-      </a>
+      </nav>
+
+      <section class="sidebar-projects" aria-labelledby="sidebar-projects-title">
+        <h2 id="sidebar-projects-title" class="nav-label">More open-source projects</h2>
+        <a
+          href="https://github.com/NGXSMK/ngxsmk-ui-kit"
+          target="_blank"
+          rel="noopener"
+          class="sidebar-promo no-underline"
+        >
+          <span class="sidebar-promo-title">ngxsmk-ui-kit</span>
+          <p class="sidebar-promo-desc">
+            200+ standalone Angular components — dashboards, data grids, kanban boards, design tokens &amp; more.
+          </p>
+          <span class="sidebar-promo-cta">Explore the kit</span>
+        </a>
+
+        <article class="sidebar-promo" aria-labelledby="sidebar-kanbrix-title">
+          <h3 id="sidebar-kanbrix-title" class="sidebar-promo-title">Kanbrix</h3>
+          <p class="sidebar-promo-desc">
+            A self-hosted issue tracker with Kanban boards, sprint planning, and configurable workflows.
+          </p>
+          <div class="sidebar-promo-actions">
+            <a class="sidebar-promo-cta" href="https://toozuuu.github.io/kanbrix/#demo" target="_blank" rel="noopener">
+              Try the demo
+            </a>
+            <a class="sidebar-promo-cta" href="https://github.com/toozuuu/kanbrix" target="_blank" rel="noopener">
+              View on GitHub
+            </a>
+          </div>
+        </article>
+      </section>
     </aside>
 
     <!-- Main Content AREA -->
@@ -206,65 +235,15 @@
     </main>
 
     <!-- Overlay for mobile -->
-    @if (isSidebarOpen) {
-      <div
-        class="sidebar-overlay"
-        (click)="closeSidebar()"
-        (keydown.enter)="closeSidebar()"
-        (keydown.space)="closeSidebar()"
-        tabindex="0"
-        role="button"
-        aria-label="Close sidebar"
-      ></div>
-    }
+    <button
+      type="button"
+      class="sidebar-overlay"
+      [class.open]="isSidebarOpen"
+      [inert]="!isSidebarOpen"
+      tabindex="-1"
+      aria-label="Close navigation"
+      (click)="closeSidebar()"
+    ></button>
   </div>
 
-  <!-- One-time ngxsmk-ui-kit promo modal -->
-  @if (showUiKitPromo()) {
-    <div
-      class="uikit-modal-overlay"
-      (click)="dismissUiKitPromo()"
-      (keydown.enter)="dismissUiKitPromo()"
-      tabindex="0"
-      role="button"
-      aria-label="Close dialog"
-    >
-      <div
-        class="uikit-modal card animate-fade-in"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="uikit-modal-title"
-        (click)="$event.stopPropagation()"
-        (keydown.enter)="$event.stopPropagation()"
-        tabindex="-1"
-      >
-        <button class="uikit-modal-close icon-btn" (click)="dismissUiKitPromo()" title="Close" aria-label="Close">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-
-        <span class="uikit-modal-badge">Also from NGXSMK</span>
-        <h2 id="uikit-modal-title" class="uikit-modal-title">Building more than a date picker?</h2>
-        <p class="uikit-modal-desc">
-          Check out <strong>ngxsmk-ui-kit</strong> — 200+ standalone Angular components: dashboards, data grids, kanban
-          boards, design tokens, dark mode, and more. Signals-first, SSR &amp; zoneless ready.
-        </p>
-
-        <div class="uikit-modal-actions">
-          <a
-            href="https://github.com/NGXSMK/ngxsmk-ui-kit"
-            target="_blank"
-            rel="noopener"
-            class="uikit-modal-cta no-underline"
-            (click)="dismissUiKitPromo()"
-          >
-            Explore ngxsmk-ui-kit
-          </a>
-          <button class="uikit-modal-dismiss" (click)="dismissUiKitPromo()">Maybe later</button>
-        </div>
-      </div>
-    </div>
-  }
 </div>

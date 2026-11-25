@@ -29,10 +29,10 @@ export const translations = {
     },
     home: {
       heroBadge: 'v3.0.6',
-      heroTitle: 'Pick dates the way a schedule board clears flights.',
+      heroTitle: 'An Angular datepicker for forms and booking flows',
       heroSubtitle: 'Angular DatePicker',
       heroLead:
-        'Signal-friendly Angular datepicker for forms and booking flows. Switch modes below, then install when you are ready.',
+        'Try single dates, date ranges, and multiple selections in the live calendar.',
       ctaBuild: 'Install',
       ctaPro: 'Open playground',
       seoTitle: 'What you get',

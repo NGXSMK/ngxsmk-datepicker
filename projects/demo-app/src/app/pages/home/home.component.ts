@@ -2,9 +2,17 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxsmkDatepickerComponent } from 'ngxsmk-datepicker';
+import { NgxsmkDatepickerComponent, type DatepickerValue } from 'ngxsmk-datepicker';
 import { ThemeService } from '@tokiforge/angular';
 import { I18nService } from '../../i18n/i18n.service';
+
+type DemoMode = 'single' | 'range' | 'multiple';
+
+const demoInstructions = {
+  single: ['Choose a date.', 'Choose another date to replace your selection.'],
+  range: ['Choose a start date.', 'Choose an end date to complete the range.', 'Choose another date to start a new range.'],
+  multiple: ['Choose any day to start a list.', 'Choose more dates to add them. Select a highlighted date again to remove it.'],
+};
 
 @Component({
   selector: 'app-home',
@@ -15,13 +23,7 @@ import { I18nService } from '../../i18n/i18n.service';
       <!-- HERO SECTION -->
       <section class="hero-section" aria-label="NGXSMK Datepicker Hero">
         <div class="hero-content">
-          <!-- Release Badge -->
-          <div class="version-badge">
-            <span class="pulse-dot"></span>
-            <span class="badge-tag">v3.0.7</span>
-            <span class="badge-divider">·</span>
-            <span class="badge-text">Angular 17-19+ & Zoneless Native</span>
-          </div>
+          <p class="hero-compatibility">{{ i18n.t().common.enterpriseReady }} · Zoneless ready</p>
 
           <!-- Main Title -->
           <h1 class="hero-title">
@@ -69,20 +71,15 @@ import { I18nService } from '../../i18n/i18n.service';
             </a>
 
             <!-- Quick Copy Box -->
-            <div
+            <button
+              type="button"
               class="quick-install-box"
               (click)="copyInstallCommand()"
-              role="button"
-              tabindex="0"
-              (keydown.enter)="copyInstallCommand()"
+              [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy install command'"
             >
               <span class="install-prompt">$</span>
               <code class="install-cmd">npm i ngxsmk-datepicker</code>
-              <button
-                type="button"
-                class="copy-trigger"
-                [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy command'"
-              >
+              <span class="copy-trigger" aria-hidden="true">
                 @if (hasCopiedInstall()) {
                   <svg
                     width="15"
@@ -111,8 +108,8 @@ import { I18nService } from '../../i18n/i18n.service';
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
                 }
-              </button>
-            </div>
+              </span>
+            </button>
           </div>
 
           <!-- Trust / Capability Pills -->
@@ -140,12 +137,6 @@ import { I18nService } from '../../i18n/i18n.service';
         <div class="showcase-card">
           <!-- Window Header Bar -->
           <div class="showcase-bar">
-            <div class="traffic-lights">
-              <span class="light red"></span>
-              <span class="light yellow"></span>
-              <span class="light green"></span>
-            </div>
-
             <!-- Segmented Mode Control -->
             <div class="mode-tabs" role="tablist" aria-label="Demo mode switcher">
               <button
@@ -153,8 +144,12 @@ import { I18nService } from '../../i18n/i18n.service';
                 role="tab"
                 class="tab-btn"
                 [class.active]="demoMode === 'single'"
+                id="demo-mode-single"
+                aria-controls="home-demo-panel"
                 [attr.aria-selected]="demoMode === 'single'"
+                [tabIndex]="demoMode === 'single' ? 0 : -1"
                 (click)="setDemoMode('single')"
+                (keydown)="onDemoModeKeydown($event)"
               >
                 {{ i18n.t().home.demoMode.single }}
               </button>
@@ -163,8 +158,12 @@ import { I18nService } from '../../i18n/i18n.service';
                 role="tab"
                 class="tab-btn"
                 [class.active]="demoMode === 'range'"
+                id="demo-mode-range"
+                aria-controls="home-demo-panel"
                 [attr.aria-selected]="demoMode === 'range'"
+                [tabIndex]="demoMode === 'range' ? 0 : -1"
                 (click)="setDemoMode('range')"
+                (keydown)="onDemoModeKeydown($event)"
               >
                 {{ i18n.t().home.demoMode.range }}
               </button>
@@ -173,64 +172,87 @@ import { I18nService } from '../../i18n/i18n.service';
                 role="tab"
                 class="tab-btn"
                 [class.active]="demoMode === 'multiple'"
+                id="demo-mode-multiple"
+                aria-controls="home-demo-panel"
                 [attr.aria-selected]="demoMode === 'multiple'"
+                [tabIndex]="demoMode === 'multiple' ? 0 : -1"
                 (click)="setDemoMode('multiple')"
+                (keydown)="onDemoModeKeydown($event)"
               >
                 {{ i18n.t().home.demoMode.multiple }}
               </button>
             </div>
 
-            <div class="live-indicator">
-              <span class="live-dot"></span>
-              <span class="live-text">Interactive</span>
-            </div>
           </div>
 
-          <!-- Calendar Preview Stage -->
-          <div class="showcase-stage">
-            <ngxsmk-datepicker
-              [(ngModel)]="demoValue"
-              [mode]="demoMode"
-              [inline]="true"
-              [calendarCount]="1"
-              [showRangeSummary]="false"
-              [showRanges]="false"
-              [autoApplyClose]="false"
-              [theme]="currentTheme"
-            >
-            </ngxsmk-datepicker>
-          </div>
-
-          <!-- Showcase Footer with Reactive Output & Snippet -->
-          <div class="showcase-footer">
-            <div class="output-preview">
-              <span class="output-label">Selected:</span>
-              <span class="output-val">{{ formattedValue }}</span>
+          <div
+            id="home-demo-panel"
+            role="tabpanel"
+            [attr.aria-labelledby]="'demo-mode-' + demoMode"
+            aria-describedby="demo-instruction"
+          >
+            <div class="demo-guide">
+              <div id="demo-instruction" class="demo-instruction">
+                @for (instruction of [demoInstruction]; track instruction) {
+                  <p class="demo-feedback">{{ instruction }}</p>
+                }
+              </div>
+              <button type="button" class="demo-reset" [disabled]="!hasDemoSelection" (click)="resetDemo()">
+                Reset
+              </button>
             </div>
-            <div class="snippet-box" (click)="copySnippet()" role="button" tabindex="0" (keydown.enter)="copySnippet()">
-              <code>&lt;ngxsmk-datepicker mode="{{ demoMode }}" /&gt;</code>
+            <div class="showcase-stage">
+              @for (revision of [demoRevision]; track revision) {
+                <ngxsmk-datepicker
+                  #demoPicker
+                  [(ngModel)]="demoValue"
+                  [mode]="demoMode"
+                  [inline]="true"
+                  [calendarCount]="1"
+                  [showRangeSummary]="false"
+                  [showRanges]="false"
+                  [autoApplyClose]="false"
+                  [theme]="currentTheme"
+                  (action)="onDemoAction($event, demoPicker)"
+                />
+              }
+            </div>
+
+            <div class="showcase-footer">
+              <div class="output-preview">
+                <span class="output-label">Selected:</span>
+                @for (selection of [formattedValue]; track selection) {
+                  <span class="output-val demo-feedback">{{ selection }}</span>
+                }
+              </div>
               <button
                 type="button"
-                class="snippet-copy-btn"
-                [attr.aria-label]="hasCopiedSnippet() ? 'Copied' : 'Copy snippet'"
+                class="snippet-box"
+                (click)="copySnippet()"
+                [attr.aria-label]="hasCopiedSnippet() ? 'Copied' : 'Copy datepicker snippet'"
               >
-                @if (hasCopiedSnippet()) {
-                  <span class="copied-badge">Copied!</span>
-                } @else {
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                  </svg>
+                @for (mode of [demoMode]; track mode) {
+                  <code class="demo-feedback">&lt;ngxsmk-datepicker mode="{{ mode }}" /&gt;</code>
                 }
+                <span class="snippet-copy-btn" aria-hidden="true">
+                  @if (hasCopiedSnippet()) {
+                    <span class="copied-badge">Copied!</span>
+                  } @else {
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  }
+                </span>
               </button>
             </div>
           </div>
@@ -445,23 +467,22 @@ import { I18nService } from '../../i18n/i18n.service';
             </a>
           </div>
         </div>
-        <div
+        <button
+          type="button"
           class="cta-terminal"
           (click)="copyInstallCommand()"
-          role="button"
-          tabindex="0"
-          (keydown.enter)="copyInstallCommand()"
+          [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy install command'"
         >
-          <div class="terminal-bar">
+          <span class="terminal-bar">
             <span class="term-dot red"></span>
             <span class="term-dot yellow"></span>
             <span class="term-dot green"></span>
             <span class="term-title">terminal</span>
-          </div>
-          <div class="terminal-body">
+          </span>
+          <span class="terminal-body">
             <span class="term-prompt">$</span>
             <span class="term-code">npm install ngxsmk-datepicker</span>
-            <button type="button" class="term-copy" [attr.aria-label]="hasCopiedInstall() ? 'Copied' : 'Copy command'">
+            <span class="term-copy" aria-hidden="true">
               @if (hasCopiedInstall()) {
                 <span class="term-copied">✓ Copied</span>
               } @else {
@@ -470,9 +491,9 @@ import { I18nService } from '../../i18n/i18n.service';
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
               }
-            </button>
-          </div>
-        </div>
+            </span>
+          </span>
+        </button>
       </section>
     </div>
   `,
@@ -489,7 +510,7 @@ import { I18nService } from '../../i18n/i18n.service';
       /* ================= HERO SECTION ================= */
       .hero-section {
         display: grid;
-        grid-template-columns: 1.15fr 1fr;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
         gap: 2.5rem;
         /* Top-align so a taller showcase (range summary, etc.) doesn't
            vertically center the copy and leave empty space above the badge. */
@@ -507,54 +528,11 @@ import { I18nService } from '../../i18n/i18n.service';
         align-items: flex-start;
       }
 
-      .version-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.35rem 0.85rem;
-        border-radius: 9999px;
-        background: var(--color-bg-card);
-        border: 1px solid var(--color-border);
-        box-shadow: var(--shadow-sm);
-        margin-bottom: 1.25rem;
-        font-size: var(--font-size-xs);
+      .hero-compatibility {
+        margin: 0 0 0.75rem;
         color: var(--color-text-muted);
-        backdrop-filter: blur(12px);
-
-        .pulse-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-          animation: pulse-glow 2s infinite;
-        }
-
-        .badge-tag {
-          font-weight: 700;
-          color: var(--color-primary);
-        }
-
-        .badge-divider {
-          opacity: 0.4;
-        }
-
-        .badge-text {
-          font-weight: 500;
-          color: var(--color-text-main);
-        }
-      }
-
-      @keyframes pulse-glow {
-        0%,
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-        50% {
-          opacity: 0.6;
-          transform: scale(0.9);
-        }
+        font-size: var(--font-size-sm);
+        font-weight: 600;
       }
 
       .hero-title {
@@ -597,6 +575,11 @@ import { I18nService } from '../../i18n/i18n.service';
             justify-content: center;
           }
         }
+      }
+
+      :is(.quick-install-box, .snippet-box, .cta-terminal, .tab-btn, .demo-reset):focus-visible {
+        outline: 2px solid var(--brand-primary);
+        outline-offset: 3px;
       }
 
       .btn-icon {
@@ -687,8 +670,7 @@ import { I18nService } from '../../i18n/i18n.service';
         overflow: hidden;
         backdrop-filter: blur(16px);
         transition:
-          transform var(--transition-normal),
-          box-shadow var(--transition-normal);
+          box-shadow var(--transition-base);
 
         &:hover {
           box-shadow: 0 24px 48px -12px rgba(99, 102, 241, 0.18);
@@ -698,32 +680,11 @@ import { I18nService } from '../../i18n/i18n.service';
       .showcase-bar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         padding: 0.75rem 1.15rem;
         background: var(--color-bg-elevated);
         border-bottom: 1px solid var(--color-border);
         gap: 0.5rem;
-      }
-
-      .traffic-lights {
-        display: flex;
-        gap: 6px;
-
-        .light {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-
-          &.red {
-            background: #ef4444;
-          }
-          &.yellow {
-            background: #f59e0b;
-          }
-          &.green {
-            background: #10b981;
-          }
-        }
       }
 
       .mode-tabs {
@@ -745,7 +706,10 @@ import { I18nService } from '../../i18n/i18n.service';
         font-weight: 600;
         color: var(--color-text-muted);
         cursor: pointer;
-        transition: all var(--transition-fast);
+        transition:
+          background-color var(--transition-fast),
+          color var(--transition-fast),
+          box-shadow var(--transition-fast);
 
         &:hover {
           color: var(--color-text-main);
@@ -758,24 +722,57 @@ import { I18nService } from '../../i18n/i18n.service';
         }
       }
 
-      .live-indicator {
+      .demo-guide {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.65rem 1.15rem;
+        border-bottom: 1px solid var(--color-border);
+        background: color-mix(in srgb, var(--brand-primary) 6%, var(--color-bg-card));
+      }
+
+      .demo-instruction {
+        min-height: 2.7em;
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        font-size: var(--font-size-xs);
-        font-weight: 600;
-        color: var(--color-text-muted);
+        color: var(--color-text-main);
+        font-size: var(--font-size-sm);
+        line-height: 1.35;
 
-        .live-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 6px #10b981;
+        p { margin: 0; }
+      }
+
+      .demo-reset {
+        padding: 0.35rem 0.6rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        background: var(--color-bg-card);
+        color: var(--color-text-main);
+        cursor: pointer;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: default;
         }
 
-        @media (max-width: 440px) {
-          display: none;
+        &:enabled:hover {
+          border-color: var(--brand-primary);
+        }
+      }
+
+      .demo-feedback {
+        animation: demo-selection-feedback var(--motion-smooth) var(--motion-easing);
+      }
+
+      @keyframes demo-selection-feedback {
+        from {
+          opacity: 0;
+          transform: translateY(3px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
 
@@ -826,7 +823,6 @@ import { I18nService } from '../../i18n/i18n.service';
         }
 
         :host ::ng-deep .showcase-stage .ngxsmk-day-cell {
-          overflow: hidden !important;
           width: 100% !important;
           height: auto !important;
           max-width: none !important;
@@ -880,6 +876,8 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .snippet-box {
+        max-width: 100%;
+        text-align: left;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -1140,7 +1138,7 @@ import { I18nService } from '../../i18n/i18n.service';
       .cta-banner {
         position: relative;
         display: grid;
-        grid-template-columns: 1.25fr 1fr;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
         gap: 2rem;
         align-items: center;
         padding: 2.5rem;
@@ -1190,6 +1188,8 @@ import { I18nService } from '../../i18n/i18n.service';
       }
 
       .cta-terminal {
+        min-width: 0;
+        text-align: left;
         background: #0b0f19;
         border: 1px solid #1e293b;
         border-radius: var(--radius-lg);
@@ -1253,6 +1253,8 @@ import { I18nService } from '../../i18n/i18n.service';
         }
 
         .term-code {
+          min-width: 0;
+          overflow-wrap: anywhere;
           color: #f8fafc !important;
           font-weight: 500;
         }
@@ -1284,11 +1286,10 @@ export class HomeComponent {
   themeService = inject(ThemeService);
   i18n = inject(I18nService);
 
-  demoMode: 'single' | 'range' | 'multiple' = 'range';
-  demoValue: Date | Date[] | { start: Date; end: Date } | null = {
-    start: new Date(),
-    end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-  };
+  demoMode: DemoMode = 'range';
+  demoValue: DatepickerValue = null;
+  demoRevision = 0;
+  private draftRangeStart: Date | null = null;
 
   hasCopiedInstall = signal(false);
   hasCopiedSnippet = signal(false);
@@ -1302,18 +1303,59 @@ export class HomeComponent {
     { key: 'locales' as const, tag: 'i18n & RTL' },
   ];
 
-  setDemoMode(mode: 'single' | 'range' | 'multiple') {
+  setDemoMode(mode: DemoMode): void {
+    if (this.demoMode === mode) return;
     this.demoMode = mode;
-    if (mode === 'single') {
-      this.demoValue = new Date();
-    } else if (mode === 'range') {
-      this.demoValue = {
-        start: new Date(),
-        end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      };
-    } else {
-      this.demoValue = [new Date()];
+    this.hasCopiedSnippet.set(false);
+    this.resetDemo();
+  }
+
+  onDemoAction(event: { type: string }, picker: NgxsmkDatepickerComponent): void {
+    if (event.type === 'dateSelected' && this.demoMode === 'range') {
+      this.draftRangeStart = picker.endDate ? null : picker.startDate;
     }
+  }
+
+  resetDemo(): void {
+    this.demoValue = null;
+    this.draftRangeStart = null;
+    this.demoRevision++;
+  }
+
+  get hasDemoSelection(): boolean {
+    return !!this.draftRangeStart || (Array.isArray(this.demoValue) ? this.demoValue.length > 0 : !!this.demoValue);
+  }
+
+  get demoInstruction(): string {
+    if (this.demoMode === 'range') {
+      return demoInstructions.range[this.draftRangeStart ? 1 : this.hasDemoSelection ? 2 : 0];
+    }
+    return demoInstructions[this.demoMode][this.hasDemoSelection ? 1 : 0];
+  }
+
+  onDemoModeKeydown(event: KeyboardEvent): void {
+    const modes = ['single', 'range', 'multiple'] as const;
+    const current = modes.indexOf(this.demoMode);
+    let next: number;
+    switch (event.key) {
+      case 'ArrowLeft':
+        next = (current + modes.length - 1) % modes.length;
+        break;
+      case 'ArrowRight':
+        next = (current + 1) % modes.length;
+        break;
+      case 'Home':
+        next = 0;
+        break;
+      case 'End':
+        next = modes.length - 1;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    this.setDemoMode(modes[next]);
+    (event.currentTarget as HTMLElement).parentElement?.querySelector<HTMLElement>('#demo-mode-' + modes[next])?.focus();
   }
 
   get currentTheme(): 'light' | 'dark' {
@@ -1321,16 +1363,20 @@ export class HomeComponent {
   }
 
   get formattedValue(): string {
-    if (!this.demoValue) return 'None selected';
+    const locale = this.i18n.lang();
+    if (this.draftRangeStart) {
+      return `${this.draftRangeStart.toLocaleDateString(locale)} → …`;
+    }
+    if (!this.hasDemoSelection) return 'None selected';
     if (this.demoValue instanceof Date) {
-      return this.demoValue.toLocaleDateString();
+      return this.demoValue.toLocaleDateString(locale);
     }
     if (Array.isArray(this.demoValue)) {
-      return `${this.demoValue.length} dates selected`;
+      return `${this.demoValue.length} ${this.demoValue.length === 1 ? 'date' : 'dates'}`;
     }
-    if (typeof this.demoValue === 'object' && 'start' in this.demoValue && 'end' in this.demoValue) {
-      const s = this.demoValue.start ? this.demoValue.start.toLocaleDateString() : '...';
-      const e = this.demoValue.end ? this.demoValue.end.toLocaleDateString() : '...';
+    if (this.demoValue) {
+      const s = this.demoValue.start?.toLocaleDateString(locale) ?? '…';
+      const e = this.demoValue.end?.toLocaleDateString(locale) ?? '…';
       return `${s} → ${e}`;
     }
     return '';

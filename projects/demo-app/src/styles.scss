@@ -127,9 +127,20 @@
   --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
   --shadow-glow: 0 0 35px rgba(99, 102, 241, 0.25);
 
-  --transition-base: 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-fast: 120ms;
+  --motion-base: 160ms;
+  --motion-smooth: 280ms;
+  --motion-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: var(--motion-fast) var(--motion-easing);
+  --transition-base: var(--motion-base) var(--motion-easing);
+  --transition-smooth: var(--motion-smooth) var(--motion-easing);
   --transition: var(--transition-base);
+
+  @media (prefers-reduced-motion: reduce) {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-smooth: 0ms;
+  }
 }
 
 html[data-theme='dark'] {
@@ -224,6 +235,10 @@ html[data-theme='light'] {
 
 html {
   scroll-behavior: smooth;
+
+  @media (prefers-reduced-motion: reduce) {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -279,18 +294,26 @@ body {
   overflow-x: hidden;
   padding: 1.5rem 0;
   z-index: 90;
-  transition: transform var(--transition-smooth);
   scrollbar-width: thin;
   scrollbar-color: var(--color-bg-elevated) transparent;
   background-image: none;
 
   @media (max-width: 1024px) {
     transform: translateX(-100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      transform var(--transition-smooth),
+      visibility 0s var(--motion-smooth);
+    overscroll-behavior: contain;
     z-index: 1000;
     box-shadow: var(--shadow-lg);
 
     &.open {
       transform: translateX(0);
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
     }
   }
 }
@@ -594,21 +617,6 @@ html[data-theme='dark'] .tip strong {
     color: var(--brand-primary);
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
-  }
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
-@media (max-width: 1024px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-
-    &.open {
-      transform: translateX(0);
-    }
   }
 }
 
@@ -956,15 +964,13 @@ a.link:hover {
    ANIMATIONS
    ============================================ */
 
-@keyframes fadeIn {
+@keyframes demo-fade-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -1014,15 +1020,15 @@ a.link:hover {
 }
 
 .animate-fade-in {
-  animation: fadeIn var(--transition-base) ease-out;
+  animation: demo-fade-in var(--transition-base);
 }
 
 .animate-slide-in-left {
-  animation: slideInLeft var(--transition-base) ease-out;
+  animation: slideInLeft var(--transition-base);
 }
 
 .animate-slide-in-right {
-  animation: slideInRight var(--transition-base) ease-out;
+  animation: slideInRight var(--transition-base);
 }
 
 /* ============================================
